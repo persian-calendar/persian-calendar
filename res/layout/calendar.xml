@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dip" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:background="@android:drawable/ic_media_previous"
+                android:onClick="nextMonth" />
+
+            <Button
+                android:id="@+id/previousButton"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:background="@android:drawable/ic_media_next"
+                android:onClick="previousMonth" />
+
+            <TextView
+                android:id="@+id/currentMonthTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="10dip"
+                android:paddingTop="20dip"
+                android:textColor="@android:color/white"
+                android:textSize="25dip" />
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/calendarTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="*"
+            android:stretchColumns="*" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/calendar_firstrow"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="ج"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="پ"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="چ"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="س"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="د"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="ی"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:text="ش"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell17"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell16"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell15"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell14"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell13"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell12"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell11"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell27"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell26"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell25"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell24"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell23"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell22"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell21"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell37"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell36"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell35"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell34"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell33"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell32"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell31"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell47"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell46"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell45"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell44"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell43"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell42"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell41"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell57"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell56"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell55"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell54"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell53"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell52"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell51"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:id="@+id/calendarCell67"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell66"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell65"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell64"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell63"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell62"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/calendarCell61"
+                    style="CalendarCellsStyle"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/calendarInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/calendar_firstrow"
+            android:gravity="right"
+            android:paddingRight="20dip"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="20dip"
+            android:paddingTop="20dip"
+            android:text="توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"
+            android:textColor="@android:color/white"
+            android:textSize="7dip" />
+    </LinearLayout>
+
+</ScrollView>

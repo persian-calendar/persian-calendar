@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/widget_background"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/clockText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right|top"
+        android:textColor="@android:color/white"
+        android:textSize="30dip" />
+
+    <TextView
+        android:id="@+id/calendarText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:gravity="left|bottom"
+        android:textColor="@android:color/white"
+        android:textSize="20dip" />
+
+</LinearLayout>
