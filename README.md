@@ -5,4 +5,4 @@ You can download it also from https://play.google.com/store/apps/details?id=com.
 
 
 License:
-http://code.google.com/p/mobile-persian-calendar/ date converter codes used, so this app will be also in GPLv2 :)
+Date converter codes from http://code.google.com/p/mobile-persian-calendar/ is used, so this project will be also in GPLv2 :)
