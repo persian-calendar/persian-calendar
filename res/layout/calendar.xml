@@ -6,6 +6,8 @@
     android:background="@drawable/background" >
 
     <LinearLayout
+        android:paddingRight="10dip"
+        android:paddingLeft="10dip"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -439,7 +441,7 @@
             android:id="@+id/calendarInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/calendar_firstrow"
+            android:background="@drawable/widget_background"
             android:gravity="right"
             android:paddingRight="20dip"
             android:textColor="@android:color/white" />
