@@ -7,11 +7,12 @@ import calendar.PersianDate;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AnimationUtils;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 /**
  * Program activity for android.
@@ -25,8 +26,39 @@ public class PersianCalendarActivity extends Activity {
 	int currentPersianMonth = 0;
 	TextView currentMonthTextView = null;
 	PersianDate nowDate = null;
+	
 
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    
+    SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
+    	@Override
+    	public boolean onDown(MotionEvent e) {
+    	    return true;        
+    	}
+    	
+		@Override
+	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	        try {
+	            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+	                return false;
+	            // right to left swipe
+	            if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+	            	nextMonth(null);
+	            }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					previousMonth(null);
+	            }
+	        } catch (Exception e) {
+	            // nothing
+	        }
+	        return super.onFling(e1, e2, velocityX, velocityY);
+	    }
+	};
+    
 	// ViewFlipper viewFlipper = null;
+	View.OnTouchListener gestureListener;
+	GestureDetector gestureDetector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +76,37 @@ public class PersianCalendarActivity extends Activity {
 		 */
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("امروز:\n");
 		CivilDate civil = new CivilDate();
 		nowDate = DateConverter.civilToPersian(civil);
-		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-				+ PersianUtils.PERSIAN_COMMA + " " + nowDate.toString()
-				+ " هجری خورشیدی\n\n");
+
+		sb.append("امروز:\n");
+		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek()));
+		sb.append(PersianUtils.PERSIAN_COMMA);
+		sb.append(" ");
+		sb.append(nowDate.toString());
+		sb.append(" هجری خورشیدی\n\n");
 		sb.append("برابر با:\n");
-		sb.append(civil.toString() + " میلادی\n");
-		sb.append(DateConverter.civilToIslamic(civil).toString()
-				+ " هجری قمری\n");
+		sb.append(civil.toString());
+		sb.append(" میلادی\n");
+		sb.append(DateConverter.civilToIslamic(civil).toString());
+		sb.append(" هجری قمری\n");
+
 		TextView ci = (TextView) findViewById(R.id.calendarInfo);
 		ci.setText(sb.toString());
 
-		setCurrentMonth();
+		setMonth();
 
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth);
-	}
+		
+	    gestureDetector = new GestureDetector(simpleOnGestureListener);
+		gestureListener = new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		};
+		findViewById(R.id.calendarTable).setOnTouchListener(gestureListener);
+	}	
 
 	private void showCalendarOfMonthYear(int year, int month) {
 
@@ -135,6 +181,7 @@ public class PersianCalendarActivity extends Activity {
 	}
 
 	private void nextMonth() {
+		
 		currentPersianMonth++;
 		if (currentPersianMonth == 13) {
 			currentPersianMonth = 1;
@@ -150,7 +197,7 @@ public class PersianCalendarActivity extends Activity {
 		}
 	}
 
-	private void setCurrentMonth() {
+	private void setMonth() {
 		PersianDate persian = DateConverter.civilToPersian(new CivilDate());
 		currentPersianMonth = persian.getMonth();
 		currentPersianYear = persian.getYear();
