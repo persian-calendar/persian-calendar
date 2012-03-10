@@ -1,10 +1,12 @@
 package calendar;
 
+import com.byagowi.persiancalendar.ArabicUtils;
 import com.byagowi.persiancalendar.PersianUtils;
 
 /**
  * 
  * @author Amir
+ * @author ebraminio
  * 
  */
 
@@ -124,8 +126,8 @@ public class IslamicDate extends AbstractDate {
 	}
 
 	public String toString() {
-		return PersianUtils.getPersianNumber(day) + " " + monthName[month]
-				+ " " + PersianUtils.getPersianNumber(year);
+		return ArabicUtils.getArabicNumber(day) + " " + monthName[month]
+				+ " " + ArabicUtils.getArabicNumber(year);
 	}
 
 }

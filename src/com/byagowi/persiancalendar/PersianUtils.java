@@ -46,8 +46,9 @@ public final class PersianUtils {
 		String timeText = date.getHours() > 12 ? PM_IN_PERSIAN : AM_IN_PERSIAN;
 		int hour = date.getHours();
 		int minute = date.getMinutes();
+		int seconds = date.getMinutes();
 
-		sb.append(getPersianNumber(hour) + ":" + getPersianNumber(minute)
+		sb.append(getPersianNumber(hour) + ":" + getPersianNumber(minute) + ":" + getPersianNumber(seconds)
 				+ " " + timeText);
 		return sb.toString();
 	}
