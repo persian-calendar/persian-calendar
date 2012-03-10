@@ -492,7 +492,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/widget_background"
             android:gravity="right"
-            android:paddingRight="20dip"
+            android:paddingRight="10dip"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -504,7 +504,7 @@
             android:paddingTop="20dip"
             android:text="توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"
             android:textColor="@android:color/white"
-            android:textSize="7dip" />
+            android:textSize="5dip" />
     </LinearLayout>
 
 </ScrollView>

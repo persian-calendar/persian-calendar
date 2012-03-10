@@ -25,36 +25,37 @@ public class PersianCalendarActivity extends Activity {
 	int currentPersianMonth = 0;
 	TextView currentMonthTextView = null;
 	PersianDate nowDate = null;
-	//ViewFlipper viewFlipper = null;
+
+	// ViewFlipper viewFlipper = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.calendar);
 
-		
 		currentMonthTextView = (TextView) findViewById(R.id.currentMonthTextView);
-		/*ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
-		viewFlipper.setAnimation(AnimationUtils.loadAnimation(this,
-				android.R.anim.fade_in));
-				*/
-		
+		/*
+		 * ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
+		 * viewFlipper.setAnimation(AnimationUtils.loadAnimation(this,
+		 * android.R.anim.fade_in));
+		 */
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("امروز:\n");
 		CivilDate civil = new CivilDate();
 		nowDate = DateConverter.civilToPersian(civil);
-		sb.append(PersianUtils.RLM
-				+ PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-				+ PersianUtils.PERSIAN_COMMA + " " + nowDate.toString() + " هجری خورشیدی\n\n");
+		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
+				+ PersianUtils.PERSIAN_COMMA + " " + nowDate.toString()
+				+ " هجری خورشیدی\n\n");
 		sb.append("برابر با:\n");
 		sb.append(civil.toString() + " میلادی\n");
-		sb.append(DateConverter.civilToIslamic(civil).toString() + " هجری قمری\n");
-		TextView ci = (TextView)findViewById(R.id.calendarInfo);
+		sb.append(DateConverter.civilToIslamic(civil).toString()
+				+ " هجری قمری\n");
+		TextView ci = (TextView) findViewById(R.id.calendarInfo);
 		ci.setText(sb.toString());
-		
 
 		setCurrentMonth();
 
@@ -84,7 +85,7 @@ public class PersianCalendarActivity extends Activity {
 					weekOfMonth++;
 					dayOfWeek = 0;
 				}
-				
+
 				if (persian.equals(nowDate)) {
 					textView.setBackgroundResource(R.drawable.widget_background);
 				} else {

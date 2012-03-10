@@ -17,7 +17,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -42,7 +41,7 @@ public class PersianCalendarWidget extends AppWidgetProvider {
 						}
 					}, intentFilter);
 		}
-		
+
 		updateTime(context);
 	}
 
@@ -55,12 +54,15 @@ public class PersianCalendarWidget extends AppWidgetProvider {
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
-		remoteViews.setTextViewText(R.id.clockText, PersianUtils.RLM
-				+ PersianUtils.getPersianFormattedClock(new Date()));
+		remoteViews.setTextViewText(R.id.clockText,
+				PersianUtils.getPersianFormattedClock(new Date()));
 
-		remoteViews.setTextViewText(R.id.calendarText, PersianUtils.RLM
-				+ PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-				+ PersianUtils.PERSIAN_COMMA + " " + persian.toString());
+		remoteViews
+				.setTextViewText(
+						R.id.calendarText,
+						PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
+								+ PersianUtils.PERSIAN_COMMA + " "
+								+ persian.toString());
 
 		Intent launchAppIntent = new Intent(context,
 				PersianCalendarActivity.class);
