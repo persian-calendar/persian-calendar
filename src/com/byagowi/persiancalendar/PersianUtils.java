@@ -4,11 +4,11 @@ import java.util.Date;
 
 /**
  * Utilities needed for Persian
+ * 
  * @author ebraminio
- *
+ * 
  */
 public final class PersianUtils {
-	public static char RLM = '\u200f';
 	public static char PERSIAN_COMMA = '،';
 
 	public static final String[] dayOfWeekName = { "", "یک‌شنبه", "دوشنبه",
@@ -24,7 +24,7 @@ public final class PersianUtils {
 	public static String getPersianNumber(int number) {
 		return getPersianNumber(number + "");
 	}
-	
+
 	public static String getPersianNumber(String number) {
 		StringBuilder sb = new StringBuilder();
 		for (char i : number.toCharArray()) {
@@ -37,19 +37,36 @@ public final class PersianUtils {
 		return sb.toString();
 	}
 
-	private static String AM_IN_PERSIAN = "ق‍.ظ‍";
-	private static String PM_IN_PERSIAN = "ب‍.ظ‍";
+	private static String AM_IN_PERSIAN = "ق.ظ";
+	private static String PM_IN_PERSIAN = "ب.ظ";
+
+	public static String addExtraZeroForClock(int num) {
+		
+		String str = Integer.toString(num);
+		int strLength = str.length();
+		if (strLength == 1) {
+			return "0" + str;
+		} else if (strLength == 2) {
+			return str;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 
 	public static String getPersianFormattedClock(Date date) {
-		StringBuilder sb = new StringBuilder();
-
-		String timeText = date.getHours() > 12 ? PM_IN_PERSIAN : AM_IN_PERSIAN;
+		
+		String timeText = null;
 		int hour = date.getHours();
-		int minute = date.getMinutes();
-		int seconds = date.getMinutes();
+		if (date.getHours() > 12) {
+			timeText = PM_IN_PERSIAN;
+			hour -= 12;
+		} else {
+			timeText = AM_IN_PERSIAN;
+		}
 
-		sb.append(getPersianNumber(hour) + ":" + getPersianNumber(minute) + ":" + getPersianNumber(seconds)
-				+ " " + timeText);
-		return sb.toString();
+		return String.format("%s:%s %s",
+				getPersianNumber(addExtraZeroForClock(hour)),
+				getPersianNumber(addExtraZeroForClock(date.getMinutes())),
+				timeText);
 	}
 }
