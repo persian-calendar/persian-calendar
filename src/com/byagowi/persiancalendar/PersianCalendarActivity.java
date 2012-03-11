@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar;
 
+import java.util.Date;
+
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
@@ -31,13 +33,13 @@ public class PersianCalendarActivity extends Activity {
 	int currentPersianYear = 0;
 	int currentPersianMonth = 0;
 	int currentCalendarIndex = 0;
-	TextView currentMonthTextView = null;
 	PersianDate nowDate = null;
 	ViewFlipper calendarPlaceholder = null;
 	Animation slideInLeftAnimation = null;
 	Animation slideOutLeftAnimation = null;
 	Animation slideInRightAnimation = null;
 	Animation slideOutRightAnimation = null;
+	Animation fadeInAnimation = null;
 	Animation fadeOutAnimation = null;
 
 	private static final int SWIPE_MIN_DISTANCE = 120;
@@ -82,13 +84,6 @@ public class PersianCalendarActivity extends Activity {
 
 		setContentView(R.layout.calendar);
 
-		currentMonthTextView = (TextView) findViewById(R.id.currentMonthTextView);
-		/*
-		 * ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
-		 * viewFlipper.setAnimation(AnimationUtils.loadAnimation(this,
-		 * android.R.anim.fade_in));
-		 */
-
 		StringBuilder sb = new StringBuilder();
 		CivilDate civil = new CivilDate();
 		nowDate = DateConverter.civilToPersian(civil);
@@ -107,8 +102,14 @@ public class PersianCalendarActivity extends Activity {
 
 		TextView ci = (TextView) findViewById(R.id.calendarInfo);
 		ci.setText(sb.toString());
+		ci.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bringThisMonth(v);
+			}
+		});
 
-		setMonth();
+		setCurrentYearMonth();
 
 		gestureDetector = new GestureDetector(simpleOnGestureListener);
 		calendarPlaceholder = (ViewFlipper) findViewById(R.id.calendar_placeholder);
@@ -127,10 +128,9 @@ public class PersianCalendarActivity extends Activity {
 				R.anim.slide_in_right);
 		slideOutRightAnimation = AnimationUtils.loadAnimation(this,
 				R.anim.slide_out_right);
-		fadeOutAnimation = AnimationUtils.loadAnimation(this,
-				R.anim.fade_out);
-		
-		
+		fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+		fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+
 		View calendar = getLayoutInflater().inflate(R.layout.calendar_table,
 				null);
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth,
@@ -139,8 +139,6 @@ public class PersianCalendarActivity extends Activity {
 	}
 
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {
-
-		calendarCleanUp(calendar);
 
 		PersianDate persian = new PersianDate(year, month, 1);
 		persian.setMonth(month);
@@ -175,19 +173,10 @@ public class PersianCalendarActivity extends Activity {
 				Log.e("com.byagowi.persiancalendar", "Error: " + e.getMessage());
 			}
 		}
+		getTextViewInView("currentMonthTextView", calendar).setText(
+				persian.getMonthName() + " "
+						+ PersianUtils.getPersianNumber(persian.getYear()));
 
-		currentMonthTextView.setText(persian.getMonthName() + " "
-				+ PersianUtils.getPersianNumber(persian.getYear()));
-
-	}
-
-	private void calendarCleanUp(View calendar) {
-		for (int i = 1; i < 7; i++) {
-			for (int j = 1; j <= 7; j++) {
-				getTextViewInView(String.format("calendarCell%d%d", i, j),
-						calendar).setText("");
-			}
-		}
 	}
 
 	private TextView getTextViewInView(String name, View view) {
@@ -210,7 +199,7 @@ public class PersianCalendarActivity extends Activity {
 		currentCalendarIndex++;
 		setViewOnCalnedarPlaceholder();
 		calendarPlaceholder.setInAnimation(slideInLeftAnimation);
-		calendarPlaceholder.setOutAnimation(fadeOutAnimation);
+		calendarPlaceholder.setOutAnimation(slideOutRightAnimation);
 		calendarPlaceholder.showNext();
 	}
 
@@ -223,8 +212,20 @@ public class PersianCalendarActivity extends Activity {
 		currentCalendarIndex++;
 		setViewOnCalnedarPlaceholder();
 		calendarPlaceholder.setInAnimation(slideInRightAnimation);
-		calendarPlaceholder.setOutAnimation(fadeOutAnimation);
+		calendarPlaceholder.setOutAnimation(slideOutLeftAnimation);
 		calendarPlaceholder.showNext();
+	}
+
+	public void bringThisMonth(View v) {
+		if (currentCalendarIndex != 0) {
+			calendarPlaceholder.removeAllViews();
+			setCurrentYearMonth();
+			currentCalendarIndex = 0;
+			setViewOnCalnedarPlaceholder();
+			calendarPlaceholder.setInAnimation(fadeInAnimation);
+			calendarPlaceholder.setOutAnimation(fadeOutAnimation);
+			calendarPlaceholder.setDisplayedChild(currentCalendarIndex);
+		}
 	}
 
 	public void setViewOnCalnedarPlaceholder() {
@@ -235,7 +236,7 @@ public class PersianCalendarActivity extends Activity {
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
 	}
 
-	private void setMonth() {
+	private void setCurrentYearMonth() {
 		PersianDate persian = DateConverter.civilToPersian(new CivilDate());
 		currentPersianMonth = persian.getMonth();
 		currentPersianYear = persian.getYear();
