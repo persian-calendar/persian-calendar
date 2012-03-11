@@ -8,6 +8,7 @@ import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -20,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 /**
@@ -61,10 +63,10 @@ public class PersianCalendarActivity extends Activity {
 				// right to left swipe
 				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					previousMonth(null);
+					previousMonth();
 				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					nextMonth(null);
+					nextMonth();
 				}
 			} catch (Exception e) {
 				// nothing
@@ -105,7 +107,7 @@ public class PersianCalendarActivity extends Activity {
 		ci.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				bringThisMonth(v);
+				bringThisMonth();
 			}
 		});
 
@@ -140,14 +142,14 @@ public class PersianCalendarActivity extends Activity {
 
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {
 
-		PersianDate persian = new PersianDate(year, month, 1);
-		persian.setMonth(month);
+		PersianDate persianDateIterator = new PersianDate(year, month, 1);
+		persianDateIterator.setMonth(month);
 
 		int weekOfMonth = 1;
-		int dayOfWeek = DateConverter.persianToCivil(persian).getDayOfWeek() % 7;
+		int dayOfWeek = DateConverter.persianToCivil(persianDateIterator).getDayOfWeek() % 7;
 		for (int i = 1; i <= 31; i++) {
 			try {
-				persian.setDayOfMonth(i);
+				persianDateIterator.setDayOfMonth(i);
 
 				TextView textView = getTextViewInView(String.format(
 						"calendarCell%d%d", weekOfMonth, dayOfWeek + 1),
@@ -160,11 +162,22 @@ public class PersianCalendarActivity extends Activity {
 					weekOfMonth++;
 					dayOfWeek = 0;
 				}
+				
+				final String holidayTitle = PersianDateHolidays.getHolidayTitle(persianDateIterator);
+				if (holidayTitle != null) {
+					textView.setBackgroundResource(R.drawable.holiday_background);
+					textView.setTextColor(Color.WHITE);
+					textView.setOnClickListener(new View.OnClickListener() {
+						String title = holidayTitle;
+						@Override
+						public void onClick(View v) {
+							Toast.makeText(getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
 
-				if (persian.equals(nowDate)) {
-					textView.setBackgroundResource(R.drawable.widget_background);
-				} else {
-					textView.setBackgroundResource(android.R.color.transparent);
+				if (persianDateIterator.equals(nowDate)) {
+					textView.setBackgroundResource(R.drawable.today_background);
 				}
 			} catch (DayOutOfRangeException e) {
 				Log.i("com.byagowi.persiancalendar", "Limit on " + i + " "
@@ -174,8 +187,8 @@ public class PersianCalendarActivity extends Activity {
 			}
 		}
 		getTextViewInView("currentMonthTextView", calendar).setText(
-				persian.getMonthName() + " "
-						+ PersianUtils.getPersianNumber(persian.getYear()));
+				persianDateIterator.getMonthName() + " "
+						+ PersianUtils.getPersianNumber(persianDateIterator.getYear()));
 
 	}
 
@@ -190,7 +203,7 @@ public class PersianCalendarActivity extends Activity {
 		}
 	}
 
-	public void nextMonth(View v) {
+	public void nextMonth() {
 		currentPersianMonth++;
 		if (currentPersianMonth == 13) {
 			currentPersianMonth = 1;
@@ -203,7 +216,7 @@ public class PersianCalendarActivity extends Activity {
 		calendarPlaceholder.showNext();
 	}
 
-	public void previousMonth(View v) {
+	public void previousMonth() {
 		currentPersianMonth--;
 		if (currentPersianMonth == 0) {
 			currentPersianMonth = 12;
@@ -216,7 +229,7 @@ public class PersianCalendarActivity extends Activity {
 		calendarPlaceholder.showNext();
 	}
 
-	public void bringThisMonth(View v) {
+	public void bringThisMonth() {
 		if (currentCalendarIndex != 0) {
 			calendarPlaceholder.removeAllViews();
 			setCurrentYearMonth();
