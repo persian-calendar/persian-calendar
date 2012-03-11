@@ -42,8 +42,12 @@
                 android:textColor="@android:color/white"
                 android:textSize="25dip" />
         </LinearLayout>
-
-        <include layout="@layout/calendar_table"/>
+		
+        <ViewFlipper 
+            android:id="@+id/calendar_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />"
 
         <TextView
             android:id="@+id/calendarInfo"
