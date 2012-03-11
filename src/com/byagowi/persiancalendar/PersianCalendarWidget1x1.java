@@ -25,7 +25,7 @@ import android.widget.RemoteViews;
  * @author ebraminio
  * 
  */
-public class PersianCalendarWidget extends AppWidgetProvider {
+public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 	static private IntentFilter intentFilter = null;
 
 	@Override
@@ -37,11 +37,11 @@ public class PersianCalendarWidget extends AppWidgetProvider {
 					new BroadcastReceiver() {
 						@Override
 						public void onReceive(Context context, Intent intent) {
-							PersianCalendarWidget.updateTime(context);
+							updateTime(context);
 						}
 					}, intentFilter);
 		}
-
+		
 		updateTime(context);
 	}
 
@@ -49,30 +49,28 @@ public class PersianCalendarWidget extends AppWidgetProvider {
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-				R.layout.widget);
+				R.layout.widget1x1);
 
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
-		remoteViews.setTextViewText(R.id.clockText,
-				PersianUtils.getPersianFormattedClock(new Date()));
+		remoteViews.setTextViewText(R.id.monthText,
+				persian.getMonthName());
 
 		remoteViews
 				.setTextViewText(
-						R.id.calendarText,
-						PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-								+ PersianUtils.PERSIAN_COMMA + " "
-								+ persian.toString());
+						R.id.dayOfMonthText,
+						PersianUtils.getPersianNumber(persian.getDayOfMonth()));
 
 		Intent launchAppIntent = new Intent(context,
 				PersianCalendarActivity.class);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, launchAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		remoteViews.setOnClickPendingIntent(R.id.widget_layout,
+		remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1,
 				launchAppPendingIntent);
-
+		
 		ComponentName widget = new ComponentName(context,
-				PersianCalendarWidget.class);
+				PersianCalendarWidget1x1.class);
 		manager.updateAppWidget(widget, remoteViews);
 	}
 }

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_layout"
+    android:id="@+id/widget_layout1x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/widget_background"
     android:orientation="vertical" >
-
+    
     <TextView
-        android:id="@+id/clockText"
+        android:text="12"
+        android:id="@+id/dayOfMonthText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right|top"
-        android:textColor="@android:color/white"
-        android:textSize="30dip" />
+        android:gravity="center"
+        android:textColor="#00FFFFFF"
+        android:textSize="50dip" />
 
     <TextView
-        android:id="@+id/calendarText"
+        android:text="شهریور"
+        android:id="@+id/monthText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:gravity="left|bottom"
-        android:textColor="@android:color/white"
+        android:gravity="center|bottom"
+        android:textColor="#00FFFFFF"
         android:textSize="20dip" />
 
 </LinearLayout>

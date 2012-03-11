@@ -20,14 +20,25 @@
         </activity>
         <receiver
             android:icon="@drawable/icon"
-            android:name=".PersianCalendarWidget"
+            android:name=".PersianCalendarWidget4x1"
             android:label="Persian Calendar" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/persiancalendar_provider" />
+                android:resource="@xml/persiancalendar_provider4x1" />
+        </receiver>
+        <receiver
+            android:icon="@drawable/icon"
+            android:name=".PersianCalendarWidget1x1"
+            android:label="Persian Calendar (Mini)" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider1x1" />
         </receiver>
     </application>
 
