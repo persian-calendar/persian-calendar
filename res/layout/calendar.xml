@@ -13,38 +13,16 @@
         android:paddingLeft="10dip"
         android:paddingRight="10dip" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-          <!-- <Button
-                android:id="@+id/nextButton"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
-                android:background="@android:drawable/ic_media_previous"
-                android:onClick="nextMonth" />
-
-            <Button
-                android:id="@+id/previousButton"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
-                android:background="@android:drawable/ic_media_next"
-                android:onClick="previousMonth" /> -->
-
-        </LinearLayout>
-		
-        <ViewFlipper 
+        <ViewFlipper
             android:id="@+id/calendar_placeholder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/calendarInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/widget_background"
+            android:background="@drawable/today_background"
             android:gravity="right"
             android:paddingRight="10dip"
             android:textColor="@android:color/white" />
@@ -60,7 +38,6 @@
             android:text="توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"
             android:textColor="@android:color/white"
             android:textSize="5dip" />
-        
     </LinearLayout>
 
 </LinearLayout>
