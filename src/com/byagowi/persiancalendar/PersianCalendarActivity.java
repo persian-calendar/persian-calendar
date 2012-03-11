@@ -1,25 +1,23 @@
 package com.byagowi.persiancalendar;
 
-import java.util.Date;
-
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -141,6 +139,24 @@ public class PersianCalendarActivity extends Activity {
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth,
 				calendar);
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_exit:
+			finish();
+			break;
+		}
+		return false;
 	}
 
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {

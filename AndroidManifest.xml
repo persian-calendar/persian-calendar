@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.byagowi.persiancalendar"
-    android:versionCode="5"
-    android:versionName="1.5" >
+    android:versionCode="6"
+    android:versionName="1.6" >
 
     <uses-sdk android:minSdkVersion="8" />
 
@@ -18,24 +18,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver
-            android:icon="@drawable/icon"
             android:name=".PersianCalendarWidget4x1"
+            android:icon="@drawable/icon"
             android:label="Persian Calendar" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
         </receiver>
         <receiver
-            android:icon="@drawable/icon"
             android:name=".PersianCalendarWidget1x1"
+            android:icon="@drawable/icon"
             android:label="Persian Calendar (Mini)" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider1x1" />
