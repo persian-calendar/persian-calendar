@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- from https://gist.github.com/2016752 and  -->
+<holidays>
+	<holiday year="1390" month="1" day="1">آغاز نوروز</holiday>
+	<holiday year="1390" month="1" day="2">عید نوروز</holiday>
+	<holiday year="1390" month="1" day="3">عید نوروز</holiday>
+	<holiday year="1390" month="1" day="4">عید نوروز</holiday>
+	<holiday year="1390" month="1" day="12">روز جمهوری اسلامی ایران</holiday>
+	<holiday year="1390" month="1" day="13">روز طبیعت</holiday>
+	<holiday year="1390" month="2" day="17">۳ جمادی الثانیة ۱۴۳۲ شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ ه ق)</holiday>
+	<holiday year="1390" month="3" day="14">رحلت حضرت امام خمینی (ره) رهبر کبیر انقلاب و بنیانگذار جمهوری اسلامی ایران (۱۳۶۸ ه ش)</holiday>
+	<holiday year="1390" month="3" day="15">قیام خونین ۱۵ خرداد (۱۳۴۲ ه ش)</holiday>
+	<holiday year="1390" month="3" day="26">خرداد ۱۳ رجب ۱۴۳۲ولادت حضرت امام علی علیه السلام (۲۳ سال قبل از هجرت)</holiday>
+	<holiday year="1390" month="4" day="9">۲۷ رجب ۱۴۳۲مبعث حضرت رسول اکرم صلی الله علیه و آله (۱۳سال قبل از هجرت)</holiday>
+	<holiday year="1390" month="4" day="26">۱۵ شعبان ۱۴۳۲ ولادت حضرت قائم عجل الله تعالی فرجه ( ۲۵۵ ه ق)</holiday>
+	<holiday year="1390" month="5" day="30">۲۱ رمضان ۱۴۳۲ شهادت حضرت علی علیه السلام ( ۴۰ ه ق)</holiday>
+	<holiday year="1390" month="6" day="9">۱ شوال ۱۴۳۲ عید سعید فطر</holiday>
+	<holiday year="1390" month="7" day="2">۲۵ شوال ۱۴۳۲شهادت حضرت امام جعفر صادق علیه السلام (۱۴۸ه ق)</holiday>
+	<holiday year="1390" month="8" day="16">۱۰ ذی الحجه ۱۴۳۲ عید سعید قربان</holiday>
+	<holiday year="1390" month="8" day="24">۱۸ ذی الحجه ۱۴۳۲ عید سعید غدیر خم (۱۰ ه ق)</holiday>
+	<holiday year="1390" month="9" day="14">۹ محرم ۱۴۳۳ تاسوعای حسینی</holiday>
+	<holiday year="1390" month="9" day="15">۱۰ محرم ۱۴۳۳ عاشورای حسینی</holiday>
+	<holiday year="1390" month="10" day="24">۲۰ صفر ۱۴۳۳ اربعین حسینی</holiday>
+	<holiday year="1390" month="11" day="2">۲۸ صفر ۱۴۳۳ رحلت حضرت رسول اکرم صلی الله علیه و آله (۱۱ ه ق) شهادت حضرت امام حسن مجتبی علیه السلام (۵۰ ه ق)</holiday>
+	<holiday year="1390" month="11" day="4">آخر صفر ۱۴۳۳ شهادت حضرت امام رضا علیهالسلام (۲۰۳ ه ق)</holiday>
+	<holiday year="1390" month="11" day="21">۱۷ ربیع الاول ۱۴۳۳ میلاد حضرت رسول اکرم صلی الله علیه و آله (۵۳سال قبل از هجرت) میلاد حضرت امام جعفر صادق علیهالسلام مؤسس مذهب جعفری ( ۸۳ ه ق)</holiday>
+	<holiday year="1390" month="11" day="2">پیروزی انقلاب اسلامی ایران و سقوط نظام شاهنشاهی (۱۳۵۷ ه ش)</holiday>
+	<holiday year="1390" month="12" day="29">روز ملی شدن صنعت نفت</holiday>
+	
+	<holiday year="1391" month="1" day="1">آﻏﺎز ﻧﻮروز</holiday>
+	<holiday year="1391" month="1" day="2">عید ﻧﻮروز</holiday>
+	<holiday year="1391" month="1" day="3">ﻋﻴﺪ ﻧﻮروز</holiday>
+	<holiday year="1391" month="1" day="4">ﻋﻴﺪ ﻧﻮروز</holiday>
+	<holiday year="1391" month="1" day="12">روز جمهوری اسلامی ایران</holiday>
+	<holiday year="1391" month="1" day="13">روز طبیعت</holiday>
+	<holiday year="1391" month="2" day="6">شهادت حضرت فاطمه زهرا سلام الله علیها</holiday>
+	<holiday year="1391" month="3" day="14">رحلت حضرت امام خمینی (ره) رهبر کبیر انقلاب و بنیانگذار جمهوری اسلامی ایران</holiday>
+	<holiday year="1391" month="3" day="15">ولادت حضرت امام علی علیه‌اسلام / قیام خونین ۱۵ خرداد</holiday>
+	<holiday year="1391" month="3" day="29">مبعث حضرت رسول اکرم صلی الله علیه و آله</holiday>
+	<holiday year="1391" month="4" day="15">ولادت حضرت قائم عجل‌الله تعالی فرجه</holiday>
+	<holiday year="1391" month="5" day="20">شهادت حضرت علی علیه‌اسلام</holiday>
+	<holiday year="1391" month="5" day="29">عید سعید فطر</holiday>
+	<holiday year="1391" month="5" day="30">تعطیل به مناسبت عید سعید فطر</holiday>
+	<holiday year="1391" month="6" day="22">شهادت حضرت امام جعفر صادق علیه‌اسلام</holiday>
+	<holiday year="1391" month="8" day="5">عید سعید قربان</holiday>
+	<holiday year="1391" month="8" day="13">عید سعید غدیر خم</holiday>
+	<holiday year="1391" month="9" day="4">تاسوعای حسینی</holiday>
+	<holiday year="1391" month="9" day="5">عاشورای حسینی</holiday>
+	<holiday year="1391" month="10" day="14">اربعین حسینی</holiday>
+	<holiday year="1391" month="10" day="22">رحلت حضرت رسول اکرم صلی‌الله علیه و آله / شهادت حضرت امام حسن مجتبی علیه‌اسلام</holiday>
+	<holiday year="1391" month="10" day="23">شهادت حضرت امام رضا علیه‌اسلام</holiday>
+	<holiday year="1391" month="11" day="10">میلاد حضرت رسول اکرم صلی‌الله علیه و آله / میلاد هضرت امام جعفر صادق علیه‌اسلام</holiday>
+	<holiday year="1391" month="11" day="22">پیروزی انقلاب اسلامی ایران و سقوط نظام شاهنشاهی</holiday>
+	<holiday year="1391" month="12" day="29">روز ملی شدن صنعت نفت</holiday>
+	
+</holidays>

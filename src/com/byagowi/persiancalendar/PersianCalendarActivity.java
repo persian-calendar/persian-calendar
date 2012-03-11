@@ -86,6 +86,9 @@ public class PersianCalendarActivity extends Activity {
 
 		setContentView(R.layout.calendar);
 
+		PersianDateHolidays.loadHolidays(getResources().openRawResource(
+				R.raw.holidays));
+
 		StringBuilder sb = new StringBuilder();
 		CivilDate civil = new CivilDate();
 		nowDate = DateConverter.civilToPersian(civil);
@@ -146,7 +149,8 @@ public class PersianCalendarActivity extends Activity {
 		persianDateIterator.setMonth(month);
 
 		int weekOfMonth = 1;
-		int dayOfWeek = DateConverter.persianToCivil(persianDateIterator).getDayOfWeek() % 7;
+		int dayOfWeek = DateConverter.persianToCivil(persianDateIterator)
+				.getDayOfWeek() % 7;
 		for (int i = 1; i <= 31; i++) {
 			try {
 				persianDateIterator.setDayOfMonth(i);
@@ -162,16 +166,19 @@ public class PersianCalendarActivity extends Activity {
 					weekOfMonth++;
 					dayOfWeek = 0;
 				}
-				
-				final String holidayTitle = PersianDateHolidays.getHolidayTitle(persianDateIterator);
+
+				final String holidayTitle = PersianDateHolidays
+						.getHolidayTitle(persianDateIterator);
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holiday_background);
 					textView.setTextColor(Color.WHITE);
 					textView.setOnClickListener(new View.OnClickListener() {
 						String title = holidayTitle;
+
 						@Override
 						public void onClick(View v) {
-							Toast.makeText(getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), title,
+									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -187,8 +194,10 @@ public class PersianCalendarActivity extends Activity {
 			}
 		}
 		getTextViewInView("currentMonthTextView", calendar).setText(
-				persianDateIterator.getMonthName() + " "
-						+ PersianUtils.getPersianNumber(persianDateIterator.getYear()));
+				persianDateIterator.getMonthName()
+						+ " "
+						+ PersianUtils.getPersianNumber(persianDateIterator
+								.getYear()));
 
 	}
 
