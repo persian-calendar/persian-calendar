@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import java.util.Date;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetProvider;
 

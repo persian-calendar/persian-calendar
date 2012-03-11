@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public final class PersianUtils {
 	public static char PERSIAN_COMMA = '،';
+	public static char LRO = '\u202D';
+	public static char POP = '\u202C';
 
 	public static final String[] dayOfWeekName = { "", "یک‌شنبه", "دوشنبه",
 			"سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه" };
@@ -27,6 +29,7 @@ public final class PersianUtils {
 
 	public static String getPersianNumber(String number) {
 		StringBuilder sb = new StringBuilder();
+		sb.append(LRO);
 		for (char i : number.toCharArray()) {
 			if (Character.isDigit(i)) {
 				sb.append(persianDigit[Integer.parseInt(i + "")]);
@@ -34,6 +37,7 @@ public final class PersianUtils {
 				sb.append(i);
 			}
 		}
+		sb.append(POP);
 		return sb.toString();
 	}
 
