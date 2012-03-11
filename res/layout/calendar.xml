@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <Button
+          <!-- <Button
                 android:id="@+id/nextButton"
                 android:layout_width="50dip"
                 android:layout_height="50dip"
@@ -30,17 +30,8 @@
                 android:layout_width="50dip"
                 android:layout_height="50dip"
                 android:background="@android:drawable/ic_media_next"
-                android:onClick="previousMonth" />
+                android:onClick="previousMonth" /> -->
 
-            <TextView
-                android:id="@+id/currentMonthTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:paddingRight="10dip"
-                android:paddingTop="20dip"
-                android:textColor="@android:color/white"
-                android:textSize="25dip" />
         </LinearLayout>
 		
         <ViewFlipper 
@@ -69,6 +60,7 @@
             android:text="توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"
             android:textColor="@android:color/white"
             android:textSize="5dip" />
+        
     </LinearLayout>
 
 </LinearLayout>
