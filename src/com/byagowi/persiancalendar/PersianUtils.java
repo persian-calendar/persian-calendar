@@ -29,7 +29,6 @@ public final class PersianUtils {
 
 	public static String getPersianNumber(String number) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(LRO);
 		for (char i : number.toCharArray()) {
 			if (Character.isDigit(i)) {
 				sb.append(persianDigit[Integer.parseInt(i + "")]);
@@ -37,7 +36,6 @@ public final class PersianUtils {
 				sb.append(i);
 			}
 		}
-		sb.append(POP);
 		return sb.toString();
 	}
 

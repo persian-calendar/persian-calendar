@@ -2,6 +2,11 @@ package com.byagowi.persiancalendar;
 
 import calendar.PersianDate;
 
+/**
+ * Holidays bean, for storing holidays
+ * @author ebraminio
+ *
+ */
 public class Holiday {
 	private PersianDate date;
 	private String title;
