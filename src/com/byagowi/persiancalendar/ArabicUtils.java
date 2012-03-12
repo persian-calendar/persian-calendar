@@ -17,7 +17,6 @@ public final class ArabicUtils {
 
 	public static String getArabicNumber(String number) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(PersianUtils.LRO);
 		for (char i : number.toCharArray()) {
 			if (Character.isDigit(i)) {
 				sb.append(persianDigit[Integer.parseInt(i + "")]);
@@ -25,7 +24,6 @@ public final class ArabicUtils {
 				sb.append(i);
 			}
 		}
-		sb.append(PersianUtils.POP);
 		return sb.toString();
 	}
 }

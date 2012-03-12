@@ -33,47 +33,15 @@ public class PersianCalendarActivity extends Activity {
 	int currentPersianYear = 0;
 	int currentPersianMonth = 0;
 	int currentCalendarIndex = 0;
-	PersianDate nowDate = null;
-	ViewFlipper calendarPlaceholder = null;
-	Animation slideInLeftAnimation = null;
-	Animation slideOutLeftAnimation = null;
-	Animation slideInRightAnimation = null;
-	Animation slideOutRightAnimation = null;
-	Animation fadeInAnimation = null;
-	Animation fadeOutAnimation = null;
+	PersianDate nowDate;
+	ViewFlipper calendarPlaceholder;
+	Animation slideInLeftAnimation;
+	Animation slideOutLeftAnimation;
+	Animation slideInRightAnimation;
+	Animation slideOutRightAnimation;
+	Animation fadeInAnimation;
+	Animation fadeOutAnimation;
 
-	private static final int SWIPE_MIN_DISTANCE = 120;
-	private static final int SWIPE_MAX_OFF_PATH = 250;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return true;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			try {
-				if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-					return false;
-				// right to left swipe
-				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					previousMonth();
-				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					nextMonth();
-				}
-			} catch (Exception e) {
-				// nothing
-			}
-			return super.onFling(e1, e2, velocityX, velocityY);
-		}
-	};
-
-	// ViewFlipper viewFlipper = null;
 	GestureDetector gestureDetector;
 
 	@Override
@@ -86,31 +54,8 @@ public class PersianCalendarActivity extends Activity {
 
 		PersianDateHolidays.loadHolidays(getResources().openRawResource(
 				R.raw.holidays));
-
-		StringBuilder sb = new StringBuilder();
-		CivilDate civil = new CivilDate();
-		nowDate = DateConverter.civilToPersian(civil);
-
-		sb.append("امروز:\n");
-		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek()));
-		sb.append(PersianUtils.PERSIAN_COMMA);
-		sb.append(" ");
-		sb.append(nowDate.toString());
-		sb.append(" هجری خورشیدی\n\n");
-		sb.append("برابر با:\n");
-		sb.append(civil.toString());
-		sb.append(" میلادی\n");
-		sb.append(DateConverter.civilToIslamic(civil).toString());
-		sb.append(" هجری قمری\n");
-
-		TextView ci = (TextView) findViewById(R.id.calendarInfo);
-		ci.setText(sb.toString());
-		ci.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				bringThisMonth();
-			}
-		});
+		
+		fillCalendarInfo();
 
 		setCurrentYearMonth();
 
@@ -142,6 +87,65 @@ public class PersianCalendarActivity extends Activity {
 		
 	}
 	
+	private static final int SWIPE_MIN_DISTANCE = 120;
+	private static final int SWIPE_MAX_OFF_PATH = 250;
+	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	
+	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return true;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			try {
+				if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+					return false;
+				// right to left swipe
+				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					previousMonth();
+				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					nextMonth();
+				}
+			} catch (Exception e) {
+				// nothing
+			}
+			return super.onFling(e1, e2, velocityX, velocityY);
+		}
+	};
+	
+	private void fillCalendarInfo() {
+
+		StringBuilder sb = new StringBuilder();
+		CivilDate civil = new CivilDate();
+		nowDate = DateConverter.civilToPersian(civil);
+
+		sb.append("امروز:\n");
+		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek()));
+		sb.append(PersianUtils.PERSIAN_COMMA);
+		sb.append(" ");
+		sb.append(nowDate.toString());
+		sb.append(" هجری خورشیدی\n\n");
+		sb.append("برابر با:\n");
+		sb.append(civil.toString());
+		sb.append(" میلادی\n");
+		sb.append(DateConverter.civilToIslamic(civil).toString());
+		sb.append(" هجری قمری\n");
+
+		TextView ci = (TextView) findViewById(R.id.calendarInfo);
+		ci.setText(sb.toString());
+		ci.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bringThisMonth();
+			}
+		});
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

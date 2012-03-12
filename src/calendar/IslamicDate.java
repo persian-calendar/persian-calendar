@@ -1,7 +1,6 @@
 package calendar;
 
 import com.byagowi.persiancalendar.ArabicUtils;
-import com.byagowi.persiancalendar.PersianUtils;
 
 /**
  * 
@@ -12,24 +11,9 @@ import com.byagowi.persiancalendar.PersianUtils;
 
 public class IslamicDate extends AbstractDate {
 
-	private static final String[] monthName = {
-			"",
-			"\u0645\u062D\u0631\u0645", // Moharram
-			"\u0635\u0641\u0631", // Safar
-			"\u0631\u0628\u064A\u0639 \u0627\u0644\u0627\u0648\u0644", // Rabi 1
-			"\u0631\u0628\u064A\u0639 \u0627\u0644\u062B\u0627\u0646\u064A", // Rabi
-																				// 2
-			"\u062C\u0645\u0627\u062F\u064A \u0627\u0644\u0627\u0648\u0644", // Jamdi
-																				// 1
-			"\u062C\u0645\u0627\u062F\u064A \u0627\u0644\u062B\u0627\u0646\u064A", // Jamadi
-																					// 2
-			"\u0631\u062C\u0628", // Rajab
-			"\u0634\u0639\u0628\u0627\u0646", // Shaban
-			"\u0631\u0645\u0636\u0627\u0646", // Ramezan
-			"\u0634\u0648\u0627\u0644", // Shavval
-			"\u0630\u064A \u0627\u0644\u0642\u0639\u062F\u0647", // Zel Ghade
-			"\u0630\u064A \u0627\u0644\u062D\u062C\u0647" // Zel Hajje
-	};
+	private static final String[] monthName = { "", "„Õ—„", "’›—",
+			"—»Ì⁄ù«·«Ê·", "—»Ì⁄ù«·À«‰Ì", "Ã„«œÌù«·«Ê·", "Ã„«œÌù«·À«‰Ì", "—Ã»",
+			"‘⁄»«‰", "—„÷«‰", "‘Ê«·", "–Ìù«·ﬁ⁄œÂ", "–Ìù«·ÕÃÂ" };
 
 	private int day;
 
@@ -126,8 +110,8 @@ public class IslamicDate extends AbstractDate {
 	}
 
 	public String toString() {
-		return ArabicUtils.getArabicNumber(day) + " " + monthName[month]
-				+ " " + ArabicUtils.getArabicNumber(year);
+		return ArabicUtils.getArabicNumber(day) + " " + monthName[month] + " "
+				+ ArabicUtils.getArabicNumber(year);
 	}
 
 }
