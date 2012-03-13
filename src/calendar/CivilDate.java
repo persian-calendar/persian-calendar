@@ -146,9 +146,9 @@ public class CivilDate extends AbstractDate {
 		return weekdayName[getDayOfWeek()];
 	}
 
-	public String toString() {
-		return PersianUtils.getPersianNumber(getDayOfMonth()) + " "
+	public String toString(boolean persianDigit) {
+		return PersianUtils.formatNumber(getDayOfMonth(), persianDigit) + " "
 				+ getMonthName() + " "
-				+ PersianUtils.getPersianNumber(getYear());
+				+ PersianUtils.formatNumber(getYear(), persianDigit);
 	}
 }

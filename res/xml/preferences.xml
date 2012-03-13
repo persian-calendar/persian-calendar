@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="General" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="PersianDigits"
+            android:summary="Enable Persian Digits"
+            android:title="Persian Digits" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Gadget" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="GadgetClock"
+            android:summary="Showing clock on widget"
+            android:title="Clock on Widget" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="TransparentWidget"
+            android:summary="Transparent background on widgets"
+            android:title="Transparent widget" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

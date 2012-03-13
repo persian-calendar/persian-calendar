@@ -5,8 +5,11 @@ import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -54,7 +57,7 @@ public class PersianCalendarActivity extends Activity {
 
 		PersianDateHolidays.loadHolidays(getResources().openRawResource(
 				R.raw.holidays));
-		
+
 		fillCalendarInfo();
 
 		setCurrentYearMonth();
@@ -84,13 +87,13 @@ public class PersianCalendarActivity extends Activity {
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth,
 				calendar);
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
-		
+
 	}
-	
+
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-	
+
 	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
 		@Override
 		public boolean onDown(MotionEvent e) {
@@ -117,8 +120,12 @@ public class PersianCalendarActivity extends Activity {
 			return super.onFling(e1, e2, velocityX, velocityY);
 		}
 	};
-	
+
 	private void fillCalendarInfo() {
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
 
 		StringBuilder sb = new StringBuilder();
 		CivilDate civil = new CivilDate();
@@ -128,12 +135,12 @@ public class PersianCalendarActivity extends Activity {
 		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek()));
 		sb.append(PersianUtils.PERSIAN_COMMA);
 		sb.append(" ");
-		sb.append(nowDate.toString());
+		sb.append(nowDate.toString(persianDigit));
 		sb.append(" هجری خورشیدی\n\n");
 		sb.append("برابر با:\n");
-		sb.append(civil.toString());
+		sb.append(civil.toString(persianDigit));
 		sb.append(" میلادی\n");
-		sb.append(DateConverter.civilToIslamic(civil).toString());
+		sb.append(DateConverter.civilToIslamic(civil).toString(persianDigit));
 		sb.append(" هجری قمری\n");
 
 		TextView ci = (TextView) findViewById(R.id.calendarInfo);
@@ -159,11 +166,34 @@ public class PersianCalendarActivity extends Activity {
 		case R.id.menu_exit:
 			finish();
 			break;
+		case R.id.menu_settings:
+			Intent preferenceIntent = new Intent(getApplicationContext(),
+					PersianCalendarPreferenceActivity.class);
+			startActivityForResult(preferenceIntent, 0);
+			break;
 		}
 		return false;
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		currentCalendarIndex++; // hack bringThisMonth for always updating after
+								// preference changes
+		bringThisMonth();
+
+		fillCalendarInfo();
+
+		PersianCalendarWidget1x1.updateTime(this);
+		PersianCalendarWidget4x1.updateTime(this);
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
 
 		PersianDate persianDateIterator = new PersianDate(year, month, 1);
 		persianDateIterator.setMonth(month);
@@ -179,7 +209,7 @@ public class PersianCalendarActivity extends Activity {
 						"calendarCell%d%d", weekOfMonth, dayOfWeek + 1),
 						calendar);
 
-				textView.setText(PersianUtils.getPersianNumber(i));
+				textView.setText(PersianUtils.formatNumber(i, persianDigit));
 
 				dayOfWeek++;
 				if (dayOfWeek == 7) {
@@ -216,8 +246,8 @@ public class PersianCalendarActivity extends Activity {
 		getTextViewInView("currentMonthTextView", calendar).setText(
 				persianDateIterator.getMonthName()
 						+ " "
-						+ PersianUtils.getPersianNumber(persianDateIterator
-								.getYear()));
+						+ PersianUtils.formatNumber(
+								persianDateIterator.getYear(), persianDigit));
 
 	}
 

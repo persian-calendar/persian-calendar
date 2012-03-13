@@ -2,13 +2,17 @@ package com.byagowi.persiancalendar;
 
 import java.util.Date;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 /**
  * Utilities needed for Persian
  * 
  * @author ebraminio
  * 
  */
-public final class PersianUtils {
+public class PersianUtils {
 	public static char PERSIAN_COMMA = '،';
 	public static char LRO = '\u202D';
 	public static char POP = '\u202C';
@@ -43,7 +47,7 @@ public final class PersianUtils {
 	private static String PM_IN_PERSIAN = "ب.ظ";
 
 	public static String addExtraZeroForClock(int num) {
-		
+
 		String str = Integer.toString(num);
 		int strLength = str.length();
 		if (strLength == 1) {
@@ -55,8 +59,9 @@ public final class PersianUtils {
 		}
 	}
 
-	public static String getPersianFormattedClock(Date date) {
-		
+	public static String getPersianFormattedClock(Date date,
+			boolean persianDigit) {
+
 		String timeText = null;
 		int hour = date.getHours();
 		if (date.getHours() > 12) {
@@ -66,9 +71,21 @@ public final class PersianUtils {
 			timeText = AM_IN_PERSIAN;
 		}
 
-		return String.format("%s:%s %s",
-				getPersianNumber(addExtraZeroForClock(hour)),
-				getPersianNumber(addExtraZeroForClock(date.getMinutes())),
-				timeText);
+		return String.format(
+				"%s:%s %s",
+				formatNumber(addExtraZeroForClock(hour), persianDigit),
+				formatNumber(addExtraZeroForClock(date.getMinutes()),
+						persianDigit), timeText);
+	}
+
+	public static String formatNumber(int number, boolean persianDigit) {
+		return formatNumber(Integer.toString(number), persianDigit);
+	}
+
+	public static String formatNumber(String number, boolean persianDigit) {
+		if (!persianDigit)
+			return number;
+
+		return getPersianNumber(number);
 	}
 }

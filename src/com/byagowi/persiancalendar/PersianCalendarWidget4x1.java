@@ -17,6 +17,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 /**
@@ -46,6 +48,12 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 	}
 
 	static public void updateTime(Context context) {
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
+		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
+
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -54,15 +62,23 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
-		remoteViews.setTextViewText(R.id.clockText,
-				PersianUtils.getPersianFormattedClock(new Date()));
+		String text1;
+		String text2;
 
-		remoteViews
-				.setTextViewText(
-						R.id.calendarText,
-						PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-								+ PersianUtils.PERSIAN_COMMA + " "
-								+ persian.toString());
+		if (gadgetClock) {
+			text1 = PersianUtils.getPersianFormattedClock(new Date(),
+					persianDigit);
+
+			text2 = PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
+					+ PersianUtils.PERSIAN_COMMA + " "
+					+ persian.toString(persianDigit);
+		} else {
+			text1 = PersianUtils.getDayOfWeekName(civil.getDayOfWeek());
+			text2 = persian.toString(persianDigit);
+		}
+
+		remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, text1);
+		remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, text2);
 
 		Intent launchAppIntent = new Intent(context,
 				PersianCalendarActivity.class);

@@ -15,6 +15,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 /**
@@ -39,11 +41,16 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 						}
 					}, intentFilter);
 		}
-		
+
 		updateTime(context);
 	}
 
 	static public void updateTime(Context context) {
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
+
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -52,13 +59,11 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
-		remoteViews.setTextViewText(R.id.monthText,
+		remoteViews.setTextViewText(R.id.textPlaceholder2_1x1,
 				persian.getMonthName());
 
-		remoteViews
-				.setTextViewText(
-						R.id.dayOfMonthText,
-						PersianUtils.getPersianNumber(persian.getDayOfMonth()));
+		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianUtils
+				.formatNumber(persian.getDayOfMonth(), persianDigit));
 
 		Intent launchAppIntent = new Intent(context,
 				PersianCalendarActivity.class);
@@ -66,9 +71,10 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 				context, 0, launchAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1,
 				launchAppPendingIntent);
-		
+
 		ComponentName widget = new ComponentName(context,
 				PersianCalendarWidget1x1.class);
+		
 		manager.updateAppWidget(widget, remoteViews);
 	}
 }

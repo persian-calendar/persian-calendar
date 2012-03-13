@@ -5,8 +5,9 @@ import com.byagowi.persiancalendar.PersianUtils;
 /**
  * 
  * @author Amir
- * @author ebraminio (adding persian number in toString, implementing isLeapYear)
- *
+ * @author ebraminio (adding persian number in toString, implementing
+ *         isLeapYear)
+ * 
  */
 public class PersianDate extends AbstractDate {
 
@@ -69,9 +70,9 @@ public class PersianDate extends AbstractDate {
 
 		if (month > 6 && month <= 12 && day > 30)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
-		
+
 		if (month == 12 && day > 29 && (!isLeapYear()))
-			throw new DayOutOfRangeException("day " + day + " is out of range!");			
+			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
 		this.day = day;
 	}
@@ -113,20 +114,22 @@ public class PersianDate extends AbstractDate {
 
 	public boolean isLeapYear() {
 		int mod = getYear() % 33;
-		if (mod == 1 || mod == 5 || mod == 9 || mod == 13 || mod == 17 || mod == 22 || mod == 26 || mod == 30)
+		if (mod == 1 || mod == 5 || mod == 9 || mod == 13 || mod == 17
+				|| mod == 22 || mod == 26 || mod == 30)
 			return true;
 		return false;
 	}
 
-	public String toString() {
-		return String.format("%s %s %s", PersianUtils.getPersianNumber(day),
-				monthName[month], PersianUtils.getPersianNumber(year));
+	public String toString(boolean persianDigit) {
+		return String.format("%s %s %s",
+				PersianUtils.formatNumber(day, persianDigit), monthName[month],
+				PersianUtils.formatNumber(year, persianDigit));
 	}
-	
+
 	public boolean equals(PersianDate persianDate) {
-		if (this.getDayOfMonth() == persianDate.getDayOfMonth() &&
-				this.getMonth() == persianDate.getMonth() &&
-				this.getYear() == persianDate.getYear())
+		if (this.getDayOfMonth() == persianDate.getDayOfMonth()
+				&& this.getMonth() == persianDate.getMonth()
+				&& this.getYear() == persianDate.getYear())
 			return true;
 		return false;
 	}
