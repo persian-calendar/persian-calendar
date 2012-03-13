@@ -14,11 +14,11 @@
             android:key="GadgetClock"
             android:summary="Showing clock on widget"
             android:title="Clock on Widget" />
-        <CheckBoxPreference
+    <!-- <CheckBoxPreference
             android:defaultValue="true"
             android:key="TransparentWidget"
             android:summary="Transparent background on widgets"
-            android:title="Transparent widget" />
+            android:title="Transparent widget" /> -->
     </PreferenceCategory>
 
 </PreferenceScreen>
