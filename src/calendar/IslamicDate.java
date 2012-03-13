@@ -1,6 +1,6 @@
 package calendar;
 
-import com.byagowi.persiancalendar.ArabicUtils;
+import com.byagowi.persiancalendar.PersianUtils;
 
 /**
  * 
@@ -109,9 +109,9 @@ public class IslamicDate extends AbstractDate {
 		throw new RuntimeException("not implemented yet!");
 	}
 
-	public String toString() {
-		return ArabicUtils.getArabicNumber(day) + " " + monthName[month] + " "
-				+ ArabicUtils.getArabicNumber(year);
+	public String toString(boolean persianDigit) {
+		return PersianUtils.formatNumber(day, persianDigit) + " " + monthName[month] + " "
+				+ PersianUtils.formatNumber(year, persianDigit);
 	}
 
 }

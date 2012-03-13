@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/clockText"
+        android:id="@+id/textPlaceholder1_4x1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right|top"
@@ -15,7 +15,7 @@
         android:textSize="30dip" />
 
     <TextView
-        android:id="@+id/calendarText"
+        android:id="@+id/textPlaceholder2_4x1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"

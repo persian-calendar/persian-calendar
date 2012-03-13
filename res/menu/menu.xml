@@ -5,5 +5,9 @@
         android:id="@+id/menu_exit"
         android:icon="@drawable/ic_menu_exit"
         android:title="@string/exit"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/ic_menu_settings"
+        android:title="@string/settings"/>
 
 </menu>
