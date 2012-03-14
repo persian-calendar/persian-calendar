@@ -221,7 +221,7 @@ public class PersianCalendarActivity extends Activity {
 						.getHolidayTitle(persianDateIterator);
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holiday_background);
-					textView.setTextColor(Color.WHITE);
+					textView.setTextColor(getResources().getColor(R.color.holidays_text_color));
 					textView.setOnClickListener(new View.OnClickListener() {
 						String title = holidayTitle;
 

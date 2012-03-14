@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="ج"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/background_light"
                     android:textSize="20dp" />
 
                 <TextView
@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -106,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -114,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -122,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -138,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -160,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -168,7 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -176,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -184,7 +184,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -192,7 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -200,7 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -208,7 +208,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -222,7 +222,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -230,7 +230,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -238,7 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -246,7 +246,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -254,7 +254,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -262,7 +262,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -270,7 +270,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -284,7 +284,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -292,7 +292,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -300,7 +300,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -308,7 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -316,7 +316,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -324,7 +324,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -332,7 +332,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -346,7 +346,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -354,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -362,7 +362,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -370,7 +370,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -378,7 +378,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -386,7 +386,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -394,7 +394,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -408,7 +408,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -416,7 +416,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -424,7 +424,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -432,7 +432,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -440,7 +440,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -448,7 +448,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -456,7 +456,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/not_holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
         </TableLayout>
