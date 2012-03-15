@@ -50,27 +50,12 @@ public class PersianCalendarActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		setContentView(R.layout.calendar);
 
+		// loading XMLs
 		PersianDateHolidays.loadHolidays(getResources().openRawResource(
 				R.raw.holidays));
-
-		fillCalendarInfo();
-
-		setCurrentYearMonth();
-
-		gestureDetector = new GestureDetector(simpleOnGestureListener);
-		calendarPlaceholder = (ViewFlipper) findViewById(R.id.calendar_placeholder);
-		calendarPlaceholder.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		});
-
 		slideInLeftAnimation = AnimationUtils.loadAnimation(this,
 				R.anim.slide_in_left);
 		slideOutLeftAnimation = AnimationUtils.loadAnimation(this,
@@ -81,13 +66,35 @@ public class PersianCalendarActivity extends Activity {
 				R.anim.slide_out_right);
 		fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 		fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+		// end
 
+		
+		// filling current date on members
+		nowDate = DateConverter.civilToPersian(new CivilDate());
+		fillCalendarInfo();
+		setCurrentYearMonth();
+		// end
+		
+		
+		// setting up app gesture
+		gestureDetector = new GestureDetector(simpleOnGestureListener);
+		calendarPlaceholder = (ViewFlipper) findViewById(R.id.calendar_placeholder);
+		calendarPlaceholder.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		});
+		// end
+		
+		
+		// fill view
 		View calendar = getLayoutInflater().inflate(R.layout.calendar_table,
 				null);
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth,
 				calendar);
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
-
+		// end
 	}
 
 	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
@@ -123,29 +130,12 @@ public class PersianCalendarActivity extends Activity {
 	};
 
 	private void fillCalendarInfo() {
-
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
 
-		StringBuilder sb = new StringBuilder();
-		CivilDate civil = new CivilDate();
-		nowDate = DateConverter.civilToPersian(civil);
-
-		sb.append("امروز:\n");
-		sb.append(PersianUtils.getDayOfWeekName(civil.getDayOfWeek()));
-		sb.append(PersianUtils.PERSIAN_COMMA);
-		sb.append(" ");
-		sb.append(nowDate.toString(persianDigit));
-		sb.append(" هجری خورشیدی\n\n");
-		sb.append("برابر با:\n");
-		sb.append(civil.toString(persianDigit));
-		sb.append(" میلادی\n");
-		sb.append(DateConverter.civilToIslamic(civil).toString(persianDigit));
-		sb.append(" هجری قمری\n");
-
 		TextView ci = (TextView) findViewById(R.id.calendarInfo);
-		ci.setText(sb.toString());
+		ci.setText(PersianCalendarUtils.generateGreeting(new CivilDate(), persianDigit));
 		ci.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -210,7 +200,7 @@ public class PersianCalendarActivity extends Activity {
 						"calendarCell%d%d", weekOfMonth, dayOfWeek + 1),
 						calendar);
 
-				textView.setText(PersianUtils.formatNumber(i, persianDigit));
+				textView.setText(PersianCalendarUtils.formatNumber(i, persianDigit));
 
 				dayOfWeek++;
 				if (dayOfWeek == 7) {
@@ -247,7 +237,7 @@ public class PersianCalendarActivity extends Activity {
 		getTextViewInView("currentMonthTextView", calendar).setText(
 				persianDateIterator.getMonthName()
 						+ " "
-						+ PersianUtils.formatNumber(
+						+ PersianCalendarUtils.formatNumber(
 								persianDateIterator.getYear(), persianDigit));
 
 	}

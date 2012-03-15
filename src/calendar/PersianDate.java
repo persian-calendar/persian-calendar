@@ -1,6 +1,6 @@
 package calendar;
 
-import com.byagowi.persiancalendar.PersianUtils;
+import com.byagowi.persiancalendar.PersianCalendarUtils;
 
 /**
  * 
@@ -10,10 +10,6 @@ import com.byagowi.persiancalendar.PersianUtils;
  * 
  */
 public class PersianDate extends AbstractDate {
-
-	private static final String[] monthName = { "", "فروردین", "اردیبهشت",
-			"خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی",
-			"بهمن", "اسفند" };
 
 	private int year;
 
@@ -37,6 +33,10 @@ public class PersianDate extends AbstractDate {
 		return month;
 	}
 
+	private static final String[] monthName = { "", "فروردین",
+			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
+			"آذر", "دی", "بهمن", "اسفند" };
+	
 	public String getMonthName() {
 		return monthName[month];
 	}
@@ -118,12 +118,6 @@ public class PersianDate extends AbstractDate {
 				|| mod == 22 || mod == 26 || mod == 30)
 			return true;
 		return false;
-	}
-
-	public String toString(boolean persianDigit) {
-		return String.format("%s %s %s",
-				PersianUtils.formatNumber(day, persianDigit), monthName[month],
-				PersianUtils.formatNumber(year, persianDigit));
 	}
 
 	public boolean equals(PersianDate persianDate) {

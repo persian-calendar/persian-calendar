@@ -7,5 +7,7 @@
     
     <color name="holidays_text_color">#FFFFFF</color>
     <color name="not_holidays_text_color">#000000</color>
+    
+    <color name="version_splash">#343434</color>
 
 </resources>

@@ -66,17 +66,20 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 		String text2;
 
 		if (gadgetClock) {
-			text1 = PersianUtils.getPersianFormattedClock(new Date(),
+			text1 = PersianCalendarUtils.getPersianFormattedClock(new Date(),
 					persianDigit);
 
-			text2 = PersianUtils.getDayOfWeekName(civil.getDayOfWeek())
-					+ PersianUtils.PERSIAN_COMMA + " "
-					+ persian.toString(persianDigit);
+			text2 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek())
+					+ PersianCalendarUtils.PERSIAN_COMMA + " "
+					+ PersianCalendarUtils.dateToString(persian, persianDigit);
 		} else {
-			text1 = PersianUtils.getDayOfWeekName(civil.getDayOfWeek());
-			text2 = persian.toString(persianDigit);
+			text1 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek());
+			text2 = PersianCalendarUtils.dateToString(persian, persianDigit);
 		}
 
+		text1 = PersianCalendarUtils.textShaper(text1);
+		text2 = PersianCalendarUtils.textShaper(text2);
+		
 		remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, text1);
 		remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, text2);
 

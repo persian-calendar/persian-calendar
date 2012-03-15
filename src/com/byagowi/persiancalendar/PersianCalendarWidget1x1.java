@@ -62,7 +62,7 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 		remoteViews.setTextViewText(R.id.textPlaceholder2_1x1,
 				persian.getMonthName());
 
-		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianUtils
+		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianCalendarUtils
 				.formatNumber(persian.getDayOfMonth(), persianDigit));
 
 		Intent launchAppIntent = new Intent(context,

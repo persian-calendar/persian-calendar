@@ -2,7 +2,7 @@ package calendar;
 
 import java.util.Calendar;
 
-import com.byagowi.persiancalendar.PersianUtils;
+import com.byagowi.persiancalendar.PersianCalendarUtils;
 
 /**
  * 
@@ -11,30 +11,12 @@ import com.byagowi.persiancalendar.PersianUtils;
  * 
  */
 public class CivilDate extends AbstractDate {
-	private static final String[] monthName = { "",
-			"\u0698\u0627\u0646\u0648\u064A\u0647", // Janvie
-			"\u0641\u0648\u0631\u064A\u0647", // Fevrie
-			"\u0645\u0627\u0631\u0633", // Mars
-			"\u0622\u0648\u0631\u064A\u0644", // Avril
-			"\u0645\u0647", // Meh
-			"\u0698\u0648\u0646", // Juan
-			"\u062C\u0648\u0644\u0627\u064A", // July
-			"\u0622\u06AF\u0648\u0633\u062A", // Agost
-			"\u0633\u067E\u062A\u0627\u0645\u0628\u0631", // Septambr
-			"\u0627\u0643\u062A\u0628\u0631", // Octobr
-			"\u0646\u0648\u0627\u0645\u0628\u0631", // Novambr
-			"\u062F\u0633\u0627\u0645\u0628\u0631" // Desambr
-	};
+	private static final String[] monthName = { "", "ژانویه", "فوریه", "مارس",
+			"آوریل", "مه", "ژون", "جولای", "آگوست", "سپتامبر", "اکتبر",
+			"نوامبر", "دسامبر" };
 
-	private static final String[] weekdayName = { "",
-			"\u064a\u06A9\u0634\u0646\u0628\u0647", // 1 shanbeh
-			"\u062F\u0648\u0634\u0646\u0628\u0647", // 2 shanbeh
-			"\u0633\u0647 \u0634\u0646\u0628\u0647", // 3 shanbeh
-			"\u0686\u0647\u0627\u0631\u0634\u0646\u0628\u0647", // 4 shanbeh
-			"\u067E\u0646\u062C\u0634\u0646\u0628\u0647", // 5 shanbeh
-			"\u062C\u0645\u0639\u0647", // jome
-			"\u0634\u0646\u0628\u0647" // shanbe
-	};
+	private static final String[] weekdayName = { "", "یکشنبه", "دوشنبه",
+			"سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 
 	private static final int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31,
 			30, 31, 30, 31 };
@@ -144,11 +126,5 @@ public class CivilDate extends AbstractDate {
 	 */
 	public String getDayOfWeekName() {
 		return weekdayName[getDayOfWeek()];
-	}
-
-	public String toString(boolean persianDigit) {
-		return PersianUtils.formatNumber(getDayOfMonth(), persianDigit) + " "
-				+ getMonthName() + " "
-				+ PersianUtils.formatNumber(getYear(), persianDigit);
 	}
 }

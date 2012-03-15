@@ -2,20 +2,31 @@ package com.byagowi.persiancalendar;
 
 import java.util.Date;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import calendar.AbstractDate;
+import calendar.CivilDate;
+import calendar.DateConverter;
+import calendar.IslamicDate;
+import calendar.PersianDate;
+
+import com.AzizHuss.ArabicRehaper.ArabicReshape;
 
 /**
- * Utilities needed for Persian
+ * Common utilities that needed for this calendar
  * 
  * @author ebraminio
  * 
  */
-public class PersianUtils {
+public class PersianCalendarUtils {
 	public static char PERSIAN_COMMA = '،';
 	public static char LRO = '\u202D';
 	public static char POP = '\u202C';
+
+	public static final char[] arabicDigits = { '0', '1', '2', '3', '4', '5',
+			'6', '7', '8', '9' };
+	public static final char[] persianDigits = { '۰', '۱', '۲', '۳', '۴', '۵',
+			'۶', '۷', '۸', '۹' };
+	public static final char[] arabicIndicDigits = { '٠', '١', '٢', '٣', '٤',
+			'٥', '٦', '٧', '٨', '٩' };
 
 	public static final String[] dayOfWeekName = { "", "یک‌شنبه", "دوشنبه",
 			"سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه" };
@@ -87,5 +98,36 @@ public class PersianUtils {
 			return number;
 
 		return getPersianNumber(number);
+	}
+
+	public static String textShaper(String text) {
+		return ArabicReshape.reshape(text);
+	}
+	
+	public static String dateToString(AbstractDate date, boolean persianDigit) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(PersianCalendarUtils.formatNumber(date.getDayOfMonth(), persianDigit));
+		sb.append(' ');
+		sb.append(date.getMonthName());
+		sb.append(PersianCalendarUtils.formatNumber(date.getYear(),
+				persianDigit));
+		
+		return textShaper(sb.toString());
+	}
+	
+	public static String generateGreeting(CivilDate civilDate, boolean persianDigit) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("امروز:\n");
+		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
+		sb.append(PERSIAN_COMMA);
+		sb.append(" ");
+		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), persianDigit));
+		sb.append(" هجری خورشیدی\n\n");
+		sb.append("برابر با:\n");
+		sb.append(dateToString(civilDate, persianDigit));
+		sb.append(" میلادی\n");
+		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), persianDigit));
+		sb.append(" هجری قمری\n");
+		return textShaper(sb.toString());
 	}
 }
