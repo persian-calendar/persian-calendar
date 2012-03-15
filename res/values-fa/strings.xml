@@ -3,4 +3,10 @@
     <string name="app_name">تقویم فارسی</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
+    <string name="enable_persian_digits">فعال‌بودن اعداد فارسی</string>
+    <string name="persian_digits">اعداد فارسی</string>
+    <string name="showing_clock_on_widget">نمایش ساعت در گجت</string>
+    <string name="clock_on_widget">ساعت در گجت</string>
+    <string name="transparent_background_on_widgets">پیش‌زمینه شفاف برای پیش‌زمینه</string>
+    <string name="transparent_widget">شفافیت پیش‌زمینه</string>
 </resources>
