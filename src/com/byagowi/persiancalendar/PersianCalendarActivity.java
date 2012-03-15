@@ -90,15 +90,16 @@ public class PersianCalendarActivity extends Activity {
 
 	}
 
-	private static final int SWIPE_MIN_DISTANCE = 120;
-	private static final int SWIPE_MAX_OFF_PATH = 250;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
 	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
+
+		private static final int SWIPE_MIN_DISTANCE = 20;
+		private static final int SWIPE_MAX_OFF_PATH = 250;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+		
 		@Override
 		public boolean onDown(MotionEvent e) {
 			return true;
-		}
+		}		
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
