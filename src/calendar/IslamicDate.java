@@ -1,7 +1,5 @@
 package calendar;
 
-import com.byagowi.persiancalendar.PersianUtils;
-
 /**
  * 
  * @author Amir
@@ -107,11 +105,6 @@ public class IslamicDate extends AbstractDate {
 
 	public boolean isLeapYear() {
 		throw new RuntimeException("not implemented yet!");
-	}
-
-	public String toString(boolean persianDigit) {
-		return PersianUtils.formatNumber(day, persianDigit) + " " + monthName[month] + " "
-				+ PersianUtils.formatNumber(year, persianDigit);
 	}
 
 }

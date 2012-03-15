@@ -29,7 +29,7 @@ public class PersianCalendarSplashScreen extends Activity {
 
 		try {
 			String versionTitle = "نسخهٔ "
-					+ PersianUtils.getPersianNumber(this.getPackageManager().getPackageInfo(
+					+ PersianCalendarUtils.getPersianNumber(this.getPackageManager().getPackageInfo(
 							this.getPackageName(), 0).versionName);
 			((TextView) findViewById(R.id.version)).setText(versionTitle);
 		} catch (Exception e) {
