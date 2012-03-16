@@ -1,4 +1,4 @@
-package com.AzizHuss.ArabicRehaper;
+package com.azizhuss.arabicreshaper;
 
 /**
  * This code is for Arabic Reshaping. Writtien by Abdulaziz Alhussien.

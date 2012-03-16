@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar;
 
 import java.util.Date;
 
+import com.azizhuss.arabicreshaper.ArabicReshape;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,7 +12,6 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-import com.AzizHuss.ArabicRehaper.ArabicReshape;
 
 /**
  * Common utilities that needed for this calendar
