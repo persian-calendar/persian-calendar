@@ -43,7 +43,7 @@ public class PersianDateHolidays {
 			}
 
 		} catch (Exception e) {
-			// do nothing
+			// forget it, do nothing
 		}
 	}
 
