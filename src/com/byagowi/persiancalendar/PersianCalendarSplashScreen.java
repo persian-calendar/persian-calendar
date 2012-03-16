@@ -2,9 +2,7 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.TextView;
