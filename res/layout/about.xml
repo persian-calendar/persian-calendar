@@ -6,8 +6,6 @@
     android:background="@drawable/background"
     android:orientation="vertical" >
 
-    <!-- <include layout="@layout/splash" /> -->
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
