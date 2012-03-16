@@ -2,9 +2,9 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.TextView;
@@ -26,14 +26,15 @@ public class PersianCalendarSplashScreen extends Activity {
 
 		// Splash screen view
 		setContentView(R.layout.splash);
+		
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
 		try {
 			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.getPersianNumber(this
-							.getPackageManager().getPackageInfo(
-									this.getPackageName(), 0).versionName);
+					+ PersianCalendarUtils.formatNumber(getPackageManager().getPackageInfo(
+									getPackageName(), 0).versionName, digits);
 
 			versionTextView.setText(PersianCalendarUtils
 					.textShaper(versionTitle));

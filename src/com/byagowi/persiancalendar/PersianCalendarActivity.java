@@ -7,7 +7,6 @@ import calendar.PersianDate;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -130,13 +129,11 @@ public class PersianCalendarActivity extends Activity {
 	};
 
 	private void fillCalendarInfo() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		TextView ci = (TextView) findViewById(R.id.calendar_info);
 		ci.setText(PersianCalendarUtils.getCalendarInfo(new CivilDate(),
-				persianDigit));
+				digits));
 		ci.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -182,10 +179,7 @@ public class PersianCalendarActivity extends Activity {
 	}
 
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {
-
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		PersianDate persianDate = new PersianDate(year, month, 1);
 		persianDate.setMonth(month);
@@ -195,8 +189,7 @@ public class PersianCalendarActivity extends Activity {
 				.getDayOfWeek() % 7;
 
 		getTextViewInView("currentMonthTextView", calendar).setText(
-				PersianCalendarUtils.getMonthYearTitle(persianDate,
-						persianDigit));
+				PersianCalendarUtils.getMonthYearTitle(persianDate, digits));
 
 		for (int i = 1; i <= 31; i++) {
 			try {
@@ -206,8 +199,7 @@ public class PersianCalendarActivity extends Activity {
 						"calendarCell%d%d", weekOfMonth, dayOfWeek + 1),
 						calendar);
 
-				textView.setText(PersianCalendarUtils.formatNumber(i,
-						persianDigit));
+				textView.setText(PersianCalendarUtils.formatNumber(i, digits));
 
 				dayOfWeek++;
 				if (dayOfWeek == 7) {

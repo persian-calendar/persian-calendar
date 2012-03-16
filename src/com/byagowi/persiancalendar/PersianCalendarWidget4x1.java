@@ -51,8 +51,9 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
 		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
+
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(context);
 
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
@@ -67,19 +68,19 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 
 		if (gadgetClock) {
 			text1 = PersianCalendarUtils.getPersianFormattedClock(new Date(),
-					persianDigit);
+					digits);
 
 			text2 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek())
 					+ PersianCalendarUtils.PERSIAN_COMMA + " "
-					+ PersianCalendarUtils.dateToString(persian, persianDigit);
+					+ PersianCalendarUtils.dateToString(persian, digits);
 		} else {
 			text1 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek());
-			text2 = PersianCalendarUtils.dateToString(persian, persianDigit);
+			text2 = PersianCalendarUtils.dateToString(persian, digits);
 		}
 
 		text1 = PersianCalendarUtils.textShaper(text1);
 		text2 = PersianCalendarUtils.textShaper(text2);
-		
+
 		remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, text1);
 		remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, text2);
 
