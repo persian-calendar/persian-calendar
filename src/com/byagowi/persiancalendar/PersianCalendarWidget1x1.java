@@ -26,22 +26,10 @@ import android.widget.RemoteViews;
  * 
  */
 public class PersianCalendarWidget1x1 extends AppWidgetProvider {
-	static private IntentFilter intentFilter = null;
-
+	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
-		if (intentFilter == null) {
-			intentFilter = new IntentFilter(Intent.ACTION_TIME_TICK);
-			context.getApplicationContext().registerReceiver(
-					new BroadcastReceiver() {
-						@Override
-						public void onReceive(Context context, Intent intent) {
-							updateTime(context);
-						}
-					}, intentFilter);
-		}
-
 		updateTime(context);
 	}
 
@@ -60,7 +48,7 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
 		remoteViews.setTextViewText(R.id.textPlaceholder2_1x1,
-				persian.getMonthName());
+				PersianCalendarUtils.textShaper(persian.getMonthName()));
 
 		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianCalendarUtils
 				.formatNumber(persian.getDayOfMonth(), persianDigit));

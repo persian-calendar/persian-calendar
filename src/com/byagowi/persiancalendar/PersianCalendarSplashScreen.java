@@ -27,11 +27,16 @@ public class PersianCalendarSplashScreen extends Activity {
 		// Splash screen view
 		setContentView(R.layout.splash);
 
+		TextView versionTextView = ((TextView) findViewById(R.id.version));
+
 		try {
 			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.getPersianNumber(this.getPackageManager().getPackageInfo(
-							this.getPackageName(), 0).versionName);
-			((TextView) findViewById(R.id.version)).setText(versionTitle);
+					+ PersianCalendarUtils.getPersianNumber(this
+							.getPackageManager().getPackageInfo(
+									this.getPackageName(), 0).versionName);
+
+			versionTextView.setText(PersianCalendarUtils
+					.textShaper(versionTitle));
 		} catch (Exception e) {
 			// okay, okay, was not important, go go :D
 		}

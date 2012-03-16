@@ -100,6 +100,7 @@ public class PersianCalendarUtils {
 		return getPersianNumber(number);
 	}
 
+	// TODO: textShaper must become private in future
 	public static String textShaper(String text) {
 		return ArabicReshape.reshape(text);
 	}
@@ -109,13 +110,14 @@ public class PersianCalendarUtils {
 		sb.append(PersianCalendarUtils.formatNumber(date.getDayOfMonth(), persianDigit));
 		sb.append(' ');
 		sb.append(date.getMonthName());
+		sb.append(' ');
 		sb.append(PersianCalendarUtils.formatNumber(date.getYear(),
 				persianDigit));
 		
 		return textShaper(sb.toString());
 	}
 	
-	public static String generateGreeting(CivilDate civilDate, boolean persianDigit) {
+	public static String getCalendarInfo(CivilDate civilDate, boolean persianDigit) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("امروز:\n");
 		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
@@ -128,6 +130,14 @@ public class PersianCalendarUtils {
 		sb.append(" میلادی\n");
 		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), persianDigit));
 		sb.append(" هجری قمری\n");
+		return textShaper(sb.toString());
+	}
+	
+	public static String getMonthYearTitle(PersianDate persianDate, boolean persianDigit) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(persianDate.getMonthName());
+		sb.append(' ');
+		sb.append(formatNumber(persianDate.getYear(), persianDigit));
 		return textShaper(sb.toString());
 	}
 }
