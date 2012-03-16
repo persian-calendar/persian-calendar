@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar;
 import calendar.PersianDate;
 
 /**
- * Holidays bean, for storing holidays
+ * Holiday POJO
  * @author ebraminio
  *
  */
