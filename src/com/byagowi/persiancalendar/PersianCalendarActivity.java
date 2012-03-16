@@ -1,3 +1,13 @@
+/*
+ * March 2012
+ *
+ * In place of a legal notice, here is a blessing:
+ *
+ *    May you do good and not evil.
+ *    May you find forgiveness for yourself and forgive others.
+ *    May you share freely, never taking more than you give.
+ *
+ */
 package com.byagowi.persiancalendar;
 
 import calendar.CivilDate;
@@ -157,6 +167,11 @@ public class PersianCalendarActivity extends Activity {
 			Intent preferenceIntent = new Intent(getApplicationContext(),
 					PersianCalendarPreferenceActivity.class);
 			startActivityForResult(preferenceIntent, 0);
+			break;
+		case R.id.menu_about:
+			Intent aboutIntent = new Intent(getApplicationContext(),
+					PersianCalendarAboutActivity.class);
+			startActivityForResult(aboutIntent, 100);
 			break;
 		}
 		return false;

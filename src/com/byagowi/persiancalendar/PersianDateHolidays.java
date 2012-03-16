@@ -1,3 +1,13 @@
+/*
+ * March 2012
+ *
+ * In place of a legal notice, here is a blessing:
+ *
+ *    May you do good and not evil.
+ *    May you find forgiveness for yourself and forgive others.
+ *    May you share freely, never taking more than you give.
+ *
+ */
 package com.byagowi.persiancalendar;
 
 import java.io.InputStream;
@@ -14,6 +24,12 @@ import org.w3c.dom.NodeList;
 
 import calendar.PersianDate;
 
+/**
+ * Holidays repository.
+ * 
+ * @author ebraminio
+ *
+ */
 public class PersianDateHolidays {
 
 	private static List<Holiday> holidays;

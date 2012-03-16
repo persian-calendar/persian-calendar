@@ -9,4 +9,6 @@
     <string name="clock_on_widget">ساعت در گجت</string>
     <string name="transparent_background_on_widgets">پیش‌زمینه شفاف برای پیش‌زمینه</string>
     <string name="transparent_widget">شفافیت پیش‌زمینه</string>
+    <string name="about">درباره</string>
+    <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
 </resources>
