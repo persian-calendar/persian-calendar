@@ -10,11 +10,9 @@ import calendar.DateConverter;
 import calendar.PersianDate;
 
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
@@ -34,10 +32,7 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 	}
 
 	static public void updateTime(Context context) {
-
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		boolean persianDigit = prefs.getBoolean("PersianDigits", true);
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(context);
 
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
@@ -51,7 +46,7 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 				PersianCalendarUtils.textShaper(persian.getMonthName()));
 
 		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianCalendarUtils
-				.formatNumber(persian.getDayOfMonth(), persianDigit));
+				.formatNumber(persian.getDayOfMonth(), digits));
 
 		Intent launchAppIntent = new Intent(context,
 				PersianCalendarActivity.class);
