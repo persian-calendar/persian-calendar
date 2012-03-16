@@ -1,5 +1,6 @@
 package com.azizhuss.arabicreshaper;
 
+// borrowed from code.google.com/p/arabicreshaper/, Apache License
 /**
  * This code is for Arabic Reshaping. Writtien by Abdulaziz Alhussien.
  * azizanroid@gmail.com
