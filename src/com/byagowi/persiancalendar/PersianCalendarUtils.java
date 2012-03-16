@@ -119,7 +119,7 @@ public class PersianCalendarUtils {
 		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
 		sb.append(PERSIAN_COMMA);
 		sb.append(" ");
-		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits));
+		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits));
 		sb.append(" هجری خورشیدی\n\n");
 		sb.append("برابر با:\n");
 		sb.append(dateToString(civilDate, digits));

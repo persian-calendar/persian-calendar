@@ -3,8 +3,7 @@ package calendar;
 /**
  * 
  * @author Amir
- * @author ebraminio (adding persian number in toString, implementing
- *         isLeapYear)
+ * @author ebraminio (implementing isLeapYear)
  * 
  */
 public class PersianDate extends AbstractDate {

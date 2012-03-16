@@ -239,7 +239,7 @@ public class PersianCalendarActivity extends Activity {
 			return (TextView) view.findViewById(R.id.class.getField(name)
 					.getInt(null)); // null for static field of classes
 		} catch (Exception e) {
-			Log.e("com.byagowi.persiancalendar", "Error on retriving cell: "
+			Log.e(getPackageName(), "Error on retriving cell: "
 					+ e.getMessage());
 			return null;
 		}
