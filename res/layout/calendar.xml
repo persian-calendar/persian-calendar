@@ -19,7 +19,7 @@
             android:layout_height="wrap_content" />
         
         <TextView
-            android:id="@+id/calendarInfo"
+            android:id="@+id/calendar_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/today_background"
@@ -28,14 +28,13 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/info"
+            android:id="@+id/about"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:gravity="right"
             android:paddingRight="20dip"
             android:paddingTop="40dip"
-            android:text="توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"
             android:textColor="@android:color/white"
             android:textSize="5dip" />
     </LinearLayout>
