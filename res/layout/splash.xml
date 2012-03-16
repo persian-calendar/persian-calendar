@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:src="@drawable/newiconempty" />
+        android:src="@drawable/logo" />
 
 </FrameLayout>
