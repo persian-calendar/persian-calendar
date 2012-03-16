@@ -1,3 +1,13 @@
+/*
+ * March 2012
+ *
+ * In place of a legal notice, here is a blessing:
+ *
+ *    May you do good and not evil.
+ *    May you find forgiveness for yourself and forgive others.
+ *    May you share freely, never taking more than you give.
+ *
+ */
 package com.byagowi.persiancalendar;
 
 import android.app.PendingIntent;
@@ -16,7 +26,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 /**
- * Program widget on Android launcher.
+ * 1x1 widget provider
  * 
  * @author ebraminio
  * 

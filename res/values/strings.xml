@@ -9,4 +9,6 @@
     <string name="clock_on_widget">Clock on Widget</string>
     <string name="transparent_background_on_widgets">Transparent background on widgets</string>
     <string name="transparent_widget">Transparent widget</string>
+    <string name="about">About</string>
+    <string name="gpl_logo">GPL Logo</string>
 </resources>

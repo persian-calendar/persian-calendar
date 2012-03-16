@@ -1,3 +1,13 @@
+/*
+ * March 2012
+ *
+ * In place of a legal notice, here is a blessing:
+ *
+ *    May you do good and not evil.
+ *    May you find forgiveness for yourself and forgive others.
+ *    May you share freely, never taking more than you give.
+ *
+ */
 package com.byagowi.persiancalendar;
 
 import android.app.Activity;
@@ -8,7 +18,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 // borrowed from http://www.codeproject.com/Articles/113831/An-Advanced-Splash-Screen-for-Android-App :)
-public class PersianCalendarSplashScreen extends Activity {
+public class PersianCalendarSplashScreenActivity extends Activity {
 
 	/**
 	 * The thread to process splash screen events
@@ -57,7 +67,7 @@ public class PersianCalendarSplashScreen extends Activity {
 				try {
 					// Run next activity
 					Intent intent = new Intent();
-					intent.setClass(PersianCalendarSplashScreen.this,
+					intent.setClass(PersianCalendarSplashScreenActivity.this,
 							PersianCalendarActivity.class);
 					startActivity(intent);
 					stop();
