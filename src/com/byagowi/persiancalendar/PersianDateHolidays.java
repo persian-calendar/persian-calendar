@@ -47,18 +47,21 @@ public class PersianDateHolidays {
 				Node node = holidaysNodes.item(i);
 				NamedNodeMap attrs = node.getAttributes();
 
-				int year = Integer.parseInt(attrs.getNamedItem("year")
-						.getTextContent());
+				//int year = Integer.parseInt(attrs.getNamedItem("year").getTextContent());
+				
 				int month = Integer.parseInt(attrs.getNamedItem("month")
 						.getTextContent());
 				int day = Integer.parseInt(attrs.getNamedItem("day")
 						.getTextContent());
-
-				holidays.add(new Holiday(new PersianDate(year, month, day),
-						node.getTextContent()));
-			}
-
-		} catch (Exception e) {
+				//holidays.add(new Holiday(new PersianDate(year, month, day),node.getTextContent()));
+				
+				//////////////////////////////////////////////////////////////////////////
+				//author : behnam mohammadi
+				for(int y=1380;y<1430;y++){
+					holidays.add(new Holiday(new PersianDate(y, month, day),node.getTextContent()));
+				}
+				//////////////////////////////////////////////////////////////////////////				
+			} catch (Exception e) {
 			// forget it, do nothing
 		}
 	}
