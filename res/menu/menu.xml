@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_menu_settings"
         android:title="@string/settings"/>
     <item
+        android:id="@+id/menu_dateconverter"
+        android:icon="@drawable/ic_menu_converter"
+        android:title="@string/date_converter"/>
+    <item
         android:id="@+id/menu_about"
         android:icon="@drawable/ic_menu_about"
         android:title="@string/about"/>

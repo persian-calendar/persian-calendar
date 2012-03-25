@@ -225,12 +225,12 @@ public class ArabicReshape {
 			{ 0x06D2, 0x0804, 0xFBAE, 0xFBAF, 0xFBAF, 0xFBAF },
 			{ 0x06D3, 0x0804, 0xFBB0, 0xFBB1, 0xFBB1, 0xFBB1 } };
 
-	public static String reshape(String Str) {
-		String Temp = " " + Str + " ";
+	public static String reshape(String str) {
+		String Temp = " " + str + " ";
 		char pre, at, post;
 		StringBuilder reshapedString = new StringBuilder();
 		int i = 0;
-		int len = Str.length();
+		int len = str.length();
 
 		char post_post;
 		char pre_pre = ' ';

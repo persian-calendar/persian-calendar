@@ -11,4 +11,11 @@
     <string name="transparent_widget">Transparent widget</string>
     <string name="about">About</string>
     <string name="gpl_logo">GPL Logo</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string> 
+    <string name="shamsi">Jalili</string>
+    <string name="islamic">Islamic</string>
+    <string name="georgian">Georgian</string>
+    <string name="date_converter">Date Converter</string>
 </resources>

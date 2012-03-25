@@ -29,7 +29,6 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 /**
@@ -168,6 +167,11 @@ public class PersianCalendarActivity extends Activity {
 					PersianCalendarPreferenceActivity.class);
 			startActivityForResult(preferenceIntent, 0);
 			break;
+		case R.id.menu_dateconverter:
+			Intent converterIntent = new Intent(getApplicationContext(),
+					PersianCalendarConverterActivity.class);
+			startActivityForResult(converterIntent, 0);
+			break;
 		case R.id.menu_about:
 			Intent aboutIntent = new Intent(getApplicationContext(),
 					PersianCalendarAboutActivity.class);
@@ -231,13 +235,11 @@ public class PersianCalendarActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							Toast.makeText(getApplicationContext(),
-									PersianCalendarUtils.textShaper(title),
-									Toast.LENGTH_SHORT).show();
+							PersianCalendarUtils.quickToast(title, getApplicationContext());
 						}
 					});
 				}
-
+				
 				if (persianDate.equals(nowDate)) {
 					textView.setBackgroundResource(R.drawable.today_background);
 				}

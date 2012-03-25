@@ -8,6 +8,14 @@ package calendar;
  */
 public class PersianDate extends AbstractDate {
 
+	private static final String[] monthName = { "", "فروردین",
+			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
+			"آذر", "دی", "بهمن", "اسفند" };
+	
+	public String[] getMonthsList() {
+		return monthName;
+	}
+	
 	private int year;
 
 	private int month;
@@ -29,10 +37,6 @@ public class PersianDate extends AbstractDate {
 	public int getMonth() {
 		return month;
 	}
-
-	private static final String[] monthName = { "", "فروردین",
-			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
-			"آذر", "دی", "بهمن", "اسفند" };
 	
 	public String getMonthName() {
 		return monthName[month];

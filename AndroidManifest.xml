@@ -41,6 +41,13 @@
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
+        <activity android:name=".PersianCalendarConverterActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.EMBED" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".PersianCalendarWidget4x1"

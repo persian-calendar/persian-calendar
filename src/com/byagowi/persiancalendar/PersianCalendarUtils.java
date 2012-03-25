@@ -17,6 +17,7 @@ import com.azizhuss.arabicreshaper.ArabicReshape;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -147,5 +148,11 @@ public class PersianCalendarUtils {
 		sb.append(' ');
 		sb.append(formatNumber(persianDate.getYear(), digits));
 		return textShaper(sb.toString());
+	}
+	
+	public static void quickToast(String message, Context context) {
+		Toast.makeText(context,
+				PersianCalendarUtils.textShaper(message),
+				Toast.LENGTH_SHORT).show();
 	}
 }

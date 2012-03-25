@@ -11,7 +11,6 @@
 package com.byagowi.persiancalendar;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -48,15 +47,12 @@ public class PersianCalendarAboutActivity extends Activity {
 						+ "GNU General Public License for more details.\n"
 						+ "\n"
 						+ "You should have received a copy of the GNU General Public License "
-						+ "along with this program.  If not, see http://www.gnu.org/licenses/.");
-	}
-
-	/**
-	 * Processes splash screen touch events
-	 */
-	@Override
-	public boolean onTouchEvent(MotionEvent evt) {
-		finish();
-		return true;
+						+ "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
+						+ "\n"
+						+ "Background and splashscreen icon designs from Iman Soltanian\n"
+						+ "Calendar converter code used from http://code.google.com/p/mobile-persian-calendar/ "
+						+ "that it was under GPLv2.\n"
+						+ "ArabicShaper for shaping Persian Characters used from Azizhuss, it is "
+						+ "under BSD License.");
 	}
 }

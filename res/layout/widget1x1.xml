@@ -3,7 +3,6 @@
     android:id="@+id/widget_layout1x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/widget_background"
     android:orientation="vertical" >
     
     <TextView
@@ -12,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
         android:textColor="#00FFFFFF"
-        android:textSize="35dip" />
+        android:textSize="40dip" />
 
     <TextView
         android:id="@+id/textPlaceholder2_1x1"

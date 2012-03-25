@@ -13,6 +13,10 @@ public class CivilDate extends AbstractDate {
 			"آوریل", "مه", "ژون", "جولای", "آگوست", "سپتامبر", "اکتبر",
 			"نوامبر", "دسامبر" };
 
+	public String[] getMonthsList() {
+		return monthName;
+	}
+	
 	private static final String[] weekdayName = { "", "یکشنبه", "دوشنبه",
 			"سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 
