@@ -32,14 +32,14 @@ public class PersianCalendarAboutActivity extends Activity {
 
 		setContentView(R.layout.about);
 
-		
 		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 		TextView versionTextView = ((TextView) findViewById(R.id.version2));
-		
+		String version = "";
 		try {
+			version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			
 			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.formatNumber(getPackageManager().getPackageInfo(
-									getPackageName(), 0).versionName, digits);
+					+ PersianCalendarUtils.formatNumber(version, digits);
 
 			versionTextView.setText(PersianCalendarUtils
 					.textShaper(versionTitle));
@@ -47,10 +47,8 @@ public class PersianCalendarAboutActivity extends Activity {
 			Log.e(getPackageName(), e.getMessage());
 		}
 		
-		
-
 		((TextView) findViewById(R.id.license))
-				.setText("Android Persian Calendar\n"
+				.setText("Android Persian Calendar Version " + version + "\n"
 						+ "Copyright (C) 2012  ebrahim@byagowi.com\n"
 						+ "\n"
 						+ "This program is free software: you can redistribute it and/or modify "
