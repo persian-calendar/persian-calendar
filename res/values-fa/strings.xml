@@ -11,4 +11,10 @@
     <string name="transparent_widget">شفافیت پیش‌زمینه</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
+    <string name="year">سال</string>
+    <string name="month">ماه</string>
+    <string name="day">روز</string> 
+    <string name="shamsi">هجری شمسی</string>
+    <string name="islamic">هجری قمری</string>
+    <string name="georgian">میلادی</string>
 </resources>

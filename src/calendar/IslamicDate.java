@@ -6,12 +6,15 @@ package calendar;
  * @author ebraminio
  * 
  */
-
 public class IslamicDate extends AbstractDate {
 
 	private static final String[] monthName = { "", "ãÍÑã", "ÕİÑ",
 			"ÑÈíÚÇáÇæá", "ÑÈíÚÇáËÇäí", "ÌãÇÏíÇáÇæá", "ÌãÇÏíÇáËÇäí", "ÑÌÈ",
 			"ÔÚÈÇä", "ÑãÖÇä", "ÔæÇá", "ĞíÇáŞÚÏå", "ĞíÇáÍÌå" };
+	
+	public String[] getMonthsList() {
+		return monthName;
+	}
 
 	private int day;
 
