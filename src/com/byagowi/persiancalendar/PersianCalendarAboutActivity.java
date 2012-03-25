@@ -12,7 +12,7 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -31,6 +31,23 @@ public class PersianCalendarAboutActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.about);
+
+		
+		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		TextView versionTextView = ((TextView) findViewById(R.id.version2));
+		
+		try {
+			String versionTitle = "نسخهٔ "
+					+ PersianCalendarUtils.formatNumber(getPackageManager().getPackageInfo(
+									getPackageName(), 0).versionName, digits);
+
+			versionTextView.setText(PersianCalendarUtils
+					.textShaper(versionTitle));
+		} catch (Exception e) {
+			Log.e(getPackageName(), e.getMessage());
+		}
+		
+		
 
 		((TextView) findViewById(R.id.license))
 				.setText("Android Persian Calendar\n"
@@ -53,6 +70,8 @@ public class PersianCalendarAboutActivity extends Activity {
 						+ "Calendar converter code used from http://code.google.com/p/mobile-persian-calendar/ "
 						+ "that it was under GPLv2.\n"
 						+ "ArabicShaper for shaping Persian Characters used from Azizhuss, it is "
-						+ "under BSD License.");
+						+ "under BSD License.\n"
+						+ "\n"
+						+ "For filling any bug, you are so welcome for coming to http://github.com/ebraminio/DroidPersianCalendar :)\n");
 	}
 }

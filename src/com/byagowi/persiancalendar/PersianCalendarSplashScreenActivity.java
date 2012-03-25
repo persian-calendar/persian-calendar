@@ -13,6 +13,7 @@ package com.byagowi.persiancalendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.TextView;
@@ -47,7 +48,7 @@ public class PersianCalendarSplashScreenActivity extends Activity {
 			versionTextView.setText(PersianCalendarUtils
 					.textShaper(versionTitle));
 		} catch (Exception e) {
-			// okay, okay, was not important, go go :D
+			Log.e(getPackageName(), e.getMessage());
 		}
 
 		// The thread to wait for splash screen events
