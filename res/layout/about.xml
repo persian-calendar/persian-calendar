@@ -15,6 +15,30 @@
         android:paddingRight="20dip"
         android:paddingTop="20dip" >
 
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/version2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="bottom"
+                android:paddingTop="20dip"
+                android:textSize="20dip" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:src="@drawable/logo" />
+        </FrameLayout>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
