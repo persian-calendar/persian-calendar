@@ -48,6 +48,10 @@ public class PersianCalendarActivity extends Activity {
 	Animation slideOutLeftAnimation;
 	Animation slideInRightAnimation;
 	Animation slideOutRightAnimation;
+	Animation slideInDownAnimation;
+	Animation slideOutDownAnimation;
+	Animation slideInUpAnimation;
+	Animation slideOutUpAnimation;
 	Animation fadeInAnimation;
 	Animation fadeOutAnimation;
 
@@ -70,6 +74,14 @@ public class PersianCalendarActivity extends Activity {
 				R.anim.slide_in_right);
 		slideOutRightAnimation = AnimationUtils.loadAnimation(this,
 				R.anim.slide_out_right);
+		slideInDownAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.slide_in_down);
+		slideOutDownAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.slide_out_down);
+		slideInUpAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.slide_in_up);
+		slideOutUpAnimation = AnimationUtils.loadAnimation(this,
+				R.anim.slide_out_up);
 		fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 		fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 		// end
@@ -105,8 +117,7 @@ public class PersianCalendarActivity extends Activity {
 
 	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
 
-		private static final int SWIPE_MIN_DISTANCE = 20;
-		private static final int SWIPE_MAX_OFF_PATH = 250;
+		private static final int SWIPE_MIN_DISTANCE = 40;
 		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
 		@Override
@@ -118,15 +129,18 @@ public class PersianCalendarActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			try {
-				if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-					return false;
-				// right to left swipe
 				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
 					previousMonth();
 				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
 					nextMonth();
+				} else if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+					nextYear();
+				} else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+					previousYear();
 				}
 			} catch (Exception e) {
 				// nothing
@@ -295,6 +309,25 @@ public class PersianCalendarActivity extends Activity {
 		setViewOnCalnedarPlaceholder();
 		calendarPlaceholder.setInAnimation(slideInRightAnimation);
 		calendarPlaceholder.setOutAnimation(slideOutLeftAnimation);
+		calendarPlaceholder.showNext();
+	}
+	
+
+	public void nextYear() {
+		currentPersianYear++;
+		currentCalendarIndex++;
+		setViewOnCalnedarPlaceholder();
+		calendarPlaceholder.setInAnimation(slideInDownAnimation);
+		calendarPlaceholder.setOutAnimation(slideOutUpAnimation);
+		calendarPlaceholder.showNext();
+	}
+
+	public void previousYear() {
+		currentPersianYear--;
+		currentCalendarIndex++;
+		setViewOnCalnedarPlaceholder();
+		calendarPlaceholder.setInAnimation(slideInUpAnimation);
+		calendarPlaceholder.setOutAnimation(slideOutDownAnimation);
 		calendarPlaceholder.showNext();
 	}
 
