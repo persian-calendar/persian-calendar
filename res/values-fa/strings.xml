@@ -17,4 +17,5 @@
     <string name="shamsi">هجری شمسی</string>
     <string name="islamic">هجری قمری</string>
     <string name="georgian">میلادی</string>
+    <string name="date_converter">مبدل تاریخ</string>
 </resources>
