@@ -69,6 +69,7 @@ public class PersianCalendarAboutActivity extends Activity {
 						+ "that it was under GPLv2.\n"
 						+ "ArabicShaper for shaping Persian Characters used from Azizhuss, it is "
 						+ "under BSD License.\n"
+						+ "Iranian Sans and Nazli font also used in this application that they are opensources fonts.\n"
 						+ "\n"
 						+ "For repoting any bug, please come to this address: http://github.com/ebraminio/DroidPersianCalendar :)\n");
 	}
