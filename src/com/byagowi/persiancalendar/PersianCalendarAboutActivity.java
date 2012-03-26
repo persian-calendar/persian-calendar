@@ -64,12 +64,12 @@ public class PersianCalendarAboutActivity extends Activity {
 						+ "You should have received a copy of the GNU General Public License "
 						+ "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
 						+ "\n"
-						+ "Background and splashscreen icon designs from Iman Soltanian\n"
+						+ "Background and about icon artworks designs are from Iman Soltanian.\n"
 						+ "Calendar converter code used from http://code.google.com/p/mobile-persian-calendar/ "
 						+ "that it was under GPLv2.\n"
 						+ "ArabicShaper for shaping Persian Characters used from Azizhuss, it is "
 						+ "under BSD License.\n"
 						+ "\n"
-						+ "For filling any bug, you are so welcome for coming to http://github.com/ebraminio/DroidPersianCalendar :)\n");
+						+ "For repoting any bug, please come to this address: http://github.com/ebraminio/DroidPersianCalendar :)\n");
 	}
 }
