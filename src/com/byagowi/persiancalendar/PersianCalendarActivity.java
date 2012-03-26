@@ -147,6 +147,16 @@ public class PersianCalendarActivity extends Activity {
 				bringThisMonth();
 			}
 		});
+		ci.setOnLongClickListener(new View.OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				Intent converterIntent = new Intent(getApplicationContext(),
+						PersianCalendarConverterActivity.class);
+				startActivityForResult(converterIntent, 100);
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -175,7 +185,7 @@ public class PersianCalendarActivity extends Activity {
 		case R.id.menu_about:
 			Intent aboutIntent = new Intent(getApplicationContext(),
 					PersianCalendarAboutActivity.class);
-			startActivityForResult(aboutIntent, 100);
+			startActivityForResult(aboutIntent, 0);
 			break;
 		}
 		return false;
