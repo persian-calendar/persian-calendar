@@ -71,7 +71,7 @@ public class PersianCalendarAboutActivity extends Activity {
 						+ "Background and about icon artwork designs are by Iman Soltanian.\n"
 						+ "Calendar converter code is from http://code.google.com/p/mobile-persian-calendar/ "
 						+ "that it was under GPLv2.\n"
-						+ "ArabicShaper for shaping Persian Characters is from Azizhuss which is"
+						+ "ArabicShaper for shaping Persian Characters is from Azizhuss which is "
 						+ "under BSD License.\n"
 						+ "\n"
 						+ "For reporting any bug, please come to this address: http://github.com/ebraminio/DroidPersianCalendar :)\n");
