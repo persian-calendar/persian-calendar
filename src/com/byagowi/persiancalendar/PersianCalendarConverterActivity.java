@@ -37,6 +37,10 @@ public class PersianCalendarConverterActivity extends Activity {
 	TextView convertedDateTextView;
 	int startingYearOnYearSpinner = 0;
 
+	String shamsi = PersianCalendarUtils.textShaper("هجری شمسی");
+	String islamic = PersianCalendarUtils.textShaper("هجری قمری");
+	String georgian = PersianCalendarUtils.textShaper("میلادی");
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,9 +59,9 @@ public class PersianCalendarConverterActivity extends Activity {
 
 		// fill views
 		List<String> calendarsTypes = new ArrayList<String>();
-		calendarsTypes.add(getString(R.string.georgian));
-		calendarsTypes.add(getString(R.string.shamsi));
-		calendarsTypes.add(getString(R.string.islamic));
+		calendarsTypes.add(georgian);
+		calendarsTypes.add(shamsi);
+		calendarsTypes.add(islamic);
 		ArrayAdapter<String> arrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.select_dialog_item, calendarsTypes);
 		calendarTypeSpinner.setAdapter(arrayAdaptor);
@@ -122,13 +126,13 @@ public class PersianCalendarConverterActivity extends Activity {
 			civilDate = new CivilDate(year, month, day);
 			persianDate = DateConverter.civilToPersian(civilDate);
 			islamicDate = DateConverter.civilToIslamic(civilDate);
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
 					digits) + " میلادی");
 
 			calendarsTextList.add(PersianCalendarUtils.dateToString(
 					persianDate, digits) + " هجری خورشیدی");
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(
 					islamicDate, digits) + " هجری قمری");
 			break;
@@ -136,10 +140,10 @@ public class PersianCalendarConverterActivity extends Activity {
 			islamicDate = new IslamicDate(year, month, day);
 			civilDate = DateConverter.islamicToCivil(islamicDate);
 			persianDate = DateConverter.islamicToPersian(islamicDate);
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(
 					islamicDate, digits) + " هجری قمری");
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
 					digits) + " میلادی");
 
@@ -150,13 +154,13 @@ public class PersianCalendarConverterActivity extends Activity {
 			persianDate = new PersianDate(year, month, day);
 			civilDate = DateConverter.persianToCivil(persianDate);
 			islamicDate = DateConverter.persianToIslamic(persianDate);
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(
 					persianDate, digits) + " هجری خورشیدی");
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
 					digits) + " میلادی");
-			
+
 			calendarsTextList.add(PersianCalendarUtils.dateToString(
 					islamicDate, digits) + " هجری قمری");
 			break;
@@ -173,8 +177,9 @@ public class PersianCalendarConverterActivity extends Activity {
 		sb.append("\n");
 		sb.append(calendarsTextList.get(2));
 		sb.append("\n");
-		
-		convertedDateTextView.setText(PersianCalendarUtils.textShaper(sb.toString()));
+
+		convertedDateTextView.setText(PersianCalendarUtils.textShaper(sb
+				.toString()));
 	}
 
 	void fillYearMonthDaySpinners() {
@@ -212,8 +217,8 @@ public class PersianCalendarConverterActivity extends Activity {
 		List<String> monthsList = new ArrayList<String>();
 		String[] monthsArray = date.getMonthsList();
 		for (int i = 1; i < 12; i++) {
-			monthsList.add(PersianCalendarUtils.textShaper(monthsArray[i] + " / "
-					+ PersianCalendarUtils.formatNumber(i, digits)));
+			monthsList.add(PersianCalendarUtils.textShaper(monthsArray[i]
+					+ " / " + PersianCalendarUtils.formatNumber(i, digits)));
 		}
 		ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, monthsList);
@@ -238,14 +243,13 @@ public class PersianCalendarConverterActivity extends Activity {
 
 	CalendarType detectSelectedCalendar() {
 		CalendarType calendarType = null;
-		if (getString(R.string.georgian).equals(
-				calendarTypeSpinner.getSelectedItem().toString())) {
+		if (georgian.equals(calendarTypeSpinner.getSelectedItem().toString())) {
 			calendarType = CalendarType.GEORGIAN;
-		} else if (getString(R.string.shamsi).equals(
-				calendarTypeSpinner.getSelectedItem().toString())) {
+		} else if (shamsi.equals(calendarTypeSpinner.getSelectedItem()
+				.toString())) {
 			calendarType = CalendarType.SHAMSI;
-		} else if (getString(R.string.islamic).equals(
-				calendarTypeSpinner.getSelectedItem().toString())) {
+		} else if (islamic.equals(calendarTypeSpinner.getSelectedItem()
+				.toString())) {
 			calendarType = CalendarType.ISLAMIC;
 		}
 		return calendarType;
