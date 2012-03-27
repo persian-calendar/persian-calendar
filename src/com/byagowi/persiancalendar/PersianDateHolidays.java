@@ -22,6 +22,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.util.Log;
+
 import calendar.PersianDate;
 
 /**
@@ -59,7 +61,7 @@ public class PersianDateHolidays {
 			}
 
 		} catch (Exception e) {
-			// forget it, do nothing
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
 		}
 	}
 

@@ -35,15 +35,16 @@ public class PersianCalendarSplashScreenActivity extends Activity {
 
 		// Splash screen view
 		setContentView(R.layout.splash);
-		
+
 		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
 		try {
 			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.formatNumber(getPackageManager().getPackageInfo(
-									getPackageName(), 0).versionName, digits);
+					+ PersianCalendarUtils.formatNumber(getPackageManager()
+							.getPackageInfo(getPackageName(), 0).versionName,
+							digits);
 
 			versionTextView.setText(PersianCalendarUtils
 					.textShaper(versionTitle));
@@ -62,19 +63,11 @@ public class PersianCalendarSplashScreenActivity extends Activity {
 					}
 				} catch (InterruptedException ex) {
 				}
-
 				finish();
-
-				try {
-					// Run next activity
-					Intent intent = new Intent();
-					intent.setClass(PersianCalendarSplashScreenActivity.this,
-							PersianCalendarActivity.class);
-					startActivity(intent);
-					stop();
-				} catch (Exception e) {
-
-				}
+				Intent intent = new Intent();
+				intent.setClass(PersianCalendarSplashScreenActivity.this,
+						PersianCalendarActivity.class);
+				startActivity(intent);
 			}
 		};
 

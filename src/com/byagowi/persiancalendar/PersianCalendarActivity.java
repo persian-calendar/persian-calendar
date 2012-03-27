@@ -129,18 +129,24 @@ public class PersianCalendarActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			try {
-				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					previousMonth();
-				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					nextMonth();
-				} else if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-					nextYear();
-				} else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
-						&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-					previousYear();
+				if (Math.abs(e1.getX() - e2.getX()) > Math.abs(e1.getY()
+						- e2.getY())) {
+					if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+							&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+						previousMonth();
+					} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+							&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+						nextMonth();
+					}
+				}
+				else {
+					if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
+							&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+						nextYear();
+					} else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
+							&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+						previousYear();
+					}
 				}
 			} catch (Exception e) {
 				// nothing
@@ -153,8 +159,8 @@ public class PersianCalendarActivity extends Activity {
 		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		TextView ci = (TextView) findViewById(R.id.calendar_info);
-		ci.setText(PersianCalendarUtils.getCalendarInfo(new CivilDate(),
-				digits));
+		ci.setText(PersianCalendarUtils
+				.getCalendarInfo(new CivilDate(), digits));
 		ci.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -162,7 +168,7 @@ public class PersianCalendarActivity extends Activity {
 			}
 		});
 		ci.setOnLongClickListener(new View.OnLongClickListener() {
-			
+
 			@Override
 			public boolean onLongClick(View v) {
 				Intent converterIntent = new Intent(getApplicationContext(),
@@ -259,11 +265,12 @@ public class PersianCalendarActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							PersianCalendarUtils.quickToast(title, getApplicationContext());
+							PersianCalendarUtils.quickToast(title,
+									getApplicationContext());
 						}
 					});
 				}
-				
+
 				if (persianDate.equals(nowDate)) {
 					textView.setBackgroundResource(R.drawable.today_background);
 				}
@@ -280,8 +287,8 @@ public class PersianCalendarActivity extends Activity {
 			return (TextView) view.findViewById(R.id.class.getField(name)
 					.getInt(null)); // null for static field of classes
 		} catch (Exception e) {
-			Log.e(getPackageName(), "Error on retriving cell: "
-					+ e.getMessage());
+			Log.e(getPackageName(),
+					"Error on retriving cell: " + e.getMessage());
 			return null;
 		}
 	}
@@ -311,7 +318,6 @@ public class PersianCalendarActivity extends Activity {
 		calendarPlaceholder.setOutAnimation(slideOutLeftAnimation);
 		calendarPlaceholder.showNext();
 	}
-	
 
 	public void nextYear() {
 		currentPersianYear++;

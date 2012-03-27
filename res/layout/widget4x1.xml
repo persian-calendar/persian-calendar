@@ -3,8 +3,9 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/widget_background"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="5dip"
+    android:paddingRight="5dip" >
 
     <TextView
         android:id="@+id/textPlaceholder1_4x1"

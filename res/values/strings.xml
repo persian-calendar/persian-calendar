@@ -14,8 +14,6 @@
     <string name="year">Year</string>
     <string name="month">Month</string>
     <string name="day">Day</string> 
-    <string name="shamsi">هجری شمسی</string>
-    <string name="islamic">هجری قمری</string>
-    <string name="georgian">میلادی</string>
     <string name="date_converter">Date Converter</string>
+    <string name="logo">Logo</string>
 </resources>
