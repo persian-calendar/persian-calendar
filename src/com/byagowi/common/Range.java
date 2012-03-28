@@ -14,9 +14,9 @@ package com.byagowi.common;
 import java.util.Iterator;
 
 /**
- * Range `iterator` for a safe `for`. This class will create an iterator from linear 
- * series of integer numbers. For example new Range(2, 5) will make a series of numbers
- * from 2 with count of 5. (2, 3, 4, 5, 6).
+ * Range `iterator` for a safe `for`. This class will create an iterator from
+ * linear series of integer numbers. For example new Range(2, 5) will make a
+ * series of numbers from 2 with count of 5. (2, 3, 4, 5, 6).
  * 
  * @author ebraminio
  * 
@@ -29,7 +29,7 @@ public class Range implements Iterable<Integer> {
 		this.min = min;
 		this.count = count;
 	}
-	
+
 	/** {@inheritDoc} */
 	public Iterator<Integer> iterator() {
 		return new Iterator<Integer>() {
