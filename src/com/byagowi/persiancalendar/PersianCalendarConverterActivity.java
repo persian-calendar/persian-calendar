@@ -216,7 +216,7 @@ public class PersianCalendarConverterActivity extends Activity {
 		// month spinner init.
 		List<String> monthsList = new ArrayList<String>();
 		String[] monthsArray = date.getMonthsList();
-		for (int i = 1; i < 12; i++) {
+		for (int i = 1; i <= 12; i++) {
 			monthsList.add(PersianCalendarUtils.textShaper(monthsArray[i]
 					+ " / " + PersianCalendarUtils.formatNumber(i, digits)));
 		}
