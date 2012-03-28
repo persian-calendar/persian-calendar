@@ -229,7 +229,7 @@ public class PersianCalendarConverterActivity extends Activity {
 
 		// days spinner init.
 		List<String> daysList = new ArrayList<String>();
-		for (int i = 1; i < 31; i++) {
+		for (int i = 1; i <= 31; i++) {
 			daysList.add(PersianCalendarUtils.formatNumber(i, digits));
 		}
 		ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,
