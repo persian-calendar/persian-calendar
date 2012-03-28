@@ -13,6 +13,8 @@ package com.byagowi.persiancalendar;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.byagowi.common.Range;
+
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -36,6 +38,7 @@ public class PersianCalendarConverterActivity extends Activity {
 	Spinner daySpinner;
 	TextView convertedDateTextView;
 	int startingYearOnYearSpinner = 0;
+	int yearDiffRange = 60;
 
 	String shamsi = PersianCalendarUtils.textShaper("هجری شمسی");
 	String islamic = PersianCalendarUtils.textShaper("هجری قمری");
@@ -200,23 +203,21 @@ public class PersianCalendarConverterActivity extends Activity {
 
 		// years spinner init.
 		List<String> yearsList = new ArrayList<String>();
-		int yearDiff = 30;
-		startingYearOnYearSpinner = date.getYear() - yearDiff;
-		for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner
-				+ yearDiff * 2; i++) {
+		startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
+		for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
 			yearsList.add(PersianCalendarUtils.formatNumber(i, digits));
 		}
 		ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, yearsList);
 		yearSpinner.setAdapter(yearArrayAdaptor);
 
-		yearSpinner.setSelection(yearDiff);
+		yearSpinner.setSelection(yearDiffRange / 2);
 		//
 
 		// month spinner init.
 		List<String> monthsList = new ArrayList<String>();
 		String[] monthsArray = date.getMonthsList();
-		for (int i = 1; i <= 12; i++) {
+		for (int i : new Range(1, 12)) {
 			monthsList.add(PersianCalendarUtils.textShaper(monthsArray[i]
 					+ " / " + PersianCalendarUtils.formatNumber(i, digits)));
 		}
@@ -229,7 +230,7 @@ public class PersianCalendarConverterActivity extends Activity {
 
 		// days spinner init.
 		List<String> daysList = new ArrayList<String>();
-		for (int i = 1; i <= 31; i++) {
+		for (int i : new Range(1, 31)) {
 			daysList.add(PersianCalendarUtils.formatNumber(i, digits));
 		}
 		ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,

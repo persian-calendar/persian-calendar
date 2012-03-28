@@ -22,6 +22,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.byagowi.common.IterableNodeList;
+
 import android.util.Log;
 
 import calendar.PersianDate;
@@ -45,8 +47,7 @@ public class PersianDateHolidays {
 			Document document = builder.parse(xmlStream);
 
 			NodeList holidaysNodes = document.getElementsByTagName("holiday");
-			for (int i = 0; i < holidaysNodes.getLength(); i++) {
-				Node node = holidaysNodes.item(i);
+			for (Node node : new IterableNodeList(holidaysNodes)) {
 				NamedNodeMap attrs = node.getAttributes();
 
 				int year = Integer.parseInt(attrs.getNamedItem("year")

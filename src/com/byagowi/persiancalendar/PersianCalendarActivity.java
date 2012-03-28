@@ -10,6 +10,8 @@
  */
 package com.byagowi.persiancalendar;
 
+import com.byagowi.common.Range;
+
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
@@ -238,7 +240,7 @@ public class PersianCalendarActivity extends Activity {
 		getTextViewInView("currentMonthTextView", calendar).setText(
 				PersianCalendarUtils.getMonthYearTitle(persianDate, digits));
 
-		for (int i = 1; i <= 31; i++) {
+		for (int i : new Range(1, 31)) {
 			try {
 				persianDate.setDayOfMonth(i);
 
