@@ -41,10 +41,10 @@ public class IterableNodeList implements Iterable<Node> {
 
 			/** {@inheritDoc} */
 			public Node next() {
-				if(!hasNext()) {
-			         throw new NoSuchElementException();
-			      }
-			      return nodeList.item(index++);
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				return nodeList.item(index++);
 			}
 
 			/** {@inheritDoc} */
