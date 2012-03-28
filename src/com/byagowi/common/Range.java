@@ -8,13 +8,13 @@
  *    May you share freely, never taking more than you give.
  *
  */
-// Originally published on stackoverflow be myself :D http://stackoverflow.com/questions/2950386/is-there-anything-like-enumerable-rangex-y-in-java/9627911#9627911
+// Originally published on stackoverflow by myself :D http://stackoverflow.com/questions/2950386/is-there-anything-like-enumerable-rangex-y-in-java/9627911#9627911
 package com.byagowi.common;
 
 import java.util.Iterator;
 
 /**
- * Range iterator creator for safe iteration.
+ * Range `iterator` for a safe `for`.
  * 
  * @author ebraminio
  * 
