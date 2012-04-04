@@ -7,7 +7,7 @@
     
     <TextView
         android:id="@+id/textPlaceholder1_1x1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
         android:textColor="#00FFFFFF"
@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/textPlaceholder2_1x1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"

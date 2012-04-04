@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
     android:paddingBottom="10dip"
@@ -12,7 +12,7 @@
 
     <Spinner
         android:id="@+id/calendarTypeSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -23,7 +23,7 @@
 
     <Spinner
         android:id="@+id/yearSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -34,7 +34,7 @@
 
     <Spinner
         android:id="@+id/monthSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -45,12 +45,12 @@
 
     <Spinner
         android:id="@+id/daySpinner"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/convertedDateTextView"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/today_background"
         android:gravity="right"

@@ -32,7 +32,7 @@ import calendar.PersianDate;
  * Holidays repository.
  * 
  * @author ebraminio
- *
+ * 
  */
 public class PersianDateHolidays {
 
@@ -51,14 +51,16 @@ public class PersianDateHolidays {
 				NamedNodeMap attrs = node.getAttributes();
 
 				int year = Integer.parseInt(attrs.getNamedItem("year")
-						.getTextContent());
+						.getNodeValue());
 				int month = Integer.parseInt(attrs.getNamedItem("month")
-						.getTextContent());
+						.getNodeValue());
 				int day = Integer.parseInt(attrs.getNamedItem("day")
-						.getTextContent());
+						.getNodeValue());
+
+				String holidayTitle = node.getFirstChild().getNodeValue();
 
 				holidays.add(new Holiday(new PersianDate(year, month, day),
-						node.getTextContent()));
+						holidayTitle));
 			}
 
 		} catch (Exception e) {
