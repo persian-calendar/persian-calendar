@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
-        android:textColor="#00FFFFFF"
+        android:textColor="@android:color/white"
         android:textSize="40dip" />
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"
-        android:textColor="#00FFFFFF"
+        android:textColor="@android:color/white"
         android:textSize="20dip" />
 
 </LinearLayout>

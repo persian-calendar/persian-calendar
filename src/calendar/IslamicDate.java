@@ -8,9 +8,9 @@ package calendar;
  */
 public class IslamicDate extends AbstractDate {
 
-	private static final String[] monthName = { "", "ãÍÑã", "ÕİÑ",
-			"ÑÈíÚÇáÇæá", "ÑÈíÚÇáËÇäí", "ÌãÇÏíÇáÇæá", "ÌãÇÏíÇáËÇäí", "ÑÌÈ",
-			"ÔÚÈÇä", "ÑãÖÇä", "ÔæÇá", "ĞíÇáŞÚÏå", "ĞíÇáÍÌå" };
+	private static final String[] monthName = { "", "Ù…Ø­Ø±Ù…", "ØµÙØ±",
+			"Ø±Ø¨ÙŠØ¹â€ŒØ§Ù„Ø§ÙˆÙ„", "Ø±Ø¨ÙŠØ¹â€ŒØ§Ù„Ø«Ø§Ù†ÙŠ", "Ø¬Ù…Ø§Ø¯ÙŠâ€ŒØ§Ù„Ø§ÙˆÙ„", "Ø¬Ù…Ø§Ø¯ÙŠâ€ŒØ§Ù„Ø«Ø§Ù†ÙŠ", "Ø±Ø¬Ø¨",
+			"Ø´Ø¹Ø¨Ø§Ù†", "Ø±Ù…Ø¶Ø§Ù†", "Ø´ÙˆØ§Ù„", "Ø°ÙŠâ€ŒØ§Ù„Ù‚Ø¹Ø¯Ù‡", "Ø°ÙŠâ€ŒØ§Ù„Ø­Ø¬Ù‡" };
 	
 	public String[] getMonthsList() {
 		return monthName;

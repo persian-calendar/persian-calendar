@@ -111,9 +111,6 @@ public class PersianCalendarActivity extends Activity {
 		showCalendarOfMonthYear(currentPersianYear, currentPersianMonth,
 				calendar);
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
-
-		((TextView) findViewById(R.id.about)).setText(PersianCalendarUtils
-				.textShaper("توسط: ابراهیم بیاگوی\nebrahim@byagowi.com"));
 		// end
 	}
 
@@ -244,8 +241,8 @@ public class PersianCalendarActivity extends Activity {
 			try {
 				persianDate.setDayOfMonth(i);
 
-				TextView textView = getTextViewInView(String.format(
-						"calendarCell%d%d", weekOfMonth, dayOfWeek + 1),
+				TextView textView = getTextViewInView(
+						"calendarCell" + weekOfMonth + (dayOfWeek + 1),
 						calendar);
 
 				textView.setText(PersianCalendarUtils.formatNumber(i, digits));
