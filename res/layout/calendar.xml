@@ -26,17 +26,6 @@
             android:gravity="right"
             android:paddingRight="10dip"
             android:textColor="@android:color/white" />
-
-        <TextView
-            android:id="@+id/about"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="bottom"
-            android:gravity="right"
-            android:paddingRight="20dip"
-            android:paddingTop="40dip"
-            android:textColor="@android:color/white"
-            android:textSize="5dip" />
     </LinearLayout>
 
 </LinearLayout>
