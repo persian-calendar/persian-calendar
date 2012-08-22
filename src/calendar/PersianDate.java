@@ -12,6 +12,13 @@ public class PersianDate extends AbstractDate {
 			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
 			"آذر", "دی", "بهمن", "اسفند" };
 	
+	/**
+	 * Months Names in Dari, needed for special Dari Version.
+	 * Provided by: Mohammad Hamid Majidee
+	 */
+	private static final String[] dariMonthName = { "", "حمل", "ثور", "جوزا",
+		"سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت" };
+	
 	public String[] getMonthsList() {
 		return monthName;
 	}
@@ -39,7 +46,7 @@ public class PersianDate extends AbstractDate {
 	}
 	
 	public String getMonthName() {
-		return monthName[month];
+		return getMonthsList()[month];
 	}
 
 	public int getWeekOfYear() {

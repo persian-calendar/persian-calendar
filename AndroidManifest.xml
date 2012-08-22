@@ -4,7 +4,8 @@
     android:versionCode="19"
     android:versionName="1.99" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
 
     <application
         android:icon="@drawable/icon"

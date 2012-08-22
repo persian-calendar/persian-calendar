@@ -18,6 +18,7 @@ import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -58,6 +59,8 @@ public class PersianCalendarActivity extends Activity {
 	Animation fadeOutAnimation;
 
 	GestureDetector gestureDetector;
+	
+	Typeface typeface;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,11 @@ public class PersianCalendarActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.calendar);
 
+		// loading our typeface
+		typeface = Typeface.createFromAsset(getAssets(),
+                "fonts/DroidNaskh-Regular.ttf");
+		// end
+		
 		// loading XMLs
 		PersianDateHolidays.loadHolidays(getResources().openRawResource(
 				R.raw.holidays));
@@ -153,11 +161,18 @@ public class PersianCalendarActivity extends Activity {
 			return super.onFling(e1, e2, velocityX, velocityY);
 		}
 	};
+	
+	private TextView prepareTextView(TextView tv) {
+		tv.setTypeface(typeface);
+		tv.setLineSpacing(0f, 0.8f);
+		return tv;
+	}
 
 	private void fillCalendarInfo() {
 		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
 
 		TextView ci = (TextView) findViewById(R.id.calendar_info);
+		prepareTextView(ci);
 		ci.setText(PersianCalendarUtils
 				.getCalendarInfo(new CivilDate(), digits));
 		ci.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +249,9 @@ public class PersianCalendarActivity extends Activity {
 		int dayOfWeek = DateConverter.persianToCivil(persianDate)
 				.getDayOfWeek() % 7;
 
-		getTextViewInView("currentMonthTextView", calendar).setText(
+		TextView currentMonthTextView = getTextViewInView("currentMonthTextView", calendar);
+		prepareTextView(currentMonthTextView);
+		currentMonthTextView.setText(
 				PersianCalendarUtils.getMonthYearTitle(persianDate, digits));
 
 		for (int i : new Range(1, 31)) {
@@ -244,7 +261,7 @@ public class PersianCalendarActivity extends Activity {
 				TextView textView = getTextViewInView(
 						"calendarCell" + weekOfMonth + (dayOfWeek + 1),
 						calendar);
-
+				prepareTextView(currentMonthTextView);
 				textView.setText(PersianCalendarUtils.formatNumber(i, digits));
 
 				dayOfWeek++;
