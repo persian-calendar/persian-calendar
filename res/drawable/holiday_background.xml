@@ -16,6 +16,4 @@
         android:endColor="#50FFFFFF"
         android:startColor="#10FFFFFF" />
 
-    <corners android:radius="4dip" />
-
 </shape>

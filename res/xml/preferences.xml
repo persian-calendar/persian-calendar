@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="General" >
+    <PreferenceCategory android:title="@string/general" >
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="DariVersion"
+            android:summary="@string/enable_dari"
+            android:title="@string/dari_months" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Gadget" >
+    <PreferenceCategory android:title="@string/widget" >
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="GadgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
-  <!--   <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="TransparentWidget"
-            android:summary="@string/transparent_background_on_widgets"
-            android:title="@string/transparent_widget" /> -->
+     <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="BlackWidget"
+            android:summary="@string/black_font_widgets"
+            android:title="@string/black_widget" />
     </PreferenceCategory>
 
 </PreferenceScreen>

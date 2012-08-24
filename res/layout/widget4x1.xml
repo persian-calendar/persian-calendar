@@ -3,25 +3,20 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingLeft="5dip"
-    android:paddingRight="5dip" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textPlaceholder1_4x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right|top"
-        android:textColor="@android:color/white"
+        android:gravity="right"
         android:textSize="30dip" />
-
+    
     <TextView
         android:id="@+id/textPlaceholder2_4x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:gravity="left|bottom"
-        android:textColor="@android:color/white"
+        android:gravity="left"
         android:textSize="20dip" />
 
 </LinearLayout>

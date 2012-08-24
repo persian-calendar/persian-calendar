@@ -7,8 +7,6 @@
     <string name="persian_digits">اعداد فارسی</string>
     <string name="showing_clock_on_widget">نمایش ساعت در گجت</string>
     <string name="clock_on_widget">ساعت در گجت</string>
-    <string name="transparent_background_on_widgets">پیش‌زمینه شفاف برای پیش‌زمینه</string>
-    <string name="transparent_widget">شفافیت پیش‌زمینه</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
     <string name="year">سال</string>
@@ -16,4 +14,10 @@
     <string name="day">روز</string> 
     <string name="date_converter">مبدل تاریخ</string>
     <string name="logo">نشان</string>
+    <string name="dari_months">ماه‌های دری</string>
+    <string name="enable_dari">فعال‌سازی ماه‌های دری</string>
+    <string name="widget">ویجت</string>
+    <string name="general">عمومی</string>
+    <string name="black_widget">ویجت‌های سیاه</string>
+    <string name="black_font_widgets">قلم سیاه برای ویجت‌ها</string>
 </resources>

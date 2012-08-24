@@ -12,9 +12,10 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
+
+import static com.byagowi.persiancalendar.CalendarUtils.*;
 
 /**
  * About Calendar Activity
@@ -22,7 +23,7 @@ import android.widget.TextView;
  * @author ebraminio
  * 
  */
-public class PersianCalendarAboutActivity extends Activity {
+public class CalendarAboutActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,20 +33,16 @@ public class PersianCalendarAboutActivity extends Activity {
 
 		setContentView(R.layout.about);
 
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = CalendarUtils.preferenceDigits(this);
 		TextView versionTextView = (TextView) findViewById(R.id.version2);
-		String version = "";
-		try {
-			version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		
+		String version = programVersion(this);
 
-			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.formatNumber(version, digits);
+		String versionTitle = "نسخهٔ "
+				+ CalendarUtils.formatNumber(version, digits);
 
-			versionTextView.setText(PersianCalendarUtils
-					.textShaper(versionTitle));
-		} catch (Exception e) {
-			Log.e(getPackageName(), e.getMessage());
-		}
+		prepareTextView(versionTextView);
+		versionTextView.setText(textShaper(versionTitle));
 
 		TextView licenseTextView = (TextView) findViewById(R.id.license);
 

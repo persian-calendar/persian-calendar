@@ -19,11 +19,12 @@ import android.preference.PreferenceActivity;
  * @author ebraminio
  *
  */
-public class PersianCalendarPreferenceActivity extends PreferenceActivity {
-    @Override
+public class CalendarPreferenceActivity extends PreferenceActivity {
+	@Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-    }   
+    }
 }
