@@ -10,13 +10,18 @@
  */
 package com.byagowi.persiancalendar;
 
+import java.util.Calendar;
 import java.util.Date;
 
-import com.azizhuss.arabicreshaper.ArabicReshape;
+import com.azizhuss.arabicreshaper.ArabicShaping;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import calendar.AbstractDate;
 import calendar.CivilDate;
@@ -30,11 +35,29 @@ import calendar.PersianDate;
  * @author ebraminio
  * 
  */
-public class PersianCalendarUtils {
+public class CalendarUtils {
 	public static char PERSIAN_COMMA = '،';
 	public static char LRO = '\u202D';
 	public static char POP = '\u202C';
 
+	// TODO: textShaper must become private in future
+	public static String textShaper(String text) {
+		return ArabicShaping.shape(text);
+	}
+	
+	public static String programVersion(Context context) {
+		try {
+			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			Log.e(context.getPackageName(), "Name not found on PersianCalendarUtils.programVersion");
+		}
+		return "";
+	}
+	
+	public static final String shamsi = CalendarUtils.textShaper("هجری شمسی");
+	public static final String islamic = CalendarUtils.textShaper("هجری قمری");
+	public static final String georgian = CalendarUtils.textShaper("میلادی");
+	
 	public static final char[] arabicDigits = { '0', '1', '2', '3', '4', '5',
 			'6', '7', '8', '9' };
 	public static final char[] persianDigits = { '۰', '۱', '۲', '۳', '۴', '۵',
@@ -48,12 +71,35 @@ public class PersianCalendarUtils {
 	public static String getDayOfWeekName(int dayOfWeek) {
 		return dayOfWeekName[dayOfWeek];
 	}
+	
+	private static Typeface typeface;
+	public static TextView prepareTextView(TextView textView) {
+		if (typeface == null) {
+			typeface = Typeface.createFromAsset(textView.getContext().getAssets(),
+            "fonts/DroidNaskh-Regular.ttf");
+		}
+		textView.setTypeface(typeface);
+		textView.setLineSpacing(0f, 0.8f);
+		return textView;
+	}
 
-	public static char[] getDigitsFromPreference(Context context) {
+	public static char[] preferenceDigits(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		return prefs.getBoolean("PersianDigits", true) ? PersianCalendarUtils.persianDigits
-				: PersianCalendarUtils.arabicDigits;
+		return prefs.getBoolean("PersianDigits", true) ? CalendarUtils.persianDigits
+				: CalendarUtils.arabicDigits;
+	}
+
+	public static boolean isDariVersion(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		return prefs.getBoolean("DariVersion", false);
+	}
+	
+	public static boolean blackWidget(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		return prefs.getBoolean("BlackWidget", false);
 	}
 	
 	public static String addExtraZeroForClock(int num) {
@@ -75,8 +121,11 @@ public class PersianCalendarUtils {
 	public static String getPersianFormattedClock(Date date, char[] digits) {
 
 		String timeText = null;
-		int hour = date.getHours();
-		if (date.getHours() > 12) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
 			timeText = PM_IN_PERSIAN;
 			hour -= 12;
 		} else {
@@ -85,7 +134,7 @@ public class PersianCalendarUtils {
 
 		return String.format("%s:%s %s",
 				formatNumber(addExtraZeroForClock(hour), digits),
-				formatNumber(addExtraZeroForClock(date.getMinutes()), digits),
+				formatNumber(addExtraZeroForClock(calendar.get(Calendar.MINUTE)), digits),
 				timeText);
 	}
 
@@ -108,36 +157,31 @@ public class PersianCalendarUtils {
 		return sb.toString();
 	}
 
-	// TODO: textShaper must become private in future
-	public static String textShaper(String text) {
-		return ArabicReshape.reshape(text);
-	}
-
 	public static String dateToString(AbstractDate date, char[] digits) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(PersianCalendarUtils.formatNumber(date.getDayOfMonth(),
+		sb.append(CalendarUtils.formatNumber(date.getDayOfMonth(),
 				digits));
 		sb.append(' ');
 		sb.append(date.getMonthName());
 		sb.append(' ');
-		sb.append(PersianCalendarUtils.formatNumber(date.getYear(), digits));
+		sb.append(CalendarUtils.formatNumber(date.getYear(), digits));
 
 		return textShaper(sb.toString());
 	}
 
-	public static String getCalendarInfo(CivilDate civilDate, char[] digits) {
+	public static String infoForSpecificDay(CivilDate civilDate, char[] digits) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("امروز:\n");
 		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
 		sb.append(PERSIAN_COMMA);
 		sb.append(" ");
 		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits));
-		sb.append(" هجری خورشیدی\n\n");
+		sb.append("\n\n");
 		sb.append("برابر با:\n");
 		sb.append(dateToString(civilDate, digits));
-		sb.append(" میلادی\n");
+		sb.append("\n");
 		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits));
-		sb.append(" هجری قمری\n");
+		sb.append("\n");
 		return textShaper(sb.toString());
 	}
 
@@ -152,7 +196,7 @@ public class PersianCalendarUtils {
 	
 	public static void quickToast(String message, Context context) {
 		Toast.makeText(context,
-				PersianCalendarUtils.textShaper(message),
+				CalendarUtils.textShaper(message),
 				Toast.LENGTH_SHORT).show();
 	}
 }

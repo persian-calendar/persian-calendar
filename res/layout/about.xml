@@ -3,7 +3,6 @@
     android:id="@+id/about_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/background"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -51,7 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dip"
-            android:textColor="@android:color/white"
             android:textSize="9dip" />
     </LinearLayout>
 

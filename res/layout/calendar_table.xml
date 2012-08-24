@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/calendar_table"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/currentMonthTextView"
@@ -16,7 +11,6 @@
             android:gravity="right"
             android:paddingRight="10dip"
             android:paddingTop="20dip"
-            android:textColor="@android:color/white"
             android:textSize="25dip" />
 
         <TableLayout
@@ -35,56 +29,56 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="ج"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell07"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="پ"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell06"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="چ"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell05"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="س"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell04"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="د"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell03"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="ی"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell02"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="ش"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/calendarCell01"
+                    android:textColor="@color/holidays_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -461,5 +455,3 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
-
-</FrameLayout>

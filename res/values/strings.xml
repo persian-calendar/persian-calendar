@@ -7,8 +7,6 @@
     <string name="persian_digits">Persian Digits</string>
     <string name="showing_clock_on_widget">Showing clock on widget</string>
     <string name="clock_on_widget">Clock on Widget</string>
-    <string name="transparent_background_on_widgets">Transparent background on widgets</string>
-    <string name="transparent_widget">Transparent widget</string>
     <string name="about">About</string>
     <string name="gpl_logo">GPL Logo</string>
     <string name="year">Year</string>
@@ -16,4 +14,10 @@
     <string name="day">Day</string> 
     <string name="date_converter">Date Converter</string>
     <string name="logo">Logo</string>
+    <string name="dari_months">Dari Months</string>
+    <string name="enable_dari">Enable Dari Months</string>
+    <string name="widget">Widget</string>
+    <string name="general">General</string>
+    <string name="black_widget">Black Widgets</string>
+    <string name="black_font_widgets">Black font for widgets</string>
 </resources>

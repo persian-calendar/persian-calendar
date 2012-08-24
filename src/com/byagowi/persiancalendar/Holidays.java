@@ -10,17 +10,20 @@
  */
 package com.byagowi.persiancalendar;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.byagowi.common.IterableNodeList;
 
@@ -34,7 +37,7 @@ import calendar.PersianDate;
  * @author ebraminio
  * 
  */
-public class PersianDateHolidays {
+public class Holidays {
 
 	private static List<Holiday> holidays;
 
@@ -63,7 +66,11 @@ public class PersianDateHolidays {
 						holidayTitle));
 			}
 
-		} catch (Exception e) {
+		} catch (ParserConfigurationException e) {
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
+		} catch (SAXException e) {
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
+		} catch (IOException e) {
 			Log.e("com.byagowi.persiancalendar", e.getMessage());
 		}
 	}

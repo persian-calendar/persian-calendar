@@ -31,13 +31,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
+import static com.byagowi.persiancalendar.CalendarUtils.*;
+
 /**
  * 4x1 widget provider
  * 
  * @author ebraminio
  * 
  */
-public class PersianCalendarWidget4x1 extends AppWidgetProvider {
+public class CalendarWidget4x1 extends AppWidgetProvider {
 	static private IntentFilter intentFilter = null;
 
 	@Override
@@ -63,7 +65,7 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 				.getDefaultSharedPreferences(context);
 		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
 
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(context);
+		char[] digits = preferenceDigits(context);
 
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
@@ -77,32 +79,42 @@ public class PersianCalendarWidget4x1 extends AppWidgetProvider {
 		String text2;
 
 		if (gadgetClock) {
-			text1 = PersianCalendarUtils.getPersianFormattedClock(new Date(),
+			text1 = getPersianFormattedClock(new Date(),
 					digits);
 
-			text2 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek())
-					+ PersianCalendarUtils.PERSIAN_COMMA + " "
-					+ PersianCalendarUtils.dateToString(persian, digits);
+			text2 = getDayOfWeekName(civil.getDayOfWeek())
+					+ PERSIAN_COMMA + " "
+					+ dateToString(persian, digits);
 		} else {
-			text1 = PersianCalendarUtils.getDayOfWeekName(civil.getDayOfWeek());
-			text2 = PersianCalendarUtils.dateToString(persian, digits);
+			text1 = getDayOfWeekName(civil.getDayOfWeek());
+			text2 = dateToString(persian, digits);
 		}
 
-		text1 = PersianCalendarUtils.textShaper(text1);
-		text2 = PersianCalendarUtils.textShaper(text2);
+		text1 = textShaper(text1);
+		text2 = textShaper(text2);
 
+		int color;
+		if (blackWidget(context)) {
+			color = context.getResources().getColor(android.R.color.black);
+		} else {
+			color = context.getResources().getColor(android.R.color.white);
+		}
+
+		remoteViews.setTextColor(R.id.textPlaceholder1_4x1, color);
+		remoteViews.setTextColor(R.id.textPlaceholder2_4x1, color);
+		
 		remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, text1);
 		remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, text2);
 
 		Intent launchAppIntent = new Intent(context,
-				PersianCalendarActivity.class);
+				CalendarActivity.class);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, launchAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1,
 				launchAppPendingIntent);
 
 		ComponentName widget = new ComponentName(context,
-				PersianCalendarWidget4x1.class);
+				CalendarWidget4x1.class);
 		manager.updateAppWidget(widget, remoteViews);
 	}
 }

@@ -2,24 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.byagowi.persiancalendar"
     android:versionCode="19"
-    android:versionName="1.99" >
+    android:versionName="2.00ɑ" >
 
-    <uses-sdk android:minSdkVersion="8"
+    <uses-sdk android:minSdkVersion="7"
         android:targetSdkVersion="16" />
 
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".PersianCalendarActivity"
-            android:label="Persian Calendar" >
+            android:name=".CalendarActivity"
+            android:label="Persian Calendar"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".PersianCalendarSplashScreenActivity" >
+        <activity android:name=".CalendarSplashScreenActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,22 +29,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PersianCalendarPreferenceActivity"
-            android:label="@string/app_name" >
+            android:name=".CalendarPreferenceActivity"
+            android:label="@string/app_name"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.PREFERENCE" />
             </intent-filter>
         </activity>
-        <activity android:name=".PersianCalendarAboutActivity" >
+        <activity
+            android:name=".CalendarAboutActivity"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
-        <activity android:name=".PersianCalendarConverterActivity" >
+        <activity
+            android:name=".CalendarConverterActivity"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,21 +58,23 @@
         </activity>
 
         <receiver
-            android:name=".PersianCalendarWidget4x1"
+            android:name=".CalendarWidget4x1"
             android:icon="@drawable/icon"
-            android:label="Persian Calendar" >
+            android:label="Persian Calendar"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
+s
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
         </receiver>
         <receiver
-            android:name=".PersianCalendarWidget1x1"
+            android:name=".CalendarWidget1x1"
             android:icon="@drawable/icon"
-            android:label="Persian Calendar (Mini)" >
+            android:label="Persian Calendar (Mini)"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

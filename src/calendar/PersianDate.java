@@ -8,7 +8,7 @@ package calendar;
  */
 public class PersianDate extends AbstractDate {
 
-	private static final String[] monthName = { "", "فروردین",
+	private static final String[] persianMonthName = { "", "فروردین",
 			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
 			"آذر", "دی", "بهمن", "اسفند" };
 	
@@ -17,10 +17,15 @@ public class PersianDate extends AbstractDate {
 	 * Provided by: Mohammad Hamid Majidee
 	 */
 	private static final String[] dariMonthName = { "", "حمل", "ثور", "جوزا",
-		"سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت" };
+			"سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت" };
 	
+	private boolean isDari = false;
 	public String[] getMonthsList() {
-		return monthName;
+		return isDari ? dariMonthName : persianMonthName;
+	}
+	
+	public void setDari(boolean isDari) {
+		this.isDari = isDari;
 	}
 	
 	private int year;

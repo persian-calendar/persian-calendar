@@ -13,13 +13,14 @@ package com.byagowi.persiancalendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.TextView;
 
+import static com.byagowi.persiancalendar.CalendarUtils.*;
+
 // borrowed from http://www.codeproject.com/Articles/113831/An-Advanced-Splash-Screen-for-Android-App :)
-public class PersianCalendarSplashScreenActivity extends Activity {
+public class CalendarSplashScreenActivity extends Activity {
 
 	/**
 	 * The thread to process splash screen events
@@ -36,21 +37,16 @@ public class PersianCalendarSplashScreenActivity extends Activity {
 		// Splash screen view
 		setContentView(R.layout.splash);
 
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = preferenceDigits(this);
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
-		try {
-			String versionTitle = "نسخهٔ "
-					+ PersianCalendarUtils.formatNumber(getPackageManager()
-							.getPackageInfo(getPackageName(), 0).versionName,
-							digits);
+		String versionTitle = "نسخهٔ "
+				+ formatNumber(programVersion(this),
+						digits);
 
-			versionTextView.setText(PersianCalendarUtils
-					.textShaper(versionTitle));
-		} catch (Exception e) {
-			Log.e(getPackageName(), e.getMessage());
-		}
+		prepareTextView(versionTextView);
+		versionTextView.setText(textShaper(versionTitle));
 
 		// The thread to wait for splash screen events
 		mSplashThread = new Thread() {
@@ -65,8 +61,8 @@ public class PersianCalendarSplashScreenActivity extends Activity {
 				}
 				finish();
 				Intent intent = new Intent();
-				intent.setClass(PersianCalendarSplashScreenActivity.this,
-						PersianCalendarActivity.class);
+				intent.setClass(CalendarSplashScreenActivity.this,
+						CalendarActivity.class);
 				startActivity(intent);
 			}
 		};

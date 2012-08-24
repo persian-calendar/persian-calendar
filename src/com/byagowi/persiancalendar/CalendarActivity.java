@@ -18,7 +18,6 @@ import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -28,11 +27,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import static com.byagowi.persiancalendar.CalendarUtils.*;
 
 /**
  * Program activity for android.
@@ -40,7 +40,7 @@ import android.widget.ViewFlipper;
  * @author ebraminio
  * 
  */
-public class PersianCalendarActivity extends Activity {
+public class CalendarActivity extends Activity {
 
 	int currentPersianYear = 0;
 	int currentPersianMonth = 0;
@@ -59,8 +59,6 @@ public class PersianCalendarActivity extends Activity {
 	Animation fadeOutAnimation;
 
 	GestureDetector gestureDetector;
-	
-	Typeface typeface;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +66,8 @@ public class PersianCalendarActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.calendar);
 
-		// loading our typeface
-		typeface = Typeface.createFromAsset(getAssets(),
-                "fonts/DroidNaskh-Regular.ttf");
-		// end
-		
 		// loading XMLs
-		PersianDateHolidays.loadHolidays(getResources().openRawResource(
-				R.raw.holidays));
+		Holidays.loadHolidays(getResources().openRawResource(R.raw.holidays));
 		slideInLeftAnimation = AnimationUtils.loadAnimation(this,
 				R.anim.slide_in_left);
 		slideOutLeftAnimation = AnimationUtils.loadAnimation(this,
@@ -103,7 +95,8 @@ public class PersianCalendarActivity extends Activity {
 		// end
 
 		// setting up app gesture
-		gestureDetector = new GestureDetector(simpleOnGestureListener);
+		gestureDetector = new GestureDetector(this,
+				new CalendarTableGestureListener(this));
 		calendarPlaceholder = (ViewFlipper) findViewById(R.id.calendar_placeholder);
 		calendarPlaceholder.setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -122,59 +115,12 @@ public class PersianCalendarActivity extends Activity {
 		// end
 	}
 
-	SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
-
-		private static final int SWIPE_MIN_DISTANCE = 40;
-		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return true;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			try {
-				if (Math.abs(e1.getX() - e2.getX()) > Math.abs(e1.getY()
-						- e2.getY())) {
-					if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-							&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-						previousMonth();
-					} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-							&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-						nextMonth();
-					}
-				}
-				else {
-					if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
-							&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-						nextYear();
-					} else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
-							&& Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-						previousYear();
-					}
-				}
-			} catch (Exception e) {
-				// nothing
-			}
-			return super.onFling(e1, e2, velocityX, velocityY);
-		}
-	};
-	
-	private TextView prepareTextView(TextView tv) {
-		tv.setTypeface(typeface);
-		tv.setLineSpacing(0f, 0.8f);
-		return tv;
-	}
-
 	private void fillCalendarInfo() {
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = preferenceDigits(this);
 
 		TextView ci = (TextView) findViewById(R.id.calendar_info);
 		prepareTextView(ci);
-		ci.setText(PersianCalendarUtils
-				.getCalendarInfo(new CivilDate(), digits));
+		ci.setText(infoForSpecificDay(new CivilDate(), digits));
 		ci.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -186,7 +132,7 @@ public class PersianCalendarActivity extends Activity {
 			@Override
 			public boolean onLongClick(View v) {
 				Intent converterIntent = new Intent(getApplicationContext(),
-						PersianCalendarConverterActivity.class);
+						CalendarConverterActivity.class);
 				startActivityForResult(converterIntent, 100);
 				return false;
 			}
@@ -196,30 +142,30 @@ public class PersianCalendarActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
+		inflater.inflate(R.menu.activity_main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_exit:
-			finish();
+		case R.id.menu_dateconverter:
+			Intent converterIntent = new Intent(getApplicationContext(),
+					CalendarConverterActivity.class);
+			startActivityForResult(converterIntent, 0);
 			break;
 		case R.id.menu_settings:
 			Intent preferenceIntent = new Intent(getApplicationContext(),
-					PersianCalendarPreferenceActivity.class);
+					CalendarPreferenceActivity.class);
 			startActivityForResult(preferenceIntent, 0);
-			break;
-		case R.id.menu_dateconverter:
-			Intent converterIntent = new Intent(getApplicationContext(),
-					PersianCalendarConverterActivity.class);
-			startActivityForResult(converterIntent, 0);
 			break;
 		case R.id.menu_about:
 			Intent aboutIntent = new Intent(getApplicationContext(),
-					PersianCalendarAboutActivity.class);
+					CalendarAboutActivity.class);
 			startActivityForResult(aboutIntent, 0);
+			break;
+		case R.id.menu_exit:
+			finish();
 			break;
 		}
 		return false;
@@ -234,35 +180,44 @@ public class PersianCalendarActivity extends Activity {
 
 		fillCalendarInfo();
 
-		PersianCalendarWidget1x1.updateTime(this);
-		PersianCalendarWidget4x1.updateTime(this);
+		CalendarWidget1x1.updateTime(this);
+		CalendarWidget4x1.updateTime(this);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void showCalendarOfMonthYear(int year, int month, View calendar) {
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = preferenceDigits(this);
 
 		PersianDate persianDate = new PersianDate(year, month, 1);
 		persianDate.setMonth(month);
+		persianDate.setDari(isDariVersion(this));
 
 		int weekOfMonth = 1;
 		int dayOfWeek = DateConverter.persianToCivil(persianDate)
 				.getDayOfWeek() % 7;
 
-		TextView currentMonthTextView = getTextViewInView("currentMonthTextView", calendar);
+		TextView currentMonthTextView = getTextViewInView(
+				"currentMonthTextView", calendar);
 		prepareTextView(currentMonthTextView);
-		currentMonthTextView.setText(
-				PersianCalendarUtils.getMonthYearTitle(persianDate, digits));
+		currentMonthTextView.setText(getMonthYearTitle(persianDate, digits));
 
-		for (int i : new Range(1, 31)) {
-			try {
+		String[] firstCharOfDaysOfWeekName = { "ش", "ی", "د", "س", "چ", "پ",
+				"ج" };
+		for (int i : new Range(0, 7)) {
+			TextView textView = getTextViewInView("calendarCell" + 0 + (i + 1),
+					calendar);
+			prepareTextView(currentMonthTextView);
+			textView.setText(firstCharOfDaysOfWeekName[i]);
+		}
+
+		try {
+			for (int i : new Range(1, 31)) {
 				persianDate.setDayOfMonth(i);
 
-				TextView textView = getTextViewInView(
-						"calendarCell" + weekOfMonth + (dayOfWeek + 1),
-						calendar);
+				TextView textView = getTextViewInView("calendarCell"
+						+ weekOfMonth + (dayOfWeek + 1), calendar);
 				prepareTextView(currentMonthTextView);
-				textView.setText(PersianCalendarUtils.formatNumber(i, digits));
+				textView.setText(formatNumber(i, digits));
 
 				dayOfWeek++;
 				if (dayOfWeek == 7) {
@@ -270,19 +225,24 @@ public class PersianCalendarActivity extends Activity {
 					dayOfWeek = 0;
 				}
 
-				final String holidayTitle = PersianDateHolidays
+				final String holidayTitle = Holidays
 						.getHolidayTitle(persianDate);
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holiday_background);
 					textView.setTextColor(getResources().getColor(
 							R.color.holidays_text_color));
+					textView.setOnTouchListener(new View.OnTouchListener() {
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							return gestureDetector.onTouchEvent(event);
+						}
+					});
 					textView.setOnClickListener(new View.OnClickListener() {
 						String title = holidayTitle;
 
 						@Override
 						public void onClick(View v) {
-							PersianCalendarUtils.quickToast(title,
-									getApplicationContext());
+							quickToast(title, getApplicationContext());
 						}
 					});
 				}
@@ -290,11 +250,9 @@ public class PersianCalendarActivity extends Activity {
 				if (persianDate.equals(nowDate)) {
 					textView.setBackgroundResource(R.drawable.today_background);
 				}
-			} catch (DayOutOfRangeException e) {
-				// okay, not bad :)
-			} catch (Exception e) {
-				Log.e(getPackageName(), "Error: " + e.getMessage());
 			}
+		} catch (DayOutOfRangeException e) {
+			// okay, it was expected
 		}
 	}
 

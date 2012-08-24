@@ -30,7 +30,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class PersianCalendarConverterActivity extends Activity {
+import static com.byagowi.persiancalendar.CalendarUtils.*;
+
+public class CalendarConverterActivity extends Activity {
 
 	Spinner calendarTypeSpinner;
 	Spinner yearSpinner;
@@ -38,11 +40,7 @@ public class PersianCalendarConverterActivity extends Activity {
 	Spinner daySpinner;
 	TextView convertedDateTextView;
 	int startingYearOnYearSpinner = 0;
-	int yearDiffRange = 60;
-
-	String shamsi = PersianCalendarUtils.textShaper("هجری شمسی");
-	String islamic = PersianCalendarUtils.textShaper("هجری قمری");
-	String georgian = PersianCalendarUtils.textShaper("میلادی");
+	int yearDiffRange = 200;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -120,7 +118,7 @@ public class PersianCalendarConverterActivity extends Activity {
 		PersianDate persianDate = null;
 		IslamicDate islamicDate = null;
 
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = preferenceDigits(this);
 		StringBuilder sb = new StringBuilder();
 
 		List<String> calendarsTextList = new ArrayList<String>();
@@ -130,48 +128,32 @@ public class PersianCalendarConverterActivity extends Activity {
 			persianDate = DateConverter.civilToPersian(civilDate);
 			islamicDate = DateConverter.civilToIslamic(civilDate);
 
-			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
-					digits) + " میلادی");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					persianDate, digits) + " هجری خورشیدی");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					islamicDate, digits) + " هجری قمری");
+			calendarsTextList.add(dateToString(civilDate, digits));
+			calendarsTextList.add(dateToString(persianDate, digits));
+			calendarsTextList.add(dateToString(islamicDate, digits));
 			break;
 		case ISLAMIC:
 			islamicDate = new IslamicDate(year, month, day);
 			civilDate = DateConverter.islamicToCivil(islamicDate);
 			persianDate = DateConverter.islamicToPersian(islamicDate);
 
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					islamicDate, digits) + " هجری قمری");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
-					digits) + " میلادی");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					persianDate, digits) + " هجری خورشیدی");
+			calendarsTextList.add(dateToString(islamicDate, digits));
+			calendarsTextList.add(dateToString(civilDate, digits));
+			calendarsTextList.add(dateToString(persianDate, digits));
 			break;
 		case SHAMSI:
 			persianDate = new PersianDate(year, month, day);
 			civilDate = DateConverter.persianToCivil(persianDate);
 			islamicDate = DateConverter.persianToIslamic(persianDate);
 
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					persianDate, digits) + " هجری خورشیدی");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(civilDate,
-					digits) + " میلادی");
-
-			calendarsTextList.add(PersianCalendarUtils.dateToString(
-					islamicDate, digits) + " هجری قمری");
+			calendarsTextList.add(dateToString(persianDate, digits));
+			calendarsTextList.add(dateToString(civilDate, digits));
+			calendarsTextList.add(dateToString(islamicDate, digits));
 			break;
 		}
 
-		sb.append(PersianCalendarUtils.getDayOfWeekName(civilDate
-				.getDayOfWeek()));
-		sb.append(PersianCalendarUtils.PERSIAN_COMMA);
+		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
+		sb.append(PERSIAN_COMMA);
 		sb.append(" ");
 		sb.append(calendarsTextList.get(0));
 		sb.append("\n\n");
@@ -181,12 +163,12 @@ public class PersianCalendarConverterActivity extends Activity {
 		sb.append(calendarsTextList.get(2));
 		sb.append("\n");
 
-		convertedDateTextView.setText(PersianCalendarUtils.textShaper(sb
-				.toString()));
+		prepareTextView(convertedDateTextView);
+		convertedDateTextView.setText(textShaper(sb.toString()));
 	}
 
 	void fillYearMonthDaySpinners() {
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(this);
+		char[] digits = preferenceDigits(this);
 
 		AbstractDate date = null;
 		switch (detectSelectedCalendar()) {
@@ -205,7 +187,7 @@ public class PersianCalendarConverterActivity extends Activity {
 		List<String> yearsList = new ArrayList<String>();
 		startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
 		for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
-			yearsList.add(PersianCalendarUtils.formatNumber(i, digits));
+			yearsList.add(formatNumber(i, digits));
 		}
 		ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, yearsList);
@@ -218,8 +200,8 @@ public class PersianCalendarConverterActivity extends Activity {
 		List<String> monthsList = new ArrayList<String>();
 		String[] monthsArray = date.getMonthsList();
 		for (int i : new Range(1, 12)) {
-			monthsList.add(PersianCalendarUtils.textShaper(monthsArray[i]
-					+ " / " + PersianCalendarUtils.formatNumber(i, digits)));
+			monthsList.add(textShaper(monthsArray[i]
+					+ " / " + formatNumber(i, digits)));
 		}
 		ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, monthsList);
@@ -231,7 +213,7 @@ public class PersianCalendarConverterActivity extends Activity {
 		// days spinner init.
 		List<String> daysList = new ArrayList<String>();
 		for (int i : new Range(1, 31)) {
-			daysList.add(PersianCalendarUtils.formatNumber(i, digits));
+			daysList.add(formatNumber(i, digits));
 		}
 		ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, daysList);

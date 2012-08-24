@@ -23,8 +23,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
+
+import static com.byagowi.persiancalendar.CalendarUtils.*;
 
 /**
  * 1x1 widget provider
@@ -32,7 +33,7 @@ import android.widget.RemoteViews;
  * @author ebraminio
  * 
  */
-public class PersianCalendarWidget1x1 extends AppWidgetProvider {
+public class CalendarWidget1x1 extends AppWidgetProvider {
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -41,7 +42,7 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 	}
 
 	static public void updateTime(Context context) {
-		char[] digits = PersianCalendarUtils.getDigitsFromPreference(context);
+		char[] digits = preferenceDigits(context);
 
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
@@ -52,20 +53,30 @@ public class PersianCalendarWidget1x1 extends AppWidgetProvider {
 		PersianDate persian = DateConverter.civilToPersian(civil);
 
 		remoteViews.setTextViewText(R.id.textPlaceholder2_1x1,
-				PersianCalendarUtils.textShaper(persian.getMonthName()));
+				textShaper(persian.getMonthName()));
 
-		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, PersianCalendarUtils
-				.formatNumber(persian.getDayOfMonth(), digits));
+		int color;
+		if (blackWidget(context)) {
+			color = context.getResources().getColor(android.R.color.black);
+		} else {
+			color = context.getResources().getColor(android.R.color.white);
+		}
+
+		remoteViews.setTextColor(R.id.textPlaceholder1_1x1, color);
+		remoteViews.setTextColor(R.id.textPlaceholder2_1x1, color);
+		
+			
+		remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(persian.getDayOfMonth(), digits));
 
 		Intent launchAppIntent = new Intent(context,
-				PersianCalendarActivity.class);
+				CalendarActivity.class);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, launchAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1,
 				launchAppPendingIntent);
 
 		ComponentName widget = new ComponentName(context,
-				PersianCalendarWidget1x1.class);
+				CalendarWidget1x1.class);
 		
 		manager.updateAppWidget(widget, remoteViews);
 	}
