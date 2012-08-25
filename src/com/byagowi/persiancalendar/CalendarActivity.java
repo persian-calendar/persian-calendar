@@ -231,12 +231,6 @@ public class CalendarActivity extends Activity {
 					textView.setBackgroundResource(R.drawable.holiday_background);
 					textView.setTextColor(getResources().getColor(
 							R.color.holidays_text_color));
-					textView.setOnTouchListener(new View.OnTouchListener() {
-						@Override
-						public boolean onTouch(View v, MotionEvent event) {
-							return gestureDetector.onTouchEvent(event);
-						}
-					});
 					textView.setOnClickListener(new View.OnClickListener() {
 						String title = holidayTitle;
 

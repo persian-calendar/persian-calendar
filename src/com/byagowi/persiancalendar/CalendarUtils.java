@@ -78,8 +78,8 @@ public class CalendarUtils {
 			typeface = Typeface.createFromAsset(textView.getContext().getAssets(),
             "fonts/DroidNaskh-Regular.ttf");
 		}
-		textView.setTypeface(typeface);
-		textView.setLineSpacing(0f, 0.8f);
+		//textView.setTypeface(typeface);
+		//textView.setLineSpacing(0f, 0.8f);
 		return textView;
 	}
 

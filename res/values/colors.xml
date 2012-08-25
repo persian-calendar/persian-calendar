@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="holidays_text_color">#A0A0A0</color>
+    <color name="first_row_text_color">#FFFFFF</color>
+    <color name="holidays_text_color">#CC0000</color>
     <color name="not_holidays_text_color">#000000</color>
 </resources>

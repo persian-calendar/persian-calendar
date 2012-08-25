@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell07"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell06"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell05"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell04"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell03"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell02"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/calendarCell01"
-                    android:textColor="@color/holidays_text_color"
+                    android:textColor="@color/first_row_text_color"
                     android:textSize="20dp" />
             </TableRow>
 
