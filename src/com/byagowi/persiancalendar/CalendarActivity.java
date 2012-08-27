@@ -10,14 +10,28 @@
  */
 package com.byagowi.persiancalendar;
 
+import java.util.Date;
+import java.util.Map;
+
 import com.byagowi.common.Range;
+import com.github.praytimes.CalculationMethod;
+import com.github.praytimes.Clock;
+import com.github.praytimes.Coordinate;
+import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimesCalculator;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -29,6 +43,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -113,6 +128,88 @@ public class CalendarActivity extends Activity {
 				calendar);
 		calendarPlaceholder.addView(calendar, currentCalendarIndex);
 		// end
+		
+		// pray times calculation
+		Location location = getLocation(this);
+		
+		final LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		if (location == null) {
+			location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+		}
+		
+		if (location != null) {
+			fillPrayTime(location);
+		} else {
+			if (android.os.Build.VERSION.SDK_INT >= 9) {
+				Button b = (Button) findViewById(R.id.praytimes_button);
+				b.setVisibility(View.VISIBLE);
+				b.setText(textShaper("محاسبهٔ مکان برای اوقات شرعی"));
+				b.setOnClickListener(
+						new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						addPrayTimeListener(lm);
+						v.setEnabled(false);
+					}
+				});
+			}
+		}
+		// end
+	}
+	
+	@TargetApi(9)
+	private void addPrayTimeListener(LocationManager lm) {
+		Criteria c = new Criteria();
+		c.setAccuracy(Criteria.ACCURACY_COARSE);
+		String provider = lm.getBestProvider(c, true);
+		if (provider != null) {
+			lm.requestSingleUpdate(provider, new LocationListener() {
+				@Override public void onLocationChanged(Location location) {
+					fillPrayTime(location);
+				}
+				@Override public void onStatusChanged(String provider, int status, Bundle extras) { }
+				@Override public void onProviderEnabled(String provider) { }
+				@Override public void onProviderDisabled(String provider) { }
+			}, null);
+		} else {
+			quickToast("Please set your geographical position on preference.", this);
+		}
+	}
+	
+	private void fillPrayTime(Location location) {
+		setLocation(location, this);
+		location.getLongitude();
+		PrayTimesCalculator ptc = new PrayTimesCalculator(CalculationMethod.Jafari);
+		StringBuilder sb = new StringBuilder();
+		Map<PrayTime, Clock> prayTimes =
+				ptc.calculate(
+						new Date(),
+						new Coordinate(
+								location.getLatitude(),
+								location.getLongitude()));
+
+		sb.append("اذان صبح: ");
+		sb.append(prayTimes.get(PrayTime.Imsak).toString());
+		
+		sb.append("\nطلوع آفتاب: ");
+		sb.append(prayTimes.get(PrayTime.Sunrise).toString());
+
+		sb.append("\nاذان ظهر: ");
+		sb.append(prayTimes.get(PrayTime.Dhuhr).toString());
+		
+		sb.append("\nاذان مغرب: ");
+		sb.append(prayTimes.get(PrayTime.Maghrib).toString());
+
+		sb.append("\nنیمه وقت شرعی: ");
+		sb.append(prayTimes.get(PrayTime.Midnight).toString());
+
+		char[] digits = preferenceDigits(this);
+		
+		TextView tv = (TextView)findViewById(R.id.today_praytimes);
+		prepareTextView(tv);
+		tv.setText(textShaper(formatNumber(sb.toString(), digits)));
+		
+		findViewById(R.id.praytimes_button).setVisibility(View.GONE);
 	}
 
 	private void fillCalendarInfo() {
@@ -125,16 +222,6 @@ public class CalendarActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				bringThisMonth();
-			}
-		});
-		ci.setOnLongClickListener(new View.OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				Intent converterIntent = new Intent(getApplicationContext(),
-						CalendarConverterActivity.class);
-				startActivityForResult(converterIntent, 100);
-				return false;
 			}
 		});
 	}
@@ -236,7 +323,7 @@ public class CalendarActivity extends Activity {
 
 						@Override
 						public void onClick(View v) {
-							quickToast(title, getApplicationContext());
+							quickToast(title, CalendarActivity.this);
 						}
 					});
 				}

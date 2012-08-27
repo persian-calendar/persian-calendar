@@ -65,10 +65,10 @@ public class CalendarAboutActivity extends Activity {
 						+ "You should have received a copy of the GNU General Public License "
 						+ "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
 						+ "\n"
-						+ "Background and about icon artwork designs are by Iman Soltanian.\n"
+						+ "About icon artwork design is by Iman Soltanian.\n"
 						+ "Calendar converter code is from http://code.google.com/p/mobile-persian-calendar/ "
-						+ "that it was under GPLv2.\n"
-						+ "ArabicShaper for shaping Persian Characters is from Azizhuss which is "
+						+ "which is under GPLv2.\n"
+						+ "ArabicShaper for shaping Arabic characters is from Azizhuss which is "
 						+ "under BSD License.\n"
 						+ "\n"
 						+ "For reporting any bug, please come to this address: http://github.com/ebraminio/DroidPersianCalendar :)\n");

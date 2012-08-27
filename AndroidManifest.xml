@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.byagowi.persiancalendar"
     android:versionCode="19"
-    android:versionName="2.00ɑ" >
+    android:versionName="2.00" >
 
     <uses-sdk android:minSdkVersion="7"
         android:targetSdkVersion="16" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:icon="@drawable/icon"
@@ -65,7 +68,7 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-s
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />

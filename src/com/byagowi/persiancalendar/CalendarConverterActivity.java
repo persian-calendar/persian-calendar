@@ -121,50 +121,54 @@ public class CalendarConverterActivity extends Activity {
 		char[] digits = preferenceDigits(this);
 		StringBuilder sb = new StringBuilder();
 
-		List<String> calendarsTextList = new ArrayList<String>();
-		switch (calendarType) {
-		case GEORGIAN:
-			civilDate = new CivilDate(year, month, day);
-			persianDate = DateConverter.civilToPersian(civilDate);
-			islamicDate = DateConverter.civilToIslamic(civilDate);
-
-			calendarsTextList.add(dateToString(civilDate, digits));
-			calendarsTextList.add(dateToString(persianDate, digits));
-			calendarsTextList.add(dateToString(islamicDate, digits));
-			break;
-		case ISLAMIC:
-			islamicDate = new IslamicDate(year, month, day);
-			civilDate = DateConverter.islamicToCivil(islamicDate);
-			persianDate = DateConverter.islamicToPersian(islamicDate);
-
-			calendarsTextList.add(dateToString(islamicDate, digits));
-			calendarsTextList.add(dateToString(civilDate, digits));
-			calendarsTextList.add(dateToString(persianDate, digits));
-			break;
-		case SHAMSI:
-			persianDate = new PersianDate(year, month, day);
-			civilDate = DateConverter.persianToCivil(persianDate);
-			islamicDate = DateConverter.persianToIslamic(persianDate);
-
-			calendarsTextList.add(dateToString(persianDate, digits));
-			calendarsTextList.add(dateToString(civilDate, digits));
-			calendarsTextList.add(dateToString(islamicDate, digits));
-			break;
+		try {
+			List<String> calendarsTextList = new ArrayList<String>();
+			switch (calendarType) {
+			case GEORGIAN:
+				civilDate = new CivilDate(year, month, day);
+				persianDate = DateConverter.civilToPersian(civilDate);
+				islamicDate = DateConverter.civilToIslamic(civilDate);
+	
+				calendarsTextList.add(dateToString(civilDate, digits));
+				calendarsTextList.add(dateToString(persianDate, digits));
+				calendarsTextList.add(dateToString(islamicDate, digits));
+				break;
+			case ISLAMIC:
+				islamicDate = new IslamicDate(year, month, day);
+				civilDate = DateConverter.islamicToCivil(islamicDate);
+				persianDate = DateConverter.islamicToPersian(islamicDate);
+	
+				calendarsTextList.add(dateToString(islamicDate, digits));
+				calendarsTextList.add(dateToString(civilDate, digits));
+				calendarsTextList.add(dateToString(persianDate, digits));
+				break;
+			case SHAMSI:
+				persianDate = new PersianDate(year, month, day);
+				civilDate = DateConverter.persianToCivil(persianDate);
+				islamicDate = DateConverter.persianToIslamic(persianDate);
+	
+				calendarsTextList.add(dateToString(persianDate, digits));
+				calendarsTextList.add(dateToString(civilDate, digits));
+				calendarsTextList.add(dateToString(islamicDate, digits));
+				break;
+			}
+	
+			sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
+			sb.append(PERSIAN_COMMA);
+			sb.append(" ");
+			sb.append(calendarsTextList.get(0));
+			sb.append("\n\n");
+			sb.append("برابر با:\n");
+			sb.append(calendarsTextList.get(1));
+			sb.append("\n");
+			sb.append(calendarsTextList.get(2));
+			sb.append("\n");
+	
+			prepareTextView(convertedDateTextView);
+			convertedDateTextView.setText(textShaper(sb.toString()));
+		} catch (RuntimeException e) {
+			convertedDateTextView.setText("Date you entered was not valid!");
 		}
-
-		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
-		sb.append(PERSIAN_COMMA);
-		sb.append(" ");
-		sb.append(calendarsTextList.get(0));
-		sb.append("\n\n");
-		sb.append("برابر با:\n");
-		sb.append(calendarsTextList.get(1));
-		sb.append("\n");
-		sb.append(calendarsTextList.get(2));
-		sb.append("\n");
-
-		prepareTextView(convertedDateTextView);
-		convertedDateTextView.setText(textShaper(sb.toString()));
 	}
 
 	void fillYearMonthDaySpinners() {

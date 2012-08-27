@@ -7,7 +7,6 @@
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
-        
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="DariVersion"
@@ -20,11 +19,24 @@
             android:key="GadgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
-     <CheckBoxPreference
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="BlackWidget"
             android:summary="@string/black_font_widgets"
             android:title="@string/black_widget" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pray_times_calucation_setting" >
+        <MultiSelectListPreference
+            android:key="method"
+            android:title="Pray Time Calculation Method" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Logitude"
+            android:title="Logitude" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Latitude"
+            android:title="Latitude" />
     </PreferenceCategory>
 
 </PreferenceScreen>

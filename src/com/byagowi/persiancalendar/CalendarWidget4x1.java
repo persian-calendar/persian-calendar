@@ -74,6 +74,7 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
+		persian.setDari(isDariVersion(context));
 
 		String text1;
 		String text2;

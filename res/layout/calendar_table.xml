@@ -31,6 +31,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell07"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -39,6 +40,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell06"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -47,6 +49,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell05"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -55,6 +58,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell04"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -63,6 +67,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell03"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -71,6 +76,7 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell02"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
 
                 <TextView
@@ -79,7 +85,20 @@
                     android:gravity="center"
                     android:id="@+id/calendarCell01"
                     android:textColor="@color/first_row_text_color"
+                    android:background="@color/first_row_background_color"
                     android:textSize="20dp" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#0099CC"
+                android:gravity="center_horizontal">
+                
+                <LinearLayout
+                    android:background="#0099CC"
+                	android:layout_width="fill_parent"
+                    android:layout_height="2dip" />
             </TableRow>
 
             <TableRow
