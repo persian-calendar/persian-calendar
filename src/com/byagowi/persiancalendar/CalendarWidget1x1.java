@@ -51,7 +51,8 @@ public class CalendarWidget1x1 extends AppWidgetProvider {
 
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
-
+		persian.setDari(isDariVersion(context));
+		
 		remoteViews.setTextViewText(R.id.textPlaceholder2_1x1,
 				textShaper(persian.getMonthName()));
 
