@@ -63,7 +63,7 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		boolean gadgetClock = prefs.getBoolean("GadgetClock", false);
+		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
 
 		char[] digits = preferenceDigits(context);
 
