@@ -7,8 +7,7 @@ A simple Persian Calendar with a Widget for Android.
  alt="Persian Calendar Lockscreen Widgets Screenshot" title="Lockscreen Widget Screenshot on Android 4.2" align="right" />
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/homescreen.png"
  alt="Persian Calendar Widgets Screenshot" title="Widget Screenshot" align="right" />
- 
- https://github.com/ebraminio/DroidPersianCalendar/raw/master/artworks/Calendar.psd
+
 You can download it also from https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar (if you can :D)
 
 
