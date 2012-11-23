@@ -10,7 +10,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
-        android:textSize="40dip" />
+        android:textDirection="rtl"
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/textPlaceholder2_1x1"
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"
-        android:textSize="20dip" />
+        android:textDirection="rtl"
+        android:textSize="20sp" />
 
 </LinearLayout>

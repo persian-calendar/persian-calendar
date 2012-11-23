@@ -9,9 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip" >
+        android:paddingBottom="10sp"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp" >
 
         <Spinner
             android:id="@+id/calendarTypeSpinner"
@@ -56,8 +56,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:paddingRight="10dip"
-            android:paddingTop="10dip"
+            android:paddingRight="10sp"
+            android:paddingTop="10sp"
             android:textColor="@android:color/background_dark" />
     </LinearLayout>
 
