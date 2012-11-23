@@ -15,7 +15,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/widget" >
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="GadgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
@@ -24,19 +24,19 @@
             android:key="BlackWidget"
             android:summary="@string/black_font_widgets"
             android:title="@string/black_widget" />
-    </PreferenceCategory>
+    </PreferenceCategory><!-- 
     <PreferenceCategory android:title="@string/pray_times_calucation_setting" >
-        <!-- <MultiSelectListPreference
+        <MultiSelectListPreference
             android:key="method"
-            android:title="Pray Time Calculation Method" /> -->
-        <!-- <EditTextPreference
+            android:title="Pray Time Calculation Method" />
+        <EditTextPreference
             android:defaultValue="0"
             android:key="Latitude"
             android:title="Latitude" />
         <EditTextPreference
             android:defaultValue="0"
             android:key="Logitude"
-            android:title="Logitude" /> -->
-    </PreferenceCategory>
+            android:title="Logitude" />
+    </PreferenceCategory> -->
 
 </PreferenceScreen>
