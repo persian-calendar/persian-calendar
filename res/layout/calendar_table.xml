@@ -9,9 +9,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:paddingRight="10dip"
-            android:paddingTop="20dip"
-            android:textSize="25dip" />
+            android:paddingRight="10sp"
+            android:paddingTop="20sp"
+            android:textSize="25sp" />
 
         <TableLayout
             android:layout_width="fill_parent"

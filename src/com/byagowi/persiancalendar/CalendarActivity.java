@@ -133,14 +133,14 @@ public class CalendarActivity extends Activity {
 		Location location = getLocation(this);
 		
 		final LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		if (location == null) {
+		/*if (location == null) {
 			location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-		}
+		}*/
 		
 		if (location != null) {
 			fillPrayTime(location);
 		} else {
-			if (android.os.Build.VERSION.SDK_INT >= 9) {
+			/* if (android.os.Build.VERSION.SDK_INT >= 9) {
 				Button b = (Button) findViewById(R.id.praytimes_button);
 				b.setVisibility(View.VISIBLE);
 				b.setText(textShaper("محاسبهٔ مکان برای اوقات شرعی"));
@@ -152,7 +152,7 @@ public class CalendarActivity extends Activity {
 						v.setEnabled(false);
 					}
 				});
-			}
+			} */
 		}
 		// end
 	}
@@ -269,6 +269,11 @@ public class CalendarActivity extends Activity {
 
 		CalendarWidget1x1.updateTime(this);
 		CalendarWidget4x1.updateTime(this);
+		
+		Location location = getLocation(this);
+		if (location != null) {
+			fillPrayTime(location);
+		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 

@@ -63,7 +63,7 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
+		boolean gadgetClock = prefs.getBoolean("GadgetClock", false);
 
 		char[] digits = preferenceDigits(context);
 
@@ -79,16 +79,12 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 		String text1;
 		String text2;
 
+		text1 = getDayOfWeekName(civil.getDayOfWeek());
+		text2 = dateToString(persian, digits, true) + PERSIAN_COMMA + " "
+				+ dateToString(civil, digits, true);
 		if (gadgetClock) {
-			text1 = getPersianFormattedClock(new Date(),
-					digits);
-
-			text2 = getDayOfWeekName(civil.getDayOfWeek())
-					+ PERSIAN_COMMA + " "
-					+ dateToString(persian, digits);
-		} else {
-			text1 = getDayOfWeekName(civil.getDayOfWeek());
-			text2 = dateToString(persian, digits);
+			text2 = text1 + " " + text2;
+			text1 = getPersianFormattedClock(new Date(), digits, false);
 		}
 
 		text1 = textShaper(text1);
@@ -103,12 +99,11 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 
 		remoteViews.setTextColor(R.id.textPlaceholder1_4x1, color);
 		remoteViews.setTextColor(R.id.textPlaceholder2_4x1, color);
-		
+
 		remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, text1);
 		remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, text2);
 
-		Intent launchAppIntent = new Intent(context,
-				CalendarActivity.class);
+		Intent launchAppIntent = new Intent(context, CalendarActivity.class);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, launchAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1,

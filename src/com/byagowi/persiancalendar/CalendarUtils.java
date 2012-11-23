@@ -102,10 +102,10 @@ public class CalendarUtils {
 				.getDefaultSharedPreferences(context);
 
 		try {
-			location.setLatitude(
-					Double.parseDouble(prefs.getString("Latitude", "0")));
-			location.setLongitude(
-					Double.parseDouble(prefs.getString("Longitude", "0")));
+			location.setLatitude(Double.parseDouble(prefs.getString("Latitude",
+					"0")));
+			location.setLongitude(Double.parseDouble(prefs.getString(
+					"Longitude", "0")));
 		} catch (RuntimeException e) {
 			location.setLatitude(0);
 			location.setLongitude(0);
@@ -155,26 +155,32 @@ public class CalendarUtils {
 	private static String AM_IN_PERSIAN = "ق.ظ";
 	private static String PM_IN_PERSIAN = "ب.ظ";
 
-	public static String getPersianFormattedClock(Date date, char[] digits) {
+	public static String getPersianFormattedClock(Date date, char[] digits,
+			boolean in24) {
 
 		String timeText = null;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
-			timeText = PM_IN_PERSIAN;
-			hour -= 12;
-		} else {
-			timeText = AM_IN_PERSIAN;
+		if (!in24) {
+			if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
+				timeText = PM_IN_PERSIAN;
+				hour -= 12;
+			} else {
+				timeText = AM_IN_PERSIAN;
+			}
 		}
 
-		return String.format(
-				"%s:%s %s",
-				formatNumber(addExtraZeroForClock(hour), digits),
-				formatNumber(
+		String result = formatNumber(addExtraZeroForClock(hour), digits)
+				+ ":"
+				+ formatNumber(
 						addExtraZeroForClock(calendar.get(Calendar.MINUTE)),
-						digits), timeText);
+						digits);
+		if (in24) {
+			result = result + " " + timeText;
+		}
+		return result;
 	}
 
 	public static String formatNumber(int number, char[] digits) {
@@ -196,13 +202,16 @@ public class CalendarUtils {
 		return sb.toString();
 	}
 
-	public static String dateToString(AbstractDate date, char[] digits) {
+	public static String dateToString(AbstractDate date, char[] digits,
+			boolean showYear) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(CalendarUtils.formatNumber(date.getDayOfMonth(), digits));
 		sb.append(' ');
 		sb.append(date.getMonthName());
-		sb.append(' ');
-		sb.append(CalendarUtils.formatNumber(date.getYear(), digits));
+		if (showYear) {
+			sb.append(' ');
+			sb.append(CalendarUtils.formatNumber(date.getYear(), digits));
+		}
 
 		return textShaper(sb.toString());
 	}
@@ -213,12 +222,14 @@ public class CalendarUtils {
 		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
 		sb.append(PERSIAN_COMMA);
 		sb.append(" ");
-		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits));
+		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits,
+				true));
 		sb.append("\n\n");
 		sb.append("برابر با:\n");
-		sb.append(dateToString(civilDate, digits));
+		sb.append(dateToString(civilDate, digits, true));
 		sb.append("\n");
-		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits));
+		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits,
+				true));
 		sb.append("\n");
 		return textShaper(sb.toString());
 	}
