@@ -4,6 +4,8 @@
     <string name="app_name">Persian Calendar</string>
     <string name="widget_name">Persian Calendar</string>
     <string name="widget_mini_name">Persian Calendar (mini)</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Lonngitude</string>
     <string name="reset">Reset</string>
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>

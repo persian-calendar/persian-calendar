@@ -51,17 +51,18 @@ public class PrayTimeActivityHelper {
 
 	public void prayTimeInitialize() {
 		location = getLocation(calendarActivity);
-		final LocationManager lm = (LocationManager) calendarActivity
+		/*final LocationManager lm = (LocationManager) calendarActivity
 				.getSystemService(Context.LOCATION_SERVICE);
 
 		if (location == null) {
 			location = lm
 					.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-		}
+		}*/
 
 		if (location != null) {
 			fillPrayTime();
 		} else {
+			/*
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				Button b = (Button) calendarActivity
 						.findViewById(R.id.praytimes_button);
@@ -75,7 +76,7 @@ public class PrayTimeActivityHelper {
 						v.setEnabled(false);
 					}
 				});
-			}
+			}*/
 		}
 	}
 

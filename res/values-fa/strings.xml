@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">تقویم فارسی</string>
     <string name="widget_name">تقویم فارسی</string>
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
+    <string name="latitude">عرض جغرافیایی</string>
+    <string name="longitude">عرض جغرافیایی</string>
     <string name="reset">بازنشانی</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
@@ -14,7 +17,7 @@
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
     <string name="year">سال</string>
     <string name="month">ماه</string>
-    <string name="day">روز</string> 
+    <string name="day">روز</string>
     <string name="date_converter">مبدل تاریخ</string>
     <string name="logo">نشان</string>
     <string name="dari_months">ماه‌های دری</string>
@@ -24,4 +27,5 @@
     <string name="black_widget">ویجت‌های سیاه</string>
     <string name="black_font_widgets">قلم سیاه برای ویجت‌ها</string>
     <string name="pray_times_calucation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
+
 </resources>
