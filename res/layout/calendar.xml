@@ -17,15 +17,16 @@
             android:layout_height="310sp" />
 
         <LinearLayout
-            android:baselineAligned="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal" >
 
             <LinearLayout
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:gravity="right" >
 
                 <Button
                     android:id="@+id/praytimes_button"
