@@ -40,6 +40,7 @@ public class CalendarWidget1x1 extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		updateTime(context);
 	}
+	
 
 	static public void updateTime(Context context) {
 		char[] digits = preferenceDigits(context);

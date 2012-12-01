@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">تقویم فارسی</string>
+    <string name="widget_name">تقویم فارسی</string>
+    <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
+    <string name="reset">بازنشانی</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">فعال‌بودن اعداد فارسی</string>

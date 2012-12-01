@@ -12,7 +12,7 @@ package calendar;
 public abstract class AbstractDate {
 
 	public abstract String[] getMonthsList();
-	
+
 	public void setDate(int year, int month, int day) {
 		setYear(year);
 		setMonth(month);
