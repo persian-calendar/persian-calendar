@@ -213,25 +213,29 @@ public class CalendarUtils {
 			sb.append(CalendarUtils.formatNumber(date.getYear(), digits));
 		}
 
-		return textShaper(sb.toString());
+		return sb.toString();
 	}
-
-	public static String infoForSpecificDay(CivilDate civilDate, char[] digits) {
+	
+	public static String dayTitleSummary(CivilDate civilDate, char[] digits) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("امروز:\n");
 		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
 		sb.append(PERSIAN_COMMA);
 		sb.append(" ");
 		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits,
 				true));
-		sb.append("\n\n");
-		sb.append("برابر با:\n");
+		return sb.toString();
+	}
+
+	public static String infoForSpecificDay(CivilDate civilDate, char[] digits) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(dayTitleSummary(civilDate, digits));
+		sb.append("\n\nبرابر با:\n");
 		sb.append(dateToString(civilDate, digits, true));
 		sb.append("\n");
 		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits,
 				true));
 		sb.append("\n");
-		return textShaper(sb.toString());
+		return sb.toString();
 	}
 
 	public static String getMonthYearTitle(PersianDate persianDate,

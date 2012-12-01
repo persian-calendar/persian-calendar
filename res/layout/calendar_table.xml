@@ -1,476 +1,481 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400sp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/currentMonthTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:gravity="right"
+        android:paddingRight="10sp"
+        android:paddingTop="20sp"
+        android:textSize="25sp" />
 
-        <TextView
-            android:id="@+id/currentMonthTextView"
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingRight="10sp"
-            android:paddingTop="20sp"
-            android:textSize="25sp" />
+            android:layout_marginLeft="1sp"
+            android:layout_marginRight="1sp"
+            android:background="@drawable/calendar_firstrow"
+            android:gravity="center_horizontal" >
 
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:shrinkColumns="*"
-            android:stretchColumns="*" >
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell07"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/calendar_firstrow"
-                android:gravity="center_horizontal" >
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell07"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell06"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell06"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell05"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell05"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell04"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell04"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell03"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell03"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell02"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell02"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell01"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/first_row_background_color"
+                android:gravity="center"
+                android:textColor="@color/first_row_text_color"
+                android:textSize="20sp" />
+        </TableRow>
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/calendarCell01"
-                    android:textColor="@color/first_row_text_color"
-                    android:background="@color/first_row_background_color"
-                    android:textSize="20dp" />
-            </TableRow>
-            
-            <TableRow
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:layout_marginLeft="1sp"
+            android:layout_marginRight="1sp"
+            android:background="#0099CC"
+            android:gravity="center_horizontal" >
+
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="2dip"
-                android:background="#0099CC"
-                android:gravity="center_horizontal">
-                
-                <LinearLayout
-                    android:background="#0099CC"
-                	android:layout_width="fill_parent"
-                    android:layout_height="2dip" />
-            </TableRow>
+                android:background="#0099CC" />
+        </TableRow>
 
-            <TableRow
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/calendarCell17"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell17"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell16"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell15"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell14"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell13"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell12"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell11"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell16"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell27"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell26"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell25"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell24"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell23"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell22"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell21"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell15"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell37"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell36"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell35"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell34"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell33"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell32"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell31"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell14"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell47"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell46"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell45"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell44"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell43"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell42"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell41"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell13"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell57"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell56"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell55"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell54"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell53"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell52"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/calendarCell51"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/calendarCell12"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell67"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/holidays_text_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell11"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
 
-                <TextView
-                    android:id="@+id/calendarCell66"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
 
-                <TextView
-                    android:id="@+id/calendarCell65"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell27"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell64"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell26"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell63"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell25"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell62"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/calendarCell24"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/calendarCell61"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/not_holidays_text_color"
-                    android:textSize="20dp" />
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/calendarCell23"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell22"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell21"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/calendarCell37"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell36"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell35"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell34"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell33"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell32"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell31"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/calendarCell47"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell46"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell45"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell44"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell43"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell42"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell41"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/calendarCell57"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell56"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell55"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell54"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell53"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell52"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell51"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/calendarCell67"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell66"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell65"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell64"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell63"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell62"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/calendarCell61"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/not_holidays_text_color"
+                android:textSize="20sp" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

@@ -11,23 +11,25 @@ public class PersianDate extends AbstractDate {
 	private static final String[] persianMonthName = { "", "فروردین",
 			"اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
 			"آذر", "دی", "بهمن", "اسفند" };
-	
+
 	/**
-	 * Months Names in Dari, needed for special Dari Version.
-	 * Provided by: Mohammad Hamid Majidee
+	 * Months Names in Dari, needed for special Dari Version. Provided by:
+	 * Mohammad Hamid Majidee
 	 */
 	private static final String[] dariMonthName = { "", "حمل", "ثور", "جوزا",
-			"سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت" };
-	
+			"سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
+			"حوت" };
+
 	private boolean isDari = false;
+
 	public String[] getMonthsList() {
 		return isDari ? dariMonthName : persianMonthName;
 	}
-	
+
 	public void setDari(boolean isDari) {
 		this.isDari = isDari;
 	}
-	
+
 	private int year;
 
 	private int month;
@@ -42,6 +44,11 @@ public class PersianDate extends AbstractDate {
 		setDayOfMonth(day);
 	}
 
+	public PersianDate clone() {
+		return new PersianDate(getYear(), getMonth(),
+				getDayOfMonth());
+	}
+
 	public int getDayOfMonth() {
 		return day;
 	}
@@ -49,7 +56,7 @@ public class PersianDate extends AbstractDate {
 	public int getMonth() {
 		return month;
 	}
-	
+
 	public String getMonthName() {
 		return getMonthsList()[month];
 	}
