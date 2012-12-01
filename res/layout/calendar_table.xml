@@ -96,13 +96,13 @@
             android:layout_height="2dip"
             android:layout_marginLeft="1sp"
             android:layout_marginRight="1sp"
-            android:background="#0099CC"
+            android:background="@color/first_row_bottom_background_color"
             android:gravity="center_horizontal" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="2dip"
-                android:background="#0099CC" />
+                android:background="@color/first_row_bottom_background_color" />
         </TableRow>
 
         <TableRow

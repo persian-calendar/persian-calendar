@@ -119,7 +119,7 @@ public class CalendarMonthFragment extends Fragment {
 							R.color.holidays_text_color));
 				}
 				ClickDayListener listener = new ClickDayListener(holidayTitle,
-						persianDate.clone(), calendarActivity, this);
+						persianDate.clone(), calendarActivity);
 				textView.setOnClickListener(listener);
 				textView.setOnLongClickListener(listener);
 

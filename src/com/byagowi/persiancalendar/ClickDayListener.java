@@ -23,8 +23,7 @@ final class ClickDayListener implements View.OnClickListener, View.OnLongClickLi
 	private final CalendarActivity calendarAcitivity;
 
 	ClickDayListener(String holidayTitle, PersianDate persianDate,
-			CalendarActivity calendarAcitivity,
-			CalendarMonthFragment calendarMonthFragment) {
+			CalendarActivity calendarAcitivity) {
 		this.holidayTitle = holidayTitle;
 		this.persianDate = persianDate;
 		this.calendarAcitivity = calendarAcitivity;
@@ -41,7 +40,7 @@ final class ClickDayListener implements View.OnClickListener, View.OnLongClickLi
 	@Override
 	public boolean onLongClick(View v) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			addEventOnCalendar(preferenceDigits(calendarAcitivity), v.getContext());
+			addEventOnCalendar(preferenceDigits(v.getContext()), v.getContext());
 		}
 		return false;
 	}
