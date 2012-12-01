@@ -8,6 +8,7 @@ import static com.byagowi.persiancalendar.CalendarUtils.quickToast;
 import static com.byagowi.persiancalendar.CalendarUtils.setLocation;
 import static com.byagowi.persiancalendar.CalendarUtils.textShaper;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -31,13 +32,25 @@ import com.github.praytimes.PrayTimesCalculator;
 
 public class PrayTimeActivityHelper {
 	CalendarActivity calendarActivity;
+	Date date;
+	Location location;
+	TextView prayTimeTextView;
 
 	public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
 		this.calendarActivity = calendarActivity;
+		date = new Date();
+		prayTimeTextView = (TextView) calendarActivity
+				.findViewById(R.id.today_praytimes);
+	}
+
+	public void setDate(int year, int month, int dayOfMonth) {
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, dayOfMonth);
+		date = c.getTime();
 	}
 
 	public void prayTimeInitialize() {
-		Location location = getLocation(calendarActivity);
+		location = getLocation(calendarActivity);
 		final LocationManager lm = (LocationManager) calendarActivity
 				.getSystemService(Context.LOCATION_SERVICE);
 
@@ -47,7 +60,7 @@ public class PrayTimeActivityHelper {
 		}
 
 		if (location != null) {
-			fillPrayTime(location);
+			fillPrayTime();
 		} else {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				Button b = (Button) calendarActivity
@@ -75,7 +88,7 @@ public class PrayTimeActivityHelper {
 			lm.requestSingleUpdate(provider, new LocationListener() {
 				@Override
 				public void onLocationChanged(Location location) {
-					fillPrayTime(location);
+					fillPrayTime();
 				}
 
 				@Override
@@ -97,15 +110,14 @@ public class PrayTimeActivityHelper {
 		}
 	}
 
-	private void fillPrayTime(Location location) {
+	private void fillPrayTime() {
 		setLocation(location, calendarActivity);
 		location.getLongitude();
 		PrayTimesCalculator ptc = new PrayTimesCalculator(
 				CalculationMethod.Jafari);
 		StringBuilder sb = new StringBuilder();
-		Map<PrayTime, Clock> prayTimes = ptc
-				.calculate(new Date(), new Coordinate(location.getLatitude(),
-						location.getLongitude()));
+		Map<PrayTime, Clock> prayTimes = ptc.calculate(date, new Coordinate(
+				location.getLatitude(), location.getLongitude()));
 
 		sb.append("اذان صبح: ");
 		sb.append(prayTimes.get(PrayTime.Imsak).toString());
@@ -124,13 +136,14 @@ public class PrayTimeActivityHelper {
 
 		char[] digits = preferenceDigits(calendarActivity);
 
-		TextView tv = (TextView) calendarActivity
-				.findViewById(R.id.today_praytimes);
-		
-		prepareTextView(tv);
-		tv.setText(textShaper(formatNumber(sb.toString(), digits)));
+		prepareTextView(prayTimeTextView);
+		prayTimeTextView.setText(textShaper(formatNumber(sb.toString(), digits)));
 
 		calendarActivity.findViewById(R.id.praytimes_button).setVisibility(
 				View.GONE);
+	}
+
+	public void clearInfo() {
+		prayTimeTextView.setText("");
 	}
 }

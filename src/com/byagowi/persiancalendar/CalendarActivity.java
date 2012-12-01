@@ -60,6 +60,9 @@ public class CalendarActivity extends FragmentActivity {
 		setContentView(R.layout.calendar);
 
 		calendarInfo = (TextView) findViewById(R.id.calendar_info);
+
+		// Pray Time
+		prayTimeInitialize();
 		
 		// Reset button
 		resetButton = (Button) findViewById(R.id.reset_button);
@@ -91,9 +94,6 @@ public class CalendarActivity extends FragmentActivity {
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 		});
-
-		// Pray Time, not working well, disabled
-		// prayTimeInitialize();
 	}
 
 	private void updateResetButtonState() {
@@ -102,11 +102,17 @@ public class CalendarActivity extends FragmentActivity {
 			fillCalendarInfo(new CivilDate());
 		} else {
 			resetButton.setVisibility(View.VISIBLE);
-			calendarInfo.setText("");
+			clearInfo();
 		}
 	}
 
-	// I know, this is ugly. But user will not notify this
+	private void clearInfo() {
+		calendarInfo.setText("");
+		prayTimeActivityHelper.clearInfo();
+	}
+
+	// I know, it is ugly, but user will not notify this and this will not have
+	// memory problem
 	private static final int MONTHS_LIMIT = 1200;
 
 	private void bringTodayYearMonth() {
@@ -161,6 +167,10 @@ public class CalendarActivity extends FragmentActivity {
 		}
 		sb.append(infoForSpecificDay(civilDate, digits));
 		calendarInfo.setText(textShaper(sb.toString()));
+
+		prayTimeActivityHelper.setDate(civilDate.getYear(),
+				civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+		prayTimeActivityHelper.prayTimeInitialize();
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -168,9 +178,13 @@ public class CalendarActivity extends FragmentActivity {
 		return ViewConfiguration.get(this).hasPermanentMenuKey();
 	}
 
-	@SuppressWarnings("unused")
+	private PrayTimeActivityHelper prayTimeActivityHelper;
+
 	private void prayTimeInitialize() {
-		new PrayTimeActivityHelper(this).prayTimeInitialize();
+		if (prayTimeActivityHelper == null) {
+			prayTimeActivityHelper = new PrayTimeActivityHelper(this);
+		}
+		prayTimeActivityHelper.prayTimeInitialize();
 	}
 
 	@Override

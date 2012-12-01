@@ -51,9 +51,6 @@ public class PrayTimesCalculator {
 		_coordinate = coordinate;
 		_dst = dst != null ? dst : getDst();
 		_timeZone = timeZone != null ? timeZone : getTimeZone(date);
-		if (_dst) {
-			_timeZone++;
-		}
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		int year = calendar.get(Calendar.YEAR);
