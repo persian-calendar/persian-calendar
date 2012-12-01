@@ -138,7 +138,6 @@ public class CalendarActivity extends FragmentActivity {
 			@Override
 			public Fragment getItem(int position) {
 				CalendarMonthFragment fragment = new CalendarMonthFragment();
-				fragment.setCalendarActivity(CalendarActivity.this);
 				Bundle args = new Bundle();
 				args.putInt("offset", position - MONTHS_LIMIT / 2);
 				fragment.setArguments(args);

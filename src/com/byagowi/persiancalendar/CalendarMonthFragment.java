@@ -24,12 +24,6 @@ import android.widget.TextView;
 public class CalendarMonthFragment extends Fragment {
 	private int offset;
 
-	private CalendarActivity calendarActivity;
-
-	public void setCalendarActivity(CalendarActivity calendarActivity) {
-		this.calendarActivity = calendarActivity;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +114,7 @@ public class CalendarMonthFragment extends Fragment {
 							R.color.holidays_text_color));
 				}
 				ClickDayListener listener = new ClickDayListener(holidayTitle,
-						persianDate.clone(), calendarActivity);
+						persianDate.clone(), (CalendarActivity)getActivity());
 				textView.setOnClickListener(listener);
 				textView.setOnLongClickListener(listener);
 
