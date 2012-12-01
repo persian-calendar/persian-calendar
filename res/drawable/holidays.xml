@@ -6,10 +6,10 @@
         android:color="#10000000" />
 
     <padding
-        android:bottom="7dp"
-        android:left="7dp"
-        android:right="7dp"
-        android:top="7dp" />
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="5dp" />
 
     <gradient
         android:angle="90.0"

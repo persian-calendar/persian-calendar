@@ -109,11 +109,12 @@ public class CalendarMonthFragment extends Fragment {
 					weekOfMonth++;
 					dayOfWeek = 0;
 				}
+				textView.setBackgroundResource(R.drawable.otherdays);
 
 				final String holidayTitle = Holidays
 						.getHolidayTitle(persianDate);
 				if (holidayTitle != null) {
-					textView.setBackgroundResource(R.drawable.holiday_background);
+					textView.setBackgroundResource(R.drawable.holidays);
 
 					textView.setTextColor(getResources().getColor(
 							R.color.holidays_text_color));
@@ -124,7 +125,7 @@ public class CalendarMonthFragment extends Fragment {
 				textView.setOnLongClickListener(listener);
 
 				if (persianDate.equals(today)) {
-					textView.setBackgroundResource(R.drawable.today_background);
+					textView.setBackgroundResource(R.drawable.background_stripes_tile);
 				}
 
 			}
