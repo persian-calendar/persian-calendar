@@ -5,4 +5,6 @@
     android:filter="false"
     android:gravity="center|center_vertical"
     android:src="@drawable/background_stripes"
-    android:tileMode="repeat" />
+    android:tileMode="repeat" >
+
+</bitmap>
