@@ -4,7 +4,7 @@
     android:dither="false"
     android:filter="false"
     android:gravity="center|center_vertical"
-    android:src="@drawable/background_stripes"
+    android:src="@drawable/background_stripes_rtl"
     android:tileMode="repeat" >
 
 </bitmap>

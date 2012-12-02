@@ -6,7 +6,7 @@
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
     <string name="latitude">عرض جغرافیایی</string>
     <string name="longitude">طول جغرافیایی</string>
-    <string name="reset">بازنشانی</string>
+    <string name="today">امروز</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">فعال‌بودن اعداد فارسی</string>
