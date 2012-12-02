@@ -49,8 +49,11 @@ public class PrayTimesCalculator {
 	public Map<PrayTime, Clock> calculate(Date date, Coordinate coordinate,
 			Double timeZone, Boolean dst) {
 		_coordinate = coordinate;
-		_dst = dst != null ? dst : getDst();
 		_timeZone = timeZone != null ? timeZone : getTimeZone(date);
+		_dst = dst != null ? dst : getDst(date);
+		if (_dst) {
+			_timeZone++;
+		}
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		int year = calendar.get(Calendar.YEAR);
@@ -266,8 +269,8 @@ public class PrayTimesCalculator {
 	}
 
 	// get daylight saving for a given date
-	private boolean getDst() {
-		return TimeZone.getDefault().getDSTSavings() == 3600000;
+	private boolean getDst(Date date) {
+		return TimeZone.getDefault().inDaylightTime(date);
 	}
 
 	//

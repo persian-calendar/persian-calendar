@@ -5,9 +5,7 @@
         android:color="@color/first_row_background_color" />
 
     <padding
-        android:bottom="7dp"
-        android:left="7dp"
-        android:right="7dp"
-        android:top="7dp" />
+        android:bottom="7sp"
+        android:top="3sp" />
 
 </shape>

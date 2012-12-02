@@ -84,7 +84,7 @@ public class CalendarMonthFragment extends Fragment {
 		for (int i : new Range(0, 7)) {
 			TextView textView = getTextViewInView("calendarCell0" + (i + 1),
 					calendar);
-			prepareTextView(currentMonthTextView);
+			prepareTextView(textView);
 			textView.setText(firstCharOfDaysOfWeekName[i]);
 		}
 		
@@ -95,7 +95,7 @@ public class CalendarMonthFragment extends Fragment {
 
 				TextView textView = getTextViewInView("calendarCell"
 						+ weekOfMonth + (dayOfWeek + 1), calendar);
-				prepareTextView(currentMonthTextView);
+				prepareTextView(textView);
 				textView.setText(formatNumber(i, digits));
 
 				dayOfWeek++;

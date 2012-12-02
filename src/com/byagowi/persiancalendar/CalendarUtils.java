@@ -68,8 +68,8 @@ public class CalendarUtils {
 	public static final char[] arabicIndicDigits = { '٠', '١', '٢', '٣', '٤',
 			'٥', '٦', '٧', '٨', '٩' };
 
-	public static final String[] dayOfWeekName = { "", "یک‌شنبه", "دوشنبه",
-			"سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه" };
+	public static final String[] dayOfWeekName = { "", "یکشنبه", "دوشنبه",
+			"سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 
 	public static String getDayOfWeekName(int dayOfWeek) {
 		return dayOfWeekName[dayOfWeek];
