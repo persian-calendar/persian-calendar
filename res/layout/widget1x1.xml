@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
     
-    <TextView
+    <com.github.AutoResizeTextView
         android:id="@+id/textPlaceholder1_1x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:textDirection="rtl"
         android:textSize="40sp" />
 
-    <TextView
+    <com.github.AutoResizeTextView
         android:id="@+id/textPlaceholder2_1x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

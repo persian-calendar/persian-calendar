@@ -7,10 +7,12 @@
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
-    
-    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!--
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    -->
 
     <application
         android:allowBackup="false"
@@ -67,7 +69,7 @@
             android:name=".CalendarWidget1x1"
             android:exported="false"
             android:icon="@drawable/launcher_icon"
-        	android:label="@string/widget_mini_name" >
+            android:label="@string/widget_mini_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
