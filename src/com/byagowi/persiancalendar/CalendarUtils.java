@@ -163,7 +163,7 @@ public class CalendarUtils {
 		calendar.setTime(date);
 
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		if (!in24) {
+		if (in24) {
 			if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
 				timeText = PM_IN_PERSIAN;
 				hour -= 12;

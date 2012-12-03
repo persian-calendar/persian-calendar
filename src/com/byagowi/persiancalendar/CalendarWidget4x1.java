@@ -64,6 +64,7 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
+		boolean gadgetIn24 = prefs.getBoolean("GadgetIn24", false);
 
 		char[] digits = preferenceDigits(context);
 
@@ -84,7 +85,7 @@ public class CalendarWidget4x1 extends AppWidgetProvider {
 				+ dateToString(civil, digits, true);
 		if (gadgetClock) {
 			text2 = text1 + " " + text2;
-			text1 = getPersianFormattedClock(new Date(), digits, false);
+			text1 = getPersianFormattedClock(new Date(), digits, gadgetIn24);
 		}
 
 		text1 = textShaper(text1);
