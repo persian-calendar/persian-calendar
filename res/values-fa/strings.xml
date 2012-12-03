@@ -13,6 +13,8 @@
     <string name="persian_digits">اعداد فارسی</string>
     <string name="showing_clock_on_widget">نمایش ساعت در گجت</string>
     <string name="clock_on_widget">ساعت در گجت</string>
+    <string name="showing_clock_in_24">نمایش ۲۴ ساعته ساعت</string>
+    <string name="clock_in_24">ساعت ۲۴ ساعته</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
     <string name="year">سال</string>

@@ -21,6 +21,11 @@
             android:title="@string/clock_on_widget" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="GadgetIn24"
+            android:summary="@string/showing_clock_in_24"
+            android:title="@string/clock_in_24" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="BlackWidget"
             android:summary="@string/black_font_widgets"
             android:title="@string/black_widget" />
