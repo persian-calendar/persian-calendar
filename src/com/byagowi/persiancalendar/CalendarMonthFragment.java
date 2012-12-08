@@ -97,12 +97,6 @@ public class CalendarMonthFragment extends Fragment {
 						+ weekOfMonth + (dayOfWeek + 1), calendar);
 				prepareTextView(textView);
 				textView.setText(formatNumber(i, digits));
-
-				dayOfWeek++;
-				if (dayOfWeek == 7) {
-					weekOfMonth++;
-					dayOfWeek = 0;
-				}
 				textView.setBackgroundResource(R.drawable.otherdays);
 
 				final String holidayTitle = Holidays
@@ -110,7 +104,7 @@ public class CalendarMonthFragment extends Fragment {
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holidays);
 				}
-				if (holidayTitle != null || dayOfWeek == 7) {
+				if (holidayTitle != null || dayOfWeek == 6) {
 					textView.setTextColor(getResources().getColor(
 							R.color.holidays_text_color));
 				}
@@ -123,6 +117,11 @@ public class CalendarMonthFragment extends Fragment {
 					textView.setBackgroundResource(R.drawable.background_stripes_tile);
 				}
 
+				dayOfWeek++;
+				if (dayOfWeek == 7) {
+					weekOfMonth++;
+					dayOfWeek = 0;
+				}
 			}
 		} catch (DayOutOfRangeException e) {
 			// okay, it was expected

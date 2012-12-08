@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.byagowi.persiancalendar"
     android:versionCode="24"
-    android:versionName="2.04" >
+    android:versionName="2.04b" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -11,7 +11,7 @@
     <!--
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     -->
 
     <application
