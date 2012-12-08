@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:textDirection="rtl" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -40,8 +41,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:paddingRight="10sp"
-                    android:text=""
-                    android:textColor="@android:color/background_dark" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -58,7 +58,7 @@
                     android:gravity="right"
                     android:paddingRight="10sp"
                     android:text=""
-                    android:textColor="@android:color/background_dark" />
+                    android:textDirection="rtl" />
 
                 <Button
                     android:id="@+id/reset_button"

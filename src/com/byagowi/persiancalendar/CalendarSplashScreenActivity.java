@@ -37,7 +37,7 @@ public class CalendarSplashScreenActivity extends Activity {
 		// Splash screen view
 		setContentView(R.layout.splash);
 
-		char[] digits = preferenceDigits(this);
+		char[] digits = preferredDigits(this);
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
@@ -55,7 +55,7 @@ public class CalendarSplashScreenActivity extends Activity {
 				try {
 					synchronized (this) {
 						// Wait given period of time or exit on touch
-						wait(1000);
+						wait(10);
 					}
 				} catch (InterruptedException ex) {
 				}

@@ -3,14 +3,15 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:textDirection="rtl" >
 
     <TextView
         android:id="@+id/textPlaceholder1_4x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:textDirection="rtl"
+        android:textColor="@android:color/white"
         android:textSize="36sp" />
 
     <TextView
@@ -18,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:textDirection="rtl"
+        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
 </LinearLayout>

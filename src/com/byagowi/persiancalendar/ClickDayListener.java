@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import static com.byagowi.persiancalendar.CalendarUtils.dayTitleSummary;
-import static com.byagowi.persiancalendar.CalendarUtils.preferenceDigits;
+import static com.byagowi.persiancalendar.CalendarUtils.preferredDigits;
 import static com.byagowi.persiancalendar.CalendarUtils.quickToast;
 
 import java.util.Calendar;
@@ -40,7 +40,7 @@ final class ClickDayListener implements View.OnClickListener, View.OnLongClickLi
 	@Override
 	public boolean onLongClick(View v) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			addEventOnCalendar(preferenceDigits(v.getContext()), v.getContext());
+			addEventOnCalendar(preferredDigits(v.getContext()), v.getContext());
 		}
 		return false;
 	}

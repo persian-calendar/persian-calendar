@@ -57,8 +57,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:paddingRight="10sp"
-            android:paddingTop="10sp"
-            android:textColor="@android:color/background_dark" />
+            android:paddingTop="10sp" />
     </LinearLayout>
 
 </ScrollView>
