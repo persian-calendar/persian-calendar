@@ -33,7 +33,7 @@ public class CalendarAboutActivity extends Activity {
 
 		setContentView(R.layout.about);
 
-		char[] digits = CalendarUtils.preferenceDigits(this);
+		char[] digits = CalendarUtils.preferredDigits(this);
 		TextView versionTextView = (TextView) findViewById(R.id.version2);
 		
 		String version = programVersion(this);

@@ -63,7 +63,7 @@ public class CalendarActivity extends FragmentActivity {
 
 		// Pray Time
 		prayTimeInitialize();
-		
+
 		// Reset button
 		resetButton = (Button) findViewById(R.id.reset_button);
 		resetButton.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +154,7 @@ public class CalendarActivity extends FragmentActivity {
 	}
 
 	private void fillCalendarInfo(CivilDate civilDate) {
-		char[] digits = preferenceDigits(this);
+		char[] digits = preferredDigits(this);
 		prepareTextView(calendarInfo);
 		StringBuilder sb = new StringBuilder();
 
@@ -217,12 +217,12 @@ public class CalendarActivity extends FragmentActivity {
 		}
 		return false;
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		bringTodayYearMonth();
-		CalendarWidget1x1.updateTime(this);
-		CalendarWidget4x1.updateTime(this);
+		CalendarWidget.update(this);
+		prayTimeInitialize();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

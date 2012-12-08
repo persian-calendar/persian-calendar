@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar;
 
 import static com.byagowi.persiancalendar.CalendarUtils.formatNumber;
 import static com.byagowi.persiancalendar.CalendarUtils.getLocation;
-import static com.byagowi.persiancalendar.CalendarUtils.preferenceDigits;
+import static com.byagowi.persiancalendar.CalendarUtils.preferredDigits;
 import static com.byagowi.persiancalendar.CalendarUtils.prepareTextView;
 import static com.byagowi.persiancalendar.CalendarUtils.quickToast;
 import static com.byagowi.persiancalendar.CalendarUtils.setLocation;
@@ -142,7 +142,7 @@ public class PrayTimeActivityHelper {
 		sb.append("\nنیمه وقت شرعی: ");
 		sb.append(prayTimes.get(PrayTime.Midnight).toString());
 
-		char[] digits = preferenceDigits(calendarActivity);
+		char[] digits = preferredDigits(calendarActivity);
 
 		prepareTextView(prayTimeTextView);
 		prayTimeTextView

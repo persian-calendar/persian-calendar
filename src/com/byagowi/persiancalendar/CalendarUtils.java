@@ -120,7 +120,7 @@ public class CalendarUtils {
 		return location;
 	}
 
-	public static char[] preferenceDigits(Context context) {
+	public static char[] preferredDigits(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		return prefs.getBoolean("PersianDigits", true) ? CalendarUtils.persianDigits
@@ -131,12 +131,6 @@ public class CalendarUtils {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		return prefs.getBoolean("DariVersion", false);
-	}
-
-	public static boolean blackWidget(Context context) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return prefs.getBoolean("BlackWidget", false);
 	}
 
 	public static String addExtraZeroForClock(int num) {

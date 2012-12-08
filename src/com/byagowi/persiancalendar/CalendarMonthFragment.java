@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar;
 import static com.byagowi.persiancalendar.CalendarUtils.formatNumber;
 import static com.byagowi.persiancalendar.CalendarUtils.getMonthYearTitle;
 import static com.byagowi.persiancalendar.CalendarUtils.isDariVersion;
-import static com.byagowi.persiancalendar.CalendarUtils.preferenceDigits;
+import static com.byagowi.persiancalendar.CalendarUtils.preferredDigits;
 import static com.byagowi.persiancalendar.CalendarUtils.prepareTextView;
 
 import calendar.CivilDate;
@@ -68,7 +68,7 @@ public class CalendarMonthFragment extends Fragment {
 
 	private void fillCalendarMonth(PersianDate persianDate, View calendar) {
 
-		char[] digits = preferenceDigits(calendar.getContext());
+		char[] digits = preferredDigits(calendar.getContext());
 
 		int weekOfMonth = 1;
 		int dayOfWeek = DateConverter.persianToCivil(persianDate)
@@ -109,7 +109,8 @@ public class CalendarMonthFragment extends Fragment {
 						.getHolidayTitle(persianDate);
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holidays);
-
+				}
+				if (holidayTitle != null || dayOfWeek == 7) {
 					textView.setTextColor(getResources().getColor(
 							R.color.holidays_text_color));
 				}

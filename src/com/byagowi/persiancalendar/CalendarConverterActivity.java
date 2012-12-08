@@ -118,7 +118,7 @@ public class CalendarConverterActivity extends Activity {
 		PersianDate persianDate = null;
 		IslamicDate islamicDate = null;
 
-		char[] digits = preferenceDigits(this);
+		char[] digits = preferredDigits(this);
 		StringBuilder sb = new StringBuilder();
 
 		try {
@@ -172,7 +172,7 @@ public class CalendarConverterActivity extends Activity {
 	}
 
 	void fillYearMonthDaySpinners() {
-		char[] digits = preferenceDigits(this);
+		char[] digits = preferredDigits(this);
 
 		AbstractDate date = null;
 		switch (detectSelectedCalendar()) {

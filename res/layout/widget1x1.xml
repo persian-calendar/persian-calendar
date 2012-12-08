@@ -3,13 +3,15 @@
     android:id="@+id/widget_layout1x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical"
+    android:textDirection="rtl" >
+
     <TextView
         android:id="@+id/textPlaceholder1_1x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
+        android:textColor="@android:color/white"
         android:textDirection="rtl"
         android:textSize="40sp" />
 
@@ -19,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"
+        android:textColor="@android:color/white"
         android:textDirection="rtl"
         android:textSize="20sp" />
 

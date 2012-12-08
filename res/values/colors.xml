@@ -2,7 +2,6 @@
 
     <color name="first_row_text_color">#FFFFFF</color>
     <color name="holidays_text_color">#6E97B9</color>
-    <color name="not_holidays_text_color">#000000</color>
     <color name="first_row_background_color">#6E97B9</color>
     <color name="first_row_bottom_background_color">#6E97B9</color>
     
