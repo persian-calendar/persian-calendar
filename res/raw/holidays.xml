@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Source:
-* https://gist.github.com/2016752 
 * http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1391.pdf
-* http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1391.pdf
+* http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1392.pdf
 -->
 <holidays>	
 	<holiday year="1391" month="1" day="1">آغاز نوروز</holiday>
