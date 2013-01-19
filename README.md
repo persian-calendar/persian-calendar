@@ -1,5 +1,4 @@
-A simple Persian Calendar with a Widget for Android.
-یک تقویم فارسی، همراه با یک گجت برای گوشی‌های آندروید.
+A Persian Calendar by Ebrahim Byagowi
 
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/main.png"
  alt="Persian Calendar Screenshot" title="Program Screenshot" width="200px" />
@@ -8,8 +7,9 @@ A simple Persian Calendar with a Widget for Android.
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/homescreen.png"
  alt="Persian Calendar Widgets Screenshot" title="Widget Screenshot" width="200px" />
 
-You can download it also from https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar (if you can :D)
+You can get it from:
+* https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar
+* http://cafebazaar.ir/app/com.byagowi.persiancalendar
+* http://ge.tt/6Q8geqV
 
-
-License:
-Date converter codes from http://code.google.com/p/mobile-persian-calendar/ is used, so this project will be also in GPL :)
+License: GPLv3
