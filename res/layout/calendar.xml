@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.CustomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:textDirection="rtl" >
@@ -70,4 +70,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</ScrollView>
+</com.github.CustomScrollView>
