@@ -1,5 +1,6 @@
 # built application files
 *.apk
+!PersianCalendar.apk
 *.ap_
 
 # files for the dex VM
