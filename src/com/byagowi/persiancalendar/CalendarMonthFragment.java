@@ -97,7 +97,7 @@ public class CalendarMonthFragment extends Fragment {
 						+ weekOfMonth + (dayOfWeek + 1), calendar);
 				prepareTextView(textView);
 				textView.setText(formatNumber(i, digits));
-				textView.setBackgroundResource(R.drawable.otherdays);
+				textView.setBackgroundResource(R.drawable.day_shape);
 
 				final String holidayTitle = Holidays
 						.getHolidayTitle(persianDate);
@@ -114,7 +114,7 @@ public class CalendarMonthFragment extends Fragment {
 				textView.setOnLongClickListener(listener);
 
 				if (persianDate.equals(today)) {
-					textView.setBackgroundResource(R.drawable.background_stripes_tile);
+					textView.setBackgroundResource(R.drawable.today_background);
 				}
 
 				dayOfWeek++;
