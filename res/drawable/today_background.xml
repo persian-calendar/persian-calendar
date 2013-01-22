@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:antialias="false"
+    android:dither="false"
+    android:filter="false"
+    android:gravity="center|center_vertical"
+    android:src="@drawable/background_stripes"
+    android:tileMode="repeat" >
 
-    <padding
-        android:bottom="4sp"
-        android:top="2sp" />
-
-    <solid android:color="#80FFFFFF" />
-
-</shape>
+</bitmap>

@@ -2,6 +2,8 @@ package com.github.praytimes;
 
 import static com.github.praytimes.StaticUtils.fixHour;
 
+import java.util.Locale;
+
 public class Clock {
 	private final int hour;
 	private final int minute;
@@ -20,7 +22,7 @@ public class Clock {
 
 	@Override
 	public String toString() {
-		return String.format("%02d:%02d", hour, minute);
+		return String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
 	}
 
 	public int getHour() {
