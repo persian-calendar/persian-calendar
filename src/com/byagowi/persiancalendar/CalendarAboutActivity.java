@@ -50,7 +50,7 @@ public class CalendarAboutActivity extends Activity {
 				.setText("Android Persian Calendar Version "
 						+ version
 						+ "\n"
-						+ "Copyright (C) 2012  ebrahim@byagowi.com\n"
+						+ "Copyright (C) 2013  ebrahim@byagowi.com\n"
 						+ "\n"
 						+ "This program is free software: you can redistribute it and/or modify "
 						+ "it under the terms of the GNU General Public License as published by "
@@ -65,13 +65,13 @@ public class CalendarAboutActivity extends Activity {
 						+ "You should have received a copy of the GNU General Public License "
 						+ "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
 						+ "\n"
-						+ "Launcher icon artwork design is by Behdad Pournader.\n"
-						+ "Logo artwork design is by Iman Soltanian.\n"
-						+ "Calendar converter code is from http://code.google.com/p/mobile-persian-calendar/ "
+						+ "Launcher icon is by Behdad Pournader.\n"
+						+ "Splash screen logo is by Iman Soltanian.\n"
+						+ "Calendar converter code from http://code.google.com/p/mobile-persian-calendar/ "
 						+ "which is under GPLv2.\n"
 						+ "ArabicShaper for shaping Arabic characters is from Azizhuss which is "
 						+ "under BSD License.\n"
 						+ "\n"
-						+ "For reporting any bug, please come to this address: http://github.com/ebraminio/DroidPersianCalendar :)\n");
+						+ "For bug report: http://github.com/ebraminio/DroidPersianCalendar");
 	}
 }
