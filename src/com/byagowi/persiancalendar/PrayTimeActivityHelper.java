@@ -30,6 +30,12 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
+/**
+ * Pray time helper. It is like an aspect for activity class
+ * 
+ * @author ebraminio
+ * 
+ */
 public class PrayTimeActivityHelper {
 	private final static boolean POSITIONING_PERMISSIONS = false;
 	private CalendarActivity calendarActivity;

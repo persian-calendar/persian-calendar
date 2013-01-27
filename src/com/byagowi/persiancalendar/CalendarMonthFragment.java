@@ -13,31 +13,87 @@ import calendar.PersianDate;
 
 import com.byagowi.common.Range;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
+/**
+ * Calendar month view fragment
+ * 
+ * @author ebraminio
+ * 
+ */
 public class CalendarMonthFragment extends Fragment {
-	private int offset;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		Bundle args = getArguments();
-		offset = args.getInt("offset");
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		// Preparing Calendar Month View
+		Context context = getActivity();
+		LinearLayout root = new LinearLayout(context);
+		root.setLayoutParams(new LayoutParams(
+						LayoutParams.WRAP_CONTENT,
+						LayoutParams.WRAP_CONTENT));
+		root.setOrientation(LinearLayout.VERTICAL);
+		
+		// currentMonthTextView
+		TextView currentMonthTextView = new TextView(context);
+		currentMonthTextView.setLayoutParams(new LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		currentMonthTextView.setGravity(Gravity.RIGHT);
+		currentMonthTextView.setPadding(0, 15, 10, 2);
+		currentMonthTextView.setTextSize(25);
+		prepareTextView(currentMonthTextView);
+		
+		root.addView(currentMonthTextView);
+		// end
+		
+		// table
+		TableLayout table = new TableLayout(context);
+		table.setLayoutParams(new LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		table.setPadding(1, 0, 1, 0);
 
-		View calendar = inflater.inflate(R.layout.calendar_table, null);
+		TextView[][] daysTextViews = new TextView[7][7];
+		for (int i : new Range(0, 7)) {
+			TableRow row = new TableRow(context);
+			row.setGravity(Gravity.CENTER_HORIZONTAL);
+			if (i == 0) {
+				row.setBackgroundResource(R.drawable.calendar_firstrow);
+				row.setPadding(0, 0, 0, 10);
+			}
+			for (int j : new Range(0, 7)) {
+				TextView tv = new TextView(context);
+				prepareTextView(tv);
+				tv.setGravity(Gravity.CENTER);
+				tv.setTextSize(20);
+				if (i == 0) {
+					tv.setBackgroundResource(R.color.first_row_background_color);
+					tv.setTextColor(getResources().getColor(R.color.first_row_text_color));
+				}
+				daysTextViews[i][j] = tv;
+				row.addView(tv);
+			}
+			table.addView(row);
+		}
 
+		table.setShrinkAllColumns(true);
+		table.setStretchAllColumns(true);
+		root.addView(table);
+		// end
+		
+		// Calendar Logic
+		int offset = getArguments().getInt("offset");
 		PersianDate persianDate = DateConverter.civilToPersian(new CivilDate());
 		int month = persianDate.getMonth() - offset;
 		month -= 1;
@@ -49,42 +105,24 @@ public class CalendarMonthFragment extends Fragment {
 			year -= 1;
 			month += 12;
 		}
-
 		month += 1;
 		persianDate.setMonth(month);
 		persianDate.setYear(year);
 		persianDate.setDayOfMonth(1);
-		persianDate.setDari(isDariVersion(calendar.getContext()));
+		persianDate.setDari(isDariVersion(context));
 
-		fillCalendarMonth(persianDate, calendar);
-		return calendar;
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putBoolean("dummy", true);
-	}
-
-	private void fillCalendarMonth(PersianDate persianDate, View calendar) {
-
-		char[] digits = preferredDigits(calendar.getContext());
+		char[] digits = preferredDigits(getActivity());
 
 		int weekOfMonth = 1;
 		int dayOfWeek = DateConverter.persianToCivil(persianDate)
 				.getDayOfWeek() % 7;
 
-		TextView currentMonthTextView = getTextViewInView(
-				"currentMonthTextView", calendar);
-		prepareTextView(currentMonthTextView);
 		currentMonthTextView.setText(getMonthYearTitle(persianDate, digits));
 
 		String[] firstCharOfDaysOfWeekName = { "ش", "ی", "د", "س", "چ", "پ",
 				"ج" };
 		for (int i : new Range(0, 7)) {
-			TextView textView = getTextViewInView("calendarCell0" + (i + 1),
-					calendar);
-			prepareTextView(textView);
+			TextView textView = daysTextViews[0][6 - i];
 			textView.setText(firstCharOfDaysOfWeekName[i]);
 		}
 		
@@ -93,14 +131,11 @@ public class CalendarMonthFragment extends Fragment {
 			for (int i : new Range(1, 31)) {
 				persianDate.setDayOfMonth(i);
 
-				TextView textView = getTextViewInView("calendarCell"
-						+ weekOfMonth + (dayOfWeek + 1), calendar);
-				prepareTextView(textView);
+				TextView textView = daysTextViews[weekOfMonth][6 - dayOfWeek];
 				textView.setText(formatNumber(i, digits));
-				textView.setBackgroundResource(R.drawable.day_shape);
+				textView.setBackgroundResource(R.drawable.days);
 
-				final String holidayTitle = Holidays
-						.getHolidayTitle(persianDate);
+				String holidayTitle = Holidays.getHolidayTitle(persianDate);
 				if (holidayTitle != null) {
 					textView.setBackgroundResource(R.drawable.holidays);
 				}
@@ -126,16 +161,6 @@ public class CalendarMonthFragment extends Fragment {
 		} catch (DayOutOfRangeException e) {
 			// okay, it was expected
 		}
-	}
-
-	private TextView getTextViewInView(String name, View view) {
-		try {
-			return (TextView) view.findViewById(R.id.class.getField(name)
-					.getInt(null)); // null for static field of classes
-		} catch (Exception e) {
-			Log.e(view.getContext().getPackageName(),
-					"Error on retriving cell: " + e.getMessage());
-			return null;
-		}
+		return root;
 	}
 }

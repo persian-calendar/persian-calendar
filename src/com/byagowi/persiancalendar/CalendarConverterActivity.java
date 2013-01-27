@@ -32,6 +32,12 @@ import android.widget.TextView;
 
 import static com.byagowi.persiancalendar.CalendarUtils.*;
 
+/**
+ * Program activity for android
+ * 
+ * @author ebraminio
+ * 
+ */
 public class CalendarConverterActivity extends Activity {
 
 	Spinner calendarTypeSpinner;

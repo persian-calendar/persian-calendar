@@ -25,6 +25,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
+/**
+ * Abstract widget class
+ * 
+ * @author ebraminio
+ * 
+ */
 abstract public class CalendarWidget extends AppWidgetProvider {
 	static private IntentFilter intentFilter = null;
 
