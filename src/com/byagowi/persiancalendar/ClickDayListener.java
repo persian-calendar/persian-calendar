@@ -17,7 +17,13 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.view.View;
 
-final class ClickDayListener implements View.OnClickListener, View.OnLongClickListener {
+/**
+ * Days events listener
+ * 
+ * @author ebraminio
+ * 
+ */
+class ClickDayListener implements View.OnClickListener, View.OnLongClickListener {
 	private final String holidayTitle;
 	private final PersianDate persianDate;
 	private final CalendarActivity calendarAcitivity;
