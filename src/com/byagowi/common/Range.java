@@ -1,14 +1,4 @@
-/*
- * March 2012
- *
- * In place of a legal notice, here is a blessing:
- *
- *    May you do good and not evil.
- *    May you find forgiveness for yourself and forgive others.
- *    May you share freely, never taking more than you give.
- *
- */
-// Originally published on stackoverflow by myself :D http://stackoverflow.com/questions/2950386/is-there-anything-like-enumerable-rangex-y-in-java/9627911#9627911
+// Originally published on stackoverflow by myself: http://stackoverflow.com/a/9627911/1414809
 package com.byagowi.common;
 
 import java.util.Iterator;
