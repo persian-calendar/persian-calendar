@@ -31,7 +31,7 @@ import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
 /**
- * Pray time helper. It is like an aspect for activity class
+ * Pray time helper. It is like an aspect for activity class somehow
  * 
  * @author ebraminio
  * 

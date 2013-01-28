@@ -67,9 +67,10 @@ public class CalendarActivity extends FragmentActivity {
 		// loading holidays
 		Holidays.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
-		// fill view
+		// Initializing the viewPager 
 		viewPager = (ViewPager) findViewById(R.id.calendar_pager);
-		bringTodayYearMonth();
+		viewPager.setAdapter(createCalendarAdaptor());
+		viewPager.setCurrentItem(MONTHS_LIMIT / 2);
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
@@ -84,6 +85,9 @@ public class CalendarActivity extends FragmentActivity {
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 		});
+
+		// Initializing the view
+		fillCalendarInfo(new CivilDate());
 	}
 
 	private void updateResetButtonState() {
@@ -102,12 +106,11 @@ public class CalendarActivity extends FragmentActivity {
 	}
 
 	// I know, it is ugly, but user will not notify this and this will not have
-	// memory problem
+	// a memory problem
 	private static final int MONTHS_LIMIT = 1200;
 
 	private void bringTodayYearMonth() {
 		if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
-			viewPager.setAdapter(createCalendarAdaptor());
 			viewPager.setCurrentItem(MONTHS_LIMIT / 2);
 			fillCalendarInfo(new CivilDate());
 		}
