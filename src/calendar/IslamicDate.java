@@ -17,9 +17,7 @@ public class IslamicDate extends AbstractDate {
 	}
 
 	private int day;
-
 	private int month;
-
 	private int year;
 
 	public IslamicDate(int year, int month, int day) {
