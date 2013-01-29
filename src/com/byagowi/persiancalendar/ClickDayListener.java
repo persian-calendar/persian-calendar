@@ -46,7 +46,13 @@ class ClickDayListener implements View.OnClickListener, View.OnLongClickListener
 	@Override
 	public boolean onLongClick(View v) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			addEventOnCalendar(preferredDigits(v.getContext()), v.getContext());
+			try {
+				addEventOnCalendar(preferredDigits(v.getContext()), v.getContext());
+			} catch (Exception e) {
+				// Ignore it for now
+				// I guess it will occur on CyanogenMod phones
+				// where Google extra things is not installed
+			}
 		}
 		return false;
 	}
