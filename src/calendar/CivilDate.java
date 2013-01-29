@@ -20,13 +20,18 @@ public class CivilDate extends AbstractDate {
 	private static final String[] weekdayName = { "", "یکشنبه", "دوشنبه",
 			"سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 
-	private static final int[] daysInMonth = { 31, 28, 31, 30, 31, 30, 31, 31,
+	private static final int[] daysInMonth = { 0, 31, 28, 31, 30, 31, 30, 31, 31,
 			30, 31, 30, 31 };
-	private Calendar cal; // Gregorian calendar instance
-
+	
+	private int year;
+	private int month;
+	private int day;
+	
 	public CivilDate() {
-		// Default to today
-		cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
+		this.year = cal.get(Calendar.YEAR);
+		this.month = cal.get(Calendar.MONTH) + 1;
+		this.day = cal.get(Calendar.DAY_OF_MONTH);
 	}
 
 	public CivilDate(int year, int month, int day) {
@@ -37,10 +42,14 @@ public class CivilDate extends AbstractDate {
 	}
 
 	public int getDayOfMonth() {
-		return cal.get(Calendar.DAY_OF_MONTH);
+		return day;
 	}
 
 	public int getDayOfWeek() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month - 1);
+		cal.set(Calendar.DAY_OF_MONTH, day);
 		return cal.get(Calendar.DAY_OF_WEEK);
 	}
 
@@ -53,7 +62,7 @@ public class CivilDate extends AbstractDate {
 	}
 
 	public int getMonth() {
-		return cal.get(Calendar.MONTH) + 1;
+		return month;
 	}
 
 	public String getMonthName() {
@@ -69,7 +78,7 @@ public class CivilDate extends AbstractDate {
 	}
 
 	public int getYear() {
-		return cal.get(Calendar.YEAR);
+		return year;
 	}
 
 	public boolean isLeapYear() {
@@ -92,12 +101,11 @@ public class CivilDate extends AbstractDate {
 		if (day < 1)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
-		if (day > daysInMonth[getMonth() - 1])
+		if (day > daysInMonth[month])
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
 		// TODO check for the case of leap year for February
-
-		cal.set(Calendar.DAY_OF_MONTH, day);
+		this.day = day;
 	}
 
 	public void setMonth(int month) {
@@ -109,14 +117,14 @@ public class CivilDate extends AbstractDate {
 		// day is out of range
 		setDayOfMonth(getDayOfMonth());
 
-		cal.set(Calendar.MONTH, month - 1);
+		this.month = month;
 	}
 
 	public void setYear(int year) {
 		if (year == 0)
 			throw new YearOutOfRangeException("Year 0 is invalid!");
 
-		cal.set(Calendar.YEAR, year);
+		this.year = year;
 	}
 
 	/**
@@ -128,5 +136,13 @@ public class CivilDate extends AbstractDate {
 	 */
 	public String getDayOfWeekName() {
 		return weekdayName[getDayOfWeek()];
+	}
+
+	public boolean equals(CivilDate civilDate) {
+		if (this.getDayOfMonth() == civilDate.getDayOfMonth()
+				&& this.getMonth() == civilDate.getMonth()
+				&& this.getYear() == civilDate.getYear())
+			return true;
+		return false;
 	}
 }

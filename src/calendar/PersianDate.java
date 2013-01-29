@@ -31,9 +31,7 @@ public class PersianDate extends AbstractDate {
 	}
 
 	private int year;
-
 	private int month;
-
 	private int day;
 
 	public PersianDate(int year, int month, int day) {
