@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 public class CustomScrollView extends ScrollView {
-    private GestureDetector mGestureDetector;
+    private final GestureDetector mGestureDetector;
     View.OnTouchListener mGestureListener;
 
     public CustomScrollView(Context context, AttributeSet attrs) {
@@ -37,10 +37,10 @@ public class CustomScrollView extends ScrollView {
     }
 
     // Return false if we're scrolling in the x direction  
-    class YScrollDetector extends SimpleOnGestureListener {
+    private class YScrollDetector extends SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if(Math.abs(distanceY) > Math.abs(distanceX)) {
+            if (Math.abs(distanceY) > Math.abs(distanceX)) {
                 return true;
             }
             return false;

@@ -5,12 +5,11 @@ import android.preference.PreferenceActivity;
 
 /**
  * Preference activity
- * 
- * @author ebraminio
  *
+ * @author ebraminio
  */
 public class CalendarPreferenceActivity extends PreferenceActivity {
-	@Override
+    @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
