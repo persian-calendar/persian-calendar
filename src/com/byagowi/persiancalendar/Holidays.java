@@ -23,10 +23,18 @@ import java.util.List;
  * @author ebraminio
  */
 class Holidays {
+    private static Holidays ourInstance = new Holidays();
 
-    private static List<Holiday> holidays;
+    public static Holidays getInstance() {
+        return ourInstance;
+    }
 
-    static public void loadHolidays(InputStream xmlStream) {
+    private Holidays() {
+    }
+
+    private List<Holiday> holidays;
+
+    public void loadHolidays(InputStream xmlStream) {
         holidays = new ArrayList<Holiday>();
         DocumentBuilder builder;
         try {
@@ -60,7 +68,7 @@ class Holidays {
         }
     }
 
-    static public String getHolidayTitle(PersianDate day) {
+    public String getHolidayTitle(PersianDate day) {
         for (Holiday holiday : holidays) {
             if (holiday.getDate().equals(day)) {
                 return holiday.getTitle();
