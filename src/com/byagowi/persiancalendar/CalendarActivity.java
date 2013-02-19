@@ -31,6 +31,9 @@ public class CalendarActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startService(new Intent(this, CalendarService.class));
+
         boolean removeTitle = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (!hasPermanentMenuKey()) {
@@ -207,7 +210,7 @@ public class CalendarActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         bringTodayYearMonth();
-        CalendarWidget.update(this);
+        startService(new Intent(this, CalendarService.class));
         prayTimeInitialize();
         super.onActivityResult(requestCode, resultCode, data);
     }

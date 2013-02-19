@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    tools:context=".CalendarConverterActivity" >
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            tools:context=".CalendarConverterActivity">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp" >
-
-        <Spinner
-            android:id="@+id/calendarTypeSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/year"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Spinner
-            android:id="@+id/yearSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/month"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Spinner
-            android:id="@+id/monthSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/day"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Spinner
-            android:id="@+id/daySpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/convertedDateTextView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingRight="10sp"
-            android:paddingTop="10sp" />
+            android:orientation="vertical"
+            android:paddingBottom="10sp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp">
+
+        <Spinner
+                android:id="@+id/calendarTypeSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Spinner
+                android:id="@+id/yearSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/month"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Spinner
+                android:id="@+id/monthSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/day"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Spinner
+                android:id="@+id/daySpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/convertedDateTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="10sp"
+                android:paddingTop="10sp"/>
     </LinearLayout>
 
 </ScrollView>
