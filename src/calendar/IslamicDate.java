@@ -1,111 +1,109 @@
 package calendar;
 
 /**
- * 
  * @author Amir
  * @author ebraminio
- * 
  */
 public class IslamicDate extends AbstractDate {
 
-	private static final String[] monthName = { "", "محرم", "صفر",
-			"ربيع‌الاول", "ربيع‌الثاني", "جمادي‌الاول", "جمادي‌الثاني", "رجب",
-			"شعبان", "رمضان", "شوال", "ذي‌القعده", "ذي‌الحجه" };
-	
-	public String[] getMonthsList() {
-		return monthName;
-	}
+    private static final String[] monthName = {"", "محرم", "صفر",
+            "ربيع‌الاول", "ربيع‌الثاني", "جمادي‌الاول", "جمادي‌الثاني", "رجب",
+            "شعبان", "رمضان", "شوال", "ذي‌القعده", "ذي‌الحجه"};
 
-	private int day;
-	private int month;
-	private int year;
+    public String[] getMonthsList() {
+        return monthName;
+    }
 
-	public IslamicDate(int year, int month, int day) {
-		setYear(year);
-		// Initialize day, so that we get no exceptions when setting month
-		this.day = 1;
-		setMonth(month);
-		setDayOfMonth(day);
-	}
+    private int day;
+    private int month;
+    private int year;
 
-	public int getDayOfMonth() {
-		return day;
-	}
+    public IslamicDate(int year, int month, int day) {
+        setYear(year);
+        // Initialize day, so that we get no exceptions when setting month
+        this.day = 1;
+        setMonth(month);
+        setDayOfMonth(day);
+    }
 
-	public int getDayOfWeek() {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public int getDayOfMonth() {
+        return day;
+    }
 
-	public int getMonth() {
-		return month;
-	}
+    public int getDayOfWeek() {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public String getMonthName() {
-		return monthName[month];
-	}
+    public int getMonth() {
+        return month;
+    }
 
-	public int getWeekOfYear() {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public String getMonthName() {
+        return monthName[month];
+    }
 
-	public int getYear() {
-		return year;
-	}
+    public int getWeekOfYear() {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public void rollDay(int amount, boolean up) {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public int getYear() {
+        return year;
+    }
 
-	public void rollMonth(int amount, boolean up) {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public void rollDay(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public void rollYear(int amount, boolean up) {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public void rollMonth(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public void setDayOfMonth(int day) {
-		// TODO This check is not very exact! But it's not worth of it
-		// to compute the number of days in this month exactly
-		if (day < 1 || day > 30)
-			throw new DayOutOfRangeException("day " + day + " is out of range!");
+    public void rollYear(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-		this.day = day;
-	}
+    public void setDayOfMonth(int day) {
+        // TODO This check is not very exact! But it's not worth of it
+        // to compute the number of days in this month exactly
+        if (day < 1 || day > 30)
+            throw new DayOutOfRangeException("day " + day + " is out of range!");
 
-	public void setMonth(int month) {
-		if (month < 1 || month > 12)
-			throw new MonthOutOfRangeException("month " + month
-					+ " is out of range!");
+        this.day = day;
+    }
 
-		// Set the day again, so that exceptions are thrown if the
-		// day is out of range
-		setDayOfMonth(day);
+    public void setMonth(int month) {
+        if (month < 1 || month > 12)
+            throw new MonthOutOfRangeException("month " + month
+                    + " is out of range!");
 
-		this.month = month;
-	}
+        // Set the day again, so that exceptions are thrown if the
+        // day is out of range
+        setDayOfMonth(day);
 
-	public void setYear(int year) {
-		if (year == 0)
-			throw new YearOutOfRangeException("Year 0 is invalid!");
+        this.month = month;
+    }
 
-		this.year = year;
-	}
+    public void setYear(int year) {
+        if (year == 0)
+            throw new YearOutOfRangeException("Year 0 is invalid!");
 
-	public String getEvent() {
-		throw new RuntimeException("not implemented yet!");
-	}
+        this.year = year;
+    }
 
-	public int getDayOfYear() {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public String getEvent() {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public int getWeekOfMonth() {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public int getDayOfYear() {
+        throw new RuntimeException("not implemented yet!");
+    }
 
-	public boolean isLeapYear() {
-		throw new RuntimeException("not implemented yet!");
-	}
+    public int getWeekOfMonth() {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public boolean isLeapYear() {
+        throw new RuntimeException("not implemented yet!");
+    }
 
 }
