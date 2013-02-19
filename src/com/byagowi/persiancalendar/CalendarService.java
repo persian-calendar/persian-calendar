@@ -133,7 +133,7 @@ public class CalendarService extends Service {
             Notification notification = new Notification.Builder(this)
                     .setSmallIcon(R.drawable.launcher_icon)
                     .setLargeIcon(bmp)
-                    .setContentText(text2)
+                    .setContentText(contentText)
                     .setContentTitle(dayTitle)
                     .setContentIntent(launchAppPendingIntent)
                     .setOngoing(true)
