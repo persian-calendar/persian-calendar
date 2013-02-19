@@ -131,11 +131,8 @@ public class PersianDate extends AbstractDate {
 	}
 
 	public boolean isLeapYear() {
-		int mod = getYear() % 33;
-		if (mod == 1 || mod == 5 || mod == 9 || mod == 13 || mod == 17
-				|| mod == 22 || mod == 26 || mod == 30)
-			return true;
-		return false;
+        int mod = (getYear() + 11) % 33;
+        return (mod != 32) && (mod % 4 == 0);
 	}
 
 	public boolean equals(PersianDate persianDate) {
