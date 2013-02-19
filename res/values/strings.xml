@@ -28,6 +28,8 @@
     <string name="general">General</string>
     <string name="black_widget">Black Widgets</string>
     <string name="black_font_widgets">Black font for the widgets</string>
-    <string name="pray_times_calucation_setting">Pray Times Calucation Setting</string>
+    <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
+    <string name="enable_notify">Enable Date Notification</string>
+    <string name="notify_date">Permanent notification for all date types</string>
 
 </resources>

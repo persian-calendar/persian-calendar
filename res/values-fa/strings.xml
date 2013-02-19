@@ -28,6 +28,8 @@
     <string name="general">عمومی</string>
     <string name="black_widget">ویجت‌های سیاه</string>
     <string name="black_font_widgets">قلم سیاه برای ویجت‌ها</string>
-    <string name="pray_times_calucation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
+    <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
+    <string name="enable_notify">فعال مطلع‌سازی از تاریخ</string>
+    <string name="notify_date">مطلع‌سازی پایدار از انواع تاریخ‌ها</string>
 
 </resources>

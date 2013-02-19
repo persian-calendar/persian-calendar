@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_layout4x1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:textDirection="rtl"
-    tools:context=".CalendarWidget4x1" >
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/widget_layout4x1"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:textDirection="rtl"
+              tools:context=".CalendarWidget4x1">
 
     <TextView
-        android:id="@+id/textPlaceholder1_4x1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textColor="@android:color/white"
-        android:textSize="36sp" />
+            android:id="@+id/textPlaceholder1_4x1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@android:color/white"
+            android:textSize="36sp"/>
 
     <TextView
-        android:id="@+id/textPlaceholder2_4x1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textColor="@android:color/white"
-        android:textSize="14sp" />
+            android:id="@+id/textPlaceholder2_4x1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
 
 </LinearLayout>
