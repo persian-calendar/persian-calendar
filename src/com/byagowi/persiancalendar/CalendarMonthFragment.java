@@ -118,7 +118,7 @@ class CalendarMonthFragment extends Fragment {
             TextView textView = daysTextViews[0][6 - i];
             textView.setText(firstCharOfDaysOfWeekName[i]);
         }
-
+        Holidays holidays = Holidays.getInstance();
         try {
             PersianDate today = DateConverter.civilToPersian(new CivilDate());
             for (int i : new Range(1, 31)) {
@@ -128,7 +128,7 @@ class CalendarMonthFragment extends Fragment {
                 textView.setText(formatNumber(i, digits));
                 textView.setBackgroundResource(R.drawable.days);
 
-                String holidayTitle = Holidays.getHolidayTitle(persianDate);
+                String holidayTitle = holidays.getHolidayTitle(persianDate);
                 if (holidayTitle != null) {
                     textView.setBackgroundResource(R.drawable.holidays);
                 }

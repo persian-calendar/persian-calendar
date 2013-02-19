@@ -58,7 +58,8 @@ public class CalendarActivity extends FragmentActivity {
         });
 
         // loading holidays
-        Holidays.loadHolidays(getResources().openRawResource(R.raw.holidays));
+        Holidays holidays = Holidays.getInstance();
+        holidays.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
         // Initializing the viewPager
         viewPager = (ViewPager) findViewById(R.id.calendar_pager);
