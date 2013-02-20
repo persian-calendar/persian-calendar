@@ -116,7 +116,7 @@ public class CalendarService extends Service {
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
-        if (prefs.getBoolean("NotifyDate", true)) {
+        if (prefs.getBoolean("NotifyDate", false)) {
             mNotificationManager.cancel(NOTIFICATION_ID);
 
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
