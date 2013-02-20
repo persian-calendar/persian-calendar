@@ -28,21 +28,23 @@ public class CalendarService extends Service {
         return null;
     }
 
+    private static int count = 0;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
-        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-        intentFilter.addAction(Intent.ACTION_TIME_TICK);
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                update(context);
-            }
-        }, intentFilter);
-
-        update(getApplicationContext());
-
+        count++;
+        if (count == 1) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+            intentFilter.addAction(Intent.ACTION_TIME_TICK);
+            registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    update(context);
+                }
+            }, intentFilter);
+            update(getApplicationContext());
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
