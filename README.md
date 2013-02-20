@@ -15,10 +15,18 @@ Contents
 ==============================
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/main.png"
  alt="Persian Calendar Screenshot" title="Program Screenshot" width="200px" />
-<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/lockscreen.png"
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/lockscreenwithnotification.png"
+ alt="Persian Calendar Day of Month on Lockscreen with Notification Icon" title="Lockscreen Persian Date" width="200px" />
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/lockscreenwidget.png"
  alt="Persian Calendar Lockscreen Widgets Screenshot" title="Lockscreen Widget Screenshot on Android 4.2" width="200px" />
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/notification.png"
+ alt="Persian Calendar Notification" title="Persian Date Notification" width="200px" />
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/homescreen.png"
  alt="Persian Calendar Widgets Screenshot" title="Widget Screenshot" width="200px" />
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/converter.png"
+ alt="Persian Calendar Date Converter Screenshot" title="Date Converter Screenshot" width="200px" />
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/preference.png"
+ alt="Persian Calendar Preference" title="Application Preference" width="200px" />
 
 2. Download
 ==============================
