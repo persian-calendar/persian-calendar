@@ -43,8 +43,8 @@ public class CalendarService extends Service {
                     update(context);
                 }
             }, intentFilter);
-            update(getApplicationContext());
         }
+        update(getApplicationContext());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -124,7 +124,7 @@ public class CalendarService extends Service {
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             int w = 64;//getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
             int h = 64;//getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
-            Bitmap bmp = Bitmap.createBitmap(h, w, conf); // this creates a MUTABLE bitmap
+            Bitmap bmp = Bitmap.createBitmap(w, h, conf); // this creates a MUTABLE bitmap
 
             Canvas canvas = new Canvas(bmp);
             drawRectangleCenter(canvas, 0, 0, w, h, CalendarUtils.formatNumber(persian.getDayOfMonth(), digits));
@@ -147,7 +147,7 @@ public class CalendarService extends Service {
         }
     }
 
-    // modified from http://stackoverflow.com/a/8553604/1414809
+    // borrowed and modified from http://stackoverflow.com/a/8553604/1414809
     void drawRectangleCenter(Canvas c, int topLeftX, int topLeftY, int width, int height, String textToDraw) {
         // height of 'Hello World'; height * 0.7 looks good
         int fontHeight = (int) (height * 0.9); // but I modified it

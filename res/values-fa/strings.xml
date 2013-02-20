@@ -29,7 +29,7 @@
     <string name="black_widget">ویجت‌های سیاه</string>
     <string name="black_font_widgets">قلم سیاه برای ویجت‌ها</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
+    <string name="notify_date">فعال‌بودن مطلع‌سازی</string>
     <string name="enable_notify">مطلع‌سازی پایدار از انواع تاریخ‌ها</string>
-    <string name="notify_date">فعال‌بودن مطلع‌سازی از تاریخ</string>
 
 </resources>
