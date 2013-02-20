@@ -19,7 +19,7 @@ public class DaysIcons {
     SparseIntArray icons = new SparseIntArray();
 
     public int getDayIconResource(int day) {
-        if (icons.get(day, -1) == -1)
+        if (icons.get(day, -1) != -1)
             return icons.get(day);
 
         int res = 0; // null here means static field
