@@ -25,7 +25,7 @@ import static com.byagowi.persiancalendar.CalendarUtils.*;
  *
  * @author ebraminio
  */
-class CalendarMonthFragment extends Fragment {
+public class CalendarMonthFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
