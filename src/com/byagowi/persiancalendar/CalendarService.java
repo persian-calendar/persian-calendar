@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -29,6 +31,7 @@ public class CalendarService extends Service {
     }
 
     private static int count = 0;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         count++;
@@ -129,20 +132,20 @@ public class CalendarService extends Service {
                 largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon);
             }
 
-            Notification notification = new Notification.Builder(this)
+            Notification notification = new NotificationCompat.Builder(this)
                     .setSmallIcon(DaysIcons.getInstance().getDayIconResource(persian.getDayOfMonth()))
                     .setLargeIcon(largeIcon)
-                    .setShowWhen(false)
                     .setPriority(Notification.PRIORITY_LOW)
                     .setContentText(contentText)
                     .setContentTitle(dayTitle)
                     .setContentIntent(launchAppPendingIntent)
                     .setOngoing(true)
                     .build();
+
             mNotificationManager.notify(NOTIFICATION_ID, notification);
-            //
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
+        //
     }
 }
