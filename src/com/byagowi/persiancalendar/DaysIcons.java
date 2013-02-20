@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Map;
+import android.util.SparseIntArray;
 
 /**
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
@@ -18,16 +16,19 @@ public class DaysIcons {
     private DaysIcons() {
     }
 
-    Map<Integer, Integer> icons = new HashMap<>();
+    SparseIntArray icons = new SparseIntArray();
 
     public int getDayIconResource(int day) {
-        if (icons.containsKey(day))
+        if (icons.get(day, -1) == -1)
             return icons.get(day);
 
         int res = 0; // null here means static field
         try {
             res = R.drawable.class.getField("day" + day).getInt(null);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+            Log.e("com.byagowi.calendar", "No such field is available");
+            return 0;
+        } catch (NoSuchFieldException e) {
             Log.e("com.byagowi.calendar", "No such field is available");
             return 0;
         }
