@@ -123,8 +123,6 @@ public class CalendarService extends Service {
         }
 
         if (prefs.getBoolean("NotifyDate", true)) {
-            mNotificationManager.cancel(NOTIFICATION_ID);
-
             String contentText = dateToString(civil, digits, true) + PERSIAN_COMMA + " " +
                     dateToString(DateConverter.civilToIslamic(civil), digits, true);
 
