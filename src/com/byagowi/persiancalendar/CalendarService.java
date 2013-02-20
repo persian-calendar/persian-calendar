@@ -50,6 +50,7 @@ public class CalendarService extends Service {
 
     private static final int NOTIFICATION_ID = 1001;
     private NotificationManager mNotificationManager;
+    private Bitmap largeIcon;
 
     public void update(Context context) {
         SharedPreferences prefs = PreferenceManager
@@ -118,23 +119,21 @@ public class CalendarService extends Service {
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
-        if (prefs.getBoolean("NotifyDate", false)) {
+        if (prefs.getBoolean("NotifyDate", true)) {
             mNotificationManager.cancel(NOTIFICATION_ID);
-
-            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-            int w = 64;//getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-            int h = 64;//getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
-            Bitmap bmp = Bitmap.createBitmap(w, h, conf); // this creates a MUTABLE bitmap
-
-            Canvas canvas = new Canvas(bmp);
-            drawRectangleCenter(canvas, 0, 0, w, h, CalendarUtils.formatNumber(persian.getDayOfMonth(), digits));
 
             String contentText = dateToString(civil, digits, true) + PERSIAN_COMMA + " " +
                     dateToString(DateConverter.civilToIslamic(civil), digits, true);
 
+            if (largeIcon == null) {
+                largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon);
+            }
+
             Notification notification = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.launcher_icon)
-                    .setLargeIcon(bmp)
+                    .setSmallIcon(DaysIcons.getInstance().getDayIconResource(persian.getDayOfMonth()))
+                    .setLargeIcon(largeIcon)
+                    .setShowWhen(false)
+                    .setPriority(Notification.PRIORITY_LOW)
                     .setContentText(contentText)
                     .setContentTitle(dayTitle)
                     .setContentIntent(launchAppPendingIntent)
@@ -145,20 +144,5 @@ public class CalendarService extends Service {
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
-    }
-
-    // borrowed and modified from http://stackoverflow.com/a/8553604/1414809
-    void drawRectangleCenter(Canvas c, int topLeftX, int topLeftY, int width, int height, String textToDraw) {
-        // height of 'Hello World'; height * 0.7 looks good
-        int fontHeight = (int) (height * 0.9); // but I modified it
-
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(fontHeight);
-        paint.setColor(Color.WHITE);
-        paint.setTextAlign(Paint.Align.CENTER);
-        Rect bounds;
-        bounds = new Rect();
-        paint.getTextBounds(textToDraw, 0, textToDraw.length(), bounds);
-        c.drawText(textToDraw, topLeftX + width / 2, topLeftY + height / 2 + (bounds.bottom - bounds.top) / 2, paint);
     }
 }
