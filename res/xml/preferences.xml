@@ -13,7 +13,7 @@
                 android:summary="@string/enable_dari"
                 android:title="@string/dari_months"/>
         <CheckBoxPreference
-                android:defaultValue="false"
+                android:defaultValue="true"
                 android:key="NotifyDate"
                 android:summary="@string/enable_notify"
                 android:title="@string/notify_date"/>
