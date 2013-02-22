@@ -11,63 +11,63 @@ import android.widget.TextView;
 public class CalendarSplashScreenActivity extends Activity {
 	public CalendarUtils utils = CalendarUtils.getInstance();
 
-    /**
-     * The thread to process splash screen events
-     */
-    private Thread mSplashThread = new Thread() {
-        @Override
-        public void run() {
-            try {
-                synchronized (this) {
-                    // Wait given period of time or exit on touch
-                    wait(10);
-                }
-            } catch (InterruptedException ex) {
-                // Okay
-            }
-            finish();
-            Intent intent = new Intent();
-            intent.setClass(CalendarSplashScreenActivity.this,
-                    CalendarActivity.class);
-            startActivity(intent);
-        }
-    };
+	/**
+	 * The thread to process splash screen events
+	 */
+	private Thread mSplashThread = new Thread() {
+		@Override
+		public void run() {
+			try {
+				synchronized (this) {
+					// Wait given period of time or exit on touch
+					wait(10);
+				}
+			} catch (InterruptedException ex) {
+				// Okay
+			}
+			finish();
+			Intent intent = new Intent();
+			intent.setClass(CalendarSplashScreenActivity.this,
+					CalendarActivity.class);
+			startActivity(intent);
+		}
+	};
 
-    /**
-     * Called when the activity is first created.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	/**
+	 * Called when the activity is first created.
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // Splash screen view
-        setContentView(R.layout.splash);
+		// Splash screen view
+		setContentView(R.layout.splash);
 
-        char[] digits = utils.preferredDigits(this);
+		char[] digits = utils.preferredDigits(this);
 
-        TextView versionTextView = ((TextView) findViewById(R.id.version));
+		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
-        String versionTitle = "نسخهٔ " + utils.formatNumber(utils.programVersion(this),
-                digits);
+		String versionTitle = "نسخهٔ "
+				+ utils.formatNumber(utils.programVersion(this), digits);
 
-        utils.prepareTextView(versionTextView);
-        versionTextView.setText(utils.textShaper(versionTitle));
+		utils.prepareTextView(versionTextView);
+		versionTextView.setText(utils.textShaper(versionTitle));
 
-        mSplashThread.start();
-    }
+		mSplashThread.start();
+	}
 
-    /**
-     * Processes splash screen touch events
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent evt) {
-        if (evt.getAction() == MotionEvent.ACTION_DOWN) {
-            synchronized (mSplashThread) {
-                mSplashThread.notifyAll();
-            }
-        }
-        return true;
-    }
+	/**
+	 * Processes splash screen touch events
+	 */
+	@Override
+	public boolean onTouchEvent(MotionEvent evt) {
+		if (evt.getAction() == MotionEvent.ACTION_DOWN) {
+			synchronized (mSplashThread) {
+				mSplashThread.notifyAll();
+			}
+		}
+		return true;
+	}
 }

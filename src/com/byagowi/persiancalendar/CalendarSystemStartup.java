@@ -6,13 +6,13 @@ import android.content.Intent;
 
 /**
  * Startup broadcast receiver
- *
+ * 
  * @author ebraminio
  */
 public class CalendarSystemStartup extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {    	
-        Intent startServiceIntent = new Intent(context, CalendarService.class);
-        context.startService(startServiceIntent);
-    }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		Intent startServiceIntent = new Intent(context, CalendarService.class);
+		context.startService(startServiceIntent);
+	}
 }
