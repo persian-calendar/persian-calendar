@@ -111,8 +111,10 @@ public class CalendarService extends Service {
 		text1 = utils.textShaper(text1);
 		text2 = utils.textShaper(text2);
 
-		remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
-		remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
+		remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, 
+				utils.textShaper(text1));
+		remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, 
+				utils.textShaper(text2));
 		remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
 				launchAppPendingIntent);
 		manager.updateAppWidget(new ComponentName(context,
@@ -141,7 +143,8 @@ public class CalendarService extends Service {
 							utils.getDayIconResource(persian.getDayOfMonth()))
 					.setLargeIcon(largeIcon)
 					.setPriority(Notification.PRIORITY_LOW)
-					.setContentText(contentText).setContentTitle(dayTitle)
+					.setContentText(utils.textShaper(contentText))
+					.setContentTitle(utils.textShaper(dayTitle))
 					.setContentIntent(launchAppPendingIntent).setOngoing(true)
 					.build();
 
