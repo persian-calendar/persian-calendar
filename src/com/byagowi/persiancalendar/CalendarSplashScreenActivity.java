@@ -7,10 +7,9 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.TextView;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 // borrowed from http://www.codeproject.com/Articles/113831/An-Advanced-Splash-Screen-for-Android-App :)
 public class CalendarSplashScreenActivity extends Activity {
+	public CalendarUtils utils = CalendarUtils.getInstance();
 
     /**
      * The thread to process splash screen events
@@ -46,16 +45,15 @@ public class CalendarSplashScreenActivity extends Activity {
         // Splash screen view
         setContentView(R.layout.splash);
 
-        char[] digits = preferredDigits(this);
+        char[] digits = utils.preferredDigits(this);
 
         TextView versionTextView = ((TextView) findViewById(R.id.version));
 
-        String versionTitle = "نسخهٔ "
-                + formatNumber(programVersion(this),
+        String versionTitle = "نسخهٔ " + utils.formatNumber(utils.programVersion(this),
                 digits);
 
-        prepareTextView(versionTextView);
-        versionTextView.setText(textShaper(versionTitle));
+        utils.prepareTextView(versionTextView);
+        versionTextView.setText(utils.textShaper(versionTitle));
 
         mSplashThread.start();
     }

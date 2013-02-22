@@ -11,7 +11,7 @@ import android.content.Intent;
  */
 public class CalendarSystemStartup extends BroadcastReceiver {
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {    	
         Intent startServiceIntent = new Intent(context, CalendarService.class);
         context.startService(startServiceIntent);
     }

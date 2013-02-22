@@ -13,29 +13,29 @@ import calendar.PersianDate;
 
 import java.util.Calendar;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * Days events listener
  *
  * @author ebraminio
  */
-class ClickDayListener implements View.OnClickListener, View.OnLongClickListener {
+class ClickDayListener implements View.OnClickListener, View.OnLongClickListener {	
     private final String holidayTitle;
     private final PersianDate persianDate;
     private final CalendarActivity calendarAcitivity;
+    private final CalendarUtils utils;
 
     ClickDayListener(String holidayTitle, PersianDate persianDate,
                      CalendarActivity calendarAcitivity) {
         this.holidayTitle = holidayTitle;
         this.persianDate = persianDate;
         this.calendarAcitivity = calendarAcitivity;
+        this.utils = calendarAcitivity.utils;
     }
 
     @Override
     public void onClick(View v) {
         if (holidayTitle != null) {
-            quickToast(holidayTitle, v.getContext());
+        	utils.quickToast(holidayTitle, v.getContext());
         }
         calendarAcitivity.setFocusedDay(persianDate);
     }
@@ -44,7 +44,7 @@ class ClickDayListener implements View.OnClickListener, View.OnLongClickListener
     public boolean onLongClick(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             try {
-                addEventOnCalendar(preferredDigits(v.getContext()), v.getContext());
+                addEventOnCalendar(utils.preferredDigits(v.getContext()), v.getContext());
             } catch (Exception e) {
                 // Ignore it for now
                 // I guess it will occur on CyanogenMod phones
@@ -60,7 +60,7 @@ class ClickDayListener implements View.OnClickListener, View.OnLongClickListener
         intent.setData(Events.CONTENT_URI);
         CivilDate civil = DateConverter.persianToCivil(persianDate);
         intent.putExtra(Events.DESCRIPTION,
-                dayTitleSummary(civil, digits));
+                utils.dayTitleSummary(civil, digits));
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1,
                 civil.getDayOfMonth());
