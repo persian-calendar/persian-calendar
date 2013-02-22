@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/general">
+    <PreferenceCategory android:title="@string/general" >
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="PersianDigits"
-                android:summary="@string/enable_persian_digits"
-                android:title="@string/persian_digits"/>
+            android:defaultValue="true"
+            android:key="PersianDigits"
+            android:summary="@string/enable_persian_digits"
+            android:title="@string/persian_digits" />
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="DariVersion"
-                android:summary="@string/enable_dari"
-                android:title="@string/dari_months"/>
+            android:defaultValue="false"
+            android:key="DariVersion"
+            android:summary="@string/enable_dari"
+            android:title="@string/dari_months" />
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="NotifyDate"
-                android:summary="@string/enable_notify"
-                android:title="@string/notify_date"/>
+            android:defaultValue="true"
+            android:key="NotifyDate"
+            android:summary="@string/enable_notify"
+            android:title="@string/notify_date" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/widget">
+    <PreferenceCategory android:title="@string/widget" >
         <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="GadgetClock"
-                android:summary="@string/showing_clock_on_widget"
-                android:title="@string/clock_on_widget"/>
+            android:defaultValue="true"
+            android:key="GadgetClock"
+            android:summary="@string/showing_clock_on_widget"
+            android:title="@string/clock_on_widget" />
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="GadgetIn24"
-                android:summary="@string/showing_clock_in_24"
-                android:title="@string/clock_in_24"/>
+            android:defaultValue="false"
+            android:key="GadgetIn24"
+            android:summary="@string/showing_clock_in_24"
+            android:title="@string/clock_in_24" />
         <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="BlackWidget"
-                android:summary="@string/black_font_widgets"
-                android:title="@string/black_widget"/>
+            android:defaultValue="false"
+            android:key="BlackWidget"
+            android:summary="@string/black_font_widgets"
+            android:title="@string/black_widget" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pray_times_calculation_setting">
-        <!-- <MultiSelectListPreference
+    <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
+
+        <!--
+             <MultiSelectListPreference
             android:key="method"
-            android:title="Pray Time Calculation Method" /> -->
+            android:title="Pray Time Calculation Method" />
+        -->
         <EditTextPreference
-                android:defaultValue="0"
-                android:key="Latitude"
-                android:title="@string/latitude"/>
+            android:defaultValue="0"
+            android:key="Latitude"
+            android:title="@string/latitude" />
         <EditTextPreference
-                android:defaultValue="0"
-                android:key="Longitude"
-                android:title="@string/longitude"/>
+            android:defaultValue="0"
+            android:key="Longitude"
+            android:title="@string/longitude" />
     </PreferenceCategory>
 
 </PreferenceScreen>

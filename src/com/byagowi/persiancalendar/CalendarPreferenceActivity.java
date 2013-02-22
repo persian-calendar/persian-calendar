@@ -5,15 +5,16 @@ import android.preference.PreferenceActivity;
 
 /**
  * Preference activity
- *
+ * 
  * @author ebraminio
  */
 public class CalendarPreferenceActivity extends PreferenceActivity {
-    @Override
-    @SuppressWarnings("deprecation")
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	@SuppressWarnings("deprecation")
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.preferences);
-    }
+		// Better is not available for Android < 11
+		addPreferencesFromResource(R.xml.preferences);
+	}
 }

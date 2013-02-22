@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.byagowi.persiancalendar"
-          android:versionCode="28"
-          android:versionName="2.08a">
+    package="com.byagowi.persiancalendar"
+    android:versionCode="28"
+    android:versionName="2.08" >
 
     <uses-sdk
-            android:minSdkVersion="7"
-            android:targetSdkVersion="17"/>
+        android:minSdkVersion="7"
+        android:targetSdkVersion="17" />
 
     <!--
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-            android:allowBackup="false"
-            android:icon="@drawable/launcher_icon"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+        android:allowBackup="false"
+        android:icon="@drawable/launcher_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <activity
-                android:name=".CalendarActivity"
-                android:exported="false"
-                android:label="@string/app_name">
+            android:name=".CalendarActivity"
+            android:exported="false"
+            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".CalendarSplashScreenActivity">
+        <activity android:name=".CalendarSplashScreenActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity
-                android:name=".CalendarPreferenceActivity"
-                android:exported="false"
-                android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.PREFERENCE"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".CalendarAboutActivity"
-                android:exported="false">
+            android:name=".CalendarPreferenceActivity"
+            android:exported="false"
+            android:label="@string/app_name" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.EMBED"/>
+                <category android:name="android.intent.category.PREFERENCE" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".CalendarConverterActivity"
-                android:exported="false">
+            android:name=".CalendarAboutActivity"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.EMBED"/>
+                <category android:name="android.intent.category.EMBED" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CalendarConverterActivity"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
 
         <receiver
-                android:name=".CalendarSystemStartup"
-                android:exported="false">
+            android:name=".CalendarSystemStartup"
+            android:exported="false" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
-                android:name=".CalendarService"
-                android:label="Calendar Service">
+            android:name=".CalendarService"
+            android:label="Calendar Service" >
         </service>
 
         <receiver
-                android:name=".CalendarWidget1x1"
-                android:exported="false"
-                android:icon="@drawable/launcher_icon"
-                android:label="@string/widget_mini_name">
+            android:name=".CalendarWidget1x1"
+            android:exported="false"
+            android:icon="@drawable/launcher_icon"
+            android:label="@string/widget_mini_name" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/persiancalendar_provider1x1"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider1x1" />
         </receiver>
         <receiver
-                android:name=".CalendarWidget4x1"
-                android:exported="false"
-                android:icon="@drawable/launcher_icon"
-                android:label="@string/widget_name">
+            android:name=".CalendarWidget4x1"
+            android:exported="false"
+            android:icon="@drawable/launcher_icon"
+            android:label="@string/widget_name" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/persiancalendar_provider4x1"/>
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider4x1" />
         </receiver>
     </application>
 

@@ -36,285 +36,287 @@ import org.xml.sax.SAXException;
 
 /**
  * Common utilities that needed for this calendar
- *
+ * 
  * @author ebraminio
  */
 public class CalendarUtils {
 	private static CalendarUtils myInstance;
+
 	public static CalendarUtils getInstance() {
 		if (myInstance == null) {
 			myInstance = new CalendarUtils();
 		}
 		return myInstance;
 	}
-	
-    public final char PERSIAN_COMMA = '،';
-    public final char LRO = '\u202D';
-    public final char POP = '\u202C';
 
-    // TODO: textShaper must become private in future
-    public String textShaper(String text) {
-        return ArabicShaping.shape(text);
-    }
+	public final char PERSIAN_COMMA = '،';
+	public final char LRO = '\u202D';
+	public final char POP = '\u202C';
 
-    public String programVersion(Context context) {
-        try {
-            return context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0).versionName;
-        } catch (NameNotFoundException e) {
-            Log.e(context.getPackageName(),
-                    "Name not found on PersianCalendarUtils.programVersion");
-        }
-        return "";
-    }
+	// TODO: textShaper must become private in future
+	public String textShaper(String text) {
+		return ArabicShaping.shape(text);
+	}
 
-    public final String shamsi = textShaper("هجری شمسی");
-    public final String islamic = textShaper("هجری قمری");
-    public final String georgian = textShaper("میلادی");
+	public String programVersion(Context context) {
+		try {
+			return context.getPackageManager().getPackageInfo(
+					context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			Log.e(context.getPackageName(),
+					"Name not found on PersianCalendarUtils.programVersion");
+		}
+		return "";
+	}
 
-    private final char[] arabicDigits = {'0', '1', '2', '3', '4', '5',
-            '6', '7', '8', '9'};
-    private final char[] persianDigits = {'۰', '۱', '۲', '۳', '۴', '۵',
-            '۶', '۷', '۸', '۹'};
-    public final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤',
-            '٥', '٦', '٧', '٨', '٩'};
+	public final String shamsi = textShaper("هجری شمسی");
+	public final String islamic = textShaper("هجری قمری");
+	public final String georgian = textShaper("میلادی");
 
-    private final String[] dayOfWeekName = {"", "یکشنبه", "دوشنبه",
-            "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
+	private final char[] arabicDigits = { '0', '1', '2', '3', '4', '5', '6',
+			'7', '8', '9' };
+	private final char[] persianDigits = { '۰', '۱', '۲', '۳', '۴', '۵', '۶',
+			'۷', '۸', '۹' };
+	public final char[] arabicIndicDigits = { '٠', '١', '٢', '٣', '٤', '٥',
+			'٦', '٧', '٨', '٩' };
 
-    public String getDayOfWeekName(int dayOfWeek) {
-        return dayOfWeekName[dayOfWeek];
-    }
+	private final String[] dayOfWeekName = { "", "یکشنبه", "دوشنبه", "سه‌شنبه",
+			"چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 
-    private Typeface typeface;
+	public String getDayOfWeekName(int dayOfWeek) {
+		return dayOfWeekName[dayOfWeek];
+	}
 
-    public void prepareTextView(TextView textView) {
-        if (typeface == null) {
-            typeface = Typeface.createFromAsset(textView.getContext()
-                    .getAssets(), "fonts/DroidNaskh-Regular.ttf");
-        }
-        textView.setTypeface(typeface);
-        textView.setLineSpacing(0f, 0.8f);
-    }
+	private Typeface typeface;
 
-    public void setLocation(Location location, Context context) {
-        Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
-                .edit();
-        editor.putString("Latitude", String.valueOf(location.getLatitude()));
-        editor.putString("Longitude", String.valueOf(location.getLongitude()));
-        editor.commit();
-    }
+	public void prepareTextView(TextView textView) {
+		if (typeface == null) {
+			typeface = Typeface.createFromAsset(textView.getContext()
+					.getAssets(), "fonts/DroidNaskh-Regular.ttf");
+		}
+		textView.setTypeface(typeface);
+		textView.setLineSpacing(0f, 0.8f);
+	}
 
-    public Location getLocation(Context context) {
-        Location location = new Location((String) null);
+	public void setLocation(Location location, Context context) {
+		Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
+				.edit();
+		editor.putString("Latitude", String.valueOf(location.getLatitude()));
+		editor.putString("Longitude", String.valueOf(location.getLongitude()));
+		editor.commit();
+	}
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+	public Location getLocation(Context context) {
+		Location location = new Location((String) null);
 
-        try {
-            location.setLatitude(Double.parseDouble(prefs.getString("Latitude",
-                    "0")));
-            location.setLongitude(Double.parseDouble(prefs.getString(
-                    "Longitude", "0")));
-        } catch (RuntimeException e) {
-            location.setLatitude(0);
-            location.setLongitude(0);
-            setLocation(location, context);
-            return null;
-        }
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
 
-        // we had not any location before
-        if (location.getLatitude() == 0 && location.getLatitude() == 0) {
-            return null;
-        }
-        return location;
-    }
+		try {
+			location.setLatitude(Double.parseDouble(prefs.getString("Latitude",
+					"0")));
+			location.setLongitude(Double.parseDouble(prefs.getString(
+					"Longitude", "0")));
+		} catch (RuntimeException e) {
+			location.setLatitude(0);
+			location.setLongitude(0);
+			setLocation(location, context);
+			return null;
+		}
 
-    public char[] preferredDigits(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        return prefs.getBoolean("PersianDigits", true) ? persianDigits
-                : arabicDigits;
-    }
+		// we had not any location before
+		if (location.getLatitude() == 0 && location.getLatitude() == 0) {
+			return null;
+		}
+		return location;
+	}
 
-    public boolean isDariVersion(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        return prefs.getBoolean("DariVersion", false);
-    }
+	public char[] preferredDigits(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		return prefs.getBoolean("PersianDigits", true) ? persianDigits
+				: arabicDigits;
+	}
 
-    private String addExtraZeroForClock(int num) {
+	public boolean isDariVersion(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		return prefs.getBoolean("DariVersion", false);
+	}
 
-        String str = Integer.toString(num);
-        int strLength = str.length();
-        if (strLength == 1) {
-            return "0" + str;
-        } else if (strLength == 2) {
-            return str;
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
+	private String addExtraZeroForClock(int num) {
 
-    private String AM_IN_PERSIAN = "ق.ظ";
-    private String PM_IN_PERSIAN = "ب.ظ";
+		String str = Integer.toString(num);
+		int strLength = str.length();
+		if (strLength == 1) {
+			return "0" + str;
+		} else if (strLength == 2) {
+			return str;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 
-    public String getPersianFormattedClock(Date date, char[] digits,
-                                                  boolean in24) {
-        String timeText = null;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+	private String AM_IN_PERSIAN = "ق.ظ";
+	private String PM_IN_PERSIAN = "ب.ظ";
 
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (in24) {
-            if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
-                timeText = PM_IN_PERSIAN;
-                hour -= 12;
-            } else {
-                timeText = AM_IN_PERSIAN;
-            }
-        }
+	public String getPersianFormattedClock(Date date, char[] digits,
+			boolean in24) {
+		String timeText = null;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
 
-        String result = formatNumber(addExtraZeroForClock(hour), digits)
-                + ":"
-                + formatNumber(
-                addExtraZeroForClock(calendar.get(Calendar.MINUTE)),
-                digits);
-        if (in24) {
-            result = result + " " + timeText;
-        }
-        return result;
-    }
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		if (in24) {
+			if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
+				timeText = PM_IN_PERSIAN;
+				hour -= 12;
+			} else {
+				timeText = AM_IN_PERSIAN;
+			}
+		}
 
-    public String formatNumber(int number, char[] digits) {
-        return formatNumber(Integer.toString(number), digits);
-    }
+		String result = formatNumber(addExtraZeroForClock(hour), digits)
+				+ ":"
+				+ formatNumber(
+						addExtraZeroForClock(calendar.get(Calendar.MINUTE)),
+						digits);
+		if (in24) {
+			result = result + " " + timeText;
+		}
+		return result;
+	}
 
-    public String formatNumber(String number, char[] digits) {
-        if (digits == arabicDigits)
-            return number;
+	public String formatNumber(int number, char[] digits) {
+		return formatNumber(Integer.toString(number), digits);
+	}
 
-        StringBuilder sb = new StringBuilder();
-        for (char i : number.toCharArray()) {
-            if (Character.isDigit(i)) {
-                sb.append(digits[Integer.parseInt(i + "")]);
-            } else {
-                sb.append(i);
-            }
-        }
-        return sb.toString();
-    }
+	public String formatNumber(String number, char[] digits) {
+		if (digits == arabicDigits)
+			return number;
 
-    public String dateToString(AbstractDate date, char[] digits,
-                                      boolean showYear) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(formatNumber(date.getDayOfMonth(), digits));
-        sb.append(' ');
-        sb.append(date.getMonthName());
-        if (showYear) {
-            sb.append(' ');
-            sb.append(formatNumber(date.getYear(), digits));
-        }
+		StringBuilder sb = new StringBuilder();
+		for (char i : number.toCharArray()) {
+			if (Character.isDigit(i)) {
+				sb.append(digits[Integer.parseInt(i + "")]);
+			} else {
+				sb.append(i);
+			}
+		}
+		return sb.toString();
+	}
 
-        return sb.toString();
-    }
+	public String dateToString(AbstractDate date, char[] digits,
+			boolean showYear) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(formatNumber(date.getDayOfMonth(), digits));
+		sb.append(' ');
+		sb.append(date.getMonthName());
+		if (showYear) {
+			sb.append(' ');
+			sb.append(formatNumber(date.getYear(), digits));
+		}
 
-    public String dayTitleSummary(CivilDate civilDate, char[] digits) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
-        sb.append(PERSIAN_COMMA);
-        sb.append(" ");
-        sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits,
-                true));
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 
-    public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(dayTitleSummary(civilDate, digits));
-        sb.append("\n\nبرابر با:\n");
-        sb.append(dateToString(civilDate, digits, true));
-        sb.append("\n");
-        sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits,
-                true));
-        sb.append("\n");
-        return sb.toString();
-    }
+	public String dayTitleSummary(CivilDate civilDate, char[] digits) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
+		sb.append(PERSIAN_COMMA);
+		sb.append(" ");
+		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits,
+				true));
+		return sb.toString();
+	}
 
-    public String getMonthYearTitle(PersianDate persianDate,
-                                           char[] digits) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(persianDate.getMonthName());
-        sb.append(' ');
-        sb.append(formatNumber(persianDate.getYear(), digits));
-        return textShaper(sb.toString());
-    }
+	public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(dayTitleSummary(civilDate, digits));
+		sb.append("\n\nبرابر با:\n");
+		sb.append(dateToString(civilDate, digits, true));
+		sb.append("\n");
+		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits,
+				true));
+		sb.append("\n");
+		return sb.toString();
+	}
 
-    public void quickToast(String message, Context context) {
-        Toast.makeText(context, textShaper(message),
-                Toast.LENGTH_SHORT).show();
-    }
-    
-    private int[] daysIcons = { 0, R.drawable.day1, R.drawable.day2, R.drawable.day3,
-    		R.drawable.day4, R.drawable.day5, R.drawable.day6, R.drawable.day7,
-    		R.drawable.day8, R.drawable.day9, R.drawable.day10, R.drawable.day11,
-    		R.drawable.day12, R.drawable.day13, R.drawable.day14, R.drawable.day15,
-    		R.drawable.day16, R.drawable.day17, R.drawable.day18, R.drawable.day19,
-    		R.drawable.day20, R.drawable.day21, R.drawable.day22, R.drawable.day23,
-    		R.drawable.day24, R.drawable.day25, R.drawable.day26, R.drawable.day27,
-    		R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31 };
+	public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(persianDate.getMonthName());
+		sb.append(' ');
+		sb.append(formatNumber(persianDate.getYear(), digits));
+		return textShaper(sb.toString());
+	}
 
-    public int getDayIconResource(int day) {
-        try {
-            return daysIcons[day];
-        } catch (IndexOutOfBoundsException e) {
-            Log.e("com.byagowi.calendar", "No such field is available");
-            return 0;
-        }
-    }
-    
-    private List<Holiday> holidays;
+	public void quickToast(String message, Context context) {
+		Toast.makeText(context, textShaper(message), Toast.LENGTH_SHORT).show();
+	}
 
-    public void loadHolidays(InputStream xmlStream) {
-        holidays = new ArrayList<Holiday>();
-        DocumentBuilder builder;
-        try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	private int[] daysIcons = { 0, R.drawable.day1, R.drawable.day2,
+			R.drawable.day3, R.drawable.day4, R.drawable.day5, R.drawable.day6,
+			R.drawable.day7, R.drawable.day8, R.drawable.day9,
+			R.drawable.day10, R.drawable.day11, R.drawable.day12,
+			R.drawable.day13, R.drawable.day14, R.drawable.day15,
+			R.drawable.day16, R.drawable.day17, R.drawable.day18,
+			R.drawable.day19, R.drawable.day20, R.drawable.day21,
+			R.drawable.day22, R.drawable.day23, R.drawable.day24,
+			R.drawable.day25, R.drawable.day26, R.drawable.day27,
+			R.drawable.day28, R.drawable.day29, R.drawable.day30,
+			R.drawable.day31 };
 
-            Document document = builder.parse(xmlStream);
+	public int getDayIconResource(int day) {
+		try {
+			return daysIcons[day];
+		} catch (IndexOutOfBoundsException e) {
+			Log.e("com.byagowi.calendar", "No such field is available");
+			return 0;
+		}
+	}
 
-            NodeList holidaysNodes = document.getElementsByTagName("holiday");
-            for (Node node : new IterableNodeList(holidaysNodes)) {
-                NamedNodeMap attrs = node.getAttributes();
+	private List<Holiday> holidays;
 
-                int year = Integer.parseInt(attrs.getNamedItem("year")
-                        .getNodeValue());
-                int month = Integer.parseInt(attrs.getNamedItem("month")
-                        .getNodeValue());
-                int day = Integer.parseInt(attrs.getNamedItem("day")
-                        .getNodeValue());
+	public void loadHolidays(InputStream xmlStream) {
+		holidays = new ArrayList<Holiday>();
+		DocumentBuilder builder;
+		try {
+			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-                String holidayTitle = node.getFirstChild().getNodeValue();
+			Document document = builder.parse(xmlStream);
 
-                holidays.add(new Holiday(new PersianDate(year, month, day),
-                        holidayTitle));
-            }
+			NodeList holidaysNodes = document.getElementsByTagName("holiday");
+			for (Node node : new IterableNodeList(holidaysNodes)) {
+				NamedNodeMap attrs = node.getAttributes();
 
-        } catch (ParserConfigurationException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (SAXException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (IOException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        }
-    }
+				int year = Integer.parseInt(attrs.getNamedItem("year")
+						.getNodeValue());
+				int month = Integer.parseInt(attrs.getNamedItem("month")
+						.getNodeValue());
+				int day = Integer.parseInt(attrs.getNamedItem("day")
+						.getNodeValue());
 
-    public String getHolidayTitle(PersianDate day) {
-        for (Holiday holiday : holidays) {
-            if (holiday.getDate().equals(day)) {
-                return holiday.getTitle();
-            }
-        }
-        return null;
-    }
+				String holidayTitle = node.getFirstChild().getNodeValue();
+
+				holidays.add(new Holiday(new PersianDate(year, month, day),
+						holidayTitle));
+			}
+
+		} catch (ParserConfigurationException e) {
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
+		} catch (SAXException e) {
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
+		} catch (IOException e) {
+			Log.e("com.byagowi.persiancalendar", e.getMessage());
+		}
+	}
+
+	public String getHolidayTitle(PersianDate day) {
+		for (Holiday holiday : holidays) {
+			if (holiday.getDate().equals(day)) {
+				return holiday.getTitle();
+			}
+		}
+		return null;
+	}
 }

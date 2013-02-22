@@ -19,135 +19,136 @@ import java.util.Map;
 
 /**
  * Pray time helper. It is like an aspect for activity class somehow
- *
+ * 
  * @author ebraminio
  */
-class PrayTimeActivityHelper {	
+class PrayTimeActivityHelper {
 	private CalendarUtils utils;
-	
-    private final static boolean POSITIONING_PERMISSIONS = false;
-    private final CalendarActivity calendarActivity;
-    private Date date;
-    private Location location;
-    private final TextView prayTimeTextView;
-    private LocationManager locationManager;
 
-    public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
-        this.calendarActivity = calendarActivity;
-        this.utils = calendarActivity.utils;
-        date = new Date();
-        prayTimeTextView = (TextView) calendarActivity
-                .findViewById(R.id.today_praytimes);
-    }
+	private final static boolean POSITIONING_PERMISSIONS = false;
+	private final CalendarActivity calendarActivity;
+	private Date date;
+	private Location location;
+	private final TextView prayTimeTextView;
+	private LocationManager locationManager;
 
-    public void setDate(int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(year, month, dayOfMonth);
-        date = c.getTime();
-    }
+	public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
+		this.calendarActivity = calendarActivity;
+		this.utils = calendarActivity.utils;
+		date = new Date();
+		prayTimeTextView = (TextView) calendarActivity
+				.findViewById(R.id.today_praytimes);
+	}
 
-    public void prayTimeInitialize() {
-        location = utils.getLocation(calendarActivity);
+	public void setDate(int year, int month, int dayOfMonth) {
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, dayOfMonth);
+		date = c.getTime();
+	}
 
-        if (POSITIONING_PERMISSIONS) {
-            locationManager = (LocationManager) calendarActivity
-                    .getSystemService(Context.LOCATION_SERVICE);
+	public void prayTimeInitialize() {
+		location = utils.getLocation(calendarActivity);
 
-            if (location == null) {
-                location = locationManager
-                        .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            }
-        }
+		if (POSITIONING_PERMISSIONS) {
+			locationManager = (LocationManager) calendarActivity
+					.getSystemService(Context.LOCATION_SERVICE);
 
-        if (location != null) {
-            fillPrayTime();
-        } else {
-            if (POSITIONING_PERMISSIONS) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                    Button b = (Button) calendarActivity
-                            .findViewById(R.id.praytimes_button);
-                    b.setVisibility(View.VISIBLE);
-                    b.setText(utils.textShaper("محاسبهٔ مکان برای اوقات شرعی"));
-                    b.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            addPrayTimeListener();
-                            v.setEnabled(false);
-                        }
-                    });
-                }
-            }
-        }
-    }
+			if (location == null) {
+				location = locationManager
+						.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+			}
+		}
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private void addPrayTimeListener() {
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_COARSE);
-        String provider = locationManager.getBestProvider(c, true);
-        if (provider != null) {
-            locationManager.requestSingleUpdate(provider,
-                    new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
-                            fillPrayTime();
-                        }
+		if (location != null) {
+			fillPrayTime();
+		} else {
+			if (POSITIONING_PERMISSIONS) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+					Button b = (Button) calendarActivity
+							.findViewById(R.id.praytimes_button);
+					b.setVisibility(View.VISIBLE);
+					b.setText(utils.textShaper("محاسبهٔ مکان برای اوقات شرعی"));
+					b.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							addPrayTimeListener();
+							v.setEnabled(false);
+						}
+					});
+				}
+			}
+		}
+	}
 
-                        @Override
-                        public void onStatusChanged(String provider,
-                                                    int status, Bundle extras) {
-                        }
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	private void addPrayTimeListener() {
+		Criteria c = new Criteria();
+		c.setAccuracy(Criteria.ACCURACY_COARSE);
+		String provider = locationManager.getBestProvider(c, true);
+		if (provider != null) {
+			locationManager.requestSingleUpdate(provider,
+					new LocationListener() {
+						@Override
+						public void onLocationChanged(Location location) {
+							fillPrayTime();
+						}
 
-                        @Override
-                        public void onProviderEnabled(String provider) {
-                        }
+						@Override
+						public void onStatusChanged(String provider,
+								int status, Bundle extras) {
+						}
 
-                        @Override
-                        public void onProviderDisabled(String provider) {
-                        }
-                    }, null);
-        } else {
-            utils.quickToast("Please set your geographical position on preference.",
-                    calendarActivity);
-        }
-    }
+						@Override
+						public void onProviderEnabled(String provider) {
+						}
 
-    private void fillPrayTime() {
-        utils.setLocation(location, calendarActivity);
-        location.getLongitude();
-        PrayTimesCalculator ptc = new PrayTimesCalculator(
-                CalculationMethod.Jafari); // Why Jafari? I don't know either,
-        // but seems Iran is using it.
-        StringBuilder sb = new StringBuilder();
-        Map<PrayTime, Clock> prayTimes = ptc.calculate(date, new Coordinate(
-                location.getLatitude(), location.getLongitude()));
+						@Override
+						public void onProviderDisabled(String provider) {
+						}
+					}, null);
+		} else {
+			utils.quickToast(
+					"Please set your geographical position on preference.",
+					calendarActivity);
+		}
+	}
 
-        sb.append("اذان صبح: ");
-        sb.append(prayTimes.get(PrayTime.Imsak).toString());
+	private void fillPrayTime() {
+		utils.setLocation(location, calendarActivity);
+		location.getLongitude();
+		PrayTimesCalculator ptc = new PrayTimesCalculator(
+				CalculationMethod.Jafari); // Why Jafari? I don't know either,
+		// but seems Iran is using it.
+		StringBuilder sb = new StringBuilder();
+		Map<PrayTime, Clock> prayTimes = ptc.calculate(date, new Coordinate(
+				location.getLatitude(), location.getLongitude()));
 
-        sb.append("\nطلوع آفتاب: ");
-        sb.append(prayTimes.get(PrayTime.Sunrise).toString());
+		sb.append("اذان صبح: ");
+		sb.append(prayTimes.get(PrayTime.Imsak).toString());
 
-        sb.append("\nاذان ظهر: ");
-        sb.append(prayTimes.get(PrayTime.Dhuhr).toString());
+		sb.append("\nطلوع آفتاب: ");
+		sb.append(prayTimes.get(PrayTime.Sunrise).toString());
 
-        sb.append("\nاذان مغرب: ");
-        sb.append(prayTimes.get(PrayTime.Maghrib).toString());
+		sb.append("\nاذان ظهر: ");
+		sb.append(prayTimes.get(PrayTime.Dhuhr).toString());
 
-        sb.append("\nنیمه وقت شرعی: ");
-        sb.append(prayTimes.get(PrayTime.Midnight).toString());
+		sb.append("\nاذان مغرب: ");
+		sb.append(prayTimes.get(PrayTime.Maghrib).toString());
 
-        char[] digits = utils.preferredDigits(calendarActivity);
+		sb.append("\nنیمه وقت شرعی: ");
+		sb.append(prayTimes.get(PrayTime.Midnight).toString());
 
-        utils.prepareTextView(prayTimeTextView);
-        prayTimeTextView
-                .setText(utils.textShaper(utils.formatNumber(sb.toString(), digits)));
+		char[] digits = utils.preferredDigits(calendarActivity);
 
-        calendarActivity.findViewById(R.id.praytimes_button).setVisibility(
-                View.GONE);
-    }
+		utils.prepareTextView(prayTimeTextView);
+		prayTimeTextView.setText(utils.textShaper(utils.formatNumber(
+				sb.toString(), digits)));
 
-    public void clearInfo() {
-        prayTimeTextView.setText("");
-    }
+		calendarActivity.findViewById(R.id.praytimes_button).setVisibility(
+				View.GONE);
+	}
+
+	public void clearInfo() {
+		prayTimeTextView.setText("");
+	}
 }

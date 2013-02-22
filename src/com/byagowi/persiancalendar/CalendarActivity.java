@@ -18,199 +18,199 @@ import calendar.PersianDate;
 
 /**
  * Program activity for android
- *
+ * 
  * @author ebraminio
  */
 public class CalendarActivity extends FragmentActivity {
 	public CalendarUtils utils = CalendarUtils.getInstance();
-	
-    private ViewPager viewPager;
-    private TextView calendarInfo;
-    private Button resetButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	private ViewPager viewPager;
+	private TextView calendarInfo;
+	private Button resetButton;
 
-        startService(new Intent(this, CalendarService.class));
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        boolean removeTitle = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (!hasPermanentMenuKey()) {
-                removeTitle = false;
-            }
-        }
-        if (removeTitle) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-        }
-        setContentView(R.layout.calendar);
+		startService(new Intent(this, CalendarService.class));
 
-        calendarInfo = (TextView) findViewById(R.id.calendar_info);
+		boolean removeTitle = true;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			if (!hasPermanentMenuKey()) {
+				removeTitle = false;
+			}
+		}
+		if (removeTitle) {
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+		}
+		setContentView(R.layout.calendar);
 
-        // Pray Time
-        prayTimeInitialize();
-        
-        // Load Holidays
-        utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
+		calendarInfo = (TextView) findViewById(R.id.calendar_info);
 
-        // Reset button
-        resetButton = (Button) findViewById(R.id.reset_button);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                bringTodayYearMonth();
-                setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
-            }
-        });
+		// Pray Time
+		prayTimeInitialize();
 
-        // Initializing the viewPager
-        viewPager = (ViewPager) findViewById(R.id.calendar_pager);
-        viewPager.setAdapter(createCalendarAdaptor());
-        viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageSelected(int arg0) {
-                updateResetButtonState();
-            }
+		// Load Holidays
+		utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
+		// Reset button
+		resetButton = (Button) findViewById(R.id.reset_button);
+		resetButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				bringTodayYearMonth();
+				setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
+			}
+		});
 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-        });
+		// Initializing the viewPager
+		viewPager = (ViewPager) findViewById(R.id.calendar_pager);
+		viewPager.setAdapter(createCalendarAdaptor());
+		viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageSelected(int arg0) {
+				updateResetButtonState();
+			}
 
-        // Initializing the view
-        fillCalendarInfo(new CivilDate());
-    }
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
 
-    private void updateResetButtonState() {
-        if (viewPager.getCurrentItem() == MONTHS_LIMIT / 2) {
-            resetButton.setVisibility(View.GONE);
-            fillCalendarInfo(new CivilDate());
-        } else {
-            resetButton.setVisibility(View.VISIBLE);
-            clearInfo();
-        }
-    }
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+			}
+		});
 
-    private void clearInfo() {
-        calendarInfo.setText("");
-        prayTimeActivityHelper.clearInfo();
-    }
+		// Initializing the view
+		fillCalendarInfo(new CivilDate());
+	}
 
-    // I know, it is ugly, but user will not notify this and this will not have
-    // a memory problem
-    private static final int MONTHS_LIMIT = 1200;
+	private void updateResetButtonState() {
+		if (viewPager.getCurrentItem() == MONTHS_LIMIT / 2) {
+			resetButton.setVisibility(View.GONE);
+			fillCalendarInfo(new CivilDate());
+		} else {
+			resetButton.setVisibility(View.VISIBLE);
+			clearInfo();
+		}
+	}
 
-    private void bringTodayYearMonth() {
-        if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
-            viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-            fillCalendarInfo(new CivilDate());
-        }
-    }
+	private void clearInfo() {
+		calendarInfo.setText("");
+		prayTimeActivityHelper.clearInfo();
+	}
 
-    public void setFocusedDay(PersianDate persianDate) {
-        fillCalendarInfo(DateConverter.persianToCivil(persianDate));
-    }
+	// I know, it is ugly, but user will not notify this and this will not have
+	// a memory problem
+	private static final int MONTHS_LIMIT = 1200;
 
-    private PagerAdapter createCalendarAdaptor() {
-        return (PagerAdapter) new FragmentPagerAdapter(
-                getSupportFragmentManager()) {
-            @Override
-            public int getCount() {
-                return MONTHS_LIMIT;
-            }
+	private void bringTodayYearMonth() {
+		if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
+			viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+			fillCalendarInfo(new CivilDate());
+		}
+	}
 
-            @Override
-            public Fragment getItem(int position) {
-                CalendarMonthFragment fragment = new CalendarMonthFragment();
-                Bundle args = new Bundle();
-                args.putInt("offset", position - MONTHS_LIMIT / 2);
-                fragment.setArguments(args);
-                return fragment;
-            }
-        };
-    }
+	public void setFocusedDay(PersianDate persianDate) {
+		fillCalendarInfo(DateConverter.persianToCivil(persianDate));
+	}
 
-    private boolean isToday(CivilDate civilDate) {
-        CivilDate today = new CivilDate();
-        return today.getYear() == civilDate.getYear()
-                && today.getMonth() == civilDate.getMonth()
-                && today.getDayOfMonth() == civilDate.getDayOfMonth();
-    }
+	private PagerAdapter createCalendarAdaptor() {
+		return (PagerAdapter) new FragmentPagerAdapter(
+				getSupportFragmentManager()) {
+			@Override
+			public int getCount() {
+				return MONTHS_LIMIT;
+			}
 
-    private void fillCalendarInfo(CivilDate civilDate) {
-        char[] digits = utils.preferredDigits(this);
-        utils.prepareTextView(calendarInfo);
-        StringBuilder sb = new StringBuilder();
+			@Override
+			public Fragment getItem(int position) {
+				CalendarMonthFragment fragment = new CalendarMonthFragment();
+				Bundle args = new Bundle();
+				args.putInt("offset", position - MONTHS_LIMIT / 2);
+				fragment.setArguments(args);
+				return fragment;
+			}
+		};
+	}
 
-        if (isToday(civilDate)) {
-            sb.append("امروز:\n");
-            resetButton.setVisibility(View.GONE);
-        } else {
-            resetButton.setVisibility(View.VISIBLE);
-        }
-        sb.append(utils.infoForSpecificDay(civilDate, digits));
-        calendarInfo.setText(utils.textShaper(sb.toString()));
+	private boolean isToday(CivilDate civilDate) {
+		CivilDate today = new CivilDate();
+		return today.getYear() == civilDate.getYear()
+				&& today.getMonth() == civilDate.getMonth()
+				&& today.getDayOfMonth() == civilDate.getDayOfMonth();
+	}
 
-        prayTimeActivityHelper.setDate(civilDate.getYear(),
-                civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-        prayTimeActivityHelper.prayTimeInitialize();
-    }
+	private void fillCalendarInfo(CivilDate civilDate) {
+		char[] digits = utils.preferredDigits(this);
+		utils.prepareTextView(calendarInfo);
+		StringBuilder sb = new StringBuilder();
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private boolean hasPermanentMenuKey() {
-        return ViewConfiguration.get(this).hasPermanentMenuKey();
-    }
+		if (isToday(civilDate)) {
+			sb.append("امروز:\n");
+			resetButton.setVisibility(View.GONE);
+		} else {
+			resetButton.setVisibility(View.VISIBLE);
+		}
+		sb.append(utils.infoForSpecificDay(civilDate, digits));
+		calendarInfo.setText(utils.textShaper(sb.toString()));
 
-    private PrayTimeActivityHelper prayTimeActivityHelper;
+		prayTimeActivityHelper.setDate(civilDate.getYear(),
+				civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+		prayTimeActivityHelper.prayTimeInitialize();
+	}
 
-    private void prayTimeInitialize() {
-        if (prayTimeActivityHelper == null) {
-            prayTimeActivityHelper = new PrayTimeActivityHelper(this);
-        }
-        prayTimeActivityHelper.prayTimeInitialize();
-    }
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private boolean hasPermanentMenuKey() {
+		return ViewConfiguration.get(this).hasPermanentMenuKey();
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+	private PrayTimeActivityHelper prayTimeActivityHelper;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_dateconverter:
-                Intent converterIntent = new Intent(getApplicationContext(),
-                        CalendarConverterActivity.class);
-                startActivityForResult(converterIntent, 0);
-                break;
-            case R.id.menu_settings:
-                Intent preferenceIntent = new Intent(getApplicationContext(),
-                        CalendarPreferenceActivity.class);
-                startActivityForResult(preferenceIntent, 0);
-                break;
-            case R.id.menu_about:
-                Intent aboutIntent = new Intent(getApplicationContext(),
-                        CalendarAboutActivity.class);
-                startActivityForResult(aboutIntent, 0);
-                break;
-            case R.id.menu_exit:
-                finish();
-                break;
-        }
-        return false;
-    }
+	private void prayTimeInitialize() {
+		if (prayTimeActivityHelper == null) {
+			prayTimeActivityHelper = new PrayTimeActivityHelper(this);
+		}
+		prayTimeActivityHelper.prayTimeInitialize();
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        bringTodayYearMonth();
-        startService(new Intent(this, CalendarService.class));
-        prayTimeInitialize();
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_dateconverter:
+			Intent converterIntent = new Intent(getApplicationContext(),
+					CalendarConverterActivity.class);
+			startActivityForResult(converterIntent, 0);
+			break;
+		case R.id.menu_settings:
+			Intent preferenceIntent = new Intent(getApplicationContext(),
+					CalendarPreferenceActivity.class);
+			startActivityForResult(preferenceIntent, 0);
+			break;
+		case R.id.menu_about:
+			Intent aboutIntent = new Intent(getApplicationContext(),
+					CalendarAboutActivity.class);
+			startActivityForResult(aboutIntent, 0);
+			break;
+		case R.id.menu_exit:
+			finish();
+			break;
+		}
+		return false;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		bringTodayYearMonth();
+		startService(new Intent(this, CalendarService.class));
+		prayTimeInitialize();
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 }
