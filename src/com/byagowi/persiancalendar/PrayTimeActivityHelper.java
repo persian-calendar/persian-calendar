@@ -17,14 +17,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * Pray time helper. It is like an aspect for activity class somehow
  *
  * @author ebraminio
  */
-class PrayTimeActivityHelper {
+class PrayTimeActivityHelper {	
+	private CalendarUtils utils;
+	
     private final static boolean POSITIONING_PERMISSIONS = false;
     private final CalendarActivity calendarActivity;
     private Date date;
@@ -34,6 +34,7 @@ class PrayTimeActivityHelper {
 
     public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
         this.calendarActivity = calendarActivity;
+        this.utils = calendarActivity.utils;
         date = new Date();
         prayTimeTextView = (TextView) calendarActivity
                 .findViewById(R.id.today_praytimes);
@@ -46,7 +47,7 @@ class PrayTimeActivityHelper {
     }
 
     public void prayTimeInitialize() {
-        location = getLocation(calendarActivity);
+        location = utils.getLocation(calendarActivity);
 
         if (POSITIONING_PERMISSIONS) {
             locationManager = (LocationManager) calendarActivity
@@ -66,7 +67,7 @@ class PrayTimeActivityHelper {
                     Button b = (Button) calendarActivity
                             .findViewById(R.id.praytimes_button);
                     b.setVisibility(View.VISIBLE);
-                    b.setText(textShaper("محاسبهٔ مکان برای اوقات شرعی"));
+                    b.setText(utils.textShaper("محاسبهٔ مکان برای اوقات شرعی"));
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -106,13 +107,13 @@ class PrayTimeActivityHelper {
                         }
                     }, null);
         } else {
-            quickToast("Please set your geographical position on preference.",
+            utils.quickToast("Please set your geographical position on preference.",
                     calendarActivity);
         }
     }
 
     private void fillPrayTime() {
-        setLocation(location, calendarActivity);
+        utils.setLocation(location, calendarActivity);
         location.getLongitude();
         PrayTimesCalculator ptc = new PrayTimesCalculator(
                 CalculationMethod.Jafari); // Why Jafari? I don't know either,
@@ -136,11 +137,11 @@ class PrayTimeActivityHelper {
         sb.append("\nنیمه وقت شرعی: ");
         sb.append(prayTimes.get(PrayTime.Midnight).toString());
 
-        char[] digits = preferredDigits(calendarActivity);
+        char[] digits = utils.preferredDigits(calendarActivity);
 
-        prepareTextView(prayTimeTextView);
+        utils.prepareTextView(prayTimeTextView);
         prayTimeTextView
-                .setText(textShaper(formatNumber(sb.toString(), digits)));
+                .setText(utils.textShaper(utils.formatNumber(sb.toString(), digits)));
 
         calendarActivity.findViewById(R.id.praytimes_button).setVisibility(
                 View.GONE);

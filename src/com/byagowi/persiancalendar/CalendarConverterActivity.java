@@ -14,14 +14,13 @@ import com.byagowi.common.Range;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * Program activity for android
  *
  * @author ebraminio
  */
 public class CalendarConverterActivity extends Activity {
+	public CalendarUtils utils = CalendarUtils.getInstance();
 
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
@@ -49,9 +48,9 @@ public class CalendarConverterActivity extends Activity {
 
         // fill views
         List<String> calendarsTypes = new ArrayList<String>();
-        calendarsTypes.add(georgian);
-        calendarsTypes.add(shamsi);
-        calendarsTypes.add(islamic);
+        calendarsTypes.add(utils.georgian);
+        calendarsTypes.add(utils.shamsi);
+        calendarsTypes.add(utils.islamic);
         ArrayAdapter<String> arrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.select_dialog_item, calendarsTypes);
         calendarTypeSpinner.setAdapter(arrayAdaptor);
@@ -107,7 +106,7 @@ public class CalendarConverterActivity extends Activity {
         PersianDate persianDate = null;
         IslamicDate islamicDate = null;
 
-        char[] digits = preferredDigits(this);
+        char[] digits = utils.preferredDigits(this);
         StringBuilder sb = new StringBuilder();
 
         try {
@@ -118,32 +117,32 @@ public class CalendarConverterActivity extends Activity {
                     persianDate = DateConverter.civilToPersian(civilDate);
                     islamicDate = DateConverter.civilToIslamic(civilDate);
 
-                    calendarsTextList.add(dateToString(civilDate, digits, true));
-                    calendarsTextList.add(dateToString(persianDate, digits, true));
-                    calendarsTextList.add(dateToString(islamicDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits, true));
                     break;
                 case ISLAMIC:
                     islamicDate = new IslamicDate(year, month, day);
                     civilDate = DateConverter.islamicToCivil(islamicDate);
                     persianDate = DateConverter.islamicToPersian(islamicDate);
 
-                    calendarsTextList.add(dateToString(islamicDate, digits, true));
-                    calendarsTextList.add(dateToString(civilDate, digits, true));
-                    calendarsTextList.add(dateToString(persianDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits, true));
                     break;
                 case SHAMSI:
                     persianDate = new PersianDate(year, month, day);
                     civilDate = DateConverter.persianToCivil(persianDate);
                     islamicDate = DateConverter.persianToIslamic(persianDate);
 
-                    calendarsTextList.add(dateToString(persianDate, digits, true));
-                    calendarsTextList.add(dateToString(civilDate, digits, true));
-                    calendarsTextList.add(dateToString(islamicDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits, true));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits, true));
                     break;
             }
 
-            sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
-            sb.append(PERSIAN_COMMA);
+            sb.append(utils.getDayOfWeekName(civilDate.getDayOfWeek()));
+            sb.append(utils.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
             sb.append("\n\n");
@@ -153,15 +152,15 @@ public class CalendarConverterActivity extends Activity {
             sb.append(calendarsTextList.get(2));
             sb.append("\n");
 
-            prepareTextView(convertedDateTextView);
-            convertedDateTextView.setText(textShaper(sb.toString()));
+            utils.prepareTextView(convertedDateTextView);
+            convertedDateTextView.setText(utils.textShaper(sb.toString()));
         } catch (RuntimeException e) {
             convertedDateTextView.setText("Date you entered was not valid!");
         }
     }
 
     void fillYearMonthDaySpinners() {
-        char[] digits = preferredDigits(this);
+        char[] digits = utils.preferredDigits(this);
 
         AbstractDate date = null;
         switch (detectSelectedCalendar()) {
@@ -180,7 +179,7 @@ public class CalendarConverterActivity extends Activity {
         List<String> yearsList = new ArrayList<String>();
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
-            yearsList.add(formatNumber(i, digits));
+            yearsList.add(utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, yearsList);
@@ -193,8 +192,8 @@ public class CalendarConverterActivity extends Activity {
         List<String> monthsList = new ArrayList<String>();
         String[] monthsArray = date.getMonthsList();
         for (int i : new Range(1, 12)) {
-            monthsList.add(textShaper(monthsArray[i]
-                    + " / " + formatNumber(i, digits)));
+            monthsList.add(utils.textShaper(monthsArray[i]
+                    + " / " + utils.formatNumber(i, digits)));
         }
         ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, monthsList);
@@ -206,7 +205,7 @@ public class CalendarConverterActivity extends Activity {
         // days spinner init.
         List<String> daysList = new ArrayList<String>();
         for (int i : new Range(1, 31)) {
-            daysList.add(formatNumber(i, digits));
+            daysList.add(utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, daysList);
@@ -219,12 +218,12 @@ public class CalendarConverterActivity extends Activity {
 
     CalendarType detectSelectedCalendar() {
         CalendarType calendarType = null;
-        if (georgian.equals(calendarTypeSpinner.getSelectedItem().toString())) {
+        if (utils.georgian.equals(calendarTypeSpinner.getSelectedItem().toString())) {
             calendarType = CalendarType.GEORGIAN;
-        } else if (shamsi.equals(calendarTypeSpinner.getSelectedItem()
+        } else if (utils.shamsi.equals(calendarTypeSpinner.getSelectedItem()
                 .toString())) {
             calendarType = CalendarType.SHAMSI;
-        } else if (islamic.equals(calendarTypeSpinner.getSelectedItem()
+        } else if (utils.islamic.equals(calendarTypeSpinner.getSelectedItem()
                 .toString())) {
             calendarType = CalendarType.ISLAMIC;
         }

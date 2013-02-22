@@ -15,26 +15,49 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 import com.azizhuss.arabicreshaper.ArabicShaping;
+import com.byagowi.common.IterableNodeList;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Common utilities that needed for this calendar
  *
  * @author ebraminio
  */
-class CalendarUtils {
-    public static final char PERSIAN_COMMA = '،';
-    public static final char LRO = '\u202D';
-    public static final char POP = '\u202C';
+public class CalendarUtils {
+	private static CalendarUtils myInstance;
+	public static CalendarUtils getInstance() {
+		if (myInstance == null) {
+			myInstance = new CalendarUtils();
+		}
+		return myInstance;
+	}
+	
+    public final char PERSIAN_COMMA = '،';
+    public final char LRO = '\u202D';
+    public final char POP = '\u202C';
 
     // TODO: textShaper must become private in future
-    public static String textShaper(String text) {
+    public String textShaper(String text) {
         return ArabicShaping.shape(text);
     }
 
-    public static String programVersion(Context context) {
+    public String programVersion(Context context) {
         try {
             return context.getPackageManager().getPackageInfo(
                     context.getPackageName(), 0).versionName;
@@ -45,27 +68,27 @@ class CalendarUtils {
         return "";
     }
 
-    public static final String shamsi = CalendarUtils.textShaper("هجری شمسی");
-    public static final String islamic = CalendarUtils.textShaper("هجری قمری");
-    public static final String georgian = CalendarUtils.textShaper("میلادی");
+    public final String shamsi = textShaper("هجری شمسی");
+    public final String islamic = textShaper("هجری قمری");
+    public final String georgian = textShaper("میلادی");
 
-    private static final char[] arabicDigits = {'0', '1', '2', '3', '4', '5',
+    private final char[] arabicDigits = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9'};
-    private static final char[] persianDigits = {'۰', '۱', '۲', '۳', '۴', '۵',
+    private final char[] persianDigits = {'۰', '۱', '۲', '۳', '۴', '۵',
             '۶', '۷', '۸', '۹'};
-    public static final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤',
+    public final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤',
             '٥', '٦', '٧', '٨', '٩'};
 
-    private static final String[] dayOfWeekName = {"", "یکشنبه", "دوشنبه",
+    private final String[] dayOfWeekName = {"", "یکشنبه", "دوشنبه",
             "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
 
-    public static String getDayOfWeekName(int dayOfWeek) {
+    public String getDayOfWeekName(int dayOfWeek) {
         return dayOfWeekName[dayOfWeek];
     }
 
-    private static Typeface typeface;
+    private Typeface typeface;
 
-    public static void prepareTextView(TextView textView) {
+    public void prepareTextView(TextView textView) {
         if (typeface == null) {
             typeface = Typeface.createFromAsset(textView.getContext()
                     .getAssets(), "fonts/DroidNaskh-Regular.ttf");
@@ -74,7 +97,7 @@ class CalendarUtils {
         textView.setLineSpacing(0f, 0.8f);
     }
 
-    public static void setLocation(Location location, Context context) {
+    public void setLocation(Location location, Context context) {
         Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         editor.putString("Latitude", String.valueOf(location.getLatitude()));
@@ -82,7 +105,7 @@ class CalendarUtils {
         editor.commit();
     }
 
-    public static Location getLocation(Context context) {
+    public Location getLocation(Context context) {
         Location location = new Location((String) null);
 
         SharedPreferences prefs = PreferenceManager
@@ -107,20 +130,20 @@ class CalendarUtils {
         return location;
     }
 
-    public static char[] preferredDigits(Context context) {
+    public char[] preferredDigits(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        return prefs.getBoolean("PersianDigits", true) ? CalendarUtils.persianDigits
-                : CalendarUtils.arabicDigits;
+        return prefs.getBoolean("PersianDigits", true) ? persianDigits
+                : arabicDigits;
     }
 
-    public static boolean isDariVersion(Context context) {
+    public boolean isDariVersion(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
         return prefs.getBoolean("DariVersion", false);
     }
 
-    private static String addExtraZeroForClock(int num) {
+    private String addExtraZeroForClock(int num) {
 
         String str = Integer.toString(num);
         int strLength = str.length();
@@ -133,12 +156,11 @@ class CalendarUtils {
         }
     }
 
-    private static String AM_IN_PERSIAN = "ق.ظ";
-    private static String PM_IN_PERSIAN = "ب.ظ";
+    private String AM_IN_PERSIAN = "ق.ظ";
+    private String PM_IN_PERSIAN = "ب.ظ";
 
-    public static String getPersianFormattedClock(Date date, char[] digits,
+    public String getPersianFormattedClock(Date date, char[] digits,
                                                   boolean in24) {
-
         String timeText = null;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -164,11 +186,11 @@ class CalendarUtils {
         return result;
     }
 
-    public static String formatNumber(int number, char[] digits) {
+    public String formatNumber(int number, char[] digits) {
         return formatNumber(Integer.toString(number), digits);
     }
 
-    public static String formatNumber(String number, char[] digits) {
+    public String formatNumber(String number, char[] digits) {
         if (digits == arabicDigits)
             return number;
 
@@ -183,21 +205,21 @@ class CalendarUtils {
         return sb.toString();
     }
 
-    public static String dateToString(AbstractDate date, char[] digits,
+    public String dateToString(AbstractDate date, char[] digits,
                                       boolean showYear) {
         StringBuilder sb = new StringBuilder();
-        sb.append(CalendarUtils.formatNumber(date.getDayOfMonth(), digits));
+        sb.append(formatNumber(date.getDayOfMonth(), digits));
         sb.append(' ');
         sb.append(date.getMonthName());
         if (showYear) {
             sb.append(' ');
-            sb.append(CalendarUtils.formatNumber(date.getYear(), digits));
+            sb.append(formatNumber(date.getYear(), digits));
         }
 
         return sb.toString();
     }
 
-    public static String dayTitleSummary(CivilDate civilDate, char[] digits) {
+    public String dayTitleSummary(CivilDate civilDate, char[] digits) {
         StringBuilder sb = new StringBuilder();
         sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
         sb.append(PERSIAN_COMMA);
@@ -207,7 +229,7 @@ class CalendarUtils {
         return sb.toString();
     }
 
-    public static String infoForSpecificDay(CivilDate civilDate, char[] digits) {
+    public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
         StringBuilder sb = new StringBuilder();
         sb.append(dayTitleSummary(civilDate, digits));
         sb.append("\n\nبرابر با:\n");
@@ -219,7 +241,7 @@ class CalendarUtils {
         return sb.toString();
     }
 
-    public static String getMonthYearTitle(PersianDate persianDate,
+    public String getMonthYearTitle(PersianDate persianDate,
                                            char[] digits) {
         StringBuilder sb = new StringBuilder();
         sb.append(persianDate.getMonthName());
@@ -228,8 +250,71 @@ class CalendarUtils {
         return textShaper(sb.toString());
     }
 
-    public static void quickToast(String message, Context context) {
-        Toast.makeText(context, CalendarUtils.textShaper(message),
+    public void quickToast(String message, Context context) {
+        Toast.makeText(context, textShaper(message),
                 Toast.LENGTH_SHORT).show();
+    }
+    
+    private int[] daysIcons = { 0, R.drawable.day1, R.drawable.day2, R.drawable.day3,
+    		R.drawable.day4, R.drawable.day5, R.drawable.day6, R.drawable.day7,
+    		R.drawable.day8, R.drawable.day9, R.drawable.day10, R.drawable.day11,
+    		R.drawable.day12, R.drawable.day13, R.drawable.day14, R.drawable.day15,
+    		R.drawable.day16, R.drawable.day17, R.drawable.day18, R.drawable.day19,
+    		R.drawable.day20, R.drawable.day21, R.drawable.day22, R.drawable.day23,
+    		R.drawable.day24, R.drawable.day25, R.drawable.day26, R.drawable.day27,
+    		R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31 };
+
+    public int getDayIconResource(int day) {
+        try {
+            return daysIcons[day];
+        } catch (IndexOutOfBoundsException e) {
+            Log.e("com.byagowi.calendar", "No such field is available");
+            return 0;
+        }
+    }
+    
+    private List<Holiday> holidays;
+
+    public void loadHolidays(InputStream xmlStream) {
+        holidays = new ArrayList<Holiday>();
+        DocumentBuilder builder;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            Document document = builder.parse(xmlStream);
+
+            NodeList holidaysNodes = document.getElementsByTagName("holiday");
+            for (Node node : new IterableNodeList(holidaysNodes)) {
+                NamedNodeMap attrs = node.getAttributes();
+
+                int year = Integer.parseInt(attrs.getNamedItem("year")
+                        .getNodeValue());
+                int month = Integer.parseInt(attrs.getNamedItem("month")
+                        .getNodeValue());
+                int day = Integer.parseInt(attrs.getNamedItem("day")
+                        .getNodeValue());
+
+                String holidayTitle = node.getFirstChild().getNodeValue();
+
+                holidays.add(new Holiday(new PersianDate(year, month, day),
+                        holidayTitle));
+            }
+
+        } catch (ParserConfigurationException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (SAXException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (IOException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        }
+    }
+
+    public String getHolidayTitle(PersianDate day) {
+        for (Holiday holiday : holidays) {
+            if (holiday.getDate().equals(day)) {
+                return holiday.getTitle();
+            }
+        }
+        return null;
     }
 }

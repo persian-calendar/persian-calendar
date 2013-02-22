@@ -18,14 +18,14 @@ import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 import com.byagowi.common.Range;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * Calendar month view fragment
  *
  * @author ebraminio
  */
 public class CalendarMonthFragment extends Fragment {
+	public CalendarUtils utils = CalendarUtils.getInstance();
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class CalendarMonthFragment extends Fragment {
         currentMonthTextView.setGravity(Gravity.RIGHT);
         currentMonthTextView.setPadding(0, 15, 10, 2);
         currentMonthTextView.setTextSize(25);
-        prepareTextView(currentMonthTextView);
+        utils.prepareTextView(currentMonthTextView);
 
         root.addView(currentMonthTextView);
         // end
@@ -67,7 +67,7 @@ public class CalendarMonthFragment extends Fragment {
             }
             for (int j : new Range(0, 7)) {
                 TextView tv = new TextView(context);
-                prepareTextView(tv);
+                utils.prepareTextView(tv);
                 tv.setGravity(Gravity.CENTER);
                 tv.setTextSize(20);
                 if (i == 0) {
@@ -102,15 +102,15 @@ public class CalendarMonthFragment extends Fragment {
         persianDate.setMonth(month);
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
-        persianDate.setDari(isDariVersion(context));
+        persianDate.setDari(utils.isDariVersion(context));
 
-        char[] digits = preferredDigits(getActivity());
+        char[] digits = utils.preferredDigits(getActivity());
 
         int weekOfMonth = 1;
         int dayOfWeek = DateConverter.persianToCivil(persianDate)
                 .getDayOfWeek() % 7;
 
-        currentMonthTextView.setText(getMonthYearTitle(persianDate, digits));
+        currentMonthTextView.setText(utils.getMonthYearTitle(persianDate, digits));
 
         String[] firstCharOfDaysOfWeekName = {"ش", "ی", "د", "س", "چ", "پ",
                 "ج"};
@@ -118,17 +118,16 @@ public class CalendarMonthFragment extends Fragment {
             TextView textView = daysTextViews[0][6 - i];
             textView.setText(firstCharOfDaysOfWeekName[i]);
         }
-        Holidays holidays = Holidays.getInstance();
         try {
             PersianDate today = DateConverter.civilToPersian(new CivilDate());
             for (int i : new Range(1, 31)) {
                 persianDate.setDayOfMonth(i);
 
                 TextView textView = daysTextViews[weekOfMonth][6 - dayOfWeek];
-                textView.setText(formatNumber(i, digits));
+                textView.setText(utils.formatNumber(i, digits));
                 textView.setBackgroundResource(R.drawable.days);
 
-                String holidayTitle = holidays.getHolidayTitle(persianDate);
+                String holidayTitle = utils.getHolidayTitle(persianDate);
                 if (holidayTitle != null) {
                     textView.setBackgroundResource(R.drawable.holidays);
                 }

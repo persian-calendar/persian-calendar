@@ -18,12 +18,11 @@ import calendar.PersianDate;
 
 import java.util.Date;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
 public class CalendarService extends Service {
+	public CalendarUtils utils = CalendarUtils.getInstance();
 
     @Override
     public IBinder onBind(Intent paramIntent) {
@@ -61,7 +60,7 @@ public class CalendarService extends Service {
         boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
         boolean gadgetIn24 = prefs.getBoolean("GadgetIn24", false);
         boolean blackWidget = prefs.getBoolean("BlackWidget", false);
-        char[] digits = preferredDigits(context);
+        char[] digits = utils.preferredDigits(context);
 
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
                 context, 0, new Intent(context, CalendarActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -73,7 +72,7 @@ public class CalendarService extends Service {
                 R.layout.widget4x1);
         CivilDate civil = new CivilDate();
         PersianDate persian = DateConverter.civilToPersian(civil);
-        persian.setDari(isDariVersion(context));
+        persian.setDari(utils.isDariVersion(context));
         int color;
         if (blackWidget) {
             color = context.getResources().getColor(android.R.color.black);
@@ -85,9 +84,9 @@ public class CalendarService extends Service {
         remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
         remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                textShaper(persian.getMonthName()));
+                utils.textShaper(persian.getMonthName()));
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                formatNumber(persian.getDayOfMonth(), digits));
+                utils.formatNumber(persian.getDayOfMonth(), digits));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
                 launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context,
@@ -98,16 +97,16 @@ public class CalendarService extends Service {
 
         String text1;
         String text2;
-        text1 = getDayOfWeekName(civil.getDayOfWeek());
-        String dayTitle = dateToString(persian, digits, true);
-        text2 = dayTitle + PERSIAN_COMMA + " " + dateToString(civil, digits, true);
+        text1 = utils.getDayOfWeekName(civil.getDayOfWeek());
+        String dayTitle = utils.dateToString(persian, digits, true);
+        text2 = dayTitle + utils.PERSIAN_COMMA + " " + utils.dateToString(civil, digits, true);
         if (gadgetClock) {
             text2 = text1 + " " + text2;
-            text1 = getPersianFormattedClock(new Date(), digits, gadgetIn24);
+            text1 = utils.getPersianFormattedClock(new Date(), digits, gadgetIn24);
         }
 
-        text1 = textShaper(text1);
-        text2 = textShaper(text2);
+        text1 = utils.textShaper(text1);
+        text2 = utils.textShaper(text2);
 
         remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
         remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
@@ -123,15 +122,15 @@ public class CalendarService extends Service {
         }
 
         if (prefs.getBoolean("NotifyDate", true)) {
-            String contentText = dateToString(civil, digits, true) + PERSIAN_COMMA + " " +
-                    dateToString(DateConverter.civilToIslamic(civil), digits, true);
+            String contentText = utils.dateToString(civil, digits, true) + utils.PERSIAN_COMMA + " " +
+                    utils.dateToString(DateConverter.civilToIslamic(civil), digits, true);
 
             if (largeIcon == null) {
                 largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon);
             }
 
             Notification notification = new NotificationCompat.Builder(this)
-                    .setSmallIcon(DaysIcons.getInstance().getDayIconResource(persian.getDayOfMonth()))
+                    .setSmallIcon(utils.getDayIconResource(persian.getDayOfMonth()))
                     .setLargeIcon(largeIcon)
                     .setPriority(Notification.PRIORITY_LOW)
                     .setContentText(contentText)

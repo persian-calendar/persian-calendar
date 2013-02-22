@@ -16,14 +16,14 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * Program activity for android
  *
  * @author ebraminio
  */
 public class CalendarActivity extends FragmentActivity {
+	public CalendarUtils utils = CalendarUtils.getInstance();
+	
     private ViewPager viewPager;
     private TextView calendarInfo;
     private Button resetButton;
@@ -49,6 +49,9 @@ public class CalendarActivity extends FragmentActivity {
 
         // Pray Time
         prayTimeInitialize();
+        
+        // Load Holidays
+        utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
         // Reset button
         resetButton = (Button) findViewById(R.id.reset_button);
@@ -59,10 +62,6 @@ public class CalendarActivity extends FragmentActivity {
                 setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
             }
         });
-
-        // loading holidays
-        Holidays holidays = Holidays.getInstance();
-        holidays.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
         // Initializing the viewPager
         viewPager = (ViewPager) findViewById(R.id.calendar_pager);
@@ -144,8 +143,8 @@ public class CalendarActivity extends FragmentActivity {
     }
 
     private void fillCalendarInfo(CivilDate civilDate) {
-        char[] digits = preferredDigits(this);
-        prepareTextView(calendarInfo);
+        char[] digits = utils.preferredDigits(this);
+        utils.prepareTextView(calendarInfo);
         StringBuilder sb = new StringBuilder();
 
         if (isToday(civilDate)) {
@@ -154,8 +153,8 @@ public class CalendarActivity extends FragmentActivity {
         } else {
             resetButton.setVisibility(View.VISIBLE);
         }
-        sb.append(infoForSpecificDay(civilDate, digits));
-        calendarInfo.setText(textShaper(sb.toString()));
+        sb.append(utils.infoForSpecificDay(civilDate, digits));
+        calendarInfo.setText(utils.textShaper(sb.toString()));
 
         prayTimeActivityHelper.setDate(civilDate.getYear(),
                 civilDate.getMonth() - 1, civilDate.getDayOfMonth());

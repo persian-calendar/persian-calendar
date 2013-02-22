@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
-import static com.byagowi.persiancalendar.CalendarUtils.*;
-
 /**
  * About Calendar Activity
  *
  * @author ebraminio
  */
 public class CalendarAboutActivity extends Activity {
-
+	public CalendarUtils utils = CalendarUtils.getInstance();
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,16 +21,16 @@ public class CalendarAboutActivity extends Activity {
 
         setContentView(R.layout.about);
 
-        char[] digits = CalendarUtils.preferredDigits(this);
+        char[] digits = utils.preferredDigits(this);
         TextView versionTextView = (TextView) findViewById(R.id.version2);
 
-        String version = programVersion(this);
+        String version = utils.programVersion(this);
 
         String versionTitle = "نسخهٔ "
-                + CalendarUtils.formatNumber(version, digits);
+                + utils.formatNumber(version, digits);
 
-        prepareTextView(versionTextView);
-        versionTextView.setText(textShaper(versionTitle));
+        utils.prepareTextView(versionTextView);
+        versionTextView.setText(utils.textShaper(versionTitle));
 
         TextView licenseTextView = (TextView) findViewById(R.id.license);
 
