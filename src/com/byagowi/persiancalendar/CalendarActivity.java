@@ -185,19 +185,16 @@ public class CalendarActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_dateconverter:
-			Intent converterIntent = new Intent(getApplicationContext(),
-					CalendarConverterActivity.class);
-			startActivityForResult(converterIntent, 0);
+			startActivity(new Intent(getApplicationContext(),
+					CalendarConverterActivity.class));
 			break;
 		case R.id.menu_settings:
-			Intent preferenceIntent = new Intent(getApplicationContext(),
-					CalendarPreferenceActivity.class);
-			startActivityForResult(preferenceIntent, 0);
+			startActivityForResult(new Intent(getApplicationContext(),
+					CalendarPreferenceActivity.class), 0);
 			break;
 		case R.id.menu_about:
-			Intent aboutIntent = new Intent(getApplicationContext(),
-					CalendarAboutActivity.class);
-			startActivityForResult(aboutIntent, 0);
+			startActivity(new Intent(getApplicationContext(),
+					CalendarAboutActivity.class));
 			break;
 		case R.id.menu_exit:
 			finish();
