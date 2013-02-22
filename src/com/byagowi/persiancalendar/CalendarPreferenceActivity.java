@@ -1,7 +1,10 @@
 package com.byagowi.persiancalendar;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 /**
  * Preference activity
@@ -10,11 +13,34 @@ import android.preference.PreferenceActivity;
  */
 public class CalendarPreferenceActivity extends PreferenceActivity {
 	@Override
-	@SuppressWarnings("deprecation")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Better is not available for Android < 11
-		addPreferencesFromResource(R.xml.preferences);
+	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+	    	lowerThanHC();
+	    } else {
+	    	higherThanHC();
+	    }
+	}
+
+	@SuppressWarnings("deprecation")
+	private void lowerThanHC() {
+    	addPreferencesFromResource(R.xml.preferences);
+	}
+	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void higherThanHC() {
+		getFragmentManager().beginTransaction()
+				.replace(android.R.id.content, new PrefFragment())
+				.commit();
+	}
+	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class PrefFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.preferences);
+		}
 	}
 }
