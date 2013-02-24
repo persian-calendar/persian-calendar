@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.widget.TextView;
 import android.widget.Toast;
 import calendar.AbstractDate;
@@ -143,15 +142,15 @@ public class CalendarUtils {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		String key = prefs.getString("Theme", "");
-		
+
 		if (key.equals("LightTheme"))
 			return R.style.LightTheme;
 		if (key.equals("DarkTheme"))
 			return R.style.DarkTheme;
-		
+
 		return R.style.LightTheme;
 	}
-	
+
 	public void setTheme(Context context) {
 		context.setTheme(preferredTheme(context));
 	}
@@ -230,6 +229,7 @@ public class CalendarUtils {
 		sb.append(formatNumber(date.getDayOfMonth(), digits));
 		sb.append(' ');
 		sb.append(date.getMonthName());
+		
 		if (showYear) {
 			sb.append(' ');
 			sb.append(formatNumber(date.getYear(), digits));
@@ -239,33 +239,25 @@ public class CalendarUtils {
 	}
 
 	public String dayTitleSummary(CivilDate civilDate, char[] digits) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getDayOfWeekName(civilDate.getDayOfWeek()));
-		sb.append(PERSIAN_COMMA);
-		sb.append(" ");
-		sb.append(dateToString(DateConverter.civilToPersian(civilDate), digits,
-				true));
-		return sb.toString();
+		return getDayOfWeekName(civilDate.getDayOfWeek())
+				+ PERSIAN_COMMA
+				+ " "
+				+ dateToString(DateConverter.civilToPersian(civilDate), digits,
+						true);
 	}
 
 	public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(dayTitleSummary(civilDate, digits));
-		sb.append("\n\nبرابر با:\n");
-		sb.append(dateToString(civilDate, digits, true));
-		sb.append("\n");
-		sb.append(dateToString(DateConverter.civilToIslamic(civilDate), digits,
-				true));
-		sb.append("\n");
-		return sb.toString();
+		return dayTitleSummary(civilDate, digits)
+				+ "\n\nبرابر با:\n"
+				+ dateToString(civilDate, digits, true)
+				+ "\n"
+				+ dateToString(DateConverter.civilToIslamic(civilDate), digits,
+						true) + "\n";
 	}
 
 	public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(persianDate.getMonthName());
-		sb.append(' ');
-		sb.append(formatNumber(persianDate.getYear(), digits));
-		return textShaper(sb.toString());
+		return textShaper(persianDate.getMonthName() + ' '
+				+ formatNumber(persianDate.getYear(), digits));
 	}
 
 	public void quickToast(String message, Context context) {

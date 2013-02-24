@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -52,7 +51,7 @@ public class CalendarService extends Service {
 
 	private static final int NOTIFICATION_ID = 1001;
 	private NotificationManager mNotificationManager;
-	private Bitmap largeIcon;
+	private NotificationCompat.Builder mNotifyBuilder;
 
 	public void update(Context context) {
 		SharedPreferences prefs = PreferenceManager
@@ -111,9 +110,9 @@ public class CalendarService extends Service {
 		text1 = utils.textShaper(text1);
 		text2 = utils.textShaper(text2);
 
-		remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, 
+		remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
 				utils.textShaper(text1));
-		remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, 
+		remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
 				utils.textShaper(text2));
 		remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
 				launchAppPendingIntent);
@@ -122,9 +121,6 @@ public class CalendarService extends Service {
 		//
 
 		// notification
-		if (mNotificationManager == null) {
-			mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		}
 
 		if (prefs.getBoolean("NotifyDate", true)) {
 			String contentText = utils.dateToString(civil, digits, true)
@@ -133,22 +129,26 @@ public class CalendarService extends Service {
 					+ utils.dateToString(DateConverter.civilToIslamic(civil),
 							digits, true);
 
-			if (largeIcon == null) {
-				largeIcon = BitmapFactory.decodeResource(getResources(),
-						R.drawable.launcher_icon);
+			if (mNotificationManager == null) {
+				mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			}
-
-			Notification notification = new NotificationCompat.Builder(this)
+			if (mNotifyBuilder == null) {
+				mNotifyBuilder = new NotificationCompat.Builder(this)
+						.setLargeIcon(
+								BitmapFactory.decodeResource(getResources(),
+										R.drawable.launcher_icon))
+						.setPriority(Notification.PRIORITY_LOW)
+						.setContentIntent(launchAppPendingIntent)
+						.setOngoing(true);
+			}
+			mNotifyBuilder
 					.setSmallIcon(
 							utils.getDayIconResource(persian.getDayOfMonth()))
-					.setLargeIcon(largeIcon)
-					.setPriority(Notification.PRIORITY_LOW)
 					.setContentText(utils.textShaper(contentText))
-					.setContentTitle(utils.textShaper(dayTitle))
-					.setContentIntent(launchAppPendingIntent).setOngoing(true)
-					.build();
+					.setContentTitle(utils.textShaper(dayTitle));
 
-			mNotificationManager.notify(NOTIFICATION_ID, notification);
+			mNotificationManager
+					.notify(NOTIFICATION_ID, mNotifyBuilder.build());
 		} else {
 			mNotificationManager.cancel(NOTIFICATION_ID);
 		}
