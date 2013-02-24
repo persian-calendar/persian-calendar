@@ -31,5 +31,7 @@
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
     <string name="notify_date">فعال‌بودن مطلع‌سازی</string>
     <string name="enable_notify">مطلع‌سازی پایدار از انواع تاریخ‌ها</string>
+    <string name="select_skin">انتخاب پوسته</string>
+    <string name="skin">پوسته</string>
 
 </resources>

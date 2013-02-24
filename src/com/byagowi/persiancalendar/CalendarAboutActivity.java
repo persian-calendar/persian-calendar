@@ -15,6 +15,7 @@ public class CalendarAboutActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		utils.setTheme(this);
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
