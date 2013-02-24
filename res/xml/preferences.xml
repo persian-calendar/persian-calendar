@@ -2,6 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="@string/general" >
+        <ListPreference
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeArray"
+            android:entryValues="@array/themeValues"
+            android:key="Theme"
+            android:summary="@string/select_skin"
+            android:title="@string/skin" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
@@ -36,12 +44,6 @@
             android:title="@string/black_widget" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
-
-        <!--
-             <MultiSelectListPreference
-            android:key="method"
-            android:title="Pray Time Calculation Method" />
-        -->
         <EditTextPreference
             android:defaultValue="0"
             android:key="Latitude"

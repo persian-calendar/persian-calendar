@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.widget.TextView;
 import android.widget.Toast;
 import calendar.AbstractDate;
@@ -136,6 +137,23 @@ public class CalendarUtils {
 				.getDefaultSharedPreferences(context);
 		return prefs.getBoolean("PersianDigits", true) ? persianDigits
 				: arabicDigits;
+	}
+
+	private int preferredTheme(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		String key = prefs.getString("Theme", "");
+		
+		if (key.equals("LightTheme"))
+			return R.style.LightTheme;
+		if (key.equals("DarkTheme"))
+			return R.style.DarkTheme;
+		
+		return R.style.LightTheme;
+	}
+	
+	public void setTheme(Context context) {
+		context.setTheme(preferredTheme(context));
 	}
 
 	public boolean isDariVersion(Context context) {

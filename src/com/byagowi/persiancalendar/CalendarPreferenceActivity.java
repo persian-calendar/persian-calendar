@@ -12,8 +12,11 @@ import android.preference.PreferenceFragment;
  * @author ebraminio
  */
 public class CalendarPreferenceActivity extends PreferenceActivity {
+	public CalendarUtils utils = CalendarUtils.getInstance();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		utils.setTheme(this);
 		super.onCreate(savedInstanceState);
 
 	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {

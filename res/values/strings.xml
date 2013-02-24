@@ -31,5 +31,7 @@
     <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Permanent notification for all date types</string>
+    <string name="select_skin">Select a skin</string>
+    <string name="skin">Skin</string>
 
 </resources>
