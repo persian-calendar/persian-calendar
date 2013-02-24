@@ -3,7 +3,7 @@
 
     <style name="LightTheme" parent="android:Theme.Light" />
 
-    <style name="DarkTheme">
+    <style name="DarkTheme" parent="android:Theme.Black">
         <item name="android:textColor">@android:color/white</item>
     </style>
 

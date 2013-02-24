@@ -15,6 +15,8 @@ Contents
 ==============================
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/main.png"
  alt="Persian Calendar Screenshot" title="Program Screenshot" width="200px" />
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/darkmain.png"
+ alt="Persian Calendar Screenshot Dark Theme" title="Program Screenshot Dark" width="200px" />
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/lockscreenwithnotification.png"
  alt="Persian Calendar Day of Month on Lockscreen with Notification Icon" title="Lockscreen Persian Date" width="200px" />
 <img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/lockscreenwidget.png"
