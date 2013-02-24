@@ -9,5 +9,23 @@
         <item>LightTheme</item>
         <item>DarkTheme</item>
     </string-array>
+    <string-array name="prayMethodArray">
+        <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
+        <item>Muslim World League</item>
+        <item>Islamic Society of North America</item>
+        <item>Egyptian General Authority of Survey</item>
+        <item>Umm Al-Qura University, Makkah</item>
+        <item>University of Islamic Sciences, Karachi</item>
+        <item>Institute of Geophysics, University of Tehran</item>
+    </string-array>
+    <string-array name="prayMethodValues">
+        <item>Jafari</item>
+        <item>MWL</item>
+        <item>ISNA</item>
+        <item>Egypt</item>
+        <item>Makkah</item>
+        <item>Karachi</item>
+        <item>Tehran</item>
+    </string-array>
 
 </resources>

@@ -33,5 +33,8 @@
     <string name="enable_notify">Permanent notification for all date types</string>
     <string name="select_skin">Select a skin</string>
     <string name="skin">Skin</string>
+    <string name="pray_methods">Calculation methods</string>
+    <string name="pray_methods_calculation">Calculation methods for pray times</string>
+    <string name="altitude">Altitude in meter (optional)</string>
 
 </resources>
