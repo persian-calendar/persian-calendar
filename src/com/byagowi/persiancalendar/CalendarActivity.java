@@ -206,9 +206,9 @@ public class CalendarActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		bringTodayYearMonth();
-		startService(new Intent(this, CalendarService.class));
-		prayTimeInitialize();
-		super.onActivityResult(requestCode, resultCode, data);
+		// Restart activity
+		Intent intent = getIntent();
+		finish();
+		startActivity(intent);
 	}
 }
