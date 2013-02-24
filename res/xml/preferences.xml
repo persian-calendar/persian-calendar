@@ -44,6 +44,13 @@
             android:title="@string/black_widget" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
+        <ListPreference
+            android:defaultValue="Jafari"
+            android:entries="@array/prayMethodArray"
+            android:entryValues="@array/prayMethodValues"
+            android:key="PrayTimeMethod"
+            android:summary="@string/pray_methods"
+            android:title="@string/pray_methods_calculation" />
         <EditTextPreference
             android:defaultValue="0"
             android:key="Latitude"
@@ -52,6 +59,10 @@
             android:defaultValue="0"
             android:key="Longitude"
             android:title="@string/longitude" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Altitude"
+            android:title="@string/altitude" />
     </PreferenceCategory>
 
 </PreferenceScreen>

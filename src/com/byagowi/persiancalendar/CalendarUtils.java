@@ -16,6 +16,7 @@ import calendar.DateConverter;
 import calendar.PersianDate;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
+import com.github.praytimes.CalculationMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,7 +104,16 @@ public class CalendarUtils {
 				.edit();
 		editor.putString("Latitude", String.valueOf(location.getLatitude()));
 		editor.putString("Longitude", String.valueOf(location.getLongitude()));
+		editor.putString("Altitude", String.valueOf(location.getAltitude()));
 		editor.commit();
+	}
+	
+	public CalculationMethod getCalculationMethod(Context context) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		
+		return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
+				"Jafari")); // Seems Iran using Jafari method
 	}
 
 	public Location getLocation(Context context) {
@@ -117,15 +127,18 @@ public class CalendarUtils {
 					"0")));
 			location.setLongitude(Double.parseDouble(prefs.getString(
 					"Longitude", "0")));
+			location.setAltitude(Double.parseDouble(prefs.getString(
+					"Altitude", "0")));
 		} catch (RuntimeException e) {
 			location.setLatitude(0);
 			location.setLongitude(0);
+			location.setAltitude(0);
 			setLocation(location, context);
 			return null;
 		}
 
-		// we had not any location before
-		if (location.getLatitude() == 0 && location.getLatitude() == 0) {
+		// If latitude or longitude is zero probably preference not set yet
+		if (location.getLatitude() == 0 && location.getLongitude() == 0) {
 			return null;
 		}
 		return location;

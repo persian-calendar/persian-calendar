@@ -27,7 +27,7 @@ class PrayTimeActivityHelper {
 
 	private final static boolean POSITIONING_PERMISSIONS = false;
 	private final CalendarActivity calendarActivity;
-	private Date date;
+	private Date date = new Date();
 	private Location location;
 	private final TextView prayTimeTextView;
 	private LocationManager locationManager;
@@ -35,7 +35,6 @@ class PrayTimeActivityHelper {
 	public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
 		this.calendarActivity = calendarActivity;
 		this.utils = calendarActivity.utils;
-		date = new Date();
 		prayTimeTextView = (TextView) calendarActivity
 				.findViewById(R.id.today_praytimes);
 	}
@@ -115,14 +114,14 @@ class PrayTimeActivityHelper {
 
 	private void fillPrayTime() {
 		utils.setLocation(location, calendarActivity);
-		location.getLongitude();
-		PrayTimesCalculator ptc = new PrayTimesCalculator(
-				CalculationMethod.Jafari); // Why Jafari? I don't know either,
-		// but seems Iran is using it.
-		StringBuilder sb = new StringBuilder();
-		Map<PrayTime, Clock> prayTimes = ptc.calculate(date, new Coordinate(
-				location.getLatitude(), location.getLongitude()));
 
+		PrayTimesCalculator ptc = new PrayTimesCalculator(
+				utils.getCalculationMethod(calendarActivity));
+		StringBuilder sb = new StringBuilder();
+		Map<PrayTime, Clock> prayTimes = ptc.calculate(date,
+				new Coordinate(location.getLatitude(), location.getLongitude(),
+						location.getAltitude()));
+		
 		sb.append("اذان صبح: ");
 		sb.append(prayTimes.get(PrayTime.Imsak).toString());
 

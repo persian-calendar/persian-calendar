@@ -9,7 +9,7 @@ public class Coordinate {
 		this(latitude, longitude, 0);
 	}
 
-	private Coordinate(double latitude, double longitude, double elevation) {
+	public Coordinate(double latitude, double longitude, double elevation) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.elevation = elevation;

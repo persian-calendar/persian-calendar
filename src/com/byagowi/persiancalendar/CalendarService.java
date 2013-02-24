@@ -121,17 +121,16 @@ public class CalendarService extends Service {
 		//
 
 		// notification
-
+		if (mNotificationManager == null) {
+			mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		}
 		if (prefs.getBoolean("NotifyDate", true)) {
 			String contentText = utils.dateToString(civil, digits, true)
 					+ utils.PERSIAN_COMMA
 					+ " "
 					+ utils.dateToString(DateConverter.civilToIslamic(civil),
 							digits, true);
-
-			if (mNotificationManager == null) {
-				mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			}
+			
 			if (mNotifyBuilder == null) {
 				mNotifyBuilder = new NotificationCompat.Builder(this)
 						.setLargeIcon(

@@ -33,5 +33,8 @@
     <string name="enable_notify">مطلع‌سازی پایدار از انواع تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
+    <string name="pray_methods">شیوه‌های محاسبه</string>
+    <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>
+    <string name="altitude">ارتفاع به متر (اختیاری)</string>
 
 </resources>
