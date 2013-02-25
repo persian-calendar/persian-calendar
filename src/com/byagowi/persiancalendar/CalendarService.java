@@ -138,16 +138,16 @@ public class CalendarService extends Service {
 							.setOngoing(true);
 				}
 
+				String title = utils.getDayOfWeekName(civil.getDayOfWeek())
+						+ utils.PERSIAN_COMMA + " "
+						+ utils.dateToString(persian, digits, true);
+				
 				String contentText = utils.dateToString(civil, digits, true)
 						+ utils.PERSIAN_COMMA
 						+ " "
 						+ utils.dateToString(
 								DateConverter.civilToIslamic(civil), digits,
 								true);
-
-				String title = utils.getDayOfWeekName(civil.getDayOfWeek())
-						+ utils.PERSIAN_COMMA + " "
-						+ utils.dateToString(persian, digits, true);
 
 				mNotifyBuilder
 						.setSmallIcon(
