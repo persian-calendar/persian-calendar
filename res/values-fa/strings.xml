@@ -35,6 +35,7 @@
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
     <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>
-    <string name="altitude">ارتفاع به متر (اختیاری)</string>
+    <string name="altitude">ارتفاع</string>
+    <string name="altitude_praytime">به متر (اختیاری)</string>
 
 </resources>

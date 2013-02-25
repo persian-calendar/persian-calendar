@@ -49,8 +49,8 @@
             android:entries="@array/prayMethodArray"
             android:entryValues="@array/prayMethodValues"
             android:key="PrayTimeMethod"
-            android:summary="@string/pray_methods"
-            android:title="@string/pray_methods_calculation" />
+            android:summary="@string/pray_methods_calculation"
+            android:title="@string/pray_methods" />
         <EditTextPreference
             android:defaultValue="0"
             android:key="Latitude"
@@ -62,7 +62,8 @@
         <EditTextPreference
             android:defaultValue="0"
             android:key="Altitude"
-            android:title="@string/altitude" />
+            android:title="@string/altitude"
+            android:summary="@string/altitude_praytime" />
     </PreferenceCategory>
 
 </PreferenceScreen>
