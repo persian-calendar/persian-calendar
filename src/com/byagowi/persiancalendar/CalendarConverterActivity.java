@@ -20,7 +20,7 @@ import java.util.List;
  * @author ebraminio
  */
 public class CalendarConverterActivity extends Activity {
-	public CalendarUtils utils = CalendarUtils.getInstance();
+	private final CalendarUtils utils = CalendarUtils.getInstance();
 
 	private Spinner calendarTypeSpinner;
 	private Spinner yearSpinner;

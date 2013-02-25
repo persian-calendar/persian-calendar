@@ -23,7 +23,7 @@ import java.util.Map;
  * @author ebraminio
  */
 class PrayTimeActivityHelper {
-	private CalendarUtils utils;
+	private final CalendarUtils utils;
 
 	private final static boolean POSITIONING_PERMISSIONS = false;
 	private final CalendarActivity calendarActivity;

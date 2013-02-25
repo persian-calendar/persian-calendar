@@ -11,7 +11,7 @@ import android.widget.TextView;
  * @author ebraminio
  */
 public class CalendarAboutActivity extends Activity {
-	public CalendarUtils utils = CalendarUtils.getInstance();
+	private final CalendarUtils utils = CalendarUtils.getInstance();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

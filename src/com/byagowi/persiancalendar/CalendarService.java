@@ -21,7 +21,7 @@ import java.util.Date;
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
 public class CalendarService extends Service {
-	public CalendarUtils utils = CalendarUtils.getInstance();
+	private final CalendarUtils utils = CalendarUtils.getInstance();
 
 	@Override
 	public IBinder onBind(Intent paramIntent) {
@@ -73,83 +73,94 @@ public class CalendarService extends Service {
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 		persian.setDari(utils.isDariVersion(context));
-		int color;
-		if (blackWidget) {
-			color = context.getResources().getColor(android.R.color.black);
-		} else {
-			color = context.getResources().getColor(android.R.color.white);
-		}
 
 		// Widget1x1
-		remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
-		remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
-		remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-				utils.textShaper(persian.getMonthName()));
-		remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-				utils.formatNumber(persian.getDayOfMonth(), digits));
-		remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
-				launchAppPendingIntent);
-		manager.updateAppWidget(new ComponentName(context,
-				CalendarWidget1x1.class), remoteViews1);
-		// Widget 4x1
-		remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
-		remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
+		{
+			int color = context.getResources()
+					.getColor(
+							blackWidget ? android.R.color.black
+									: android.R.color.white);
 
-		String text1;
-		String text2;
-		text1 = utils.getDayOfWeekName(civil.getDayOfWeek());
-		String dayTitle = utils.dateToString(persian, digits, true);
-		text2 = dayTitle + utils.PERSIAN_COMMA + " "
-				+ utils.dateToString(civil, digits, true);
-		if (gadgetClock) {
-			text2 = text1 + " " + text2;
-			text1 = utils.getPersianFormattedClock(new Date(), digits,
-					gadgetIn24);
+			remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
+			remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
+			remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
+					utils.textShaper(persian.getMonthName()));
+			remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
+					utils.formatNumber(persian.getDayOfMonth(), digits));
+			remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
+					launchAppPendingIntent);
+			manager.updateAppWidget(new ComponentName(context,
+					CalendarWidget1x1.class), remoteViews1);
+			// Widget 4x1
+			remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
+			remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
+
+			String text1;
+			String text2;
+			text1 = utils.getDayOfWeekName(civil.getDayOfWeek());
+			String dayTitle = utils.dateToString(persian, digits, true);
+			text2 = dayTitle + utils.PERSIAN_COMMA + " "
+					+ utils.dateToString(civil, digits, true);
+			if (gadgetClock) {
+				text2 = text1 + " " + text2;
+				text1 = utils.getPersianFormattedClock(new Date(), digits,
+						gadgetIn24);
+			}
+
+			text1 = utils.textShaper(text1);
+			text2 = utils.textShaper(text2);
+
+			remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
+					utils.textShaper(text1));
+			remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
+					utils.textShaper(text2));
+			remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
+					launchAppPendingIntent);
+			manager.updateAppWidget(new ComponentName(context,
+					CalendarWidget4x1.class), remoteViews4);
 		}
-
-		text1 = utils.textShaper(text1);
-		text2 = utils.textShaper(text2);
-
-		remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
-				utils.textShaper(text1));
-		remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
-				utils.textShaper(text2));
-		remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
-				launchAppPendingIntent);
-		manager.updateAppWidget(new ComponentName(context,
-				CalendarWidget4x1.class), remoteViews4);
 		//
 
 		// notification
-		if (mNotificationManager == null) {
-			mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		}
-		if (prefs.getBoolean("NotifyDate", true)) {
-			String contentText = utils.dateToString(civil, digits, true)
-					+ utils.PERSIAN_COMMA
-					+ " "
-					+ utils.dateToString(DateConverter.civilToIslamic(civil),
-							digits, true);
-			
-			if (mNotifyBuilder == null) {
-				mNotifyBuilder = new NotificationCompat.Builder(this)
-						.setLargeIcon(
-								BitmapFactory.decodeResource(getResources(),
-										R.drawable.launcher_icon))
-						.setPriority(Notification.PRIORITY_LOW)
-						.setContentIntent(launchAppPendingIntent)
-						.setOngoing(true);
+		{
+			if (mNotificationManager == null) {
+				mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			}
-			mNotifyBuilder
-					.setSmallIcon(
-							utils.getDayIconResource(persian.getDayOfMonth()))
-					.setContentText(utils.textShaper(contentText))
-					.setContentTitle(utils.textShaper(dayTitle));
+			if (prefs.getBoolean("NotifyDate", true)) {
+				if (mNotifyBuilder == null) {
+					mNotifyBuilder = new NotificationCompat.Builder(this)
+							.setLargeIcon(
+									BitmapFactory.decodeResource(
+											getResources(),
+											R.drawable.launcher_icon))
+							.setPriority(Notification.PRIORITY_LOW)
+							.setContentIntent(launchAppPendingIntent)
+							.setOngoing(true);
+				}
 
-			mNotificationManager
-					.notify(NOTIFICATION_ID, mNotifyBuilder.build());
-		} else {
-			mNotificationManager.cancel(NOTIFICATION_ID);
+				String contentText = utils.dateToString(civil, digits, true)
+						+ utils.PERSIAN_COMMA
+						+ " "
+						+ utils.dateToString(
+								DateConverter.civilToIslamic(civil), digits,
+								true);
+
+				String title = utils.getDayOfWeekName(civil.getDayOfWeek())
+						+ utils.PERSIAN_COMMA + " "
+						+ utils.dateToString(persian, digits, true);
+
+				mNotifyBuilder
+						.setSmallIcon(
+								utils.getDayIconResource(persian
+										.getDayOfMonth()))
+						.setContentText(utils.textShaper(contentText))
+						.setContentTitle(utils.textShaper(title));
+
+				mNotificationManager.notify(NOTIFICATION_ID,
+						mNotifyBuilder.build());
+			} else {
+				mNotificationManager.cancel(NOTIFICATION_ID);
+			}
 		}
 		//
 	}

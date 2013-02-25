@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 // borrowed from http://www.codeproject.com/Articles/113831/An-Advanced-Splash-Screen-for-Android-App :)
 public class CalendarSplashScreenActivity extends Activity {
-	public CalendarUtils utils = CalendarUtils.getInstance();
+	private final CalendarUtils utils = CalendarUtils.getInstance();
 
 	/**
 	 * The thread to process splash screen events

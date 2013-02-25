@@ -24,7 +24,7 @@ import com.byagowi.common.Range;
  * @author ebraminio
  */
 public class CalendarMonthFragment extends Fragment {
-	public CalendarUtils utils = CalendarUtils.getInstance();
+	private final CalendarUtils utils = CalendarUtils.getInstance();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
