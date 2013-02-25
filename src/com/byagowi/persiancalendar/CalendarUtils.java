@@ -151,21 +151,19 @@ public class CalendarUtils {
 				: arabicDigits;
 	}
 
-	private int preferredTheme(Context context) {
+	public void setTheme(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		String key = prefs.getString("Theme", "");
 
+		int theme = R.style.LightTheme; // default theme
+		
 		if (key.equals("LightTheme"))
-			return R.style.LightTheme;
+			theme = R.style.LightTheme;
 		if (key.equals("DarkTheme"))
-			return R.style.DarkTheme;
-
-		return R.style.LightTheme;
-	}
-
-	public void setTheme(Context context) {
-		context.setTheme(preferredTheme(context));
+			theme = R.style.DarkTheme;
+		
+		context.setTheme(theme);
 	}
 
 	public boolean isDariVersion(Context context) {
