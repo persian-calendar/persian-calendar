@@ -139,9 +139,8 @@ public class CalendarService extends Service {
 				}
 
 				String title = utils.getDayOfWeekName(civil.getDayOfWeek())
-						+ " "
-						+ utils.dateToString(persian, digits, true);
-				
+						+ " " + utils.dateToString(persian, digits, true);
+
 				String contentText = utils.dateToString(civil, digits, true)
 						+ utils.PERSIAN_COMMA
 						+ " "
