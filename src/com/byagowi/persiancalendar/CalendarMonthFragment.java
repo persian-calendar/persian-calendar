@@ -41,7 +41,7 @@ public class CalendarMonthFragment extends Fragment {
 		currentMonthTextView.setLayoutParams(new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		currentMonthTextView.setGravity(Gravity.RIGHT);
-		currentMonthTextView.setPadding(0, 15, 10, 2);
+		currentMonthTextView.setPadding(0, 0, 10, 2);
 		currentMonthTextView.setTextSize(25);
 		utils.prepareTextView(currentMonthTextView);
 
@@ -152,7 +152,6 @@ public class CalendarMonthFragment extends Fragment {
 		} catch (DayOutOfRangeException e) {
 			// okay, it was expected
 		}
-		
 		return root;
 	}
 }
