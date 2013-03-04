@@ -152,6 +152,7 @@ public class CalendarMonthFragment extends Fragment {
 		} catch (DayOutOfRangeException e) {
 			// okay, it was expected
 		}
+		
 		return root;
 	}
 }

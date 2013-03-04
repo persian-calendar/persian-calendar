@@ -18,7 +18,8 @@
     <application
         android:allowBackup="false"
         android:icon="@drawable/launcher_icon"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:supportsRtl="true" >
         <activity
             android:name=".CalendarActivity"
             android:exported="false"

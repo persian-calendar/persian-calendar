@@ -30,7 +30,7 @@ public class CalendarActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	    utils.setTheme(this);
+		utils.setTheme(this);
 		super.onCreate(savedInstanceState);
 
 		startService(new Intent(this, CalendarService.class));
