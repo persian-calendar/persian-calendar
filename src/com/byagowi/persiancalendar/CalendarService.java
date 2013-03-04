@@ -7,6 +7,7 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -58,7 +59,7 @@ public class CalendarService extends Service {
 				.getDefaultSharedPreferences(context);
 		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
 		boolean gadgetIn24 = prefs.getBoolean("GadgetIn24", false);
-		boolean blackWidget = prefs.getBoolean("BlackWidget", false);
+		int color = prefs.getInt("WidgetTextColor", Color.WHITE);
 		char[] digits = utils.preferredDigits(context);
 
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
@@ -76,11 +77,6 @@ public class CalendarService extends Service {
 
 		// Widget1x1
 		{
-			int color = context.getResources()
-					.getColor(
-							blackWidget ? android.R.color.black
-									: android.R.color.white);
-
 			remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
 			remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
 			remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
