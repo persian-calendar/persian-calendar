@@ -131,6 +131,9 @@ class PrayTimeActivityHelper {
 		sb.append("\nاذان ظهر: ");
 		sb.append(prayTimes.get(PrayTime.Dhuhr).toString());
 
+		sb.append("\nغروب آفتاب: ");
+		sb.append(prayTimes.get(PrayTime.Sunset).toString());
+		
 		sb.append("\nاذان مغرب: ");
 		sb.append(prayTimes.get(PrayTime.Maghrib).toString());
 
