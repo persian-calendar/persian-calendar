@@ -26,8 +26,8 @@
     <string name="enable_dari">فعال‌سازی ماه‌های دری</string>
     <string name="widget">ویجت</string>
     <string name="general">عمومی</string>
-    <string name="black_widget">ویجت‌های سیاه</string>
-    <string name="black_font_widgets">قلم سیاه برای ویجت‌ها</string>
+    <string name="widget_text_color">رنگ نوشته‌های ویجت</string>
+    <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ویجت‌ها</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی</string>
     <string name="notify_date">فعال‌بودن مطلع‌سازی</string>
     <string name="enable_notify">مطلع‌سازی پایدار از انواع تاریخ‌ها</string>

@@ -37,11 +37,13 @@
             android:key="GadgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="BlackWidget"
-            android:summary="@string/black_font_widgets"
-            android:title="@string/black_widget" />
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            alphaSlider="true"
+            android:defaultValue="@android:color/white"
+            android:key="WidgetTextColor"
+            android:summary="@string/select_widgets_text_color"
+            android:title="@string/widget_text_color" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
         <ListPreference
@@ -51,6 +53,7 @@
             android:key="PrayTimeMethod"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
+
         <EditTextPreference
             android:defaultValue="0"
             android:key="Latitude"
@@ -62,8 +65,8 @@
         <EditTextPreference
             android:defaultValue="0"
             android:key="Altitude"
-            android:title="@string/altitude"
-            android:summary="@string/altitude_praytime" />
+            android:summary="@string/altitude_praytime"
+            android:title="@string/altitude" />
     </PreferenceCategory>
 
 </PreferenceScreen>

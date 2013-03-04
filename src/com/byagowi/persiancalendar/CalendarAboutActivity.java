@@ -53,12 +53,12 @@ public class CalendarAboutActivity extends Activity {
 						+ "You should have received a copy of the GNU General Public License "
 						+ "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
 						+ "\n"
-						+ "Launcher icon is by Behdad Pournader.\n"
-						+ "Splash screen logo is by Iman Soltanian.\n"
-						+ "Calendar converter code from http://code.google.com/p/mobile-persian-calendar/ "
-						+ "which is under GPLv2.\n"
-						+ "ArabicShaper for shaping Arabic characters is from Azizhuss which is "
-						+ "under BSD License.\n"
+						+ "Thanks to:\n"
+						+ "* Behdad Pournader for launcher icon\n"
+						+ "* Iman Soltanian for splash screen logo\n"
+						+ "* Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)\n"
+						+ "* ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)\n"
+						+ "* ColorPickerPreference https://github.com/attenzione/android-ColorPickerPreference (Apache)\n"
 						+ "\n"
 						+ "For bug report: http://github.com/ebraminio/DroidPersianCalendar");
 	}
