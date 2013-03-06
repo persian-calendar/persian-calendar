@@ -35,7 +35,7 @@ Contents
 * https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar
 * http://cafebazaar.ir/app/com.byagowi.persiancalendar
 * https://github.com/ebraminio/DroidPersianCalendar/raw/master/PersianCalendar.apk
-<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/screenshots/preference.png"
+<img src="https://github.com/ebraminio/DroidPersianCalendar/raw/master/extra/githubapkurl.png"
  alt="PersianCalendar.apk Download QR Code" title="PersianCalendar.apk Download QR Code" width="200px" />
 
 3. License
