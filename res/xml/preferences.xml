@@ -33,7 +33,7 @@
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="GadgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
