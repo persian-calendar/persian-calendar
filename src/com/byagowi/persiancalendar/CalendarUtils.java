@@ -107,11 +107,11 @@ public class CalendarUtils {
 		editor.putString("Altitude", String.valueOf(location.getAltitude()));
 		editor.commit();
 	}
-	
+
 	public CalculationMethod getCalculationMethod(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		
+
 		return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
 				"Jafari")); // Seems Iran using Jafari method
 	}
@@ -127,8 +127,8 @@ public class CalendarUtils {
 					"0")));
 			location.setLongitude(Double.parseDouble(prefs.getString(
 					"Longitude", "0")));
-			location.setAltitude(Double.parseDouble(prefs.getString(
-					"Altitude", "0")));
+			location.setAltitude(Double.parseDouble(prefs.getString("Altitude",
+					"0")));
 		} catch (RuntimeException e) {
 			location.setLatitude(0);
 			location.setLongitude(0);
@@ -157,12 +157,12 @@ public class CalendarUtils {
 		String key = prefs.getString("Theme", "");
 
 		int theme = R.style.LightTheme; // default theme
-		
+
 		if (key.equals("LightTheme"))
 			theme = R.style.LightTheme;
 		if (key.equals("DarkTheme"))
 			theme = R.style.DarkTheme;
-		
+
 		context.setTheme(theme);
 	}
 
@@ -195,7 +195,7 @@ public class CalendarUtils {
 		calendar.setTime(date);
 
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		if (in24) {
+		if (!in24) {
 			if (calendar.get(Calendar.HOUR_OF_DAY) > 12) {
 				timeText = PM_IN_PERSIAN;
 				hour -= 12;
@@ -209,7 +209,7 @@ public class CalendarUtils {
 				+ formatNumber(
 						addExtraZeroForClock(calendar.get(Calendar.MINUTE)),
 						digits);
-		if (in24) {
+		if (!in24) {
 			result = result + " " + timeText;
 		}
 		return result;
@@ -240,7 +240,7 @@ public class CalendarUtils {
 		sb.append(formatNumber(date.getDayOfMonth(), digits));
 		sb.append(' ');
 		sb.append(date.getMonthName());
-		
+
 		if (showYear) {
 			sb.append(' ');
 			sb.append(formatNumber(date.getYear(), digits));

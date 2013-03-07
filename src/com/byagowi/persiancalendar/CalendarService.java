@@ -38,6 +38,8 @@ public class CalendarService extends Service {
 			IntentFilter intentFilter = new IntentFilter();
 			intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
 			intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+			intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+			intentFilter.addAction(Intent.ACTION_SCREEN_ON);
 			intentFilter.addAction(Intent.ACTION_TIME_TICK);
 			registerReceiver(new BroadcastReceiver() {
 				@Override
@@ -57,26 +59,26 @@ public class CalendarService extends Service {
 	public void update(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		boolean gadgetClock = prefs.getBoolean("GadgetClock", true);
-		boolean gadgetIn24 = prefs.getBoolean("GadgetIn24", false);
-		int color = prefs.getInt("WidgetTextColor", Color.WHITE);
 		char[] digits = utils.preferredDigits(context);
 
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, new Intent(context, CalendarActivity.class),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		AppWidgetManager manager = AppWidgetManager.getInstance(context);
-		RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(),
-				R.layout.widget1x1);
-		RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(),
-				R.layout.widget4x1);
 		CivilDate civil = new CivilDate();
 		PersianDate persian = DateConverter.civilToPersian(civil);
 		persian.setDari(utils.isDariVersion(context));
 
-		// Widget1x1
+		// Widgets
 		{
+			AppWidgetManager manager = AppWidgetManager.getInstance(context);
+			RemoteViews remoteViews1 = new RemoteViews(
+					context.getPackageName(), R.layout.widget1x1);
+			RemoteViews remoteViews4 = new RemoteViews(
+					context.getPackageName(), R.layout.widget4x1);
+			int color = prefs.getInt("WidgetTextColor", Color.WHITE);
+
+			// Widget 1x1
 			remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
 			remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
 			remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
@@ -87,6 +89,7 @@ public class CalendarService extends Service {
 					launchAppPendingIntent);
 			manager.updateAppWidget(new ComponentName(context,
 					CalendarWidget1x1.class), remoteViews1);
+
 			// Widget 4x1
 			remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
 			remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
@@ -97,14 +100,14 @@ public class CalendarService extends Service {
 			String dayTitle = utils.dateToString(persian, digits, true);
 			text2 = dayTitle + utils.PERSIAN_COMMA + " "
 					+ utils.dateToString(civil, digits, true);
-			if (gadgetClock) {
-				text2 = text1 + " " + text2;
-				text1 = utils.getPersianFormattedClock(new Date(), digits,
-						gadgetIn24);
-			}
 
-			text1 = utils.textShaper(text1);
-			text2 = utils.textShaper(text2);
+			boolean enableClock = prefs.getBoolean("GadgetClock", true);
+			if (enableClock) {
+				text2 = text1 + " " + text2;
+				boolean in24 = prefs.getBoolean("GadgetIn24", true);
+				text1 = utils
+						.getPersianFormattedClock(new Date(), digits, in24);
+			}
 
 			remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
 					utils.textShaper(text1));
@@ -115,9 +118,8 @@ public class CalendarService extends Service {
 			manager.updateAppWidget(new ComponentName(context,
 					CalendarWidget4x1.class), remoteViews4);
 		}
-		//
 
-		// notification
+		// Notification Permanent Bar
 		{
 			if (mNotificationManager == null) {
 				mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -157,6 +159,5 @@ public class CalendarService extends Service {
 				mNotificationManager.cancel(NOTIFICATION_ID);
 			}
 		}
-		//
 	}
 }
