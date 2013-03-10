@@ -70,7 +70,7 @@ public class CalendarUtils {
 		return "";
 	}
 
-	public final String shamsi = textShaper("هجری شمسی");
+	public final String shamsi = textShaper("هجری خورشیدی");
 	public final String islamic = textShaper("هجری قمری");
 	public final String georgian = textShaper("میلادی");
 
