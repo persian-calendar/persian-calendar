@@ -41,6 +41,11 @@ public class CalendarActivity extends FragmentActivity {
 				removeTitle = false;
 			}
 		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+				&& Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			// if a tablet version is installed
+			removeTitle = false;
+		}
 		if (removeTitle) {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
