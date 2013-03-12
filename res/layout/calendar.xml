@@ -17,7 +17,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/calendar_pager"
             android:layout_width="fill_parent"
-            android:layout_height="305sp"
+            android:layout_height="285sp"
             android:layoutDirection="ltr" />
 
         <LinearLayout
