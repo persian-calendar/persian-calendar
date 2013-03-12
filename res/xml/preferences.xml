@@ -29,12 +29,12 @@
     <PreferenceCategory android:title="@string/widget" >
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="GadgetClock"
+            android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="GadgetIn24"
+            android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
 
