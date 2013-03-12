@@ -101,10 +101,10 @@ public class CalendarService extends Service {
 			text2 = dayTitle + utils.PERSIAN_COMMA + " "
 					+ utils.dateToString(civil, digits, true);
 
-			boolean enableClock = prefs.getBoolean("GadgetClock", true);
+			boolean enableClock = prefs.getBoolean("WidgetClock", true);
 			if (enableClock) {
 				text2 = text1 + " " + text2;
-				boolean in24 = prefs.getBoolean("GadgetIn24", true);
+				boolean in24 = prefs.getBoolean("WidgetIn24", true);
 				text1 = utils
 						.getPersianFormattedClock(new Date(), digits, in24);
 			}
