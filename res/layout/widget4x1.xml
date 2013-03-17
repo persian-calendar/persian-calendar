@@ -4,6 +4,7 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:textDirection="rtl"
     tools:context=".CalendarWidget4x1" >
@@ -13,6 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:text="@string/clock"
         android:textColor="@android:color/white"
         android:textSize="36sp" />
 
@@ -21,6 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:text="@string/date"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 

@@ -4,34 +4,30 @@
     android:id="@+id/widget_layout1x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="center"
     android:orientation="vertical"
     android:textDirection="rtl"
     tools:context=".CalendarWidget1x1" >
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textPlaceholder1_1x1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical" >
+        android:gravity="center"
+        android:text="@string/day"
+        android:textColor="@android:color/white"
+        android:textDirection="rtl"
+        android:textSize="40sp" />
 
-        <TextView
-            android:id="@+id/textPlaceholder1_1x1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textDirection="rtl"
-            android:textSize="40sp" />
-
-        <TextView
-            android:id="@+id/textPlaceholder2_1x1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:gravity="center_horizontal|bottom"
-            android:textColor="@android:color/white"
-            android:textDirection="rtl"
-            android:textSize="20sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textPlaceholder2_1x1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_horizontal|bottom"
+        android:text="@string/month"
+        android:textColor="@android:color/white"
+        android:textDirection="rtl"
+        android:textSize="20sp" />
 
 </LinearLayout>
