@@ -1,15 +1,14 @@
 package com.byagowi.persiancalendar;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -59,6 +58,7 @@ public class CalendarService extends Service {
 
 	private static final int NOTIFICATION_ID = 1001;
 	private NotificationManager mNotificationManager;
+	private Bitmap largeIcon;
 
 	public void update(Context context) {
 		SharedPreferences prefs = PreferenceManager
@@ -140,61 +140,26 @@ public class CalendarService extends Service {
 								DateConverter.civilToIslamic(civil), digits,
 								true);
 
-				Notification notification;
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-					notification = notificationBuilderNew(
-							launchAppPendingIntent, persian, title, contentText);
-				else
-					notification = notificationBuilderCompat(
-							launchAppPendingIntent, persian, title, contentText);
+				if (largeIcon == null)
+					largeIcon = BitmapFactory.decodeResource(getResources(),
+							R.drawable.launcher_icon);
 
-				mNotificationManager.notify(NOTIFICATION_ID, notification);
+				mNotificationManager.notify(
+						NOTIFICATION_ID,
+						new NotificationCompat.Builder(this)
+								.setPriority(Notification.PRIORITY_LOW)
+								.setOngoing(true)
+								.setLargeIcon(largeIcon)
+								.setSmallIcon(
+										utils.getDayIconResource(persian
+												.getDayOfMonth()))
+								.setContentIntent(launchAppPendingIntent)
+								.setContentText(utils.textShaper(contentText))
+								.setContentTitle(utils.textShaper(title))
+								.build());
 			} else {
 				mNotificationManager.cancel(NOTIFICATION_ID);
 			}
 		}
-	}
-
-	NotificationCompat.Builder mBuilderCompat;
-
-	private Notification notificationBuilderCompat(
-			PendingIntent launchAppPendingIntent, PersianDate persian,
-			String title, String contentText) {
-		if (mBuilderCompat == null) {
-			mBuilderCompat = new NotificationCompat.Builder(this)
-					.setPriority(Notification.PRIORITY_LOW)
-					.setOngoing(true)
-					.setLargeIcon(
-							BitmapFactory.decodeResource(getResources(),
-									R.drawable.launcher_icon));
-		}
-		return mBuilderCompat
-				.setSmallIcon(utils.getDayIconResource(persian.getDayOfMonth()))
-				.setContentIntent(launchAppPendingIntent)
-				.setContentText(utils.textShaper(contentText))
-				.setContentTitle(utils.textShaper(title)).build();
-	}
-
-	Notification.Builder mBuilderNew;
-
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-	private Notification notificationBuilderNew(
-			PendingIntent launchAppPendingIntent, PersianDate persian,
-			String title, String contentText) {
-		if (mBuilderNew == null) {
-			mBuilderNew = new Notification.Builder(this)
-					.setPriority(Notification.PRIORITY_LOW)
-					.setOngoing(true)
-					.setLargeIcon(
-							BitmapFactory.decodeResource(getResources(),
-									R.drawable.launcher_icon))
-					// Don't show time on notifications, other line must be same
-					.setShowWhen(false);
-		}
-		return mBuilderNew
-				.setSmallIcon(utils.getDayIconResource(persian.getDayOfMonth()))
-				.setContentIntent(launchAppPendingIntent)
-				.setContentText(utils.textShaper(contentText))
-				.setContentTitle(utils.textShaper(title)).build();
 	}
 }
