@@ -28,6 +28,6 @@
         android:text="@string/month"
         android:textColor="@android:color/white"
         android:textDirection="rtl"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>
