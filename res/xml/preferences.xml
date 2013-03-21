@@ -27,6 +27,13 @@
             android:title="@string/notify_date" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/widget" >
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            alphaSlider="true"
+            android:defaultValue="@android:color/white"
+            android:key="WidgetTextColor"
+            android:summary="@string/select_widgets_text_color"
+            android:title="@string/widget_text_color" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetClock"
@@ -37,13 +44,6 @@
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
-
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="true"
-            android:defaultValue="@android:color/white"
-            android:key="WidgetTextColor"
-            android:summary="@string/select_widgets_text_color"
-            android:title="@string/widget_text_color" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
         <ListPreference

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.*;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -19,6 +21,9 @@ import calendar.PersianDate;
 import java.util.Date;
 
 /**
+ * The Calendar Service that updates widget time and clock and build/update
+ * calendar notification.
+ * 
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
 public class CalendarService extends Service {
@@ -54,7 +59,6 @@ public class CalendarService extends Service {
 
 	private static final int NOTIFICATION_ID = 1001;
 	private NotificationManager mNotificationManager;
-	private NotificationCompat.Builder mNotifyBuilder;
 
 	public void update(Context context) {
 		SharedPreferences prefs = PreferenceManager
@@ -125,16 +129,6 @@ public class CalendarService extends Service {
 				mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			}
 			if (prefs.getBoolean("NotifyDate", true)) {
-				if (mNotifyBuilder == null) {
-					mNotifyBuilder = new NotificationCompat.Builder(this)
-							.setLargeIcon(
-									BitmapFactory.decodeResource(
-											getResources(),
-											R.drawable.launcher_icon))
-							.setPriority(Notification.PRIORITY_LOW)
-							.setContentIntent(launchAppPendingIntent)
-							.setOngoing(true);
-				}
 
 				String title = utils.getDayOfWeekName(civil.getDayOfWeek())
 						+ " " + utils.dateToString(persian, digits, true);
@@ -146,18 +140,61 @@ public class CalendarService extends Service {
 								DateConverter.civilToIslamic(civil), digits,
 								true);
 
-				mNotifyBuilder
-						.setSmallIcon(
-								utils.getDayIconResource(persian
-										.getDayOfMonth()))
-						.setContentText(utils.textShaper(contentText))
-						.setContentTitle(utils.textShaper(title));
+				Notification notification;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+					notification = notificationBuilderNew(
+							launchAppPendingIntent, persian, title, contentText);
+				else
+					notification = notificationBuilderCompat(
+							launchAppPendingIntent, persian, title, contentText);
 
-				mNotificationManager.notify(NOTIFICATION_ID,
-						mNotifyBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID, notification);
 			} else {
 				mNotificationManager.cancel(NOTIFICATION_ID);
 			}
 		}
+	}
+
+	NotificationCompat.Builder mBuilderCompat;
+
+	private Notification notificationBuilderCompat(
+			PendingIntent launchAppPendingIntent, PersianDate persian,
+			String title, String contentText) {
+		if (mBuilderCompat == null) {
+			mBuilderCompat = new NotificationCompat.Builder(this)
+					.setPriority(Notification.PRIORITY_LOW)
+					.setOngoing(true)
+					.setLargeIcon(
+							BitmapFactory.decodeResource(getResources(),
+									R.drawable.launcher_icon));
+		}
+		return mBuilderCompat
+				.setSmallIcon(utils.getDayIconResource(persian.getDayOfMonth()))
+				.setContentIntent(launchAppPendingIntent)
+				.setContentText(utils.textShaper(contentText))
+				.setContentTitle(utils.textShaper(title)).build();
+	}
+
+	Notification.Builder mBuilderNew;
+
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+	private Notification notificationBuilderNew(
+			PendingIntent launchAppPendingIntent, PersianDate persian,
+			String title, String contentText) {
+		if (mBuilderNew == null) {
+			mBuilderNew = new Notification.Builder(this)
+					.setPriority(Notification.PRIORITY_LOW)
+					.setOngoing(true)
+					.setLargeIcon(
+							BitmapFactory.decodeResource(getResources(),
+									R.drawable.launcher_icon))
+					// Don't show time on notifications, other line must be same
+					.setShowWhen(false);
+		}
+		return mBuilderNew
+				.setSmallIcon(utils.getDayIconResource(persian.getDayOfMonth()))
+				.setContentIntent(launchAppPendingIntent)
+				.setContentText(utils.textShaper(contentText))
+				.setContentTitle(utils.textShaper(title)).build();
 	}
 }
