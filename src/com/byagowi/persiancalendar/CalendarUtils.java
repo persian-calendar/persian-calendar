@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
@@ -17,6 +15,8 @@ import calendar.PersianDate;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
 import com.github.praytimes.CalculationMethod;
+import com.github.praytimes.Coordinate;
+import com.github.praytimes.Locations;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,10 +51,7 @@ public class CalendarUtils {
 	}
 
 	public final char PERSIAN_COMMA = '،';
-	public final char LRO = '\u202D';
-	public final char POP = '\u202C';
 
-	// TODO: textShaper must become private in future
 	public String textShaper(String text) {
 		return ArabicShaping.shape(text);
 	}
@@ -99,15 +96,6 @@ public class CalendarUtils {
 		textView.setLineSpacing(0f, 0.8f);
 	}
 
-	public void setLocation(Location location, Context context) {
-		Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
-				.edit();
-		editor.putString("Latitude", String.valueOf(location.getLatitude()));
-		editor.putString("Longitude", String.valueOf(location.getLongitude()));
-		editor.putString("Altitude", String.valueOf(location.getAltitude()));
-		editor.commit();
-	}
-
 	public CalculationMethod getCalculationMethod(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
@@ -116,32 +104,30 @@ public class CalendarUtils {
 				"Jafari")); // Seems Iran using Jafari method
 	}
 
-	public Location getLocation(Context context) {
-		Location location = new Location((String) null);
-
+	public Coordinate getCoordinate(Context context) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
+		String province = prefs.getString("Province", "CUSTOM");
+		if (!province.equals("CUSTOM")) {
+			return Locations.valueOf(province).getCoordinate();
+		}
+		
+		Coordinate coord;
 		try {
-			location.setLatitude(Double.parseDouble(prefs.getString("Latitude",
-					"0")));
-			location.setLongitude(Double.parseDouble(prefs.getString(
-					"Longitude", "0")));
-			location.setAltitude(Double.parseDouble(prefs.getString("Altitude",
-					"0")));
-		} catch (RuntimeException e) {
-			location.setLatitude(0);
-			location.setLongitude(0);
-			location.setAltitude(0);
-			setLocation(location, context);
+			coord = new Coordinate(Double.parseDouble(prefs.getString(
+					"Latitude", "0")), Double.parseDouble(prefs.getString(
+					"Longitude", "0")), Double.parseDouble(prefs.getString(
+					"Altitude", "0")));
+		} catch (NumberFormatException e) {
 			return null;
 		}
 
 		// If latitude or longitude is zero probably preference not set yet
-		if (location.getLatitude() == 0 && location.getLongitude() == 0) {
+		if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
 			return null;
 		}
-		return location;
+		return coord;
 	}
 
 	public char[] preferredDigits(Context context) {

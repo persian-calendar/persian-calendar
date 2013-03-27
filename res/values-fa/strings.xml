@@ -39,5 +39,7 @@
     <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (اختیاری)</string>
+    <string name="location">مکان</string>
+    <string name="location_help">اگر هیچ‌کدام نیست مختصات را زیر وارد کنید</string>
 
 </resources>

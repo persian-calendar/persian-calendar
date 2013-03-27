@@ -4,8 +4,8 @@
     <PreferenceCategory android:title="@string/general" >
         <ListPreference
             android:defaultValue="LightTheme"
-            android:entries="@array/themeArray"
-            android:entryValues="@array/themeValues"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
             android:key="Theme"
             android:summary="@string/select_skin"
             android:title="@string/skin" />
@@ -48,11 +48,18 @@
     <PreferenceCategory android:title="@string/pray_times_calculation_setting" >
         <ListPreference
             android:defaultValue="Jafari"
-            android:entries="@array/prayMethodArray"
-            android:entryValues="@array/prayMethodValues"
+            android:entries="@array/prayMethodsNames"
+            android:entryValues="@array/prayMethodsKeys"
             android:key="PrayTimeMethod"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
+        <ListPreference
+            android:defaultValue="CUSTOM"
+            android:entries="@array/locationNames"
+            android:entryValues="@array/locationKeys"
+            android:key="Location"
+            android:summary="@string/location_help"
+            android:title="@string/location" />
 
         <EditTextPreference
             android:defaultValue="0"

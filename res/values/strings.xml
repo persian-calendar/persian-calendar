@@ -39,5 +39,7 @@
     <string name="pray_methods_calculation">Calculation methods for pray times</string>
     <string name="altitude">Altitude</string>
     <string name="altitude_praytime">in meter (optional)</string>
+    <string name="location">Location</string>
+    <string name="location_help">If none of them, specify it below</string>
 
 </resources>

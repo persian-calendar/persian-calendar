@@ -54,7 +54,8 @@ public class CalendarActivity extends FragmentActivity {
 		calendarInfo = (TextView) findViewById(R.id.calendar_info);
 
 		// Pray Time
-		prayTimeInitialize();
+		prayTimeActivityHelper = new PrayTimeActivityHelper(this);
+		prayTimeActivityHelper.fillPrayTime();
 
 		// Load Holidays
 		utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
@@ -164,7 +165,7 @@ public class CalendarActivity extends FragmentActivity {
 
 		prayTimeActivityHelper.setDate(civilDate.getYear(),
 				civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-		prayTimeActivityHelper.prayTimeInitialize();
+		prayTimeActivityHelper.fillPrayTime();
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -174,13 +175,6 @@ public class CalendarActivity extends FragmentActivity {
 
 	private PrayTimeActivityHelper prayTimeActivityHelper;
 
-	private void prayTimeInitialize() {
-		if (prayTimeActivityHelper == null) {
-			prayTimeActivityHelper = new PrayTimeActivityHelper(this);
-		}
-		prayTimeActivityHelper.prayTimeInitialize();
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -189,22 +183,18 @@ public class CalendarActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_dateconverter:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_dateconverter) {
 			startActivity(new Intent(getApplicationContext(),
 					CalendarConverterActivity.class));
-			break;
-		case R.id.menu_settings:
+		} else if (itemId == R.id.menu_settings) {
 			startActivityForResult(new Intent(getApplicationContext(),
 					CalendarPreferenceActivity.class), 0);
-			break;
-		case R.id.menu_about:
+		} else if (itemId == R.id.menu_about) {
 			startActivity(new Intent(getApplicationContext(),
 					CalendarAboutActivity.class));
-			break;
-		case R.id.menu_exit:
+		} else if (itemId == R.id.menu_exit) {
 			finish();
-			break;
 		}
 		return false;
 	}

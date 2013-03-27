@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="themeArray">
+    <string-array name="themeNames">
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string-array name="themeValues">
+    <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
     </string-array>
-    <string-array name="prayMethodArray">
+    <string-array name="prayMethodsNames">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
         <item>Muslim World League</item>
         <item>Islamic Society of North America</item>
@@ -18,7 +18,7 @@
         <item>University of Islamic Sciences, Karachi</item>
         <item>Institute of Geophysics, University of Tehran</item>
     </string-array>
-    <string-array name="prayMethodValues">
+    <string-array name="prayMethodsKeys" translatable="false">
         <item>Jafari</item>
         <item>MWL</item>
         <item>ISNA</item>
@@ -26,6 +26,74 @@
         <item>Makkah</item>
         <item>Karachi</item>
         <item>Tehran</item>
+    </string-array>
+    <string-array name="locationNames">
+        <item>None</item>
+        <item>Arak</item>
+        <item>Ardabil</item>
+        <item>Orumiyeh</item>
+        <item>Esfehan</item>
+        <item>Alborz</item>
+        <item>Ahvaz</item>
+        <item>Ilam</item>
+        <item>Bojnurd</item>
+        <item>Bandar Abbas</item>
+        <item>Bushehr</item>
+        <item>Birjand</item>
+        <item>Tabriz</item>
+        <item>Tehran</item>
+        <item>Khoram Abad</item>
+        <item>Rasht</item>
+        <item>Zahedan</item>
+        <item>Zanjan</item>
+        <item>Sari</item>
+        <item>Semnan</item>
+        <item>Sanandaj</item>
+        <item>Shahr-e-kord</item>
+        <item>Shiraz</item>
+        <item>Ghazvin</item>
+        <item>Qom</item>
+        <item>Kerman</item>
+        <item>Kermanshah</item>
+        <item>Gorgan</item>
+        <item>Mashhad</item>
+        <item>Hamedan</item>
+        <item>Yasuj</item>
+        <item>Yazd</item>
+    </string-array>
+    <string-array name="locationKeys" translatable="false">
+        <item>CUSTOM</item>
+        <item>ARAK</item>
+        <item>ARDABIL</item>
+        <item>ORUMIYEH</item>
+        <item>ESFEHAN</item>
+        <item>AHVAZ</item>
+        <item>ILAM</item>
+        <item>BOJNURD</item>
+        <item>BANDAR_ABAS</item>
+        <item>BUSHEHR</item>
+        <item>BIRJAND</item>
+        <item>TABRIZ</item>
+        <item>TEHRAN</item>
+        <item>KHORAM_ABAD</item>
+        <item>RASHT</item>
+        <item>ZAHEDAN</item>
+        <item>ZANJAN</item>
+        <item>SARI</item>
+        <item>SEMNAN</item>
+        <item>SANANDAJ</item>
+        <item>SHAHREKORD</item>
+        <item>SHIRAZ</item>
+        <item>GHAZVIN</item>
+        <item>GHOM</item>
+        <item>KARAJ</item>
+        <item>KERMAN</item>
+        <item>KERMANSHAH</item>
+        <item>GORGAN</item>
+        <item>MASHHAD</item>
+        <item>HAMEDAN</item>
+        <item>YASUJ</item>
+        <item>YAZD</item>
     </string-array>
 
 </resources>
