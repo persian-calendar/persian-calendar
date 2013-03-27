@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="themeArray">
+    <string-array name="themeNames">
         <item>روشن</item>
         <item>تاریک</item>
     </string-array>
-    <string-array name="themeValues">
-        <item>LightTheme</item>
-        <item>DarkTheme</item>
-    </string-array>
-    <string-array name="prayMethodArray">
+    <string-array name="prayMethodsNames">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
         <item>Muslim World League</item>
         <item>Islamic Society of North America</item>
@@ -18,14 +14,39 @@
         <item>University of Islamic Sciences, Karachi</item>
         <item>Institute of Geophysics, University of Tehran</item>
     </string-array>
-    <string-array name="prayMethodValues">
-        <item>Jafari</item>
-        <item>MWL</item>
-        <item>ISNA</item>
-        <item>Egypt</item>
-        <item>Makkah</item>
-        <item>Karachi</item>
-        <item>Tehran</item>
+    <string-array name="locationNames">
+        <item>هیچ‌کدام</item>
+        <item>اراک</item>
+        <item>اردبیل</item>
+        <item>ارومیه</item>
+        <item>اصفهان</item>
+        <item>البرز</item>
+        <item>اهواز</item>
+        <item>ایلام</item>
+        <item>بجنورد</item>
+        <item>بندرعباس</item>
+        <item>بوشهر</item>
+        <item>بیرجند</item>
+        <item>تبریز</item>
+        <item>تهران</item>
+        <item>خرم‌آباد</item>
+        <item>رشت</item>
+        <item>زاهدان</item>
+        <item>زنجان</item>
+        <item>ساری</item>
+        <item>سمنان</item>
+        <item>سنندج</item>
+        <item>شهرکرد</item>
+        <item>شیراز</item>
+        <item>قزوین</item>
+        <item>قم</item>
+        <item>کرمان</item>
+        <item>کرمانشاه</item>
+        <item>گرگان</item>
+        <item>مشهد</item>
+        <item>همدان</item>
+        <item>یاسوج</item>
+        <item>یزد</item>
     </string-array>
 
 </resources>
