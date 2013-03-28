@@ -70,8 +70,9 @@ public class CalendarService extends Service {
 				context, 0, new Intent(context, CalendarActivity.class),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		Calendar calendar = utils.makeCalendarFromDate(new Date(), prefs.getBoolean("IranTime", false));
-		
+		boolean iranTime = prefs.getBoolean("IranTime", false);
+		Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
+
 		CivilDate civil = new CivilDate(calendar);
 		PersianDate persian = DateConverter.civilToPersian(civil);
 		persian.setDari(utils.isDariVersion(context));
@@ -113,6 +114,9 @@ public class CalendarService extends Service {
 				text2 = text1 + " " + text2;
 				boolean in24 = prefs.getBoolean("WidgetIn24", true);
 				text1 = utils.getPersianFormattedClock(calendar, digits, in24);
+				if (iranTime) {
+					text1 = text1 + " ایران";
+				}
 			}
 
 			remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
