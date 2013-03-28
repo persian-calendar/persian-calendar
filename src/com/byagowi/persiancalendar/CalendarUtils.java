@@ -109,7 +109,7 @@ public class CalendarUtils {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
-		String province = prefs.getString("Province", "CUSTOM");
+		String province = prefs.getString("Location", "CUSTOM");
 		if (!province.equals("CUSTOM")) {
 			return Locations.valueOf(province).getCoordinate();
 		}

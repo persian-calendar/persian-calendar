@@ -43,5 +43,6 @@
     <string name="location_help">اگر هیچ‌کدام نیست مختصات را زیر وارد کنید</string>
     <string name="showing_iran_time">نمایش ویجت‌ها و نوار هشدار به وقت ایران</string>
     <string name="iran_time">وقت ایران</string>
+    <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
 
 </resources>

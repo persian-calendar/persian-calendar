@@ -185,14 +185,14 @@ public class CalendarActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == R.id.menu_dateconverter) {
-			startActivity(new Intent(getApplicationContext(),
-					CalendarConverterActivity.class));
+			startActivity(new Intent(this, CalendarConverterActivity.class));
+		} else if (itemId == R.id.menu_compass) {
+			startActivity(new Intent(this, CompassActivity.class));
 		} else if (itemId == R.id.menu_settings) {
-			startActivityForResult(new Intent(getApplicationContext(),
+			startActivityForResult(new Intent(this,
 					CalendarPreferenceActivity.class), 0);
 		} else if (itemId == R.id.menu_about) {
-			startActivity(new Intent(getApplicationContext(),
-					CalendarAboutActivity.class));
+			startActivity(new Intent(this, CalendarAboutActivity.class));
 		} else if (itemId == R.id.menu_exit) {
 			finish();
 		}
