@@ -104,6 +104,7 @@ public class CalendarService extends Service {
 
 			String text1;
 			String text2;
+			String text3 = "";
 			text1 = utils.getDayOfWeekName(civil.getDayOfWeek());
 			String dayTitle = utils.dateToString(persian, digits, true);
 			text2 = dayTitle + utils.PERSIAN_COMMA + " "
@@ -115,7 +116,7 @@ public class CalendarService extends Service {
 				boolean in24 = prefs.getBoolean("WidgetIn24", true);
 				text1 = utils.getPersianFormattedClock(calendar, digits, in24);
 				if (iranTime) {
-					text1 = text1 + " ایران";
+					text3 = "(به وقت ایران)";
 				}
 			}
 
@@ -123,6 +124,9 @@ public class CalendarService extends Service {
 					utils.textShaper(text1));
 			remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
 					utils.textShaper(text2));
+			remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1,
+					utils.textShaper(text3));
+			
 			remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
 					launchAppPendingIntent);
 			manager.updateAppWidget(new ComponentName(context,
