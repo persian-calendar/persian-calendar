@@ -60,6 +60,7 @@ public class CalendarAboutActivity extends Activity {
 						+ "* Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)\n"
 						+ "* ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)\n"
 						+ "* ColorPickerPreference https://github.com/attenzione/android-ColorPickerPreference (Apache)\n"
+						+ "* QiblaDirectionCalculator.java from https://github.com/farsitel/android_packages_apps_QiblaCompass (Apache)"
 						+ "\n"
 						+ "For bug report: http://github.com/ebraminio/DroidPersianCalendar");
 	}

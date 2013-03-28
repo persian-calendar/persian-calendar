@@ -5,6 +5,9 @@
         android:id="@+id/menu_dateconverter"
         android:title="@string/date_converter"/>
     <item
+        android:id="@+id/menu_compass"
+        android:title="@string/qibla_compass"/>
+    <item
         android:id="@+id/menu_settings"
         android:title="@string/settings"/>
     <item
