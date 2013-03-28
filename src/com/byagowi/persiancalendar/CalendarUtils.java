@@ -172,17 +172,21 @@ public class CalendarUtils {
 		}
 	}
 
-	private String AM_IN_PERSIAN = "ق.ظ";
-	private String PM_IN_PERSIAN = "ب.ظ";
-
-	public String getPersianFormattedClock(Date date, char[] digits,
-			boolean in24, boolean iranTime) {
-		String timeText = null;
+	public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
 		Calendar calendar = Calendar.getInstance();
 		if (iranTime) {
 			calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
 		}
 		calendar.setTime(date);
+		return calendar;
+	}
+	
+	private String AM_IN_PERSIAN = "ق.ظ";
+	private String PM_IN_PERSIAN = "ب.ظ";
+
+	public String getPersianFormattedClock(Calendar calendar, char[] digits,
+			boolean in24) {
+		String timeText = null;
 
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		if (!in24) {

@@ -1,7 +1,6 @@
 package calendar;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
 /**
  * @author Amir
@@ -27,17 +26,13 @@ public class CivilDate extends AbstractDate {
 	private int day;
 
 	public CivilDate() {
-		this(false);
+		this(Calendar.getInstance());
 	}
 	
-	public CivilDate(boolean iranTime) {
-		Calendar cal = Calendar.getInstance();
-		if (iranTime) {
-			cal.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
-		}
-		this.year = cal.get(Calendar.YEAR);
-		this.month = cal.get(Calendar.MONTH) + 1;
-		this.day = cal.get(Calendar.DAY_OF_MONTH);
+	public CivilDate(Calendar calendar) {
+		this.year = calendar.get(Calendar.YEAR);
+		this.month = calendar.get(Calendar.MONTH) + 1;
+		this.day = calendar.get(Calendar.DAY_OF_MONTH);
 	}
 
 	public CivilDate(int year, int month, int day) {
