@@ -4,14 +4,13 @@ import com.github.praytimes.Coordinate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.TextView;
 
 /**
  * Compass/Qibla activity
@@ -22,16 +21,20 @@ public class CompassActivity extends Activity {
 	private CalendarUtils utils = CalendarUtils.getInstance();
 
 	CompassView compassView;
+	TextView degree;
 	SensorManager sensorManager;
 	Sensor sensor;
+	SensorEventListener compassListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		utils.setTheme(this);
+		// utils.setTheme(this);
 		super.onCreate(savedInstanceState);
-		compassView = new CompassView(this);
+		compassListener = new CompassListener(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(compassView);
+		setContentView(R.layout.compass);
+		compassView = (CompassView)findViewById(R.id.compass_view);
+		degree = (TextView)findViewById(R.id.degree);
 
 		Coordinate coordinate = utils.getCoordinate(this);
 		if (coordinate != null) {
@@ -43,32 +46,13 @@ public class CompassActivity extends Activity {
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		if (sensor != null) {
-			sensorManager.registerListener(mySensorEventListener, sensor,
-					SensorManager.SENSOR_DELAY_NORMAL);
-			Log.i("Compass MainActivity", "Registerered for ORIENTATION Sensor");
-
+			sensorManager.registerListener(compassListener, sensor,
+					SensorManager.SENSOR_DELAY_FASTEST);
 		} else {
-			Log.e("Compass MainActivity", "Registerered for ORIENTATION Sensor");
-			Toast.makeText(this, "ORIENTATION Sensor not found",
-					Toast.LENGTH_LONG).show();
+			utils.quickToast("ORIENTATION Sensor not found", this);
 			finish();
 		}
 	}
-
-	private SensorEventListener mySensorEventListener = new SensorEventListener() {
-
-		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		}
-
-		@Override
-		public void onSensorChanged(SensorEvent event) {
-			// angle between the magnetic north direction
-			// 0=North, 90=East, 180=South, 270=West
-			float azimuth = event.values[0];
-			compassView.setPosition(azimuth);
-		}
-	};
 
 	@Override
 	protected void onPause() {
@@ -80,7 +64,7 @@ public class CompassActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		if (sensor != null) {
-			sensorManager.unregisterListener(mySensorEventListener);
+			sensorManager.unregisterListener(compassListener);
 		}
 	}
 }
