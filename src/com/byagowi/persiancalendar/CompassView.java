@@ -24,7 +24,6 @@ public class CompassView extends View {
 		paint.setStrokeWidth(2);
 		paint.setTextSize(25);
 		paint.setStyle(Paint.Style.STROKE);
-		paint.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -33,16 +32,19 @@ public class CompassView extends View {
 		int yPoint = getMeasuredHeight() / 2;
 
 		float radius = (float) (Math.max(xPoint, yPoint) * 0.6);
-		canvas.drawCircle(xPoint, yPoint, radius, paint);
-
-		canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
 		
+		paint.setColor(Color.BLACK);
+		canvas.drawCircle(xPoint, yPoint, radius, paint);
+		
+		canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+
 		canvas.drawLine(xPoint, yPoint,
 				(float) (xPoint + radius * Math.sin(-north / 180 * Math.PI)),
 				(float) (yPoint - radius * Math.cos(-north / 180 * Math.PI)),
 				paint);
 
 		if (everQiblaSet == true) {
+			paint.setColor(Color.BLUE);
 			canvas.drawLine(
 					xPoint,
 					yPoint,

@@ -22,7 +22,7 @@ public class CompassActivity extends Activity {
 	private CalendarUtils utils = CalendarUtils.getInstance();
 
 	CompassView compassView;
-	static SensorManager sensorService;
+	SensorManager sensorManager;
 	Sensor sensor;
 
 	@Override
@@ -40,10 +40,10 @@ public class CompassActivity extends Activity {
 							coordinate.getLongitude()));
 		}
 
-		sensorService = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		sensor = sensorService.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		if (sensor != null) {
-			sensorService.registerListener(mySensorEventListener, sensor,
+			sensorManager.registerListener(mySensorEventListener, sensor,
 					SensorManager.SENSOR_DELAY_NORMAL);
 			Log.i("Compass MainActivity", "Registerered for ORIENTATION Sensor");
 
@@ -71,10 +71,16 @@ public class CompassActivity extends Activity {
 	};
 
 	@Override
+	protected void onPause() {
+		super.onPause();
+		finish();
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		if (sensor != null) {
-			sensorService.unregisterListener(mySensorEventListener);
+			sensorManager.unregisterListener(mySensorEventListener);
 		}
 	}
 }
