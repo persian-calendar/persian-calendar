@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class CompassView extends View {
@@ -13,10 +14,17 @@ public class CompassView extends View {
 	private double qibla = 0;
 	private boolean everQiblaSet = false;
 
+	public CompassView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
+
 	public CompassView(Context context) {
 		super(context);
 		init();
 	}
+
+	int color1;
 
 	private void init() {
 		paint = new Paint();
@@ -32,30 +40,25 @@ public class CompassView extends View {
 		int yPoint = getMeasuredHeight() / 2;
 
 		float radius = (float) (Math.max(xPoint, yPoint) * 0.6);
-		
-		paint.setColor(Color.BLACK);
-		canvas.drawCircle(xPoint, yPoint, radius, paint);
-		
-		canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
 
-		canvas.drawLine(xPoint, yPoint,
-				(float) (xPoint + radius * Math.sin(-north / 180 * Math.PI)),
-				(float) (yPoint - radius * Math.cos(-north / 180 * Math.PI)),
-				paint);
+		// paint.setColor(color1);
+		// canvas.drawCircle(xPoint, yPoint, radius, paint);
+		// canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(),
+		// paint);
 
 		if (everQiblaSet == true) {
-			paint.setColor(Color.BLUE);
-			canvas.drawLine(
-					xPoint,
-					yPoint,
-					(float) (xPoint + radius
-							* Math.sin((-north + qibla) / 180 * Math.PI)),
-					(float) (yPoint - radius
-							* Math.cos((-north + qibla) / 180 * Math.PI)),
-					paint);
+			double x = xPoint + radius
+					* Math.sin((-north + qibla) / 180 * Math.PI);
+			double y = yPoint - radius
+					* Math.cos((-north + qibla) / 180 * Math.PI);
+			paint.setColor(Color.GREEN);
+			canvas.drawLine(xPoint, yPoint, (float) x, (float) y, paint);
 		}
 
-		// canvas.drawText(String.valueOf(north), xPoint, yPoint, paint);
+		double x = xPoint + radius * Math.sin(-north / 180 * Math.PI);
+		double y = yPoint - radius * Math.cos(-north / 180 * Math.PI);
+		paint.setColor(Color.WHITE);
+		canvas.drawLine(xPoint, yPoint, (float) x, (float) y, paint);
 	}
 
 	public void setQibla(double position) {
