@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -175,9 +176,12 @@ public class CalendarUtils {
 	private String PM_IN_PERSIAN = "ب.ظ";
 
 	public String getPersianFormattedClock(Date date, char[] digits,
-			boolean in24) {
+			boolean in24, boolean iranTime) {
 		String timeText = null;
 		Calendar calendar = Calendar.getInstance();
+		if (iranTime) {
+			calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
+		}
 		calendar.setTime(date);
 
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);

@@ -35,6 +35,11 @@
             android:title="@string/widget_text_color" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="IranTime"
+            android:summary="@string/showing_iran_time"
+            android:title="@string/iran_time" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"

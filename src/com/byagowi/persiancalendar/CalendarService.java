@@ -64,12 +64,13 @@ public class CalendarService extends Service {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		char[] digits = utils.preferredDigits(context);
+		boolean iranTime = prefs.getBoolean("IranTime", false);
 
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
 				context, 0, new Intent(context, CalendarActivity.class),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		CivilDate civil = new CivilDate();
+		CivilDate civil = new CivilDate(iranTime);
 		PersianDate persian = DateConverter.civilToPersian(civil);
 		persian.setDari(utils.isDariVersion(context));
 
@@ -109,8 +110,8 @@ public class CalendarService extends Service {
 			if (enableClock) {
 				text2 = text1 + " " + text2;
 				boolean in24 = prefs.getBoolean("WidgetIn24", true);
-				text1 = utils
-						.getPersianFormattedClock(new Date(), digits, in24);
+				text1 = utils.getPersianFormattedClock(new Date(), digits,
+						in24, iranTime);
 			}
 
 			remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,

@@ -41,5 +41,7 @@
     <string name="altitude_praytime">in meter (optional)</string>
     <string name="location">Location</string>
     <string name="location_help">If none of them, specify it below</string>
+    <string name="showing_iran_time">Showing Widgets in Iran TimeZone</string>
+    <string name="iran_time">Iran Time</string>
 
 </resources>
