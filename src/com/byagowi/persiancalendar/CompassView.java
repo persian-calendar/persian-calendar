@@ -41,11 +41,6 @@ public class CompassView extends View {
 
 		float radius = (float) (Math.max(xPoint, yPoint) * 0.6);
 
-		// paint.setColor(color1);
-		// canvas.drawCircle(xPoint, yPoint, radius, paint);
-		// canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(),
-		// paint);
-
 		if (everQiblaSet == true) {
 			double x = xPoint + radius
 					* Math.sin((-north + qibla) / 180 * Math.PI);

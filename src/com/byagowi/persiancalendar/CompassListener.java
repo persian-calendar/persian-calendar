@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;

@@ -156,7 +156,8 @@ public class CalendarConverterActivity extends Activity {
 			sb.append(" ");
 			sb.append(calendarsTextList.get(0));
 			sb.append("\n\n");
-			sb.append("برابر با:\n");
+			sb.append(utils.equalWith);
+			sb.append(":\n");
 			sb.append(calendarsTextList.get(1));
 			sb.append("\n");
 			sb.append(calendarsTextList.get(2));

@@ -71,6 +71,7 @@ public class CalendarUtils {
 	public final String shamsi = textShaper("هجری خورشیدی");
 	public final String islamic = textShaper("هجری قمری");
 	public final String georgian = textShaper("میلادی");
+	public final String equalWith = textShaper("برابر با");
 
 	private final char[] arabicDigits = { '0', '1', '2', '3', '4', '5', '6',
 			'7', '8', '9' };
@@ -113,7 +114,7 @@ public class CalendarUtils {
 		if (!province.equals("CUSTOM")) {
 			return Locations.valueOf(province).getCoordinate();
 		}
-		
+
 		Coordinate coord;
 		try {
 			coord = new Coordinate(Double.parseDouble(prefs.getString(
@@ -180,7 +181,7 @@ public class CalendarUtils {
 		calendar.setTime(date);
 		return calendar;
 	}
-	
+
 	private String AM_IN_PERSIAN = "ق.ظ";
 	private String PM_IN_PERSIAN = "ب.ظ";
 
@@ -253,7 +254,9 @@ public class CalendarUtils {
 
 	public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
 		return dayTitleSummary(civilDate, digits)
-				+ "\n\nبرابر با:\n"
+				+ "\n\n"
+				+ equalWith
+				+ ":\n"
 				+ dateToString(civilDate, digits, true)
 				+ "\n"
 				+ dateToString(DateConverter.civilToIslamic(civilDate), digits,
