@@ -115,21 +115,21 @@ public class CalendarUtils {
 			return Locations.valueOf(location).getCoordinate();
 		}
 
-		Coordinate coord;
 		try {
-			coord = new Coordinate(Double.parseDouble(prefs.getString(
-					"Latitude", "0")), Double.parseDouble(prefs.getString(
-					"Longitude", "0")), Double.parseDouble(prefs.getString(
-					"Altitude", "0")));
+			Coordinate coord = new Coordinate(Double.parseDouble(prefs
+					.getString("Latitude", "0")), Double.parseDouble(prefs
+					.getString("Longitude", "0")), Double.parseDouble(prefs
+					.getString("Altitude", "0")));
+
+			// If latitude or longitude is zero probably preference not set yet
+			if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
+				return null;
+			}
+
+			return coord;
 		} catch (NumberFormatException e) {
 			return null;
 		}
-
-		// If latitude or longitude is zero probably preference not set yet
-		if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
-			return null;
-		}
-		return coord;
 	}
 
 	public char[] preferredDigits(Context context) {
