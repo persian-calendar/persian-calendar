@@ -28,7 +28,7 @@ public class CivilDate extends AbstractDate {
 	public CivilDate() {
 		this(Calendar.getInstance());
 	}
-	
+
 	public CivilDate(Calendar calendar) {
 		this.year = calendar.get(Calendar.YEAR);
 		this.month = calendar.get(Calendar.MONTH) + 1;

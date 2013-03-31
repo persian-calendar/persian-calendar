@@ -32,8 +32,8 @@ public class CompassActivity extends Activity {
 		compassListener = new CompassListener(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.compass);
-		compassView = (CompassView)findViewById(R.id.compass_view);
-		degree = (TextView)findViewById(R.id.degree);
+		compassView = (CompassView) findViewById(R.id.compass_view);
+		degree = (TextView) findViewById(R.id.degree);
 
 		Coordinate coordinate = utils.getCoordinate(this);
 		if (coordinate != null) {
