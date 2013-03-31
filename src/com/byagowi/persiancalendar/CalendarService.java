@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -157,7 +156,7 @@ public class CalendarService extends Service {
 				mNotificationManager.notify(
 						NOTIFICATION_ID,
 						new NotificationCompat.Builder(this)
-								.setPriority(Notification.PRIORITY_LOW)
+								.setPriority(NotificationCompat.PRIORITY_LOW)
 								.setOngoing(true)
 								.setLargeIcon(largeIcon)
 								.setSmallIcon(

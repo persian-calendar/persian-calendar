@@ -4,7 +4,6 @@ import com.github.praytimes.Coordinate;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -49,8 +48,7 @@ public class CompassActivity extends Activity {
 			sensorManager.registerListener(compassListener, sensor,
 					SensorManager.SENSOR_DELAY_FASTEST);
 		} else {
-			utils.quickToast("ORIENTATION Sensor not found", this);
-			finish();
+			utils.quickToast(getString(R.string.compass_not_found), this);
 		}
 	}
 

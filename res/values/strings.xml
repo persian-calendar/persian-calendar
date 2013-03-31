@@ -44,5 +44,6 @@
     <string name="showing_iran_time">Showing Widgets and notification bar in Iran TimeZone</string>
     <string name="iran_time">Iran Time</string>
     <string name="qibla_compass">Compass/Qibla</string>
+    <string name="compass_not_found">Compass sensor not found</string>
 
 </resources>
