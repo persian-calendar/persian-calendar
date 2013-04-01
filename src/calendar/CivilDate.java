@@ -84,13 +84,13 @@ public class CivilDate extends AbstractDate {
 
 	public boolean isLeapYear() {
 		if (year % 400 == 0)
-		   return true;
+			return true;
 		else if (year % 100 == 0)
-		   return false;
+			return false;
 		else if (year % 4 == 0)
-		   return true;
+			return true;
 		else
-		   return false;
+			return false;
 	}
 
 	public void rollDay(int amount, boolean up) {
@@ -114,7 +114,7 @@ public class CivilDate extends AbstractDate {
 
 		if (month == 2 && isLeapYear() && day > 29)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
-		
+
 		if (month == 2 && (!isLeapYear()) && day > 28)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 

@@ -88,7 +88,7 @@ public class PersianDate extends AbstractDate {
 
 		if (isLeapYear() && month == 12 && day > 30)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
-		
+
 		if ((!isLeapYear()) && month == 12 && day > 29)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
@@ -131,8 +131,12 @@ public class PersianDate extends AbstractDate {
 	}
 
 	public boolean isLeapYear() {
-		int mod = (getYear() + 11) % 33;
-		return (mod != 32) && (mod % 4 == 0);
+		int y;
+		if (year > 0)
+			y = year - 474;
+		else
+			y = 473;
+		return (((((y % 2820) + 474) + 38) * 682) % 2816) < 682;
 	}
 
 	public boolean equals(PersianDate persianDate) {
