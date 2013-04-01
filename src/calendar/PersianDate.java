@@ -86,7 +86,10 @@ public class PersianDate extends AbstractDate {
 		if (month > 6 && month <= 12 && day > 30)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
-		if (month == 12 && day > 29 && (!isLeapYear()))
+		if (isLeapYear() && month == 12 && day > 30)
+			throw new DayOutOfRangeException("day " + day + " is out of range!");
+		
+		if ((!isLeapYear()) && month == 12 && day > 29)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
 		this.day = day;

@@ -83,7 +83,14 @@ public class CivilDate extends AbstractDate {
 	}
 
 	public boolean isLeapYear() {
-		throw new RuntimeException("not implemented yet!");
+		if (year % 400 == 0)
+		   return true;
+		else if (year % 100 == 0)
+		   return false;
+		else if (year % 4 == 0)
+		   return true;
+		else
+		   return false;
 	}
 
 	public void rollDay(int amount, boolean up) {
@@ -102,7 +109,13 @@ public class CivilDate extends AbstractDate {
 		if (day < 1)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
-		if (day > daysInMonth[month])
+		if (month != 2 && day > daysInMonth[month])
+			throw new DayOutOfRangeException("day " + day + " is out of range!");
+
+		if (month == 2 && isLeapYear() && day > 29)
+			throw new DayOutOfRangeException("day " + day + " is out of range!");
+		
+		if (month == 2 && (!isLeapYear()) && day > 28)
 			throw new DayOutOfRangeException("day " + day + " is out of range!");
 
 		// TODO check for the case of leap year for February
