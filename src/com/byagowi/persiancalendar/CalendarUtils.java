@@ -15,6 +15,7 @@ import calendar.PersianDate;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
 import com.github.praytimes.CalculationMethod;
+import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.Locations;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -160,19 +162,6 @@ public class CalendarUtils {
 		return prefs.getBoolean("DariVersion", false);
 	}
 
-	private String addExtraZeroForClock(int num) {
-
-		String str = Integer.toString(num);
-		int strLength = str.length();
-		if (strLength == 1) {
-			return "0" + str;
-		} else if (strLength == 2) {
-			return str;
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-
 	public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
 		Calendar calendar = Calendar.getInstance();
 		if (iranTime) {
@@ -184,6 +173,15 @@ public class CalendarUtils {
 
 	private String AM_IN_PERSIAN = "ق.ظ";
 	private String PM_IN_PERSIAN = "ب.ظ";
+
+	public String clockToString(Clock clock, char[] digits) {
+		return clockToString(clock.getHour(), clock.getMinute(), digits);
+	}
+
+	public String clockToString(int hour, int minute, char[] digits) {
+		return formatNumber(
+				String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+	}
 
 	public String getPersianFormattedClock(Calendar calendar, char[] digits,
 			boolean in24) {
@@ -199,11 +197,8 @@ public class CalendarUtils {
 			}
 		}
 
-		String result = formatNumber(addExtraZeroForClock(hour), digits)
-				+ ":"
-				+ formatNumber(
-						addExtraZeroForClock(calendar.get(Calendar.MINUTE)),
-						digits);
+		String result = clockToString(hour, calendar.get(Calendar.MINUTE),
+				digits);
 		if (!in24) {
 			result = result + " " + timeText;
 		}

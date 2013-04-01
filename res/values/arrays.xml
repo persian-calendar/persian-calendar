@@ -9,7 +9,7 @@
         <item>LightTheme</item>
         <item>DarkTheme</item>
     </string-array>
-    <string-array name="prayMethodsNames">
+    <string-array name="prayMethodsNames" translatable="false">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
         <item>Muslim World League</item>
         <item>Islamic Society of North America</item>

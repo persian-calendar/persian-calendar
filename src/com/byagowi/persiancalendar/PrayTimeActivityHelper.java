@@ -43,25 +43,25 @@ class PrayTimeActivityHelper {
 		StringBuilder sb = new StringBuilder();
 		Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
 
+		char[] digits = utils.preferredDigits(calendarActivity);
+
 		sb.append("اذان صبح: ");
-		sb.append(prayTimes.get(PrayTime.Imsak).toString());
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Imsak), digits));
 
 		sb.append("\nطلوع آفتاب: ");
-		sb.append(prayTimes.get(PrayTime.Sunrise).toString());
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Sunrise), digits));
 
 		sb.append("\nاذان ظهر: ");
-		sb.append(prayTimes.get(PrayTime.Dhuhr).toString());
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Dhuhr), digits));
 
 		sb.append("\nغروب آفتاب: ");
-		sb.append(prayTimes.get(PrayTime.Sunset).toString());
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Sunset), digits));
 
 		sb.append("\nاذان مغرب: ");
-		sb.append(prayTimes.get(PrayTime.Maghrib).toString());
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Maghrib), digits));
 
 		sb.append("\nنیمه وقت شرعی: ");
-		sb.append(prayTimes.get(PrayTime.Midnight).toString());
-
-		char[] digits = utils.preferredDigits(calendarActivity);
+		sb.append(utils.clockToString(prayTimes.get(PrayTime.Midnight), digits));
 
 		utils.prepareTextView(prayTimeTextView);
 		prayTimeTextView.setText(utils.textShaper(utils.formatNumber(

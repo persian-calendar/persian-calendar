@@ -1,7 +1,5 @@
 package com.github.praytimes;
 
-import java.util.Locale;
-
 import static com.github.praytimes.StaticUtils.fixHour;
 
 public class Clock {
@@ -18,11 +16,6 @@ public class Clock {
 		int hour = (int) arg;
 		int minute = (int) ((arg - hour) * 60d);
 		return new Clock(hour, minute);
-	}
-
-	@Override
-	public String toString() {
-		return String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
 	}
 
 	public int getHour() {

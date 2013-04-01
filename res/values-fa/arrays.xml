@@ -5,15 +5,6 @@
         <item>روشن</item>
         <item>تاریک</item>
     </string-array>
-    <string-array name="prayMethodsNames">
-        <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
-        <item>Muslim World League</item>
-        <item>Islamic Society of North America</item>
-        <item>Egyptian General Authority of Survey</item>
-        <item>Umm Al-Qura University, Makkah</item>
-        <item>University of Islamic Sciences, Karachi</item>
-        <item>Institute of Geophysics, University of Tehran</item>
-    </string-array>
     <string-array name="locationNames">
         <item>هیچ‌کدام</item>
         <item>اراک</item>

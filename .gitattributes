@@ -2,3 +2,4 @@
 *        text=auto
 
 *.java   text diff=java
+*.xml    text diff=xml
