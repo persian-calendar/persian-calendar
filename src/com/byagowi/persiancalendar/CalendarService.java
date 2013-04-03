@@ -100,6 +100,7 @@ public class CalendarService extends Service {
 			// Widget 4x1
 			remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
 			remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
+			remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
 
 			String text1;
 			String text2;
