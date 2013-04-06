@@ -13,13 +13,13 @@ import java.util.Map;
  * @author ebraminio
  */
 class PrayTimeActivityHelper {
-	private final CalendarUtils utils;
+	private final Utils utils;
 
-	private final CalendarActivity calendarActivity;
+	private final MainActivity calendarActivity;
 	private Date date = new Date();
 	private final TextView prayTimeTextView;
 
-	public PrayTimeActivityHelper(CalendarActivity calendarActivity) {
+	public PrayTimeActivityHelper(MainActivity calendarActivity) {
 		this.calendarActivity = calendarActivity;
 		this.utils = calendarActivity.utils;
 		prayTimeTextView = (TextView) calendarActivity

@@ -22,11 +22,11 @@ class ClickDayListener implements View.OnClickListener,
 		View.OnLongClickListener {
 	private final String holidayTitle;
 	private final PersianDate persianDate;
-	private final CalendarActivity calendarAcitivity;
-	private final CalendarUtils utils;
+	private final MainActivity calendarAcitivity;
+	private final Utils utils;
 
 	ClickDayListener(String holidayTitle, PersianDate persianDate,
-			CalendarActivity calendarAcitivity) {
+			MainActivity calendarAcitivity) {
 		this.holidayTitle = holidayTitle;
 		this.persianDate = persianDate;
 		this.calendarAcitivity = calendarAcitivity;

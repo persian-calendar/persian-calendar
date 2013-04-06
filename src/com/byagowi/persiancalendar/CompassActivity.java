@@ -17,7 +17,7 @@ import android.widget.TextView;
  * @author ebraminio
  */
 public class CompassActivity extends Activity {
-	private CalendarUtils utils = CalendarUtils.getInstance();
+	private Utils utils = Utils.getInstance();
 
 	CompassView compassView;
 	TextView degree;

@@ -11,8 +11,8 @@ import android.preference.PreferenceFragment;
  * 
  * @author ebraminio
  */
-public class CalendarPreferenceActivity extends PreferenceActivity {
-	private final CalendarUtils utils = CalendarUtils.getInstance();
+public class ApplicationPreference extends PreferenceActivity {
+	private final Utils utils = Utils.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

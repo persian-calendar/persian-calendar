@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:textDirection="rtl"
-    tools:context=".CalendarActivity" >
+    tools:context=".MainActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"

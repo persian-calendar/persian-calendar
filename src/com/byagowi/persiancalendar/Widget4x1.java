@@ -9,9 +9,9 @@ import android.content.Intent;
  * 
  * @author ebraminio
  */
-public class CalendarWidget4x1 extends AppWidgetProvider {
+public class Widget4x1 extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent(context, CalendarService.class));
+		context.startService(new Intent(context, ApplicationService.class));
 	}
 }

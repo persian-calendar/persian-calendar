@@ -10,8 +10,8 @@ import android.widget.TextView;
  * 
  * @author ebraminio
  */
-public class CalendarAboutActivity extends Activity {
-	private final CalendarUtils utils = CalendarUtils.getInstance();
+public class AboutActivity extends Activity {
+	private final Utils utils = Utils.getInstance();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

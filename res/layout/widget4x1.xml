@@ -4,10 +4,9 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center"
     android:orientation="vertical"
     android:textDirection="rtl"
-    tools:context=".CalendarWidget4x1" >
+    tools:context=".Widget4x1" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -26,6 +25,7 @@
             android:text="@string/clock"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
+
         <TextView
             android:id="@+id/textPlaceholder1_4x1"
             android:layout_width="wrap_content"
