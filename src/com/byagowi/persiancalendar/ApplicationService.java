@@ -1,23 +1,8 @@
 package com.byagowi.persiancalendar;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
 import android.content.*;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.widget.RemoteViews;
-import calendar.CivilDate;
-import calendar.DateConverter;
-import calendar.PersianDate;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * The Calendar Service that updates widget time and clock and build/update
