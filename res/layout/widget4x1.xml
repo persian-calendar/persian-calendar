@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:textDirection="rtl"
-    tools:context=".Widget4x1" >
+    tools:context=".Widget4x1Listener" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@string/clock"
+            android:text="@string/time"
             android:textColor="@android:color/white"
             android:textSize="36sp" />
     </LinearLayout>

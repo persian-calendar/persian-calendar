@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:textDirection="rtl"
-    tools:context=".Widget1x1" >
+    tools:context=".Widget1x1Listener" >
 
     <TextView
         android:id="@+id/textPlaceholder1_1x1"

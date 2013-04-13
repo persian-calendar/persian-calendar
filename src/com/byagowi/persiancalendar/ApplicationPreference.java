@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
+import com.byagowi.persiancalendar.utils.Utils;
+
 /**
  * Preference activity
  * 

@@ -1,10 +1,10 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.utils;
 
 /**
  * Calendars Types
  * 
  * @author ebraminio
  */
-enum Calendars {
+public enum Calendars {
 	SHAMSI, ISLAMIC, GEORGIAN
 }

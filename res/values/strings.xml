@@ -22,6 +22,7 @@
     <string name="day">Day</string>
     <string name="clock">Clock</string>
     <string name="date">Date</string>
+    <string name="time">Time</string>
     <string name="date_converter">Date Converter</string>
     <string name="logo">Logo</string>
     <string name="dari_months">Dari Months</string>
@@ -38,7 +39,7 @@
     <string name="pray_methods">Calculation methods</string>
     <string name="pray_methods_calculation">Calculation methods for pray times and qibla compass</string>
     <string name="altitude">Altitude</string>
-    <string name="altitude_praytime">in meter (optional)</string>
+    <string name="altitude_praytime">In meter (optional)</string>
     <string name="location">Location</string>
     <string name="location_help">If none of them, specify it below</string>
     <string name="showing_iran_time">Showing Widgets and notification bar in Iran TimeZone</string>

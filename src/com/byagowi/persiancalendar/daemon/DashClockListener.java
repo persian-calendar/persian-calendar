@@ -1,15 +1,14 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.daemon;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 
-public class DashClockUpdate extends DashClockExtension {
+public class DashClockListener extends DashClockExtension {
 	private final UpdateUtils updateUtils = UpdateUtils.getInstance();
 
 	@Override
 	protected void onUpdateData(int reason) {
 		setUpdateWhenScreenOn(true);
-		updateUtils.update(this);
-		publishUpdate(updateUtils.getExtensionData());
+		publishUpdate(updateUtils.getDashClockUpdatedData(this));
 	}
 
 }

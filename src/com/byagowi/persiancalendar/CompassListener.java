@@ -1,16 +1,17 @@
 package com.byagowi.persiancalendar;
 
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
-final class CompassListener implements SensorEventListener {
+public final class CompassListener implements SensorEventListener {
 	private final CompassActivity compassActivity;
 
 	/**
 	 * @param compassActivity
 	 */
-	CompassListener(CompassActivity compassActivity) {
+	public CompassListener(CompassActivity compassActivity) {
 		this.compassActivity = compassActivity;
 	}
 

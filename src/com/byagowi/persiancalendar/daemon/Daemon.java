@@ -1,7 +1,11 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.daemon;
+
 
 import android.app.Service;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 
 /**
@@ -10,7 +14,7 @@ import android.os.IBinder;
  * 
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
-public class ApplicationService extends Service {
+public class Daemon extends Service {
 	private final UpdateUtils updateUtils = UpdateUtils.getInstance();
 
 	@Override
