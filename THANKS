@@ -1,7 +1,8 @@
 * ME! (Ebrahim Byagowi)
-* Behdad Pournader for launcher icon
-* Iman Soltanian for splash screen logo
+* Behdad Pournader, launcher icon
+* Iman Soltanian, about icon
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
+* PrayTimes.js (Ported by me) http://praytimes.org/ (LGPLv3)
 * ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)
 * ColorPickerPreference https://github.com/attenzione/android-ColorPickerPreference (Apache)
 * QiblaDirectionCalculator.java from https://github.com/farsitel/android_packages_apps_QiblaCompass (Apache)
