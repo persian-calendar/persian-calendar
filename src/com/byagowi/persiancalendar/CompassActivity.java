@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar;
 
+import com.github.praytimes.Coordinate;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,10 +11,6 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.utils.QiblaDirectionCalculator;
-import com.byagowi.persiancalendar.utils.Utils;
-import com.github.praytimes.Coordinate;
-
 /**
  * Compass/Qibla activity
  * 
@@ -21,12 +19,11 @@ import com.github.praytimes.Coordinate;
 public class CompassActivity extends Activity {
 	private Utils utils = Utils.getInstance();
 
-	public CompassView compassView;
-	public TextView degree;
-	
-	private SensorManager sensorManager;
-	private Sensor sensor;
-	private SensorEventListener compassListener;
+	CompassView compassView;
+	TextView degree;
+	SensorManager sensorManager;
+	Sensor sensor;
+	SensorEventListener compassListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

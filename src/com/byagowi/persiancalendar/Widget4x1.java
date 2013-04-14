@@ -1,5 +1,4 @@
-package com.byagowi.persiancalendar.daemon;
-
+package com.byagowi.persiancalendar;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -10,9 +9,9 @@ import android.content.Intent;
  * 
  * @author ebraminio
  */
-public class Widget4x1Listener extends AppWidgetProvider {
+public class Widget4x1 extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent(context, Daemon.class));
+		context.startService(new Intent(context, ApplicationService.class));
 	}
 }

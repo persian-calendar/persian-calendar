@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import java.util.Calendar;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -13,21 +11,21 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-import com.byagowi.persiancalendar.utils.Utils;
+import java.util.Calendar;
 
 /**
  * Days events listener
  * 
  * @author ebraminio
  */
-public class ClickDayListener implements View.OnClickListener,
+class ClickDayListener implements View.OnClickListener,
 		View.OnLongClickListener {
 	private final String holidayTitle;
 	private final PersianDate persianDate;
 	private final MainActivity calendarAcitivity;
 	private final Utils utils;
 
-	public ClickDayListener(String holidayTitle, PersianDate persianDate,
+	ClickDayListener(String holidayTitle, PersianDate persianDate,
 			MainActivity calendarAcitivity) {
 		this.holidayTitle = holidayTitle;
 		this.persianDate = persianDate;
