@@ -27,8 +27,7 @@ public class SplashScreen extends Activity {
 			}
 			finish();
 			Intent intent = new Intent();
-			intent.setClass(SplashScreen.this,
-					MainActivity.class);
+			intent.setClass(SplashScreen.this, MainActivity.class);
 			startActivity(intent);
 		}
 	};
@@ -50,7 +49,7 @@ public class SplashScreen extends Activity {
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
-		String versionTitle = "نسخهٔ "
+		String versionTitle = utils.version
 				+ utils.formatNumber(utils.programVersion(this), digits);
 
 		utils.prepareTextView(versionTextView);
