@@ -1,11 +1,15 @@
 package com.byagowi.persiancalendar;
 
-import android.widget.TextView;
-import com.github.praytimes.*;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
+import android.widget.TextView;
+
+import com.github.praytimes.Clock;
+import com.github.praytimes.Coordinate;
+import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimesCalculator;
 
 /**
  * Pray time helper. It is like an aspect for activity class somehow

@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar;
 
+import java.util.Calendar;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +12,6 @@ import android.view.View;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
-
-import java.util.Calendar;
 
 /**
  * Days events listener

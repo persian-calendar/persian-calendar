@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import com.github.praytimes.Coordinate;
-
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -10,6 +8,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.github.praytimes.Coordinate;
 
 /**
  * Compass/Qibla activity
