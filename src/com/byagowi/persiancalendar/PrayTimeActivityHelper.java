@@ -79,8 +79,7 @@ class PrayTimeActivityHelper {
 		sb.append(utils.clockToString(prayTimes.get(PrayTime.Midnight), digits));
 
 		utils.prepareTextView(prayTimeTextView);
-		prayTimeTextView.setText(utils.textShaper(utils.formatNumber(
-				sb.toString(), digits)));
+		prayTimeTextView.setText(utils.formatNumber(sb.toString(), digits));
 	}
 
 	public void clearInfo() {
