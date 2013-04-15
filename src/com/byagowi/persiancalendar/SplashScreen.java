@@ -49,7 +49,7 @@ public class SplashScreen extends Activity {
 
 		TextView versionTextView = ((TextView) findViewById(R.id.version));
 
-		String versionTitle = utils.version
+		String versionTitle = utils.version + " "
 				+ utils.formatNumber(utils.programVersion(this), digits);
 
 		utils.prepareTextView(versionTextView);
