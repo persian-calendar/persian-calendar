@@ -1,4 +1,4 @@
-package com.github;
+package com.byagowi.persiancalendar.view;
 
 /* 
  * The reason behind this code is the problem of having multiple scroll-able 
@@ -27,7 +27,14 @@ public class CustomScrollView extends ScrollView {
 
 	public CustomScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mGestureDetector = new GestureDetector(context, new YScrollDetector());
+		mGestureDetector = new GestureDetector(context,
+				new SimpleOnGestureListener() {
+					@Override
+					public boolean onScroll(MotionEvent e1, MotionEvent e2,
+							float distanceX, float distanceY) {
+						return Math.abs(distanceY) > Math.abs(distanceX);
+					}
+				});
 		setFadingEdgeLength(0);
 	}
 
@@ -35,17 +42,5 @@ public class CustomScrollView extends ScrollView {
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		return super.onInterceptTouchEvent(ev)
 				&& mGestureDetector.onTouchEvent(ev);
-	}
-
-	// Return false if we're scrolling in the x direction
-	private class YScrollDetector extends SimpleOnGestureListener {
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-				float distanceX, float distanceY) {
-			if (Math.abs(distanceY) > Math.abs(distanceX)) {
-				return true;
-			}
-			return false;
-		}
 	}
 }

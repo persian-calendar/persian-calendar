@@ -18,14 +18,14 @@ import calendar.PersianDate;
  * 
  * @author ebraminio
  */
-class ClickDayListener implements View.OnClickListener,
+public class ClickDayListener implements View.OnClickListener,
 		View.OnLongClickListener {
 	private final String holidayTitle;
 	private final PersianDate persianDate;
 	private final MainActivity calendarAcitivity;
 	private final Utils utils;
 
-	ClickDayListener(String holidayTitle, PersianDate persianDate,
+	public ClickDayListener(String holidayTitle, PersianDate persianDate,
 			MainActivity calendarAcitivity) {
 		this.holidayTitle = holidayTitle;
 		this.persianDate = persianDate;

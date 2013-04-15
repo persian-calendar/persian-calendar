@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.view.CompassView;
 import com.farsitel.qiblacompass.logic.QiblaDirectionCalculator;
 import com.github.praytimes.Coordinate;
 

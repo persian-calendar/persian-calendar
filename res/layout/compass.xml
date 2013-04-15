@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:gravity="center" />
 
-        <com.byagowi.persiancalendar.CompassView
+        <com.byagowi.persiancalendar.view.CompassView
             android:id="@+id/compass_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
