@@ -21,7 +21,7 @@ public class ApplicationService extends Service {
 		return null;
 	}
 
-	private static int count = 0;
+	private int count = 0;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
