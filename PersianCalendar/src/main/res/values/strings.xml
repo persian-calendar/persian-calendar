@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Persian Calendar</string>
+    <string name="widget_name">Persian Calendar</string>
+    <string name="widget_mini_name">Persian Calendar (mini)</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="today">Today</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="enable_persian_digits">Enable Persian Digits</string>
+    <string name="persian_digits">Persian Digits</string>
+    <string name="showing_clock_on_widget">Show the clock on widget</string>
+    <string name="clock_on_widget">Clock on the Widget</string>
+    <string name="showing_clock_in_24">Show the clock in 24 hour</string>
+    <string name="clock_in_24">Clock in 24 hour</string>
+    <string name="about">About</string>
+    <string name="gpl_logo">GPL Logo</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
+    <string name="clock">Clock</string>
+    <string name="date">Date</string>
+    <string name="date_converter">Date Converter</string>
+    <string name="logo">Logo</string>
+    <string name="dari_months">Dari Months</string>
+    <string name="enable_dari">Enable Dari Months</string>
+    <string name="widget_notification_dashclock">Widget, notification bar and DashClock</string>
+    <string name="general">General</string>
+    <string name="widget_text_color">Widget Text Color</string>
+    <string name="select_widgets_text_color">Select custom color for widgets texts</string>
+    <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
+    <string name="notify_date">Enable Date Notification</string>
+    <string name="enable_notify">Permanent notification for all date types</string>
+    <string name="select_skin">Select a skin</string>
+    <string name="skin">Skin</string>
+    <string name="pray_methods">Calculation methods</string>
+    <string name="pray_methods_calculation">Calculation methods for pray times and qibla compass
+    </string>
+    <string name="altitude">Altitude</string>
+    <string name="altitude_praytime">in meter (optional)</string>
+    <string name="location">Location</string>
+    <string name="location_help">If none of them, specify it below</string>
+    <string name="showing_iran_time">Showing Widgets and notification bar in Iran TimeZone</string>
+    <string name="iran_time">Iran Time</string>
+    <string name="qibla_compass">Compass/Qibla</string>
+    <string name="compass_not_found">Compass sensor not found</string>
+
+</resources>

@@ -17,4 +17,5 @@ gen/
 local.properties
 
 #IntelliJ
-.idea/
+build
+*.iml

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="android-ColorPickerPreference.aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PersianCalendar/build/exploded-bundles/android-ColorPickerPreference.aar/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
