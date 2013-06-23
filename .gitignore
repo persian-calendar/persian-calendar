@@ -19,3 +19,6 @@ local.properties
 #IntelliJ
 build
 *.iml
+
+#gradle
+.gradle/
