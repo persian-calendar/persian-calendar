@@ -41,6 +41,6 @@ public class ApplicationService extends Service {
             }, intentFilter);
         }
         updateUtils.update(getApplicationContext());
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 }
