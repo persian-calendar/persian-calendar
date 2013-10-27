@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/widget_layout1x1"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical"
-              android:textDirection="rtl"
-              tools:context=".Widget1x1">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_layout1x1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:textDirection="rtl"
+    tools:context=".Widget1x1">
 
     <TextView
-            android:id="@+id/textPlaceholder1_1x1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-3sp"
-            android:gravity="center"
-            android:text="@string/day"
-            android:textColor="@android:color/white"
-            android:textDirection="rtl"
-            android:textSize="40sp"
-            style="@style/ShadowTextStyle"/>
+        android:id="@+id/textPlaceholder1_1x1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-3sp"
+        android:gravity="center"
+        android:text="@string/day"
+        android:textColor="@android:color/white"
+        android:textDirection="rtl"
+        android:textSize="40sp"
+        style="@style/ShadowTextStyle" />
 
     <TextView
-            android:id="@+id/textPlaceholder2_1x1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:gravity="center_horizontal|bottom"
-            android:text="@string/month"
-            android:textColor="@android:color/white"
-            android:textDirection="rtl"
-            android:textSize="15sp"
-            style="@style/ShadowTextStyle"/>
+        android:id="@+id/textPlaceholder2_1x1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_horizontal|bottom"
+        android:text="@string/month"
+        android:textColor="@android:color/white"
+        android:textDirection="rtl"
+        android:textSize="15sp"
+        style="@style/ShadowTextStyle" />
 
 </LinearLayout>

@@ -38,10 +38,10 @@ final class CompassListener implements SensorEventListener {
 
     /**
      * @see http
-     *      ://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
+     * ://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      * @see http
-     *      ://developer.android.com/reference/android/hardware/SensorEvent.html
-     *      #values
+     * ://developer.android.com/reference/android/hardware/SensorEvent.html
+     * #values
      */
     private float lowPass(float input, float output) {
         if (Math.abs(180 - input) > 170) {

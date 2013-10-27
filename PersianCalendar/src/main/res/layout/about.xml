@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/about_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            tools:context=".AboutActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/about_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".AboutActivity">
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="20sp"
-            android:paddingRight="20sp"
-            android:paddingTop="20sp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
 
         <FrameLayout
-                android:id="@+id/main_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:id="@+id/main_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
-                    android:id="@+id/version2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="bottom"
-                    android:paddingTop="20sp"
-                    android:textSize="20sp"/>
+                android:id="@+id/version2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="bottom"
+                android:paddingTop="20sp"
+                android:textSize="20sp" />
 
             <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#00000000"
-                    android:contentDescription="@string/logo"
-                    android:gravity="center"
-                    android:src="@drawable/logo"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:contentDescription="@string/logo"
+                android:gravity="center"
+                android:src="@drawable/logo" />
         </FrameLayout>
 
         <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/gpl_logo"
-                android:src="@drawable/gpl3_logo"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/gpl_logo"
+            android:src="@drawable/gpl3_logo" />
 
         <TextView
-                android:id="@+id/license"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10sp"
-                android:textSize="9sp"/>
+            android:id="@+id/license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:textSize="9sp" />
     </LinearLayout>
 
 </ScrollView>

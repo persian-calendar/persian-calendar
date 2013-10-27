@@ -2,16 +2,16 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <stroke
-            android:width="1sp"
-            android:color="#10000000"/>
+        android:width="1sp"
+        android:color="#10000000" />
 
     <padding
-            android:bottom="4sp"
-            android:top="2sp"/>
+        android:bottom="4sp"
+        android:top="2sp" />
 
     <gradient
-            android:angle="90.0"
-            android:endColor="#50FFFFFF"
-            android:startColor="#10FFFFFF"/>
+        android:angle="90.0"
+        android:endColor="#50FFFFFF"
+        android:startColor="#10FFFFFF" />
 
 </shape>

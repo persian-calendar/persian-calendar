@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="net.margaritov.preference.colorpicker"
-      android:versionCode="0111"
-      android:versionName="1.11">
+    package="net.margaritov.preference.colorpicker"
+    android:versionCode="0111"
+    android:versionName="1.11">
+
     <uses-sdk android:minSdkVersion="7" />
 </manifest> 
