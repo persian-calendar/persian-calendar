@@ -11,7 +11,7 @@ public enum Locations {
             29.62, 52.53), GHAZVIN(36.45, 50), GHOM(34.65, 50.95), KERMAN(
             30.28, 57.06), KERMANSHAH(34.32, 47.06), GORGAN(36.83, 54.48), MASHHAD(
             34.3, 59.57), HAMEDAN(34.77, 48.58), YASUJ(30.82, 51.68), YAZD(
-            31.90, 54.37);
+            31.90, 54.37), KABUL(34.53, 69.16);
 
     private Coordinate coordinate;
 
