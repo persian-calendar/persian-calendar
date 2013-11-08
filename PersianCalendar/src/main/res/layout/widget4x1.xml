@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5sp"
             android:gravity="right"
-            android:text="@string/clock"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             style="@style/ShadowTextStyle" />
@@ -32,7 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@string/clock"
             android:textColor="@android:color/white"
             android:textSize="36sp"
             style="@style/ShadowTextStyle" />
@@ -43,7 +41,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="@string/date"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         style="@style/ShadowTextStyle" />
