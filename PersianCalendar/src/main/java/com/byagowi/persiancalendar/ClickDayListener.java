@@ -68,6 +68,8 @@ public class ClickDayListener implements View.OnClickListener,
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                 time.getTimeInMillis());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
         context.startActivity(intent);
     }
