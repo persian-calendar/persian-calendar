@@ -6,10 +6,6 @@ package com.cepmuvakkit.times.posAlgo;
 
 import android.graphics.Canvas;
 
-
-
-
-
 public class Horizontal {
 
     public double h; //h         Altitude
