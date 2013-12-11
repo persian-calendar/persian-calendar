@@ -54,16 +54,7 @@ public class AboutActivity extends Activity {
                 + "You should have received a copy of the GNU General Public License "
                 + "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
                 + "\n"
-                + "Thanks to:\n"
-                + "* Behdad Pournader, application icon\n"
-                + "* Iman Soltanian, about icon\n"
-                + "* Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)\n"
-                + "* PrayTimes.js (Ported by me) http://praytimes.org/ (LGPLv3)\n"
-                + "* ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)\n"
-                + "* ColorPickerPreference https://github.com/attenzione/android-ColorPickerPreference (Apache)\n"
-                + "* QiblaDirectionCalculator.java from https://github.com/farsitel/android_packages_apps_QiblaCompass (Apache)"
-                + "\n"
-                + "For bug report: http://github.com/ebraminio/DroidPersianCalendar";
+                + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar";
 
         licenseTextView.setText(text);
     }

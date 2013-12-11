@@ -6,11 +6,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.view.CompassView;
-import com.farsitel.qiblacompass.logic.QiblaDirectionCalculator;
+import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
 
 /**
@@ -21,7 +22,7 @@ import com.github.praytimes.Coordinate;
 public class CompassActivity extends Activity {
     private Utils utils = Utils.getInstance();
 
-    CompassView compassView;
+    QiblaCompassView compassView;
     TextView degree;
     SensorManager sensorManager;
     Sensor sensor;
@@ -34,14 +35,20 @@ public class CompassActivity extends Activity {
         compassListener = new CompassListener(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.compass);
-        compassView = (CompassView) findViewById(R.id.compass_view);
-        degree = (TextView) findViewById(R.id.degree);
+        compassView = (QiblaCompassView) findViewById(R.id.compass_view);
+
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+        compassView.setScreenResolution(width, height - 2 * height / 8);
 
         Coordinate coordinate = utils.getCoordinate(this);
         if (coordinate != null) {
-            compassView.setQibla(QiblaDirectionCalculator
-                    .getQiblaDirectionFromNorth(coordinate.getLatitude(),
-                            coordinate.getLongitude()));
+            compassView.setLongitude(coordinate.getLongitude());
+            compassView.setLatitude(coordinate.getLatitude());
+            compassView.initCompassView();
+            compassView.invalidate();
         }
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

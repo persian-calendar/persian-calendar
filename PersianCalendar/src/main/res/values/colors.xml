@@ -5,4 +5,9 @@
     <color name="holidays_text_color">#6E97B9</color>
     <color name="first_row_background_color">#6E97B9</color>
 
+    <!-- solely used on QiblaCompassView -->
+    <color name="background_color">#6E97B9</color>
+    <color name="marker_color">#FFFFFF</color>
+    <color name="text_color">#FFFFFF</color>
+
 </resources>

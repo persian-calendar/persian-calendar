@@ -4,8 +4,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
+import com.byagowi.persiancalendar.view.QiblaCompassView;
+
 final class CompassListener implements SensorEventListener {
-    private final CompassActivity compassActivity;
+    private CompassActivity compassActivity;
 
     /**
      * @param compassActivity
@@ -32,16 +34,13 @@ final class CompassListener implements SensorEventListener {
         // angle between the magnetic north direction
         // 0=North, 90=East, 180=South, 270=West
         azimuth = lowPass(event.values[0], azimuth);
-        compassActivity.compassView.setPosition(azimuth);
-        compassActivity.degree.setText("N: " + (int) azimuth + "°");
+        compassActivity.compassView.setBearing(azimuth);
+        compassActivity.compassView.invalidate();
     }
 
     /**
-     * @see http
-     * ://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
-     * @see http
-     * ://developer.android.com/reference/android/hardware/SensorEvent.html
-     * #values
+     * @see https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
+     * @see http://developer.android.com/reference/android/hardware/SensorEvent.html#values
      */
     private float lowPass(float input, float output) {
         if (Math.abs(180 - input) > 170) {
