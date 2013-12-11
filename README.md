@@ -1,8 +1,8 @@
 Android Persian Calendar [![Build Status](https://buildhive.cloudbees.com/job/ebraminio/job/DroidPersianCalendar/badge/icon)](https://buildhive.cloudbees.com/job/ebraminio/job/DroidPersianCalendar/)
 =============================
 <div lang="fa" dir="rtl"><font>تقویم فارسی اندروید<br />
-تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock
-برای دریافت بر روی برگهٔ Release در بالای صفحه کلیک کنید.</div>
+تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock<br />
+برای دریافت و نصب بر برگهٔ release در بالای صفحه کلیک کنید.</div>
 =============================
 
 ------------------------------
