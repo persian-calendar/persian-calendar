@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile files('libs/android-support-v4.jar')
+    compile 'com.android.support:support-v4:+'
     compile 'com.google.android.apps.dashclock:dashclock-api:+'
     compile project(':libraries:android-ColorPickerPreference')
 }

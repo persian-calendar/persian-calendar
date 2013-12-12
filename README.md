@@ -40,3 +40,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 3. Build
 ==============================
 Import it on Android Studio
+
+Note: After downloading Android Studio, you should once open
+Android SDK Manager and download Android Support Library
