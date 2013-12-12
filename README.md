@@ -17,7 +17,7 @@ Contents
 ==============================
 * [Google Play](https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar)
 * [Bazaar](http://cafebazaar.ir/app/com.byagowi.persiancalendar)
-* [F-Droid](http://f-droid.org/repository/browse/?fdid=com.byagowi.persiancalendar)
+* [F-Droid](https://f-droid.org/app/com.byagowi.persiancalendar)
 * [Github](https://github.com/ebraminio/DroidPersianCalendar/releases/)
 
 2. License
