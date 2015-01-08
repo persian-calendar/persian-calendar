@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="hello">سلام</string>
+    <string name="app_name">ترجیحات انتخاب رنگ</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">انتخاب‌گر رنگ</string>
+    <string name="press_color_to_apply">برای اعمال فشار دهید</string>
+
+    <!-- Preferences -->
+    <string name="pref_category">رده</string>
+    <string name="color1_title">رنگ ۱</string>
+    <string name="color1_summary">رنگ سیاه به‌صورت پیشفرض، مشخص‌شده توسط ترجیحات</string>
+    <string name="color2_title">رنگ ۲</string>
+    <string name="color2_summary">رنگ غیر پایدار\nلغزشگر شفافیت با کد افزوده‌شده</string>
+    <string name="color3_title">رنگ ۳</string>
+    <string name="color3_summary">انتخاب‌گر با لغزندهٔ شفافیت</string>
+    <string name="color4_title">رنگ ۴</string>
+    <string name="color4_summary">انتخاب رنگ با کد هگز در اکس‌ام‌ال</string>
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/general">
+        <ListPreference
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
+            android:summary="@string/select_skin"
+            android:title="@string/skin" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="PersianDigits"
+            android:summary="@string/enable_persian_digits"
+            android:title="@string/persian_digits" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="DariVersion"
+            android:summary="@string/enable_dari"
+            android:title="@string/dari_months" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/widget_notification_dashclock">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="NotifyDate"
+            android:summary="@string/enable_notify"
+            android:title="@string/notify_date" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            alphaSlider="true"
+            android:defaultValue="@android:color/white"
+            android:key="WidgetTextColor"
+            android:summary="@string/select_widgets_text_color"
+            android:title="@string/widget_text_color" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="IranTime"
+            android:summary="@string/showing_iran_time"
+            android:title="@string/iran_time" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="WidgetClock"
+            android:summary="@string/showing_clock_on_widget"
+            android:title="@string/clock_on_widget" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="WidgetIn24"
+            android:summary="@string/showing_clock_in_24"
+            android:title="@string/clock_in_24" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pray_times_calculation_setting">
+        <ListPreference
+            android:defaultValue="Jafari"
+            android:entries="@array/prayMethodsNames"
+            android:entryValues="@array/prayMethodsKeys"
+            android:key="PrayTimeMethod"
+            android:summary="@string/pray_methods_calculation"
+            android:title="@string/pray_methods" />
+        <ListPreference
+            android:defaultValue="CUSTOM"
+            android:entries="@array/locationNames"
+            android:entryValues="@array/locationKeys"
+            android:key="Location"
+            android:summary="@string/location_help"
+            android:title="@string/location" />
+
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Latitude"
+            android:title="@string/latitude" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Longitude"
+            android:title="@string/longitude" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="Altitude"
+            android:summary="@string/altitude_praytime"
+            android:title="@string/altitude" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

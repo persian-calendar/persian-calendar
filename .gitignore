@@ -1,6 +1,5 @@
 # built application files
 *.apk
-!PersianCalendar.apk
 *.ap_
 
 # files for the dex VM
@@ -13,8 +12,29 @@
 bin/
 gen/
 
+# Eclipse project files
+.classpath
+.project
+
 # Local configuration file (sdk path, etc)
 local.properties
 
 #IntelliJ
+build
+*.iml
+
+#gradle
+.gradle/
+
+# Android Studio
 .idea/
+.gradle
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
