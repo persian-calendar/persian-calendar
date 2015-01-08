@@ -38,7 +38,7 @@ public class AboutActivity extends Activity {
         String text = "Android Persian Calendar Version "
                 + version
                 + "\n"
-                + "Copyright (C) 2012-2013  ebrahim@byagowi.com "
+                + "Copyright (C) 2012-2015  ebrahim@gnu.org "
                 + utils.textShaper("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
