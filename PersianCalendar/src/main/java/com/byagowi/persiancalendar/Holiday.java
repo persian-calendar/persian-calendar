@@ -11,6 +11,11 @@ class Holiday {
     private PersianDate date;
     private String title;
 
+    public Holiday(PersianDate date, String title) {
+        this.date = date;
+        this.title = title;
+    }
+
     public PersianDate getDate() {
         return date;
     }
@@ -24,11 +29,6 @@ class Holiday {
     }
 
     public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Holiday(PersianDate date, String title) {
-        this.date = date;
         this.title = title;
     }
 }

@@ -1,8 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -17,14 +14,26 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
+import com.google.android.apps.dashclock.api.ExtensionData;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-import com.google.android.apps.dashclock.api.ExtensionData;
-
 public class UpdateUtils {
+    private static final int NOTIFICATION_ID = 1001;
     private static UpdateUtils myInstance;
+    private final Utils utils = Utils.getInstance();
+
+    //
+    private NotificationManager mNotificationManager;
+    private Bitmap largeIcon;
+    private ExtensionData mExtensionData;
+    private UpdateUtils() {
+    }
 
     public static UpdateUtils getInstance() {
         if (myInstance == null) {
@@ -32,17 +41,6 @@ public class UpdateUtils {
         }
         return myInstance;
     }
-
-    private UpdateUtils() {
-    }
-
-    //
-
-    private final Utils utils = Utils.getInstance();
-
-    private static final int NOTIFICATION_ID = 1001;
-    private NotificationManager mNotificationManager;
-    private Bitmap largeIcon;
 
     public void update(Context context) {
         SharedPreferences prefs = PreferenceManager
@@ -160,8 +158,6 @@ public class UpdateUtils {
                 .expandedTitle(utils.textShaper(title))
                 .expandedBody(utils.textShaper(body)).clickIntent(intent);
     }
-
-    private ExtensionData mExtensionData;
 
     public ExtensionData getExtensionData() {
         return mExtensionData;

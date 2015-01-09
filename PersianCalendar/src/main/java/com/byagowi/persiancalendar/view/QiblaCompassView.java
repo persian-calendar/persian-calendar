@@ -2,21 +2,26 @@
 // licensed under GPLv3
 package com.byagowi.persiancalendar.view;
 
-import java.text.DecimalFormat;
-import java.util.GregorianCalendar;
-
 import android.content.Context;
-import android.graphics.*;
-import android.view.*;
-import android.util.AttributeSet;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
+import android.util.AttributeSet;
+import android.view.View;
 
+import com.byagowi.persiancalendar.R;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
-import com.byagowi.persiancalendar.R;
+import java.util.GregorianCalendar;
 
 public class QiblaCompassView extends View {
     private Paint dashedPaint;

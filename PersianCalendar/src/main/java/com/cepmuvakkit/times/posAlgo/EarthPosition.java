@@ -5,7 +5,6 @@
 package com.cepmuvakkit.times.posAlgo;
 
 /**
- *
  * @author mgeden
  */
 public class EarthPosition {
@@ -23,23 +22,23 @@ public class EarthPosition {
 
     public EarthPosition(double latitude, double longitude) {
 
-        this(latitude,longitude,Math.round(longitude/15.0), 0, 10, 1010);
+        this(latitude, longitude, Math.round(longitude / 15.0), 0, 10, 1010);
 
     }
 
     public EarthPosition(double latitude, double longitude, double timezone, int altitude, int temperature, int pressure) {
         mLatitude = latitude;
         mLongitude = longitude;
-        mTimezone=timezone;
+        mTimezone = timezone;
         mTemperature = temperature;
         mPressure = pressure;
         mAltitude = altitude;
     }
 
-    public EarthPosition(float latitude, float longitude,float timezone, int altitude, int temperature, int pressure) {
-        mLatitude = (double)latitude;
-        mLongitude =(double) longitude;
-        mTimezone=(double)timezone;
+    public EarthPosition(float latitude, float longitude, float timezone, int altitude, int temperature, int pressure) {
+        mLatitude = (double) latitude;
+        mLongitude = (double) longitude;
+        mTimezone = (double) timezone;
         mTemperature = temperature;
         mPressure = pressure;
         mAltitude = altitude;
@@ -52,6 +51,7 @@ public class EarthPosition {
     public double getLongitude() {
         return mLongitude;
     }
+
     public double getTimezone() {
         return mTimezone;
     }

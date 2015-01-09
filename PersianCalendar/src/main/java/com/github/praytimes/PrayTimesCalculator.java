@@ -1,11 +1,5 @@
 package com.github.praytimes;
 
-import static com.github.praytimes.StaticUtils.deg;
-import static com.github.praytimes.StaticUtils.dtr;
-import static com.github.praytimes.StaticUtils.fixHour;
-import static com.github.praytimes.StaticUtils.min;
-import static com.github.praytimes.StaticUtils.rtd;
-
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -13,20 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class PrayTimesCalculator {
-    private final MinuteOrAngleDouble _imsak = min(10);
-    private final MinuteOrAngleDouble _dhuhr = min(0);
-    private final CalculationMethod.AsrJuristics _asr = CalculationMethod.AsrJuristics.Standard;
-    private final CalculationMethod.HighLatMethods _highLats = CalculationMethod.HighLatMethods.NightMiddle;
-    private boolean _dst;
-    private double _timeZone;
-    private double _jDate;
-    private Coordinate _coordinate;
-    private final CalculationMethod _method;
+import static com.github.praytimes.StaticUtils.deg;
+import static com.github.praytimes.StaticUtils.dtr;
+import static com.github.praytimes.StaticUtils.fixHour;
+import static com.github.praytimes.StaticUtils.min;
+import static com.github.praytimes.StaticUtils.rtd;
 
+public class PrayTimesCalculator {
     // default times
     private static Map<PrayTime, Double> _defaultTimes;
-
     static {
         _defaultTimes = new HashMap<PrayTime, Double>();
         _defaultTimes.put(PrayTime.Imsak, 5d / 24);
@@ -39,6 +28,15 @@ public class PrayTimesCalculator {
         _defaultTimes.put(PrayTime.Isha, 18d / 24);
         _defaultTimes = Collections.unmodifiableMap(_defaultTimes); // immutable
     }
+    private final MinuteOrAngleDouble _imsak = min(10);
+    private final MinuteOrAngleDouble _dhuhr = min(0);
+    private final CalculationMethod.AsrJuristics _asr = CalculationMethod.AsrJuristics.Standard;
+    private final CalculationMethod.HighLatMethods _highLats = CalculationMethod.HighLatMethods.NightMiddle;
+    private final CalculationMethod _method;
+    private boolean _dst;
+    private double _timeZone;
+    private double _jDate;
+    private Coordinate _coordinate;
 
     public PrayTimesCalculator() {
         this(CalculationMethod.MWL); // default method
@@ -157,25 +155,6 @@ public class PrayTimesCalculator {
         return sunAngleTime(deg(rtd(angle)), time);
     }
 
-    private class DeclEqt {
-        private final double declination;
-        private final double equation;
-
-        public DeclEqt(double declination, double equation) {
-            super();
-            this.declination = declination;
-            this.equation = equation;
-        }
-
-        public double getDeclination() {
-            return declination;
-        }
-
-        public double getEquation() {
-            return equation;
-        }
-    }
-
     // compute declination angle of sun and equation of time
     // Ref: http://aa.usno.navy.mil/faq/docs/SunApprox.php
     private DeclEqt sunPosition(double jd) {
@@ -214,9 +193,6 @@ public class PrayTimesCalculator {
         return JD;
     }
 
-    // Section 2!! (Compute Prayer Time in JS code)
-    //
-
     // adjust times
     private Map<PrayTime, Double> adjustTimes(Map<PrayTime, Double> times) {
         Map<PrayTime, Double> result = new HashMap<PrayTime, Double>();
@@ -247,6 +223,9 @@ public class PrayTimesCalculator {
         return result;
     }
 
+    // Section 2!! (Compute Prayer Time in JS code)
+    //
+
     // get asr shadow factor
     private double asrFactor() {
         return _asr == CalculationMethod.AsrJuristics.Hanafi ? 2d : 1d;
@@ -275,19 +254,19 @@ public class PrayTimesCalculator {
         times.put(
                 PrayTime.Fajr,
                 adjustHLTime(times.get(PrayTime.Fajr), times
-                        .get(PrayTime.Sunrise), _method.getFajr().getValue(),
+                                .get(PrayTime.Sunrise), _method.getFajr().getValue(),
                         nightTime, true));
 
         times.put(
                 PrayTime.Isha,
                 adjustHLTime(times.get(PrayTime.Isha), times
-                        .get(PrayTime.Sunset), _method.getIsha().getValue(),
+                                .get(PrayTime.Sunset), _method.getIsha().getValue(),
                         nightTime));
 
         times.put(
                 PrayTime.Maghrib,
                 adjustHLTime(times.get(PrayTime.Maghrib), times
-                        .get(PrayTime.Sunset), _method.getMaghrib().getValue(),
+                                .get(PrayTime.Sunset), _method.getMaghrib().getValue(),
                         nightTime));
 
         return times;
@@ -321,19 +300,24 @@ public class PrayTimesCalculator {
         return portion * night;
     }
 
-    //
-    // Time Zone Functions
-    //
-    //
-
     // get local time zone
     private double getTimeZone(Date date) {
         return TimeZone.getDefault().getRawOffset() / (60 * 60 * 1000.0);
     }
 
+    //
+    // Time Zone Functions
+    //
+    //
+
     // get daylight saving for a given date
     private boolean getDst(Date date) {
         return TimeZone.getDefault().inDaylightTime(date);
+    }
+
+    // compute the difference between two times
+    private double timeDiff(double time1, double time2) {
+        return fixHour(time2 - time1);
     }
 
     //
@@ -341,8 +325,22 @@ public class PrayTimesCalculator {
     //
     //
 
-    // compute the difference between two times
-    private double timeDiff(double time1, double time2) {
-        return fixHour(time2 - time1);
+    private class DeclEqt {
+        private final double declination;
+        private final double equation;
+
+        public DeclEqt(double declination, double equation) {
+            super();
+            this.declination = declination;
+            this.equation = equation;
+        }
+
+        public double getDeclination() {
+            return declination;
+        }
+
+        public double getEquation() {
+            return equation;
+        }
     }
 }

@@ -19,6 +19,16 @@ public class PersianDate extends AbstractDate {
             "حوت"};
 
     private boolean isDari = false;
+    private int year;
+    private int month;
+    private int day;
+    public PersianDate(int year, int month, int day) {
+        setYear(year);
+        // Initialize day, so that we get no exceptions when setting month
+        this.day = 1;
+        setMonth(month);
+        setDayOfMonth(day);
+    }
 
     public String[] getMonthsList() {
         return isDari ? dariMonthName : persianMonthName;
@@ -28,52 +38,12 @@ public class PersianDate extends AbstractDate {
         this.isDari = isDari;
     }
 
-    private int year;
-    private int month;
-    private int day;
-
-    public PersianDate(int year, int month, int day) {
-        setYear(year);
-        // Initialize day, so that we get no exceptions when setting month
-        this.day = 1;
-        setMonth(month);
-        setDayOfMonth(day);
-    }
-
     public PersianDate clone() {
         return new PersianDate(getYear(), getMonth(), getDayOfMonth());
     }
 
     public int getDayOfMonth() {
         return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public String getMonthName() {
-        return getMonthsList()[month];
-    }
-
-    public int getWeekOfYear() {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void rollDay(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public void rollMonth(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public void rollYear(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
     }
 
     public void setDayOfMonth(int day) {
@@ -95,6 +65,10 @@ public class PersianDate extends AbstractDate {
         this.day = day;
     }
 
+    public int getMonth() {
+        return month;
+    }
+
     public void setMonth(int month) {
         if (month < 1 || month > 12)
             throw new MonthOutOfRangeException("month " + month
@@ -107,11 +81,35 @@ public class PersianDate extends AbstractDate {
         this.month = month;
     }
 
+    public String getMonthName() {
+        return getMonthsList()[month];
+    }
+
+    public int getWeekOfYear() {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public int getYear() {
+        return year;
+    }
+
     public void setYear(int year) {
         if (year == 0)
             throw new YearOutOfRangeException("Year 0 is invalid!");
 
         this.year = year;
+    }
+
+    public void rollDay(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public void rollMonth(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public void rollYear(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
     }
 
     public String getEvent() {

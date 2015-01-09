@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import com.byagowi.persiancalendar.view.MonthFragment;
-
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
@@ -19,6 +17,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.view.MonthFragment;
+
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
@@ -29,11 +29,14 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class MainActivity extends FragmentActivity {
+    // I know, it is ugly, but user will not notify this and this will not have
+    // a memory problem
+    private static final int MONTHS_LIMIT = 1200;
     public Utils utils = Utils.getInstance();
-
     private ViewPager viewPager;
     private TextView calendarInfo;
     private Button resetButton;
+    private PrayTimeActivityHelper prayTimeActivityHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +119,6 @@ public class MainActivity extends FragmentActivity {
         prayTimeActivityHelper.clearInfo();
     }
 
-    // I know, it is ugly, but user will not notify this and this will not have
-    // a memory problem
-    private static final int MONTHS_LIMIT = 1200;
-
     private void bringTodayYearMonth() {
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
@@ -180,8 +179,6 @@ public class MainActivity extends FragmentActivity {
     private boolean hasPermanentMenuKey() {
         return ViewConfiguration.get(this).hasPermanentMenuKey();
     }
-
-    private PrayTimeActivityHelper prayTimeActivityHelper;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

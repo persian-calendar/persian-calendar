@@ -6,11 +6,10 @@
 package com.cepmuvakkit.times.posAlgo;
 
 /**
- *
  * @author mgeden
  */
 public class EarthHeading {
-    
+
     private double mHeading;
     private long mMetres;
 
@@ -18,12 +17,12 @@ public class EarthHeading {
         mHeading = heading;
         mMetres = metres;
     }
-    
+
     public double getHeading() {
         return mHeading;
     }
-    
+
     public long getKiloMetres() {
-        return mMetres/1000;
+        return mMetres / 1000;
     }
 }

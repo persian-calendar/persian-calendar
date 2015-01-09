@@ -10,21 +10,13 @@ public class CivilDate extends AbstractDate {
     private static final String[] monthName = {"", "ژانویه", "فوریه", "مارس",
             "آوریل", "مه", "ژون", "جولای", "آگوست", "سپتامبر", "اکتبر",
             "نوامبر", "دسامبر"};
-
-    public String[] getMonthsList() {
-        return monthName;
-    }
-
     private static final String[] weekdayName = {"", "یکشنبه", "دوشنبه",
             "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
-
     private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31,
             31, 30, 31, 30, 31};
-
     private int year;
     private int month;
     private int day;
-
     public CivilDate() {
         this(Calendar.getInstance());
     }
@@ -42,8 +34,29 @@ public class CivilDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
+    public String[] getMonthsList() {
+        return monthName;
+    }
+
     public int getDayOfMonth() {
         return day;
+    }
+
+    public void setDayOfMonth(int day) {
+        if (day < 1)
+            throw new DayOutOfRangeException("day " + day + " is out of range!");
+
+        if (month != 2 && day > daysInMonth[month])
+            throw new DayOutOfRangeException("day " + day + " is out of range!");
+
+        if (month == 2 && isLeapYear() && day > 29)
+            throw new DayOutOfRangeException("day " + day + " is out of range!");
+
+        if (month == 2 && (!isLeapYear()) && day > 28)
+            throw new DayOutOfRangeException("day " + day + " is out of range!");
+
+        // TODO check for the case of leap year for February
+        this.day = day;
     }
 
     public int getDayOfWeek() {
@@ -66,6 +79,18 @@ public class CivilDate extends AbstractDate {
         return month;
     }
 
+    public void setMonth(int month) {
+        if (month < 1 || month > 12)
+            throw new MonthOutOfRangeException("month " + month
+                    + " is out of range!");
+
+        // Set the day again, so that exceptions are thrown if the
+        // day is out of range
+        setDayOfMonth(getDayOfMonth());
+
+        this.month = month;
+    }
+
     public String getMonthName() {
         return monthName[getMonth()];
     }
@@ -80,6 +105,13 @@ public class CivilDate extends AbstractDate {
 
     public int getYear() {
         return year;
+    }
+
+    public void setYear(int year) {
+        if (year == 0)
+            throw new YearOutOfRangeException("Year 0 is invalid!");
+
+        this.year = year;
     }
 
     public boolean isLeapYear() {
@@ -103,42 +135,6 @@ public class CivilDate extends AbstractDate {
 
     public void rollYear(int amount, boolean up) {
         throw new RuntimeException("not implemented yet!");
-    }
-
-    public void setDayOfMonth(int day) {
-        if (day < 1)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
-
-        if (month != 2 && day > daysInMonth[month])
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
-
-        if (month == 2 && isLeapYear() && day > 29)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
-
-        if (month == 2 && (!isLeapYear()) && day > 28)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
-
-        // TODO check for the case of leap year for February
-        this.day = day;
-    }
-
-    public void setMonth(int month) {
-        if (month < 1 || month > 12)
-            throw new MonthOutOfRangeException("month " + month
-                    + " is out of range!");
-
-        // Set the day again, so that exceptions are thrown if the
-        // day is out of range
-        setDayOfMonth(getDayOfMonth());
-
-        this.month = month;
-    }
-
-    public void setYear(int year) {
-        if (year == 0)
-            throw new YearOutOfRangeException("Year 0 is invalid!");
-
-        this.year = year;
     }
 
     /**

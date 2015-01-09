@@ -15,13 +15,12 @@ import android.os.IBinder;
  */
 public class ApplicationService extends Service {
     private final UpdateUtils updateUtils = UpdateUtils.getInstance();
+    private int count = 0;
 
     @Override
     public IBinder onBind(Intent paramIntent) {
         return null;
     }
-
-    private int count = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

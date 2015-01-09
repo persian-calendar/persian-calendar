@@ -9,15 +9,9 @@ public class IslamicDate extends AbstractDate {
     private static final String[] monthName = {"", "محرم", "صفر",
             "ربيع‌الاول", "ربيع‌الثاني", "جمادي‌الاول", "جمادي‌الثاني", "رجب",
             "شعبان", "رمضان", "شوال", "ذي‌القعده", "ذي‌الحجه"};
-
-    public String[] getMonthsList() {
-        return monthName;
-    }
-
     private int day;
     private int month;
     private int year;
-
     public IslamicDate(int year, int month, int day) {
         setYear(year);
         // Initialize day, so that we get no exceptions when setting month
@@ -26,40 +20,12 @@ public class IslamicDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
+    public String[] getMonthsList() {
+        return monthName;
+    }
+
     public int getDayOfMonth() {
         return day;
-    }
-
-    public int getDayOfWeek() {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public String getMonthName() {
-        return monthName[month];
-    }
-
-    public int getWeekOfYear() {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void rollDay(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public void rollMonth(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
-    }
-
-    public void rollYear(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
     }
 
     public void setDayOfMonth(int day) {
@@ -69,6 +35,14 @@ public class IslamicDate extends AbstractDate {
             throw new DayOutOfRangeException("day " + day + " is out of range!");
 
         this.day = day;
+    }
+
+    public int getDayOfWeek() {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public int getMonth() {
+        return month;
     }
 
     public void setMonth(int month) {
@@ -83,11 +57,35 @@ public class IslamicDate extends AbstractDate {
         this.month = month;
     }
 
+    public String getMonthName() {
+        return monthName[month];
+    }
+
+    public int getWeekOfYear() {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public int getYear() {
+        return year;
+    }
+
     public void setYear(int year) {
         if (year == 0)
             throw new YearOutOfRangeException("Year 0 is invalid!");
 
         this.year = year;
+    }
+
+    public void rollDay(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public void rollMonth(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
+    }
+
+    public void rollYear(int amount, boolean up) {
+        throw new RuntimeException("not implemented yet!");
     }
 
     public String getEvent() {

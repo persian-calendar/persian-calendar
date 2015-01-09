@@ -4,9 +4,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
-import com.byagowi.persiancalendar.view.QiblaCompassView;
-
 final class CompassListener implements SensorEventListener {
+    /*
+     * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
+     * value basically means more smoothing See:
+     * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
+     */
+    static final float ALPHA = 0.15f;
+    float azimuth;
     private CompassActivity compassActivity;
 
     /**
@@ -19,15 +24,6 @@ final class CompassListener implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
-
-    /*
-     * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
-     * value basically means more smoothing See:
-     * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
-     */
-    static final float ALPHA = 0.15f;
-
-    float azimuth;
 
     @Override
     public void onSensorChanged(SensorEvent event) {

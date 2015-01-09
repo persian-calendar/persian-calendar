@@ -10,24 +10,24 @@
 
     <TextView
         android:id="@+id/textPlaceholder1_1x1"
+        style="@style/ShadowTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-3sp"
         android:gravity="center"
         android:textColor="@android:color/white"
         android:textDirection="rtl"
-        android:textSize="40sp"
-        style="@style/ShadowTextStyle" />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/textPlaceholder2_1x1"
+        style="@style/ShadowTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"
         android:textColor="@android:color/white"
         android:textDirection="rtl"
-        android:textSize="15sp"
-        style="@style/ShadowTextStyle" />
+        android:textSize="15sp" />
 
 </LinearLayout>

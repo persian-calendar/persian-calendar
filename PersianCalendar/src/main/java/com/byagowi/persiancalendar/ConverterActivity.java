@@ -1,8 +1,5 @@
 package com.byagowi.persiancalendar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,13 +9,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.byagowi.common.Range;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
-
-import com.byagowi.common.Range;
 
 /**
  * Program activity for android
@@ -27,14 +27,13 @@ import com.byagowi.common.Range;
  */
 public class ConverterActivity extends Activity {
     private final Utils utils = Utils.getInstance();
-
+    private final int yearDiffRange = 200;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
     private Spinner daySpinner;
     private TextView convertedDateTextView;
     private int startingYearOnYearSpinner = 0;
-    private final int yearDiffRange = 200;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,33 +72,6 @@ public class ConverterActivity extends Activity {
         monthSpinner.setOnItemSelectedListener(csl);
         daySpinner.setOnItemSelectedListener(csl);
         //
-    }
-
-    // inner classes
-    private class CalendarSpinnersListener implements
-            AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                   long arg3) {
-            fillCalendarInfo();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
-    }
-
-    private class CalendarTypeSpinnerListener implements
-            AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                   long arg3) {
-            fillYearMonthDaySpinners();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
     }
 
     void fillCalendarInfo() {
@@ -237,5 +209,32 @@ public class ConverterActivity extends Activity {
             calendarType = CalendarType.ISLAMIC;
         }
         return calendarType;
+    }
+
+    // inner classes
+    private class CalendarSpinnersListener implements
+            AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+                                   long arg3) {
+            fillCalendarInfo();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
+    }
+
+    private class CalendarTypeSpinnerListener implements
+            AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+                                   long arg3) {
+            fillYearMonthDaySpinners();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
     }
 }

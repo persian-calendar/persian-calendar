@@ -21,8 +21,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 
-import net.margaritov.preference.colorpicker.R;
-
 public class Test extends PreferenceActivity {
     /**
      * Called when the activity is first created.

@@ -4,7 +4,9 @@ public class MATH {
     // Square root from 3
 
     final static public double SQRT3 = 1.732050807568877294;
-    /** ln(0.5) constant */
+    /**
+     * ln(0.5) constant
+     */
     final static public double LOGdiv2 = -0.6931471805599453094;
 
     static public int round(float a) {

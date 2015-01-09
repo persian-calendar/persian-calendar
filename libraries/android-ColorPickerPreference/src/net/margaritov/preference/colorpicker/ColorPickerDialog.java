@@ -38,10 +38,6 @@ public class ColorPickerDialog
 
     private OnColorChangedListener mListener;
 
-    public interface OnColorChangedListener {
-        public void onColorChanged(int color);
-    }
-
     public ColorPickerDialog(Context context, int initialColor) {
         super(context);
 
@@ -139,5 +135,9 @@ public class ColorPickerDialog
         super.onRestoreInstanceState(savedInstanceState);
         mOldColor.setColor(savedInstanceState.getInt("old_color"));
         mColorPicker.setColor(savedInstanceState.getInt("new_color"), true);
+    }
+
+    public interface OnColorChangedListener {
+        public void onColorChanged(int color);
     }
 }

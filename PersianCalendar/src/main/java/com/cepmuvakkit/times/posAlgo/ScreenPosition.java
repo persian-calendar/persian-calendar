@@ -13,5 +13,5 @@ public class ScreenPosition {
 
     public ScreenPosition() {
     }
-    
+
 }

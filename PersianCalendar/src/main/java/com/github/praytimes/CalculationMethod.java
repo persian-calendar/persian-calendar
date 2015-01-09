@@ -41,26 +41,6 @@ public enum
         this(name, fajr, isha, null);
     }
 
-    // Midnight Mode
-    public enum MidnightType {
-        Standard, // Mid Sunset to Sunrise
-        Jafari // Mid Sunset to Fajr
-    }
-
-    // Asr Juristic Methods
-    public enum AsrJuristics {
-        Standard, // Shafi`i, Maliki, Ja`fari, Hanbali
-        Hanafi // Hanafi
-    }
-
-    // Adjust Methods for Higher Latitudes
-    public enum HighLatMethods {
-        NightMiddle, // middle of night
-        AngleBased, // angle/60th of night
-        OneSeventh, // 1/7th of night
-        None // No adjustment
-    }
-
     public String getName() {
         return name;
     }
@@ -79,5 +59,25 @@ public enum
 
     public MidnightType getMidnight() {
         return midnight;
+    }
+
+    // Midnight Mode
+    public enum MidnightType {
+        Standard, // Mid Sunset to Sunrise
+        Jafari // Mid Sunset to Fajr
+    }
+
+    // Asr Juristic Methods
+    public enum AsrJuristics {
+        Standard, // Shafi`i, Maliki, Ja`fari, Hanbali
+        Hanafi // Hanafi
+    }
+
+    // Adjust Methods for Higher Latitudes
+    public enum HighLatMethods {
+        NightMiddle, // middle of night
+        AngleBased, // angle/60th of night
+        OneSeventh, // 1/7th of night
+        None // No adjustment
     }
 }

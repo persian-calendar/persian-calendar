@@ -14,6 +14,7 @@ package com.azizhuss.arabicreshaper;
  */
 public class ArabicShaping {
 
+    static final char RIGHT_LEFT_CHAR_MASK = 0x0880;
     private static final char RIGHT_LEFT_CHAR = 0x0001;
     private static final char RIGHT_NOLEFT_CHAR_ALEF = 0x0006;
     private static final char RIGHT_NOLEFT_CHAR = 0x0004;
@@ -24,8 +25,6 @@ public class ArabicShaping {
     private static final char NORIGHT_NOLEFT_CHAR = 0x0007;
     private static final char NOTUSED_CHAR = 0x000F;
     private static final char NOTARABIC_CHAR = 0x0000;
-
-    static final char RIGHT_LEFT_CHAR_MASK = 0x0880;
     private static final char RIGHT_NOLEFT_CHAR_MASK = 0x0800;
     private static final char LEFT_CHAR_MASK = 0x0080;
 

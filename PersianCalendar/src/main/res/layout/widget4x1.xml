@@ -18,31 +18,31 @@
 
         <TextView
             android:id="@+id/textPlaceholder3_4x1"
+            style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5sp"
             android:gravity="right"
             android:textColor="@android:color/white"
-            android:textSize="12sp"
-            style="@style/ShadowTextStyle" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/textPlaceholder1_4x1"
+            style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:textColor="@android:color/white"
-            android:textSize="36sp"
-            style="@style/ShadowTextStyle" />
+            android:textSize="36sp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textPlaceholder2_4x1"
+        style="@style/ShadowTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:textColor="@android:color/white"
-        android:textSize="14sp"
-        style="@style/ShadowTextStyle" />
+        android:textSize="14sp" />
 
 </LinearLayout>

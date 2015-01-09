@@ -23,16 +23,16 @@ public class Horizontal {
         return h;
     }
 
+    public void setElevation(double elevation) {
+        h = elevation;
+    }
+
     public double getAzimuth() {
         return Az;
     }
 
     public void setAzimuth(double azimuth) {
         Az = azimuth;
-    }
-
-    public void setElevation(double elevation) {
-        h = elevation;
     }
 
     public ScreenPosition toScreenPosition(Canvas canvas, int offset, boolean flipX) {
@@ -47,13 +47,14 @@ public class Horizontal {
         return screenPosition;
 
     }
-    public ScreenPosition toScreenPosition(int midX,int midY) {
-        
-    	int maxR = Math.min(midX,midY);
+
+    public ScreenPosition toScreenPosition(int midX, int midY) {
+
+        int maxR = Math.min(midX, midY);
         ScreenPosition screenPosition = new ScreenPosition();
         double r = ((90 - h) / 90) * maxR;
         double azimuth = Math.toRadians(Az);
-        screenPosition.x = (int) (Math.sin(azimuth) * r)+ midX;
+        screenPosition.x = (int) (Math.sin(azimuth) * r) + midX;
         screenPosition.y = (int) (Math.cos(azimuth) * (-r)) + midY;
         return screenPosition;
 

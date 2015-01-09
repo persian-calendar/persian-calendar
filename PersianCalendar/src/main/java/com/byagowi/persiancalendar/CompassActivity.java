@@ -20,13 +20,12 @@ import com.github.praytimes.Coordinate;
  * @author ebraminio
  */
 public class CompassActivity extends Activity {
-    private Utils utils = Utils.getInstance();
-
     QiblaCompassView compassView;
     TextView degree;
     SensorManager sensorManager;
     Sensor sensor;
     SensorEventListener compassListener;
+    private Utils utils = Utils.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

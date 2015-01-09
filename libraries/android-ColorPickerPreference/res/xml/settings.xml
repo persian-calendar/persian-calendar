@@ -2,27 +2,27 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/pref_category">
         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="@integer/COLOR_BLACK"
             android:key="color1"
-            android:title="@string/color1_title"
             android:summary="@string/color1_summary"
-            android:defaultValue="@integer/COLOR_BLACK" />
+            android:title="@string/color1_title" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="@integer/COLOR_GREEN"
             android:key="color2"
             android:persistent="false"
-            android:title="@string/color2_title"
             android:summary="@string/color2_summary"
-            android:defaultValue="@integer/COLOR_GREEN" />
+            android:title="@string/color2_title" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:key="color3"
-            android:title="@string/color3_title"
-            android:summary="@string/color3_summary"
+            alphaSlider="true"
             android:defaultValue="@integer/COLOR_GREEN"
-            alphaSlider="true" />
+            android:key="color3"
+            android:summary="@string/color3_summary"
+            android:title="@string/color3_title" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#0000FF"
             android:key="color4"
             android:persistent="false"
-            android:title="@string/color4_title"
             android:summary="@string/color4_summary"
-            android:defaultValue="#0000FF" />
+            android:title="@string/color4_title" />
     </PreferenceCategory>
 </PreferenceScreen>

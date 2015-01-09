@@ -44,15 +44,18 @@ import android.view.View;
 public class ColorPickerView extends View {
 
     private final static int PANEL_SAT_VAL = 0;
+    /*
+     * To remember which panel that has the "focus" when
+     * processing hardware button data.
+     */
+    private int mLastTouchedPanel = PANEL_SAT_VAL;
     private final static int PANEL_HUE = 1;
     private final static int PANEL_ALPHA = 2;
-
     /**
      * The width in pixels of the border
      * surrounding all color panels.
      */
     private final static float BORDER_WIDTH_PX = 1;
-
     /**
      * The width in dp of the hue panel.
      */
@@ -75,44 +78,27 @@ public class ColorPickerView extends View {
      * will extend outside of its bounds.
      */
     private float RECTANGLE_TRACKER_OFFSET = 2f;
-
-
     private float mDensity = 1f;
-
     private OnColorChangedListener mListener;
-
     private Paint mSatValPaint;
     private Paint mSatValTrackerPaint;
-
     private Paint mHuePaint;
     private Paint mHueTrackerPaint;
-
     private Paint mAlphaPaint;
     private Paint mAlphaTextPaint;
-
     private Paint mBorderPaint;
-
     private Shader mValShader;
     private Shader mSatShader;
     private Shader mHueShader;
     private Shader mAlphaShader;
-
     private int mAlpha = 0xff;
     private float mHue = 360f;
     private float mSat = 0f;
     private float mVal = 0f;
-
     private String mAlphaSliderText = "";
     private int mSliderTrackerColor = 0xff1c1c1c;
     private int mBorderColor = 0xff6E6E6E;
     private boolean mShowAlphaPanel = false;
-
-    /*
-     * To remember which panel that has the "focus" when
-     * processing hardware button data.
-     */
-    private int mLastTouchedPanel = PANEL_SAT_VAL;
-
     /**
      * Offset from the edge we must have or else
      * the finger tracker will get clipped when
@@ -134,10 +120,6 @@ public class ColorPickerView extends View {
     private AlphaPatternDrawable mAlphaPattern;
 
     private Point mStartTouchPoint = null;
-
-    public interface OnColorChangedListener {
-        public void onColorChanged(int color);
-    }
 
     public ColorPickerView(Context context) {
         this(context, null);
@@ -216,7 +198,6 @@ public class ColorPickerView extends View {
 
         return hue;
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -345,7 +326,6 @@ public class ColorPickerView extends View {
 
     }
 
-
     private Point hueToPoint(float hue) {
 
         final RectF rect = mHueRect;
@@ -451,7 +431,6 @@ public class ColorPickerView extends View {
         return 0xff - (x * 0xff / width);
 
     }
-
 
     @Override
     public boolean onTrackballEvent(MotionEvent event) {
@@ -715,7 +694,6 @@ public class ColorPickerView extends View {
         return height;
     }
 
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -782,7 +760,6 @@ public class ColorPickerView extends View {
 
     }
 
-
     /**
      * Set a OnColorChangedListener to get notified when the color
      * selected by the user has changed.
@@ -794,6 +771,13 @@ public class ColorPickerView extends View {
     }
 
     /**
+     * Get the color of the border surrounding all panels.
+     */
+    public int getBorderColor() {
+        return mBorderColor;
+    }
+
+    /**
      * Set the color of the border surrounding all panels.
      *
      * @param color
@@ -801,13 +785,6 @@ public class ColorPickerView extends View {
     public void setBorderColor(int color) {
         mBorderColor = color;
         invalidate();
-    }
-
-    /**
-     * Get the color of the border surrounding all panels.
-     */
-    public int getBorderColor() {
-        return mBorderColor;
     }
 
     /**
@@ -898,16 +875,16 @@ public class ColorPickerView extends View {
 
     }
 
+    public int getSliderTrackerColor() {
+        return mSliderTrackerColor;
+    }
+
     public void setSliderTrackerColor(int color) {
         mSliderTrackerColor = color;
 
         mHueTrackerPaint.setColor(mSliderTrackerColor);
 
         invalidate();
-    }
-
-    public int getSliderTrackerColor() {
-        return mSliderTrackerColor;
     }
 
     /**
@@ -922,6 +899,17 @@ public class ColorPickerView extends View {
     }
 
     /**
+     * Get the current value of the text
+     * that will be shown in the alpha
+     * slider.
+     *
+     * @return
+     */
+    public String getAlphaSliderText() {
+        return mAlphaSliderText;
+    }
+
+    /**
      * Set the text that should be shown in the
      * alpha slider. Set to null to disable text.
      *
@@ -932,14 +920,7 @@ public class ColorPickerView extends View {
         invalidate();
     }
 
-    /**
-     * Get the current value of the text
-     * that will be shown in the alpha
-     * slider.
-     *
-     * @return
-     */
-    public String getAlphaSliderText() {
-        return mAlphaSliderText;
+    public interface OnColorChangedListener {
+        public void onColorChanged(int color);
     }
 }

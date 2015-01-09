@@ -5,7 +5,6 @@
 package com.cepmuvakkit.times.posAlgo;
 
 /**
- *
  * @author mehmetrg
  */
 public class Ecliptic {
