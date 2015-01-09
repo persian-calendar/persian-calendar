@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8+'
+        classpath 'com.android.tools.build:gradle:1.0+'
     }
 }
 apply plugin: 'com.android.library'
@@ -27,5 +27,9 @@ android {
             resources.srcDirs = ['src']
             res.srcDirs = ['res']
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
