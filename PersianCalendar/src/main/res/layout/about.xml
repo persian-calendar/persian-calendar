@@ -51,8 +51,7 @@
             android:id="@+id/license"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10sp"
-            android:textSize="9sp" />
+            android:paddingTop="10sp" />
     </LinearLayout>
 
 </ScrollView>
