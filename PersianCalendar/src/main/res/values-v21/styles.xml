@@ -3,19 +3,16 @@
 
     <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:colorPrimary">#6e97b9</item>
-        <item name="android:colorPrimaryDark">#6e97b9</item>
+        <item name="android:colorPrimaryDark">#587994</item>
 
 
     </style>
 
     <style name="DarkTheme" parent="android:Theme.Material">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:colorPrimaryDark">#6e97b9</item>
         <item name="android:colorPrimary">#6e97b9</item>
+        <item name="android:colorPrimaryDark">#587994</item>
     </style>
 
-    <style name="LightTheme.ActionBarStyle">
-        <item name="android:background">#6e97b9</item>
-        <item name="android:showText">true</item>
-    </style>
+
 </resources>
