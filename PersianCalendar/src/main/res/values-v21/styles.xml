@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar" />
+    <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">#6e97b9</item>
+        <item name="android:colorPrimaryDark">#6e97b9</item>
+
+
+    </style>
 
     <style name="DarkTheme" parent="android:Theme.Material">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:colorPrimaryDark">#6e97b9</item>
+        <item name="android:colorPrimary">#6e97b9</item>
     </style>
 
+    <style name="LightTheme.ActionBarStyle">
+        <item name="android:background">#6e97b9</item>
+        <item name="android:showText">true</item>
+    </style>
 </resources>
