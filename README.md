@@ -39,5 +39,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 3. Build
 ==============================
-Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
-then import the project on Android Studio
+1. Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
+2. Import the project on Android Studio
+3. Click on "Sync Project with Gradle Files" after the import
