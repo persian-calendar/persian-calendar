@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -152,22 +151,18 @@ public class MonthFragment extends Fragment {
                 if (persianDate.equals(today)) {
                     //textView.setBackgroundResource(R.drawable.today_background);
 
-                    //To apply the right shadow color for the right theme:
-
                     SharedPreferences prefs = PreferenceManager
                             .getDefaultSharedPreferences(context);
+
                     String key = prefs.getString("Theme", "");
 
-                    if (key.equals("LightTheme"))
-                    {
-                        //textView.setShadowLayer(15,0,0,R.color.shadow_color_for_light_theme);
-                        textView.setTextSize(30);
+                    if (key.equals("LightTheme")){
+                        textView.setBackgroundResource(R.drawable.today_forlight);
                     }
-                    if (key.equals("DarkTheme"))
-                    {
-                        //textView.setShadowLayer(10,0,0,R.color.shadow_color_for_dark_theme);
-                        textView.setTextSize(30);
+                    if (key.equals("DarkTheme")){
+                        textView.setBackgroundResource(R.drawable.today_fordark);
                     }
+
 
                 }
 
