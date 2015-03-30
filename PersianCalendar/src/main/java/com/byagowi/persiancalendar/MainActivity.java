@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -80,6 +81,8 @@ public class MainActivity extends FragmentActivity {
                 setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
             }
         });
+        resetButton.setTypeface(Typeface.createFromAsset(this.getAssets(),
+                "fonts/NotoNaskhArabic-Regular.ttf"));
 
         // Initializing the viewPager
         viewPager = (ViewPager) findViewById(R.id.calendar_pager);
