@@ -176,12 +176,14 @@ public class Utils {
 
         int theme = R.style.LightTheme; // default theme
 
-        if (key.equals("LightTheme"))
+        if (key.equals("LightTheme")) {
             theme = R.style.LightTheme;
-        if (key.equals("DarkTheme"))
+        } else if (key.equals("DarkTheme")) {
             theme = R.style.DarkTheme;
-        if (key.equals("BlackTheme"))
+        } else if (key.equals("BlackTheme")) {
             theme = R.style.BlackTheme;
+        }
+
         context.setTheme(theme);
     }
 
