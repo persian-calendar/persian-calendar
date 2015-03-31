@@ -16,30 +16,15 @@
         android:paddingRight="20sp"
         android:paddingTop="20sp">
 
-        <FrameLayout
-            android:id="@+id/main_layout"
+        <TextView
+            android:id="@+id/version2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/version2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="bottom"
-                android:paddingTop="20sp"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#00000000"
-                android:contentDescription="@string/logo"
-                android:gravity="center"
-                android:src="@drawable/logo" />
-        </FrameLayout>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="20sp"
+            android:paddingBottom="40sp"
+            android:textSize="30sp" />
 
         <ImageView
             android:layout_width="wrap_content"
