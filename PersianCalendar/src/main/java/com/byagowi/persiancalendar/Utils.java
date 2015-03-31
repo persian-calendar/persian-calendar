@@ -180,7 +180,8 @@ public class Utils {
             theme = R.style.LightTheme;
         if (key.equals("DarkTheme"))
             theme = R.style.DarkTheme;
-
+        if (key.equals("BlackTheme"))
+            theme = R.style.BlackTheme;
         context.setTheme(theme);
     }
 

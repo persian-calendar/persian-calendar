@@ -5,6 +5,15 @@
 
     <style name="DarkTheme" parent="android:Theme.Holo">
         <item name="android:textColor">@android:color/white</item>
+
     </style>
 
+
+<style name="BlackTheme" parent="android:Theme.Holo">
+<item name="android:textColor">@android:color/white</item>
+<item name="android:actionBarStyle">@android:color/black</item>
+<item name="android:windowBackground">@android:color/black</item>
+<item name="android:buttonBarStyle">@color/color_of_button_holo</item>
+
+</style>
 </resources>

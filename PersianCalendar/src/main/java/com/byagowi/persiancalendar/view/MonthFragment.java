@@ -149,7 +149,6 @@ public class MonthFragment extends Fragment {
                 textView.setOnLongClickListener(listener);
 
                 if (persianDate.equals(today)) {
-                    //textView.setBackgroundResource(R.drawable.today_background);
 
                     SharedPreferences prefs = PreferenceManager
                             .getDefaultSharedPreferences(context);
@@ -161,6 +160,9 @@ public class MonthFragment extends Fragment {
                     }
                     if (key.equals("DarkTheme")){
                         textView.setBackgroundResource(R.drawable.today_fordark);
+                    }
+                    if (key.equals("BlackTheme")){
+                        textView.setBackgroundResource(R.drawable.today_forblack);
                     }
 
 
