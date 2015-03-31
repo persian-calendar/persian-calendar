@@ -1,6 +1,7 @@
 * Author: Ebrahim Byagowi (ebraminio)
 * Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
 * Icon: Behdad Pournader
+* About icon: Iman Soltanian
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
 * PrayTimes.js (Ported by me) http://praytimes.org/ (LGPLv3)
 * ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)
