@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -67,17 +69,20 @@ public class MonthFragment extends Fragment {
             if (i == 0) {
                 row.setBackgroundResource(R.drawable.calendar_firstrow);
                 row.setPadding(0, 0, 0, 10);
+
             }
             for (int j : new Range(0, 7)) {
                 TextView tv = new TextView(context);
                 utils.prepareTextView(tv);
                 tv.setGravity(Gravity.CENTER);
                 tv.setTextSize(20);
+                // This is wrong and annoys eyes --v
+                // tv.setShadowLayer(15,0,0,R.color.shadow_color);
                 if (i == 0) {
                     tv.setBackgroundResource(R.color.first_row_background_color);
                     tv.setTextColor(getResources().getColor(
                             R.color.first_row_text_color));
-                }
+                    }
                 daysTextViews[i][j] = tv;
                 row.addView(tv);
             }
@@ -144,7 +149,23 @@ public class MonthFragment extends Fragment {
                 textView.setOnLongClickListener(listener);
 
                 if (persianDate.equals(today)) {
-                    textView.setBackgroundResource(R.drawable.today_background);
+
+                    SharedPreferences prefs = PreferenceManager
+                            .getDefaultSharedPreferences(context);
+
+                    String key = prefs.getString("Theme", "");
+
+                    if (key.equals("LightTheme")){
+                        textView.setBackgroundResource(R.drawable.today_forlight);
+                    }
+                    if (key.equals("DarkTheme")){
+                        textView.setBackgroundResource(R.drawable.today_fordark);
+                    }
+                    if (key.equals("BlackTheme")){
+                        textView.setBackgroundResource(R.drawable.today_forblack);
+                    }
+
+
                 }
 
                 dayOfWeek++;
