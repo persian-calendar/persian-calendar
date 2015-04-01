@@ -4,12 +4,10 @@
     <string-array name="themeNames">
         <item>Light</item>
         <item>Dark</item>
-        <item>Black</item>
     </string-array>
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
-        <item>BlackTheme</item>
     </string-array>
     <string-array name="prayMethodsNames" translatable="false">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>

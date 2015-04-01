@@ -4,7 +4,6 @@
     <string-array name="themeNames">
         <item>روشن</item>
         <item>تاریک</item>
-        <item>سیاه</item>
     </string-array>
     <string-array name="locationNames">
         <item>هیچ‌کدام</item>

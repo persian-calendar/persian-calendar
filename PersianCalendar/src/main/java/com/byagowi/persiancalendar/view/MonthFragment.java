@@ -135,9 +135,6 @@ public class MonthFragment extends Fragment {
                 textView.setBackgroundResource(R.drawable.days);
 
                 String holidayTitle = utils.getHolidayTitle(persianDate);
-                if (holidayTitle != null) {
-                    textView.setBackgroundResource(R.drawable.holidays);
-                }
                 if (holidayTitle != null || dayOfWeek == 6) {
                     textView.setTextColor(getResources().getColor(
                             R.color.holidays_text_color));
@@ -151,14 +148,12 @@ public class MonthFragment extends Fragment {
                     SharedPreferences prefs = PreferenceManager
                             .getDefaultSharedPreferences(context);
 
-                    String key = prefs.getString("Theme", "");
+                    String theme = prefs.getString("Theme", "");
 
-                    if (key.equals("LightTheme")) {
+                    if (theme.equals("LightTheme")) {
                         textView.setBackgroundResource(R.drawable.today_forlight);
-                    } else if (key.equals("DarkTheme")) {
+                    } else if (theme.equals("DarkTheme")) {
                         textView.setBackgroundResource(R.drawable.today_fordark);
-                    } else if (key.equals("BlackTheme")) {
-                        textView.setBackgroundResource(R.drawable.today_forblack);
                     }
 
                 }
