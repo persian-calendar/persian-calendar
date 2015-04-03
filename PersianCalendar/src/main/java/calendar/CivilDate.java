@@ -8,7 +8,7 @@ import java.util.Calendar;
  */
 public class CivilDate extends AbstractDate {
     private static final String[] monthName = {"", "ژانویه", "فوریه", "مارس",
-            "آوریل", "مه", "ژون", "جولای", "آگوست", "سپتامبر", "اکتبر",
+            "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
             "نوامبر", "دسامبر"};
     private static final String[] weekdayName = {"", "یکشنبه", "دوشنبه",
             "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
