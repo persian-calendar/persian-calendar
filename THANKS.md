@@ -7,3 +7,4 @@
 * ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache)
 * ColorPickerPreference https://github.com/attenzione/android-ColorPickerPreference (Apache)
 * QiblaCompassView.java and its dependencies from https://code.google.com/p/android-salat-times (GPLv3)
+* Noto Naskh Arabic from Noto fonts project http://code.google.com/p/noto (Apache)
