@@ -4,6 +4,7 @@
     <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:colorPrimary">#6e97b9</item>
         <item name="android:colorPrimaryDark">#587994</item>
+        <item name="android:navigationBarColor">#587994</item>
     </style>
 
     <style name="DarkTheme" parent="android:Theme.Material">
