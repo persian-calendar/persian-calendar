@@ -21,10 +21,10 @@
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5sp"
+            android:layout_marginRight="5dp"
             android:gravity="right"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/textPlaceholder1_4x1"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:textColor="@android:color/white"
-            android:textSize="36sp" />
+            android:textSize="36dp" />
     </LinearLayout>
 
     <TextView
@@ -43,6 +43,6 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textSize="14dp" />
 
 </LinearLayout>

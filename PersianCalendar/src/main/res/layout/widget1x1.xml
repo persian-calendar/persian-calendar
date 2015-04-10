@@ -13,11 +13,11 @@
         style="@style/ShadowTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-3sp"
+        android:layout_marginTop="-3dp"
         android:gravity="center"
         android:textColor="@android:color/white"
         android:textDirection="rtl"
-        android:textSize="40sp" />
+        android:textSize="40dp" />
 
     <TextView
         android:id="@+id/textPlaceholder2_1x1"
@@ -28,6 +28,6 @@
         android:gravity="center_horizontal|bottom"
         android:textColor="@android:color/white"
         android:textDirection="rtl"
-        android:textSize="15sp" />
+        android:textSize="15dp" />
 
 </LinearLayout>
