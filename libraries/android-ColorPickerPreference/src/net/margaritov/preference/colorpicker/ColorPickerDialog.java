@@ -138,6 +138,6 @@ public class ColorPickerDialog
     }
 
     public interface OnColorChangedListener {
-        public void onColorChanged(int color);
+        void onColorChanged(int color);
     }
 }
