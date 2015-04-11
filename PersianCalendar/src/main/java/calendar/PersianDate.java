@@ -138,10 +138,8 @@ public class PersianDate extends AbstractDate {
     }
 
     public boolean equals(PersianDate persianDate) {
-        if (this.getDayOfMonth() == persianDate.getDayOfMonth()
+        return this.getDayOfMonth() == persianDate.getDayOfMonth()
                 && this.getMonth() == persianDate.getMonth()
-                && this.getYear() == persianDate.getYear())
-            return true;
-        return false;
+                && this.getYear() == persianDate.getYear();
     }
 }

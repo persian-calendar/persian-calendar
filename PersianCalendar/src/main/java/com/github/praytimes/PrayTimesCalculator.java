@@ -186,7 +186,7 @@ public class PrayTimesCalculator {
             month += 12;
         }
         double A = Math.floor((double) year / 100);
-        double B = 2 - A + Math.floor((double) A / 4);
+        double B = 2 - A + Math.floor(A / 4);
 
         double JD = Math.floor(365.25 * (year + 4716))
                 + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;

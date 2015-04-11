@@ -137,7 +137,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private PagerAdapter createCalendarAdaptor() {
-        return (PagerAdapter) new FragmentPagerAdapter(
+        return new FragmentPagerAdapter(
                 getSupportFragmentManager()) {
             @Override
             public int getCount() {
