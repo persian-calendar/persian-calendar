@@ -148,7 +148,8 @@ public class MonthFragment extends Fragment {
                     SharedPreferences prefs = PreferenceManager
                             .getDefaultSharedPreferences(context);
 
-                    textView.setBackgroundResource(prefs.getString("Theme", "").equals("LightTheme")
+                    textView.setBackgroundResource(
+                            prefs.getString("Theme", "LightTheme").equals("LightTheme")
                             ? R.drawable.today_light
                             : R.drawable.today_dark);
                 }
