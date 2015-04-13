@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -28,20 +26,35 @@ public class AboutActivity extends Activity {
 
         setContentView(R.layout.about);
 
-        char[] digits = utils.preferredDigits(this);
-        TextView versionTextView = (TextView) findViewById(R.id.version2);
-
         String version = utils.programVersion(this);
 
-        String versionTitle = utils.version + " "
-                + utils.formatNumber(version, digits);
-
+        TextView versionTextView = (TextView) findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
-        versionTextView.setText(versionTitle);
+        versionTextView.setText(utils.version + " " +
+                utils.formatNumber(version, utils.preferredDigits(this)));
+
+        StringBuilder sb = new StringBuilder();
+
+        BufferedReader input = new BufferedReader(
+                new InputStreamReader(getResources().openRawResource(R.raw.credits)));
+        try {
+            String line;
+            while ((line = input.readLine()) != null) {
+                sb.append(line);
+                sb.append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         TextView licenseTextView = (TextView) findViewById(R.id.license);
-
-        String text = "Android Persian Calendar Version "
+        licenseTextView.setText("Android Persian Calendar Version "
                 + version
                 + "\n"
                 + "Copyright (C) 2012-2015  ebrahim@gnu.org "
@@ -60,30 +73,7 @@ public class AboutActivity extends Activity {
                 + "You should have received a copy of the GNU General Public License "
                 + "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
                 + "\n"
-                + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar";
-
-        BufferedReader input = new BufferedReader(
-                new InputStreamReader(getResources().openRawResource(R.raw.credits)));
-
-        StringBuilder sb = new StringBuilder();
-        try {
-            String line = null;
-            while ((line = input.readLine()) != null) {
-                sb.append(line);
-                sb.append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        text = text + "\n\n----\n\n" + sb.toString();
-
-        licenseTextView.setText(text);
+                + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar"
+                + "\n\n----\n\n" + sb.toString());
     }
 }
