@@ -61,8 +61,10 @@ public class Utils {
     public final String imsak = textShaper("اذان صبح");
     public final String sunrise = textShaper("طلوع آفتاب");
     public final String dhuhr = textShaper("اذان ظهر");
+    public final String asr = textShaper("عصر");
     public final String sunset = textShaper("غروب آفتاب");
     public final String maghrib = textShaper("اذان مغرب");
+    public final String isha = textShaper("عشا");
     public final String midnight = textShaper("نیمه وقت شرعی");
     public final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};

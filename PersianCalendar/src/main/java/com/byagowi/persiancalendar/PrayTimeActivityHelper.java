@@ -64,6 +64,11 @@ class PrayTimeActivityHelper {
         sb.append(utils.clockToString(prayTimes.get(PrayTime.Dhuhr), digits));
 
         sb.append("\n");
+        sb.append(utils.asr);
+        sb.append(": ");
+        sb.append(utils.clockToString(prayTimes.get(PrayTime.Asr), digits));
+
+        sb.append("\n");
         sb.append(utils.sunset);
         sb.append(": ");
         sb.append(utils.clockToString(prayTimes.get(PrayTime.Sunset), digits));
@@ -72,6 +77,11 @@ class PrayTimeActivityHelper {
         sb.append(utils.maghrib);
         sb.append(": ");
         sb.append(utils.clockToString(prayTimes.get(PrayTime.Maghrib), digits));
+
+        sb.append("\n");
+        sb.append(utils.isha);
+        sb.append(": ");
+        sb.append(utils.clockToString(prayTimes.get(PrayTime.Isha), digits));
 
         sb.append("\n");
         sb.append(utils.midnight);
