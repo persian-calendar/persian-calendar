@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * About Calendar Activity
  *
@@ -55,6 +61,28 @@ public class AboutActivity extends Activity {
                 + "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
                 + "\n"
                 + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar";
+
+        BufferedReader input = new BufferedReader(
+                new InputStreamReader(getResources().openRawResource(R.raw.credits)));
+
+        StringBuilder sb = new StringBuilder();
+        try {
+            String line = null;
+            while ((line = input.readLine()) != null) {
+                sb.append(line);
+                sb.append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        text = text + "\n\n----\n\n" + sb.toString();
 
         licenseTextView.setText(text);
     }
