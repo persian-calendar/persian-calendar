@@ -2,9 +2,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:colorPrimary">#6e97b9</item>
-        <item name="android:colorPrimaryDark">#587994</item>
-        <item name="android:navigationBarColor">#587994</item>
+        <item name="android:colorPrimary">#3F51B5</item>
+        <item name="android:colorPrimaryDark">#3F51B5</item>
+        <item name="android:navigationBarColor">#3F51B5</item>
     </style>
 
     <style name="DarkTheme" parent="android:Theme.Material">
