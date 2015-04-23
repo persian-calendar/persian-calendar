@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar;
 
+import android.app.Activity;
 import android.widget.TextView;
 
 import com.github.praytimes.Clock;
@@ -17,17 +18,15 @@ import java.util.Map;
  * @author ebraminio
  */
 class PrayTimeActivityHelper {
-    private final Utils utils;
 
-    private final MainActivity calendarActivity;
+    private final Utils utils = Utils.getInstance();
+    private final Activity activity;
     private final TextView prayTimeTextView;
     private Date date = new Date();
 
-    public PrayTimeActivityHelper(MainActivity calendarActivity) {
-        this.calendarActivity = calendarActivity;
-        this.utils = calendarActivity.utils;
-        prayTimeTextView = (TextView) calendarActivity
-                .findViewById(R.id.today_praytimes);
+    public PrayTimeActivityHelper(Activity activity) {
+        this.activity = activity;
+        prayTimeTextView = (TextView) activity.findViewById(R.id.today_praytimes);
     }
 
     public void setDate(int year, int month, int dayOfMonth) {
@@ -37,17 +36,17 @@ class PrayTimeActivityHelper {
     }
 
     public void fillPrayTime() {
-        if (utils.getCoordinate(calendarActivity) == null) {
+        if (utils.getCoordinate(activity) == null) {
             return;
         }
-        Coordinate coord = utils.getCoordinate(calendarActivity);
+        Coordinate coord = utils.getCoordinate(activity);
 
         PrayTimesCalculator ptc = new PrayTimesCalculator(
-                utils.getCalculationMethod(calendarActivity));
+                utils.getCalculationMethod(activity));
         StringBuilder sb = new StringBuilder();
         Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
 
-        char[] digits = utils.preferredDigits(calendarActivity);
+        char[] digits = utils.preferredDigits(activity);
 
         sb.append(utils.imsak);
         sb.append(": ");
