@@ -3,7 +3,7 @@
 
     <style name="LightTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:colorPrimary">#3F51B5</item>
-        <item name="android:colorPrimaryDark">#3F51B5</item>
+        <item name="android:colorPrimaryDark">#303F9F</item>
         <item name="android:navigationBarColor">#3F51B5</item>
     </style>
 
