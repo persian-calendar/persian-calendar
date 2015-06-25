@@ -63,7 +63,7 @@ public class ClickDayListener implements View.OnClickListener,
         intent.setData(Events.CONTENT_URI);
         CivilDate civil = DateConverter.persianToCivil(persianDate);
         intent.putExtra(Events.DESCRIPTION,
-                utils.dayTitleSummary(civil, digits));
+                utils.dayTitleSummary(persianDate, digits));
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,

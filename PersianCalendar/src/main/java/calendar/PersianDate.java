@@ -38,6 +38,10 @@ public class PersianDate extends AbstractDate {
         this.isDari = isDari;
     }
 
+    public boolean isDari() {
+        return isDari;
+    }
+
     public PersianDate clone() {
         return new PersianDate(getYear(), getMonth(), getDayOfMonth());
     }

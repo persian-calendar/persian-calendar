@@ -46,6 +46,7 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class Utils {
+    private static final String TAG = "Utils";
     private static Utils myInstance;
     public final char PERSIAN_COMMA = '،';
     // I couldn't put them in strings.xml because I want them always in Persian
@@ -258,13 +259,17 @@ public class Utils {
                 + formatNumber(date.getYear(), digits);
     }
 
-    public String dayTitleSummary(CivilDate civilDate, char[] digits) {
+    public String dayTitleSummary(PersianDate persianDate, char[] digits) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
+        Log.d(TAG, persianDate.isDari() + "");
         return getDayOfWeekName(civilDate.getDayOfWeek()) + PERSIAN_COMMA + " "
-                + dateToString(DateConverter.civilToPersian(civilDate), digits);
+                + dateToString(persianDate, digits);
     }
 
-    public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
-        return dayTitleSummary(civilDate, digits) + "\n\n" + equalWith + ":\n"
+    public String infoForSpecificDay(PersianDate persianDate, char[] digits) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
+
+        return dayTitleSummary(persianDate, digits) + "\n\n" + equalWith + ":\n"
                 + dateToString(civilDate, digits) + "\n"
                 + dateToString(DateConverter.civilToIslamic(civilDate), digits)
                 + "\n";
@@ -313,12 +318,8 @@ public class Utils {
                         holidayTitle));
             }
 
-        } catch (ParserConfigurationException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (SAXException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (IOException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 
