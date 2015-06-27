@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +31,11 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class MainActivity extends FragmentActivity {
+    private static final String TAG = "MainActivity";
     // I know, it is ugly, but user will not notify this and this will not have
     // a memory problem
     private static final int MONTHS_LIMIT = 1200;
-    private final JalaliCalendar jalaliCalendar = JalaliCalendar.getInstance();
+    private JalaliCalendar jalaliCalendar;
     public Utils utils = Utils.getInstance();
     private ViewPager viewPager;
     private TextView calendarInfo;
@@ -46,9 +46,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
         super.onCreate(savedInstanceState);
-        if(utils.isDariVersion(this)) {
-            jalaliCalendar.setType(JalaliCalendar.MONTH_NAMES_TYPE.DARI);
-        }
+        jalaliCalendar = JalaliCalendar.getInstance(getApplication());
 
         startService(new Intent(this, ApplicationService.class));
 
@@ -87,7 +85,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View arg0) {
                 bringTodayYearMonth();
-                setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
+                setFocusedDay(jalaliCalendar.getToday());
             }
         });
         resetButton.setTypeface(Typeface.createFromAsset(this.getAssets(),
@@ -113,6 +111,12 @@ public class MainActivity extends FragmentActivity {
         });
 
         // Initializing the view
+        fillCalendarInfo(jalaliCalendar.getToday());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         fillCalendarInfo(jalaliCalendar.getToday());
     }
 

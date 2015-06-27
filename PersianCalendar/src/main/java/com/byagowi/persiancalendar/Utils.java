@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.MonthNameType;
 import calendar.PersianDate;
 
 /**
@@ -194,6 +195,20 @@ public class Utils {
         return prefs.getBoolean("DariVersion", false);
     }
 
+    public MonthNameType getMonthNameType(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String monthNameType = prefs.getString("MonthNameType", "persian");
+        switch (monthNameType) {
+            case "dari":
+                return MonthNameType.DARI;
+            case "pashto":
+                return MonthNameType.PASHTO;
+            case "persian":
+            default:
+                return MonthNameType.PERSIAN;
+        }
+    }
+
     public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
         Calendar calendar = Calendar.getInstance();
         if (iranTime) {
@@ -261,7 +276,6 @@ public class Utils {
 
     public String dayTitleSummary(PersianDate persianDate, char[] digits) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        Log.d(TAG, persianDate.isDari() + "");
         return getDayOfWeekName(civilDate.getDayOfWeek()) + PERSIAN_COMMA + " "
                 + dateToString(persianDate, digits);
     }

@@ -27,11 +27,11 @@ public class ClickDayListener implements View.OnClickListener,
     private final Utils utils;
 
     public ClickDayListener(String holidayTitle, PersianDate persianDate,
-                            MainActivity calendarAcitivity) {
+                            MainActivity calendarActivity) {
         this.holidayTitle = holidayTitle;
         this.persianDate = persianDate;
-        this.calendarAcitivity = calendarAcitivity;
-        this.utils = calendarAcitivity.utils;
+        this.calendarAcitivity = calendarActivity;
+        this.utils = calendarActivity.utils;
     }
 
     @Override

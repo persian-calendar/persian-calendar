@@ -1,38 +1,34 @@
 package calendar;
 
+import android.content.Context;
+
+import com.byagowi.persiancalendar.Utils;
+
 public class JalaliCalendar {
+    private static final String TAG = "JalaliCalendar";
     private static JalaliCalendar thisInstance;
+    private Utils utils = Utils.getInstance();
+    private Context context;
 
-    public enum MONTH_NAMES_TYPE {PERSIAN, DARI}
+    private JalaliCalendar(Context ctx) {
+        context = ctx;
+    }
 
-    private MONTH_NAMES_TYPE type = MONTH_NAMES_TYPE.PERSIAN;
-
-    public static JalaliCalendar getInstance() {
+    public static JalaliCalendar getInstance(Context ctx) {
         if (thisInstance == null) {
-            thisInstance = new JalaliCalendar();
+            thisInstance = new JalaliCalendar(ctx);
         }
         return thisInstance;
     }
 
-    public void setType(MONTH_NAMES_TYPE type) {
-        this.type = type;
-    }
-
-    public MONTH_NAMES_TYPE getType() {
-        return type;
+    public MonthNameType getType() {
+        return utils.getMonthNameType(context);
     }
 
     public PersianDate getToday() {
         CivilDate civilDate = new CivilDate();
         PersianDate equivalentPersianDate = DateConverter.civilToPersian(civilDate);
-        switch (getType()) {
-            case DARI:
-                equivalentPersianDate.setDari(true);
-                break;
-            default:
-                equivalentPersianDate.setDari(false);
-                break;
-        }
+        equivalentPersianDate.setNameType(getType());
         return equivalentPersianDate;
     }
 }

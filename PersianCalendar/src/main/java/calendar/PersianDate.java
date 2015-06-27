@@ -5,7 +5,6 @@ package calendar;
  * @author ebraminio (implementing isLeapYear)
  */
 public class PersianDate extends AbstractDate {
-
     private static final String[] persianMonthName = {"", "فروردین",
             "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
             "آذر", "دی", "بهمن", "اسفند"};
@@ -17,11 +16,16 @@ public class PersianDate extends AbstractDate {
     private static final String[] dariMonthName = {"", "حمل", "ثور", "جوزا",
             "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
             "حوت"};
+    private static final String[] pashtoMonthName = {"name in pashto", "name in pashto", "name in pashto",
+            "name in pashto", "name in pashto", "name in pashto", "name in pashto", "name in pashto", "name in pashto",
+            "name in pashto", "name in pashto", "name in pashto", "name in pashto"};
 
+    private MonthNameType type = MonthNameType.PERSIAN;
     private boolean isDari = false;
     private int year;
     private int month;
     private int day;
+
     public PersianDate(int year, int month, int day) {
         setYear(year);
         // Initialize day, so that we get no exceptions when setting month
@@ -31,19 +35,29 @@ public class PersianDate extends AbstractDate {
     }
 
     public String[] getMonthsList() {
-        return isDari ? dariMonthName : persianMonthName;
+        switch (getMonthNameType()) {
+            case DARI:
+                return dariMonthName;
+            case PASHTO:
+                return pashtoMonthName;
+            case PERSIAN:
+            default:
+                return persianMonthName;
+        }
     }
 
-    public void setDari(boolean isDari) {
-        this.isDari = isDari;
+    public void setNameType(MonthNameType type) {
+        this.type = type;
     }
 
-    public boolean isDari() {
-        return isDari;
+    public MonthNameType getMonthNameType() {
+        return type;
     }
 
     public PersianDate clone() {
-        return new PersianDate(getYear(), getMonth(), getDayOfMonth());
+        PersianDate dateClone = new PersianDate(getYear(), getMonth(), getDayOfMonth());
+        dateClone.setNameType(getMonthNameType());
+        return dateClone;
     }
 
     public int getDayOfMonth() {
