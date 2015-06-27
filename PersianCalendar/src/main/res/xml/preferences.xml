@@ -15,11 +15,6 @@
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits"/>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="DariVersion"
-            android:summary="@string/enable_dari"
-            android:title="@string/dari_months"/>
 
         <ListPreference
             android:defaultValue="persian"

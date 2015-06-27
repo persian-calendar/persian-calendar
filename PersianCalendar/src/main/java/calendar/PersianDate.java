@@ -21,7 +21,6 @@ public class PersianDate extends AbstractDate {
             "name in pashto", "name in pashto", "name in pashto", "name in pashto"};
 
     private MonthNameType type = MonthNameType.PERSIAN;
-    private boolean isDari = false;
     private int year;
     private int month;
     private int day;
@@ -32,6 +31,11 @@ public class PersianDate extends AbstractDate {
         this.day = 1;
         setMonth(month);
         setDayOfMonth(day);
+    }
+
+    public PersianDate(int year, int month, int day, MonthNameType type) {
+        this(year, month, day);
+        setNameType(type);
     }
 
     public String[] getMonthsList() {

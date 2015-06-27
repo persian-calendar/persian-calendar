@@ -18,6 +18,7 @@ import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
+import calendar.JalaliCalendar;
 import calendar.PersianDate;
 
 /**
@@ -27,6 +28,7 @@ import calendar.PersianDate;
  */
 public class ConverterActivity extends Activity {
     private final Utils utils = Utils.getInstance();
+    private JalaliCalendar jalaliCalendar;
     private final int yearDiffRange = 200;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
@@ -39,6 +41,7 @@ public class ConverterActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
         super.onCreate(savedInstanceState);
+        jalaliCalendar = JalaliCalendar.getInstance(getApplication());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -93,8 +96,9 @@ public class ConverterActivity extends Activity {
             switch (calendarType) {
                 case GEORGIAN:
                     civilDate = new CivilDate(year, month, day);
-                    persianDate = DateConverter.civilToPersian(civilDate);
                     islamicDate = DateConverter.civilToIslamic(civilDate);
+                    persianDate = DateConverter.civilToPersian(civilDate);
+                    persianDate.setNameType(jalaliCalendar.getType());
 
                     calendarsTextList.add(utils.dateToString(civilDate, digits));
                     calendarsTextList.add(utils.dateToString(persianDate, digits));
@@ -104,13 +108,14 @@ public class ConverterActivity extends Activity {
                     islamicDate = new IslamicDate(year, month, day);
                     civilDate = DateConverter.islamicToCivil(islamicDate);
                     persianDate = DateConverter.islamicToPersian(islamicDate);
+                    persianDate.setNameType(jalaliCalendar.getType());
 
                     calendarsTextList.add(utils.dateToString(islamicDate, digits));
                     calendarsTextList.add(utils.dateToString(civilDate, digits));
                     calendarsTextList.add(utils.dateToString(persianDate, digits));
                     break;
                 case SHAMSI:
-                    persianDate = new PersianDate(year, month, day);
+                    persianDate = new PersianDate(year, month, day, jalaliCalendar.getType());
                     civilDate = DateConverter.persianToCivil(persianDate);
                     islamicDate = DateConverter.persianToIslamic(persianDate);
 
@@ -143,15 +148,19 @@ public class ConverterActivity extends Activity {
         char[] digits = utils.preferredDigits(this);
 
         AbstractDate date = null;
+        PersianDate newDatePersian = jalaliCalendar.getToday();
+        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
+        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
+
         switch (detectSelectedCalendar()) {
             case GEORGIAN:
-                date = new CivilDate();
+                date = newDateCivil;
                 break;
             case ISLAMIC:
-                date = DateConverter.civilToIslamic(new CivilDate());
+                date = newDateIslamic;
                 break;
             case SHAMSI:
-                date = DateConverter.civilToPersian(new CivilDate());
+                date = newDatePersian;
                 break;
         }
 
