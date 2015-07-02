@@ -5,7 +5,6 @@ package calendar;
  * @author ebraminio (implementing isLeapYear)
  */
 public class PersianDate extends AbstractDate {
-
     private static final String[] persianMonthName = {"", "فروردین",
             "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
             "آذر", "دی", "بهمن", "اسفند"};
@@ -18,10 +17,11 @@ public class PersianDate extends AbstractDate {
             "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
             "حوت"};
 
-    private boolean isDari = false;
+    private MonthNameType type = MonthNameType.PERSIAN;
     private int year;
     private int month;
     private int day;
+
     public PersianDate(int year, int month, int day) {
         setYear(year);
         // Initialize day, so that we get no exceptions when setting month
@@ -30,16 +30,33 @@ public class PersianDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
-    public String[] getMonthsList() {
-        return isDari ? dariMonthName : persianMonthName;
+    public PersianDate(int year, int month, int day, MonthNameType type) {
+        this(year, month, day);
+        setNameType(type);
     }
 
-    public void setDari(boolean isDari) {
-        this.isDari = isDari;
+    public String[] getMonthsList() {
+        switch (getMonthNameType()) {
+            case DARI:
+                return dariMonthName;
+            case PERSIAN:
+            default:
+                return persianMonthName;
+        }
+    }
+
+    public void setNameType(MonthNameType type) {
+        this.type = type;
+    }
+
+    public MonthNameType getMonthNameType() {
+        return type;
     }
 
     public PersianDate clone() {
-        return new PersianDate(getYear(), getMonth(), getDayOfMonth());
+        PersianDate dateClone = new PersianDate(getYear(), getMonth(), getDayOfMonth());
+        dateClone.setNameType(getMonthNameType());
+        return dateClone;
     }
 
     public int getDayOfMonth() {

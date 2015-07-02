@@ -21,9 +21,9 @@ import com.byagowi.persiancalendar.MainActivity;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 
-import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
+import calendar.JalaliCalendar;
 import calendar.PersianDate;
 
 /**
@@ -33,12 +33,14 @@ import calendar.PersianDate;
  */
 public class MonthFragment extends Fragment {
     private final Utils utils = Utils.getInstance();
+    private JalaliCalendar jalaliCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Preparing Calendar Month View
         Context context = getActivity();
+        jalaliCalendar = JalaliCalendar.getInstance(context);
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
@@ -95,7 +97,7 @@ public class MonthFragment extends Fragment {
 
         // Calendar Logic
         int offset = getArguments().getInt("offset");
-        PersianDate persianDate = DateConverter.civilToPersian(new CivilDate());
+        PersianDate persianDate = jalaliCalendar.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
         int year = persianDate.getYear();
@@ -110,7 +112,6 @@ public class MonthFragment extends Fragment {
         persianDate.setMonth(month);
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
-        persianDate.setDari(utils.isDariVersion(context));
 
         char[] digits = utils.preferredDigits(getActivity());
 
@@ -126,7 +127,7 @@ public class MonthFragment extends Fragment {
             textView.setText(utils.firstCharOfDaysOfWeekName[i]);
         }
         try {
-            PersianDate today = DateConverter.civilToPersian(new CivilDate());
+            PersianDate today = jalaliCalendar.getToday();
             for (int i : new Range(1, 31)) {
                 persianDate.setDayOfMonth(i);
 
@@ -150,8 +151,8 @@ public class MonthFragment extends Fragment {
 
                     textView.setBackgroundResource(
                             prefs.getString("Theme", "LightTheme").equals("LightTheme")
-                            ? R.drawable.today_light
-                            : R.drawable.today_dark);
+                                    ? R.drawable.today_light
+                                    : R.drawable.today_dark);
                 }
 
                 dayOfWeek++;

@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -21,9 +22,11 @@ import java.util.Date;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.JalaliCalendar;
 import calendar.PersianDate;
 
 public class UpdateUtils {
+    private static final String TAG = "UpdateUtils";
     private static final int NOTIFICATION_ID = 1001;
     private static UpdateUtils myInstance;
     private final Utils utils = Utils.getInstance();
@@ -49,8 +52,7 @@ public class UpdateUtils {
         boolean iranTime = prefs.getBoolean("IranTime", false);
         Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
         CivilDate civil = new CivilDate(calendar);
-        PersianDate persian = DateConverter.civilToPersian(civil);
-        persian.setDari(utils.isDariVersion(context));
+        PersianDate persian = JalaliCalendar.getInstance(context).getToday();
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(

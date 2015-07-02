@@ -112,4 +112,12 @@
         <item>YAZD</item>
     </string-array>
 
+    <string-array name="monthTypeNames" >
+        <item>Persian</item>
+        <item>Dari</item>
+    </string-array>
+    <string-array name="monthTypeKeys" >
+        <item>persian</item>
+        <item>dari</item>
+    </string-array>
 </resources>

@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.MonthNameType;
 import calendar.PersianDate;
 
 /**
@@ -46,6 +47,7 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class Utils {
+    private static final String TAG = "Utils";
     private static Utils myInstance;
     public final char PERSIAN_COMMA = '،';
     // I couldn't put them in strings.xml because I want them always in Persian
@@ -193,6 +195,24 @@ public class Utils {
         return prefs.getBoolean("DariVersion", false);
     }
 
+    public boolean clockIn24(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return prefs.getBoolean("WidgetIn24", true);
+    }
+
+    public MonthNameType getMonthNameType(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String monthNameType = prefs.getString("MonthNameType", "persian");
+        switch (monthNameType) {
+            case "dari":
+                return MonthNameType.DARI;
+            case "persian":
+            default:
+                return MonthNameType.PERSIAN;
+        }
+    }
+
     public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
         Calendar calendar = Calendar.getInstance();
         if (iranTime) {
@@ -209,6 +229,26 @@ public class Utils {
     public String clockToString(int hour, int minute, char[] digits) {
         return formatNumber(
                 String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+    }
+
+    public String getPersianFormattedClock(Clock clock, char[] digits, boolean in24) {
+        String timeText = null;
+
+        int hour = clock.getHour();
+        if (!in24) {
+            if (hour >= 12) {
+                timeText = PM_IN_PERSIAN;
+                hour -= 12;
+            } else {
+                timeText = AM_IN_PERSIAN;
+            }
+        }
+
+        String result = clockToString(hour, clock.getMinute(), digits);
+        if (!in24) {
+            result = result + " " + timeText;
+        }
+        return result;
     }
 
     public String getPersianFormattedClock(Calendar calendar, char[] digits,
@@ -258,13 +298,16 @@ public class Utils {
                 + formatNumber(date.getYear(), digits);
     }
 
-    public String dayTitleSummary(CivilDate civilDate, char[] digits) {
+    public String dayTitleSummary(PersianDate persianDate, char[] digits) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         return getDayOfWeekName(civilDate.getDayOfWeek()) + PERSIAN_COMMA + " "
-                + dateToString(DateConverter.civilToPersian(civilDate), digits);
+                + dateToString(persianDate, digits);
     }
 
-    public String infoForSpecificDay(CivilDate civilDate, char[] digits) {
-        return dayTitleSummary(civilDate, digits) + "\n\n" + equalWith + ":\n"
+    public String infoForSpecificDay(PersianDate persianDate, char[] digits) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
+
+        return dayTitleSummary(persianDate, digits) + "\n\n" + equalWith + ":\n"
                 + dateToString(civilDate, digits) + "\n"
                 + dateToString(DateConverter.civilToIslamic(civilDate), digits)
                 + "\n";
@@ -313,12 +356,8 @@ public class Utils {
                         holidayTitle));
             }
 
-        } catch (ParserConfigurationException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (SAXException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (IOException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 
