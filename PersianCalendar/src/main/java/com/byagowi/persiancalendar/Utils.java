@@ -195,6 +195,12 @@ public class Utils {
         return prefs.getBoolean("DariVersion", false);
     }
 
+    public boolean clockIn24(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return prefs.getBoolean("WidgetIn24", true);
+    }
+
     public MonthNameType getMonthNameType(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String monthNameType = prefs.getString("MonthNameType", "persian");
@@ -223,6 +229,26 @@ public class Utils {
     public String clockToString(int hour, int minute, char[] digits) {
         return formatNumber(
                 String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+    }
+
+    public String getPersianFormattedClock(Clock clock, char[] digits, boolean in24) {
+        String timeText = null;
+
+        int hour = clock.getHour();
+        if (!in24) {
+            if (hour >= 12) {
+                timeText = PM_IN_PERSIAN;
+                hour -= 12;
+            } else {
+                timeText = AM_IN_PERSIAN;
+            }
+        }
+
+        String result = clockToString(hour, clock.getMinute(), digits);
+        if (!in24) {
+            result = result + " " + timeText;
+        }
+        return result;
     }
 
     public String getPersianFormattedClock(Calendar calendar, char[] digits,
@@ -330,8 +356,12 @@ public class Utils {
                         holidayTitle));
             }
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            Log.e(TAG, e.getMessage());
+        } catch (ParserConfigurationException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (SAXException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (IOException e) {
+            Log.e("com.byagowi.persiancalendar", e.getMessage());
         }
     }
 

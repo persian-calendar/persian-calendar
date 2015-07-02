@@ -47,45 +47,46 @@ class PrayTimeActivityHelper {
         Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
 
         char[] digits = utils.preferredDigits(activity);
+        boolean clockIn24 = utils.clockIn24(activity);
 
         sb.append(utils.imsak);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Imsak), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Imsak), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.sunrise);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Sunrise), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Sunrise), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.dhuhr);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Dhuhr), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Dhuhr), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.asr);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Asr), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Asr), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.sunset);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Sunset), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Sunset), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.maghrib);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Maghrib), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Maghrib), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.isha);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Isha), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Isha), digits, clockIn24));
 
         sb.append("\n");
         sb.append(utils.midnight);
         sb.append(": ");
-        sb.append(utils.clockToString(prayTimes.get(PrayTime.Midnight), digits));
+        sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Midnight), digits, clockIn24));
 
         utils.prepareTextView(prayTimeTextView);
         prayTimeTextView.setText(utils.formatNumber(sb.toString(), digits));
