@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class MonthFragment extends Fragment {
-    private static final String TAG = "MonthFragment";
     private final Utils utils = Utils.getInstance();
     private JalaliCalendar jalaliCalendar;
 
@@ -114,7 +112,6 @@ public class MonthFragment extends Fragment {
         persianDate.setMonth(month);
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
-        Log.d(TAG, "focusing date: " + persianDate.getMonthNameType());
 
         char[] digits = utils.preferredDigits(getActivity());
 
