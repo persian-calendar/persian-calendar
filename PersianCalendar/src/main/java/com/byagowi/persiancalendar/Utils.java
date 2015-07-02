@@ -356,12 +356,8 @@ public class Utils {
                         holidayTitle));
             }
 
-        } catch (ParserConfigurationException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (SAXException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
-        } catch (IOException e) {
-            Log.e("com.byagowi.persiancalendar", e.getMessage());
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 
