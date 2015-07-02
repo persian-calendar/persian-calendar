@@ -201,8 +201,6 @@ public class Utils {
         switch (monthNameType) {
             case "dari":
                 return MonthNameType.DARI;
-            case "pashto":
-                return MonthNameType.PASHTO;
             case "persian":
             default:
                 return MonthNameType.PERSIAN;

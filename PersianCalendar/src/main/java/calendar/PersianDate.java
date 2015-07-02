@@ -16,9 +16,6 @@ public class PersianDate extends AbstractDate {
     private static final String[] dariMonthName = {"", "حمل", "ثور", "جوزا",
             "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
             "حوت"};
-    private static final String[] pashtoMonthName = {"name in pashto", "name in pashto", "name in pashto",
-            "name in pashto", "name in pashto", "name in pashto", "name in pashto", "name in pashto", "name in pashto",
-            "name in pashto", "name in pashto", "name in pashto", "name in pashto"};
 
     private MonthNameType type = MonthNameType.PERSIAN;
     private int year;
@@ -42,8 +39,6 @@ public class PersianDate extends AbstractDate {
         switch (getMonthNameType()) {
             case DARI:
                 return dariMonthName;
-            case PASHTO:
-                return pashtoMonthName;
             case PERSIAN:
             default:
                 return persianMonthName;

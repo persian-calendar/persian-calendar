@@ -115,11 +115,9 @@
     <string-array name="monthTypeNames" >
         <item>Persian</item>
         <item>Dari</item>
-        <item>Pashto</item>
     </string-array>
     <string-array name="monthTypeKeys" >
         <item>persian</item>
         <item>dari</item>
-        <item>pashto</item>
     </string-array>
 </resources>

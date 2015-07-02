@@ -1,5 +1,5 @@
 package calendar;
 
 public enum MonthNameType {
-    PERSIAN, DARI, PASHTO
+    PERSIAN, DARI
 }
