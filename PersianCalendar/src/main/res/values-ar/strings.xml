@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">تقویم فارسی</string>
     <string name="widget_name">تقویم فارسی</string>
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
@@ -46,31 +45,39 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass_not_found">سنسور قطب‌نما یافت نشد</string>
 
-    <string name="ABAN">آبان</string>
-    <string name="AZAR">آذر</string>
-    <string name="BAHMAN">بهمن</string>
-    <string name="DEY">دی</string>
-    <string name="ESFAND">اسفند</string>
-    <string name="FARVARDIN">فروردین</string>
-    <string name="KHORDARD">خرداد</string>
-    <string name="MEHR">مهر</string>
-    <string name="MORDAD">مرداد</string>
-    <string name="ORDIBEHESHT">اردیبهشت</string>
-    <string name="SHAHRIVAR">شهریور</string>
-    <string name="TIR">تیر</string>
+    <string name="FARVARDIN">حمل</string>
+    <string name="ORDIBEHESHT">ثور</string>
+    <string name="KHORDARD">جوزا</string>
+    <string name="TIR">سرطان</string>
+    <string name="MORDAD">اسد</string>
+    <string name="SHAHRIVAR">سنبله</string>
+    <string name="MEHR">میزان</string>
+    <string name="ABAN">عقرب</string>
+    <string name="AZAR">قوس</string>
+    <string name="DEY">جدی</string>
+    <string name="BAHMAN">دلو</string>
+    <string name="ESFAND">حوت</string>
 
-    <string name="JANUARY">ژانویه</string>
-    <string name="FEBRUARY">فوریه</string>
-    <string name="MARCH">مارس</string>
-    <string name="APRIL">آوریل</string>
-    <string name="MAY">مه</string>
-    <string name="JUNE">ژوئن</string>
-    <string name="JULY">ژوئیه</string>
-    <string name="AUGUST">اوت</string>
-    <string name="SEPTEMBER">سپتامبر</string>
+    <string name="WEDNESDAY">چهارشنبه</string>
+    <string name="MONDAY">دوشنبه</string>
+    <string name="FRIDAY">جمعه</string>
+    <string name="THURSDAY">پنجشنبه</string>
+    <string name="TUESDAY">سه شنبه</string>
+    <string name="SATURDAY">شنبه</string>
+    <string name="SUNDAY">یکشنبه</string>
+
+    <string name="JANUARY">جنوری</string>
+    <string name="FEBRUARY">فبروری</string>
+    <string name="MARCH">مارچ</string>
+    <string name="APRIL">اپریل</string>
+    <string name="MAY">می</string>
+    <string name="JUNE">جون</string>
+    <string name="JULY">جولای</string>
+    <string name="AUGUST">آگست</string>
+    <string name="SEPTEMBER">سپتمبر</string>
     <string name="OCTOBER">اکتبر</string>
-    <string name="NOVEMBER">نوامبر</string>
-    <string name="DECEMBER">دسامبر</string>
+    <string name="NOVEMBER">نومبر</string>
+    <string name="DECEMBER">دیسمبر</string>
 
     <string name="language">زبان</string>
     <string name="month_names">نام ماه ها</string>
@@ -79,13 +86,7 @@
     <string name="georgian">میلادی</string>
     <string name="hijri_qamari">هجری قمری</string>
     <string name="hijri_shamsi">هجری شمسی</string>
-    <string name="WEDNESDAY">چهارشنبه</string>
-    <string name="MONDAY">دوشنبه</string>
-    <string name="FRIDAY">جمعه</string>
-    <string name="THURSDAY">پنجشنبه</string>
-    <string name="TUESDAY">سه شنبه</string>
-    <string name="SATURDAY">شنبه</string>
-    <string name="SUNDAY">یکشنبه</string>
+
     <string name="asr">عصر</string>
     <string name="dhuhr">ظهر</string>
     <string name="imsak">طلوع فجر</string>
@@ -94,8 +95,8 @@
     <string name="midnight">نیمه وقت شرعی</string>
     <string name="sunrise">طلوع آفتاب</string>
     <string name="sunset">غروب آفتاب</string>
+
     <string name="version">نسخه</string>
     <string name="calendar_font">فونت تقویم</string>
     <string name="calendar_font_summary">تغییر فونت تقویم</string>
-
 </resources>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">فارسی کلیز</string>
+    <string name="widget_mini_name">فارسی کلیز (کوچنی)</string>
+    <string name="latitude">جغرافیایی عرض</string>
+    <string name="longitude">جغرافیایی طول</string>
+    <string name="settings">غوراوي</string>
+    <string name="exit">وتل</string>
+    <string name="enable_persian_digits">فارسی اعداد توانول</string>
+    <string name="persian_digits">فارسی اعداد</string>
+    <string name="clock_on_widget">ساعت په ویجت کی</string>
+    <string name="showing_clock_in_24">د ۲۴ ساعته ساعت ښودل</string>
+    <string name="clock_in_24">۲۴ ساعته ساعت</string>
+    <string name="about">په باره کی</string>
+    <string name="gpl_logo">د گنو عمومی مجوز لوگو</string>
+    <string name="year">کال</string>
+    <string name="month">میاشت</string>
+    <string name="day">ورځ</string>
+    <string name="clock">ساعت</string>
+    <string name="date">نیټه</string>
+    <string name="date_converter">د نیټه مبدل</string>
+    <string name="logo">نښه</string>
+    <string name="dari_months">دری میاشتو</string>
+    <string name="enable_dari">دری میاشتو توانول</string>
+    <string name="widget_notification_dashclock">ویجت، د مطلع سازی نوار او دش کلاک</string>
+    <string name="general">ټولګړي غوراوي</string>
+    <string name="widget_text_color">د ویجت د لیکل رنگ</string>
+    <string name="select_widgets_text_color">د ویجت دودیز رنگونه ټاکنه</string>
+    <string name="pray_times_calculation_setting">د شرعی اوقات محاسبه او قبله نما غوراوي</string>
+    <string name="notify_date">د نیټه یادښت توانول</string>
+    <string name="enable_notify">دايمي يادښت د ټولو نېټه ډول</string>
+    <string name="select_skin">د پروگرام رنگ غوراوي</string>
+    <string name="skin">د پروگرام رنگ</string>
+    <string name="pray_methods">د حساب کارونه</string>
+    <string name="pray_methods_calculation">د شرعی اوقات د حساب کارونه</string>
+    <string name="altitude">ارتفاع</string>
+    <string name="location">ځای</string>
+    <string name="location_help">که هیڅ کوم نه دی د ځای مختصات لاندی وارد وکۍ</string>
+    <string name="showing_iran_time">ویجت او مطلع سازی نوار په ایران د وخت کی حتی ایران نه بیرون</string>
+    <string name="iran_time">د ایران وخت</string>
+    <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
+    <string name="compass_not_found">د قطب نما سنسور پیدا نشو</string>
+
+    <string name="FARVARDIN">وری</string>
+    <string name="ORDIBEHESHT">غویی</string>
+    <string name="KHORDARD">غبرگولی</string>
+    <string name="TIR">چنگاش</string>
+    <string name="MORDAD">زمری</string>
+    <string name="SHAHRIVAR">وږی</string>
+    <string name="MEHR">تله</string>
+    <string name="ABAN">لرم</string>
+    <string name="AZAR">لیندۍ</string>
+    <string name="DEY">مرغومی</string>
+    <string name="BAHMAN">سلواغه</string>
+    <string name="ESFAND">کب</string>
+
+    <string name="WEDNESDAY">چهارشنبه</string>
+    <string name="MONDAY">دوشنبه</string>
+    <string name="FRIDAY">جمعه</string>
+    <string name="THURSDAY">پنجشنبه</string>
+    <string name="TUESDAY">سه شنبه</string>
+    <string name="SATURDAY">شنبه</string>
+    <string name="SUNDAY">یکشنبه</string>
+
+    <string name="JANUARY">جنوری</string>
+    <string name="FEBRUARY">فبروری</string>
+    <string name="MARCH">مارچ</string>
+    <string name="APRIL">اپریل</string>
+    <string name="MAY">می</string>
+    <string name="JUNE">جون</string>
+    <string name="JULY">جولای</string>
+    <string name="AUGUST">آگست</string>
+    <string name="SEPTEMBER">سپتمبر</string>
+    <string name="OCTOBER">اکتبر</string>
+    <string name="NOVEMBER">نومبر</string>
+    <string name="DECEMBER">دیسمبر</string>
+
+    <string name="month_names">مياشت نومونه</string>
+    <string name="application_language">د پروگرام ژبه</string>
+    <string name="equals_with">برابر دی په</string>
+    <string name="georgian">میلادی</string>
+    <string name="hijri_qamari">هجری قمری</string>
+    <string name="hijri_shamsi">هجری شمسی</string>
+
+    <string name="asr">مازدیگر</string>
+    <string name="dhuhr">ماسپښین </string>
+    <string name="imsak">لمرڅرک</string>
+    <string name="isha">ماخستن</string>
+    <string name="maghrib">ماښام</string>
+    <string name="midnight">نيمه شپه</string>
+    <string name="sunrise">د لمر ختل</string>
+    <string name="sunset">د لمر غورځیده</string>
+
+    <string name="version">نسخه</string>
+    <string name="today">نن</string>
+    <string name="language">ژبه</string>
+    <string name="app_name">فارسی کلیز</string>
+    <string name="altitude_praytime">په متر کی (اختیاری)</string>
+    <string name="calendar_font">د کلیز فانت</string>
+    <string name="calendar_font_summary">دکلیز فانت</string>
+    <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
+</resources>

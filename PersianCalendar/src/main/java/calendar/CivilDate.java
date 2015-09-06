@@ -1,5 +1,7 @@
 package calendar;
 
+import com.byagowi.persiancalendar.Utils;
+
 import java.util.Calendar;
 
 /**
@@ -7,11 +9,11 @@ import java.util.Calendar;
  * @author ebraminio
  */
 public class CivilDate extends AbstractDate {
-    private static final String[] monthName = {"", "ژانویه", "فوریه", "مارس",
-            "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
-            "نوامبر", "دسامبر"};
-    private static final String[] weekdayName = {"", "یکشنبه", "دوشنبه",
-            "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
+    public static final String[] monthName = {"", "JANUARY", "FEBRUARY", "MARCH",
+            "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
+            "NOVEMBER", "DECEMBER"};
+    private static final String[] weekdayName = {"", "SUNDAY", "MONDAY",
+            "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
     private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31,
             31, 30, 31, 30, 31};
     private int year;
@@ -92,7 +94,7 @@ public class CivilDate extends AbstractDate {
     }
 
     public String getMonthName() {
-        return monthName[getMonth()];
+        return Utils.getCalendarItemName(monthName[getMonth()]);
     }
 
     public int getWeekOfMonth() {
@@ -142,7 +144,7 @@ public class CivilDate extends AbstractDate {
      * @return The name of day of week
      */
     public String getDayOfWeekName() {
-        return weekdayName[getDayOfWeek()];
+        return Utils.getCalendarItemName(weekdayName[getDayOfWeek()]);
     }
 
     public boolean equals(CivilDate civilDate) {

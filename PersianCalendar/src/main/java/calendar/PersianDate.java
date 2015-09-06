@@ -1,23 +1,20 @@
 package calendar;
 
+import com.byagowi.persiancalendar.Utils;
+
+import java.util.Calendar;
+
 /**
  * @author Amir
  * @author ebraminio (implementing isLeapYear)
  */
 public class PersianDate extends AbstractDate {
-    private static final String[] persianMonthName = {"", "فروردین",
-            "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
-            "آذر", "دی", "بهمن", "اسفند"};
+    public static final String[] MONTH_NAME_KEYS = {"", "FARVARDIN",
+            "ORDIBEHESHT", "KHORDARD", "TIR", "MORDAD", "SHAHRIVAR",
+            "MEHR", "ABAN", "AZAR", "DEY", "BAHMAN", "ESFAND"};
+    public static final String[] WEEK_DAY_NAME_KEYS = {"", "SUNDAY", "MONDAY", "TUESDAY",
+            "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
 
-    /**
-     * Months Names in Dari, needed for special Dari Version. Provided by:
-     * Mohammad Hamid Majidee
-     */
-    private static final String[] dariMonthName = {"", "حمل", "ثور", "جوزا",
-            "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
-            "حوت"};
-
-    private MonthNameType type = MonthNameType.PERSIAN;
     private int year;
     private int month;
     private int day;
@@ -30,33 +27,12 @@ public class PersianDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
-    public PersianDate(int year, int month, int day, MonthNameType type) {
-        this(year, month, day);
-        setNameType(type);
-    }
-
     public String[] getMonthsList() {
-        switch (getMonthNameType()) {
-            case DARI:
-                return dariMonthName;
-            case PERSIAN:
-            default:
-                return persianMonthName;
-        }
-    }
-
-    public void setNameType(MonthNameType type) {
-        this.type = type;
-    }
-
-    public MonthNameType getMonthNameType() {
-        return type;
+        return MONTH_NAME_KEYS;
     }
 
     public PersianDate clone() {
-        PersianDate dateClone = new PersianDate(getYear(), getMonth(), getDayOfMonth());
-        dateClone.setNameType(getMonthNameType());
-        return dateClone;
+        return new PersianDate(getYear(), getMonth(), getDayOfMonth());
     }
 
     public int getDayOfMonth() {
@@ -99,7 +75,11 @@ public class PersianDate extends AbstractDate {
     }
 
     public String getMonthName() {
-        return getMonthsList()[month];
+        return Utils.getCalendarItemName(getMonthsList()[getMonth()]);
+    }
+
+    public String getWeekdayName() {
+        return Utils.getCalendarItemName(WEEK_DAY_NAME_KEYS[getDayOfWeek()]);
     }
 
     public int getWeekOfYear() {
@@ -134,7 +114,11 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getDayOfWeek() {
-        throw new RuntimeException("not implemented yet!");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 
     public int getDayOfYear() {

@@ -30,8 +30,8 @@ public class AboutActivity extends Activity {
 
         TextView versionTextView = (TextView) findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
-        versionTextView.setText(utils.version + " " +
-                utils.formatNumber(version, utils.preferredDigits(this)));
+        versionTextView.setText(getString(R.string.version) + " " +
+                Utils.formatNumber(version, utils.preferredDigits(this)));
 
         StringBuilder sb = new StringBuilder();
 
@@ -58,7 +58,7 @@ public class AboutActivity extends Activity {
                 + version
                 + "\n"
                 + "Copyright (C) 2012-2015  ebrahim@gnu.org "
-                + utils.textShaper("ابراهیم بیاگوی")
+                + Utils.textShaper("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
                 + "it under the terms of the GNU General Public License as published by "

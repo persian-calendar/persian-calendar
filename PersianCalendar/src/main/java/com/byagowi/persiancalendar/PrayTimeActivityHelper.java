@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.widget.TextView;
 
 import com.github.praytimes.Clock;
@@ -49,47 +50,48 @@ class PrayTimeActivityHelper {
         char[] digits = utils.preferredDigits(activity);
         boolean clockIn24 = utils.clockIn24(activity);
 
-        sb.append(utils.imsak);
+        Context ctx = activity.getApplication();
+        sb.append(ctx.getString(R.string.imsak));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Imsak), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.sunrise);
+        sb.append(ctx.getString(R.string.sunrise));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Sunrise), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.dhuhr);
+        sb.append(ctx.getString(R.string.dhuhr));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Dhuhr), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.asr);
+        sb.append(ctx.getString(R.string.asr));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Asr), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.sunset);
+        sb.append(ctx.getString(R.string.sunset));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Sunset), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.maghrib);
+        sb.append(ctx.getString(R.string.maghrib));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Maghrib), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.isha);
+        sb.append(ctx.getString(R.string.isha));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Isha), digits, clockIn24));
 
         sb.append("\n");
-        sb.append(utils.midnight);
+        sb.append(ctx.getString(R.string.midnight));
         sb.append(": ");
         sb.append(utils.getPersianFormattedClock(prayTimes.get(PrayTime.Midnight), digits, clockIn24));
 
         utils.prepareTextView(prayTimeTextView);
-        prayTimeTextView.setText(utils.formatNumber(sb.toString(), digits));
+        prayTimeTextView.setText(Utils.formatNumber(sb.toString(), digits));
     }
 
     public void clearInfo() {

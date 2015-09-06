@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.Utils;
 
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
-import calendar.JalaliCalendar;
 import calendar.PersianDate;
 
 /**
@@ -33,14 +32,12 @@ import calendar.PersianDate;
  */
 public class MonthFragment extends Fragment {
     private final Utils utils = Utils.getInstance();
-    private JalaliCalendar jalaliCalendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Preparing Calendar Month View
         Context context = getActivity();
-        jalaliCalendar = JalaliCalendar.getInstance(context);
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
@@ -97,7 +94,7 @@ public class MonthFragment extends Fragment {
 
         // Calendar Logic
         int offset = getArguments().getInt("offset");
-        PersianDate persianDate = jalaliCalendar.getToday();
+        PersianDate persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
         int year = persianDate.getYear();
@@ -124,15 +121,15 @@ public class MonthFragment extends Fragment {
 
         for (int i : new Range(0, 7)) {
             TextView textView = daysTextViews[0][6 - i];
-            textView.setText(utils.firstCharOfDaysOfWeekName[i]);
+            textView.setText(Utils.firstCharOfDaysOfWeekName[i]);
         }
         try {
-            PersianDate today = jalaliCalendar.getToday();
+            PersianDate today = Utils.getToday();
             for (int i : new Range(1, 31)) {
                 persianDate.setDayOfMonth(i);
 
                 TextView textView = daysTextViews[weekOfMonth][6 - dayOfWeek];
-                textView.setText(utils.formatNumber(i, digits));
+                textView.setText(Utils.formatNumber(i, digits));
                 textView.setBackgroundResource(R.drawable.days);
 
                 String holidayTitle = utils.getHolidayTitle(persianDate);
