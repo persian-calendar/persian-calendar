@@ -22,7 +22,6 @@ import com.byagowi.persiancalendar.view.MonthFragment;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.JalaliCalendar;
 import calendar.PersianDate;
 
 /**
@@ -35,7 +34,6 @@ public class MainActivity extends FragmentActivity {
     // I know, it is ugly, but user will not notify this and this will not have
     // a memory problem
     private static final int MONTHS_LIMIT = 1200;
-    private JalaliCalendar jalaliCalendar;
     public Utils utils = Utils.getInstance();
     private ViewPager viewPager;
     private TextView calendarInfo;
@@ -45,8 +43,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
+        utils.loadLanguageFromSettings(this);
         super.onCreate(savedInstanceState);
-        jalaliCalendar = JalaliCalendar.getInstance(getApplication());
 
         startService(new Intent(this, ApplicationService.class));
 
@@ -80,12 +78,12 @@ public class MainActivity extends FragmentActivity {
 
         // Reset button
         resetButton = (Button) findViewById(R.id.reset_button);
-        resetButton.setText(utils.today);
+        resetButton.setText(getString(R.string.today));
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 bringTodayYearMonth();
-                setFocusedDay(jalaliCalendar.getToday());
+                setFocusedDay(Utils.getToday());
             }
         });
         resetButton.setTypeface(Typeface.createFromAsset(this.getAssets(),
@@ -111,19 +109,19 @@ public class MainActivity extends FragmentActivity {
         });
 
         // Initializing the view
-        fillCalendarInfo(jalaliCalendar.getToday());
+        fillCalendarInfo(Utils.getToday());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        fillCalendarInfo(jalaliCalendar.getToday());
+        fillCalendarInfo(Utils.getToday());
     }
 
     private void updateResetButtonState() {
         if (viewPager.getCurrentItem() == MONTHS_LIMIT / 2) {
             resetButton.setVisibility(View.GONE);
-            fillCalendarInfo(jalaliCalendar.getToday());
+            fillCalendarInfo(Utils.getToday());
         } else {
             resetButton.setVisibility(View.VISIBLE);
             clearInfo();
@@ -138,7 +136,7 @@ public class MainActivity extends FragmentActivity {
     private void bringTodayYearMonth() {
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-            fillCalendarInfo(jalaliCalendar.getToday());
+            fillCalendarInfo(Utils.getToday());
         }
     }
 
@@ -179,13 +177,23 @@ public class MainActivity extends FragmentActivity {
         StringBuilder sb = new StringBuilder();
 
         if (isToday(civilDate)) {
-            sb.append("امروز:\n");
+            sb.append(getString(R.string.today)).append(":\n");
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setVisibility(View.VISIBLE);
         }
-        sb.append(utils.infoForSpecificDay(persianDate, digits));
-        calendarInfo.setText(utils.textShaper(sb.toString()));
+
+        sb.append(persianDate.getWeekdayName()).append(Utils.PERSIAN_COMMA)
+                .append(" ")
+                .append(Utils.dateToString(persianDate, digits))
+                .append("\n\n")
+                .append(getString(R.string.equals_with))
+                .append(":\n")
+                .append(Utils.dateToString(civilDate, digits))
+                .append("\n")
+                .append(Utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append("\n");
+        calendarInfo.setText(Utils.textShaper(sb.toString()));
 
         prayTimeActivityHelper.setDate(civilDate.getYear(),
                 civilDate.getMonth() - 1, civilDate.getDayOfMonth());

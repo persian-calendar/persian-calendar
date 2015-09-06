@@ -3,6 +3,13 @@
 
     <PreferenceCategory android:title="@string/general">
         <ListPreference
+            android:defaultValue="en"
+            android:entries="@array/languageNames"
+            android:entryValues="@array/languageKeys"
+            android:key="ApplicationLanguage"
+            android:summary="@string/application_language"
+            android:title="@string/language"/>
+        <ListPreference
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
@@ -17,11 +24,10 @@
             android:title="@string/persian_digits"/>
 
         <ListPreference
-            android:defaultValue="persian"
-            android:entries="@array/monthTypeNames"
-            android:entryValues="@array/monthTypeKeys"
-            android:key="MonthNameType"
-            android:title="@string/month_names"/>
+            android:key="CalendarFont"
+            android:defaultValue="NotoNaskhArabic-Regular.ttf"
+            android:summary="@string/calendar_font_summary"
+            android:title="@string/calendar_font"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/widget_notification_dashclock">
         <CheckBoxPreference
