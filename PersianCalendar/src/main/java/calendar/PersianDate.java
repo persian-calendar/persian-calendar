@@ -1,7 +1,5 @@
 package calendar;
 
-import java.util.Calendar;
-
 /**
  * @author Amir
  * @author ebraminio (implementing isLeapYear)
@@ -94,11 +92,7 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getDayOfWeek() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        return cal.get(Calendar.DAY_OF_WEEK);
+        throw new RuntimeException("not implemented yet!");
     }
 
     public int getDayOfYear() {

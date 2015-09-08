@@ -5,9 +5,6 @@ package calendar;
  * @author ebraminio
  */
 public class IslamicDate extends AbstractDate {
-//    private static final String[] monthName = {"", "محرم", "صفر",
-//            "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثاني", "رجب",
-//            "شعبان", "رمضان", "شوال", "ذو القعده", "ذو الحجه"};
     private int day;
     private int month;
     private int year;

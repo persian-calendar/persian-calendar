@@ -7,10 +7,12 @@ import com.byagowi.persiancalendar.Utils;
 
 import calendar.AbstractDate;
 import calendar.CivilDate;
+import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
 public class DateFormatUtils {
+    private static final String TAG = "DateFormatUtils";
     private static DateFormatUtils instance;
     private Context context;
 
@@ -111,7 +113,19 @@ public class DateFormatUtils {
 
 
     public String getWeekDayName(AbstractDate date) {
-        WEEKDAY_NAME_CODES weekday_name_code = WEEKDAY_NAME_CODES.values()[date.getDayOfWeek()];
+        // only CivilDate return a good value for dayOfWeek
+        CivilDate civilDate;
+        if (date.getClass().equals(PersianDate.class)) {
+            civilDate = DateConverter.persianToCivil((PersianDate) date);
+        } else if (date.getClass().equals(IslamicDate.class)) {
+            civilDate = DateConverter.islamicToCivil((IslamicDate) date);
+        } else {
+            civilDate = (CivilDate) date;
+        }
+
+        int dayOfWeek = civilDate.getDayOfWeek() - 1;
+        WEEKDAY_NAME_CODES weekday_name_code = WEEKDAY_NAME_CODES.values()[dayOfWeek];
+
         String weekdayName;
         switch (weekday_name_code) {
             case MONDAY:
