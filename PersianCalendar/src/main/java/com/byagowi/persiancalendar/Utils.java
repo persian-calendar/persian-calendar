@@ -107,10 +107,6 @@ public class Utils {
     }
 
     public void prepareTextView(TextView textView) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(textView.getContext());
-        String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
-        typeface = Typeface.createFromAsset(textView.getContext()
-                .getAssets(), "fonts/" + calendarFont);
         textView.setTypeface(typeface);
         textView.setLineSpacing(0f, 0.8f);
     }
@@ -351,5 +347,9 @@ public class Utils {
         String localeCode = prefs.getString("ApplicationLanguage", "en");
         changeLanguage(localeCode, context);
         dateFormatUtils = DateFormatUtils.getInstance(context);
+
+        // setting the typeface here every time the language loads
+        String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
+        typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);
     }
 }
