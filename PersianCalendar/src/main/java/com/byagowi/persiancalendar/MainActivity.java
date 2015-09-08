@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.util.DateFormatUtils;
 import com.byagowi.persiancalendar.view.MonthFragment;
 
 import calendar.CivilDate;
@@ -34,6 +35,7 @@ public class MainActivity extends FragmentActivity {
     // I know, it is ugly, but user will not notify this and this will not have
     // a memory problem
     private static final int MONTHS_LIMIT = 1200;
+    private DateFormatUtils dateFormatUtils;
     public Utils utils = Utils.getInstance();
     private ViewPager viewPager;
     private TextView calendarInfo;
@@ -47,6 +49,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         startService(new Intent(this, ApplicationService.class));
+
+        dateFormatUtils = DateFormatUtils.getInstance(this);
 
         boolean removeTitle = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -183,15 +187,15 @@ public class MainActivity extends FragmentActivity {
             resetButton.setVisibility(View.VISIBLE);
         }
 
-        sb.append(persianDate.getWeekdayName()).append(Utils.PERSIAN_COMMA)
+        sb.append(dateFormatUtils.getWeekDayName(persianDate)).append(Utils.PERSIAN_COMMA)
                 .append(" ")
-                .append(Utils.dateToString(persianDate, digits))
+                .append(utils.dateToString(persianDate, digits))
                 .append("\n\n")
                 .append(getString(R.string.equals_with))
                 .append(":\n")
-                .append(Utils.dateToString(civilDate, digits))
+                .append(utils.dateToString(civilDate, digits))
                 .append("\n")
-                .append(Utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
                 .append("\n");
         calendarInfo.setText(Utils.textShaper(sb.toString()));
 

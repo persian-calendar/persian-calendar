@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
+import com.byagowi.persiancalendar.util.DateFormatUtils;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -33,10 +33,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,6 +54,7 @@ import calendar.PersianDate;
 public class Utils {
     private static final String TAG = "Utils";
     private static Utils myInstance;
+    private DateFormatUtils dateFormatUtils;
     public static final char PERSIAN_COMMA = '،';
     public static final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
@@ -67,8 +66,6 @@ public class Utils {
             '۷', '۸', '۹'};
     private String AM_IN_PERSIAN = "ق.ظ";
     private String PM_IN_PERSIAN = "ب.ظ";
-
-    private static Map<String, String> calendarItemsNameCache = new HashMap<>();
 
     private Typeface typeface;
     private int[] daysIcons = {0, R.drawable.day1, R.drawable.day2,
@@ -265,20 +262,20 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String dateToString(AbstractDate date, char[] digits) {
+    public String dateToString(AbstractDate date, char[] digits) {
         return formatNumber(date.getDayOfMonth(), digits) + ' '
-                + date.getMonthName() + ' '
+                + dateFormatUtils.getMonthName(date) + ' '
                 + formatNumber(date.getYear(), digits);
     }
 
     public String dayTitleSummary(PersianDate persianDate, char[] digits) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        return civilDate.getDayOfWeekName() + PERSIAN_COMMA + " "
+        return dateFormatUtils.getWeekDayName(civilDate) + PERSIAN_COMMA + " "
                 + dateToString(persianDate, digits);
     }
 
     public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-        return textShaper(persianDate.getMonthName() + ' '
+        return textShaper(dateFormatUtils.getMonthName(persianDate) + ' '
                 + formatNumber(persianDate.getYear(), digits));
     }
 
@@ -349,31 +346,10 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    public void setCalendarItemNames(Context ctx) {
-        for (String key : PersianDate.MONTH_NAME_KEYS) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-
-        for (String key : PersianDate.WEEK_DAY_NAME_KEYS) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-
-        for (String key : CivilDate.monthName) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-    }
-
-    public static String getCalendarItemName(String name) {
-        return calendarItemsNameCache.get(name);
-    }
-
     public void loadLanguageFromSettings(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String localeCode = prefs.getString("ApplicationLanguage", "en");
         changeLanguage(localeCode, context);
-        setCalendarItemNames(context);
+        dateFormatUtils = DateFormatUtils.getInstance(context);
     }
 }

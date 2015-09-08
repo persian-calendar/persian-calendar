@@ -75,6 +75,19 @@
     <string name="NOVEMBER">نومبر</string>
     <string name="DECEMBER">دیسمبر</string>
 
+    <string name="MUHARRAM">محرم</string>
+    <string name="SAFAR">صفر</string>
+    <string name="RABI_OL_AWAL">ربيع الأول</string>
+    <string name="RABI_O_THANI">ربیع الثاني</string>
+    <string name="JAMADI_OL_AWLA">جمادى الأولى</string>
+    <string name="JAMADI_O_THANI">جمادی الثاني</string>
+    <string name="RAJAB">رجب</string>
+    <string name="SHABAN">شعبان</string>
+    <string name="RAMADAN">رمضان</string>
+    <string name="SHAWAL">شوال</string>
+    <string name="ZOLQADA">ذو القعده</string>
+    <string name="ZOLHAJJA">ذو الحجه</string>
+
     <string name="month_names">مياشت نومونه</string>
     <string name="application_language">د پروگرام ژبه</string>
     <string name="equals_with">برابر دی په</string>

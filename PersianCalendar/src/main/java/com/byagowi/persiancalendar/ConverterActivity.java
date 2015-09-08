@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -11,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.util.DateFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +35,15 @@ public class ConverterActivity extends Activity {
     private Spinner daySpinner;
     private TextView convertedDateTextView;
     private int startingYearOnYearSpinner = 0;
+    private DateFormatUtils dateFormatUtils;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
         super.onCreate(savedInstanceState);
 
+        dateFormatUtils = DateFormatUtils.getInstance(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.calendar_converter);
@@ -90,31 +93,31 @@ public class ConverterActivity extends Activity {
                     islamicDate = DateConverter.civilToIslamic(civilDate);
                     persianDate = DateConverter.civilToPersian(civilDate);
 
-                    calendarsTextList.add(Utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(Utils.dateToString(persianDate, digits));
-                    calendarsTextList.add(Utils.dateToString(islamicDate, digits));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
                     break;
                 case ISLAMIC:
                     islamicDate = new IslamicDate(year, month, day);
                     civilDate = DateConverter.islamicToCivil(islamicDate);
                     persianDate = DateConverter.islamicToPersian(islamicDate);
 
-                    calendarsTextList.add(Utils.dateToString(islamicDate, digits));
-                    calendarsTextList.add(Utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(Utils.dateToString(persianDate, digits));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits));
                     break;
                 case SHAMSI:
                     persianDate = new PersianDate(year, month, day);
                     civilDate = DateConverter.persianToCivil(persianDate);
                     islamicDate = DateConverter.persianToIslamic(persianDate);
 
-                    calendarsTextList.add(Utils.dateToString(persianDate, digits));
-                    calendarsTextList.add(Utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(Utils.dateToString(islamicDate, digits));
+                    calendarsTextList.add(utils.dateToString(persianDate, digits));
+                    calendarsTextList.add(utils.dateToString(civilDate, digits));
+                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
                     break;
             }
 
-            sb.append(civilDate.getDayOfWeekName());
+            sb.append(dateFormatUtils.getWeekDayName(civilDate));
             sb.append(Utils.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
@@ -169,10 +172,8 @@ public class ConverterActivity extends Activity {
 
         // month spinner init.
         List<String> monthsList = new ArrayList<String>();
-        String[] monthsArray = date.getMonthsList();
         for (int i : new Range(1, 12)) {
-            String monthName = selectedCalendarType == CalendarType.ISLAMIC ? monthsArray[i] : Utils.getCalendarItemName(monthsArray[i]);
-            monthsList.add(Utils.textShaper(monthName + " / "
+            monthsList.add(Utils.textShaper(dateFormatUtils.getMonthName(date) + " / "
                     + Utils.formatNumber(i, digits)));
         }
         ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,

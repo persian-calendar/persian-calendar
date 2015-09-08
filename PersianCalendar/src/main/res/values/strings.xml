@@ -48,14 +48,15 @@
     <string name="application_language">Application Lanuage</string>
     <string name="language">Language</string>
     <string name="calendar_font">Calendar Font</string>
+    <string name="calendar_font_summary">Change the font for the calendar</string>
 
-    <string name="equals_with">برابر با</string>
 
-    <string name="SATURDAY">شنبه</string>
 
-    <string name="georgian">میلادی</string>
     <string name="version">Version</string>
 
+    <string name="equals_with">برابر با</string>
+    <string name="SATURDAY">شنبه</string>
+    <string name="georgian">میلادی</string>
     <string name="ABAN">آبان</string>
     <string name="APRIL">آوریل</string>
     <string name="AUGUST">اوت</string>
@@ -97,5 +98,17 @@
     <string name="sunrise">طلوع آفتاب</string>
     <string name="sunset">غروب افتاب</string>
     <string name="today">امروز</string>
-    <string name="calendar_font_summary">Change the font for the calendar</string>
+
+    <string name="MUHARRAM">محرم</string>
+    <string name="SAFAR">صفر</string>
+    <string name="RABI_OL_AWAL">ربيع الأول</string>
+    <string name="RABI_O_THANI">ربیع الثاني</string>
+    <string name="JAMADI_OL_AWLA">جمادى الأولى</string>
+    <string name="JAMADI_O_THANI">جمادی الثاني</string>
+    <string name="RAJAB">رجب</string>
+    <string name="SHABAN">شعبان</string>
+    <string name="RAMADAN">رمضان</string>
+    <string name="SHAWAL">شوال</string>
+    <string name="ZOLQADA">ذو القعده</string>
+    <string name="ZOLHAJJA">ذو الحجه</string>
 </resources>
