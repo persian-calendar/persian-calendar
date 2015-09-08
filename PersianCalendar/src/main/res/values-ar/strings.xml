@@ -112,4 +112,6 @@
     <string name="version">نسخه</string>
     <string name="calendar_font">فونت تقویم</string>
     <string name="calendar_font_summary">تغییر فونت تقویم</string>
+    <string name="enable_text_shaper">خوش نمایی فونت</string>
+    <string name="disable_text_shaper_summary">فعال/غیر فعال کردن این گزینه می‌تواند در نمایش فونت تقویم در بعضی زبانها مؤثر باشد</string>
 </resources>

@@ -49,9 +49,8 @@
     <string name="language">Language</string>
     <string name="calendar_font">Calendar Font</string>
     <string name="calendar_font_summary">Change the font for the calendar</string>
-
-
-
+    <string name="enable_text_shaper">Enable Text Shaper</string>
+    <string name="disable_text_shaper_summary">Enabling/disabling the text shaper can improve calenar font viewing for some  languages.</string>
     <string name="version">Version</string>
 
     <string name="equals_with">برابر با</string>

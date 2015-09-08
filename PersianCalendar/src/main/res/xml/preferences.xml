@@ -24,10 +24,16 @@
             android:title="@string/persian_digits"/>
 
         <ListPreference
-            android:key="CalendarFont"
             android:defaultValue="NotoNaskhArabic-Regular.ttf"
+            android:key="CalendarFont"
             android:summary="@string/calendar_font_summary"
             android:title="@string/calendar_font"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="EnableTextShaper"
+            android:summary="@string/disable_text_shaper_summary"
+            android:title="@string/enable_text_shaper"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/widget_notification_dashclock">
         <CheckBoxPreference

@@ -66,6 +66,7 @@ public class Utils {
             '۷', '۸', '۹'};
     private String AM_IN_PERSIAN = "ق.ظ";
     private String PM_IN_PERSIAN = "ب.ظ";
+    private static boolean textShaperEnabled = true;
 
     private Typeface typeface;
     private int[] daysIcons = {0, R.drawable.day1, R.drawable.day2,
@@ -91,8 +92,12 @@ public class Utils {
         return myInstance;
     }
 
+    public static boolean textShaperEnabled() {
+        return textShaperEnabled;
+    }
+
     public static String textShaper(String text) {
-        return ArabicShaping.shape(text);
+        return textShaperEnabled() ? ArabicShaping.shape(text) : text;
     }
 
     public String programVersion(Context context) {
@@ -351,5 +356,8 @@ public class Utils {
         // setting the typeface here every time the language loads
         String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);
+
+        // some fonts are better viewed without the textShaper
+        textShaperEnabled = prefs.getBoolean("EnableTextShaper", false);
     }
 }

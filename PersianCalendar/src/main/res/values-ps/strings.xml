@@ -43,12 +43,12 @@
 
     <string name="FARVARDIN">وری</string>
     <string name="ORDIBEHESHT">غویی</string>
-    <string name="KHORDARD">غبرگولی</string>
-    <string name="TIR">چنگاش</string>
+    <string name="KHORDARD">غبرګولی</string>
+    <string name="TIR">چنګاښ</string>
     <string name="MORDAD">زمری</string>
     <string name="SHAHRIVAR">وږی</string>
     <string name="MEHR">تله</string>
-    <string name="ABAN">لرم</string>
+    <string name="ABAN">لړم</string>
     <string name="AZAR">لیندۍ</string>
     <string name="DEY">مرغومی</string>
     <string name="BAHMAN">سلواغه</string>
@@ -112,4 +112,6 @@
     <string name="calendar_font">د کلیز فانت</string>
     <string name="calendar_font_summary">دکلیز فانت</string>
     <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
+    <string name="enable_text_shaper">ښه فانت</string>
+    <string name="disable_text_shaper_summary">گوډوله دا كالخواهې لرې ولري يا د ښه نمود ليکبڼو کولاي شي </string>
 </resources>
