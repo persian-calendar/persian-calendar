@@ -1,14 +1,17 @@
 package com.byagowi.persiancalendar;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -290,6 +293,11 @@ public class Utils {
             Log.e("com.byagowi.calendar", "No such field is available");
             return 0;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static void keepLtrLayoutDirection(View view) {
+        view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
     }
 
     public void loadHolidays(InputStream xmlStream) {

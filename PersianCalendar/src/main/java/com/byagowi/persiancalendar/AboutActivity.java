@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -54,6 +55,7 @@ public class AboutActivity extends Activity {
         }
 
         TextView licenseTextView = (TextView) findViewById(R.id.license);
+        Utils.keepLtrLayoutDirection(licenseTextView);
         licenseTextView.setText("Android Persian Calendar Version "
                 + version
                 + "\n"
