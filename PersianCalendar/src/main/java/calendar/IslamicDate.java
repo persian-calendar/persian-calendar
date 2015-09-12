@@ -92,4 +92,8 @@ public class IslamicDate extends AbstractDate {
         throw new RuntimeException("not implemented yet!");
     }
 
+    @Override
+    public IslamicDate clone() {
+        return new IslamicDate(getYear(), getMonth(), getDayOfMonth());
+    }
 }

@@ -49,4 +49,6 @@ public abstract class AbstractDate {
     public abstract String getEvent();
 
     public abstract boolean isLeapYear();
+
+    public abstract AbstractDate clone();
 }

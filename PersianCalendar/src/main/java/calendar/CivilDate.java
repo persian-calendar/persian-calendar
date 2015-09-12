@@ -128,4 +128,9 @@ public class CivilDate extends AbstractDate {
                 && this.getMonth() == civilDate.getMonth()
                 && this.getYear() == civilDate.getYear();
     }
+
+    @Override
+    public CivilDate clone() {
+        return new CivilDate(getYear(), getMonth(), getDayOfMonth());
+    }
 }

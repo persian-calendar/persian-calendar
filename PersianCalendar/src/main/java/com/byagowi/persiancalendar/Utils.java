@@ -91,7 +91,7 @@ public class Utils {
     }
 
     public static String textShaper(String text) {
-        return (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
+        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
     }
 
     public String programVersion(Context context) {
@@ -281,9 +281,11 @@ public class Utils {
 
     public String getMonthName(AbstractDate date, Context context) {
         String monthName = "";
+        // zero based
+        int month = date.getMonth() - 1;
 
         if (date.getClass().equals(PersianDate.class)) {
-            LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[date.getDayOfMonth()];
+            LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
             switch (monthNameCode) {
                 case FARVARDIN:
                     monthName = context.getString(R.string.FARVARDIN);
@@ -323,7 +325,7 @@ public class Utils {
                     break;
             }
         } else if (date.getClass().equals(CivilDate.class)) {
-            LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[date.getDayOfMonth()];
+            LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
             switch (monthNameCode) {
                 case JANUARY:
                     monthName = context.getString(R.string.JANUARY);
@@ -364,7 +366,7 @@ public class Utils {
 
             }
         } else if (date.getClass().equals(IslamicDate.class)) {
-            LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[date.getDayOfMonth()];
+            LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
             switch (monthNameCode) {
                 case MUHARRAM:
                     monthName = context.getString(R.string.MUHARRAM);
@@ -409,10 +411,11 @@ public class Utils {
     }
 
     public List<String> getMonthNameList(AbstractDate date, Context context) {
+        AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
         for (int month : new Range(1, 12)) {
-            date.setMonth(month);
-            monthNameList.add(textShaper(getMonthName(date, context)));
+            dateClone.setMonth(month);
+            monthNameList.add(textShaper(getMonthName(dateClone, context)));
         }
         return monthNameList;
     }
@@ -428,7 +431,9 @@ public class Utils {
             civilDate = (CivilDate) date;
         }
 
-        LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[civilDate.getDayOfWeek()];
+        // zero based
+        int dayOfWeek = civilDate.getDayOfWeek() - 1;
+        LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[dayOfWeek];
         switch (weekDayNameCode) {
             case SUNDAY:
                 weekDayName = context.getString(R.string.SUNDAY);
