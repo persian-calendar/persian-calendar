@@ -120,7 +120,7 @@
     <string-array name="languageKeys" translatable="false">
         <item>en</item>
         <item>fa</item>
-        <item>ar</item>
+        <item>prs</item>
         <item>ps</item>
     </string-array>
 

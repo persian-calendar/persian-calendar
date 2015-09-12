@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="themeNames">
-        <item>روشن</item>
-        <item>تاریک</item>
-    </string-array>
-
-    <string-array name="prayMethodsNames" translatable="false">
-        <item>شیعه دوازده امامی، انجمن لوا، قم</item>
-        <item>اتحادیه جهانی اسلام،‌ عربستان سعودی</item>
-        <item>جامعه اسلامی آمریکای شمالی</item>
-        <item>مرجع عمومی تحقیقات مصر</item>
-        <item>دانشگاه ام القری،‌ مکه</item>
-        <item>دانشگاه علوم اسلامی،‌ کراچی</item>
-        <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
-    </string-array>
-
     <string-array name="locationNames">
         <item>هیچ‌کدام</item>
         <item>اراک</item>
