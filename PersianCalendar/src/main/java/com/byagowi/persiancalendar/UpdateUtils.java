@@ -74,7 +74,7 @@ public class UpdateUtils {
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                 Utils.formatNumber(persian.getDayOfMonth(), digits));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                Utils.textShaper(persian.getMonthName()));
+                Utils.textShaper(utils.getMonthName(persian, context)));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
                 launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget1x1.class),
@@ -88,10 +88,10 @@ public class UpdateUtils {
         String text1;
         String text2;
         String text3 = "";
-        text1 = civil.getDayOfWeekName();
-        String dayTitle = Utils.dateToString(persian, digits);
+        text1 = utils.getWeekDayName(civil, context);
+        String dayTitle = utils.dateToString(persian, digits, context);
         text2 = dayTitle + Utils.PERSIAN_COMMA + " "
-                + Utils.dateToString(civil, digits);
+                + utils.dateToString(civil, digits, context);
 
         boolean enableClock = prefs.getBoolean("WidgetClock", true);
         if (enableClock) {
@@ -119,16 +119,16 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        String status = persian.getMonthName();
+        String status = utils.getMonthName(persian, context);
 
-        String title = civil.getDayOfWeekName() + " "
-                + Utils.dateToString(persian, digits);
+        String title = utils.getWeekDayName(civil, context) + " "
+                + utils.dateToString(persian, digits, context);
 
-        String body = Utils.dateToString(civil, digits)
+        String body = utils.dateToString(civil, digits, context)
                 + Utils.PERSIAN_COMMA
                 + " "
-                + Utils.dateToString(DateConverter.civilToIslamic(civil),
-                digits);
+                + utils.dateToString(DateConverter.civilToIslamic(civil),
+                digits, context);
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 

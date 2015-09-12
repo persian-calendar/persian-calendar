@@ -5,10 +5,6 @@ package calendar;
  * @author ebraminio
  */
 public class IslamicDate extends AbstractDate {
-
-    private static final String[] monthName = {"", "محرم", "صفر",
-            "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثاني", "رجب",
-            "شعبان", "رمضان", "شوال", "ذو القعده", "ذو الحجه"};
     private int day;
     private int month;
     private int year;
@@ -18,10 +14,6 @@ public class IslamicDate extends AbstractDate {
         this.day = 1;
         setMonth(month);
         setDayOfMonth(day);
-    }
-
-    public String[] getMonthsList() {
-        return monthName;
     }
 
     public int getDayOfMonth() {
@@ -55,10 +47,6 @@ public class IslamicDate extends AbstractDate {
         setDayOfMonth(day);
 
         this.month = month;
-    }
-
-    public String getMonthName() {
-        return monthName[month];
     }
 
     public int getWeekOfYear() {

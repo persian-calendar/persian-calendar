@@ -117,7 +117,7 @@ public class MonthFragment extends Fragment {
                 .getDayOfWeek() % 7;
 
         currentMonthTextView.setText(utils.getMonthYearTitle(persianDate,
-                digits));
+                digits, getActivity()));
 
         for (int i : new Range(0, 7)) {
             TextView textView = daysTextViews[0][6 - i];

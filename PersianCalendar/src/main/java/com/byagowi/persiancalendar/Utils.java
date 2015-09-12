@@ -8,13 +8,13 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
+import com.byagowi.common.Range;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -31,10 +31,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -44,6 +42,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.IslamicDate;
+import calendar.LocaleData;
 import calendar.PersianDate;
 
 /**
@@ -65,8 +65,6 @@ public class Utils {
             '۷', '۸', '۹'};
     private String AM_IN_PERSIAN = "ق.ظ";
     private String PM_IN_PERSIAN = "ب.ظ";
-
-    private static Map<String, String> calendarItemsNameCache = new HashMap<>();
 
     private Typeface typeface;
     private int[] daysIcons = {0, R.drawable.day1, R.drawable.day2,
@@ -265,21 +263,197 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String dateToString(AbstractDate date, char[] digits) {
+    public String dateToString(AbstractDate date, char[] digits, Context context) {
         return formatNumber(date.getDayOfMonth(), digits) + ' '
-                + date.getMonthName() + ' '
+                + getMonthName(date, context) + ' '
                 + formatNumber(date.getYear(), digits);
     }
 
-    public String dayTitleSummary(PersianDate persianDate, char[] digits) {
-        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        return civilDate.getDayOfWeekName() + PERSIAN_COMMA + " "
-                + dateToString(persianDate, digits);
+    public String dayTitleSummary(PersianDate persianDate, char[] digits, Context context) {
+        return getWeekDayName(persianDate, context) + PERSIAN_COMMA + " "
+                + dateToString(persianDate, digits, context);
     }
 
-    public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-        return textShaper(persianDate.getMonthName() + ' '
+    public String getMonthYearTitle(PersianDate persianDate, char[] digits, Context context) {
+        return textShaper(getMonthName(persianDate, context) + ' '
                 + formatNumber(persianDate.getYear(), digits));
+    }
+
+    public String getMonthName(AbstractDate date, Context context) {
+        String monthName = "";
+
+        if (date.getClass().equals(PersianDate.class)) {
+            LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[date.getDayOfMonth()];
+            switch (monthNameCode) {
+                case FARVARDIN:
+                    monthName = context.getString(R.string.FARVARDIN);
+                    break;
+                case ORDIBEHESHT:
+                    monthName = context.getString(R.string.ORDIBEHESHT);
+                    break;
+                case KHORDARD:
+                    monthName = context.getString(R.string.KHORDARD);
+                    break;
+                case TIR:
+                    monthName = context.getString(R.string.TIR);
+                    break;
+                case MORDAD:
+                    monthName = context.getString(R.string.MORDAD);
+                    break;
+                case SHAHRIVAR:
+                    monthName = context.getString(R.string.SHAHRIVAR);
+                    break;
+                case MEHR:
+                    monthName = context.getString(R.string.MEHR);
+                    break;
+                case ABAN:
+                    monthName = context.getString(R.string.ABAN);
+                    break;
+                case AZAR:
+                    monthName = context.getString(R.string.AZAR);
+                    break;
+                case DEY:
+                    monthName = context.getString(R.string.DEY);
+                    break;
+                case BAHMAN:
+                    monthName = context.getString(R.string.BAHMAN);
+                    break;
+                case ESFAND:
+                    monthName = context.getString(R.string.ESFAND);
+                    break;
+            }
+        } else if (date.getClass().equals(CivilDate.class)) {
+            LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[date.getDayOfMonth()];
+            switch (monthNameCode) {
+                case JANUARY:
+                    monthName = context.getString(R.string.JANUARY);
+                    break;
+                case FEBRUARY:
+                    monthName = context.getString(R.string.FEBRUARY);
+                    break;
+                case MARCH:
+                    monthName = context.getString(R.string.MARCH);
+                    break;
+                case APRIL:
+                    monthName = context.getString(R.string.APRIL);
+                    break;
+                case MAY:
+                    monthName = context.getString(R.string.MAY);
+                    break;
+                case JUNE:
+                    monthName = context.getString(R.string.JUNE);
+                    break;
+                case JULY:
+                    monthName = context.getString(R.string.JULY);
+                    break;
+                case AUGUST:
+                    monthName = context.getString(R.string.AUGUST);
+                    break;
+                case SEPTEMBER:
+                    monthName = context.getString(R.string.SEPTEMBER);
+                    break;
+                case OCTOBER:
+                    monthName = context.getString(R.string.OCTOBER);
+                    break;
+                case NOVEMBER:
+                    monthName = context.getString(R.string.NOVEMBER);
+                    break;
+                case DECEMBER:
+                    monthName = context.getString(R.string.DECEMBER);
+                    break;
+
+            }
+        } else if (date.getClass().equals(IslamicDate.class)) {
+            LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[date.getDayOfMonth()];
+            switch (monthNameCode) {
+                case MUHARRAM:
+                    monthName = context.getString(R.string.MUHARRAM);
+                    break;
+                case SAFAR:
+                    monthName = context.getString(R.string.SAFAR);
+                    break;
+                case RABI_OL_AWAL:
+                    monthName = context.getString(R.string.RABI_OL_AWAL);
+                    break;
+                case RABI_O_THANI:
+                    monthName = context.getString(R.string.RABI_O_THANI);
+                    break;
+                case JAMADI_OL_AWLA:
+                    monthName = context.getString(R.string.JAMADI_OL_AWLA);
+                    break;
+                case JAMADI_O_THANI:
+                    monthName = context.getString(R.string.JAMADI_O_THANI);
+                    break;
+                case RAJAB:
+                    monthName = context.getString(R.string.RAJAB);
+                    break;
+                case SHABAN:
+                    monthName = context.getString(R.string.SHABAN);
+                    break;
+                case RAMADAN:
+                    monthName = context.getString(R.string.RAMADAN);
+                    break;
+                case SHAWAL:
+                    monthName = context.getString(R.string.SHAWAL);
+                    break;
+                case ZOLQADA:
+                    monthName = context.getString(R.string.ZOLQADA);
+                    break;
+                case ZOLHAJJA:
+                    monthName = context.getString(R.string.ZOLHAJJA);
+                    break;
+            }
+        }
+
+        return monthName;
+    }
+
+    public List<String> getMonthNameList(AbstractDate date, Context context) {
+        List<String> monthNameList = new ArrayList<>();
+        for (int month : new Range(1, 12)) {
+            date.setMonth(month);
+            monthNameList.add(textShaper(getMonthName(date, context)));
+        }
+        return monthNameList;
+    }
+
+    public String getWeekDayName(AbstractDate date, Context context) {
+        String weekDayName = "";
+        CivilDate civilDate;
+        if (date.getClass().equals(PersianDate.class)) {
+            civilDate = DateConverter.persianToCivil((PersianDate) date);
+        } else if (date.getClass().equals(IslamicDate.class)) {
+            civilDate = DateConverter.islamicToCivil((IslamicDate) date);
+        } else {
+            civilDate = (CivilDate) date;
+        }
+
+        LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[civilDate.getDayOfWeek()];
+        switch (weekDayNameCode) {
+            case SUNDAY:
+                weekDayName = context.getString(R.string.SUNDAY);
+                break;
+            case MONDAY:
+                weekDayName = context.getString(R.string.MONDAY);
+                break;
+            case TUESDAY:
+                weekDayName = context.getString(R.string.TUESDAY);
+                break;
+            case WEDNESDAY:
+                weekDayName = context.getString(R.string.WEDNESDAY);
+                break;
+            case THURSDAY:
+                weekDayName = context.getString(R.string.THURSDAY);
+                break;
+            case FRIDAY:
+                weekDayName = context.getString(R.string.FRIDAY);
+                break;
+            case SATURDAY:
+                weekDayName = context.getString(R.string.SATURDAY);
+                break;
+        }
+
+        return weekDayName;
     }
 
     public void quickToast(String message, Context context) {
@@ -344,32 +518,10 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    public void setCalendarItemNames(Context ctx) {
-        for (String key : PersianDate.MONTH_NAME_KEYS) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-
-        for (String key : PersianDate.WEEK_DAY_NAME_KEYS) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-
-        for (String key : CivilDate.monthName) {
-            if (!TextUtils.isEmpty(key))
-                calendarItemsNameCache.put(key, ctx.getString(ctx.getResources().getIdentifier(key, "string", "com.byagowi.persiancalendar")));
-        }
-    }
-
-    public static String getCalendarItemName(String name) {
-        return calendarItemsNameCache.get(name);
-    }
-
     public void loadLanguageFromSettings(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String localeCode = prefs.getString("ApplicationLanguage", "en");
         changeLanguage(localeCode, context);
-        setCalendarItemNames(context);
 
         String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);

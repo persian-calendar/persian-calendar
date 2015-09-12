@@ -183,15 +183,15 @@ public class MainActivity extends FragmentActivity {
             resetButton.setVisibility(View.VISIBLE);
         }
 
-        sb.append(persianDate.getWeekdayName()).append(Utils.PERSIAN_COMMA)
+        sb.append(utils.getWeekDayName(persianDate, this)).append(Utils.PERSIAN_COMMA)
                 .append(" ")
-                .append(Utils.dateToString(persianDate, digits))
+                .append(utils.dateToString(persianDate, digits, this))
                 .append("\n\n")
                 .append(getString(R.string.equals_with))
                 .append(":\n")
-                .append(Utils.dateToString(civilDate, digits))
+                .append(utils.dateToString(civilDate, digits, this))
                 .append("\n")
-                .append(Utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits, this))
                 .append("\n");
         calendarInfo.setText(Utils.textShaper(sb.toString()));
 

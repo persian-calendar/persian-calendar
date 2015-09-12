@@ -1,7 +1,5 @@
 package calendar;
 
-import com.byagowi.persiancalendar.Utils;
-
 import java.util.Calendar;
 
 /**
@@ -9,12 +7,6 @@ import java.util.Calendar;
  * @author ebraminio (implementing isLeapYear)
  */
 public class PersianDate extends AbstractDate {
-    public static final String[] MONTH_NAME_KEYS = {"", "FARVARDIN",
-            "ORDIBEHESHT", "KHORDARD", "TIR", "MORDAD", "SHAHRIVAR",
-            "MEHR", "ABAN", "AZAR", "DEY", "BAHMAN", "ESFAND"};
-    public static final String[] WEEK_DAY_NAME_KEYS = {"", "SUNDAY", "MONDAY", "TUESDAY",
-            "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
-
     private int year;
     private int month;
     private int day;
@@ -25,10 +17,6 @@ public class PersianDate extends AbstractDate {
         this.day = 1;
         setMonth(month);
         setDayOfMonth(day);
-    }
-
-    public String[] getMonthsList() {
-        return MONTH_NAME_KEYS;
     }
 
     public PersianDate clone() {
@@ -72,14 +60,6 @@ public class PersianDate extends AbstractDate {
         setDayOfMonth(day);
 
         this.month = month;
-    }
-
-    public String getMonthName() {
-        return Utils.getCalendarItemName(getMonthsList()[getMonth()]);
-    }
-
-    public String getWeekdayName() {
-        return Utils.getCalendarItemName(WEEK_DAY_NAME_KEYS[getDayOfWeek()]);
     }
 
     public int getWeekOfYear() {
