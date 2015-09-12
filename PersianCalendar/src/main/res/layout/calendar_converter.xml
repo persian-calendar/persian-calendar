@@ -38,7 +38,7 @@
                 android:paddingStart="0sp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/converterLabelYear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/year"
@@ -63,6 +63,7 @@
                 android:paddingStart="0sp">
 
                 <TextView
+                    android:id="@+id/converterLabelMonth"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/month"
@@ -83,6 +84,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/converterLabelDay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/day"

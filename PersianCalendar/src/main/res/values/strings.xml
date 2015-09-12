@@ -83,7 +83,7 @@
     <string name="SHAHRIVAR">شهریور</string>
     <string name="SUNDAY">یکشنبه</string>
     <string name="THURSDAY">پنجشنبه</string>
-    <string name="TIR">تبر</string>
+    <string name="TIR">تیر</string>
     <string name="TUESDAY">سه شنبه</string>
     <string name="WEDNESDAY">چهارشنبه</string>
     <string name="asr">عصر</string>
@@ -98,4 +98,17 @@
     <string name="sunset">غروب افتاب</string>
     <string name="today">امروز</string>
     <string name="calendar_font_summary">Change the font for the calendar</string>
+
+    <string name="MUHARRAM">محرم</string>
+    <string name="SAFAR">صفر</string>
+    <string name="RABI_OL_AWAL">ربيع الأول</string>
+    <string name="RABI_O_THANI">ربیع الثاني</string>
+    <string name="JAMADI_OL_AWLA">جمادى الأولى</string>
+    <string name="JAMADI_O_THANI">جمادی الثاني</string>
+    <string name="RAJAB">رجب</string>
+    <string name="SHABAN">شعبان</string>
+    <string name="RAMADAN">رمضان</string>
+    <string name="SHAWAL">شوال</string>
+    <string name="ZOLQADA">ذو القعده</string>
+    <string name="ZOLHAJJA">ذو الحجه</string>
 </resources>

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -92,7 +93,7 @@ public class Utils {
     }
 
     public static String textShaper(String text) {
-        return ArabicShaping.shape(text);
+        return (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
     }
 
     public String programVersion(Context context) {

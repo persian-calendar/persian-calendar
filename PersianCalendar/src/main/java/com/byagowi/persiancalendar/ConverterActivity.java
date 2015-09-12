@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -51,6 +50,14 @@ public class ConverterActivity extends Activity {
         monthSpinner = (Spinner) findViewById(R.id.monthSpinner);
         daySpinner = (Spinner) findViewById(R.id.daySpinner);
         convertedDateTextView = (TextView) findViewById(R.id.convertedDateTextView);
+
+        TextView labelDay = (TextView) findViewById(R.id.converterLabelDay);
+        TextView labelMonth = (TextView) findViewById(R.id.converterLabelMonth);
+        TextView labelYear = (TextView) findViewById(R.id.converterLabelYear);
+        labelDay.setText(Utils.textShaper(getString(R.string.day)));
+        labelMonth.setText(Utils.textShaper(getString(R.string.month)));
+        labelYear.setText(Utils.textShaper(getString(R.string.year)));
+
         //
 
         // fill views
