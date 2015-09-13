@@ -6,7 +6,6 @@
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
     <string name="latitude">عرض جغرافیایی</string>
     <string name="longitude">طول جغرافیایی</string>
-    <string name="today">امروز</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">فعال‌بودن اعداد فارسی</string>
@@ -17,9 +16,6 @@
     <string name="clock_in_24">ساعت ۲۴ ساعته</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
-    <string name="year">سال</string>
-    <string name="month">ماه</string>
-    <string name="day">روز</string>
     <string name="clock">ساعت</string>
     <string name="date">تاریخ</string>
     <string name="date_converter">مبدل تاریخ</string>
@@ -46,56 +42,13 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass_not_found">سنسور قطب‌نما یافت نشد</string>
 
-    <string name="ABAN">آبان</string>
-    <string name="AZAR">آذر</string>
-    <string name="BAHMAN">بهمن</string>
-    <string name="DEY">دی</string>
-    <string name="ESFAND">اسفند</string>
-    <string name="FARVARDIN">فروردین</string>
-    <string name="KHORDARD">خرداد</string>
-    <string name="MEHR">مهر</string>
-    <string name="MORDAD">مرداد</string>
-    <string name="ORDIBEHESHT">اردیبهشت</string>
-    <string name="SHAHRIVAR">شهریور</string>
-    <string name="TIR">تیر</string>
-
-    <string name="JANUARY">ژانویه</string>
-    <string name="FEBRUARY">فوریه</string>
-    <string name="MARCH">مارس</string>
-    <string name="APRIL">آوریل</string>
-    <string name="MAY">مه</string>
-    <string name="JUNE">ژوئن</string>
-    <string name="JULY">ژوئیه</string>
-    <string name="AUGUST">اوت</string>
-    <string name="SEPTEMBER">سپتامبر</string>
-    <string name="OCTOBER">اکتبر</string>
-    <string name="NOVEMBER">نوامبر</string>
-    <string name="DECEMBER">دسامبر</string>
-
     <string name="language">زبان</string>
     <string name="month_names">نام ماه ها</string>
     <string name="application_language">زبان برنامه</string>
-    <string name="equals_with">برابر با</string>
-    <string name="georgian">میلادی</string>
-    <string name="hijri_qamari">هجری قمری</string>
-    <string name="hijri_shamsi">هجری شمسی</string>
-    <string name="WEDNESDAY">چهارشنبه</string>
-    <string name="MONDAY">دوشنبه</string>
-    <string name="FRIDAY">جمعه</string>
-    <string name="THURSDAY">پنجشنبه</string>
-    <string name="TUESDAY">سه شنبه</string>
-    <string name="SATURDAY">شنبه</string>
-    <string name="SUNDAY">یکشنبه</string>
-    <string name="asr">عصر</string>
-    <string name="dhuhr">ظهر</string>
-    <string name="imsak">طلوع فجر</string>
-    <string name="isha">عشاء</string>
-    <string name="maghrib">مغرب</string>
-    <string name="midnight">نیمه وقت شرعی</string>
-    <string name="sunrise">طلوع آفتاب</string>
-    <string name="sunset">غروب آفتاب</string>
     <string name="version">نسخه</string>
     <string name="calendar_font">فونت تقویم</string>
     <string name="calendar_font_summary">تغییر فونت تقویم</string>
+    <string name="calendar_language">زبان تقویم</string>
+    <string name="calendar_language_summary">زبانی که ماه ها و روزها باید در آن نمایش داده شود</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -54,6 +56,8 @@ import calendar.PersianDate;
 public class Utils {
     private static final String TAG = "Utils";
     private static Utils myInstance;
+    private LocaleUtils localeUtils;
+
     public static final char PERSIAN_COMMA = '،';
     public static final char[] arabicIndicDigits = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
@@ -92,6 +96,10 @@ public class Utils {
 
     public static String textShaper(String text) {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
+    }
+
+    public String getString(String key) {
+        return localeUtils == null ? "" : textShaper(localeUtils.getString(key));
     }
 
     public String programVersion(Context context) {
@@ -263,165 +271,52 @@ public class Utils {
         return sb.toString();
     }
 
-    public String dateToString(AbstractDate date, char[] digits, Context context) {
+    public String dateToString(AbstractDate date, char[] digits) {
         return formatNumber(date.getDayOfMonth(), digits) + ' '
-                + getMonthName(date, context) + ' '
+                + getMonthName(date) + ' '
                 + formatNumber(date.getYear(), digits);
     }
 
-    public String dayTitleSummary(PersianDate persianDate, char[] digits, Context context) {
-        return getWeekDayName(persianDate, context) + PERSIAN_COMMA + " "
-                + dateToString(persianDate, digits, context);
+    public String dayTitleSummary(PersianDate persianDate, char[] digits) {
+        return getWeekDayName(persianDate) + PERSIAN_COMMA + " "
+                + dateToString(persianDate, digits);
     }
 
-    public String getMonthYearTitle(PersianDate persianDate, char[] digits, Context context) {
-        return textShaper(getMonthName(persianDate, context) + ' '
+    public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
+        return textShaper(getMonthName(persianDate) + ' '
                 + formatNumber(persianDate.getYear(), digits));
     }
 
-    public String getMonthName(AbstractDate date, Context context) {
+    public String getMonthName(AbstractDate date) {
         String monthName = "";
         // zero based
         int month = date.getMonth() - 1;
 
         if (date.getClass().equals(PersianDate.class)) {
             LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
-            switch (monthNameCode) {
-                case FARVARDIN:
-                    monthName = context.getString(R.string.FARVARDIN);
-                    break;
-                case ORDIBEHESHT:
-                    monthName = context.getString(R.string.ORDIBEHESHT);
-                    break;
-                case KHORDARD:
-                    monthName = context.getString(R.string.KHORDARD);
-                    break;
-                case TIR:
-                    monthName = context.getString(R.string.TIR);
-                    break;
-                case MORDAD:
-                    monthName = context.getString(R.string.MORDAD);
-                    break;
-                case SHAHRIVAR:
-                    monthName = context.getString(R.string.SHAHRIVAR);
-                    break;
-                case MEHR:
-                    monthName = context.getString(R.string.MEHR);
-                    break;
-                case ABAN:
-                    monthName = context.getString(R.string.ABAN);
-                    break;
-                case AZAR:
-                    monthName = context.getString(R.string.AZAR);
-                    break;
-                case DEY:
-                    monthName = context.getString(R.string.DEY);
-                    break;
-                case BAHMAN:
-                    monthName = context.getString(R.string.BAHMAN);
-                    break;
-                case ESFAND:
-                    monthName = context.getString(R.string.ESFAND);
-                    break;
-            }
+            monthName = getString(String.valueOf(monthNameCode));
         } else if (date.getClass().equals(CivilDate.class)) {
             LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
-            switch (monthNameCode) {
-                case JANUARY:
-                    monthName = context.getString(R.string.JANUARY);
-                    break;
-                case FEBRUARY:
-                    monthName = context.getString(R.string.FEBRUARY);
-                    break;
-                case MARCH:
-                    monthName = context.getString(R.string.MARCH);
-                    break;
-                case APRIL:
-                    monthName = context.getString(R.string.APRIL);
-                    break;
-                case MAY:
-                    monthName = context.getString(R.string.MAY);
-                    break;
-                case JUNE:
-                    monthName = context.getString(R.string.JUNE);
-                    break;
-                case JULY:
-                    monthName = context.getString(R.string.JULY);
-                    break;
-                case AUGUST:
-                    monthName = context.getString(R.string.AUGUST);
-                    break;
-                case SEPTEMBER:
-                    monthName = context.getString(R.string.SEPTEMBER);
-                    break;
-                case OCTOBER:
-                    monthName = context.getString(R.string.OCTOBER);
-                    break;
-                case NOVEMBER:
-                    monthName = context.getString(R.string.NOVEMBER);
-                    break;
-                case DECEMBER:
-                    monthName = context.getString(R.string.DECEMBER);
-                    break;
-
-            }
+            monthName = getString(String.valueOf(monthNameCode));
         } else if (date.getClass().equals(IslamicDate.class)) {
             LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
-            switch (monthNameCode) {
-                case MUHARRAM:
-                    monthName = context.getString(R.string.MUHARRAM);
-                    break;
-                case SAFAR:
-                    monthName = context.getString(R.string.SAFAR);
-                    break;
-                case RABI_OL_AWAL:
-                    monthName = context.getString(R.string.RABI_OL_AWAL);
-                    break;
-                case RABI_O_THANI:
-                    monthName = context.getString(R.string.RABI_O_THANI);
-                    break;
-                case JAMADI_OL_AWLA:
-                    monthName = context.getString(R.string.JAMADI_OL_AWLA);
-                    break;
-                case JAMADI_O_THANI:
-                    monthName = context.getString(R.string.JAMADI_O_THANI);
-                    break;
-                case RAJAB:
-                    monthName = context.getString(R.string.RAJAB);
-                    break;
-                case SHABAN:
-                    monthName = context.getString(R.string.SHABAN);
-                    break;
-                case RAMADAN:
-                    monthName = context.getString(R.string.RAMADAN);
-                    break;
-                case SHAWAL:
-                    monthName = context.getString(R.string.SHAWAL);
-                    break;
-                case ZOLQADA:
-                    monthName = context.getString(R.string.ZOLQADA);
-                    break;
-                case ZOLHAJJA:
-                    monthName = context.getString(R.string.ZOLHAJJA);
-                    break;
-            }
+            monthName = getString(String.valueOf(monthNameCode));
         }
 
         return monthName;
     }
 
-    public List<String> getMonthNameList(AbstractDate date, Context context) {
+    public List<String> getMonthNameList(AbstractDate date) {
         AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
         for (int month : new Range(1, 12)) {
             dateClone.setMonth(month);
-            monthNameList.add(textShaper(getMonthName(dateClone, context)));
+            monthNameList.add(textShaper(getMonthName(dateClone)));
         }
         return monthNameList;
     }
 
-    public String getWeekDayName(AbstractDate date, Context context) {
-        String weekDayName = "";
+    public String getWeekDayName(AbstractDate date) {
         CivilDate civilDate;
         if (date.getClass().equals(PersianDate.class)) {
             civilDate = DateConverter.persianToCivil((PersianDate) date);
@@ -434,31 +329,8 @@ public class Utils {
         // zero based
         int dayOfWeek = civilDate.getDayOfWeek() - 1;
         LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[dayOfWeek];
-        switch (weekDayNameCode) {
-            case SUNDAY:
-                weekDayName = context.getString(R.string.SUNDAY);
-                break;
-            case MONDAY:
-                weekDayName = context.getString(R.string.MONDAY);
-                break;
-            case TUESDAY:
-                weekDayName = context.getString(R.string.TUESDAY);
-                break;
-            case WEDNESDAY:
-                weekDayName = context.getString(R.string.WEDNESDAY);
-                break;
-            case THURSDAY:
-                weekDayName = context.getString(R.string.THURSDAY);
-                break;
-            case FRIDAY:
-                weekDayName = context.getString(R.string.FRIDAY);
-                break;
-            case SATURDAY:
-                weekDayName = context.getString(R.string.SATURDAY);
-                break;
-        }
 
-        return weekDayName;
+        return getString(weekDayNameCode.toString());
     }
 
     public void quickToast(String message, Context context) {
@@ -514,19 +386,33 @@ public class Utils {
         return null;
     }
 
-    public void changeLanguage(String localeCode, Context context) {
-        Resources resources = context.getApplicationContext().getResources();
-        Locale locale = new Locale(localeCode);
+    public void changeAppLanguage(String localeCode, Context context) {
+        Locale locale = TextUtils.isEmpty(localeCode) ? Locale.getDefault() : new Locale(localeCode);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
+        Resources resources = context.getApplicationContext().getResources();
         resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    public void changeCalendarLanguage(String localeCode, Context context) {
+        if (localeUtils == null) {
+            localeUtils = LocaleUtils.getInstance(context, localeCode);
+        }
+
+        localeUtils.changeLocale(localeCode);
     }
 
     public void loadLanguageFromSettings(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String localeCode = prefs.getString("ApplicationLanguage", "en");
-        changeLanguage(localeCode, context);
+
+        // set app language
+        String appLocale = prefs.getString("ApplicationLanguage", "");
+        changeAppLanguage(appLocale, context);
+
+        // set calendar language
+        String calendarLocale = prefs.getString("CalendarLanguage", "fa");
+        changeCalendarLanguage(calendarLocale, context);
 
         String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);

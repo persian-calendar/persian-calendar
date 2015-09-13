@@ -41,7 +41,7 @@
                     android:id="@+id/converterLabelYear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/year"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner
@@ -66,7 +66,7 @@
                     android:id="@+id/converterLabelMonth"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/month"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner
@@ -87,7 +87,7 @@
                     android:id="@+id/converterLabelDay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/day"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner

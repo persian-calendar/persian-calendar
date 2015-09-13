@@ -2,20 +2,27 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/general">
+        <!--<ListPreference-->
+            <!--android:defaultValue="en"-->
+            <!--android:entries="@array/languageNames"-->
+            <!--android:entryValues="@array/languageKeys"-->
+            <!--android:key="ApplicationLanguage"-->
+            <!--android:summary="@string/application_language"-->
+            <!--android:title="@string/language"/>-->
+
         <ListPreference
-            android:defaultValue="en"
-            android:entries="@array/languageNames"
-            android:entryValues="@array/languageKeys"
-            android:key="ApplicationLanguage"
-            android:summary="@string/application_language"
-            android:title="@string/language"/>
-        <ListPreference
-            android:defaultValue="LightTheme"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeKeys"
-            android:key="Theme"
-            android:summary="@string/select_skin"
-            android:title="@string/skin"/>
+            android:defaultValue="fa"
+            android:entries="@array/calendarLanguageNames"
+            android:entryValues="@array/calendarLanguageKeys"
+            android:key="CalendarLanguage"
+            android:summary="@string/calendar_language_summary"
+            android:title="@string/calendar_language"/>
+
+        <!--<ListPreference-->
+            <!--android:defaultValue="NotoNaskhArabic-Regular.ttf"-->
+            <!--android:key="CalendarFont"-->
+            <!--android:summary="@string/calendar_font_summary"-->
+            <!--android:title="@string/calendar_font"/>-->
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -24,11 +31,15 @@
             android:title="@string/persian_digits"/>
 
         <ListPreference
-            android:key="CalendarFont"
-            android:defaultValue="NotoNaskhArabic-Regular.ttf"
-            android:summary="@string/calendar_font_summary"
-            android:title="@string/calendar_font"/>
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
+            android:summary="@string/select_skin"
+            android:title="@string/skin"/>
+
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/widget_notification_dashclock">
         <CheckBoxPreference
             android:defaultValue="true"

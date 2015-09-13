@@ -55,16 +55,17 @@ public class ApplicationPreference extends PreferenceActivity {
         }
     }
 
+    // this reads the font list in assets/fonts/ and puts them in the ListPreference
     public static void loadFonts(Context context, ListPreference listPreference) {
-        CharSequence[] fontList = new CharSequence[0];
-        try {
-            fontList = context.getAssets().list("fonts");
-        } catch (IOException e) {
-            Log.e("ApplicationPreference", "", e);
-        }
-
-        listPreference.setEntries(fontList);
-        listPreference.setEntryValues(fontList);
-        listPreference.setDefaultValue("NotoNaskhArabic-Regular.ttf");
+//        CharSequence[] fontList = new CharSequence[0];
+//        try {
+//            fontList = context.getAssets().list("fonts");
+//        } catch (IOException e) {
+//            Log.e("ApplicationPreference", "", e);
+//        }
+//
+//        listPreference.setEntries(fontList);
+//        listPreference.setEntryValues(fontList);
+//        listPreference.setDefaultValue("NotoNaskhArabic-Regular.ttf");
     }
 }

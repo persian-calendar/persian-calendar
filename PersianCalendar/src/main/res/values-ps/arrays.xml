@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="themeNames">
+        <item>روښان</item>
+        <item>تور</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames" translatable="false">
+        <item>شیعه دوازده امامی، انجمن لوا، قم</item>
+        <item>اتحادیه جهانی اسلام،‌ عربستان سعودی</item>
+        <item>جامعه اسلامی آمریکای شمالی</item>
+        <item>مرجع عمومی تحقیقات مصر</item>
+        <item>دانشگاه ام القری،‌ مکه</item>
+        <item>دانشگاه علوم اسلامی،‌ کراچی</item>
+        <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
+    </string-array>
+
     <string-array name="locationNames">
         <item>هیڅ کوم</item>
         <item>اراک</item>
@@ -41,5 +56,17 @@
         <item>همدان</item>
         <item>یاسوج</item>
         <item>یزد</item>
+    </string-array>
+
+    <string-array name="languageNames">
+        <item>انګریزی</item>
+        <item>فارسی</item>
+        <item>پښتو</item>
+    </string-array>
+
+    <string-array name="calendarLanguageNames">
+        <item>فارسی</item>
+        <item>دری</item>
+        <item>پښتو</item>
     </string-array>
 </resources>

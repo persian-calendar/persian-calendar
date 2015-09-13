@@ -13,9 +13,6 @@
     <string name="clock_in_24">۲۴ ساعته ساعت</string>
     <string name="about">په باره کی</string>
     <string name="gpl_logo">د گنو عمومی مجوز لوگو</string>
-    <string name="year">کال</string>
-    <string name="month">میاشت</string>
-    <string name="day">ورځ</string>
     <string name="clock">ساعت</string>
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>
@@ -41,62 +38,15 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass_not_found">د قطب نما سنسور پیدا نشو</string>
 
-    <string name="FARVARDIN">وری</string>
-    <string name="ORDIBEHESHT">غویی</string>
-    <string name="KHORDARD">غبرګولی</string>
-    <string name="TIR">چنګاښ</string>
-    <string name="MORDAD">زمری</string>
-    <string name="SHAHRIVAR">وږی</string>
-    <string name="MEHR">تله</string>
-    <string name="ABAN">لړم</string>
-    <string name="AZAR">لیندۍ</string>
-    <string name="DEY">مرغومی</string>
-    <string name="BAHMAN">سلواغه</string>
-    <string name="ESFAND">کب</string>
-
-    <string name="WEDNESDAY">چهارشنبه</string>
-    <string name="MONDAY">دوشنبه</string>
-    <string name="FRIDAY">جمعه</string>
-    <string name="THURSDAY">پنجشنبه</string>
-    <string name="TUESDAY">سه شنبه</string>
-    <string name="SATURDAY">شنبه</string>
-    <string name="SUNDAY">یکشنبه</string>
-
-    <string name="JANUARY">جنوری</string>
-    <string name="FEBRUARY">فبروری</string>
-    <string name="MARCH">مارچ</string>
-    <string name="APRIL">اپریل</string>
-    <string name="MAY">می</string>
-    <string name="JUNE">جون</string>
-    <string name="JULY">جولای</string>
-    <string name="AUGUST">آگست</string>
-    <string name="SEPTEMBER">سپتمبر</string>
-    <string name="OCTOBER">اکتبر</string>
-    <string name="NOVEMBER">نومبر</string>
-    <string name="DECEMBER">دیسمبر</string>
-
     <string name="month_names">مياشت نومونه</string>
     <string name="application_language">د پروگرام ژبه</string>
-    <string name="equals_with">برابر دی په</string>
-    <string name="georgian">میلادی</string>
-    <string name="hijri_qamari">هجری قمری</string>
-    <string name="hijri_shamsi">هجری شمسی</string>
-
-    <string name="asr">مازدیگر</string>
-    <string name="dhuhr">ماسپښین </string>
-    <string name="imsak">لمرڅرک</string>
-    <string name="isha">ماخستن</string>
-    <string name="maghrib">ماښام</string>
-    <string name="midnight">نيمه شپه</string>
-    <string name="sunrise">د لمر ختل</string>
-    <string name="sunset">د لمر غورځیده</string>
 
     <string name="version">نسخه</string>
-    <string name="today">نن</string>
     <string name="language">ژبه</string>
     <string name="app_name">فارسی کلیز</string>
     <string name="altitude_praytime">په متر کی (اختیاری)</string>
     <string name="calendar_font">د کلیز فانت</string>
     <string name="calendar_font_summary">دکلیز فانت</string>
     <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
+    <string name="calendar_language">د کلیز ژبه</string>
 </resources>
