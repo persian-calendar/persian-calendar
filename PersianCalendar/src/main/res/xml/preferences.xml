@@ -87,20 +87,27 @@
 
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Latitude"
             android:title="@string/latitude"/>
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Longitude"
             android:title="@string/longitude"/>
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Altitude"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/athan">
+    <PreferenceCategory
+        android:key="Athan"
+        android:layout="@layout/preference_category"
+        android:title="@string/athan">
+
         <com.byagowi.persiancalendar.view.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
