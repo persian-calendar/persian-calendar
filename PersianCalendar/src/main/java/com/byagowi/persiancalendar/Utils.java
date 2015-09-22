@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -451,8 +452,12 @@ public class Utils {
     }
 
     public void setAlarm(Context context, long triggerInMillis) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String valAthanGap = prefs.getString("AthanGap", "0");
+        long athanGap = TextUtils.isEmpty(valAthanGap) ? 0 : Long.parseLong(valAthanGap);
+
         Calendar triggerTime = Calendar.getInstance();
-        triggerTime.setTimeInMillis(triggerInMillis);
+        triggerTime.setTimeInMillis(triggerInMillis - TimeUnit.SECONDS.toMillis(athanGap));
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // don't set an alarm in the past
@@ -464,9 +469,9 @@ public class Utils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerInMillis, pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerInMillis, pendingIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             }
         }
     }

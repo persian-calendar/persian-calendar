@@ -59,5 +59,7 @@
     <string name="athan_volume_summary">تنظیم بلندی صدای اذان</string>
     <string name="playing_athan">در حال پخش هشدار اذان</string>
     <string name="tap_to_stop_athan">برای متوقف ساختن صدای اذان، کلیک کنید</string>
+    <string name="athan_gap">فاصله بین اذان و هشدار</string>
+    <string name="athan_gap_summary">چند دقیقه قبل از اذان، هشدار به صدا در آورده شود</string>
 
 </resources>

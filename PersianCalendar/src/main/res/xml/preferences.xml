@@ -108,6 +108,13 @@
         android:layout="@layout/preference_category"
         android:title="@string/athan">
 
+        <EditTextPreference
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="AthanGap"
+            android:summary="@string/athan_gap_summary"
+            android:title="@string/athan_gap"/>
+
         <com.byagowi.persiancalendar.view.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
