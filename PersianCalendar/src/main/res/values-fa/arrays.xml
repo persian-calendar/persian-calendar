@@ -69,4 +69,11 @@
         <item>دری</item>
         <item>پشتو</item>
     </string-array>
+    <string-array name="prayerTimeNames">
+        <item>صبح</item>
+        <item>ظهر</item>
+        <item>عصر</item>
+        <item>مغرب</item>
+        <item>عشاء</item>
+    </string-array>
 </resources>

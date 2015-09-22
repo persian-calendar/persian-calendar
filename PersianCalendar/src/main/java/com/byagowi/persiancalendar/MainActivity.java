@@ -109,8 +109,8 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        // Initializing the view
         fillCalendarInfo(Utils.getToday());
+        utils.setAthanRepeater(this);
     }
 
     @Override
