@@ -50,5 +50,16 @@
     <string name="calendar_font_summary">تغییر فونت تقویم</string>
     <string name="calendar_language">زبان تقویم</string>
     <string name="calendar_language_summary">زبانی که ماه ها و روزها باید در آن نمایش داده شود</string>
+    <string name="athan">اذان</string>
+    <string name="athan_alarm">هشدار اذان</string>
+    <string name="athan_alarm_summary">نمازهایی که برای آنها اذان به صدا در آورده شود</string>
+    <string name="athan_disabled_summary">برای فعال سازی تنظیمات اذان یک مکان را از لیست انتخاب یا مشخصات موقعیت خود را وارد کنید</string>
+    <string name="athan_sound">صدای اذان</string>
+    <string name="athan_volume">بلندی صدا</string>
+    <string name="athan_volume_summary">تنظیم بلندی صدای اذان</string>
+    <string name="playing_athan">در حال پخش هشدار اذان</string>
+    <string name="tap_to_stop_athan">برای متوقف ساختن صدای اذان، کلیک کنید</string>
+    <string name="athan_gap">فاصله بین اذان و هشدار</string>
+    <string name="athan_gap_summary">چند دقیقه قبل از اذان، هشدار به صدا در آورده شود</string>
 
 </resources>
