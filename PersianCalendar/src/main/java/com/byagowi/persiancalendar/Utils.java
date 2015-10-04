@@ -2,20 +2,16 @@ package com.byagowi.persiancalendar;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
@@ -38,8 +34,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -406,7 +400,6 @@ public class Utils {
         Log.d(TAG, "athan repeater set: " + athanRepeaterSet);
         // load them so the prefs are read for today's alarms
         loadAlarms(context);
-        loadAthanFiles(context);
 
         if (!athanRepeaterSet) {
 
@@ -512,63 +505,5 @@ public class Utils {
 
         String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);
-    }
-
-    public void loadAthanFiles(final Context context) {
-        final String fileName = "AbdulBasit.ogg";
-        final String fileTitle = "Athan Abdul Basit";
-        File sdcardPath = Environment.getExternalStorageDirectory();
-        File alarmsDir = new File(sdcardPath.getPath() + "/Alarms");
-        final String outputPath = alarmsDir + "/" + fileName;
-        if (!alarmsDir.exists()) {
-            alarmsDir.mkdirs();
-        }
-
-        if (athanFileUri == null || (!(new File(outputPath).exists()))) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (!(new File(outputPath).exists())) {
-                            FileOutputStream fos = new FileOutputStream(outputPath);
-                            InputStream is = context.getResources().openRawResource(R.raw.abdulbasit);
-                            int len;
-                            byte[] buffer = new byte[1024];
-                            while ((len = is.read(buffer)) != -1) {
-                                fos.write(buffer, 0, len);
-                            }
-                            fos.close();
-                            is.close();
-
-                            ContentValues values = new ContentValues(4);
-                            values.put(MediaStore.Audio.Media.TITLE, fileTitle);
-                            values.put(MediaStore.Audio.Media.DATE_ADDED, System.currentTimeMillis() / 1000);
-                            values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/ogg");
-                            values.put(MediaStore.Audio.Media.DATA, outputPath);
-
-                            Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                            athanFileUri = context.getContentResolver().insert(base, values);
-                            Log.d(TAG, "new uri: " + athanFileUri);
-
-                            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, athanFileUri));
-                        } else {
-                            String[] projection = new String[]{MediaStore.Audio.AudioColumns._ID, MediaStore.Audio.AudioColumns.DATA};
-                            String selection = MediaStore.Audio.AudioColumns.DATA + " LIKE ? ";
-                            String[] selectionArgs = new String[]{outputPath};
-                            Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, null);
-                            cursor.moveToFirst();
-                            Log.d(TAG, "count: " + cursor.getCount());
-                            if (cursor.getCount() > 0) {
-                                athanFileUri = Uri.parse(MediaStore.Audio.Media.getContentUri("external") + "/" +
-                                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID)));
-                            }
-                            cursor.close();
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "", e);
-                    }
-                }
-            }).start();
-        }
     }
 }

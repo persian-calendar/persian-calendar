@@ -61,5 +61,6 @@
     <string name="tap_to_stop_athan">برای متوقف ساختن صدای اذان، کلیک کنید</string>
     <string name="athan_gap">فاصله بین اذان و هشدار</string>
     <string name="athan_gap_summary">چند دقیقه قبل از اذان، هشدار به صدا در آورده شود</string>
+    <string name="athan_sound_summary">صدای اذان را انتخاب کنید یا گزینه ی «هیچ کدام» و یا «سکوت» را برای اذان پیش فرض انتخاب کنید</string>
 
 </resources>

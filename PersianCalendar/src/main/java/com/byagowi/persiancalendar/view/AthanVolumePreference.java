@@ -22,7 +22,6 @@ public class AthanVolumePreference extends DialogPreference {
     private static AudioManager audioManager;
     private static MediaPlayer mediaPlayer;
 
-    private Context context;
     private SeekBar seekBarVolumeSlider;
     private int initialVolume;
     private Utils utils = Utils.getInstance();
@@ -31,7 +30,6 @@ public class AthanVolumePreference extends DialogPreference {
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        this.context = context;
         setDialogLayoutResource(R.layout.preference_volume);
         setDialogIcon(null);
 

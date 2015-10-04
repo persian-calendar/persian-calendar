@@ -130,6 +130,7 @@
             android:ringtoneType="alarm"
             android:showDefault="true"
             android:showSilent="true"
+            android:summary="@string/athan_sound_summary"
             android:title="@string/athan_sound"/>
     </PreferenceCategory>
 

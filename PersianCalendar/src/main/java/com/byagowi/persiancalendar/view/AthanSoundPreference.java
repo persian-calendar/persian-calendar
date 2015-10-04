@@ -48,7 +48,7 @@ public class AthanSoundPreference extends RingtonePreference {
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getTitle());
     }
 
-    public boolean isFirstRun(Context context) {
+    private boolean isFirstRun(Context context) {
         final String FIRST_RUN_PREF_KEY = "FirstRunVersionCode";
         if (firstRun == null) {
             try {
