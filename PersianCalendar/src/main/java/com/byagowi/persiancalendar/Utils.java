@@ -451,13 +451,13 @@ public class Utils {
         setAlarm(context, triggerTime.getTimeInMillis());
     }
 
-    public void setAlarm(Context context, long triggerInMillis) {
+    public void setAlarm(Context context, long timeInMillis) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String valAthanGap = prefs.getString("AthanGap", "0");
         long athanGap = TextUtils.isEmpty(valAthanGap) ? 0 : Long.parseLong(valAthanGap);
 
         Calendar triggerTime = Calendar.getInstance();
-        triggerTime.setTimeInMillis(triggerInMillis - TimeUnit.SECONDS.toMillis(athanGap));
+        triggerTime.setTimeInMillis(timeInMillis - TimeUnit.SECONDS.toMillis(athanGap));
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // don't set an alarm in the past
@@ -477,8 +477,11 @@ public class Utils {
     }
 
     public Uri getAthanUri(Context context) {
+        String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String athanSoundUri = prefs.getString("AthanSound", "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit);
+        String athanSoundUri = prefs.getString("AthanSound", defaultSoundUri);
+        if (TextUtils.isEmpty(athanSoundUri))
+            athanSoundUri = defaultSoundUri;
         return Uri.parse(athanSoundUri);
     }
 

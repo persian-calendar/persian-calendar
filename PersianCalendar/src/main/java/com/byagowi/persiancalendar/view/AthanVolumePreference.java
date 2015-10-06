@@ -54,7 +54,6 @@ public class AthanVolumePreference extends DialogPreference {
         seekBarVolumeSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(TAG, "volume: " + progress);
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
             }
 
@@ -88,6 +87,8 @@ public class AthanVolumePreference extends DialogPreference {
 
     public void instantiateMediaPlayer() {
         try {
+            Log.v(TAG, "instantiating MediaPlayer to: " + athanSoundUri);
+
             mediaPlayer = null;
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
