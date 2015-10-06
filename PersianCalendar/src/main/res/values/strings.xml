@@ -62,4 +62,5 @@
     <string name="athan_gap">Athan Gap</string>
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
     <string name="athan_sound_summary">Select the Athan sound or choose None or Silent for the default Athan sound</string>
+    <string name="todays_holiday">Today\'s Holiday</string>
 </resources>

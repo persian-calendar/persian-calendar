@@ -62,5 +62,6 @@
     <string name="athan_gap">فاصله بین اذان و هشدار</string>
     <string name="athan_gap_summary">چند دقیقه قبل از اذان، هشدار به صدا در آورده شود</string>
     <string name="athan_sound_summary">صدای اذان را انتخاب کنید یا گزینه ی «هیچ کدام» و یا «سکوت» را برای اذان پیش فرض انتخاب کنید</string>
+    <string name="todays_holiday">مناسبت امروز</string>
 
 </resources>
