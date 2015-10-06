@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -449,10 +449,9 @@ public class Utils {
                     new NotificationCompat.Builder(context)
                             .setContentTitle(context.getString(R.string.todays_holiday))
                             .setContentText(holidayToday)
-                            .setSmallIcon(R.drawable.launcher_icon)
-                            .setPriority(NotificationCompat.PRIORITY_MAX)
-                            .setCategory(NotificationCompat.CATEGORY_EVENT)
-                            .setColor(Color.WHITE)
+                            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                                    R.drawable.launcher_icon))
+                            .setSmallIcon(android.R.drawable.star_big_on)
                             .build());
         }
     }
