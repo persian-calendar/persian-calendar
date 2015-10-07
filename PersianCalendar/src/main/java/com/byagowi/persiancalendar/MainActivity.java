@@ -57,9 +57,6 @@ public class MainActivity extends FragmentActivity {
             // if a tablet version is installed
             removeTitle = false;
         }
-        if (android.os.Build.BRAND.equals("chromium")) {
-            removeTitle = false;
-        }
         if (removeTitle) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
