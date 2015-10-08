@@ -1,10 +1,15 @@
 package com.byagowi.persiancalendar;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.util.Log;
+
+import java.io.IOException;
 
 /**
  * Preference activity
@@ -29,6 +34,8 @@ public class ApplicationPreference extends PreferenceActivity {
     @SuppressWarnings("deprecation")
     private void lowerThanHC() {
         addPreferencesFromResource(R.xml.preferences);
+
+        loadFonts(getApplicationContext(), (ListPreference) findPreference("CalendarFont"));
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -43,6 +50,21 @@ public class ApplicationPreference extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+
+            loadFonts(getActivity(), (ListPreference) findPreference("CalendarFont"));
         }
+    }
+
+    public static void loadFonts(Context context, ListPreference listPreference) {
+        CharSequence[] fontList = new CharSequence[0];
+        try {
+            fontList = context.getAssets().list("fonts");
+        } catch (IOException e) {
+            Log.e("ApplicationPreference", "", e);
+        }
+
+        listPreference.setEntries(fontList);
+        listPreference.setEntryValues(fontList);
+        listPreference.setDefaultValue("NotoNaskhArabic-Regular.ttf");
     }
 }

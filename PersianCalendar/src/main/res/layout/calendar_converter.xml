@@ -1,65 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
     android:id="@+id/main_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ConverterActivity">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp">
+        android:orientation="vertical">
 
         <Spinner
             android:id="@+id/calendarTypeSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/containerDateSelector"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/year"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:padding="10sp">
 
-        <Spinner
-            android:id="@+id/yearSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/containerYearSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:paddingEnd="10sp"
+                android:paddingLeft="0sp"
+                android:paddingRight="10sp"
+                android:paddingStart="0sp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/month"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/year"
+                    android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-        <Spinner
-            android:id="@+id/monthSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+                <Spinner
+                    android:id="@+id/yearSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/day"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
 
-        <Spinner
-            android:id="@+id/daySpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/containerMonthSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:paddingEnd="10sp"
+                android:paddingLeft="0sp"
+                android:paddingRight="10sp"
+                android:paddingStart="0sp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/month"
+                    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                <Spinner
+                    android:id="@+id/monthSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerDaySelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/day"
+                    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                <Spinner
+                    android:id="@+id/daySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/convertedDateTextView"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingRight="10sp"
-            android:paddingTop="10sp" />
+            android:padding="10sp"/>
     </LinearLayout>
 
 </ScrollView>

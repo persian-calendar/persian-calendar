@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.util.DateFormatUtils;
 import com.byagowi.persiancalendar.view.MonthFragment;
 
 import calendar.CivilDate;
@@ -30,9 +31,11 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class MainActivity extends FragmentActivity {
+    private static final String TAG = "MainActivity";
     // I know, it is ugly, but user will not notify this and this will not have
     // a memory problem
     private static final int MONTHS_LIMIT = 1200;
+    private DateFormatUtils dateFormatUtils;
     public Utils utils = Utils.getInstance();
     private ViewPager viewPager;
     private TextView calendarInfo;
@@ -42,9 +45,12 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
+        utils.loadLanguageFromSettings(this);
         super.onCreate(savedInstanceState);
 
         startService(new Intent(this, ApplicationService.class));
+
+        dateFormatUtils = DateFormatUtils.getInstance(this);
 
         boolean removeTitle = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -73,12 +79,12 @@ public class MainActivity extends FragmentActivity {
 
         // Reset button
         resetButton = (Button) findViewById(R.id.reset_button);
-        resetButton.setText(utils.today);
+        resetButton.setText(getString(R.string.today));
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 bringTodayYearMonth();
-                setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
+                setFocusedDay(Utils.getToday());
             }
         });
         resetButton.setTypeface(Typeface.createFromAsset(this.getAssets(),
@@ -104,13 +110,19 @@ public class MainActivity extends FragmentActivity {
         });
 
         // Initializing the view
-        fillCalendarInfo(new CivilDate());
+        fillCalendarInfo(Utils.getToday());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillCalendarInfo(Utils.getToday());
     }
 
     private void updateResetButtonState() {
         if (viewPager.getCurrentItem() == MONTHS_LIMIT / 2) {
             resetButton.setVisibility(View.GONE);
-            fillCalendarInfo(new CivilDate());
+            fillCalendarInfo(Utils.getToday());
         } else {
             resetButton.setVisibility(View.VISIBLE);
             clearInfo();
@@ -125,12 +137,12 @@ public class MainActivity extends FragmentActivity {
     private void bringTodayYearMonth() {
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-            fillCalendarInfo(new CivilDate());
+            fillCalendarInfo(Utils.getToday());
         }
     }
 
     public void setFocusedDay(PersianDate persianDate) {
-        fillCalendarInfo(DateConverter.persianToCivil(persianDate));
+        fillCalendarInfo(persianDate);
     }
 
     private PagerAdapter createCalendarAdaptor() {
@@ -159,19 +171,30 @@ public class MainActivity extends FragmentActivity {
                 && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
 
-    private void fillCalendarInfo(CivilDate civilDate) {
+    private void fillCalendarInfo(PersianDate persianDate) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         char[] digits = utils.preferredDigits(this);
         utils.prepareTextView(calendarInfo);
         StringBuilder sb = new StringBuilder();
 
         if (isToday(civilDate)) {
-            sb.append("امروز:\n");
+            sb.append(getString(R.string.today)).append(":\n");
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setVisibility(View.VISIBLE);
         }
-        sb.append(utils.infoForSpecificDay(civilDate, digits));
-        calendarInfo.setText(utils.textShaper(sb.toString()));
+
+        sb.append(dateFormatUtils.getWeekDayName(persianDate)).append(Utils.PERSIAN_COMMA)
+                .append(" ")
+                .append(utils.dateToString(persianDate, digits))
+                .append("\n\n")
+                .append(getString(R.string.equals_with))
+                .append(":\n")
+                .append(utils.dateToString(civilDate, digits))
+                .append("\n")
+                .append(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append("\n");
+        calendarInfo.setText(Utils.textShaper(sb.toString()));
 
         prayTimeActivityHelper.setDate(civilDate.getYear(),
                 civilDate.getMonth() - 1, civilDate.getDayOfMonth());

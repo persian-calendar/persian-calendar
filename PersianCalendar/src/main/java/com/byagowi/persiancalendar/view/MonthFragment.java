@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.MainActivity;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 
-import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
@@ -95,7 +94,7 @@ public class MonthFragment extends Fragment {
 
         // Calendar Logic
         int offset = getArguments().getInt("offset");
-        PersianDate persianDate = DateConverter.civilToPersian(new CivilDate());
+        PersianDate persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
         int year = persianDate.getYear();
@@ -110,7 +109,6 @@ public class MonthFragment extends Fragment {
         persianDate.setMonth(month);
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
-        persianDate.setDari(utils.isDariVersion(context));
 
         char[] digits = utils.preferredDigits(getActivity());
 
@@ -123,15 +121,15 @@ public class MonthFragment extends Fragment {
 
         for (int i : new Range(0, 7)) {
             TextView textView = daysTextViews[0][6 - i];
-            textView.setText(utils.firstCharOfDaysOfWeekName[i]);
+            textView.setText(Utils.firstCharOfDaysOfWeekName[i]);
         }
         try {
-            PersianDate today = DateConverter.civilToPersian(new CivilDate());
+            PersianDate today = Utils.getToday();
             for (int i : new Range(1, 31)) {
                 persianDate.setDayOfMonth(i);
 
                 TextView textView = daysTextViews[weekOfMonth][6 - dayOfWeek];
-                textView.setText(utils.formatNumber(i, digits));
+                textView.setText(Utils.formatNumber(i, digits));
                 textView.setBackgroundResource(R.drawable.days);
 
                 String holidayTitle = utils.getHolidayTitle(persianDate);
@@ -150,8 +148,8 @@ public class MonthFragment extends Fragment {
 
                     textView.setBackgroundResource(
                             prefs.getString("Theme", "LightTheme").equals("LightTheme")
-                            ? R.drawable.today_light
-                            : R.drawable.today_dark);
+                                    ? R.drawable.today_light
+                                    : R.drawable.today_dark);
                 }
 
                 dayOfWeek++;

@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -30,8 +31,8 @@ public class AboutActivity extends Activity {
 
         TextView versionTextView = (TextView) findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
-        versionTextView.setText(utils.version + " " +
-                utils.formatNumber(version, utils.preferredDigits(this)));
+        versionTextView.setText(getString(R.string.version) + " " +
+                Utils.formatNumber(version, utils.preferredDigits(this)));
 
         StringBuilder sb = new StringBuilder();
 
@@ -54,11 +55,12 @@ public class AboutActivity extends Activity {
         }
 
         TextView licenseTextView = (TextView) findViewById(R.id.license);
+        Utils.keepLtrLayoutDirection(licenseTextView);
         licenseTextView.setText("Android Persian Calendar Version "
                 + version
                 + "\n"
                 + "Copyright (C) 2012-2015  ebrahim@gnu.org "
-                + utils.textShaper("ابراهیم بیاگوی")
+                + Utils.textShaper("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
                 + "it under the terms of the GNU General Public License as published by "

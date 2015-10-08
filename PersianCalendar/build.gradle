@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
@@ -7,8 +8,10 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'maven'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

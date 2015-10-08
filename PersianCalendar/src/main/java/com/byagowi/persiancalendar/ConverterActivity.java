@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.util.DateFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,15 @@ public class ConverterActivity extends Activity {
     private Spinner daySpinner;
     private TextView convertedDateTextView;
     private int startingYearOnYearSpinner = 0;
+    private DateFormatUtils dateFormatUtils;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
         super.onCreate(savedInstanceState);
 
+        dateFormatUtils = DateFormatUtils.getInstance(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.calendar_converter);
@@ -53,19 +57,12 @@ public class ConverterActivity extends Activity {
         //
 
         // fill views
-        List<String> calendarsTypes = new ArrayList<String>();
-        calendarsTypes.add(utils.georgian);
-        calendarsTypes.add(utils.shamsi);
-        calendarsTypes.add(utils.islamic);
-        ArrayAdapter<String> arrayAdaptor = new ArrayAdapter<String>(this,
-                android.R.layout.select_dialog_item, calendarsTypes);
-        calendarTypeSpinner.setAdapter(arrayAdaptor);
+        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(this, android.R.layout.select_dialog_item));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
 
-        calendarTypeSpinner
-                .setOnItemSelectedListener(new CalendarTypeSpinnerListener());
+        calendarTypeSpinner.setOnItemSelectedListener(new CalendarTypeSpinnerListener());
 
         CalendarSpinnersListener csl = new CalendarSpinnersListener();
         yearSpinner.setOnItemSelectedListener(csl);
@@ -79,7 +76,7 @@ public class ConverterActivity extends Activity {
                 + yearSpinner.getSelectedItemPosition();
         int month = monthSpinner.getSelectedItemPosition() + 1;
         int day = daySpinner.getSelectedItemPosition() + 1;
-        CalendarType calendarType = detectSelectedCalendar();
+        CalendarType calendarType = (CalendarType) calendarTypeSpinner.getSelectedItem();
 
         CivilDate civilDate = null;
         PersianDate persianDate = null;
@@ -93,8 +90,8 @@ public class ConverterActivity extends Activity {
             switch (calendarType) {
                 case GEORGIAN:
                     civilDate = new CivilDate(year, month, day);
-                    persianDate = DateConverter.civilToPersian(civilDate);
                     islamicDate = DateConverter.civilToIslamic(civilDate);
+                    persianDate = DateConverter.civilToPersian(civilDate);
 
                     calendarsTextList.add(utils.dateToString(civilDate, digits));
                     calendarsTextList.add(utils.dateToString(persianDate, digits));
@@ -120,12 +117,12 @@ public class ConverterActivity extends Activity {
                     break;
             }
 
-            sb.append(utils.getDayOfWeekName(civilDate.getDayOfWeek()));
-            sb.append(utils.PERSIAN_COMMA);
+            sb.append(dateFormatUtils.getWeekDayName(civilDate));
+            sb.append(Utils.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
             sb.append("\n\n");
-            sb.append(utils.equalWith);
+            sb.append(getString(R.string.equals_with));
             sb.append(":\n");
             sb.append(calendarsTextList.get(1));
             sb.append("\n");
@@ -133,7 +130,7 @@ public class ConverterActivity extends Activity {
             sb.append("\n");
 
             utils.prepareTextView(convertedDateTextView);
-            convertedDateTextView.setText(utils.textShaper(sb.toString()));
+            convertedDateTextView.setText(Utils.textShaper(sb.toString()));
         } catch (RuntimeException e) {
             convertedDateTextView.setText("Date you entered was not valid!");
         }
@@ -143,15 +140,20 @@ public class ConverterActivity extends Activity {
         char[] digits = utils.preferredDigits(this);
 
         AbstractDate date = null;
-        switch (detectSelectedCalendar()) {
+        PersianDate newDatePersian = Utils.getToday();
+        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
+        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
+
+        CalendarType selectedCalendarType = (CalendarType) calendarTypeSpinner.getSelectedItem();
+        switch (selectedCalendarType) {
             case GEORGIAN:
-                date = new CivilDate();
+                date = newDateCivil;
                 break;
             case ISLAMIC:
-                date = DateConverter.civilToIslamic(new CivilDate());
+                date = newDateIslamic;
                 break;
             case SHAMSI:
-                date = DateConverter.civilToPersian(new CivilDate());
+                date = newDatePersian;
                 break;
         }
 
@@ -159,7 +161,7 @@ public class ConverterActivity extends Activity {
         List<String> yearsList = new ArrayList<String>();
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
-            yearsList.add(utils.formatNumber(i, digits));
+            yearsList.add(Utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, yearsList);
@@ -170,10 +172,9 @@ public class ConverterActivity extends Activity {
 
         // month spinner init.
         List<String> monthsList = new ArrayList<String>();
-        String[] monthsArray = date.getMonthsList();
         for (int i : new Range(1, 12)) {
-            monthsList.add(utils.textShaper(monthsArray[i] + " / "
-                    + utils.formatNumber(i, digits)));
+            monthsList.add(Utils.textShaper(dateFormatUtils.getMonthName(date) + " / "
+                    + Utils.formatNumber(i, digits)));
         }
         ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, monthsList);
@@ -185,7 +186,7 @@ public class ConverterActivity extends Activity {
         // days spinner init.
         List<String> daysList = new ArrayList<String>();
         for (int i : new Range(1, 31)) {
-            daysList.add(utils.formatNumber(i, digits));
+            daysList.add(Utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, daysList);
@@ -196,27 +197,10 @@ public class ConverterActivity extends Activity {
 
     }
 
-    CalendarType detectSelectedCalendar() {
-        CalendarType calendarType = null;
-        if (utils.georgian.equals(calendarTypeSpinner.getSelectedItem()
-                .toString())) {
-            calendarType = CalendarType.GEORGIAN;
-        } else if (utils.shamsi.equals(calendarTypeSpinner.getSelectedItem()
-                .toString())) {
-            calendarType = CalendarType.SHAMSI;
-        } else if (utils.islamic.equals(calendarTypeSpinner.getSelectedItem()
-                .toString())) {
-            calendarType = CalendarType.ISLAMIC;
-        }
-        return calendarType;
-    }
-
     // inner classes
-    private class CalendarSpinnersListener implements
-            AdapterView.OnItemSelectedListener {
+    private class CalendarSpinnersListener implements AdapterView.OnItemSelectedListener {
         @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                   long arg3) {
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
             fillCalendarInfo();
         }
 
@@ -225,11 +209,9 @@ public class ConverterActivity extends Activity {
         }
     }
 
-    private class CalendarTypeSpinnerListener implements
-            AdapterView.OnItemSelectedListener {
+    private class CalendarTypeSpinnerListener implements AdapterView.OnItemSelectedListener {
         @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                   long arg3) {
+        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
             fillYearMonthDaySpinners();
         }
 

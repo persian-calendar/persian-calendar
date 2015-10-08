@@ -7,16 +7,12 @@ import java.util.Calendar;
  * @author ebraminio
  */
 public class CivilDate extends AbstractDate {
-    private static final String[] monthName = {"", "ژانویه", "فوریه", "مارس",
-            "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
-            "نوامبر", "دسامبر"};
-    private static final String[] weekdayName = {"", "یکشنبه", "دوشنبه",
-            "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"};
     private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31,
             31, 30, 31, 30, 31};
     private int year;
     private int month;
     private int day;
+
     public CivilDate() {
         this(Calendar.getInstance());
     }
@@ -32,10 +28,6 @@ public class CivilDate extends AbstractDate {
         setYear(year);
         setMonth(month);
         setDayOfMonth(day);
-    }
-
-    public String[] getMonthsList() {
-        return monthName;
     }
 
     public int getDayOfMonth() {
@@ -91,10 +83,6 @@ public class CivilDate extends AbstractDate {
         this.month = month;
     }
 
-    public String getMonthName() {
-        return monthName[getMonth()];
-    }
-
     public int getWeekOfMonth() {
         throw new RuntimeException("not implemented yet!");
     }
@@ -132,17 +120,6 @@ public class CivilDate extends AbstractDate {
 
     public void rollYear(int amount, boolean up) {
         throw new RuntimeException("not implemented yet!");
-    }
-
-    /**
-     * This method should have been in PersianDate rather than here. It is here
-     * because finding the weekday is much easier here, since we use the JDK's
-     * Calendar class to compute weekday, instead of computing it ourselves.
-     *
-     * @return The name of day of week
-     */
-    public String getDayOfWeekName() {
-        return weekdayName[getDayOfWeek()];
     }
 
     public boolean equals(CivilDate civilDate) {
