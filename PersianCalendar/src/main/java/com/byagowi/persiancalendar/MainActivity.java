@@ -10,14 +10,23 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
+import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.view.MonthFragment;
 
 import calendar.CivilDate;
@@ -29,7 +38,8 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity implements ClickListener {
+    private static final String TAG = "MainActivity";
     // I know, it is ugly, but user will not notify this and this will not have
     // a memory problem
     private static final int MONTHS_LIMIT = 1200;
@@ -39,9 +49,18 @@ public class MainActivity extends FragmentActivity {
     private Button resetButton;
     private PrayTimeActivityHelper prayTimeActivityHelper;
 
+    private Toolbar toolbar;
+    private RecyclerView navigation;
+    private DrawerAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         utils.setTheme(this);
+        utils.loadLanguageFromSettings(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
         startService(new Intent(this, ApplicationService.class));
@@ -54,13 +73,48 @@ public class MainActivity extends FragmentActivity {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            // if a tablet version is installed
+//             if a tablet version is installed
             removeTitle = false;
         }
         if (removeTitle) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
         setContentView(R.layout.calendar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
+
+        navigation = (RecyclerView) findViewById(R.id.navigation_view);
+        navigation.setHasFixedSize(true);
+        adapter = new DrawerAdapter(this, this);
+        navigation.setAdapter(adapter);
+
+        layoutManager = new LinearLayoutManager(this);
+        navigation.setLayoutManager(layoutManager);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.openDrawer,R.string.closeDrawer){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
+
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
 
         calendarInfo = (TextView) findViewById(R.id.calendar_info);
 
@@ -73,12 +127,12 @@ public class MainActivity extends FragmentActivity {
 
         // Reset button
         resetButton = (Button) findViewById(R.id.reset_button);
-        resetButton.setText(utils.today);
+        resetButton.setText(getString(R.string.today));
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 bringTodayYearMonth();
-                setFocusedDay(DateConverter.civilToPersian(new CivilDate()));
+                setFocusedDay(Utils.getToday());
             }
         });
         resetButton.setTypeface(Typeface.createFromAsset(this.getAssets(),
@@ -104,13 +158,19 @@ public class MainActivity extends FragmentActivity {
         });
 
         // Initializing the view
-        fillCalendarInfo(new CivilDate());
+        fillCalendarInfo(Utils.getToday());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillCalendarInfo(Utils.getToday());
     }
 
     private void updateResetButtonState() {
         if (viewPager.getCurrentItem() == MONTHS_LIMIT / 2) {
             resetButton.setVisibility(View.GONE);
-            fillCalendarInfo(new CivilDate());
+            fillCalendarInfo(Utils.getToday());
         } else {
             resetButton.setVisibility(View.VISIBLE);
             clearInfo();
@@ -125,12 +185,12 @@ public class MainActivity extends FragmentActivity {
     private void bringTodayYearMonth() {
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-            fillCalendarInfo(new CivilDate());
+            fillCalendarInfo(Utils.getToday());
         }
     }
 
     public void setFocusedDay(PersianDate persianDate) {
-        fillCalendarInfo(DateConverter.persianToCivil(persianDate));
+        fillCalendarInfo(persianDate);
     }
 
     private PagerAdapter createCalendarAdaptor() {
@@ -159,24 +219,36 @@ public class MainActivity extends FragmentActivity {
                 && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
 
-    private void fillCalendarInfo(CivilDate civilDate) {
+    private void fillCalendarInfo(PersianDate persianDate) {
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         char[] digits = utils.preferredDigits(this);
         utils.prepareTextView(calendarInfo);
         StringBuilder sb = new StringBuilder();
 
         if (isToday(civilDate)) {
-            sb.append("امروز:\n");
+            sb.append(getString(R.string.today)).append(":\n");
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setVisibility(View.VISIBLE);
         }
-        sb.append(utils.infoForSpecificDay(civilDate, digits));
-        calendarInfo.setText(utils.textShaper(sb.toString()));
+
+        sb.append(persianDate.getWeekdayName()).append(Utils.PERSIAN_COMMA)
+                .append(" ")
+                .append(Utils.dateToString(persianDate, digits))
+                .append("\n\n")
+                .append(getString(R.string.equals_with))
+                .append(":\n")
+                .append(Utils.dateToString(civilDate, digits))
+                .append("\n")
+                .append(Utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append("\n");
+        calendarInfo.setText(Utils.textShaper(sb.toString()));
 
         prayTimeActivityHelper.setDate(civilDate.getYear(),
                 civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         prayTimeActivityHelper.fillPrayTime();
     }
+
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private boolean hasPermanentMenuKey() {
@@ -209,9 +281,24 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Restart activity
+//         Restart activity
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    public void onClickItem(View v, int position) {
+        selectItem(position);
+    }
+
+    public void selectItem(int position) {
+        switch (position) {
+
+            case 0:
+
+                break;
+        }
+        drawerLayout.closeDrawers();
     }
 }

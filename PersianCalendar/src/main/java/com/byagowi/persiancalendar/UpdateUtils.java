@@ -24,6 +24,7 @@ import calendar.DateConverter;
 import calendar.PersianDate;
 
 public class UpdateUtils {
+    private static final String TAG = "UpdateUtils";
     private static final int NOTIFICATION_ID = 1001;
     private static UpdateUtils myInstance;
     private final Utils utils = Utils.getInstance();
@@ -32,6 +33,7 @@ public class UpdateUtils {
     private NotificationManager mNotificationManager;
     private Bitmap largeIcon;
     private ExtensionData mExtensionData;
+
     private UpdateUtils() {
     }
 
@@ -49,8 +51,7 @@ public class UpdateUtils {
         boolean iranTime = prefs.getBoolean("IranTime", false);
         Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
         CivilDate civil = new CivilDate(calendar);
-        PersianDate persian = DateConverter.civilToPersian(civil);
-        persian.setDari(utils.isDariVersion(context));
+        PersianDate persian = Utils.getToday();
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
@@ -71,9 +72,9 @@ public class UpdateUtils {
         remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
         remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                utils.formatNumber(persian.getDayOfMonth(), digits));
+                Utils.formatNumber(persian.getDayOfMonth(), digits));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                utils.textShaper(persian.getMonthName()));
+                Utils.textShaper(persian.getMonthName()));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
                 launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget1x1.class),
@@ -87,10 +88,10 @@ public class UpdateUtils {
         String text1;
         String text2;
         String text3 = "";
-        text1 = utils.getDayOfWeekName(civil.getDayOfWeek());
-        String dayTitle = utils.dateToString(persian, digits);
-        text2 = dayTitle + utils.PERSIAN_COMMA + " "
-                + utils.dateToString(civil, digits);
+        text1 = civil.getDayOfWeekName();
+        String dayTitle = Utils.dateToString(persian, digits);
+        text2 = dayTitle + Utils.PERSIAN_COMMA + " "
+                + Utils.dateToString(civil, digits);
 
         boolean enableClock = prefs.getBoolean("WidgetClock", true);
         if (enableClock) {
@@ -98,16 +99,16 @@ public class UpdateUtils {
             boolean in24 = prefs.getBoolean("WidgetIn24", true);
             text1 = utils.getPersianFormattedClock(calendar, digits, in24);
             if (iranTime) {
-                text3 = "(" + utils.irdt + ")";
+                text3 = "(" + context.getString(R.string.iran_time) + ")";
             }
         }
 
         remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
-                utils.textShaper(text1));
+                Utils.textShaper(text1));
         remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
-                utils.textShaper(text2));
+                Utils.textShaper(text2));
         remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1,
-                utils.textShaper(text3));
+                Utils.textShaper(text3));
 
         remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
                 launchAppPendingIntent);
@@ -120,13 +121,13 @@ public class UpdateUtils {
         //
         String status = persian.getMonthName();
 
-        String title = utils.getDayOfWeekName(civil.getDayOfWeek()) + " "
-                + utils.dateToString(persian, digits);
+        String title = civil.getDayOfWeekName() + " "
+                + Utils.dateToString(persian, digits);
 
-        String body = utils.dateToString(civil, digits)
-                + utils.PERSIAN_COMMA
+        String body = Utils.dateToString(civil, digits)
+                + Utils.PERSIAN_COMMA
                 + " "
-                + utils.dateToString(DateConverter.civilToIslamic(civil),
+                + Utils.dateToString(DateConverter.civilToIslamic(civil),
                 digits);
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
@@ -147,16 +148,16 @@ public class UpdateUtils {
                             .setOngoing(true).setLargeIcon(largeIcon)
                             .setSmallIcon(icon)
                             .setContentIntent(launchAppPendingIntent)
-                            .setContentText(utils.textShaper(body))
-                            .setContentTitle(utils.textShaper(title)).build());
+                            .setContentText(Utils.textShaper(body))
+                            .setContentTitle(Utils.textShaper(title)).build());
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
-                .status(utils.textShaper(status))
-                .expandedTitle(utils.textShaper(title))
-                .expandedBody(utils.textShaper(body)).clickIntent(intent);
+                .status(Utils.textShaper(status))
+                .expandedTitle(Utils.textShaper(title))
+                .expandedBody(Utils.textShaper(body)).clickIntent(intent);
     }
 
     public ExtensionData getExtensionData() {

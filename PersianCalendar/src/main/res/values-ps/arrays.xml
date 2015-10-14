@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="themeNames">
-        <item>روشن</item>
-        <item>تاریک</item>
+        <item>روښان</item>
+        <item>تور</item>
     </string-array>
 
     <string-array name="prayMethodsNames" translatable="false">
@@ -17,7 +16,7 @@
     </string-array>
 
     <string-array name="locationNames">
-        <item>هیچ‌کدام</item>
+        <item>هیڅ کوم</item>
         <item>اراک</item>
         <item>اردبیل</item>
         <item>ارومیه</item>
@@ -58,5 +57,4 @@
         <item>یاسوج</item>
         <item>یزد</item>
     </string-array>
-
 </resources>

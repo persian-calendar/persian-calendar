@@ -1,27 +1,24 @@
 package calendar;
 
+import com.byagowi.persiancalendar.Utils;
+
+import java.util.Calendar;
+
 /**
  * @author Amir
  * @author ebraminio (implementing isLeapYear)
  */
 public class PersianDate extends AbstractDate {
+    public static final String[] MONTH_NAME_KEYS = {"", "FARVARDIN",
+            "ORDIBEHESHT", "KHORDARD", "TIR", "MORDAD", "SHAHRIVAR",
+            "MEHR", "ABAN", "AZAR", "DEY", "BAHMAN", "ESFAND"};
+    public static final String[] WEEK_DAY_NAME_KEYS = {"", "SUNDAY", "MONDAY", "TUESDAY",
+            "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
 
-    private static final String[] persianMonthName = {"", "فروردین",
-            "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان",
-            "آذر", "دی", "بهمن", "اسفند"};
-
-    /**
-     * Months Names in Dari, needed for special Dari Version. Provided by:
-     * Mohammad Hamid Majidee
-     */
-    private static final String[] dariMonthName = {"", "حمل", "ثور", "جوزا",
-            "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
-            "حوت"};
-
-    private boolean isDari = false;
     private int year;
     private int month;
     private int day;
+
     public PersianDate(int year, int month, int day) {
         setYear(year);
         // Initialize day, so that we get no exceptions when setting month
@@ -31,11 +28,7 @@ public class PersianDate extends AbstractDate {
     }
 
     public String[] getMonthsList() {
-        return isDari ? dariMonthName : persianMonthName;
-    }
-
-    public void setDari(boolean isDari) {
-        this.isDari = isDari;
+        return MONTH_NAME_KEYS;
     }
 
     public PersianDate clone() {
@@ -82,7 +75,11 @@ public class PersianDate extends AbstractDate {
     }
 
     public String getMonthName() {
-        return getMonthsList()[month];
+        return Utils.getCalendarItemName(getMonthsList()[getMonth()]);
+    }
+
+    public String getWeekdayName() {
+        return Utils.getCalendarItemName(WEEK_DAY_NAME_KEYS[getDayOfWeek()]);
     }
 
     public int getWeekOfYear() {
@@ -117,7 +114,11 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getDayOfWeek() {
-        throw new RuntimeException("not implemented yet!");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 
     public int getDayOfYear() {
