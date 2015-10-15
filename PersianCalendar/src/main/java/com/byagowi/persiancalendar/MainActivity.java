@@ -29,6 +29,14 @@ import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
  * @author ebraminio
  */
 public class MainActivity extends AppCompatActivity implements ClickListener {
+    public static final int CALENDAR = 0;
+    public static final int CONVERTER = 1;
+    public static final int COMPASS = 2;
+    public static final int PREFERENCE = 3;
+    public static final int ABOUT = 4;
+    public static final int EXIT = 5;
+
+    public int menuPosition = 0;
     public Utils utils = Utils.getInstance();
 
     private DrawerLayout drawerLayout;
@@ -96,51 +104,76 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
     public void selectItem(int position) {
         switch (position) {
 
-            case 0:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new CalendarFragment())
-                        .addToBackStack(null)
-                        .commit();
+            case CALENDAR:
+                if (menuPosition != CALENDAR) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, new CalendarFragment())
+                            .addToBackStack(null)
+                            .commit();
+
+                    menuPosition = CALENDAR;
+                }
 
                 break;
 
-            case 1:
+            case CONVERTER:
+                if (menuPosition != CONVERTER) {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_holder, new ConverterFragment())
                         .addToBackStack(null)
                         .commit();
 
+                    menuPosition = CONVERTER;
+                }
+
                 break;
 
-            case 2:
+            case COMPASS:
+                if (menuPosition != COMPASS) {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_holder, new CompassFragment())
                         .addToBackStack(null)
                         .commit();
 
+                    menuPosition = COMPASS;
+                }
+
                 break;
 
-            case 3:
+            case PREFERENCE:
+                if (menuPosition != PREFERENCE) {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
                         .addToBackStack(null)
                         .commit();
 
+                    menuPosition = PREFERENCE;
+                }
+
                 break;
 
-            case 4:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new AboutFragment())
-                        .addToBackStack(null)
-                        .commit();
+            case ABOUT:
+                if (menuPosition != ABOUT) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, new AboutFragment())
+                            .addToBackStack(null)
+                            .commit();
 
+                    menuPosition = ABOUT;
+                }
+
+                break;
+
+            case EXIT:
+                finish();
                 break;
         }
+
         drawerLayout.closeDrawers();
     }
 }
