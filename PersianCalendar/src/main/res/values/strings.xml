@@ -61,4 +61,16 @@
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <string name="athan_gap">Athan Gap</string>
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
+
+    <string name="closeDrawer">Close</string>
+    <string name="openDrawer">Open</string>
+
+
+    <string-array name="drawer_title">
+        <item>تبدیل تاریخ</item>
+        <item>قطب نما</item>
+        <item>تنظیمات</item>
+        <item>درباره</item>
+        <item>خروج</item>
+    </string-array>
 </resources>
