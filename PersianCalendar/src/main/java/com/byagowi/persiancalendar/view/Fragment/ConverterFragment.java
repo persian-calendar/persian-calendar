@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.CalendarType;
+import com.byagowi.persiancalendar.CalendarTypesSpinnerAdapter;
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.locale.CalendarStrings;
 
 import java.util.ArrayList;
