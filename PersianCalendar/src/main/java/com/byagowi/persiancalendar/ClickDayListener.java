@@ -39,7 +39,7 @@ public class ClickDayListener implements View.OnClickListener,
         if (holidayTitle != null) {
             utils.quickToast(holidayTitle, v.getContext());
         }
-        calendarAcitivity.setFocusedDay(persianDate);
+//        calendarAcitivity.setFocusedDay(persianDate);
     }
 
     @Override

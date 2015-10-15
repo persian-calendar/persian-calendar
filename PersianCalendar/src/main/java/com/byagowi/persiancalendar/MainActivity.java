@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.Interface.ClickListener;
+import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
 
 /**
  * Program activity for android
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
         startService(new Intent(this, ApplicationService.class));
 
-        setContentView(R.layout.calendar);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_holder, new CalendarFragment());
+        transaction.commit();
     }
 
 //    @Override
