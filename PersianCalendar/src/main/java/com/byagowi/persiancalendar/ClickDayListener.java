@@ -8,6 +8,8 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.view.View;
 
+import com.byagowi.persiancalendar.view.Activity.MainActivity;
+
 import java.util.Calendar;
 
 import calendar.CivilDate;
