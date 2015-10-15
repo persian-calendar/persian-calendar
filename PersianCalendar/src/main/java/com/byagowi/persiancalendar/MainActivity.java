@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
 
 /**
  * Program activity for android
