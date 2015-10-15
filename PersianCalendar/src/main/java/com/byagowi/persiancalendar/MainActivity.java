@@ -78,24 +78,6 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         transaction.commit();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int itemId = item.getItemId();
-//        if (itemId == R.id.menu_dateconverter) {
-//            startActivity(new Intent(this, ConverterFragment.class));
-//        } else if (itemId == R.id.menu_compass) {
-//            startActivity(new Intent(this, CompassFragment.class));
-//        } else if (itemId == R.id.menu_settings) {
-//            startActivityForResult(
-//                    new Intent(this, ApplicationPreference.class), 0);
-//        } else if (itemId == R.id.menu_about) {
-//            startActivity(new Intent(this, AboutActivity.class));
-//        } else if (itemId == R.id.menu_exit) {
-//            finish();
-//        }
-//        return false;
-//    }
-
 //    @Override  // TODO: 10/15/15  this cod for reload app after setting
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //         Restart activity
@@ -143,6 +125,15 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_holder, new ApplicationPreference())
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
+
+            case 4:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new AboutFragment())
                         .addToBackStack(null)
                         .commit();
 

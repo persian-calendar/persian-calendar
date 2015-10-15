@@ -26,16 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AboutActivity"
-            android:exported="false"
-            android:label="@string/about">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.EMBED"/>
-            </intent-filter>
-        </activity>
 
         <receiver
             android:name="com.byagowi.persiancalendar.SystemStartup"
@@ -52,7 +42,7 @@
 
         <service
             android:name=".ApplicationService"
-            android:label="Calendar Service"></service>
+            android:label="Calendar Service"/>
 
         <receiver
             android:name=".Widget1x1"
