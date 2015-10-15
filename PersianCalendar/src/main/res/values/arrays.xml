@@ -8,7 +8,7 @@
         <item>LightTheme</item>
         <item>DarkTheme</item>
     </string-array>
-    <string-array name="prayMethodsNames" translatable="false">
+    <string-array name="prayMethodsNames">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
         <item>Muslim World League</item>
         <item>Islamic Society of North America</item>
@@ -147,5 +147,13 @@
         <item>ASR</item>
         <item>MAGHRIB</item>
         <item>ISHA</item>
+    </string-array>
+
+    <string-array name="drawer_title">
+        <item>تبدیل تاریخ</item>
+        <item>قطب نما</item>
+        <item>تنظیمات</item>
+        <item>درباره</item>
+        <item>خروج</item>
     </string-array>
 </resources>
