@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        int itemId = item.getItemId();
 //        if (itemId == R.id.menu_dateconverter) {
-//            startActivity(new Intent(this, ConverterActivity.class));
+//            startActivity(new Intent(this, ConverterFragment.class));
 //        } else if (itemId == R.id.menu_compass) {
 //            startActivity(new Intent(this, CompassActivity.class));
 //        } else if (itemId == R.id.menu_settings) {
@@ -111,6 +111,20 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         switch (position) {
 
             case 0:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new CalendarFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
+
+            case 1:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new ConverterFragment())
+                        .addToBackStack(null)
+                        .commit();
 
                 break;
         }
