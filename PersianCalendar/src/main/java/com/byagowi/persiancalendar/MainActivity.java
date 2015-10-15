@@ -17,6 +17,8 @@ import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.Interface.ClickListener;
+import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
+import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             case 3:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_holder, new ApplicationPreference())
+                        .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
                         .addToBackStack(null)
                         .commit();
 

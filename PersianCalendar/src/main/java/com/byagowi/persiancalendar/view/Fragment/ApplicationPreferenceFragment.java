@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,13 +11,14 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.byagowi.persiancalendar.R;
+
 /**
  * Preference activity
  *
  * @author ebraminio
  */
-public class ApplicationPreference extends PreferenceFragmentCompat {
-    private static final String TAG = "ApplicationPreference";
+public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 //    private final Utils utils = Utils.getInstance();
     private static SharedPreferences prefs;
     private static Preference categoryAthan;
@@ -117,7 +118,7 @@ public class ApplicationPreference extends PreferenceFragmentCompat {
 //        try {
 //            fontList = context.getAssets().list("fonts");
 //        } catch (IOException e) {
-//            Log.e("ApplicationPreference", "", e);
+//            Log.e("ApplicationPreferenceFragment", "", e);
 //        }
 //
 //        listPreference.setEntries(fontList);
