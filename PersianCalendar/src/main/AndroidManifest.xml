@@ -46,18 +46,6 @@
                 <category android:name="android.intent.category.EMBED"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CompassActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false"
-            android:label="@string/qibla_compass"
-            android:screenOrientation="nosensor">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.EMBED"/>
-            </intent-filter>
-        </activity>
 
         <receiver
             android:name="com.byagowi.persiancalendar.SystemStartup"

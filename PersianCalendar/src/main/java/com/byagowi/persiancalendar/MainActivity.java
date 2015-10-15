@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
 
 /**
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 //        if (itemId == R.id.menu_dateconverter) {
 //            startActivity(new Intent(this, ConverterFragment.class));
 //        } else if (itemId == R.id.menu_compass) {
-//            startActivity(new Intent(this, CompassActivity.class));
+//            startActivity(new Intent(this, CompassFragment.class));
 //        } else if (itemId == R.id.menu_settings) {
 //            startActivityForResult(
 //                    new Intent(this, ApplicationPreference.class), 0);
@@ -124,6 +125,15 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_holder, new ConverterFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
+
+            case 2:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new CompassFragment())
                         .addToBackStack(null)
                         .commit();
 
