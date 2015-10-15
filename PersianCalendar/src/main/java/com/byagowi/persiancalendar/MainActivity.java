@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.locale.CalendarStrings;
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.view.MonthFragment;
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
         // Reset button
         resetButton = (Button) findViewById(R.id.reset_button);
-        resetButton.setText(getString(R.string.today));
+        resetButton.setText(utils.getString(CalendarStrings.TODAY));
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -157,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             }
         });
 
-        // Initializing the view
         fillCalendarInfo(Utils.getToday());
+        utils.setAthanRepeater(this);
     }
 
     @Override
@@ -226,21 +227,21 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         StringBuilder sb = new StringBuilder();
 
         if (isToday(civilDate)) {
-            sb.append(getString(R.string.today)).append(":\n");
+            sb.append(utils.getString(CalendarStrings.TODAY)).append(":\n");
             resetButton.setVisibility(View.GONE);
         } else {
             resetButton.setVisibility(View.VISIBLE);
         }
 
-        sb.append(persianDate.getWeekdayName()).append(Utils.PERSIAN_COMMA)
+        sb.append(utils.getWeekDayName(persianDate)).append(Utils.PERSIAN_COMMA)
                 .append(" ")
-                .append(Utils.dateToString(persianDate, digits))
+                .append(utils.dateToString(persianDate, digits))
                 .append("\n\n")
-                .append(getString(R.string.equals_with))
+                .append(utils.getString(CalendarStrings.EQUALS_WITH))
                 .append(":\n")
-                .append(Utils.dateToString(civilDate, digits))
+                .append(utils.dateToString(civilDate, digits))
                 .append("\n")
-                .append(Utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
+                .append(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits))
                 .append("\n");
         calendarInfo.setText(Utils.textShaper(sb.toString()));
 

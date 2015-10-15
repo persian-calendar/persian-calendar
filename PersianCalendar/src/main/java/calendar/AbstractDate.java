@@ -10,8 +10,6 @@ package calendar;
  */
 public abstract class AbstractDate {
 
-    public abstract String[] getMonthsList();
-
     public void setDate(int year, int month, int day) {
         setYear(year);
         setMonth(month);
@@ -25,8 +23,6 @@ public abstract class AbstractDate {
     public abstract int getMonth();
 
     public abstract void setMonth(int month);
-
-    public abstract String getMonthName();
 
     public abstract int getDayOfMonth();
 
@@ -53,4 +49,6 @@ public abstract class AbstractDate {
     public abstract String getEvent();
 
     public abstract boolean isLeapYear();
+
+    public abstract AbstractDate clone();
 }

@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.locale.CalendarStrings;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
+    private Utils utils;
+
     // so there's an order
     private CalendarType[] calendarTypeKeys = new CalendarType[]{
             CalendarType.SHAMSI,
@@ -22,11 +26,13 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
 
     public CalendarTypesSpinnerAdapter(Context context, int resource) {
         super(context, resource);
+        utils = Utils.getInstance();
+        utils.loadLanguageFromSettings(context);
 
         spinnerResource = resource;
-        calendarTypes.put(CalendarType.SHAMSI, context.getString(R.string.hijri_shamsi));
-        calendarTypes.put(CalendarType.ISLAMIC, context.getString(R.string.hijri_qamari));
-        calendarTypes.put(CalendarType.GEORGIAN, context.getString(R.string.georgian));
+        calendarTypes.put(CalendarType.SHAMSI, utils.getString(CalendarStrings.HIJRI_SHAMSI));
+        calendarTypes.put(CalendarType.ISLAMIC, utils.getString(CalendarStrings.HIJRI_QAMARI));
+        calendarTypes.put(CalendarType.GEORGIAN, utils.getString(CalendarStrings.GEORGIAN));
     }
 
     @Override

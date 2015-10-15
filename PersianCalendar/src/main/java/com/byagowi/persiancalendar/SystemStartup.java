@@ -12,6 +12,9 @@ import android.content.Intent;
 public class SystemStartup extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Utils utils = Utils.getInstance();
+
         context.startService(new Intent(context, ApplicationService.class));
+        utils.setAthanRepeater(context);
     }
 }

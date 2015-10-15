@@ -38,10 +38,10 @@
                 android:paddingStart="0sp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/converterLabelYear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/year"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner
@@ -63,9 +63,10 @@
                 android:paddingStart="0sp">
 
                 <TextView
+                    android:id="@+id/converterLabelMonth"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/month"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner
@@ -83,9 +84,10 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/converterLabelDay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/day"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <Spinner

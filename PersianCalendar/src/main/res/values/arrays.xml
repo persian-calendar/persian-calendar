@@ -113,15 +113,39 @@
 
     <string-array name="languageNames">
         <item>English</item>
-        <item>Persian - فارسی</item>
-        <item>Dari - دری</item>
-        <item>Pashto - پشتو</item>
+        <item>Persian</item>
+        <item>Pashto</item>
     </string-array>
     <string-array name="languageKeys" translatable="false">
         <item>en</item>
         <item>fa</item>
-        <item>ar</item>
         <item>ps</item>
     </string-array>
 
+    <string-array name="calendarLanguageNames">
+        <item>Persian</item>
+        <item>Dari</item>
+        <item>Pashto</item>
+    </string-array>
+
+    <string-array name="calendarLanguageKeys" translatable="false">
+        <item>fa</item>
+        <item>prs</item>
+        <item>ps</item>
+    </string-array>
+    <string-array name="prayerTimeNames">
+        <item>Morning</item>
+        <item>Dhohr</item>
+        <item>Asr</item>
+        <item>Maghrib</item>
+        <item>Isha</item>
+    </string-array>
+
+    <string-array name="prayerTimeKeys">
+        <item>FAJR</item>
+        <item>DHUHR</item>
+        <item>ASR</item>
+        <item>MAGHRIB</item>
+        <item>ISHA</item>
+    </string-array>
 </resources>

@@ -2,20 +2,27 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/general">
+        <!--<ListPreference-->
+        <!--android:defaultValue="en"-->
+        <!--android:entries="@array/languageNames"-->
+        <!--android:entryValues="@array/languageKeys"-->
+        <!--android:key="ApplicationLanguage"-->
+        <!--android:summary="@string/application_language"-->
+        <!--android:title="@string/language"/>-->
+
         <ListPreference
-            android:defaultValue="en"
-            android:entries="@array/languageNames"
-            android:entryValues="@array/languageKeys"
-            android:key="ApplicationLanguage"
-            android:summary="@string/application_language"
-            android:title="@string/language"/>
-        <ListPreference
-            android:defaultValue="LightTheme"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeKeys"
-            android:key="Theme"
-            android:summary="@string/select_skin"
-            android:title="@string/skin"/>
+            android:defaultValue="fa"
+            android:entries="@array/calendarLanguageNames"
+            android:entryValues="@array/calendarLanguageKeys"
+            android:key="CalendarLanguage"
+            android:summary="@string/calendar_language_summary"
+            android:title="@string/calendar_language"/>
+
+        <!--<ListPreference-->
+        <!--android:defaultValue="NotoNaskhArabic-Regular.ttf"-->
+        <!--android:key="CalendarFont"-->
+        <!--android:summary="@string/calendar_font_summary"-->
+        <!--android:title="@string/calendar_font"/>-->
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -24,11 +31,15 @@
             android:title="@string/persian_digits"/>
 
         <ListPreference
-            android:key="CalendarFont"
-            android:defaultValue="NotoNaskhArabic-Regular.ttf"
-            android:summary="@string/calendar_font_summary"
-            android:title="@string/calendar_font"/>
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
+            android:summary="@string/select_skin"
+            android:title="@string/skin"/>
+
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/widget_notification_dashclock">
         <CheckBoxPreference
             android:defaultValue="true"
@@ -76,17 +87,50 @@
 
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Latitude"
             android:title="@string/latitude"/>
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Longitude"
             android:title="@string/longitude"/>
         <EditTextPreference
             android:defaultValue="0"
+            android:inputType="numberDecimal"
             android:key="Altitude"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="Athan"
+        android:layout="@layout/preference_category"
+        android:title="@string/athan">
+
+        <EditTextPreference
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="AthanGap"
+            android:summary="@string/athan_gap_summary"
+            android:title="@string/athan_gap"/>
+
+        <com.byagowi.persiancalendar.view.PrayerSelectPreference
+            android:key="AthanAlarm"
+            android:summary="@string/athan_alarm_summary"
+            android:title="@string/athan_alarm"/>
+
+        <com.byagowi.persiancalendar.view.AthanVolumePreference
+            android:key="AthanVolume"
+            android:summary="@string/athan_volume_summary"
+            android:title="@string/athan_volume"/>
+
+        <com.byagowi.persiancalendar.view.AthanSoundPreference
+            android:key="AthanSound"
+            android:ringtoneType="alarm"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:title="@string/athan_sound"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

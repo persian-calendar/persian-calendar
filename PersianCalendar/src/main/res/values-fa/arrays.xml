@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="themeNames">
         <item>روشن</item>
         <item>تاریک</item>
@@ -59,4 +58,22 @@
         <item>یزد</item>
     </string-array>
 
+    <string-array name="languageNames">
+        <item>انگلیسی</item>
+        <item>فارسی</item>
+        <item>پشتو</item>
+    </string-array>
+
+    <string-array name="calendarLanguageNames">
+        <item>فارسی</item>
+        <item>دری</item>
+        <item>پشتو</item>
+    </string-array>
+    <string-array name="prayerTimeNames">
+        <item>صبح</item>
+        <item>ظهر</item>
+        <item>عصر</item>
+        <item>مغرب</item>
+        <item>عشاء</item>
+    </string-array>
 </resources>
