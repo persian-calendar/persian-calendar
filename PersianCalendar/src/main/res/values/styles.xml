@@ -4,7 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
         <!-- Customize your theme here. -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
+
 
     <style name="LightTheme" parent="android:Theme.Light" />
 

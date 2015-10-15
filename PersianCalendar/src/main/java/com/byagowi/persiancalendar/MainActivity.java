@@ -138,6 +138,15 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
                         .commit();
 
                 break;
+
+            case 3:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new ApplicationPreference())
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
         }
         drawerLayout.closeDrawers();
     }
