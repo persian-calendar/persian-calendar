@@ -1,25 +1,25 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import com.byagowi.persiancalendar.R;
 
 /**
  * Preference activity
  *
  * @author ebraminio
  */
-public class ApplicationPreference extends PreferenceActivity {
-    private static final String TAG = "ApplicationPreference";
-    private final Utils utils = Utils.getInstance();
+public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
+//    private final Utils utils = Utils.getInstance();
     private static SharedPreferences prefs;
     private static Preference categoryAthan;
     private static Preference prefLocation;
@@ -31,10 +31,9 @@ public class ApplicationPreference extends PreferenceActivity {
     private static double longitude;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        utils.setTheme(this);
-        super.onCreate(savedInstanceState);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    public void onCreatePreferences(Bundle bundle, String s) {
+//        utils.setTheme(getContext());
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         locationName = prefs.getString("Location", "");
         String strLat = prefs.getString("Latitude", "0");
         String strLng = prefs.getString("Longitude", "0");
@@ -63,7 +62,7 @@ public class ApplicationPreference extends PreferenceActivity {
         prefLongitude.setOnPreferenceChangeListener(prefChangeListener);
 
         updateAthanPreferencesState(null, null);
-        loadFonts(getApplicationContext(), (ListPreference) findPreference("CalendarFont"));
+        loadFonts(getContext().getApplicationContext(), (ListPreference) findPreference("CalendarFont"));
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -73,10 +72,9 @@ public class ApplicationPreference extends PreferenceActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class PrefFragment extends PreferenceFragment {
+    public static class PrefFragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle bundle, String s) {
             addPreferencesFromResource(R.xml.preferences);
 
             LocationPreferencesChangeListener prefChangeListener = new LocationPreferencesChangeListener();
@@ -120,7 +118,7 @@ public class ApplicationPreference extends PreferenceActivity {
 //        try {
 //            fontList = context.getAssets().list("fonts");
 //        } catch (IOException e) {
-//            Log.e("ApplicationPreference", "", e);
+//            Log.e("ApplicationPreferenceFragment", "", e);
 //        }
 //
 //        listPreference.setEntries(fontList);

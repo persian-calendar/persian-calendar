@@ -1,16 +1,22 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.Display;
-import android.view.Window;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.CompassListener;
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
 
@@ -19,8 +25,8 @@ import com.github.praytimes.Coordinate;
  *
  * @author ebraminio
  */
-public class CompassActivity extends Activity {
-    QiblaCompassView compassView;
+public class CompassFragment extends Fragment {
+    public QiblaCompassView compassView;
     TextView degree;
     SensorManager sensorManager;
     Sensor sensor;
@@ -28,21 +34,20 @@ public class CompassActivity extends Activity {
     private Utils utils = Utils.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // utils.setTheme(this);
-        super.onCreate(savedInstanceState);
-        compassListener = new CompassListener(this);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.compass);
-        compassView = (QiblaCompassView) findViewById(R.id.compass_view);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
-        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+        // utils.setTheme(this);
+        compassListener = new CompassListener(this);
+        compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
+
+        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
         compassView.setScreenResolution(width, height - 2 * height / 8);
 
-        Coordinate coordinate = utils.getCoordinate(this);
+        Coordinate coordinate = utils.getCoordinate(getContext());
         if (coordinate != null) {
             compassView.setLongitude(coordinate.getLongitude());
             compassView.setLatitude(coordinate.getLatitude());
@@ -50,24 +55,20 @@ public class CompassActivity extends Activity {
             compassView.invalidate();
         }
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         if (sensor != null) {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            utils.quickToast(getString(R.string.compass_not_found), this);
+            utils.quickToast(getString(R.string.compass_not_found), getContext());
         }
+        return view;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (sensor != null) {
             sensorManager.unregisterListener(compassListener);

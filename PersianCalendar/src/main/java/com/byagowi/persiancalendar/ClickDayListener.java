@@ -8,6 +8,8 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.view.View;
 
+import com.byagowi.persiancalendar.view.Activity.MainActivity;
+
 import java.util.Calendar;
 
 import calendar.CivilDate;
@@ -39,7 +41,7 @@ public class ClickDayListener implements View.OnClickListener,
         if (holidayTitle != null) {
             utils.quickToast(holidayTitle, v.getContext());
         }
-        calendarAcitivity.setFocusedDay(persianDate);
+//        calendarAcitivity.setFocusedDay(persianDate);
     }
 
     @Override

@@ -61,5 +61,8 @@
     <string name="tap_to_stop_athan">برای متوقف ساختن صدای اذان، کلیک کنید</string>
     <string name="athan_gap">فاصله بین اذان و هشدار</string>
     <string name="athan_gap_summary">چند دقیقه قبل از اذان، هشدار به صدا در آورده شود</string>
+    <string name="match_system">Match System</string>
+    <string name="closeDrawer">Close</string>
+    <string name="openDrawer">Open</string>
 
 </resources>

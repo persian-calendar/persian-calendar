@@ -20,14 +20,14 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private ClickListener clickListener;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
-    public int selectedItem = 1;
+    public int selectedItem = 0;
     String[] drawerTitles;
     String[] drawerIcon = {
+            "{zmdi-swap-vertical-circle}",
+            "{zmdi-compass}",
             "{zmdi-settings}",
-            "{zmdi-settings}",
-            "{zmdi-settings}",
-            "{zmdi-settings}",
-            "{zmdi-settings}"
+            "{zmdi-info}",
+            "{zmdi-close-circle}"
     };
 
     public DrawerAdapter(Context context, ClickListener clickListener) {
@@ -96,7 +96,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return drawerTitles.length;
+        return drawerTitles.length + 1;
     }
 
     @Override

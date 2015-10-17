@@ -1,16 +1,22 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.CalendarTypesSpinnerAdapter;
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.locale.CalendarStrings;
+import com.byagowi.persiancalendar.CalendarType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +32,7 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class ConverterActivity extends Activity {
+public class ConverterFragment extends Fragment {
     private final Utils utils = Utils.getInstance();
     private final int yearDiffRange = 200;
     private Spinner calendarTypeSpinner;
@@ -37,25 +43,23 @@ public class ConverterActivity extends Activity {
     private int startingYearOnYearSpinner = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        utils.setTheme(this);
-        utils.loadLanguageFromSettings(this);
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.calendar_converter, container, false);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        utils.setTheme(this);
+//        utils.loadLanguageFromSettings(this);
 
-        setContentView(R.layout.calendar_converter);
 
         // fill members
-        calendarTypeSpinner = (Spinner) findViewById(R.id.calendarTypeSpinner);
-        yearSpinner = (Spinner) findViewById(R.id.yearSpinner);
-        monthSpinner = (Spinner) findViewById(R.id.monthSpinner);
-        daySpinner = (Spinner) findViewById(R.id.daySpinner);
-        convertedDateTextView = (TextView) findViewById(R.id.convertedDateTextView);
+        calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
+        yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
+        monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
+        daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        convertedDateTextView = (TextView) view.findViewById(R.id.convertedDateTextView);
 
-        TextView labelDay = (TextView) findViewById(R.id.converterLabelDay);
-        TextView labelMonth = (TextView) findViewById(R.id.converterLabelMonth);
-        TextView labelYear = (TextView) findViewById(R.id.converterLabelYear);
+        TextView labelDay = (TextView) view.findViewById(R.id.converterLabelDay);
+        TextView labelMonth = (TextView) view.findViewById(R.id.converterLabelMonth);
+        TextView labelYear = (TextView) view.findViewById(R.id.converterLabelYear);
         labelDay.setText(utils.getString(CalendarStrings.DAY));
         labelMonth.setText(utils.getString(CalendarStrings.MONTH));
         labelYear.setText(utils.getString(CalendarStrings.YEAR));
@@ -63,7 +67,7 @@ public class ConverterActivity extends Activity {
         //
 
         // fill views
-        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(this, android.R.layout.select_dialog_item));
+        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(), android.R.layout.select_dialog_item));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
@@ -75,6 +79,7 @@ public class ConverterActivity extends Activity {
         monthSpinner.setOnItemSelectedListener(csl);
         daySpinner.setOnItemSelectedListener(csl);
         //
+        return view;
     }
 
     void fillCalendarInfo() {
@@ -85,14 +90,14 @@ public class ConverterActivity extends Activity {
         CalendarType calendarType = (CalendarType) calendarTypeSpinner.getSelectedItem();
 
         CivilDate civilDate = null;
-        PersianDate persianDate = null;
-        IslamicDate islamicDate = null;
+        PersianDate persianDate;
+        IslamicDate islamicDate;
 
-        char[] digits = utils.preferredDigits(this);
+        char[] digits = utils.preferredDigits(getContext());
         StringBuilder sb = new StringBuilder();
 
         try {
-            List<String> calendarsTextList = new ArrayList<String>();
+            List<String> calendarsTextList = new ArrayList<>();
             switch (calendarType) {
                 case GEORGIAN:
                     civilDate = new CivilDate(year, month, day);
@@ -143,7 +148,7 @@ public class ConverterActivity extends Activity {
     }
 
     void fillYearMonthDaySpinners() {
-        char[] digits = utils.preferredDigits(this);
+        char[] digits = utils.preferredDigits(getContext());
 
         AbstractDate date = null;
         PersianDate newDatePersian = Utils.getToday();
@@ -164,12 +169,12 @@ public class ConverterActivity extends Activity {
         }
 
         // years spinner init.
-        List<String> yearsList = new ArrayList<String>();
+        List<String> yearsList = new ArrayList<>();
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
             yearsList.add(Utils.formatNumber(i, digits));
         }
-        ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, yearsList);
         yearSpinner.setAdapter(yearArrayAdaptor);
 
@@ -178,7 +183,7 @@ public class ConverterActivity extends Activity {
 
         // month spinner init.
         List<String> monthsList = utils.getMonthNameList(date);
-        ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, monthsList);
         monthSpinner.setAdapter(monthArrayAdaptor);
 
@@ -186,11 +191,11 @@ public class ConverterActivity extends Activity {
         //
 
         // days spinner init.
-        List<String> daysList = new ArrayList<String>();
+        List<String> daysList = new ArrayList<>();
         for (int i : new Range(1, 31)) {
             daysList.add(Utils.formatNumber(i, digits));
         }
-        ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, daysList);
         daySpinner.setAdapter(dayArrayAdaptor);
 

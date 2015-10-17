@@ -4,7 +4,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
-final class CompassListener implements SensorEventListener {
+import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
+
+public final class CompassListener implements SensorEventListener {
     /*
      * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
      * value basically means more smoothing See:
@@ -12,13 +14,13 @@ final class CompassListener implements SensorEventListener {
      */
     static final float ALPHA = 0.15f;
     float azimuth;
-    private CompassActivity compassActivity;
+    private CompassFragment compassFragment;
 
     /**
-     * @param compassActivity
+     * @param compassFragment
      */
-    CompassListener(CompassActivity compassActivity) {
-        this.compassActivity = compassActivity;
+    public CompassListener(CompassFragment compassFragment) {
+        this.compassFragment = compassFragment;
     }
 
     @Override
@@ -30,8 +32,8 @@ final class CompassListener implements SensorEventListener {
         // angle between the magnetic north direction
         // 0=North, 90=East, 180=South, 270=West
         azimuth = lowPass(event.values[0], azimuth);
-        compassActivity.compassView.setBearing(azimuth);
-        compassActivity.compassView.invalidate();
+        compassFragment.compassView.setBearing(azimuth);
+        compassFragment.compassView.invalidate();
     }
 
     /**

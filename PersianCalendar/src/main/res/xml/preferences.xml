@@ -46,12 +46,12 @@
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date"/>
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            alphaSlider="true"
-            android:defaultValue="@android:color/white"
-            android:key="WidgetTextColor"
-            android:summary="@string/select_widgets_text_color"
-            android:title="@string/widget_text_color"/>
+        <!--<net.margaritov.preference.colorpicker.ColorPickerPreference-->
+            <!--alphaSlider="true"-->
+            <!--android:defaultValue="@android:color/white"-->
+            <!--android:key="WidgetTextColor"-->
+            <!--android:summary="@string/select_widgets_text_color"-->
+            <!--android:title="@string/widget_text_color"/>-->
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -115,22 +115,22 @@
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap"/>
 
-        <com.byagowi.persiancalendar.view.PrayerSelectPreference
-            android:key="AthanAlarm"
-            android:summary="@string/athan_alarm_summary"
-            android:title="@string/athan_alarm"/>
+        <!--<com.byagowi.persiancalendar.view.PrayerSelectPreference-->
+            <!--android:key="AthanAlarm"-->
+            <!--android:summary="@string/athan_alarm_summary"-->
+            <!--android:title="@string/athan_alarm"/>-->
 
-        <com.byagowi.persiancalendar.view.AthanVolumePreference
-            android:key="AthanVolume"
-            android:summary="@string/athan_volume_summary"
-            android:title="@string/athan_volume"/>
+        <!--<com.byagowi.persiancalendar.view.AthanVolumePreference-->
+            <!--android:key="AthanVolume"-->
+            <!--android:summary="@string/athan_volume_summary"-->
+            <!--android:title="@string/athan_volume"/>-->
 
-        <com.byagowi.persiancalendar.view.AthanSoundPreference
-            android:key="AthanSound"
-            android:ringtoneType="alarm"
-            android:showDefault="true"
-            android:showSilent="true"
-            android:title="@string/athan_sound"/>
+        <!--<com.byagowi.persiancalendar.view.AthanSoundPreference-->
+            <!--android:key="AthanSound"-->
+            <!--android:ringtoneType="alarm"-->
+            <!--android:showDefault="true"-->
+            <!--android:showSilent="true"-->
+            <!--android:title="@string/athan_sound"/>-->
     </PreferenceCategory>
 
 </PreferenceScreen>

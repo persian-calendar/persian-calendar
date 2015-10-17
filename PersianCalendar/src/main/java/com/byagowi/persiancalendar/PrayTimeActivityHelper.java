@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author ebraminio
  */
-class PrayTimeActivityHelper {
+public class PrayTimeActivityHelper {
 
     private final Utils utils = Utils.getInstance();
     private final Activity activity;

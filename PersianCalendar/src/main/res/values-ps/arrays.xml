@@ -5,7 +5,7 @@
         <item>تور</item>
     </string-array>
 
-    <string-array name="prayMethodsNames" translatable="false">
+    <string-array name="prayMethodsNames">
         <item>شیعه دوازده امامی، انجمن لوا، قم</item>
         <item>اتحادیه جهانی اسلام،‌ عربستان سعودی</item>
         <item>جامعه اسلامی آمریکای شمالی</item>
@@ -68,5 +68,29 @@
         <item>فارسی</item>
         <item>دری</item>
         <item>پښتو</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>Morning</item>
+        <item>Dhohr</item>
+        <item>Asr</item>
+        <item>Maghrib</item>
+        <item>Isha</item>
+    </string-array>
+
+    <string-array name="prayerTimeKeys">
+        <item>FAJR</item>
+        <item>DHUHR</item>
+        <item>ASR</item>
+        <item>MAGHRIB</item>
+        <item>ISHA</item>
+    </string-array>
+
+    <string-array name="drawer_title">
+        <item>تبدیل تاریخ</item>
+        <item>قطب نما</item>
+        <item>تنظیمات</item>
+        <item>درباره</item>
+        <item>خروج</item>
     </string-array>
 </resources>

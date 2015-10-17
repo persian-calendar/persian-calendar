@@ -65,12 +65,4 @@
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
 
-
-    <string-array name="drawer_title">
-        <item>تبدیل تاریخ</item>
-        <item>قطب نما</item>
-        <item>تنظیمات</item>
-        <item>درباره</item>
-        <item>خروج</item>
-    </string-array>
 </resources>

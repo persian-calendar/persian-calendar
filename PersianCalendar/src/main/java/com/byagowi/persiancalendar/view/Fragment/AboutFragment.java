@@ -1,9 +1,15 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view.Fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,24 +20,20 @@ import java.io.InputStreamReader;
  *
  * @author ebraminio
  */
-public class AboutActivity extends Activity {
+public class AboutFragment extends Fragment {
     private final Utils utils = Utils.getInstance();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        utils.setTheme(this);
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        utils.setTheme(getContext());
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        String version = utils.programVersion(getContext());
 
-        setContentView(R.layout.about);
-
-        String version = utils.programVersion(this);
-
-        TextView versionTextView = (TextView) findViewById(R.id.version2);
+        TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
         versionTextView.setText(getString(R.string.version) + " " +
-                Utils.formatNumber(version, utils.preferredDigits(this)));
+                Utils.formatNumber(version, utils.preferredDigits(getContext())));
 
         StringBuilder sb = new StringBuilder();
 
@@ -53,7 +55,7 @@ public class AboutActivity extends Activity {
             }
         }
 
-        TextView licenseTextView = (TextView) findViewById(R.id.license);
+        TextView licenseTextView = (TextView) view.findViewById(R.id.license);
         licenseTextView.setText("Android Persian Calendar Version "
                 + version
                 + "\n"
@@ -75,5 +77,7 @@ public class AboutActivity extends Activity {
                 + "\n"
                 + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar"
                 + "\n\n----\n\n" + sb.toString());
+
+        return view;
     }
 }
