@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.view.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -55,12 +57,26 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-            toolbar.setPadding(0, 32, 0, 0);  //32 = height status bar
+            toolbar.setPadding(0, 48, 0, 0);  //48 = height status bar
         }
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        String key = prefs.getString("Theme", "");
+        int theme = R.style.LightTheme;
+
+        if (key.equals("LightTheme")) {
+            theme = R.style.LightTheme;
+        } else if (key.equals("DarkTheme")) {
+            theme = R.style.DarkTheme;
+        }
+        setTheme(theme);
+
+        toolbar.setBackgroundColor(getResources().getColor(R.color.first_row_background_color));
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);

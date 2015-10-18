@@ -181,22 +181,6 @@ public class Utils {
                 : arabicDigits;
     }
 
-    public void setTheme(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        String key = prefs.getString("Theme", "");
-
-//        int theme = R.style.LightTheme; // default theme  // TODO: 10/15/15
-//
-//        if (key.equals("LightTheme")) {
-//            theme = R.style.LightTheme;
-//        } else if (key.equals("DarkTheme")) {
-//            theme = R.style.DarkTheme;
-//        }
-//
-//        context.setTheme(theme);
-    }
-
     public boolean clockIn24(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
