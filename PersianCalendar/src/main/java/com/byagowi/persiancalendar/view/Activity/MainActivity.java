@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         transaction.commit();
     }
 
-//    @Override  // TODO: 10/15/15  this cod for reload app after setting
+//    @Override  // TODO: 10/15/15 to replace app setting
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //         Restart activity
 //        Intent intent = getIntent();
@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
             case CONVERTER:
                 if (menuPosition != CONVERTER) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new ConverterFragment())
-                        .addToBackStack(null)
-                        .commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, new ConverterFragment())
+                            .addToBackStack(null)
+                            .commit();
 
                     menuPosition = CONVERTER;
                 }
@@ -135,11 +135,11 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
             case COMPASS:
                 if (menuPosition != COMPASS) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new CompassFragment())
-                        .addToBackStack(null)
-                        .commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, new CompassFragment())
+                            .addToBackStack(null)
+                            .commit();
 
                     menuPosition = COMPASS;
                 }
@@ -148,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
             case PREFERENCE:
                 if (menuPosition != PREFERENCE) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
-                        .addToBackStack(null)
-                        .commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
+                            .addToBackStack(null)
+                            .commit();
 
                     menuPosition = PREFERENCE;
                 }

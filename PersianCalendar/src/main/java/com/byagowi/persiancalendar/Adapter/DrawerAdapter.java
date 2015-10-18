@@ -39,7 +39,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemTitle;
         IconTextView itemIcon;
-        View backGrand;
+        View background;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -50,7 +50,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             if (ViewType == TYPE_ITEM) {
                 itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
                 itemIcon = (IconTextView) itemView.findViewById(R.id.ItemIcon);
-                backGrand = itemView.findViewById(R.id.back_grand);
+                background = itemView.findViewById(R.id.background);
             }
         }
 
@@ -86,9 +86,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.itemTitle.setText(drawerTitles[position - 1]);
             holder.itemIcon.setText(drawerIcon[position - 1]);
             if (selectedItem == position) {
-                holder.backGrand.setVisibility(View.VISIBLE);
+                holder.background.setVisibility(View.VISIBLE);
             } else {
-                holder.backGrand.setVisibility(View.GONE);
+                holder.background.setVisibility(View.GONE);
             }
         }
         holder.itemView.setSelected(false);

@@ -5,7 +5,7 @@
     android:layout_height="48dp" >
 
     <View
-        android:id="@+id/back_grand"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#eeeeee" />
