@@ -122,6 +122,15 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         selectItem(position);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (menuPosition != CALENDAR) {
+            selectItem(CALENDAR);
+        } else {
+            finish();
+        }
+    }
+
     public void selectItem(int position) {
         switch (position) {
 
