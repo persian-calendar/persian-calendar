@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            toolbar.setPadding(0, 32, 0, 0);  //32 = height status bar
         }
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
