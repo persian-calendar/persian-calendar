@@ -41,15 +41,6 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         longitude = TextUtils.isEmpty(strLng) ? 0 : Double.parseDouble(strLng);
 
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            lowerThanHC();
-        } else {
-            higherThanHC();
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void lowerThanHC() {
         addPreferencesFromResource(R.xml.preferences);
 
         LocationPreferencesChangeListener prefChangeListener = new LocationPreferencesChangeListener();
@@ -63,32 +54,6 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
         updateAthanPreferencesState(null, null);
         loadFonts(getContext().getApplicationContext(), (ListPreference) findPreference("CalendarFont"));
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void higherThanHC() {
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new PrefFragment()).commit();
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class PrefFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle bundle, String s) {
-            addPreferencesFromResource(R.xml.preferences);
-
-            LocationPreferencesChangeListener prefChangeListener = new LocationPreferencesChangeListener();
-            categoryAthan = findPreference("Athan");
-            prefLocation = findPreference("Location");
-            prefLatitude = findPreference("Latitude");
-            prefLongitude = findPreference("Longitude");
-            prefLocation.setOnPreferenceChangeListener(prefChangeListener);
-            prefLatitude.setOnPreferenceChangeListener(prefChangeListener);
-            prefLongitude.setOnPreferenceChangeListener(prefChangeListener);
-
-            updateAthanPreferencesState(null, null);
-            loadFonts(getActivity(), (ListPreference) findPreference("CalendarFont"));
-        }
     }
 
     public static void updateAthanPreferencesState(Preference pref, Object newValue) {
