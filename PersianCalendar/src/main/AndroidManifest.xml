@@ -6,9 +6,7 @@
     android:versionName="4.1.2">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="ANDROID.PERMISSION.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="false"
