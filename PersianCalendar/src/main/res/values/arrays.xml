@@ -151,7 +151,7 @@
 
     <string-array name="drawer_title">
         <item>Calendar Converter</item>
-        <item>Compass/Qibla</item>
+        <item>Compass</item>
         <item>Setting</item>
         <item>About</item>
         <item>Exit</item>
