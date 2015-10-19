@@ -24,4 +24,10 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
     </style>
+
+    <declare-styleable name="ProgressBar">
+
+        <!-- Defines the maximum value the progress can take. -->
+        <attr name="max" format="integer"/>
+    </declare-styleable>
 </resources>
