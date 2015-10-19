@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.view.Activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -90,7 +91,20 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         navigation.setLayoutManager(layoutManager);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        final View appMainView = findViewById(R.id.app_main_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+            int slidingDirection = +1;
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    if (isRTL())
+                        slidingDirection = -1;
+                }
+            }
+
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+            private boolean isRTL() {
+                return getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+            }
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -100,6 +114,21 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    slidingAnimation(drawerView, slideOffset);
+                }
+            }
+
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            private void slidingAnimation(View drawerView, float slideOffset) {
+                appMainView.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
+                drawerLayout.bringChildToFront(drawerView);
+                drawerLayout.requestLayout();
             }
         };
 
