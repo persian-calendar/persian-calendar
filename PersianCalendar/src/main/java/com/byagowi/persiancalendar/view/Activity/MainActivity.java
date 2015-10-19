@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -109,14 +112,6 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         transaction.commit();
     }
 
-//    @Override  // TODO: 10/15/15 to replace app setting
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//         Restart activity
-//        Intent intent = getIntent();
-//        finish();
-//        startActivity(intent);
-//    }
-
     @Override
     public void onClickItem(View v, int position) {
         selectItem(position);
@@ -128,6 +123,21 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             selectItem(CALENDAR);
         } else {
             finish();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Checking for the "menu" key
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawers();
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
     }
 
