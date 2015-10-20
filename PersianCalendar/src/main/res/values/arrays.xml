@@ -150,10 +150,10 @@
     </string-array>
 
     <string-array name="drawer_title">
-        <item>تبدیل تاریخ</item>
-        <item>قطب نما</item>
-        <item>تنظیمات</item>
-        <item>درباره</item>
-        <item>خروج</item>
+        <item>Calendar Converter</item>
+        <item>Compass</item>
+        <item>Setting</item>
+        <item>About</item>
+        <item>Exit</item>
     </string-array>
 </resources>

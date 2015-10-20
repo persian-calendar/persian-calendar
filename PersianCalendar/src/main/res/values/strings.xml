@@ -64,5 +64,6 @@
 
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
+    <string name="compassSubtitle">and Qibla, if location is set in the Setting</string>
 
 </resources>

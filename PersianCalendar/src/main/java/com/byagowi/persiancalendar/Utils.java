@@ -175,10 +175,8 @@ public class Utils {
     }
 
     public char[] preferredDigits(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        return prefs.getBoolean("PersianDigits", true) ? persianDigits
-                : arabicDigits;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("PersianDigits", true) ? persianDigits : arabicDigits;
     }
 
     public boolean clockIn24(Context context) {
