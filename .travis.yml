@@ -1,3 +1,4 @@
+sudo: false # Use Travis docker infrastructure
 language: android
 android:
   components:
