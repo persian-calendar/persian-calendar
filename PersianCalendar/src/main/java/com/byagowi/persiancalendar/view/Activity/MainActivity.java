@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view.Activity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -63,13 +62,13 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             toolbar.setPadding(0, 48, 0, 0);  //48 = height status bar
         }
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String key = prefs.getString("Theme", "");
         int theme = R.style.LightTheme;
 
@@ -94,8 +93,9 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         final View appMainView = findViewById(R.id.app_main_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = +1;
+
             {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     if (isRTL())
                         slidingDirection = -1;
                 }
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //Checking for the "menu" key
+        // Checking for the "menu" key
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawers();

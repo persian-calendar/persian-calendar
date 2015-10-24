@@ -17,7 +17,7 @@ import com.byagowi.persiancalendar.R;
  * @author ebraminio
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
-//    private final Utils utils = Utils.getInstance();
+    //    private final Utils utils = Utils.getInstance();
     private static SharedPreferences prefs;
     private static Preference categoryAthan;
     private static Preference prefLocation;

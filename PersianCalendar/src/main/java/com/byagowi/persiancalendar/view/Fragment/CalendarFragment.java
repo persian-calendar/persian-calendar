@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.PrayTimeActivityHelper;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.locale.CalendarStrings;
@@ -33,7 +32,7 @@ public class CalendarFragment extends Fragment {
     private ViewPager viewPager;
     private TextView calendarInfo;
     private Button resetButton;
-//    private PrayTimeActivityHelper prayTimeActivityHelper;
+    //    private PrayTimeActivityHelper prayTimeActivityHelper;
     private static final int MONTHS_LIMIT = 1200;
 
     @Override
@@ -67,7 +66,7 @@ public class CalendarFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
         viewPager.setAdapter(createCalendarAdaptor());
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {
                 updateResetButtonState();
@@ -149,8 +148,6 @@ public class CalendarFragment extends Fragment {
                 && today.getMonth() == civilDate.getMonth()
                 && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
-
-
 
 
     public void setFocusedDay(PersianDate persianDate) {

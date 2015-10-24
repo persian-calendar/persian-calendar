@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
 import com.malinskiy.materialicons.widget.IconTextView;
 
 /**
@@ -23,6 +22,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private static final int TYPE_ITEM = 1;
     public int selectedItem = 0;
     String[] drawerTitles;
+    String[] drawerSubtitles;
     String[] drawerIcon = {
             "{zmdi-swap-vertical-circle}",
             "{zmdi-compass}",
@@ -34,7 +34,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public DrawerAdapter(Context context, ClickListener clickListener) {
         this.clickListener = clickListener;
         this.context = context;
-        drawerTitles = context.getResources().getStringArray(R.array.drawer_title);
+        drawerTitles = context.getResources().getStringArray(R.array.drawerTitles);
+        drawerSubtitles = context.getResources().getStringArray(R.array.drawerSubtitles);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -87,9 +88,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
             holder.itemTitle.setText(drawerTitles[position - 1]);
-            if (position == 2) {
+            if (drawerSubtitles[position - 1].length() != 0) {
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
-                holder.itemSubtitle.setText(R.string.compassSubtitle);
+                holder.itemSubtitle.setText(drawerSubtitles[position - 1]);
             }
             holder.itemIcon.setText(drawerIcon[position - 1]);
             if (selectedItem == position) {

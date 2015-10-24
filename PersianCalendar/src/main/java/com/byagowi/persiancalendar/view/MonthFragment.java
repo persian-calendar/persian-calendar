@@ -17,9 +17,9 @@ import android.widget.TextView;
 
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.ClickDayListener;
-import com.byagowi.persiancalendar.view.Activity.MainActivity;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.Activity.MainActivity;
 
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
