@@ -42,7 +42,8 @@ public class LocaleUtils {
     private Context context;
     private Map<String, String> cache = new HashMap<>();
 
-    private LocaleUtils() {}
+    private LocaleUtils() {
+    }
 
     private LocaleUtils(Context context, String localeCode) {
         this.context = context;

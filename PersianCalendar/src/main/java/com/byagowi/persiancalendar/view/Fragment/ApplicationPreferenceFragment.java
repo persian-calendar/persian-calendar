@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -19,7 +17,7 @@ import com.byagowi.persiancalendar.R;
  * @author ebraminio
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
-//    private final Utils utils = Utils.getInstance();
+    //    private final Utils utils = Utils.getInstance();
     private static SharedPreferences prefs;
     private static Preference categoryAthan;
     private static Preference prefLocation;

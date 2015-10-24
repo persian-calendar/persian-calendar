@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
 import com.malinskiy.materialicons.widget.IconTextView;
 
 /**
