@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             int slidingDirection = +1;
 
             {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     if (isRTL())
                         slidingDirection = -1;
                 }
