@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.R;
 
 import java.util.List;
 
-
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private final Context context;
     private final ClickListener clickListener;
