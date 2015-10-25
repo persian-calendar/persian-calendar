@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/circle_select"
+        android:id="@+id/select_day"/>
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/circle_current_day"
+        android:id="@+id/today"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
         android:id="@+id/num"/>
 
 </RelativeLayout>

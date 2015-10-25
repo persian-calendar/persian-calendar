@@ -20,6 +20,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DAY = 1;
     private List<Day> days;
+    private int select_Day = -1;
 
     public MonthAdapter(Context context, ClickListener clickListener, List<Day> days) {
         this.clickListener = clickListener;
@@ -27,15 +28,26 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView num;
+        View today;
+        View selectDay;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
 
             num = (TextView) itemView.findViewById(R.id.num);
+            today = itemView.findViewById(R.id.today);
+            selectDay = itemView.findViewById(R.id.select_day);
+
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            select_Day = getAdapterPosition();
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -53,9 +65,39 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         if (!isPositionHeader(position)) {
             if (position - 7 - days.get(0).getDayOfWeek() >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
+                holder.num.setTextColor(context.getResources().getColor(R.color.first_row_text_color));
+                holder.num.setTextSize(25);
+                holder.today.setVisibility(View.GONE);
+                holder.selectDay.setVisibility(View.GONE);
+                holder.num.setVisibility(View.VISIBLE);
+
+                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
+                    holder.num.setTextColor(context.getResources().getColor(R.color.holiday));
+                }
+
+                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isToday()) {
+                    holder.today.setVisibility(View.VISIBLE);
+                }
+
+                if (position == select_Day) {
+                    holder.selectDay.setVisibility(View.VISIBLE);
+                    holder.num.setTextColor(context.getResources().getColor(R.color.first_row_background_color));
+                }
+
+
+            } else {
+                holder.today.setVisibility(View.GONE);
+                holder.selectDay.setVisibility(View.GONE);
+                holder.num.setVisibility(View.GONE);
+
             }
         } else {
             holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
+            holder.num.setTextColor(context.getResources().getColor(R.color.first_row_text_color2));
+            holder.num.setTextSize(20);
+            holder.today.setVisibility(View.GONE);
+            holder.selectDay.setVisibility(View.GONE);
+            holder.num.setVisibility(View.VISIBLE);
         }
     }
 

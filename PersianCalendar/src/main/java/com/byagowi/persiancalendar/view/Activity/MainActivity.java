@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         }
         setTheme(theme);
 
-        toolbar.setBackgroundColor(getResources().getColor(R.color.first_row_background_color));
+//        toolbar.setBackgroundColor(getResources().getColor(R.color.first_row_background_color));
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);

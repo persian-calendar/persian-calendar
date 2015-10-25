@@ -8,15 +8,13 @@
     <fragment
         android:name="com.byagowi.persiancalendar.view.Fragment.CalendarNewFragment"
         android:id="@+id/headlines_fragment"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <fragment
         android:name="com.byagowi.persiancalendar.view.Fragment.CalendarDetialsFragment"
         android:id="@+id/article_fragment"
-        android:layout_weight="2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

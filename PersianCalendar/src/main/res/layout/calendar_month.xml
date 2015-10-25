@@ -2,8 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/first_row_background_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +21,9 @@
             android:shadowDy="3"
             android:shadowRadius="1"
             android:textSize="40sp"
-            android:padding="10dp" />
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/first_row_text_color2"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -31,16 +34,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:id="@+id/currentMonthTextView"
+                android:textSize="18sp"
+                android:id="@+id/currentYearTextView"
+                android:textColor="@color/first_row_text_color2"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:id="@+id/currentYearTextView"
+                android:textSize="25sp"
+                android:id="@+id/currentMonthTextView"
+                android:textColor="@color/first_row_text_color2"
                 android:layout_gravity="center"/>
+
 
         </LinearLayout>
 
@@ -55,17 +61,23 @@
             android:shadowDy="3"
             android:shadowRadius="1"
             android:textSize="40sp"
-            android:padding="10dp"/>
+            android:layout_centerVertical="true"
+            android:textColor="@color/first_row_text_color2"
+            android:paddingRight="20dp"/>
 
     </RelativeLayout>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layoutDirection="rtl"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="center"
+        android:foregroundGravity="center">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

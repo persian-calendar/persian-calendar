@@ -2,11 +2,13 @@
 <resources>
 
     <color name="first_row_text_color">#FFFFFF</color>
+    <color name="first_row_text_color2">#CCFFFFFF</color>
     <color name="holidays_text_color">#6E97B9</color>
     <color name="first_row_background_color">#6E97B9</color>
     <color name="shadow_color_for_light_theme">#587994</color>
     <color name="shadow_color_for_dark_theme">#6E97B9</color>
     <color name="color_of_button_holo">#191919</color>
+    <color name="holiday">#ff0000</color>
 
     <!-- solely used on QiblaCompassView -->
     <color name="background_color">#6E97B9</color>
