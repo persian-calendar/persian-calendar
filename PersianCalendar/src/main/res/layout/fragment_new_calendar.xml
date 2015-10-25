@@ -6,12 +6,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="مهر ۱۳۹۴"
-        android:textSize="25sp"/>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/calendar_pager"
         android:layout_width="fill_parent"

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.byagowi.persiancalendar.view.Fragment.CalendarNewFragment;
-import com.byagowi.persiancalendar.view.MonthFragment;
+import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 
 /**
  * Created by behdad on 10/25/15.
@@ -18,7 +18,7 @@ public class CalendarAdaptor extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        MonthFragment fragment = new MonthFragment();
+        MonthNewFragment fragment = new MonthNewFragment();
         Bundle args = new Bundle();
         args.putInt("offset", position - CalendarNewFragment.MONTHS_LIMIT / 2);
         fragment.setArguments(args);
