@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/about_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -8,7 +9,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="new"
-        android:textSize="30sp"/>
+        android:text="مهر ۱۳۹۴"
+        android:textSize="25sp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/calendar_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="315sp"
+        android:layoutDirection="ltr" />
 
 </LinearLayout>
