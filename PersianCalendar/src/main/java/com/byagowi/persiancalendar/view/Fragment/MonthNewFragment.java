@@ -65,7 +65,10 @@ public class MonthNewFragment extends Fragment implements ClickListener, View.On
         persianDate.setDayOfMonth(1);
 
         TextView currentMonthTextView = (TextView) view.findViewById(R.id.currentMonthTextView);
-        currentMonthTextView.setText(utils.getMonthYearTitle(persianDate, digits));
+        currentMonthTextView.setText(Utils.textShaper(utils.getMonthName(persianDate)));
+
+        TextView currentYearTextView = (TextView) view.findViewById(R.id.currentYearTextView);
+        currentYearTextView.setText(Utils.formatNumber(persianDate.getYear(), digits));
 
         recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
