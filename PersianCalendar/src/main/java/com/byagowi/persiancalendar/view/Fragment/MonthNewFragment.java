@@ -30,7 +30,7 @@ public class MonthNewFragment extends Fragment implements ClickListener, View.On
     private IconTextView next;
     private changeMonth changeMonth;
 
-    public MonthNewFragment(changeMonth changeMonth) {
+    public void addListener(changeMonth changeMonth) {
         this.changeMonth = changeMonth;
     }
 

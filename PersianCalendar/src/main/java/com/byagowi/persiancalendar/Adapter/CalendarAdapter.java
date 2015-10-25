@@ -22,7 +22,8 @@ public class CalendarAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        MonthNewFragment fragment = new MonthNewFragment(changeMonth);
+        MonthNewFragment fragment = new MonthNewFragment();
+        fragment.addListener(changeMonth);
         Bundle args = new Bundle();
         args.putInt("offset", position - CalendarNewFragment.MONTHS_LIMIT / 2);
         fragment.setArguments(args);
