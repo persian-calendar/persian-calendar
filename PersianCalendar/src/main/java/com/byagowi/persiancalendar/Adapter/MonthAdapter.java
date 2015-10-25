@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Entity.Day;
 import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
             }
         } else {
-            holder.num.setText("ش");
+            holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
         }
     }
 
