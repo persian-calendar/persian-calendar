@@ -12,18 +12,27 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Adapter.MonthAdapter;
 import com.byagowi.persiancalendar.Entity.Day;
 import com.byagowi.persiancalendar.Interface.ClickListener;
+import com.byagowi.persiancalendar.Interface.changeMonth;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.List;
 
 import calendar.PersianDate;
 
-public class MonthNewFragment extends Fragment implements ClickListener {
+public class MonthNewFragment extends Fragment implements ClickListener, View.OnClickListener {
     private RecyclerView recyclerView;
     private MonthAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private final Utils utils = Utils.getInstance();
+    private IconTextView prev;
+    private IconTextView next;
+    private changeMonth changeMonth;
+
+    public MonthNewFragment(changeMonth changeMonth) {
+        this.changeMonth = changeMonth;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +41,11 @@ public class MonthNewFragment extends Fragment implements ClickListener {
         int offset = getArguments().getInt("offset");
         List<Day> days = utils.getDays(getContext(), offset);
         char[] digits = utils.preferredDigits(getActivity());
+
+        prev = (IconTextView) view.findViewById(R.id.prev);
+        next = (IconTextView) view.findViewById(R.id.next);
+        prev.setOnClickListener(this);
+        next.setOnClickListener(this);
 
 
         PersianDate persianDate = Utils.getToday();
@@ -66,6 +80,20 @@ public class MonthNewFragment extends Fragment implements ClickListener {
 
     @Override
     public void onClickItem(View v, int position) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.next:
+                changeMonth.changeMonth(1);
+                break;
+
+            case R.id.prev:
+                changeMonth.changeMonth(-1);
+                break;
+        }
 
     }
 }

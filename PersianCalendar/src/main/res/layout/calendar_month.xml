@@ -19,12 +19,14 @@
             android:shadowDx="3"
             android:shadowDy="3"
             android:shadowRadius="1"
-            android:textSize="26sp" />
+            android:textSize="40sp"
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:textSize="20sp"
             android:id="@+id/currentMonthTextView"/>
 
         <com.malinskiy.materialicons.widget.IconTextView
@@ -37,7 +39,8 @@
             android:shadowDx="3"
             android:shadowDy="3"
             android:shadowRadius="1"
-            android:textSize="26sp" />
+            android:textSize="40sp"
+            android:padding="10dp"/>
 
     </RelativeLayout>
 

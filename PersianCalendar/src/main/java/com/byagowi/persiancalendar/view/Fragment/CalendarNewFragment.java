@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.Interface.changeMonth;
 import com.byagowi.persiancalendar.R;
 
 /**
  * Created by behdad on 10/25/15.
  */
-public class CalendarNewFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class CalendarNewFragment extends Fragment implements ViewPager.OnPageChangeListener, changeMonth {
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
 
@@ -25,7 +26,7 @@ public class CalendarNewFragment extends Fragment implements ViewPager.OnPageCha
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
-        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager(), this));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         viewPager.addOnPageChangeListener(this);
 
@@ -45,5 +46,10 @@ public class CalendarNewFragment extends Fragment implements ViewPager.OnPageCha
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void changeMonth(int position) {
+        viewPager.setCurrentItem(viewPager.getCurrentItem() + position, true);
     }
 }
