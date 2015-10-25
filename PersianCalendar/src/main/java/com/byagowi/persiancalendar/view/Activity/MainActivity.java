@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
 
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
                 if (menuPosition != CALENDAR) {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, new CalendarFragment())
+                            .replace(R.id.fragment_holder, new CalendarMainFragment())
                             .addToBackStack(null)
                             .commit();
 

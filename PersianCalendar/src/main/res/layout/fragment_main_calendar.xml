@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/about_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:name="com.byagowi.persiancalendar.view.Fragment.CalendarNewFragment"
+        android:id="@+id/headlines_fragment"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <fragment
+        android:name="com.byagowi.persiancalendar.view.Fragment.CalendarDetialsFragment"
+        android:id="@+id/article_fragment"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
