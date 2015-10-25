@@ -11,8 +11,8 @@ import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 /**
  * Created by behdad on 10/25/15.
  */
-public class CalendarAdaptor extends FragmentPagerAdapter {
-    public CalendarAdaptor(FragmentManager fm) {
+public class CalendarAdapter extends FragmentPagerAdapter {
+    public CalendarAdapter(FragmentManager fm) {
         super(fm);
     }
 

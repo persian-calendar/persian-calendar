@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.byagowi.persiancalendar.Adapter.CalendarAdaptor;
+import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
 
 /**
@@ -25,7 +25,7 @@ public class CalendarNewFragment extends Fragment implements ViewPager.OnPageCha
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
-        viewPager.setAdapter(new CalendarAdaptor(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         viewPager.addOnPageChangeListener(this);
 
