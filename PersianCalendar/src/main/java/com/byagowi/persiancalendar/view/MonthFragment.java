@@ -116,9 +116,9 @@ public class MonthFragment extends Fragment {
         int dayOfWeek = DateConverter.persianToCivil(persianDate)
                 .getDayOfWeek() % 7;
 
-        currentMonthTextView.setText(utils.getMonthYearTitle(persianDate, digits));
+        currentMonthTextView.setText(utils.getMonthYearTitle(persianDate, digits)); // TODO: 10/25/15  
 
-        for (int i : new Range(0, 7)) {
+        for (int i : new Range(0, 7)) { // TODO: 10/25/15  
             TextView textView = daysTextViews[0][6 - i];
             textView.setText(Utils.firstCharOfDaysOfWeekName[i]);
         }
