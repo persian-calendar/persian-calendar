@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
-import com.byagowi.persiancalendar.Interface.changeMonth;
 import com.byagowi.persiancalendar.R;
 
-/**
- * Created by behdad on 10/25/15.
- */
-public class CalendarNewFragment extends Fragment implements ViewPager.OnPageChangeListener, changeMonth {
+public class CalendarNewFragment extends Fragment implements ViewPager.OnPageChangeListener {
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
 
@@ -48,7 +43,6 @@ public class CalendarNewFragment extends Fragment implements ViewPager.OnPageCha
 
     }
 
-    @Override
     public void changeMonth(int position) {
         viewPager.setCurrentItem(viewPager.getCurrentItem() + position, true);
     }

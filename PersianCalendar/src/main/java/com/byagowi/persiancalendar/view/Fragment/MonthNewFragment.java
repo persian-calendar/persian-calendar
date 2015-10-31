@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Adapter.MonthAdapter;
 import com.byagowi.persiancalendar.Entity.Day;
 import com.byagowi.persiancalendar.Interface.ClickListener;
-import com.byagowi.persiancalendar.Interface.changeMonth;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.malinskiy.materialicons.widget.IconTextView;
@@ -28,10 +27,10 @@ public class MonthNewFragment extends Fragment implements ClickListener, View.On
     private final Utils utils = Utils.getInstance();
     private IconTextView prev;
     private IconTextView next;
-    private changeMonth changeMonth;
+    private CalendarNewFragment calendarNewFragment;
 
-    public void addListener(changeMonth changeMonth) {
-        this.changeMonth = changeMonth;
+    public void addListener(CalendarNewFragment calendarNewFragment) {
+        this.calendarNewFragment = calendarNewFragment;
     }
 
     @Override
@@ -90,11 +89,11 @@ public class MonthNewFragment extends Fragment implements ClickListener, View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                changeMonth.changeMonth(1);
+                calendarNewFragment.changeMonth(1);
                 break;
 
             case R.id.prev:
-                changeMonth.changeMonth(-1);
+                calendarNewFragment.changeMonth(-1);
                 break;
         }
 
