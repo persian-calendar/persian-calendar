@@ -22,7 +22,6 @@ import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.ApplicationService;
-import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
@@ -37,7 +36,7 @@ import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity implements ClickListener {
+public class MainActivity extends AppCompatActivity {
     public static final int CALENDAR = 0;
     public static final int CONVERTER = 1;
     public static final int COMPASS = 2;
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
-        DrawerAdapter adapter = new DrawerAdapter(this, this);
+        DrawerAdapter adapter = new DrawerAdapter(this);
         navigation.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -142,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
         transaction.commit();
     }
 
-    @Override
     public void onClickItem(View v, int position) {
         selectItem(position);
     }

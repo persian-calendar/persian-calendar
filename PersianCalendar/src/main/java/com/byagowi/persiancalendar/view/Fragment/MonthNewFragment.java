@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Adapter.MonthAdapter;
 import com.byagowi.persiancalendar.Entity.Day;
-import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.malinskiy.materialicons.widget.IconTextView;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import calendar.PersianDate;
 
-public class MonthNewFragment extends Fragment implements ClickListener, View.OnClickListener {
+public class MonthNewFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private MonthAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -80,7 +79,6 @@ public class MonthNewFragment extends Fragment implements ClickListener, View.On
         return view;
     }
 
-    @Override
     public void onClickItem(View v, int position) {
 
     }

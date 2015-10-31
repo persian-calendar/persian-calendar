@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.view.Activity.MainActivity;
 import com.malinskiy.materialicons.widget.IconTextView;
 
 /**
@@ -16,8 +16,7 @@ import com.malinskiy.materialicons.widget.IconTextView;
  */
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
-    private final Context context;
-    private final ClickListener clickListener;
+    private final MainActivity mainActivity;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
     public int selectedItem = 0;
@@ -31,11 +30,10 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             "{zmdi-close-circle}"
     };
 
-    public DrawerAdapter(Context context, ClickListener clickListener) {
-        this.clickListener = clickListener;
-        this.context = context;
-        drawerTitles = context.getResources().getStringArray(R.array.drawerTitles);
-        drawerSubtitles = context.getResources().getStringArray(R.array.drawerSubtitles);
+    public DrawerAdapter(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
+        drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -60,7 +58,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-            clickListener.onClickItem(view, getAdapterPosition());
+            mainActivity.onClickItem(view, getAdapterPosition());
             selectedItem = getAdapterPosition();
             notifyDataSetChanged();
         }

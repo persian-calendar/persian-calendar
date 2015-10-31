@@ -8,22 +8,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Entity.Day;
-import com.byagowi.persiancalendar.Interface.ClickListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 
 import java.util.List;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private final Context context;
-    private final ClickListener clickListener;
+    private final MonthNewFragment monthNewFragment;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DAY = 1;
     private List<Day> days;
     private int select_Day = -1;
 
-    public MonthAdapter(Context context, ClickListener clickListener, List<Day> days) {
-        this.clickListener = clickListener;
+    public MonthAdapter(Context context, MonthNewFragment monthNewFragment, List<Day> days) {
+        this.monthNewFragment = monthNewFragment;
         this.context = context;
         this.days = days;
     }
