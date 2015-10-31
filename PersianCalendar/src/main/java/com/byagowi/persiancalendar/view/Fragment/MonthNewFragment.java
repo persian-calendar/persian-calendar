@@ -26,10 +26,10 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     private final Utils utils = Utils.getInstance();
     private IconTextView prev;
     private IconTextView next;
-    private CalendarNewFragment calendarNewFragment;
+    private CalendarMainFragment calendarMainFragment;
 
-    public void addListener(CalendarNewFragment calendarNewFragment) {
-        this.calendarNewFragment = calendarNewFragment;
+    public void addListener(CalendarMainFragment calendarMainFragment) {
+        this.calendarMainFragment = calendarMainFragment;
     }
 
     @Override
@@ -45,7 +45,6 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
-
         PersianDate persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
@@ -57,6 +56,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
             year -= 1;
             month += 12;
         }
+
         month += 1;
         persianDate.setMonth(month);
         persianDate.setYear(year);
@@ -87,13 +87,12 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                calendarNewFragment.changeMonth(1);
+                calendarMainFragment.changeMonth(1);
                 break;
 
             case R.id.prev:
-                calendarNewFragment.changeMonth(-1);
+                calendarMainFragment.changeMonth(-1);
                 break;
         }
-
     }
 }

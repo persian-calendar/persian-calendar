@@ -5,29 +5,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.byagowi.persiancalendar.view.Fragment.CalendarNewFragment;
+import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 
 public class CalendarAdapter extends FragmentPagerAdapter {
-    private CalendarNewFragment calendarNewFragment;
+    private CalendarMainFragment calendarMainFragment;
 
-    public CalendarAdapter(FragmentManager fm, CalendarNewFragment calendarNewFragment) {
+    public CalendarAdapter(FragmentManager fm, CalendarMainFragment calendarMainFragment) {
         super(fm);
-        this.calendarNewFragment = calendarNewFragment;
+        this.calendarMainFragment = calendarMainFragment;
     }
 
     @Override
     public Fragment getItem(int position) {
         MonthNewFragment fragment = new MonthNewFragment();
-        fragment.addListener(calendarNewFragment);
+        fragment.addListener(calendarMainFragment);
         Bundle args = new Bundle();
-        args.putInt("offset", position - CalendarNewFragment.MONTHS_LIMIT / 2);
+        args.putInt("offset", position - CalendarMainFragment.MONTHS_LIMIT / 2);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return CalendarNewFragment.MONTHS_LIMIT;
+        return CalendarMainFragment.MONTHS_LIMIT;
     }
 }
