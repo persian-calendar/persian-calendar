@@ -15,309 +15,400 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/calendar_pager"
-        android:layout_width="fill_parent"
-        android:layout_height="315sp"
-        android:layoutDirection="ltr" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/calendar_pager"
+                android:layout_width="fill_parent"
+                android:layout_height="315sp"
+                android:layoutDirection="ltr" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="اوقات شرعی"
-                android:textColor="@color/first_row_background_color"
-                android:textSize="18sp"
-                android:padding="14dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#aaa"/>
-
-            <RelativeLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:layout_margin="6dp">
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon"
-                    android:layout_width="46dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="اذان صبح"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon"
-                    android:layout_toEndOf="@+id/ItemIcon"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="امروز"
+                        android:textColor="@color/first_row_background_color"
+                        android:textSize="18sp"
+                        android:padding="14dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۶:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon"
-                    android:layout_toEndOf="@+id/ItemIcon"
-                    android:layout_below="@id/text1"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#aaa"/>
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="62dp"
-                android:background="#aaa"/>
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon0"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+                        <TextView
+                            android:id="@+id/text0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="یکشنبه"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon0"
+                            android:layout_toEndOf="@+id/ItemIcon0"/>
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon2"
-                    android:layout_width="46dp"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                        <TextView
+                            android:id="@+id/text01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۱۶ خرداد ۱۳۹۱"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon0"
+                            android:layout_toEndOf="@+id/ItemIcon0"
+                            android:layout_below="@id/text0"/>
 
-                <TextView
-                    android:id="@+id/text2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="طلوع آفتاب"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon2"
-                    android:layout_toEndOf="@+id/ItemIcon2"/>
+                        <TextView
+                            android:id="@+id/text02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25 oct 2011"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon0"
+                            android:layout_toEndOf="@+id/ItemIcon0"
+                            android:layout_below="@id/text01"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۷:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon2"
-                    android:layout_toEndOf="@+id/ItemIcon2"
-                    android:layout_below="@id/text2"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۲ شوال ۱۴۴۱"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon0"
+                            android:layout_toEndOf="@+id/ItemIcon0"
+                            android:layout_below="@id/text02"/>
 
-            </RelativeLayout>
+                    </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="62dp"
-                android:background="#aaa"/>
+                </LinearLayout>
 
-            <RelativeLayout
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:layout_margin="6dp">
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon3"
-                    android:layout_width="46dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="اذان ظهر"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon3"
-                    android:layout_toEndOf="@+id/ItemIcon3"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="اوقات شرعی"
+                        android:textColor="@color/first_row_background_color"
+                        android:textSize="18sp"
+                        android:padding="14dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۱۳:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon3"
-                    android:layout_toEndOf="@+id/ItemIcon3"
-                    android:layout_below="@id/text3"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#aaa"/>
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="62dp"
-                android:background="#aaa"/>
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+                        <TextView
+                            android:id="@+id/text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="اذان صبح"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon"
+                            android:layout_toEndOf="@+id/ItemIcon"/>
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon4"
-                    android:layout_width="46dp"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۶:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon"
+                            android:layout_toEndOf="@+id/ItemIcon"
+                            android:layout_below="@id/text1"/>
 
-                <TextView
-                    android:id="@+id/text4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="غروب آفتاب"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon4"
-                    android:layout_toEndOf="@+id/ItemIcon4"/>
+                    </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۱۷:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon4"
-                    android:layout_toEndOf="@+id/ItemIcon4"
-                    android:layout_below="@id/text4"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="62dp"
+                        android:background="#aaa"/>
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="62dp"
-                android:background="#aaa"/>
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon2"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="طلوع آفتاب"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon2"
+                            android:layout_toEndOf="@+id/ItemIcon2"/>
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon5"
-                    android:layout_width="46dp"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۷:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon2"
+                            android:layout_toEndOf="@+id/ItemIcon2"
+                            android:layout_below="@id/text2"/>
 
-                <TextView
-                    android:id="@+id/text5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="اذان مغرب"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon5"
-                    android:layout_toEndOf="@+id/ItemIcon5"/>
+                    </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۱۸:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon5"
-                    android:layout_toEndOf="@+id/ItemIcon5"
-                    android:layout_below="@id/text5"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="62dp"
+                        android:background="#aaa"/>
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="62dp"
-                android:background="#aaa"/>
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon3"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+                        <TextView
+                            android:id="@+id/text3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="اذان ظهر"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon3"
+                            android:layout_toEndOf="@+id/ItemIcon3"/>
 
-                <com.malinskiy.materialicons.widget.IconTextView
-                    android:id="@+id/ItemIcon6"
-                    android:layout_width="46dp"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="#22000000"
-                    android:textColor="@color/first_row_background_color"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="3"
-                    android:text="{zmdi-brightness-4}"
-                    android:shadowDy="3"
-                    android:shadowRadius="1"
-                    android:textSize="30sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۱۳:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon3"
+                            android:layout_toEndOf="@+id/ItemIcon3"
+                            android:layout_below="@id/text3"/>
 
-                <TextView
-                    android:id="@+id/text6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="نیمه شب شرعی"
-                    android:textSize="16sp"
-                    android:textColor="#777"
-                    android:layout_toRightOf="@+id/ItemIcon6"
-                    android:layout_toEndOf="@+id/ItemIcon6"/>
+                    </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="۲۳:۰۰"
-                    android:textSize="20sp"
-                    android:textColor="#333"
-                    android:layout_toRightOf="@+id/ItemIcon6"
-                    android:layout_toEndOf="@+id/ItemIcon6"
-                    android:layout_below="@id/text6"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="62dp"
+                        android:background="#aaa"/>
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon4"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/text4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="غروب آفتاب"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon4"
+                            android:layout_toEndOf="@+id/ItemIcon4"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۱۷:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon4"
+                            android:layout_toEndOf="@+id/ItemIcon4"
+                            android:layout_below="@id/text4"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="62dp"
+                        android:background="#aaa"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon5"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/text5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="اذان مغرب"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon5"
+                            android:layout_toEndOf="@+id/ItemIcon5"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۱۸:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon5"
+                            android:layout_toEndOf="@+id/ItemIcon5"
+                            android:layout_below="@id/text5"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="62dp"
+                        android:background="#aaa"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:id="@+id/ItemIcon6"
+                            android:layout_width="46dp"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#22000000"
+                            android:textColor="@color/first_row_background_color"
+                            android:layout_centerVertical="true"
+                            android:shadowDx="3"
+                            android:text="{zmdi-brightness-4}"
+                            android:shadowDy="3"
+                            android:shadowRadius="1"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/text6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="نیمه شب شرعی"
+                            android:textSize="16sp"
+                            android:textColor="#777"
+                            android:layout_toRightOf="@+id/ItemIcon6"
+                            android:layout_toEndOf="@+id/ItemIcon6"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="۲۳:۰۰"
+                            android:textSize="20sp"
+                            android:textColor="#333"
+                            android:layout_toRightOf="@+id/ItemIcon6"
+                            android:layout_toEndOf="@+id/ItemIcon6"
+                            android:layout_below="@id/text6"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
