@@ -30,6 +30,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
 
     public void addListener(CalendarMainFragment calendarMainFragment) {
         this.calendarMainFragment = calendarMainFragment;
+        this.calendarMainFragment.selectDay(Utils.getToday());
     }
 
     @Override
@@ -75,9 +76,6 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
-
-
-        calendarMainFragment.selectDay(Utils.getToday());
 
         return view;
     }
