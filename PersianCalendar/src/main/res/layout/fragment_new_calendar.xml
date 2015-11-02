@@ -43,6 +43,7 @@
                         android:background="#e0e0e0"/>
 
                     <RelativeLayout
+                        android:id="@+id/info_day"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp">
@@ -74,7 +75,8 @@
                             android:textColor="#202020"
                             android:padding="2dp"
                             android:layout_toLeftOf="@+id/day_icon"
-                            android:layout_below="@id/shamsi_date"/>
+                            android:layout_below="@id/shamsi_date"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/ghamari_date"
@@ -84,7 +86,8 @@
                             android:textColor="#202020"
                             android:padding="2dp"
                             android:layout_toLeftOf="@+id/day_icon"
-                            android:layout_below="@id/miladi_date"/>
+                            android:layout_below="@id/miladi_date"
+                            android:visibility="gone"/>
 
 
                     </RelativeLayout>
