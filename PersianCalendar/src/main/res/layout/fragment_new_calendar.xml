@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/about_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f4f4f4">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v4.view.ViewPager
+            android:id="@+id/calendar_pager"
+            android:layout_width="match_parent"
+            android:layout_height="348dp"/>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="#fafafa"
+            android:layout_margin="7dp">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/calendar_pager"
-                android:layout_width="fill_parent"
-                android:layout_height="348dp"
-                android:layoutDirection="ltr" />
-
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/week_day_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="امروز"
-                        android:textColor="@color/first_row_background_color"
-                        android:textSize="18sp"
-                        android:padding="14dp"/>
+                    android:layout_gravity="right"
+                    android:textColor="@color/first_row_background_color"
+                    android:textSize="18sp"
+                    android:padding="14dp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#aaa"/>
+                        android:background="#e0e0e0"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -50,59 +48,44 @@
                         android:padding="16dp">
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon0"
+                            android:id="@+id/day_icon"
                             android:layout_width="46dp"
                             android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
+                            android:layout_alignParentRight="true"
                             android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:gravity="right"
+                            android:text="{zmdi-calendar-alt}"
+                            android:textSize="28sp" />
 
                         <TextView
-                            android:id="@+id/text0"
+                            android:id="@+id/shamsi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="یکشنبه"
                             android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon0"
-                            android:layout_toEndOf="@+id/ItemIcon0"/>
+                            android:textColor="#202020"
+                            android:padding="2dp"
+                            android:layout_toLeftOf="@+id/day_icon"/>
 
                         <TextView
-                            android:id="@+id/text01"
+                            android:id="@+id/miladi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="۱۶ خرداد ۱۳۹۱"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon0"
-                            android:layout_toEndOf="@+id/ItemIcon0"
-                            android:layout_below="@id/text0"/>
+                            android:textSize="16sp"
+                            android:textColor="#202020"
+                            android:padding="2dp"
+                            android:layout_toLeftOf="@+id/day_icon"
+                            android:layout_below="@id/shamsi_date"/>
 
                         <TextView
-                            android:id="@+id/text02"
+                            android:id="@+id/ghamari_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="25 oct 2011"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon0"
-                            android:layout_toEndOf="@+id/ItemIcon0"
-                            android:layout_below="@id/text01"/>
+                            android:textSize="16sp"
+                            android:textColor="#202020"
+                            android:padding="2dp"
+                            android:layout_toLeftOf="@+id/day_icon"
+                            android:layout_below="@id/miladi_date"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۲ شوال ۱۴۴۱"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon0"
-                            android:layout_toEndOf="@+id/ItemIcon0"
-                            android:layout_below="@id/text02"/>
 
                     </RelativeLayout>
 
@@ -146,7 +129,7 @@
                             android:textColor="@color/first_row_background_color"
                             android:layout_centerVertical="true"
                             android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
+                            android:text="{zmdi-calendar-alt}"
                             android:shadowDy="3"
                             android:shadowRadius="1"
                             android:textSize="30sp" />
@@ -409,6 +392,4 @@
 
         </LinearLayout>
 
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>
