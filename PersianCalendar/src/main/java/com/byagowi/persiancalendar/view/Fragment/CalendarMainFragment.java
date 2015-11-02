@@ -10,15 +10,19 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 
 public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageChangeListener {
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
+    private final Utils utils = Utils.getInstance();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
+
+        utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager(), this));

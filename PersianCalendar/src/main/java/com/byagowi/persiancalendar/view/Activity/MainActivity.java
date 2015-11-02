@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_holder, new CalendarFragment());
+        transaction.replace(R.id.fragment_holder, new CalendarMainFragment());
         transaction.commit();
     }
 
