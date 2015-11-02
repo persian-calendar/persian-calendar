@@ -45,8 +45,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            select_Day = getAdapterPosition();
-            notifyDataSetChanged();
+            if (getAdapterPosition() - 7 - days.get(0).getDayOfWeek() >= 0) {
+                monthNewFragment.onClickItem(days
+                        .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
+                        .getPersianDate());
+
+                select_Day = getAdapterPosition();
+                notifyDataSetChanged();
+            }
         }
     }
 
@@ -81,16 +87,21 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
                 if (position == select_Day) {
                     holder.selectDay.setVisibility(View.VISIBLE);
-                    holder.num.setTextColor(context.getResources().getColor(R.color.first_row_background_color));
-                }
 
+                    if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
+                        holder.num.setTextColor(context.getResources().getColor(R.color.holiday));
+                    } else {
+                        holder.num.setTextColor(context.getResources().getColor(R.color.first_row_background_color));
+                    }
+
+                }
 
             } else {
                 holder.today.setVisibility(View.GONE);
                 holder.selectDay.setVisibility(View.GONE);
                 holder.num.setVisibility(View.GONE);
-
             }
+
         } else {
             holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
             holder.num.setTextColor(context.getResources().getColor(R.color.first_row_text_color2));
@@ -99,6 +110,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.selectDay.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         }
+
     }
 
     @Override
@@ -113,9 +125,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         } else {
             return TYPE_DAY;
         }
+
     }
 
     private boolean isPositionHeader(int position) {
         return position < 7;
     }
+
 }
