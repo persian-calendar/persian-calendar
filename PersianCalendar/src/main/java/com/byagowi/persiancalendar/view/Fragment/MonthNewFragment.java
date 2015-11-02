@@ -76,10 +76,14 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
+
+        calendarMainFragment.selectDay(Utils.getToday());
+
         return view;
     }
 
-    public void onClickItem(View v, int position) {
+    public void onClickItem(PersianDate day) {
+        calendarMainFragment.selectDay(day);
 
     }
 
