@@ -229,6 +229,8 @@ public class Utils {
                     day.setHoliday(true);
                 }
 
+                day.setPersianDate(persianDate.clone());
+
                 if (persianDate.equals(today)) {
                     day.setToday(true);
                 }
