@@ -1,12 +1,17 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
+import android.animation.ArgbEvaluator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,8 +48,37 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
         return view;
     }
 
+    int[] colors = { 0xFF689F38, 0xFFFFEB3B, 0xFFFFB74D, 0xFF039BE5 };
+    Toolbar toolbar;
+    ArgbEvaluator argbEvaluator;
+    Window window;
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+            return;
+
+        if (toolbar == null)
+            toolbar = (Toolbar)
+                    getActivity().findViewById(R.id.toolbar);
+
+        if (argbEvaluator == null)
+            argbEvaluator = new ArgbEvaluator();
+
+        int color = (Integer) argbEvaluator.evaluate(positionOffset,
+                colors[position % 4],
+                colors[(position + 1) % 4]);
+
+        toolbar.setBackgroundColor(color);
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return;
+
+        if (window == null)
+            window = getActivity().getWindow();
+
+        window.setNavigationBarColor(color);
     }
 
     @Override
