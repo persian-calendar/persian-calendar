@@ -26,10 +26,14 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     private final Utils utils = Utils.getInstance();
     private IconTextView prev;
     private IconTextView next;
-    private CalendarMainFragment calendarMainFragment;
 
-    public void addListener(CalendarMainFragment calendarMainFragment) {
-        this.calendarMainFragment = calendarMainFragment;
+    private CalendarMainFragment getParentCalendarFragment() {
+        Fragment fragment = getActivity()
+                .getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_holder);
+        return fragment instanceof CalendarMainFragment ?
+            (CalendarMainFragment) fragment :
+            null;
     }
 
     @Override
@@ -76,19 +80,32 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
+        CalendarMainFragment calendarMainFragment =
+                getParentCalendarFragment();
 
-        calendarMainFragment.selectDay(Utils.getToday());
+        if (calendarMainFragment != null)
+            calendarMainFragment.selectDay(Utils.getToday());
 
         return view;
     }
 
     public void onClickItem(PersianDate day) {
-        calendarMainFragment.selectDay(day);
+        CalendarMainFragment calendarMainFragment =
+                getParentCalendarFragment();
 
+        if (calendarMainFragment != null)
+            calendarMainFragment.selectDay(day);
     }
 
     @Override
     public void onClick(View v) {
+        CalendarMainFragment calendarMainFragment =
+                getParentCalendarFragment();
+
+        if (calendarMainFragment == null)
+            return;
+
+
         switch (v.getId()) {
             case R.id.next:
                 calendarMainFragment.changeMonth(1);
