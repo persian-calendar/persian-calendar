@@ -1,19 +1,23 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
+import android.animation.ArgbEvaluator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.locale.CalendarStrings;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -24,10 +28,6 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
     private RelativeLayout infoDay;
-    private TextView weekDayName;
-    private TextView shamsiDate;
-    private TextView miladiDate;
-    private TextView ghamariDate;
 
     @Nullable
     @Override
@@ -35,10 +35,6 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
         infoDay = (RelativeLayout) view.findViewById(R.id.info_day);
-        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
-        shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
-        miladiDate = (TextView) view.findViewById(R.id.miladi_date);
-        ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
@@ -52,9 +48,37 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
         return view;
     }
 
+    int[] colors = { 0xFF689F38, 0xFFFFEB3B, 0xFFFFB74D, 0xFF039BE5 };
+    Toolbar toolbar;
+    ArgbEvaluator argbEvaluator;
+    Window window;
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+            return;
 
+        if (toolbar == null)
+            toolbar = (Toolbar)
+                    getActivity().findViewById(R.id.toolbar);
+
+        if (argbEvaluator == null)
+            argbEvaluator = new ArgbEvaluator();
+
+        int color = (Integer) argbEvaluator.evaluate(positionOffset,
+                colors[position % 4],
+                colors[(position + 1) % 4]);
+
+        toolbar.setBackgroundColor(color);
+
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return;
+
+        if (window == null)
+            window = getActivity().getWindow();
+
+        window.setNavigationBarColor(color);
     }
 
     @Override
@@ -75,6 +99,15 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         char[] digits = utils.preferredDigits(getContext());
 
+        View view = getView();
+        if (view == null)
+            return;
+
+        TextView weekDayName = (TextView) view.findViewById(R.id.week_day_name);
+        TextView shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
+        TextView miladiDate = (TextView) view.findViewById(R.id.miladi_date);
+        TextView ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
@@ -83,6 +116,13 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
 
     @Override
     public void onClick(View v) {
+        View view = getView();
+        if (view == null)
+            return;
+
+        TextView miladiDate = (TextView) view.findViewById(R.id.miladi_date);
+        TextView ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+
         miladiDate.setVisibility(View.VISIBLE);
         ghamariDate.setVisibility(View.VISIBLE);
     }
