@@ -3,12 +3,12 @@ package com.byagowi.persiancalendar.Adapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 
-public class CalendarAdapter extends FragmentPagerAdapter {
+public class CalendarAdapter extends FragmentStatePagerAdapter {
 
     public CalendarAdapter(FragmentManager fm) {
         super(fm);
