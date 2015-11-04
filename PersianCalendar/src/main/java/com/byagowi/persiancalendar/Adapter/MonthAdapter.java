@@ -110,7 +110,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.selectDay.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override

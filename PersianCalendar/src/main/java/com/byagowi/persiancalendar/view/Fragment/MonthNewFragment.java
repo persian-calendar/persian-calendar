@@ -26,15 +26,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     private final Utils utils = Utils.getInstance();
     private IconTextView prev;
     private IconTextView next;
-
-    private CalendarMainFragment getParentCalendarFragment() {
-        Fragment fragment = getActivity()
-                .getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_holder);
-        return fragment instanceof CalendarMainFragment ?
-            (CalendarMainFragment) fragment :
-            null;
-    }
+    private CalendarMainFragment calendarMainFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,31 +72,18 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
-        CalendarMainFragment calendarMainFragment =
-                getParentCalendarFragment();
-
-        if (calendarMainFragment != null)
-            calendarMainFragment.selectDay(Utils.getToday());
+        calendarMainFragment = (CalendarMainFragment) getActivity().getSupportFragmentManager().findFragmentByTag("CalendarMainFragment");
+        calendarMainFragment.selectDay(Utils.getToday());
 
         return view;
     }
 
     public void onClickItem(PersianDate day) {
-        CalendarMainFragment calendarMainFragment =
-                getParentCalendarFragment();
-
-        if (calendarMainFragment != null)
-            calendarMainFragment.selectDay(day);
+        calendarMainFragment.selectDay(day);
     }
 
     @Override
     public void onClick(View v) {
-        CalendarMainFragment calendarMainFragment =
-                getParentCalendarFragment();
-
-        if (calendarMainFragment == null)
-            return;
-
 
         switch (v.getId()) {
             case R.id.next:

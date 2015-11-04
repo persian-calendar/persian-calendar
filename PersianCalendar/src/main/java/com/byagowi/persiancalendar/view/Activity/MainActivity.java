@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
-import com.byagowi.persiancalendar.view.Fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
@@ -78,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
             theme = R.style.DarkTheme;
         }
         setTheme(theme);
-
-//        toolbar.setBackgroundColor(getResources().getColor(R.color.first_row_background_color));
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_holder, new CalendarMainFragment());
+        transaction.replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment");
         transaction.commit();
     }
 
@@ -176,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuPosition != CALENDAR) {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, new CalendarMainFragment())
+                            .replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment")
                             .addToBackStack(null)
                             .commit();
 

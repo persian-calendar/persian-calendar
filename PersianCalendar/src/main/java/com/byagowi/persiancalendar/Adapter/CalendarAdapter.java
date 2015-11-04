@@ -9,11 +9,9 @@ import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
 
 public class CalendarAdapter extends FragmentPagerAdapter {
-    private CalendarMainFragment calendarMainFragment;
 
-    public CalendarAdapter(FragmentManager fm, CalendarMainFragment calendarMainFragment) {
+    public CalendarAdapter(FragmentManager fm) {
         super(fm);
-        this.calendarMainFragment = calendarMainFragment;
     }
 
     @Override

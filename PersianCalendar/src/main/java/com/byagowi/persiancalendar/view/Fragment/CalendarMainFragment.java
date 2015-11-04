@@ -23,7 +23,7 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class CalendarMainFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
@@ -34,14 +34,13 @@ public class CalendarMainFragment extends Fragment  implements ViewPager.OnPageC
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
-        infoDay = (RelativeLayout) view.findViewById(R.id.info_day);
-
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
+        infoDay = (RelativeLayout) view.findViewById(R.id.info_day);
         infoDay.setOnClickListener(this);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
-        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager(), this));
+        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         viewPager.addOnPageChangeListener(this);
 
