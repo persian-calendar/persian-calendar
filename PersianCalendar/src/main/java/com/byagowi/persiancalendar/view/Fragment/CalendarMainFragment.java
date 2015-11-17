@@ -6,15 +6,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
@@ -41,6 +40,15 @@ public class CalendarMainFragment extends Fragment
     private final Utils utils = Utils.getInstance();
     private CardView infoDay;
     private Date date = new Date();
+
+    private Calendar c = Calendar.getInstance();
+    private Map<PrayTime, Clock> prayTimes;
+    private char[] digits;
+    private boolean clockIn24;
+
+    private Coordinate coord;
+
+    private PrayTimesCalculator ptc;
     private TextView azan1;
     private TextView azan2;
     private TextView azan3;
@@ -74,6 +82,19 @@ public class CalendarMainFragment extends Fragment
     private View divider6;
     private View divider7;
 
+    private int currentMounth;
+
+    Toolbar toolbar;
+    ArgbEvaluator argbEvaluator;
+
+    private int[] colors = {
+            0xFF0000FF,
+            0xFF00FF00, 0xFF00FF00, 0xFF00FF00,
+            0xFFFF0000, 0xFFFF0000, 0xFFFF0000,
+            0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00,
+            0xFF0000FF, 0xFF0000FF, 0xFF0000FF,
+            0xFF00FF00 };
+
     @Nullable
     @Override
     public View onCreateView(
@@ -84,6 +105,18 @@ public class CalendarMainFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
+        utils.loadLanguageFromSettings(getContext());
+
+        digits = utils.preferredDigits(getContext());
+        clockIn24 = utils.clockIn24(getContext());
+        coord = utils.getCoordinate(getContext());
+        ptc = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
+
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            argbEvaluator = new ArgbEvaluator();
+        }
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
@@ -129,14 +162,10 @@ public class CalendarMainFragment extends Fragment
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
 
+        setMonth();
 
         return view;
     }
-
-    int[] colors = { 0xFF689F38, 0xFFFFEB3B, 0xFFFFB74D, 0xFF039BE5 };
-    Toolbar toolbar;
-    ArgbEvaluator argbEvaluator;
-    Window window;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -144,36 +173,35 @@ public class CalendarMainFragment extends Fragment
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             return;
 
-        if (toolbar == null)
-            toolbar = (Toolbar)
-                    getActivity().findViewById(R.id.toolbar);
+        int color;
+        if (positionOffset > 0.5) {
+            color = (Integer) argbEvaluator.evaluate(
+                    positionOffset,
+                    colors[currentMounth + 1],
+                    colors[currentMounth]);
+            Log.e("test", "-");
+        } else {
 
-        if (argbEvaluator == null)
-            argbEvaluator = new ArgbEvaluator();
-
-        int color = (Integer) argbEvaluator.evaluate(positionOffset,
-                colors[position % 4],
-                colors[(position + 1) % 4]);
+            color = (Integer) argbEvaluator.evaluate(
+                    positionOffset,
+                    colors[currentMounth],
+                    colors[currentMounth + 1]);
+            Log.e("test", "+");
+        }
 
         toolbar.setBackgroundColor(color);
-
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            return;
-
-        if (window == null)
-            window = getActivity().getWindow();
-
-        window.setNavigationBarColor(color);
     }
 
     @Override
     public void onPageSelected(int position) {
-
+        Log.e("test", "onPageSelected" + position);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
+        if (state == 0) {
+            setMonth();
+        }
     }
 
     public void changeMonth(int position) {
@@ -182,12 +210,6 @@ public class CalendarMainFragment extends Fragment
 
     public void selectDay(PersianDate persianDate) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        char[] digits = utils.preferredDigits(getContext());
-
-        View view = getView();
-        if (view == null)
-            return;
-
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
@@ -197,23 +219,14 @@ public class CalendarMainFragment extends Fragment
     }
 
     private void setOwghat(CivilDate civilDate) {
-        utils.loadLanguageFromSettings(getContext());
-        if (utils.getCoordinate(getContext()) == null) {
+        if (coord == null) {
             return;
         }
 
-        owghat.setVisibility(View.VISIBLE);
-
-        Calendar c = Calendar.getInstance();
         c.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         date = c.getTime();
-        PrayTimesCalculator ptc = new PrayTimesCalculator(
-                utils.getCalculationMethod(getContext()));
-        Coordinate coord = utils.getCoordinate(getContext());
 
-        Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
-        char[] digits = utils.preferredDigits(getContext());
-        boolean clockIn24 = utils.clockIn24(getContext());
+        prayTimes = ptc.calculate(date, coord);
 
         azan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
         aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24));
@@ -223,6 +236,8 @@ public class CalendarMainFragment extends Fragment
         azan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24));
         azan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24));
         aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24));
+
+        owghat.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -252,6 +267,24 @@ public class CalendarMainFragment extends Fragment
                 divider7.setVisibility(View.VISIBLE);
                 break;
         }
+    }
 
+    private void setMonth(){
+        int posithon = viewPager.getCurrentItem();
+        int offset = posithon - CalendarMainFragment.MONTHS_LIMIT / 2;
+
+        PersianDate persianDate = Utils.getToday();
+        int month = persianDate.getMonth() - offset;
+        month -= 1;
+
+        month = month % 12;
+        if (month < 0) {
+            month += 12;
+        }
+
+        month += 1;
+
+        currentMounth = month;
+        Log.e("month", " " + month);
     }
 }
