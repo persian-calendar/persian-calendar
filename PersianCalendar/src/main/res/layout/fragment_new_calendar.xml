@@ -516,7 +516,7 @@
                                 android:textColor="@color/text_color_normal"/>
 
                             <TextView
-                                android:id="@+id/text_aftab3"
+                                android:id="@+id/aftab3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"

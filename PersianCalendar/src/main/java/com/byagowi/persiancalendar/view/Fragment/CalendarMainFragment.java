@@ -19,6 +19,14 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.github.praytimes.Clock;
+import com.github.praytimes.Coordinate;
+import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimesCalculator;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -31,6 +39,15 @@ public class CalendarMainFragment extends Fragment
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
     private LinearLayoutCompat infoDay;
+    private Date date = new Date();
+    private TextView azan1;
+    private TextView azan2;
+    private TextView azan3;
+    private TextView azan4;
+    private TextView azan5;
+    private TextView aftab1;
+    private TextView aftab2;
+    private TextView aftab3;
 
     @Nullable
     @Override
@@ -46,6 +63,15 @@ public class CalendarMainFragment extends Fragment
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         viewPager.addOnPageChangeListener(this);
+
+        azan1 = (TextView) view.findViewById(R.id.azan1);
+        azan2 = (TextView) view.findViewById(R.id.azan2);
+        azan3 = (TextView) view.findViewById(R.id.azan3);
+        azan4 = (TextView) view.findViewById(R.id.azan4);
+        azan5 = (TextView) view.findViewById(R.id.azan5);
+        aftab1 = (TextView) view.findViewById(R.id.aftab1);
+        aftab2 = (TextView) view.findViewById(R.id.aftab2);
+        aftab3 = (TextView) view.findViewById(R.id.aftab3);
 
         return view;
     }
@@ -114,6 +140,35 @@ public class CalendarMainFragment extends Fragment
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
         ghamariDate.setText(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits));
+
+        setOwghat(civilDate);
+    }
+
+    private void setOwghat(CivilDate civilDate) {
+        utils.loadLanguageFromSettings(getContext());
+        if (utils.getCoordinate(getContext()) == null) {
+            return;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+        date = c.getTime();
+        PrayTimesCalculator ptc = new PrayTimesCalculator(
+                utils.getCalculationMethod(getContext()));
+        Coordinate coord = utils.getCoordinate(getContext());
+
+        Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
+        char[] digits = utils.preferredDigits(getContext());
+        boolean clockIn24 = utils.clockIn24(getContext());
+
+        azan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
+        aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24));
+        azan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24));
+        azan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24));
+        aftab2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), digits, clockIn24));
+        azan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24));
+        azan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24));
+        aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24));
     }
 
     @Override
