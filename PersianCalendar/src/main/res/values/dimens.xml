@@ -3,14 +3,16 @@
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_padding">16dp</dimen>
     <dimen name="divider_margin">5dp</dimen>
+    <dimen name="divider_margin2">44dp</dimen>
     <dimen name="icon_margin">16dp</dimen>
     <dimen name="icon_size">28dp</dimen>
+    <dimen name="padding_item">8dp</dimen>
 
-
-    <dimen name="item_calendar_margintop">4dp</dimen>
+    <dimen name="item_calendar_margin_top">4dp</dimen>
 
     <dimen name="text_size_title">16sp</dimen>
-    <dimen name="text_size_desctiption">14sp</dimen>
+    <dimen name="text_size_description">14sp</dimen>
+    <dimen name="text_size_note">14sp</dimen>
     <dimen name="icon_text_size">26sp</dimen>
 
 

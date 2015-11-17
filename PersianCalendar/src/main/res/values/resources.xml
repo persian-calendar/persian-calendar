@@ -1,5 +1,11 @@
 <resources>
 
     <string name="calendar_icon">{zmdi-calendar-alt}</string>
+    <string name="azan1_icon">{zmdi-brightness-4}</string>
+    <string name="aftab1_icon">{zmdi-brightness-7}</string>
+    <string name="azan2_icon">{zmdi-brightness-5}</string>
+    <string name="aftab2_icon">{zmdi-brightness-6}</string>
+    <string name="azan3_icon">{zmdi-brightness-3}</string>
+    <string name="aftab3_icon">{zmdi-brightness-2}</string>
 
 </resources>

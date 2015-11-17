@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/parent_card_background"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -22,13 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/card_background"
-            android:layout_margin="@dimen/card_margin"
-            >
+            android:layout_margin="@dimen/card_margin">
 
             <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/info_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground">
 
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -55,7 +55,6 @@
                     android:background="@color/divider_color"/>
 
                 <android.support.v7.widget.LinearLayoutCompat
-                    android:id="@+id/info_day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -72,35 +71,33 @@
                             android:id="@+id/shamsi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_desctiption"
+                            android:textSize="@dimen/text_size_description"
                             android:textColor="@color/text_color_normal"/>
 
                         <TextView
                             android:id="@+id/miladi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_desctiption"
+                            android:textSize="@dimen/text_size_description"
                             android:textColor="@color/text_color_normal"
-                            android:layout_marginTop="@dimen/item_calendar_margintop"
+                            android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/ghamari_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_desctiption"
+                            android:textSize="@dimen/text_size_description"
                             android:textColor="@color/text_color_normal"
-                            android:layout_marginTop="@dimen/item_calendar_margintop"
+                            android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:visibility="gone"/>
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <com.malinskiy.materialicons.widget.IconTextView
-                        android:id="@+id/day_icon"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_marginLeft="@dimen/icon_margin"
-                        android:layout_alignParentRight="true"
                         android:textColor="@color/text_color_primary"
                         android:gravity="center"
                         android:text="@string/calendar_icon"
@@ -112,303 +109,439 @@
 
         </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card_background"
+            android:layout_margin="@dimen/card_margin">
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/owghat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp">
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
+                <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="اوقات شرعی"
-                        android:textColor="@color/first_row_background_color"
-                        android:textSize="18sp"
-                        android:padding="14dp"/>
+                        android:text="@string/owghat"
+                        android:gravity="right"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="@dimen/text_size_title"/>
+
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="@dimen/divider_margin"
+                    android:layout_marginLeft="@dimen/divider_margin"
+                    android:background="@color/divider_color"/>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/azan1"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/azan1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
+
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/azan1_icon"
+                            android:textSize="@dimen/icon_text_size" />
+
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:paddingTop="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/aftab1"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/aftab1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-calendar-alt}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/aftab1_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="اذان صبح"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon"
-                            android:layout_toEndOf="@+id/ItemIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۶:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon"
-                            android:layout_toEndOf="@+id/ItemIcon"
-                            android:layout_below="@id/text1"/>
-
-                    </RelativeLayout>
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="62dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:paddingTop="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/azan2"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/azan2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon2"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/azan2_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="طلوع آفتاب"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon2"
-                            android:layout_toEndOf="@+id/ItemIcon2"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۷:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon2"
-                            android:layout_toEndOf="@+id/ItemIcon2"
-                            android:layout_below="@id/text2"/>
-
-                    </RelativeLayout>
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="62dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:paddingTop="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/azan3"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/azan3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon3"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/azan2_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="اذان ظهر"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon3"
-                            android:layout_toEndOf="@+id/ItemIcon3"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۱۳:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon3"
-                            android:layout_toEndOf="@+id/ItemIcon3"
-                            android:layout_below="@id/text3"/>
-
-                    </RelativeLayout>
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="62dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:paddingTop="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/aftab2"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/aftab2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon4"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/aftab2_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="غروب آفتاب"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon4"
-                            android:layout_toEndOf="@+id/ItemIcon4"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۱۷:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon4"
-                            android:layout_toEndOf="@+id/ItemIcon4"
-                            android:layout_below="@id/text4"/>
-
-                    </RelativeLayout>
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="62dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_item"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/azan4"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/azan4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon5"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/azan3_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="اذان مغرب"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon5"
-                            android:layout_toEndOf="@+id/ItemIcon5"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۱۸:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon5"
-                            android:layout_toEndOf="@+id/ItemIcon5"
-                            android:layout_below="@id/text5"/>
-
-                    </RelativeLayout>
+                    </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginLeft="62dp"
-                        android:background="#aaa"/>
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
 
-                    <RelativeLayout
+                    <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_item"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/azan5"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
+
+                            <TextView
+                                android:id="@+id/azan5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                         <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/ItemIcon6"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:shadowColor="#22000000"
-                            android:textColor="@color/first_row_background_color"
-                            android:layout_centerVertical="true"
-                            android:shadowDx="3"
-                            android:text="{zmdi-brightness-4}"
-                            android:shadowDy="3"
-                            android:shadowRadius="1"
-                            android:textSize="30sp" />
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/azan3_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-                        <TextView
-                            android:id="@+id/text6"
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginRight="@dimen/divider_margin2"
+                        android:layout_marginLeft="@dimen/divider_margin"
+                        android:background="@color/divider_color"/>
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_item"
+                        android:gravity="right">
+
+                        <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="نیمه شب شرعی"
-                            android:textSize="16sp"
-                            android:textColor="#777"
-                            android:layout_toRightOf="@+id/ItemIcon6"
-                            android:layout_toEndOf="@+id/ItemIcon6"/>
+                            android:orientation="vertical"
+                            android:gravity="right">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="۲۳:۰۰"
-                            android:textSize="20sp"
-                            android:textColor="#333"
-                            android:layout_toRightOf="@+id/ItemIcon6"
-                            android:layout_toEndOf="@+id/ItemIcon6"
-                            android:layout_below="@id/text6"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/aftab3"
+                                android:textSize="@dimen/text_size_note"
+                                android:textColor="@color/text_color_normal"/>
 
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/text_aftab3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textSize="@dimen/text_size_description"
+                                android:textColor="@color/text_color_dark"/>
 
-                </LinearLayout>
+                        </android.support.v7.widget.LinearLayoutCompat>
 
-            </android.support.v7.widget.CardView>
+                        <com.malinskiy.materialicons.widget.IconTextView
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:textColor="@color/text_color_primary"
+                            android:gravity="center"
+                            android:text="@string/aftab3_icon"
+                            android:textSize="@dimen/icon_text_size" />
 
-        </android.support.v7.widget.LinearLayoutCompat>
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                </android.support.v7.widget.LinearLayoutCompat>
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.CardView>
+
+    </android.support.v7.widget.LinearLayoutCompat>
 
 </ScrollView>
