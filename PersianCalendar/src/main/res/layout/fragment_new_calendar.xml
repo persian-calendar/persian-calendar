@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f4f4f4">
+    android:background="@color/parent_card_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,81 +21,96 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fafafa"
-            android:layout_margin="7dp">
+            android:background="@color/card_background"
+            android:layout_margin="@dimen/card_margin"
+            >
 
-            <LinearLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/week_day_name"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:textColor="@color/first_row_background_color"
-                    android:textSize="18sp"
-                    android:padding="14dp"/>
+                    android:orientation="horizontal"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#e0e0e0"/>
-
-                    <RelativeLayout
-                        android:id="@+id/info_day"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/week_day_name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:layout_gravity="right"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="@dimen/text_size_title"/>
 
-                        <com.malinskiy.materialicons.widget.IconTextView
-                            android:id="@+id/day_icon"
-                            android:layout_width="46dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:textColor="@color/first_row_background_color"
-                            android:gravity="right"
-                            android:text="{zmdi-calendar-alt}"
-                            android:textSize="28sp" />
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="@dimen/divider_margin"
+                    android:layout_marginLeft="@dimen/divider_margin"
+                    android:background="@color/divider_color"/>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:id="@+id/info_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="right">
 
                         <TextView
                             android:id="@+id/shamsi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="#202020"
-                            android:padding="2dp"
-                            android:layout_toLeftOf="@+id/day_icon"/>
+                            android:textSize="@dimen/text_size_desctiption"
+                            android:textColor="@color/text_color_normal"/>
 
                         <TextView
                             android:id="@+id/miladi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="#202020"
-                            android:padding="2dp"
-                            android:layout_toLeftOf="@+id/day_icon"
-                            android:layout_below="@id/shamsi_date"
+                            android:textSize="@dimen/text_size_desctiption"
+                            android:textColor="@color/text_color_normal"
+                            android:layout_marginTop="@dimen/item_calendar_margintop"
                             android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/ghamari_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="#202020"
-                            android:padding="2dp"
-                            android:layout_toLeftOf="@+id/day_icon"
-                            android:layout_below="@id/miladi_date"
+                            android:textSize="@dimen/text_size_desctiption"
+                            android:textColor="@color/text_color_normal"
+                            android:layout_marginTop="@dimen/item_calendar_margintop"
                             android:visibility="gone"/>
 
+                    </android.support.v7.widget.LinearLayoutCompat>
 
-                    </RelativeLayout>
+                    <com.malinskiy.materialicons.widget.IconTextView
+                        android:id="@+id/day_icon"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_marginLeft="@dimen/icon_margin"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/text_color_primary"
+                        android:gravity="center"
+                        android:text="@string/calendar_icon"
+                        android:textSize="@dimen/icon_text_size" />
 
-                </LinearLayout>
+                </android.support.v7.widget.LinearLayoutCompat>
 
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -393,6 +409,6 @@
 
             </android.support.v7.widget.CardView>
 
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
 
 </ScrollView>

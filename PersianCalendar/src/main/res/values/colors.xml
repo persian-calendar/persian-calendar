@@ -15,4 +15,25 @@
     <color name="marker_color">#FFFFFF</color>
     <color name="text_color">#FFFFFF</color>
 
+
+    <color name="text_color_light">#ffffff</color>
+    <color name="text_color_dark">#232323</color>
+    <color name="text_color_primary">#2f65ca</color>
+    <color name="icon_color_primary">#2f65ca</color>
+    <color name="text_color_normal">#737373</color>
+    <color name="submit">#17a05d</color>
+    <color name="error">#ff0000</color>
+
+    <color name="card_background">#fafafa</color>
+    <color name="card_text">#757575</color>
+    <color name="parent_card_background">#f4f4f4</color>
+    <color name="drawer_background">#eeeeee</color>
+    <color name="divider_color">#e0e0e0</color>
+
+    <color name="black">#00000000</color>
+    <color name="black_transparent">#aa000000</color>
+
+    <color name="white">#ffffff</color>
+
+
 </resources>

@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
@@ -23,11 +24,13 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class CalendarMainFragment extends Fragment
+        implements ViewPager.OnPageChangeListener, View.OnClickListener {
+
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
-    private RelativeLayout infoDay;
+    private LinearLayoutCompat infoDay;
 
     @Nullable
     @Override
@@ -36,7 +39,7 @@ public class CalendarMainFragment extends Fragment implements ViewPager.OnPageCh
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
 
-        infoDay = (RelativeLayout) view.findViewById(R.id.info_day);
+        infoDay = (LinearLayoutCompat) view.findViewById(R.id.info_day);
         infoDay.setOnClickListener(this);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
