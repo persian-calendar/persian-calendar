@@ -6,8 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class CalendarMainFragment extends Fragment
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
-    private LinearLayoutCompat infoDay;
+    private CardView infoDay;
     private Date date = new Date();
     private TextView azan1;
     private TextView azan2;
@@ -49,20 +50,75 @@ public class CalendarMainFragment extends Fragment
     private TextView aftab2;
     private TextView aftab3;
 
+    private TextView weekDayName;
+    private TextView miladiDate;
+    private TextView ghamariDate;
+    private TextView shamsiDate;
+
+    private CardView owghat;
+
+    private LinearLayoutCompat owghat1;
+    private LinearLayoutCompat owghat2;
+    private LinearLayoutCompat owghat3;
+    private LinearLayoutCompat owghat4;
+    private LinearLayoutCompat owghat5;
+    private LinearLayoutCompat owghat6;
+    private LinearLayoutCompat owghat7;
+    private LinearLayoutCompat owghat8;
+
+    private View divider1;
+    private View divider2;
+    private View divider3;
+    private View divider4;
+    private View divider5;
+    private View divider6;
+    private View divider7;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
-
-        infoDay = (LinearLayoutCompat) view.findViewById(R.id.info_day);
-        infoDay.setOnClickListener(this);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         viewPager.addOnPageChangeListener(this);
+
+        infoDay = (CardView) view.findViewById(R.id.info_day);
+        owghat = (CardView) view.findViewById(R.id.owghat);
+
+        infoDay.setOnClickListener(this);
+        owghat.setOnClickListener(this);
+
+        owghat1 = (LinearLayoutCompat) view.findViewById(R.id.owghat1);
+        owghat2 = (LinearLayoutCompat) view.findViewById(R.id.owghat2);
+        owghat3 = (LinearLayoutCompat) view.findViewById(R.id.owghat3);
+        owghat4 = (LinearLayoutCompat) view.findViewById(R.id.owghat4);
+        owghat5 = (LinearLayoutCompat) view.findViewById(R.id.owghat5);
+        owghat6 = (LinearLayoutCompat) view.findViewById(R.id.owghat6);
+        owghat7 = (LinearLayoutCompat) view.findViewById(R.id.owghat7);
+        owghat8 = (LinearLayoutCompat) view.findViewById(R.id.owghat8);
+
+        divider1 = view.findViewById(R.id.div1);
+        divider2 = view.findViewById(R.id.div2);
+        divider3 = view.findViewById(R.id.div3);
+        divider4 = view.findViewById(R.id.div4);
+        divider5 = view.findViewById(R.id.div5);
+        divider6 = view.findViewById(R.id.div6);
+        divider7 = view.findViewById(R.id.div7);
+
+        miladiDate = (TextView) view.findViewById(R.id.miladi_date);
+        ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
+        shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
+        miladiDate = (TextView) view.findViewById(R.id.miladi_date);
+        ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
 
         azan1 = (TextView) view.findViewById(R.id.azan1);
         azan2 = (TextView) view.findViewById(R.id.azan2);
@@ -72,6 +128,7 @@ public class CalendarMainFragment extends Fragment
         aftab1 = (TextView) view.findViewById(R.id.aftab1);
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
+
 
         return view;
     }
@@ -131,11 +188,6 @@ public class CalendarMainFragment extends Fragment
         if (view == null)
             return;
 
-        TextView weekDayName = (TextView) view.findViewById(R.id.week_day_name);
-        TextView shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
-        TextView miladiDate = (TextView) view.findViewById(R.id.miladi_date);
-        TextView ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
-
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
@@ -149,6 +201,8 @@ public class CalendarMainFragment extends Fragment
         if (utils.getCoordinate(getContext()) == null) {
             return;
         }
+
+        owghat.setVisibility(View.VISIBLE);
 
         Calendar c = Calendar.getInstance();
         c.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
@@ -173,14 +227,31 @@ public class CalendarMainFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        View view = getView();
-        if (view == null)
-            return;
+        switch (v.getId()) {
+            case R.id.info_day:
+                miladiDate.setVisibility(View.VISIBLE);
+                ghamariDate.setVisibility(View.VISIBLE);
+                break;
 
-        TextView miladiDate = (TextView) view.findViewById(R.id.miladi_date);
-        TextView ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+            case R.id.owghat:
+                owghat1.setVisibility(View.VISIBLE);
+                owghat2.setVisibility(View.VISIBLE);
+                owghat3.setVisibility(View.VISIBLE);
+                owghat4.setVisibility(View.VISIBLE);
+                owghat5.setVisibility(View.VISIBLE);
+                owghat6.setVisibility(View.VISIBLE);
+                owghat7.setVisibility(View.VISIBLE);
+                owghat8.setVisibility(View.VISIBLE);
 
-        miladiDate.setVisibility(View.VISIBLE);
-        ghamariDate.setVisibility(View.VISIBLE);
+                divider1.setVisibility(View.VISIBLE);
+                divider2.setVisibility(View.VISIBLE);
+                divider3.setVisibility(View.VISIBLE);
+                divider4.setVisibility(View.VISIBLE);
+                divider5.setVisibility(View.VISIBLE);
+                divider6.setVisibility(View.VISIBLE);
+                divider7.setVisibility(View.VISIBLE);
+                break;
+        }
+
     }
 }

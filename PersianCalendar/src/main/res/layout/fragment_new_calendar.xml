@@ -18,13 +18,13 @@
             android:layout_height="348dp"/>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/info_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/card_background"
             android:layout_margin="@dimen/card_margin">
 
             <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/info_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -110,13 +110,14 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/owghat"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/card_background"
             android:layout_margin="@dimen/card_margin">
 
             <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/owghat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -150,17 +151,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/card_padding"
+                    android:paddingRight="@dimen/card_padding"
+                    android:paddingLeft="@dimen/card_padding"
+                    android:paddingBottom="@dimen/padding_item"
+                    android:paddingTop="@dimen/padding_item"
                     android:gravity="right">
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_item"
                         android:paddingBottom="@dimen/padding_item"
                         android:gravity="right">
 
                         <android.support.v7.widget.LinearLayoutCompat
+                            android:id="@+id/owghat1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -195,6 +201,7 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div1"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
@@ -202,6 +209,7 @@
                         android:background="@color/divider_color"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -244,19 +252,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div2"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -293,19 +305,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div3"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -342,19 +358,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div4"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -391,19 +411,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div5"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/padding_item"
                         android:paddingBottom="@dimen/padding_item"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -440,19 +464,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div6"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/padding_item"
                         android:paddingBottom="@dimen/padding_item"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
@@ -489,18 +517,23 @@
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <View
+                        android:id="@+id/div7"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginRight="@dimen/divider_margin2"
                         android:layout_marginLeft="@dimen/divider_margin"
-                        android:background="@color/divider_color"/>
+                        android:background="@color/divider_color"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/owghat8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/padding_item"
-                        android:gravity="right">
+                        android:paddingBottom="@dimen/padding_item"
+                        android:gravity="right"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
