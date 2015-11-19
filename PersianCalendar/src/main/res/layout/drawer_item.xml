@@ -3,51 +3,47 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="?attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="48dp" >
+    android:layout_height="@dimen/drawer_item_height" >
 
     <View
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#eeeeee" />
+        android:background="@color/drawer_background" />
 
     <com.malinskiy.materialicons.widget.IconTextView
         android:id="@+id/ItemIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:shadowColor="#22000000"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:shadowDx="3"
-        android:shadowDy="3"
-        android:shadowRadius="1"
-        android:textSize="26sp" />
+        android:textColor="@color/text_color_dark"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/icon_margin"
+        android:layout_marginRight="@dimen/icon_margin"
+        android:textSize="@dimen/icon_text_size" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/ItemIcon"
         android:layout_toRightOf="@+id/ItemIcon"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="@dimen/text_size_drawer"
+            android:textColor="@color/text_color_dark"
             android:id="@+id/itemTitle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="10sp"
-            android:text=""
+            android:textSize="@dimen/text_size_drawer_subtitle"
+            android:textColor="@color/text_color_normal"
             android:visibility="gone"
             android:id="@+id/itemSubtitle"/>
 

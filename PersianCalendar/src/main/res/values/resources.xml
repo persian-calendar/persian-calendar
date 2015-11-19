@@ -7,5 +7,7 @@
     <string name="aftab2_icon">{zmdi-brightness-6}</string>
     <string name="azan3_icon">{zmdi-brightness-3}</string>
     <string name="aftab3_icon">{zmdi-brightness-2}</string>
+    <string name="left_icon">{zmdi-chevron-left}</string>
+    <string name="right_icon">{zmdi-chevron-right}</string>
 
 </resources>
