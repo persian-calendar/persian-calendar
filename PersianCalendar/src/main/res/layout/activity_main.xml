@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
+            android:paddingTop="23dp"
             android:background="@color/first_row_background_color"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
         </android.support.v7.widget.Toolbar>

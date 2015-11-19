@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
             w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-            toolbar.setPadding(0, 48, 0, 0);  //48 = height status bar
+        } else {
+            toolbar.setPadding(0, 0, 0, 0);
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
