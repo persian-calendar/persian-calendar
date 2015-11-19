@@ -72,14 +72,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_description"
-                            android:textColor="@color/text_color_normal"/>
+                            android:textColor="@color/text_color_dark"/>
 
                         <TextView
                             android:id="@+id/miladi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_description"
-                            android:textColor="@color/text_color_normal"
+                            android:textColor="@color/text_color_dark"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:visibility="gone"/>
 
@@ -88,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_description"
-                            android:textColor="@color/text_color_normal"
+                            android:textColor="@color/text_color_dark"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:visibility="gone"/>
 
