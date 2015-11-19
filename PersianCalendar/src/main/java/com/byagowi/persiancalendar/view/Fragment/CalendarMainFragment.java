@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,12 +87,12 @@ public class CalendarMainFragment extends Fragment
     ArgbEvaluator argbEvaluator;
 
     private int[] colors = {
-            0xFF0000FF,
-            0xFF00FF00, 0xFF00FF00, 0xFF00FF00,
-            0xFFFF0000, 0xFFFF0000, 0xFFFF0000,
-            0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00,
-            0xFF0000FF, 0xFF0000FF, 0xFF0000FF,
-            0xFF00FF00 };
+            0xFF3F51B5,
+            0xFF51B53F, 0xFF51B53F, 0xFF51B53F,
+            0xFFB5513F, 0xFFB5513F, 0xFFB5513F,
+            0xFFFF8C00, 0xFFFF8C00, 0xFFFF8C00,
+            0xFF3F51B5, 0xFF3F51B5, 0xFF3F51B5,
+            0xFF3FB551 };
 
     @Nullable
     @Override
@@ -174,27 +173,26 @@ public class CalendarMainFragment extends Fragment
             return;
 
         int color;
-        if (positionOffset > 0.5) {
+//        if (positionOffset > 0.5) {
+//            color = (Integer) argbEvaluator.evaluate(
+//                    positionOffset,
+//                    colors[currentMounth + 1],
+//                    colors[currentMounth]);
+//            Log.e("test", "-");
+//        } else {
+
             color = (Integer) argbEvaluator.evaluate(
                     positionOffset,
                     colors[currentMounth + 1],
                     colors[currentMounth]);
-            Log.e("test", "-");
-        } else {
-
-            color = (Integer) argbEvaluator.evaluate(
-                    positionOffset,
-                    colors[currentMounth],
-                    colors[currentMounth + 1]);
-            Log.e("test", "+");
-        }
+//            Log.e("test", "+");
+//        }
 
         toolbar.setBackgroundColor(color);
     }
 
     @Override
     public void onPageSelected(int position) {
-        Log.e("test", "onPageSelected" + position);
     }
 
     @Override
@@ -285,6 +283,5 @@ public class CalendarMainFragment extends Fragment
         month += 1;
 
         currentMounth = month;
-        Log.e("month", " " + month);
     }
 }
