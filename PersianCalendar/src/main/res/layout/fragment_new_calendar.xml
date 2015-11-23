@@ -110,6 +110,81 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card_background"
+            android:layout_margin="@dimen/card_margin"
+            android:visibility="gone">
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="@string/events"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="@dimen/text_size_title"/>
+
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="@dimen/divider_margin"
+                    android:layout_marginLeft="@dimen/divider_margin"
+                    android:background="@color/divider_color"/>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/card_padding"
+                    android:gravity="right">
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/event_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_description"
+                            android:textColor="@color/text_color_dark"/>
+
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                    <com.malinskiy.materialicons.widget.IconTextView
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_marginLeft="@dimen/icon_margin"
+                        android:textColor="@color/text_color_primary"
+                        android:gravity="center"
+                        android:text="@string/event_icon"
+                        android:textSize="@dimen/icon_text_size" />
+
+                </android.support.v7.widget.LinearLayoutCompat>
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/owghat"
             android:visibility="gone"
             android:layout_width="match_parent"

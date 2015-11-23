@@ -9,5 +9,6 @@
     <string name="aftab3_icon">{zmdi-brightness-2}</string>
     <string name="left_icon">{zmdi-chevron-left}</string>
     <string name="right_icon">{zmdi-chevron-right}</string>
+    <string name="event_icon">{zmdi-calendar-note}</string>
 
 </resources>

@@ -37,7 +37,6 @@ public class CalendarMainFragment extends Fragment
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
-    private CardView infoDay;
     private Date date = new Date();
 
     private Calendar c = Calendar.getInstance();
@@ -61,8 +60,11 @@ public class CalendarMainFragment extends Fragment
     private TextView miladiDate;
     private TextView ghamariDate;
     private TextView shamsiDate;
+    private TextView eventTitle;
 
+    private CardView infoDay;
     private CardView owghat;
+    private CardView event;
 
     private LinearLayoutCompat owghat1;
     private LinearLayoutCompat owghat2;
@@ -124,6 +126,7 @@ public class CalendarMainFragment extends Fragment
 
         infoDay = (CardView) view.findViewById(R.id.info_day);
         owghat = (CardView) view.findViewById(R.id.owghat);
+        event = (CardView) view.findViewById(R.id.event);
 
         infoDay.setOnClickListener(this);
         owghat.setOnClickListener(this);
@@ -160,6 +163,8 @@ public class CalendarMainFragment extends Fragment
         aftab1 = (TextView) view.findViewById(R.id.aftab1);
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
+
+        eventTitle = (TextView) view.findViewById(R.id.event_title);
 
         setMonth();
 
@@ -214,6 +219,20 @@ public class CalendarMainFragment extends Fragment
         ghamariDate.setText(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits));
 
         setOwghat(civilDate);
+        showEvent(persianDate);
+    }
+
+    private void showEvent(PersianDate persianDate) {
+        String holidayTitle = utils.getHolidayTitle(persianDate);
+
+        if (holidayTitle != null) {
+            eventTitle.setText(holidayTitle);
+            event.setVisibility(View.VISIBLE);
+
+        } else {
+            event.setVisibility(View.GONE);
+
+        }
     }
 
     private void setOwghat(CivilDate civilDate) {
