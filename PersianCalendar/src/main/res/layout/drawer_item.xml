@@ -18,7 +18,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:textColor="@color/text_color_dark"
+        android:textColor="@color/text_color_normal"
         android:gravity="center"
         android:layout_marginLeft="@dimen/icon_margin"
         android:layout_marginRight="@dimen/icon_margin"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_drawer"
-            android:textColor="@color/text_color_dark"
+            android:textColor="@color/text_color_normal"
             android:id="@+id/itemTitle" />
 
         <TextView
