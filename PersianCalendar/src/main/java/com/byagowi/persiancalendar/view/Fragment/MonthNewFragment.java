@@ -72,7 +72,10 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
-        calendarMainFragment = (CalendarMainFragment) getActivity().getSupportFragmentManager().findFragmentByTag("CalendarMainFragment");
+        calendarMainFragment = (CalendarMainFragment) getActivity()
+                        .getSupportFragmentManager()
+                        .findFragmentByTag("CalendarMainFragment");
+
         calendarMainFragment.selectDay(Utils.getToday());
 
         return view;

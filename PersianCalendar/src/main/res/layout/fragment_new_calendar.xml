@@ -35,13 +35,27 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding"
-                    android:gravity="right">
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="left"
+                        android:paddingRight="16dp"
+                        android:text="@string/today"
+                        android:visibility="gone"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="@dimen/text_size_title"/>
 
                     <TextView
                         android:id="@+id/week_day_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
+                        android:layout_weight="1"
                         android:textColor="@color/text_color_primary"
                         android:textSize="@dimen/text_size_title"/>
 

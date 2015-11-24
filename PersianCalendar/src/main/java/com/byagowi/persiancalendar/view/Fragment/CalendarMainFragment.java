@@ -61,6 +61,7 @@ public class CalendarMainFragment extends Fragment
     private TextView ghamariDate;
     private TextView shamsiDate;
     private TextView eventTitle;
+    private TextView today;
 
     private CardView infoDay;
     private CardView owghat;
@@ -154,6 +155,9 @@ public class CalendarMainFragment extends Fragment
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
         miladiDate = (TextView) view.findViewById(R.id.miladi_date);
         ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+        today = (TextView) view.findViewById(R.id.today);
+
+        today.setOnClickListener(this);
 
         azan1 = (TextView) view.findViewById(R.id.azan1);
         azan2 = (TextView) view.findViewById(R.id.azan2);
@@ -186,14 +190,14 @@ public class CalendarMainFragment extends Fragment
 //            Log.e("test", "-");
 //        } else {
 
-            color = (Integer) argbEvaluator.evaluate(
-                    positionOffset,
-                    colors[currentMounth + 1],
-                    colors[currentMounth]);
+//            color = (Integer) argbEvaluator.evaluate(
+//                    positionOffset,
+//                    colors[currentMounth + 1],
+//                    colors[currentMounth]);
 //            Log.e("test", "+");
 //        }
 
-        toolbar.setBackgroundColor(color);
+//        toolbar.setBackgroundColor(color);
     }
 
     @Override
@@ -217,6 +221,12 @@ public class CalendarMainFragment extends Fragment
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
         ghamariDate.setText(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits));
+
+        if (isToday(civilDate)) {
+            today.setVisibility(View.GONE);
+        } else {
+            today.setVisibility(View.VISIBLE);
+        }
 
         setOwghat(civilDate);
         showEvent(persianDate);
@@ -283,6 +293,10 @@ public class CalendarMainFragment extends Fragment
                 divider6.setVisibility(View.VISIBLE);
                 divider7.setVisibility(View.VISIBLE);
                 break;
+
+            case R.id.today:
+                bringTodayYearMonth();
+                break;
         }
     }
 
@@ -302,5 +316,19 @@ public class CalendarMainFragment extends Fragment
         month += 1;
 
         currentMounth = month;
+    }
+
+    private void bringTodayYearMonth() {
+        if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
+            viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+        }
+        selectDay(Utils.getToday());
+    }
+
+    private boolean isToday(CivilDate civilDate) {
+        CivilDate today = new CivilDate();
+        return today.getYear() == civilDate.getYear()
+                && today.getMonth() == civilDate.getMonth()
+                && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
 }
