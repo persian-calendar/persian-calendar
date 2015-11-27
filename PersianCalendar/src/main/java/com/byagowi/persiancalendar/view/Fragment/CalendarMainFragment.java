@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
-import android.animation.ArgbEvaluator;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,18 +82,18 @@ public class CalendarMainFragment extends Fragment
     private View divider6;
     private View divider7;
 
-    private int currentMounth;
+//    private int currentMounth;
 
-    Toolbar toolbar;
-    ArgbEvaluator argbEvaluator;
+//    Toolbar toolbar;
+//    ArgbEvaluator argbEvaluator;
 
-    private int[] colors = {
-            0xFF3F51B5,
-            0xFF51B53F, 0xFF51B53F, 0xFF51B53F,
-            0xFFB5513F, 0xFFB5513F, 0xFFB5513F,
-            0xFFFF8C00, 0xFFFF8C00, 0xFFFF8C00,
-            0xFF3F51B5, 0xFF3F51B5, 0xFF3F51B5,
-            0xFF3FB551 };
+//    private int[] colors = {
+//            0xFF3F51B5,
+//            0xFF51B53F, 0xFF51B53F, 0xFF51B53F,
+//            0xFFB5513F, 0xFFB5513F, 0xFFB5513F,
+//            0xFFFF8C00, 0xFFFF8C00, 0xFFFF8C00,
+//            0xFF3F51B5, 0xFF3F51B5, 0xFF3F51B5,
+//            0xFF3FB551 };
 
     @Nullable
     @Override
@@ -105,32 +103,6 @@ public class CalendarMainFragment extends Fragment
             @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
-
-        utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
-        utils.loadLanguageFromSettings(getContext());
-
-        digits = utils.preferredDigits(getContext());
-        clockIn24 = utils.clockIn24(getContext());
-        coord = utils.getCoordinate(getContext());
-        ptc = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
-
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            argbEvaluator = new ArgbEvaluator();
-        }
-
-        viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
-        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
-        viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-        viewPager.addOnPageChangeListener(this);
-
-        infoDay = (CardView) view.findViewById(R.id.info_day);
-        owghat = (CardView) view.findViewById(R.id.owghat);
-        event = (CardView) view.findViewById(R.id.event);
-
-        infoDay.setOnClickListener(this);
-        owghat.setOnClickListener(this);
 
         owghat1 = (LinearLayoutCompat) view.findViewById(R.id.owghat1);
         owghat2 = (LinearLayoutCompat) view.findViewById(R.id.owghat2);
@@ -157,8 +129,6 @@ public class CalendarMainFragment extends Fragment
         ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
         today = (TextView) view.findViewById(R.id.today);
 
-        today.setOnClickListener(this);
-
         azan1 = (TextView) view.findViewById(R.id.azan1);
         azan2 = (TextView) view.findViewById(R.id.azan2);
         azan3 = (TextView) view.findViewById(R.id.azan3);
@@ -170,6 +140,35 @@ public class CalendarMainFragment extends Fragment
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
 
+        infoDay = (CardView) view.findViewById(R.id.info_day);
+        owghat = (CardView) view.findViewById(R.id.owghat);
+        event = (CardView) view.findViewById(R.id.event);
+
+        viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
+
+        utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
+        utils.loadLanguageFromSettings(getContext());
+
+        digits = utils.preferredDigits(getContext());
+        clockIn24 = utils.clockIn24(getContext());
+        coord = utils.getCoordinate(getContext());
+        ptc = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
+
+//        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            argbEvaluator = new ArgbEvaluator();
+//        }
+
+        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+        viewPager.addOnPageChangeListener(this);
+
+        infoDay.setOnClickListener(this);
+        owghat.setOnClickListener(this);
+
+        today.setOnClickListener(this);
+
         setMonth();
 
         return view;
@@ -178,10 +177,10 @@ public class CalendarMainFragment extends Fragment
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            return;
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+//            return;
 
-        int color;
+//        int color;
 //        if (positionOffset > 0.5) {
 //            color = (Integer) argbEvaluator.evaluate(
 //                    positionOffset,
@@ -315,7 +314,7 @@ public class CalendarMainFragment extends Fragment
 
         month += 1;
 
-        currentMounth = month;
+//        currentMounth = month;
     }
 
     private void bringTodayYearMonth() {

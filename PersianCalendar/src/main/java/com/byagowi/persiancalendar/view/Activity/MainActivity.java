@@ -133,13 +133,13 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment");
-        transaction.commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment")
+                .commit();
     }
 
-    public void onClickItem(View v, int position) {
+    public void onClickItem(int position) {
         selectItem(position);
     }
 
@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment")
-                            .addToBackStack(null)
                             .commit();
 
                     menuPosition = CALENDAR;
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder, new ConverterFragment())
-                            .addToBackStack(null)
                             .commit();
 
                     menuPosition = CONVERTER;
@@ -201,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder, new CompassFragment())
-                            .addToBackStack(null)
                             .commit();
 
                     menuPosition = COMPASS;
@@ -214,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
-                            .addToBackStack(null)
                             .commit();
 
                     menuPosition = PREFERENCE;
@@ -227,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder, new AboutFragment())
-                            .addToBackStack(null)
                             .commit();
 
                     menuPosition = ABOUT;
