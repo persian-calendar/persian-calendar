@@ -44,7 +44,7 @@
             android:maxHeight="8dp"
             android:visibility="gone"
             android:maxWidth="8dp"
-            android:src="@drawable/icon"
+            android:src="@drawable/launcher_icon"
             android:layout_gravity="center" />
 
         <SeekBar
