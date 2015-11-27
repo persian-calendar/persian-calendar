@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">فارسی کلیز</string>
     <string name="widget_name">فارسی کلیز</string>
     <string name="widget_mini_name">فارسی کلیز (کوچنی)</string>
     <string name="latitude">جغرافیایی عرض</string>
@@ -8,6 +10,7 @@
     <string name="exit">وتل</string>
     <string name="enable_persian_digits">فارسی اعداد توانول</string>
     <string name="persian_digits">فارسی اعداد</string>
+    <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
     <string name="clock_on_widget">ساعت په ویجت کی</string>
     <string name="showing_clock_in_24">د ۲۴ ساعته ساعت ښودل</string>
     <string name="clock_in_24">۲۴ ساعته ساعت</string>
@@ -31,6 +34,7 @@
     <string name="pray_methods">د حساب کارونه</string>
     <string name="pray_methods_calculation">د شرعی اوقات د حساب کارونه</string>
     <string name="altitude">ارتفاع</string>
+    <string name="altitude_praytime">په متر کی (اختیاری)</string>
     <string name="location">ځای</string>
     <string name="location_help">که هیڅ کوم نه دی د ځای مختصات لاندی وارد وکۍ</string>
     <string name="showing_iran_time">ویجت او مطلع سازی نوار په ایران د وخت کی حتی ایران نه بیرون</string>
@@ -39,21 +43,18 @@
     <string name="compass_not_found">د قطب نما سنسور پیدا نشو</string>
 
     <string name="month_names">مياشت نومونه</string>
-    <string name="application_language">د پروگرام ژبه</string>
-
-    <string name="version">نسخه</string>
-    <string name="language">ژبه</string>
-    <string name="app_name">فارسی کلیز</string>
-    <string name="altitude_praytime">په متر کی (اختیاری)</string>
     <string name="calendar_font">د کلیز فانت</string>
-    <string name="calendar_font_summary">دکلیز فانت</string>
-    <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
+    <string name="application_language">د پروگرام ژبه</string>
+    <string name="language">ژبه</string>
     <string name="calendar_language">د کلیز ژبه</string>
-    <string name="athan">اذان</string>
     <string name="calendar_language_summary">The language to show the month and day names in</string>
+    <string name="version">نسخه</string>
+    <string name="calendar_font_summary">دکلیز فانت</string>
+    <string name="athan">اذان</string>
     <string name="athan_alarm_summary">Prayres to sound the alarm for</string>
     <string name="athan_alarm">Athan Alarm</string>
     <string name="athan_sound">Athan Sound</string>
+    <string name="match_system">Match System</string>
     <string name="athan_volume_summary">Set the volume for the alarm</string>
     <string name="athan_volume">Athan Volume</string>
     <string name="tap_to_stop_athan">Tap to stop Athan sound</string>
@@ -63,6 +64,15 @@
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
-    <string name="match_system">Match System</string>
+    <string name="azan1">اذان صبح</string>
+    <string name="azan2">اذان ظهر</string>
+    <string name="azan3">عصر</string>
+    <string name="azan4">اذان مغرب</string>
+    <string name="azan5">عشا</string>
+    <string name="aftab1">طلوع آفتاب</string>
+    <string name="aftab2">غروب آفتاب</string>
+    <string name="aftab3">نیمه وقت شرعی</string>
     <string name="owghat">اوقات شرعی</string>
+    <string name="events">رویداد‌ها</string>
+    <string name="today">امروز</string>
 </resources>

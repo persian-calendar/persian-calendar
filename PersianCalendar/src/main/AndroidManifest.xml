@@ -78,9 +78,10 @@
             <meta-data
                 android:name="protocolVersion"
                 android:value="1"/>
+
             <meta-data
                 android:name="description"
-                android:value="@string/app_name"/>
+                android:value="Persian Calendar"/>
         </service>
     </application>
 
