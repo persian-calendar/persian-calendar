@@ -10,5 +10,6 @@
     <string translatable="false" name="left_icon">{zmdi-chevron-left}</string>
     <string translatable="false" name="right_icon">{zmdi-chevron-right}</string>
     <string translatable="false" name="event_icon">{zmdi-calendar-note}</string>
+    <string translatable="false" name="convert_icon">{zmdi-swap-vertical-circle}</string>
 
 </resources>
