@@ -76,7 +76,9 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
                         .getSupportFragmentManager()
                         .findFragmentByTag("CalendarMainFragment");
 
-        calendarMainFragment.selectDay(Utils.getToday());
+        if (calendarMainFragment != null) {
+            calendarMainFragment.selectDay(Utils.getToday());
+        }
 
         return view;
     }
