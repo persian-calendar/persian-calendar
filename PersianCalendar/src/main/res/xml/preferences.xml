@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
+<android.support.v7.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:empub="http://schemas.android.com/apk/res-auto">
 
@@ -33,14 +33,6 @@
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits"/>
 
-        <android.support.v7.preference.ListPreference
-            android:defaultValue="LightTheme"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeKeys"
-            android:key="Theme"
-            android:summary="@string/select_skin"
-            android:title="@string/skin"/>
-
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory
@@ -58,6 +50,14 @@
             <!--android:key="WidgetTextColor"-->
             <!--android:summary="@string/select_widgets_text_color"-->
             <!--android:title="@string/widget_text_color"/>-->
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="fa"
+            android:entries="@array/calendarLanguageNames"
+            android:entryValues="@array/calendarLanguageKeys"
+            android:key="CalendarLanguage"
+            android:summary="@string/calendar_language_summary"
+            android:title="@string/calendar_language"/>
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="false"
@@ -152,4 +152,4 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>
