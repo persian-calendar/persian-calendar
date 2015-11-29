@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public Utils utils = Utils.getInstance();
 
     private DrawerLayout drawerLayout;
+    private DrawerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
-        DrawerAdapter adapter = new DrawerAdapter(this);
+        adapter = new DrawerAdapter(this);
         navigation.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -147,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (menuPosition != CALENDAR) {
             selectItem(CALENDAR);
+            adapter.selectedItem = 0;
+            adapter.notifyDataSetChanged();
         } else {
             finish();
         }
