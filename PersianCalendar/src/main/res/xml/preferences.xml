@@ -131,6 +131,11 @@
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap"/>
 
+        <com.byagowi.persiancalendar.view.custom.Dialogpref1
+            android:key="AthanAlarm"
+            android:summary="@string/athan_alarm_summary"
+            android:title="@string/athan_alarm"/>/>
+
         <!--<com.byagowi.persiancalendar.view.PrayerSelectPreference-->
             <!--android:key="AthanAlarm"-->
             <!--android:summary="@string/athan_alarm_summary"-->

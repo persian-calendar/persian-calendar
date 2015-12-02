@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -10,6 +11,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.view.custom.DialogPref;
 
 /**
  * Preference activity
@@ -95,5 +97,19 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             updateAthanPreferencesState(preference, newValue);
             return true;
         }
+    }
+
+
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        // the following call results in a dialogue being shown
+        DialogFragment fragment;
+//        if (preference instanceof LocationChooserDialog) {
+            fragment = DialogPref.newInstance(preference);
+            fragment.setTargetFragment(this, 0);
+            fragment.show(getFragmentManager(),
+                    "android.support.v7.preference.PreferenceFragment.DIALOG");
+//        } else super.onDisplayPreferenceDialog(preference);
     }
 }
