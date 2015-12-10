@@ -11,8 +11,8 @@ import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.custom.DialogPref;
-import com.byagowi.persiancalendar.view.custom.Dialogpref1;
+import com.byagowi.persiancalendar.view.custom.PrayerSelectDialog;
+import com.byagowi.persiancalendar.view.custom.PrayerSelectPreference;
 
 /**
  * Preference activity
@@ -100,14 +100,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         }
     }
 
-
-
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        // the following call results in a dialogue being shown
         DialogFragment fragment;
-        if (preference instanceof Dialogpref1) {
-            fragment = DialogPref.newInstance(preference);
+        if (preference instanceof PrayerSelectPreference) {
+            fragment = PrayerSelectDialog.newInstance(preference);
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");

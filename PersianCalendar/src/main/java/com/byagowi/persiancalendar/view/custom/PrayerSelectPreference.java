@@ -13,8 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Dialogpref1 extends DialogPreference{
-    private static final String TAG = "PrayerSelectPreference";
+public class PrayerSelectPreference extends DialogPreference{
 
     public CharSequence[] mEntries;
     public CharSequence[] mEntryValues;
@@ -22,14 +21,12 @@ public class Dialogpref1 extends DialogPreference{
     public Set<String> mNewValues;
     public boolean mPreferenceChanged;
 
-    public Dialogpref1(Context context, AttributeSet attrs) {
+    public PrayerSelectPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-//        super.onSetInitialValue(restorePersistedValue, defaultValue);
         String alarmTimes = getPersistedString("");
         setValues(restorePersistedValue ? Arrays.asList(TextUtils.split(alarmTimes, ",")) : (Set<String>) defaultValue);
     }
@@ -79,8 +76,7 @@ public class Dialogpref1 extends DialogPreference{
             } else {
                 super.onRestoreInstanceState(state);
             }
-        } catch (Exception e) {
-//            Log.e(TAG, "", e);
+        } catch (Exception ignored) {
         }
     }
 
