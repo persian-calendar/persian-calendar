@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.view.custom.DialogPref;
+import com.byagowi.persiancalendar.view.custom.Dialogpref1;
 
 /**
  * Preference activity
@@ -105,11 +106,13 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public void onDisplayPreferenceDialog(Preference preference) {
         // the following call results in a dialogue being shown
         DialogFragment fragment;
-//        if (preference instanceof LocationChooserDialog) {
+        if (preference instanceof Dialogpref1) {
             fragment = DialogPref.newInstance(preference);
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
-//        } else super.onDisplayPreferenceDialog(preference);
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 }
