@@ -34,7 +34,6 @@ import calendar.PersianDate;
  */
 public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private final Utils utils = Utils.getInstance();
-    private final int yearDiffRange = 200;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -50,7 +49,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_converter, container, false);
 
-//        utils.setTheme(this);
 //        utils.loadLanguageFromSettings(this);
 
         // fill members
@@ -136,8 +134,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             date0.setText(sb);
             date1.setText(calendarsTextList.get(1));
             date2.setText(calendarsTextList.get(2));
-//            utils.prepareTextView(convertedDateTextView);
-//            convertedDateTextView.setText(Utils.textShaper(sb.toString()));
         } catch (RuntimeException e) {
             divider.setVisibility(View.GONE);
             moreDate.setVisibility(View.GONE);
@@ -168,6 +164,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         // years spinner init.
         List<String> yearsList = new ArrayList<>();
+        int yearDiffRange = 200;
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
             yearsList.add(Utils.formatNumber(i, digits));

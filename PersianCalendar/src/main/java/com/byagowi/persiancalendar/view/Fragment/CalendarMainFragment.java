@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,16 +27,13 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment
-        implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class CalendarMainFragment extends Fragment implements View.OnClickListener {
 
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
     private final Utils utils = Utils.getInstance();
-    private Date date = new Date();
 
     private Calendar c = Calendar.getInstance();
-    private Map<PrayTime, Clock> prayTimes;
     private char[] digits;
     private boolean clockIn24;
 
@@ -61,7 +56,6 @@ public class CalendarMainFragment extends Fragment
     private TextView eventTitle;
     private TextView today;
 
-    private CardView infoDay;
     private CardView owghat;
     private CardView event;
 
@@ -81,19 +75,6 @@ public class CalendarMainFragment extends Fragment
     private View divider5;
     private View divider6;
     private View divider7;
-
-//    private int currentMounth;
-
-//    Toolbar toolbar;
-//    ArgbEvaluator argbEvaluator;
-
-//    private int[] colors = {
-//            0xFF3F51B5,
-//            0xFF51B53F, 0xFF51B53F, 0xFF51B53F,
-//            0xFFB5513F, 0xFFB5513F, 0xFFB5513F,
-//            0xFFFF8C00, 0xFFFF8C00, 0xFFFF8C00,
-//            0xFF3F51B5, 0xFF3F51B5, 0xFF3F51B5,
-//            0xFF3FB551 };
 
     @Nullable
     @Override
@@ -140,7 +121,7 @@ public class CalendarMainFragment extends Fragment
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
 
-        infoDay = (CardView) view.findViewById(R.id.info_day);
+        CardView infoDay = (CardView) view.findViewById(R.id.info_day);
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.event);
 
@@ -154,60 +135,15 @@ public class CalendarMainFragment extends Fragment
         coord = utils.getCoordinate(getContext());
         ptc = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
 
-//        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            argbEvaluator = new ArgbEvaluator();
-//        }
-
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-        viewPager.addOnPageChangeListener(this);
 
         infoDay.setOnClickListener(this);
         owghat.setOnClickListener(this);
 
         today.setOnClickListener(this);
 
-        setMonth();
-
         return view;
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-//            return;
-
-//        int color;
-//        if (positionOffset > 0.5) {
-//            color = (Integer) argbEvaluator.evaluate(
-//                    positionOffset,
-//                    colors[currentMounth + 1],
-//                    colors[currentMounth]);
-//            Log.e("test", "-");
-//        } else {
-
-//            color = (Integer) argbEvaluator.evaluate(
-//                    positionOffset,
-//                    colors[currentMounth + 1],
-//                    colors[currentMounth]);
-//            Log.e("test", "+");
-//        }
-
-//        toolbar.setBackgroundColor(color);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        if (state == 0) {
-            setMonth();
-        }
     }
 
     public void changeMonth(int position) {
@@ -250,9 +186,9 @@ public class CalendarMainFragment extends Fragment
         }
 
         c.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-        date = c.getTime();
+        Date date = c.getTime();
 
-        prayTimes = ptc.calculate(date, coord);
+        Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
 
         azan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
         aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24));
@@ -297,24 +233,6 @@ public class CalendarMainFragment extends Fragment
                 bringTodayYearMonth();
                 break;
         }
-    }
-
-    private void setMonth(){
-        int posithon = viewPager.getCurrentItem();
-        int offset = posithon - CalendarMainFragment.MONTHS_LIMIT / 2;
-
-        PersianDate persianDate = Utils.getToday();
-        int month = persianDate.getMonth() - offset;
-        month -= 1;
-
-        month = month % 12;
-        if (month < 0) {
-            month += 12;
-        }
-
-        month += 1;
-
-//        currentMounth = month;
     }
 
     private void bringTodayYearMonth() {

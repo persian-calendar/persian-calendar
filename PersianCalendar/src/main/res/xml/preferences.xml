@@ -119,13 +119,6 @@
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume"/>
 
-        <!--<com.byagowi.persiancalendar.view.AthanSoundPreference-->
-            <!--android:key="AthanSound"-->
-            <!--android:ringtoneType="alarm"-->
-            <!--android:showDefault="true"-->
-            <!--android:showSilent="true"-->
-            <!--android:title="@string/athan_sound"/>-->
-
     </android.support.v7.preference.PreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>
