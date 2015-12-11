@@ -82,6 +82,10 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         calendarMainFragment.selectDay(day);
     }
 
+    public void onLongClickItem(PersianDate day) {
+        calendarMainFragment.addEventOnCalendar(day);
+    }
+
     @Override
     public void onClick(View v) {
 

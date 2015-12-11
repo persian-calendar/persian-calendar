@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView num;
         View today;
         View selectDay;
@@ -41,6 +42,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             selectDay = itemView.findViewById(R.id.select_day);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -53,6 +55,22 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 select_Day = getAdapterPosition();
                 notifyDataSetChanged();
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                try {
+                    monthNewFragment.onLongClickItem(days
+                            .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
+                            .getPersianDate());
+                } catch (Exception e) {
+                    // Ignore it for now
+                    // I guess it will occur on CyanogenMod phones
+                    // where Google extra things is not installed
+                }
+            }
+            return false;
         }
     }
 

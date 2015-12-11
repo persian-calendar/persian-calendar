@@ -1,6 +1,11 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -165,6 +170,23 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
         setOwghat(civilDate);
         showEvent(persianDate);
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public void addEventOnCalendar(PersianDate persianDate) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setData(CalendarContract.Events.CONTENT_URI);
+        CivilDate civil = DateConverter.persianToCivil(persianDate);
+        intent.putExtra(CalendarContract.Events.DESCRIPTION,
+                utils.dayTitleSummary(persianDate, digits));
+        Calendar time = Calendar.getInstance();
+        time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                time.getTimeInMillis());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                time.getTimeInMillis());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+        startActivity(intent);
     }
 
     private void showEvent(PersianDate persianDate) {
