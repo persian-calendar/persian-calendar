@@ -21,12 +21,6 @@
             android:summary="@string/calendar_language_summary"
             android:title="@string/calendar_language"/>
 
-        <!--<ListPreference-->
-        <!--android:defaultValue="NotoNaskhArabic-Regular.ttf"-->
-        <!--android:key="CalendarFont"-->
-        <!--android:summary="@string/calendar_font_summary"-->
-        <!--android:title="@string/calendar_font"/>-->
-
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
@@ -50,14 +44,6 @@
             <!--android:key="WidgetTextColor"-->
             <!--android:summary="@string/select_widgets_text_color"-->
             <!--android:title="@string/widget_text_color"/>-->
-
-        <android.support.v7.preference.ListPreference
-            android:defaultValue="fa"
-            android:entries="@array/calendarLanguageNames"
-            android:entryValues="@array/calendarLanguageKeys"
-            android:key="CalendarLanguage"
-            android:summary="@string/calendar_language_summary"
-            android:title="@string/calendar_language"/>
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="false"
@@ -134,12 +120,7 @@
         <com.byagowi.persiancalendar.view.custom.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
-            android:title="@string/athan_alarm"/>/>
-
-        <!--<com.byagowi.persiancalendar.view.PrayerSelectPreference-->
-            <!--android:key="AthanAlarm"-->
-            <!--android:summary="@string/athan_alarm_summary"-->
-            <!--android:title="@string/athan_alarm"/>-->
+            android:title="@string/athan_alarm"/>
 
         <com.byagowi.persiancalendar.view.custom.SeekBarPreference
             android:key="AthanVolume"
