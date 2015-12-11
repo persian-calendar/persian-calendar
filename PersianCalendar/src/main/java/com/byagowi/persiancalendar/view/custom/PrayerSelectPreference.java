@@ -13,8 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PrayerSelectPreference extends DialogPreference{
-
+public class PrayerSelectPreference extends DialogPreference {
     public CharSequence[] mEntries;
     public CharSequence[] mEntryValues;
     public Set<String> mValues = new HashSet<>();
@@ -28,7 +27,8 @@ public class PrayerSelectPreference extends DialogPreference{
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         String alarmTimes = getPersistedString("");
-        setValues(restorePersistedValue ? Arrays.asList(TextUtils.split(alarmTimes, ",")) : (Set<String>) defaultValue);
+        setValues(restorePersistedValue ?
+                Arrays.asList(TextUtils.split(alarmTimes, ",")) : (Set<String>) defaultValue);
     }
 
     public void setValues(Collection<String> values) {
@@ -106,7 +106,8 @@ public class PrayerSelectPreference extends DialogPreference{
         }
 
         @SuppressWarnings("unused")
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
@@ -124,9 +125,7 @@ public class PrayerSelectPreference extends DialogPreference{
             source.readStringArray(strings);
 
             final int stringCount = strings.length;
-            for (int i = 0; i < stringCount; i++) {
-                values.add(strings[i]);
-            }
+            values.addAll(Arrays.asList(strings).subList(0, stringCount));
 
             return values;
         }

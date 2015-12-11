@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:empub="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/general">
-        <!--<ListPreference-->
-        <!--android:defaultValue="en"-->
-        <!--android:entries="@array/languageNames"-->
-        <!--android:entryValues="@array/languageKeys"-->
-        <!--android:key="ApplicationLanguage"-->
-        <!--android:summary="@string/application_language"-->
-        <!--android:title="@string/language"/>-->
 
         <android.support.v7.preference.ListPreference
             android:defaultValue="fa"
@@ -122,12 +114,10 @@
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm"/>
 
-        <com.byagowi.persiancalendar.view.custom.SeekBarPreference
+        <com.byagowi.persiancalendar.view.custom.AthanVolumePreference
             android:key="AthanVolume"
             android:summary="@string/athan_volume_summary"
-            android:title="@string/athan_volume"
-            android:defaultValue="50"
-            empub:max="100"/>
+            android:title="@string/athan_volume"/>
 
         <!--<com.byagowi.persiancalendar.view.AthanSoundPreference-->
             <!--android:key="AthanSound"-->

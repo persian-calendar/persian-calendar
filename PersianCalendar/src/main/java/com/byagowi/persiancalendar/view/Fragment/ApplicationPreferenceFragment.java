@@ -11,6 +11,8 @@ import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.view.custom.AthanVolumeDialog;
+import com.byagowi.persiancalendar.view.custom.AthanVolumePreference;
 import com.byagowi.persiancalendar.view.custom.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.custom.PrayerSelectPreference;
 
@@ -105,6 +107,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         DialogFragment fragment;
         if (preference instanceof PrayerSelectPreference) {
             fragment = PrayerSelectDialog.newInstance(preference);
+            fragment.setTargetFragment(this, 0);
+            fragment.show(getFragmentManager(),
+                    "android.support.v7.preference.PreferenceFragment.DIALOG");
+        } else if (preference instanceof AthanVolumePreference) {
+            fragment = AthanVolumeDialog.newInstance(preference);
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");

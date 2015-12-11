@@ -26,8 +26,11 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((PrayerSelectPreference)getPreference()).mEntries = getResources().getStringArray(R.array.prayerTimeNames);
-        ((PrayerSelectPreference)getPreference()).mEntryValues = getResources().getStringArray(R.array.prayerTimeKeys);
+        ((PrayerSelectPreference)getPreference()).mEntries = getResources()
+                .getStringArray(R.array.prayerTimeNames);
+
+        ((PrayerSelectPreference)getPreference()).mEntryValues = getResources()
+                .getStringArray(R.array.prayerTimeKeys);
     }
 
     @Override
@@ -39,7 +42,8 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
-        if (((PrayerSelectPreference)getPreference()).mEntries == null || ((PrayerSelectPreference)getPreference()).mEntryValues == null) {
+        if (((PrayerSelectPreference)getPreference()).mEntries == null
+                || ((PrayerSelectPreference)getPreference()).mEntryValues == null) {
             throw new IllegalStateException(
                     "MultiSelectListPreference requires an entries array and "
                             + "an entryValues array.");
@@ -47,21 +51,30 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 
         if (((PrayerSelectPreference)getPreference()).mNewValues == null) {
             ((PrayerSelectPreference)getPreference()).mNewValues = new HashSet<>();
-            ((PrayerSelectPreference)getPreference()).mNewValues.addAll(((PrayerSelectPreference)getPreference()).mValues);
+            ((PrayerSelectPreference)getPreference()).mNewValues.addAll(
+                    ((PrayerSelectPreference)getPreference()).mValues);
+
             ((PrayerSelectPreference)getPreference()).mPreferenceChanged = false;
         }
 
-        final boolean[] checkedItems = getSelectedItems(((PrayerSelectPreference)getPreference()).mNewValues);
-        builder.setMultiChoiceItems(((PrayerSelectPreference)getPreference()).mEntries, checkedItems,
+        final boolean[] checkedItems = getSelectedItems(
+                ((PrayerSelectPreference)getPreference()).mNewValues);
+
+        builder.setMultiChoiceItems(
+                ((PrayerSelectPreference)getPreference()).mEntries, checkedItems,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
                         if (isChecked) {
-                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged |= ((PrayerSelectPreference)getPreference()).mNewValues
-                                    .add(((PrayerSelectPreference)getPreference()).mEntryValues[which].toString());
+                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged
+                                    |= ((PrayerSelectPreference)getPreference()).mNewValues
+                                    .add(((PrayerSelectPreference)getPreference())
+                                            .mEntryValues[which].toString());
                         } else {
-                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged |= ((PrayerSelectPreference)getPreference()).mNewValues
-                                    .remove(((PrayerSelectPreference)getPreference()).mEntryValues[which].toString());
+                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged
+                                    |= ((PrayerSelectPreference)getPreference()).mNewValues
+                                    .remove(((PrayerSelectPreference)getPreference())
+                                            .mEntryValues[which].toString());
                         }
                     }
                 });
