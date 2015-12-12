@@ -149,6 +149,7 @@ public class UpdateUtils {
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                             .setOngoing(true).setLargeIcon(largeIcon)
                             .setSmallIcon(icon)
+                            .setWhen(0)
                             .setContentIntent(launchAppPendingIntent)
                             .setContentText(Utils.textShaper(body))
                             .setContentTitle(Utils.textShaper(title)).build());
