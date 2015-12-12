@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="view_padding">16dp</dimen>
+    <dimen name="divider_margin">5dp</dimen>
+    <dimen name="divider_margin2">44dp</dimen>
+    <dimen name="icon_margin">16dp</dimen>
+    <dimen name="icon_size">28dp</dimen>
+    <dimen name="padding_item">8dp</dimen>
+    <dimen name="status_padding_top">23dp</dimen>
+    <dimen name="drawer_width">250dp</dimen>
+    <dimen name="drawer_header_height">150dp</dimen>
+    <dimen name="drawer_item_height">48dp</dimen>
+
+    <dimen name="grid_calendar_height">348dp</dimen>
+    <dimen name="grid_calendar_padding">20dp</dimen>
+    <dimen name="grid_calendar_padding_bottom">10dp</dimen>
+
+    <dimen name="item_calendar_margin_top">4dp</dimen>
+
+    <dimen name="text_size_title">16sp</dimen>
+    <dimen name="text_size_description">14sp</dimen>
+    <dimen name="text_size_note">14sp</dimen>
+    <dimen name="text_size_drawer_subtitle">10sp</dimen>
+    <dimen name="text_size_drawer">16sp</dimen>
+    <dimen name="icon_text_size">26sp</dimen>
+
+    <dimen name="day_item_size">40dp</dimen>
+    <dimen name="day_item_select_size">38dp</dimen>
+
+
+</resources>

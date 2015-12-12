@@ -20,12 +20,7 @@ import java.util.List;
 import calendar.PersianDate;
 
 public class MonthNewFragment extends Fragment implements View.OnClickListener {
-    private RecyclerView recyclerView;
-    private MonthAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private final Utils utils = Utils.getInstance();
-    private IconTextView prev;
-    private IconTextView next;
     private CalendarMainFragment calendarMainFragment;
 
     @Override
@@ -36,8 +31,8 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         List<Day> days = utils.getDays(getContext(), offset);
         char[] digits = utils.preferredDigits(getActivity());
 
-        prev = (IconTextView) view.findViewById(R.id.prev);
-        next = (IconTextView) view.findViewById(R.id.next);
+        IconTextView prev = (IconTextView) view.findViewById(R.id.prev);
+        IconTextView next = (IconTextView) view.findViewById(R.id.next);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
@@ -64,22 +59,31 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         TextView currentYearTextView = (TextView) view.findViewById(R.id.currentYearTextView);
         currentYearTextView.setText(Utils.formatNumber(persianDate.getYear(), digits));
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(getContext(), 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MonthAdapter(getActivity(), this, days);
+        MonthAdapter adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
-        calendarMainFragment = (CalendarMainFragment) getActivity().getSupportFragmentManager().findFragmentByTag("CalendarMainFragment");
-        calendarMainFragment.selectDay(Utils.getToday());
+        calendarMainFragment = (CalendarMainFragment) getActivity()
+                        .getSupportFragmentManager()
+                        .findFragmentByTag("CalendarMainFragment");
+
+        if (calendarMainFragment != null) {
+            calendarMainFragment.selectDay(Utils.getToday());
+        }
 
         return view;
     }
 
     public void onClickItem(PersianDate day) {
         calendarMainFragment.selectDay(day);
+    }
+
+    public void onLongClickItem(PersianDate day) {
+        calendarMainFragment.addEventOnCalendar(day);
     }
 
     @Override

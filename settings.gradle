@@ -1,1 +1,1 @@
-include ':libraries:android-ColorPickerPreference', ':PersianCalendar'
+include ':PersianCalendar'

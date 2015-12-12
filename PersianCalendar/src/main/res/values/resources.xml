@@ -1,0 +1,15 @@
+<resources>
+
+    <string translatable="false" name="calendar_icon">{zmdi-calendar-alt}</string>
+    <string translatable="false" name="azan1_icon">{zmdi-brightness-4}</string>
+    <string translatable="false" name="aftab1_icon">{zmdi-brightness-7}</string>
+    <string translatable="false" name="azan2_icon">{zmdi-brightness-5}</string>
+    <string translatable="false" name="aftab2_icon">{zmdi-brightness-6}</string>
+    <string translatable="false" name="azan3_icon">{zmdi-brightness-3}</string>
+    <string translatable="false" name="aftab3_icon">{zmdi-brightness-2}</string>
+    <string translatable="false" name="left_icon">{zmdi-chevron-left}</string>
+    <string translatable="false" name="right_icon">{zmdi-chevron-right}</string>
+    <string translatable="false" name="event_icon">{zmdi-calendar-note}</string>
+    <string translatable="false" name="convert_icon">{zmdi-swap-vertical-circle}</string>
+
+</resources>

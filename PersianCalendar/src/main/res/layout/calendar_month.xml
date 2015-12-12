@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="348dp"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/grid_calendar_height"
     android:orientation="vertical"
-    android:background="@color/first_row_background_color">
+    android:background="@color/winter_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,18 +12,14 @@
 
         <com.malinskiy.materialicons.widget.IconTextView
             android:id="@+id/prev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="#22000000"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:layout_alignParentLeft="true"
-            android:text="{zmdi-chevron-left}"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="1"
-            android:textSize="40sp"
-            android:paddingLeft="20dp"
             android:layout_centerVertical="true"
-            android:textColor="@color/first_row_text_color2"/>
+            android:text="@string/left_icon"
+            android:textSize="@dimen/icon_text_size"
+            android:layout_marginLeft="@dimen/icon_margin"
+            android:textColor="@color/text_color_transparent_white"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,38 +28,33 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/currentYearTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:id="@+id/currentYearTextView"
-                android:textColor="@color/first_row_text_color2"
+                android:textColor="@color/text_color_transparent_white"
                 android:layout_gravity="center"/>
 
             <TextView
+                android:id="@+id/currentMonthTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
-                android:id="@+id/currentMonthTextView"
-                android:textColor="@color/first_row_text_color2"
+                android:textColor="@color/text_color_transparent_white"
                 android:layout_gravity="center"/>
-
 
         </LinearLayout>
 
         <com.malinskiy.materialicons.widget.IconTextView
             android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="#22000000"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:layout_alignParentRight="true"
-            android:text="{zmdi-chevron-right}"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="1"
-            android:textSize="40sp"
             android:layout_centerVertical="true"
-            android:textColor="@color/first_row_text_color2"
-            android:paddingRight="20dp"/>
+            android:text="@string/right_icon"
+            android:textSize="@dimen/icon_text_size"
+            android:layout_marginLeft="@dimen/icon_margin"
+            android:textColor="@color/text_color_transparent_white"/>
 
     </RelativeLayout>
 
@@ -73,11 +64,11 @@
         android:layout_height="wrap_content"
         android:layoutDirection="rtl"
         android:scrollbars="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:layout_gravity="center"
-        android:foregroundGravity="center">
+        android:paddingLeft="@dimen/grid_calendar_padding"
+        android:paddingRight="@dimen/grid_calendar_padding"
+        android:paddingBottom="@dimen/grid_calendar_padding_bottom"
+        android:layout_gravity="center">
+
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import com.byagowi.persiancalendar.CalendarType;
 import com.byagowi.persiancalendar.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.locale.CalendarStrings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,39 +32,37 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class ConverterFragment extends Fragment {
+public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private final Utils utils = Utils.getInstance();
-    private final int yearDiffRange = 200;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
     private Spinner daySpinner;
-    private TextView convertedDateTextView;
     private int startingYearOnYearSpinner = 0;
+    private TextView date0;
+    private TextView date1;
+    private TextView date2;
+    private LinearLayoutCompat moreDate;
+    private View divider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_converter, container, false);
 
-//        utils.setTheme(this);
 //        utils.loadLanguageFromSettings(this);
-
 
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
         yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
         monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
         daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
-        convertedDateTextView = (TextView) view.findViewById(R.id.convertedDateTextView);
 
-        TextView labelDay = (TextView) view.findViewById(R.id.converterLabelDay);
-        TextView labelMonth = (TextView) view.findViewById(R.id.converterLabelMonth);
-        TextView labelYear = (TextView) view.findViewById(R.id.converterLabelYear);
-        labelDay.setText(utils.getString(CalendarStrings.DAY));
-        labelMonth.setText(utils.getString(CalendarStrings.MONTH));
-        labelYear.setText(utils.getString(CalendarStrings.YEAR));
+        date0 = (TextView) view.findViewById(R.id.date0);
+        date1 = (TextView) view.findViewById(R.id.date1);
+        date2 = (TextView) view.findViewById(R.id.date2);
 
-        //
+        divider = view.findViewById(R.id.divider_line);
+        moreDate = (LinearLayoutCompat) view.findViewById(R.id.more_date);
 
         // fill views
         calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(), android.R.layout.select_dialog_item));
@@ -72,12 +70,11 @@ public class ConverterFragment extends Fragment {
 
         fillYearMonthDaySpinners();
 
-        calendarTypeSpinner.setOnItemSelectedListener(new CalendarTypeSpinnerListener());
+        calendarTypeSpinner.setOnItemSelectedListener(this);
 
-        CalendarSpinnersListener csl = new CalendarSpinnersListener();
-        yearSpinner.setOnItemSelectedListener(csl);
-        monthSpinner.setOnItemSelectedListener(csl);
-        daySpinner.setOnItemSelectedListener(csl);
+        yearSpinner.setOnItemSelectedListener(this);
+        monthSpinner.setOnItemSelectedListener(this);
+        daySpinner.setOnItemSelectedListener(this);
         //
         return view;
     }
@@ -128,22 +125,19 @@ public class ConverterFragment extends Fragment {
                     break;
             }
 
+
             sb.append(utils.getWeekDayName(civilDate));
             sb.append(Utils.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
-            sb.append("\n\n");
-            sb.append(utils.getString(CalendarStrings.EQUALS_WITH));
-            sb.append(":\n");
-            sb.append(calendarsTextList.get(1));
-            sb.append("\n");
-            sb.append(calendarsTextList.get(2));
-            sb.append("\n");
 
-            utils.prepareTextView(convertedDateTextView);
-            convertedDateTextView.setText(Utils.textShaper(sb.toString()));
+            date0.setText(sb);
+            date1.setText(calendarsTextList.get(1));
+            date2.setText(calendarsTextList.get(2));
         } catch (RuntimeException e) {
-            convertedDateTextView.setText("Date you entered was not valid!");
+            divider.setVisibility(View.GONE);
+            moreDate.setVisibility(View.GONE);
+            date0.setText(getString(R.string.date_exeption));
         }
     }
 
@@ -170,12 +164,15 @@ public class ConverterFragment extends Fragment {
 
         // years spinner init.
         List<String> yearsList = new ArrayList<>();
+        int yearDiffRange = 200;
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
             yearsList.add(Utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> yearArrayAdaptor = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, yearsList);
+                android.R.layout.simple_spinner_dropdown_item, yearsList);
+
+
         yearSpinner.setAdapter(yearArrayAdaptor);
 
         yearSpinner.setSelection(yearDiffRange / 2);
@@ -184,7 +181,7 @@ public class ConverterFragment extends Fragment {
         // month spinner init.
         List<String> monthsList = utils.getMonthNameList(date);
         ArrayAdapter<String> monthArrayAdaptor = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, monthsList);
+                android.R.layout.simple_spinner_dropdown_item, monthsList);
         monthSpinner.setAdapter(monthArrayAdaptor);
 
         monthSpinner.setSelection(date.getMonth() - 1);
@@ -196,7 +193,7 @@ public class ConverterFragment extends Fragment {
             daysList.add(Utils.formatNumber(i, digits));
         }
         ArrayAdapter<String> dayArrayAdaptor = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, daysList);
+                android.R.layout.simple_spinner_dropdown_item, daysList);
         daySpinner.setAdapter(dayArrayAdaptor);
 
         daySpinner.setSelection(date.getDayOfMonth() - 1);
@@ -204,26 +201,29 @@ public class ConverterFragment extends Fragment {
 
     }
 
-    // inner classes
-    private class CalendarSpinnersListener implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-            fillCalendarInfo();
-        }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.yearSpinner:
+                fillCalendarInfo();
+            break;
 
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
+            case R.id.monthSpinner:
+                fillCalendarInfo();
+                break;
+
+            case R.id.daySpinner:
+                fillCalendarInfo();
+                break;
+
+            case R.id.calendarTypeSpinner:
+                fillYearMonthDaySpinners();
+                break;
         }
     }
 
-    private class CalendarTypeSpinnerListener implements AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-            fillYearMonthDaySpinners();
-        }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
     }
 }

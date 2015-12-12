@@ -41,6 +41,7 @@
     <string name="iran_time">Iran Time</string>
     <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass_not_found">Compass sensor not found</string>
+
     <string name="month_names">Month Names</string>
     <string name="calendar_font">Calendar Font</string>
     <string name="application_language">Application Lanuage</string>
@@ -63,4 +64,30 @@
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
+    <string name="azan1">اذان صبح</string>
+    <string name="azan2">اذان ظهر</string>
+    <string name="azan3">عصر</string>
+    <string name="azan4">اذان مغرب</string>
+    <string name="azan5">عشا</string>
+    <string name="aftab1">طلوع آفتاب</string>
+    <string name="aftab2">غروب آفتاب</string>
+    <string name="aftab3">نیمه وقت شرعی</string>
+    <string name="owghat">اوقات شرعی</string>
+    <string name="events">رویداد‌ها</string>
+    <string name="today">امروز</string>
+    <string name="select_type_date">انتخاب نوع تاریخ</string>
+    <string name="year">سال</string>
+    <string name="mount">ماه</string>
+    <string name="day">روز</string>
+    <string name="select_year">انتخاب سال</string>
+    <string name="select_mount">انتخاب ماه</string>
+    <string name="select_day">انتخاب روز</string>
+    <string name="date_exeption">Date you entered was not valid!</string>
+
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
 </resources>
