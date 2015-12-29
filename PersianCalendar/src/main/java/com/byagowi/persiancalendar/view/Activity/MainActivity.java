@@ -27,6 +27,10 @@ import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
+import com.github.praytimes.PrayTime;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Program activity for android

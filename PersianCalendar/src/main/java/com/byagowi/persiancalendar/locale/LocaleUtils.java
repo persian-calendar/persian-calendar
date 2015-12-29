@@ -62,7 +62,6 @@ public class LocaleUtils {
         try {
             InputStream pis = context.getAssets().open("locale/" + CALENDAR_BUNDLE + fileSuffix + ".properties");
             ResourceBundle bundle = new PropertyResourceBundle(pis);
-            Log.v(TAG, "bundle key test: " + getUTF8(bundle.getString(TODAY)));
 
             // cache strings for later use
             for (LocaleData.PersianMonthNames name : LocaleData.PersianMonthNames.values()) {
