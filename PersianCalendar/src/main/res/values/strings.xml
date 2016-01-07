@@ -90,6 +90,6 @@
         <item>هجری قمری</item>
         <item>میلادی</item>
     </string-array>
-    <string name="stop">Stop</string>
+    <string name="stop"><u>Stop</u></string>
 
 </resources>

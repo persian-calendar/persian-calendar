@@ -20,7 +20,7 @@ public class AthanView extends AppCompatActivity {
     public static boolean displayed = false;
     private static AthanView instance;
 
-    private int layoutId = R.layout.activity_athan_fajr;
+    private int layoutId = R.layout.activity_athan_dhuhr;
     private int athanIcon = R.string.azan1_icon;
 
     @Override
