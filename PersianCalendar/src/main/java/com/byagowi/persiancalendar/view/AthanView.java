@@ -3,9 +3,11 @@ package com.byagowi.persiancalendar.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -15,9 +17,12 @@ import com.byagowi.persiancalendar.R;
 import com.github.praytimes.PrayTime;
 import com.malinskiy.materialicons.widget.IconTextView;
 
+import java.util.concurrent.TimeUnit;
+
 public class AthanView extends AppCompatActivity {
     private static final String TAG = "AthanView";
     public static boolean displayed = false;
+    private static boolean handlerRunning = false;
     private static AthanView instance;
 
     private int layoutId = R.layout.activity_athan_dhuhr;
@@ -35,6 +40,15 @@ public class AthanView extends AppCompatActivity {
 
         instance = this;
         displayed = true;
+
+        handlerRunning = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handlerRunning = false;
+                hideAthan();
+            }
+        }, TimeUnit.SECONDS.toMillis(45));
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         TextView textAlarmName = (TextView) findViewById(R.id.textAlarmName);
@@ -129,7 +143,8 @@ public class AthanView extends AppCompatActivity {
     }
 
     public static void hideAthan() {
-        if (instance != null) {
+        Log.d(TAG, "trying to hide athan screen. handler running: " + handlerRunning);
+        if (instance != null && !handlerRunning) {
             displayed = false;
             instance.finish();
         }
