@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
@@ -64,14 +63,14 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     private CardView owghat;
     private CardView event;
 
-    private LinearLayoutCompat owghat1;
-    private LinearLayoutCompat owghat2;
-    private LinearLayoutCompat owghat3;
-    private LinearLayoutCompat owghat4;
-    private LinearLayoutCompat owghat5;
-    private LinearLayoutCompat owghat6;
-    private LinearLayoutCompat owghat7;
-    private LinearLayoutCompat owghat8;
+    private RelativeLayout owghat1;
+    private RelativeLayout owghat2;
+    private RelativeLayout owghat3;
+    private RelativeLayout owghat4;
+    private RelativeLayout owghat5;
+    private RelativeLayout owghat6;
+    private RelativeLayout owghat7;
+    private RelativeLayout owghat8;
 
     private View divider1;
     private View divider2;
@@ -90,14 +89,14 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
         View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
 
-        owghat1 = (LinearLayoutCompat) view.findViewById(R.id.owghat1);
-        owghat2 = (LinearLayoutCompat) view.findViewById(R.id.owghat2);
-        owghat3 = (LinearLayoutCompat) view.findViewById(R.id.owghat3);
-        owghat4 = (LinearLayoutCompat) view.findViewById(R.id.owghat4);
-        owghat5 = (LinearLayoutCompat) view.findViewById(R.id.owghat5);
-        owghat6 = (LinearLayoutCompat) view.findViewById(R.id.owghat6);
-        owghat7 = (LinearLayoutCompat) view.findViewById(R.id.owghat7);
-        owghat8 = (LinearLayoutCompat) view.findViewById(R.id.owghat8);
+        owghat1 = (RelativeLayout) view.findViewById(R.id.owghat1);
+        owghat2 = (RelativeLayout) view.findViewById(R.id.owghat2);
+        owghat3 = (RelativeLayout) view.findViewById(R.id.owghat3);
+        owghat4 = (RelativeLayout) view.findViewById(R.id.owghat4);
+        owghat5 = (RelativeLayout) view.findViewById(R.id.owghat5);
+        owghat6 = (RelativeLayout) view.findViewById(R.id.owghat6);
+        owghat7 = (RelativeLayout) view.findViewById(R.id.owghat7);
+        owghat8 = (RelativeLayout) view.findViewById(R.id.owghat8);
 
         divider1 = view.findViewById(R.id.div1);
         divider2 = view.findViewById(R.id.div2);
