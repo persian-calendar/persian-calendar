@@ -14,6 +14,12 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:background">@color/background_color</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
     <style name="ShadowTextStyle">
         <item name="android:paddingLeft">4px</item>
         <item name="android:paddingBottom">4px</item>

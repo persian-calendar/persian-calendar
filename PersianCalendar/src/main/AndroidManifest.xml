@@ -31,9 +31,19 @@
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmReceiver"/>
-        <receiver android:name=".AthanResetReceiver"/>
-        <receiver android:name=".AlarmReceiver$StopAthanPlaybackReceiver"/>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".AthanResetReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".AlarmReceiver$StopAthanPlaybackReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.byagowi.persiancalendar.stop_athan" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".ApplicationService"
@@ -83,6 +93,10 @@
                 android:name="description"
                 android:value="Persian Calendar"/>
         </service>
+
+        <activity
+            android:name=".view.AthanView"
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>

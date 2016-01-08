@@ -57,7 +57,7 @@
     <string name="match_system">Match System</string>
     <string name="athan_volume_summary">Set the volume for the alarm</string>
     <string name="athan_volume">Athan Volume</string>
-    <string name="tap_to_stop_athan">Tap to stop Athan sound</string>
+    <string name="tap_to_stop_athan">Tap to stop</string>
     <string name="playing_athan">Playing Athan</string>
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <string name="athan_gap">Athan Gap</string>
@@ -83,11 +83,13 @@
     <string name="select_mount">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
     <string name="date_exeption">Date you entered was not valid!</string>
+    <string name="in_city_time">in</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>
         <item>هجری قمری</item>
         <item>میلادی</item>
     </string-array>
+    <string name="stop"><u>Stop</u></string>
 
 </resources>
