@@ -89,5 +89,6 @@
         <item>هجری قمری</item>
         <item>میلادی</item>
     </string-array>
+    <string name="date_copied_clipboard">Copied to clipboard</string>
 
 </resources>

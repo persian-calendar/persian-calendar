@@ -1,5 +1,10 @@
 package com.byagowi.persiancalendar.view.Fragment;
 
+import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +16,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.CalendarType;
 import com.byagowi.persiancalendar.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.custom.CustomToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +41,7 @@ import calendar.PersianDate;
  */
 public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private final Utils utils = Utils.getInstance();
+    private static ClipboardManager clipboardManager;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -48,8 +56,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_converter, container, false);
-
-//        utils.loadLanguageFromSettings(this);
+        clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
 
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
@@ -60,6 +67,11 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         date0 = (TextView) view.findViewById(R.id.date0);
         date1 = (TextView) view.findViewById(R.id.date1);
         date2 = (TextView) view.findViewById(R.id.date2);
+
+        DateTapListener dateTapListener = new DateTapListener();
+        date0.setOnClickListener(dateTapListener);
+        date1.setOnClickListener(dateTapListener);
+        date2.setOnClickListener(dateTapListener);
 
         divider = view.findViewById(R.id.divider_line);
         moreDate = (LinearLayoutCompat) view.findViewById(R.id.more_date);
@@ -206,7 +218,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         switch (parent.getId()) {
             case R.id.yearSpinner:
                 fillCalendarInfo();
-            break;
+                break;
 
             case R.id.monthSpinner:
                 fillCalendarInfo();
@@ -225,5 +237,29 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private class DateTapListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            TextView textViewDate = (TextView) view;
+            CharSequence convertedDate = textViewDate.getText();
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                copyText(convertedDate);
+            } else {
+                ClipData clip = ClipData.newPlainText("converted date", convertedDate);
+                clipboardManager.setPrimaryClip(clip);
+            }
+
+            Context context = view.getContext();
+            Toast toast = CustomToast.makeToast(context, R.string.date_copied_clipboard, convertedDate, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        private void copyText(CharSequence text) {
+            clipboardManager.setText(text);
+        }
     }
 }
