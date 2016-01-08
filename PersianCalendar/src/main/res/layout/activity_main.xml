@@ -32,7 +32,7 @@
         android:id="@+id/navigation_view"
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:background="@color/parent_card_background"
         android:scrollbars="vertical">
 
