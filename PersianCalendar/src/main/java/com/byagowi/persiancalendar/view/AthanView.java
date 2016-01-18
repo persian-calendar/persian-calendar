@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.AlarmReceiver;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.db.LocationsHelper;
+import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
 import com.malinskiy.materialicons.widget.IconTextView;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class AthanView extends AppCompatActivity {
@@ -58,21 +62,20 @@ public class AthanView extends AppCompatActivity {
         IconTextView athanIconView = (IconTextView) findViewById(R.id.athan_icon);
         athanIconView.setText(getString(athanIcon));
 
-        String cityName = "";
-        String cityKey = sharedPreferences.getString("Location", "");
-        String[] cityKeys = getResources().getStringArray(R.array.locationKeys);
-        String[] cityNames = getResources().getStringArray(R.array.locationNames);
-
+        String cityName;
+        String cityKey = sharedPreferences.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
         if (!TextUtils.isEmpty(cityKey)) {
-            for (int i = 0; i < cityKeys.length; ++i) {
-                if (cityKey.equals(cityKeys[i])) {
-                    cityName = cityNames[i];
-                    break;
-                }
+            LocationsHelper helper = new LocationsHelper(this);
+            Cursor cursor = helper.getCityByKey(cityKey);
+            cursor.moveToFirst();
+            if (Locale.getDefault().getLanguage().equals("fa")) {
+                cityName = cursor.getString(cursor.getColumnIndex(LocationsHelper.COLUMN_NAME_FA));
+            } else {
+                cityName = cursor.getString(cursor.getColumnIndex(LocationsHelper.COLUMN_NAME_EN));
             }
         } else {
-            float latitude = sharedPreferences.getFloat("Latitude", 0);
-            float longitude = sharedPreferences.getFloat("Longitude", 0);
+            float latitude = sharedPreferences.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
+            float longitude = sharedPreferences.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
             cityName = latitude + ", " + longitude;
         }
         textCityName.setText(cityName);

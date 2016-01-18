@@ -13,7 +13,6 @@ import android.widget.ListView;
 public class LocationPreference extends DialogPreference {
     public String value;
     public String newValue;
-    public boolean preferenceChanged;
     public ListView listLocations;
 
     public LocationPreference(Context context, AttributeSet attrs) {
@@ -27,7 +26,7 @@ public class LocationPreference extends DialogPreference {
     }
 
     public void close(boolean positiveResult) {
-        if (positiveResult && preferenceChanged) {
+        if (positiveResult) {
             if (callChangeListener(newValue)) {
                 value = newValue;
                 persistString(value);

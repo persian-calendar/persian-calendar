@@ -107,10 +107,10 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
 
         Intent intent = new Intent(ApplicationPreferenceFragment.INTENT_ACTION_PREFERENCES_CHANGED);
         intent.putExtra(ApplicationPreferenceFragment.PREF_KEY_LOCATION, selectedCity);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
-        LocalBroadcastManager.getInstance(getContext())
-                .sendBroadcast(intent);
-        getPreference().close(positiveResult);
+        // we haven't included buttons so we always send true
+        getPreference().close(true);
     }
 
     private class CityNameAdapter extends SimpleCursorAdapter {

@@ -87,16 +87,26 @@ public class LocationsHelper extends SQLiteOpenHelper {
                 "c." + COLUMN_NAME_EN + " " + TABLE_NAME_COUNTRIES + COLUMN_NAME_EN + ", " +
                 "c." + COLUMN_NAME_FA + " " + TABLE_NAME_COUNTRIES + COLUMN_NAME_FA + " " +
                 "FROM " + TABLE_NAME_CITIES + " as i, " + TABLE_NAME_COUNTRIES + " as c " +
-                "WHERE i." + COLUMN_COUNTRY + " = c." + COLUMN_KEY + " ";
+                "WHERE i." + COLUMN_COUNTRY + " = c." + COLUMN_KEY + " " +
+                "ORDER BY " + TABLE_NAME_COUNTRIES + COLUMN_KEY + " DESC";
         if (!TextUtils.isEmpty(langCode) && langCode.equalsIgnoreCase("fa")) {
-            sql += "ORDER BY " + TABLE_NAME_COUNTRIES + COLUMN_NAME_FA + " DESC, " +
-                    TABLE_NAME_CITIES + COLUMN_NAME_EN;
+            sql += ", " + TABLE_NAME_CITIES + COLUMN_NAME_FA;
         } else {
-            sql += "ORDER BY " + TABLE_NAME_COUNTRIES + COLUMN_NAME_FA + " DESC, " +
-                    TABLE_NAME_CITIES + COLUMN_NAME_EN;
+            sql += ", " + TABLE_NAME_CITIES + COLUMN_NAME_EN;
         }
 
         Log.v(TAG, "running sql: " + sql);
         return db.rawQuery(sql, null);
+    }
+
+    public Cursor getCityByKey(String key) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME_CITIES, new String[]{
+                BaseColumns._ID,
+                COLUMN_NAME_EN,
+                COLUMN_NAME_FA
+        }, COLUMN_KEY + " = ? ", new String[]{key}, null, null, null);
+        db.close();
+        return cursor;
     }
 }
