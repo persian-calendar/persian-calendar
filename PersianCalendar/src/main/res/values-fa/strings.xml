@@ -75,5 +75,19 @@
     <string name="owghat">اوقات شرعی</string>
     <string name="events">رویداد‌ها</string>
     <string name="today">امروز</string>
+    <string name="select_type_date">انتخاب نوع تاریخ</string>
+    <string name="year">سال</string>
+    <string name="mount">ماه</string>
+    <string name="day">روز</string>
+    <string name="select_year">انتخاب سال</string>
+    <string name="select_mount">انتخاب ماه</string>
+    <string name="select_day">انتخاب روز</string>
+    <string name="date_exeption">Date you entered was not valid!</string>
+
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
     <string name="date_copied_clipboard">به کلیپ بودر کپی شد</string>
 </resources>
