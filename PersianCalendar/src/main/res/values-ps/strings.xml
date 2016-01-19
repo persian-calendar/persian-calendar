@@ -82,7 +82,7 @@
     <string name="select_year">انتخاب سال</string>
     <string name="select_mount">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
-    <string name="date_exeption">Date you entered was not valid!</string>
+    <string name="date_exception">تاریخی که وارد کردید اشتباه بود!</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>

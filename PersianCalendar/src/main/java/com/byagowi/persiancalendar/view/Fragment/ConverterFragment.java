@@ -149,7 +149,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         } catch (RuntimeException e) {
             divider.setVisibility(View.GONE);
             moreDate.setVisibility(View.GONE);
-            date0.setText(getString(R.string.date_exeption));
+            date0.setText(getString(R.string.date_exception));
         }
     }
 

@@ -28,7 +28,7 @@
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
     <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
     <string name="notify_date">Enable Date Notification</string>
-    <string name="enable_notify">Permanent notification for all date types</string>
+    <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">Select a skin</string>
     <string name="skin">Skin</string>
     <string name="pray_methods">Calculation methods</string>
@@ -37,21 +37,21 @@
     <string name="altitude_praytime">in meter (optional)</string>
     <string name="location">Location</string>
     <string name="location_help">If none of them, specify it below</string>
-    <string name="showing_iran_time">Showing Widgets and notification bar in Iran TimeZone</string>
+    <string name="showing_iran_time">Widgets and notifications in Iran TimeZone</string>
     <string name="iran_time">Iran Time</string>
     <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass_not_found">Compass sensor not found</string>
 
     <string name="month_names">Month Names</string>
     <string name="calendar_font">Calendar Font</string>
-    <string name="application_language">Application Lanuage</string>
+    <string name="application_language">Application Language</string>
     <string name="language">Language</string>
     <string name="calendar_language">Calendar Language</string>
     <string name="calendar_language_summary">The language to show the month and day names in</string>
     <string name="version">Version</string>
     <string name="calendar_font_summary">Change the font for the calendar</string>
     <string name="athan">Athan</string>
-    <string name="athan_alarm_summary">Prayres to sound the alarm for</string>
+    <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
     <string name="athan_alarm">Athan Alarm</string>
     <string name="athan_sound">Athan Sound</string>
     <string name="match_system">Match System</string>
@@ -61,7 +61,7 @@
     <string name="playing_athan">Playing Athan</string>
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <string name="athan_gap">Athan Gap</string>
-    <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
+    <string name="athan_gap_summary">How long ahead of the Athan should the alarm be triggered (in minutes)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
     <string name="azan1">اذان صبح</string>
@@ -82,7 +82,7 @@
     <string name="select_year">انتخاب سال</string>
     <string name="select_mount">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
-    <string name="date_exeption">Date you entered was not valid!</string>
+    <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
 
     <string-array name="calendar_type">

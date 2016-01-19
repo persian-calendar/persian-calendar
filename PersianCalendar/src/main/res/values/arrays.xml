@@ -68,14 +68,14 @@
     <string-array name="drawerTitles">
         <item>Calendar Converter</item>
         <item>Compass</item>
-        <item>Setting</item>
+        <item>Settings</item>
         <item>About</item>
         <item>Exit</item>
     </string-array>
 
     <string-array name="drawerSubtitles">
         <item></item>
-        <item>and Qibla, if location is set in the Setting</item>
+        <item>and Qibla, if location is set in the Settings</item>
         <item></item>
         <item></item>
         <item></item>
