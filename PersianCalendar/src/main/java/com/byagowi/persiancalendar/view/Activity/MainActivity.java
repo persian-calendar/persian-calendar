@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.ApplicationService;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.service.DatabaseInitService;
 import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         startService(new Intent(this, ApplicationService.class));
+        startService(new Intent(this, DatabaseInitService.class));
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

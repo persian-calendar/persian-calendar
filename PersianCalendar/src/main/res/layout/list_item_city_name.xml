@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/card_padding">
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/padding_item"
+        android:paddingLeft="@dimen/padding_item"
+        android:paddingRight="@dimen/padding_item"
+        android:paddingStart="@dimen/padding_item"
+        android:text="City Name"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Country Name"
+        android:textColor="@android:color/darker_gray" />
+</LinearLayout>

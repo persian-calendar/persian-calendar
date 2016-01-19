@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="@string/general">
+    <android.support.v7.preference.PreferenceCategory android:title="@string/general">
 
         <android.support.v7.preference.ListPreference
             android:defaultValue="fa"
@@ -11,54 +9,52 @@
             android:entryValues="@array/calendarLanguageKeys"
             android:key="CalendarLanguage"
             android:summary="@string/calendar_language_summary"
-            android:title="@string/calendar_language"/>
+            android:title="@string/calendar_language" />
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
-            android:title="@string/persian_digits"/>
+            android:title="@string/persian_digits" />
 
     </android.support.v7.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="@string/widget_notification_dashclock">
+    <android.support.v7.preference.PreferenceCategory android:title="@string/widget_notification_dashclock">
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
-            android:title="@string/notify_date"/>
+            android:title="@string/notify_date" />
 
         <!--<net.margaritov.preference.colorpicker.ColorPickerPreference-->
-            <!--alphaSlider="true"-->
-            <!--android:defaultValue="@android:color/white"-->
-            <!--android:key="WidgetTextColor"-->
-            <!--android:summary="@string/select_widgets_text_color"-->
-            <!--android:title="@string/widget_text_color"/>-->
+        <!--alphaSlider="true"-->
+        <!--android:defaultValue="@android:color/white"-->
+        <!--android:key="WidgetTextColor"-->
+        <!--android:summary="@string/select_widgets_text_color"-->
+        <!--android:title="@string/widget_text_color"/>-->
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
-            android:title="@string/iran_time"/>
+            android:title="@string/iran_time" />
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
-            android:title="@string/clock_on_widget"/>
+            android:title="@string/clock_on_widget" />
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
-            android:title="@string/clock_in_24"/>
+            android:title="@string/clock_in_24" />
 
     </android.support.v7.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="@string/pray_times_calculation_setting">
+    <android.support.v7.preference.PreferenceCategory android:title="@string/pray_times_calculation_setting">
 
         <android.support.v7.preference.ListPreference
             android:defaultValue="Jafari"
@@ -66,34 +62,31 @@
             android:entryValues="@array/prayMethodsKeys"
             android:key="PrayTimeMethod"
             android:summary="@string/pray_methods_calculation"
-            android:title="@string/pray_methods"/>
+            android:title="@string/pray_methods" />
 
-        <android.support.v7.preference.ListPreference
-            android:defaultValue="CUSTOM"
-            android:entries="@array/locationNames"
-            android:entryValues="@array/locationKeys"
+        <com.byagowi.persiancalendar.view.custom.LocationPreference
             android:key="Location"
             android:summary="@string/location_help"
-            android:title="@string/location"/>
+            android:title="@string/location" />
 
         <android.support.v7.preference.EditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Latitude"
-            android:title="@string/latitude"/>
+            android:title="@string/latitude" />
 
         <android.support.v7.preference.EditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Longitude"
-            android:title="@string/longitude"/>
+            android:title="@string/longitude" />
 
         <android.support.v7.preference.EditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Altitude"
             android:summary="@string/altitude_praytime"
-            android:title="@string/altitude"/>
+            android:title="@string/altitude" />
 
     </android.support.v7.preference.PreferenceCategory>
 
@@ -103,21 +96,20 @@
         android:title="@string/athan">
 
         <android.support.v7.preference.EditTextPreference
-            android:defaultValue="0"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:key="AthanGap"
             android:summary="@string/athan_gap_summary"
-            android:title="@string/athan_gap"/>
+            android:title="@string/athan_gap" />
 
         <com.byagowi.persiancalendar.view.custom.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
-            android:title="@string/athan_alarm"/>
+            android:title="@string/athan_alarm" />
 
         <com.byagowi.persiancalendar.view.custom.AthanVolumePreference
             android:key="AthanVolume"
             android:summary="@string/athan_volume_summary"
-            android:title="@string/athan_volume"/>
+            android:title="@string/athan_volume" />
 
     </android.support.v7.preference.PreferenceCategory>
 

@@ -17,7 +17,6 @@
     <color name="marker_color">#FFFFFF</color>
     <color name="text_color">#FFFFFF</color>
 
-
     <color name="text_color_light">#ffffff</color>
     <color name="text_color_dark">#232323</color>
     <color name="text_color_primary">#2f65ca</color>
@@ -38,5 +37,9 @@
 
     <color name="white">#ffffff</color>
 
-
+    <color name="bg_fajr">#1f8ec1</color>
+    <color name="bg_dhuhr">#f2ea00</color>
+    <color name="bg_asr">#ed7b00</color>
+    <color name="bg_maghrib">#2284b1</color>
+    <color name="bg_isha">#0e4f6c</color>
 </resources>

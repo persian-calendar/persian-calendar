@@ -478,20 +478,20 @@ public class Utils {
                 Clock alarmTime = prayTimes.get(PrayTime.valueOf(prayerName));
 
                 if (alarmTime != null) {
-                    setAlarm(context, alarmTime);
+                    setAlarm(context, PrayTime.valueOf(prayerName), alarmTime);
                 }
             }
         }
     }
 
-    public void setAlarm(Context context, Clock clock) {
+    public void setAlarm(Context context, PrayTime prayTime, Clock clock) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, triggerTime.getTimeInMillis());
+        setAlarm(context, prayTime, triggerTime.getTimeInMillis());
     }
 
-    public void setAlarm(Context context, long timeInMillis) {
+    public void setAlarm(Context context, PrayTime prayTime, long timeInMillis) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String valAthanGap = prefs.getString("AthanGap", "0");
         long athanGap = TextUtils.isEmpty(valAthanGap) ? 0 : Long.parseLong(valAthanGap);
@@ -502,10 +502,10 @@ public class Utils {
 
         // don't set an alarm in the past
         if (!triggerTime.before(Calendar.getInstance())) {
-            triggerTime.set(Calendar.SECOND, 0);
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
             Intent intent = new Intent(context, AlarmReceiver.class);
+            intent.putExtra(AlarmReceiver.KEY_EXTRA_PRAYER_KEY, prayTime.name());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
