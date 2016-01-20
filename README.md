@@ -1,27 +1,29 @@
-Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidPersianCalendar.svg?branch=master)](https://travis-ci.org/ebraminio/DroidPersianCalendar)
+Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidPersianCalendar.svg?branch=master)](https://travis-ci.org/ebraminio/DroidPersianCalendar)  [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ebraminio/DroidPersianCalendar)
 =============================
 <div lang="fa" dir="rtl">تقویم فارسی اندروید<br />
 تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock<br />
 برای دریافت و نصب بر برگهٔ releases در بالای صفحه کلیک کنید.</div>
-=============================
+-----------------------------
 
-------------------------------
 Contents
-==============================
+-----------------------------
+<ol>
+    <li>Download</li>
+    <li>License</li>
+    <li>Build</li>
+</ol>
 
 1. Download
-2. License
-3. Build
-
-1. Download
-==============================
-* [Google Play](https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar)
-* [Bazaar](http://cafebazaar.ir/app/com.byagowi.persiancalendar)
-* [F-Droid](https://f-droid.org/app/com.byagowi.persiancalendar)
-* [Github](https://github.com/ebraminio/DroidPersianCalendar/releases/)
+-----------------------------
+<ul>
+    <li> <a href="https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar" >Google Play</a> </li>
+    <li> <a href="http://cafebazaar.ir/app/com.byagowi.persiancalendar" >Bazaar</a> </li>
+    <li> <a href="https://f-droid.org/app/com.byagowi.persiancalendar" >F-Droid</a> </li>
+    <li> <a href="https://github.com/ebraminio/DroidPersianCalendar/releases/" >Github</a> </li>
+</ul>
 
 2. License
-==============================
+-----------------------------
 Copyright (C) 2012-2015  ebrahim@gnu.org
 
 This program is free software: you can redistribute it and/or modify 
@@ -38,7 +40,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
 3. Build
-==============================
+-----------------------------
 0. git clone --depth=1 https://github.com/ebraminio/DroidPersianCalendar
 1. Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
 2. Import the project on Android Studio
