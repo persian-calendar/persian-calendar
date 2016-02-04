@@ -31,7 +31,7 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment implements View.OnClickListener {
+public class CalendarMainFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
@@ -141,6 +141,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+
+        viewPager.addOnPageChangeListener(this);
 
         infoDay.setOnClickListener(this);
         owghat.setOnClickListener(this);
@@ -268,5 +270,20 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         return today.getYear() == civilDate.getYear()
                 && today.getMonth() == civilDate.getMonth()
                 && today.getDayOfMonth() == civilDate.getDayOfMonth();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");
+        intent.putExtra("value", position - CalendarMainFragment.MONTHS_LIMIT / 2);
+        getContext().sendBroadcast(intent);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 }

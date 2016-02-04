@@ -1,74 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/grid_calendar_height"
     android:orientation="vertical"
     android:background="@color/winter_color">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <com.malinskiy.materialicons.widget.IconTextView
+        android:id="@+id/prev"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_alignParentLeft="true"
+        android:text="@string/left_icon"
+        android:textSize="@dimen/icon_text_size"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/text_color_transparent_white"/>
 
-        <com.malinskiy.materialicons.widget.IconTextView
-            android:id="@+id/prev"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/left_icon"
-            android:textSize="@dimen/icon_text_size"
-            android:layout_marginLeft="@dimen/icon_margin"
-            android:textColor="@color/text_color_transparent_white"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/currentYearTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/text_color_transparent_white"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/currentMonthTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textColor="@color/text_color_transparent_white"
-                android:layout_gravity="center"/>
-
-        </LinearLayout>
-
-        <com.malinskiy.materialicons.widget.IconTextView
-            android:id="@+id/next"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="@string/right_icon"
-            android:textSize="@dimen/icon_text_size"
-            android:layout_marginLeft="@dimen/icon_margin"
-            android:textColor="@color/text_color_transparent_white"/>
-
-    </RelativeLayout>
+    <com.malinskiy.materialicons.widget.IconTextView
+        android:id="@+id/next"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_alignParentRight="true"
+        android:text="@string/right_icon"
+        android:textSize="@dimen/icon_text_size"
+        android:gravity="center"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/text_color_transparent_white"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layoutDirection="rtl"
         android:scrollbars="vertical"
-        android:paddingLeft="@dimen/grid_calendar_padding"
-        android:paddingRight="@dimen/grid_calendar_padding"
         android:paddingBottom="@dimen/grid_calendar_padding_bottom"
-        android:layout_gravity="center">
+        android:layout_toRightOf="@+id/prev"
+        android:layout_toLeftOf="@+id/next">
 
     </android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+</RelativeLayout>
