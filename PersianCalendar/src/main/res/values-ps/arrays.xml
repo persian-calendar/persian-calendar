@@ -21,6 +21,13 @@
         <item>پښتو</item>
     </string-array>
 
+    <string-array name="colorNames">
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Black</item>
+    </string-array>
+
     <string-array name="calendarLanguageNames">
         <item>فارسی</item>
         <item>دری</item>

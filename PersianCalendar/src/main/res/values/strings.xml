@@ -16,6 +16,7 @@
     <string name="clock_in_24">Clock in 24 hour</string>
     <string name="about">About</string>
     <string name="gpl_logo">GPL Logo</string>
+    <string name="widget_text_colors">Widget Text Colors</string>
     <string name="clock">Clock</string>
     <string name="date">Date</string>
     <string name="date_converter">Date Converter</string>
@@ -84,6 +85,7 @@
     <string name="select_day">انتخاب روز</string>
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
+    <string name="default_widget_text_color">#ffffffff</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>

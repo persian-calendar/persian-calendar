@@ -27,6 +27,20 @@
         <item>Tehran</item>
     </string-array>
 
+    <string-array name="colorNames">
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Black</item>
+    </string-array>
+
+    <string-array name="colorKeys" translatable="false">
+        <item>#ffffffff</item>
+        <item>#ffff0000</item>
+        <item>#ff0000ff</item>
+        <item>#ff000000</item>
+    </string-array>
+
     <string-array name="languageNames">
         <item>English</item>
         <item>Persian</item>
