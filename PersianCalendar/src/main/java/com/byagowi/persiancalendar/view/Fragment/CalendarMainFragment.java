@@ -58,6 +58,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     private TextView ghamariDate;
     private TextView shamsiDate;
     private TextView eventTitle;
+    private TextView holidayTitle;
     private TextView today;
 
     private CardView owghat;
@@ -124,6 +125,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
+        holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
 
         CardView infoDay = (CardView) view.findViewById(R.id.info_day);
         owghat = (CardView) view.findViewById(R.id.owghat);
@@ -132,6 +134,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
+        utils.loadEvents(getResources().openRawResource(R.raw.events));
+
         utils.loadLanguageFromSettings(getContext());
 
         digits = utils.preferredDigits(getContext());
@@ -191,15 +195,23 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void showEvent(PersianDate persianDate) {
-        String holidayTitle = utils.getHolidayTitle(persianDate);
+        String holidays = utils.getHolidayTitle(persianDate);
+        String events = utils.getEventTitle(persianDate);
 
-        if (holidayTitle != null) {
-            eventTitle.setText(holidayTitle);
+        event.setVisibility(View.GONE);
+        holidayTitle.setVisibility(View.GONE);
+        eventTitle.setVisibility(View.GONE);
+
+        if (holidays != null) {
+            holidayTitle.setText(holidays);
+            holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
+        }
 
-        } else {
-            event.setVisibility(View.GONE);
-
+        if (events != null) {
+            eventTitle.setText(events);
+            eventTitle.setVisibility(View.VISIBLE);
+            event.setVisibility(View.VISIBLE);
         }
     }
 
