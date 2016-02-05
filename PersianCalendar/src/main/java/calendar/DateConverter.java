@@ -16,11 +16,11 @@ package calendar;
 
 public final class DateConverter {
 
-    public static final IslamicDate civilToIslamic(CivilDate civil) {
-        return jdnToIslamic(civilToJdn(civil));
+    public static IslamicDate civilToIslamic(CivilDate civil) {
+        return jdnToIslamic(civilToJdn(civil) - 2);
     }
 
-    public static final long civilToJdn(CivilDate civil) {
+    public static long civilToJdn(CivilDate civil) {
 
         long lYear = civil.getYear();
         long lMonth = civil.getMonth();
@@ -37,19 +37,19 @@ public final class DateConverter {
 
     }
 
-    public static final PersianDate civilToPersian(CivilDate civil) {
+    public static PersianDate civilToPersian(CivilDate civil) {
         return jdnToPersian(civilToJdn(civil));
     }
 
-    private static final long floor(double d) {
+    private static long floor(double d) {
         return (long) Math.floor(d);
     }
 
-    public static final CivilDate islamicToCivil(IslamicDate islamic) {
+    public static CivilDate islamicToCivil(IslamicDate islamic) {
         return jdnToCivil(islamicToJdn(islamic));
     }
 
-    public static final long islamicToJdn(IslamicDate islamic) {
+    public static long islamicToJdn(IslamicDate islamic) {
         // NMONTH is the number of months between julian day number 1 and
         // the year 1405 A.H. which started immediatly after lunar
         // conjunction number 1048 which occured on September 1984 25d
@@ -66,11 +66,11 @@ public final class DateConverter {
         return floor(visibility(k + 1048) + day + 0.5);
     }
 
-    public static final PersianDate islamicToPersian(IslamicDate islamic) {
+    public static PersianDate islamicToPersian(IslamicDate islamic) {
         return jdnToPersian(islamicToJdn(islamic));
     }
 
-    public static final CivilDate jdnToCivil(long jdn) {
+    public static CivilDate jdnToCivil(long jdn) {
 
         if (jdn > 2299160) {
             long l = jdn + 68569;
@@ -88,7 +88,7 @@ public final class DateConverter {
             return jdnToJulian(jdn);
     }
 
-    public static final IslamicDate jdnToIslamic(long jd) {
+    public static IslamicDate jdnToIslamic(long jd) {
 
         CivilDate civil = jdnToCivil(jd);
         int year = civil.getYear();
@@ -124,7 +124,7 @@ public final class DateConverter {
     }
 
     // TODO Is it correct to return a CivilDate as a JulianDate?
-    public static final CivilDate jdnToJulian(long jdn) {
+    public static CivilDate jdnToJulian(long jdn) {
         long j = jdn + 1402;
         long k = ((j - 1) / 1461);
         long l = j - 1461 * k;
@@ -139,13 +139,13 @@ public final class DateConverter {
         return new CivilDate(year, month, day);
     }
 
-    public static final PersianDate jdnToPersian(long jdn) {
+    public static PersianDate jdnToPersian(long jdn) {
 
         long depoch = jdn - persianToJdn(475, 1, 1);
         long cycle = depoch / 1029983;
         long cyear = depoch % 1029983;
         long ycycle;
-        long aux1 = 0, aux2 = 0;
+        long aux1, aux2;
 
         if (cyear == 1029982)
             ycycle = 2820;
@@ -171,22 +171,22 @@ public final class DateConverter {
         return new PersianDate(year, month, day);
     }
 
-    public static final long julianToJdn(long lYear, long lMonth, long lDay) {
+    public static long julianToJdn(long lYear, long lMonth, long lDay) {
 
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
                 + ((275 * lMonth) / 9) + lDay + 1729777;
 
     }
 
-    public static final CivilDate persianToCivil(PersianDate persian) {
+    public static CivilDate persianToCivil(PersianDate persian) {
         return jdnToCivil(persianToJdn(persian));
     }
 
-    public static final IslamicDate persianToIslamic(PersianDate persian) {
+    public static IslamicDate persianToIslamic(PersianDate persian) {
         return jdnToIslamic(persianToJdn(persian));
     }
 
-    public static final long persianToJdn(int year, int month, int day) {
+    public static long persianToJdn(int year, int month, int day) {
         final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
 
         long epbase;
@@ -207,7 +207,7 @@ public final class DateConverter {
                 + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
     }
 
-    public static final long persianToJdn(PersianDate persian) {
+    public static long persianToJdn(PersianDate persian) {
         int year = persian.getYear();
         int month = persian.getMonth();
         int day = persian.getDayOfMonth();
@@ -232,12 +232,12 @@ public final class DateConverter {
                 + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
     }
 
-    private static final double tmoonphase(long n, int nph) {
+    private static double tmoonphase(long n, int nph) {
 
         final double RPD = (1.74532925199433E-02); // radians per degree
         // (pi/180)
 
-        double xtra = 0;
+        double xtra;
 
         double k = n + nph / 4d;
         double T = k / 1236.85;
@@ -298,7 +298,7 @@ public final class DateConverter {
         return jd + xtra - (0.41 + 1.2053 * T + 0.4992 * t2) / 1440;
     }
 
-    private static final double visibility(long n) {
+    private static double visibility(long n) {
 
         // parameters for Makkah: for a new moon to be visible after sunset on
         // a the same day in which it started, it has to have started before
@@ -320,7 +320,5 @@ public final class DateConverter {
             else
                 return jd;
         }
-
     }
-
 }
