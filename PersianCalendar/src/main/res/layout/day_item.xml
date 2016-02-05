@@ -32,8 +32,8 @@
         android:id="@+id/num"/>
 
     <View
-        android:layout_width="@dimen/day_item_event_size"
-        android:layout_height="@dimen/day_item_event_size"
+        android:layout_width="8dp"
+        android:layout_height="1dp"
         android:gravity="center"
         android:visibility="gone"
         android:layout_marginBottom="8dp"

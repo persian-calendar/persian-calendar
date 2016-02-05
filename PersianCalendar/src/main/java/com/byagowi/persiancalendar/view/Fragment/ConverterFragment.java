@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +51,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     private TextView date0;
     private TextView date1;
     private TextView date2;
-    private LinearLayoutCompat moreDate;
+    private RelativeLayout moreDate;
     private View divider;
 
     @Override
@@ -74,7 +75,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         date2.setOnClickListener(dateTapListener);
 
         divider = view.findViewById(R.id.divider_line);
-        moreDate = (LinearLayoutCompat) view.findViewById(R.id.more_date);
+        moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
         // fill views
         calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(), android.R.layout.select_dialog_item));

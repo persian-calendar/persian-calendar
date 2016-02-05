@@ -154,15 +154,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/card_padding"
-                    android:layout_weight="2">
+                    android:padding="@dimen/card_padding">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/date0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:layout_weight="1"
                         android:textColor="@color/text_color_primary"
                         android:textSize="@dimen/text_size_title"/>
 
@@ -176,15 +174,25 @@
                     android:layout_marginLeft="@dimen/divider_margin"
                     android:background="@color/divider_color"/>
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <RelativeLayout
                     android:id="@+id/more_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/card_padding"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:padding="@dimen/card_padding">
+
+                <com.malinskiy.materialicons.widget.IconTextView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginLeft="@dimen/icon_margin"
+                    android:layout_toRightOf="@+id/dateContainer"
+                    android:textColor="@color/text_color_primary"
+                    android:gravity="center"
+                    android:text="@string/convert_icon"
+                    android:textSize="@dimen/icon_text_size" />
 
                     <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/dateContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -207,16 +215,7 @@
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
-                    <com.malinskiy.materialicons.widget.IconTextView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_marginLeft="@dimen/icon_margin"
-                        android:textColor="@color/text_color_primary"
-                        android:gravity="center"
-                        android:text="@string/convert_icon"
-                        android:textSize="@dimen/icon_text_size" />
-
-                </android.support.v7.widget.LinearLayoutCompat>
+                </RelativeLayout>
 
             </android.support.v7.widget.LinearLayoutCompat>
 
