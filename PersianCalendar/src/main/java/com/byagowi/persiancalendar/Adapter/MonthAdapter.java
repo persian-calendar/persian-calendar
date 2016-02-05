@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.Adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         View selectDay;
         View event;
 
-        public ViewHolder(View itemView, int ViewType) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             num = (TextView) itemView.findViewById(R.id.num);
@@ -82,7 +83,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.day_item, parent, false);
 
-        return new ViewHolder(v, viewType);
+        return new ViewHolder(v);
 
     }
 
@@ -91,7 +92,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         if (!isPositionHeader(position)) {
             if (position - 7 - days.get(0).getDayOfWeek() >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
-                holder.num.setTextColor(context.getResources().getColor(R.color.first_row_text_color));
+                holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color));
                 holder.num.setTextSize(25);
                 holder.today.setVisibility(View.GONE);
                 holder.selectDay.setVisibility(View.GONE);
@@ -99,7 +100,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.event.setVisibility(View.GONE);
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                    holder.num.setTextColor(context.getResources().getColor(R.color.holiday));
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
@@ -114,11 +115,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.selectDay.setVisibility(View.VISIBLE);
 
                     if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                        holder.num.setTextColor(context.getResources().getColor(R.color.holiday));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
                     } else {
-                        holder.num.setTextColor(context.getResources().getColor(R.color.first_row_background_color));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_background_color));
                     }
-
                 }
 
             } else {
@@ -129,7 +129,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         } else {
             holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
-            holder.num.setTextColor(context.getResources().getColor(R.color.first_row_text_color2));
+            holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color2));
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
             holder.selectDay.setVisibility(View.GONE);
