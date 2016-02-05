@@ -10,6 +10,7 @@ import java.util.Iterator;
  *
  * @author ebraminio
  */
+
 public class Range implements Iterable<Integer> {
     private final int min;
     private final int count;

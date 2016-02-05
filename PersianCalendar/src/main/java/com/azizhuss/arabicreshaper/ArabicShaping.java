@@ -12,6 +12,7 @@ package com.azizhuss.arabicreshaper;
  * @author azizanroid@gmail.com
  * @author ebraminio (renaming and cleaning-up)
  */
+
 public class ArabicShaping {
 
     static final char RIGHT_LEFT_CHAR_MASK = 0x0880;
