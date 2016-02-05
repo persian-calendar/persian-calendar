@@ -230,6 +230,11 @@ public class Utils {
                     day.setHoliday(true);
                 }
 
+                String eventTitle = getEventTitle(persianDate);
+                if (eventTitle != null || holidayTitle != null ) {
+                    day.setEvent(true);
+                }
+
                 day.setPersianDate(persianDate.clone());
 
                 if (persianDate.equals(today)) {

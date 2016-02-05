@@ -2,15 +2,21 @@ package com.byagowi.persiancalendar.Entity;
 
 import calendar.PersianDate;
 
-/**
- * Created by behdad on 10/25/15.
- */
 public class Day {
     String num;
     boolean holiday;
     boolean today;
     int dayOfWeek;
     PersianDate persianDate;
+    boolean event;
+
+    public boolean isEvent() {
+        return event;
+    }
+
+    public void setEvent(boolean event) {
+        this.event = event;
+    }
 
     public String getNum() {
         return num;

@@ -33,6 +33,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         TextView num;
         View today;
         View selectDay;
+        View event;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -40,6 +41,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             num = (TextView) itemView.findViewById(R.id.num);
             today = itemView.findViewById(R.id.today);
             selectDay = itemView.findViewById(R.id.select_day);
+            event = itemView.findViewById(R.id.event);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -94,9 +96,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.today.setVisibility(View.GONE);
                 holder.selectDay.setVisibility(View.GONE);
                 holder.num.setVisibility(View.VISIBLE);
+                holder.event.setVisibility(View.GONE);
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
                     holder.num.setTextColor(context.getResources().getColor(R.color.holiday));
+                }
+
+                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
+                    holder.event.setVisibility(View.VISIBLE);
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isToday()) {

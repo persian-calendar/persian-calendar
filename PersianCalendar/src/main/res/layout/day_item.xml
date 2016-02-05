@@ -31,4 +31,15 @@
         android:layout_centerInParent="true"
         android:id="@+id/num"/>
 
+    <View
+        android:layout_width="@dimen/day_item_event_size"
+        android:layout_height="@dimen/day_item_event_size"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/circle_select"
+        android:id="@+id/event"/>
+
 </RelativeLayout>
