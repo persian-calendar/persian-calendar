@@ -17,6 +17,14 @@
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/islamicOffsetNames"
+            android:entryValues="@array/islamicOffsetKeys"
+            android:key="islamicOffset"
+            android:summary="@string/islamic_offset_summery"
+            android:title="@string/islamic_offset" />
+
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory

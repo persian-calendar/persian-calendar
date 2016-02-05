@@ -151,6 +151,13 @@ public class Utils {
                 "Jafari")); // Seems Iran using Jafari method
     }
 
+    public static int getIslamicOffset(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        return Integer.parseInt(prefs.getString("islamicOffset", "0"));
+    }
+
     public Coordinate getCoordinate(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);

@@ -131,7 +131,9 @@ public class UpdateUtils {
         String body = utils.dateToString(civil, digits)
                 + Utils.PERSIAN_COMMA
                 + " "
-                + utils.dateToString(DateConverter.civilToIslamic(civil),
+                + utils.dateToString(
+                DateConverter.civilToIslamic(
+                        civil, Utils.getIslamicOffset(context)),
                 digits);
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());

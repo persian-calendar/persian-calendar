@@ -165,7 +165,10 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
-        ghamariDate.setText(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits));
+        ghamariDate.setText(utils.dateToString(
+                DateConverter.civilToIslamic(
+                        civilDate, Utils.getIslamicOffset(getContext())),
+                digits));
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);

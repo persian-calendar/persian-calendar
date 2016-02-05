@@ -16,8 +16,8 @@ package calendar;
 
 public final class DateConverter {
 
-    public static IslamicDate civilToIslamic(CivilDate civil) {
-        return jdnToIslamic(civilToJdn(civil) - 2);
+    public static IslamicDate civilToIslamic(CivilDate civil, int offset) {
+        return jdnToIslamic(civilToJdn(civil) + offset);
     }
 
     public static long civilToJdn(CivilDate civil) {

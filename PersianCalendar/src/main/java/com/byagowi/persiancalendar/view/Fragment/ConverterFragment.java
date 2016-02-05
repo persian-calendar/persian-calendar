@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +110,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             switch (calendarType) {
                 case GEORGIAN:
                     civilDate = new CivilDate(year, month, day);
-                    islamicDate = DateConverter.civilToIslamic(civilDate);
+                    islamicDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
 
                     calendarsTextList.add(utils.dateToString(civilDate, digits));

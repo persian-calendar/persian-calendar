@@ -79,6 +79,22 @@
         <item>ISHA</item>
     </string-array>
 
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>+2</item>
+    </string-array>
+
+    <string-array name="islamicOffsetKeys">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>+2</item>
+    </string-array>
+
     <string-array name="drawerTitles">
         <item>Calendar Converter</item>
         <item>Compass</item>

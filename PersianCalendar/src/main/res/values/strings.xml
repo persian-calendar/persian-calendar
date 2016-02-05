@@ -86,6 +86,8 @@
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
     <string name="default_widget_text_color">#ffffffff</string>
+    <string name="islamic_offset">Islamic offset</string>
+    <string name="islamic_offset_summery">Islamic offset summery</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>
