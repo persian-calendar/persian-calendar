@@ -22,7 +22,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DAY = 1;
     private List<Day> days;
-    private int select_Day = -1;
+    public int select_Day = -1;
 
     public MonthAdapter(Context context, MonthNewFragment monthNewFragment, List<Day> days) {
         this.monthNewFragment = monthNewFragment;

@@ -31,6 +31,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     private int offset;
     private IntentFilter filter;
     private BroadcastReceiver receiver;
+    private MonthAdapter adapter;
 
     @Override
     public View onCreateView(
@@ -65,24 +66,12 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
 
-
-        filter = new IntentFilter("com.byagowi.persiancalendar.changemounth");
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int value =  intent.getExtras().getInt("value");
-                if (value == offset) {
-                    UpdateTitle();
-                }
-            }
-        };
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(layoutManager);
-        MonthAdapter adapter = new MonthAdapter(getActivity(), this, days);
+        adapter = new MonthAdapter(getActivity(), this, days);
         recyclerView.setAdapter(adapter);
 
         calendarMainFragment = (CalendarMainFragment) getActivity()
@@ -96,6 +85,21 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         if (offset == 0) {
             UpdateTitle();
         }
+
+        filter = new IntentFilter("com.byagowi.persiancalendar.changemounth");
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int value =  intent.getExtras().getInt("value");
+                if (value == offset) {
+                    UpdateTitle();
+                }
+
+                if (value == 2000) {
+                    resetSelectDay();
+                }
+            }
+        };
 
         return view;
     }
@@ -146,5 +150,10 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
                 .getSupportActionBar()
                 .setTitle(utils.getMonthName(persianDate));
 
+    }
+
+    private void resetSelectDay() {
+        adapter.select_Day = -1;
+        adapter.notifyDataSetChanged();
     }
 }

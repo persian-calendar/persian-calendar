@@ -277,6 +277,11 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         }
+
+        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth"); //todo use fragment tag
+        intent.putExtra("value", 2000);
+        getContext().sendBroadcast(intent);
+
         selectDay(Utils.getToday());
     }
 
@@ -293,7 +298,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onPageSelected(int position) {
-        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");
+        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");//todo use fragment tag
         intent.putExtra("value", position - CalendarMainFragment.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
     }
