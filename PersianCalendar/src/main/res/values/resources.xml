@@ -1,6 +1,7 @@
 <resources>
 
     <string translatable="false" name="calendar_icon">{zmdi-calendar-alt}</string>
+    <string translatable="false" name="more_icon">{zmdi-chevron-down}</string>
     <string translatable="false" name="azan1_icon">{zmdi-brightness-4}</string>
     <string translatable="false" name="aftab1_icon">{zmdi-brightness-7}</string>
     <string translatable="false" name="azan2_icon">{zmdi-brightness-5}</string>

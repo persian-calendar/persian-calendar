@@ -17,7 +17,6 @@
             android:layout_height="@dimen/grid_calendar_height" />
 
         <android.support.v7.widget.CardView
-            android:id="@+id/info_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/card_margin"
@@ -97,8 +96,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:textColor="@color/text_color_dark"
-                            android:textSize="@dimen/text_size_description"
-                            android:visibility="gone" />
+                            android:textSize="@dimen/text_size_description" />
 
                         <TextView
                             android:id="@+id/ghamari_date"
@@ -106,8 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
                             android:textColor="@color/text_color_dark"
-                            android:textSize="@dimen/text_size_description"
-                            android:visibility="gone" />
+                            android:textSize="@dimen/text_size_description" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
@@ -131,11 +128,10 @@
                 android:background="?attr/selectableItemBackground"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 
                     <TextView
@@ -146,7 +142,7 @@
                         android:textColor="@color/text_color_primary"
                         android:textSize="@dimen/text_size_title" />
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -215,7 +211,7 @@
                 android:orientation="vertical">
 
                 <!-- title: prayer times -->
-                <android.support.v7.widget.LinearLayoutCompat
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -223,6 +219,7 @@
                     android:padding="@dimen/card_padding">
 
                     <TextView
+                        android:id="@+id/owghat_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -230,7 +227,17 @@
                         android:textColor="@color/text_color_primary"
                         android:textSize="@dimen/text_size_title" />
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                    <com.malinskiy.materialicons.widget.IconTextView
+                        android:id="@+id/more_owghat"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_toLeftOf="@+id/owghat_text"
+                        android:gravity="center"
+                        android:text="@string/more_icon"
+                        android:textColor="@color/text_color_primary"
+                        android:textSize="@dimen/icon_text_size" />
+
+                </RelativeLayout>
 
                 <!--divider-->
                 <View

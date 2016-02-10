@@ -22,6 +22,7 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
+import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -60,6 +61,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     private TextView eventTitle;
     private TextView holidayTitle;
     private TextView today;
+
+    private IconTextView moreOwghat;
 
     private CardView owghat;
     private CardView event;
@@ -124,10 +127,11 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
 
+        moreOwghat = (IconTextView) view.findViewById(R.id.more_owghat);
+
         eventTitle = (TextView) view.findViewById(R.id.event_title);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
 
-        CardView infoDay = (CardView) view.findViewById(R.id.info_day);
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.event);
 
@@ -148,9 +152,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
         viewPager.addOnPageChangeListener(this);
 
-        infoDay.setOnClickListener(this);
         owghat.setOnClickListener(this);
-
         today.setOnClickListener(this);
 
         return view;
@@ -243,10 +245,6 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.info_day:
-                miladiDate.setVisibility(View.VISIBLE);
-                ghamariDate.setVisibility(View.VISIBLE);
-                break;
 
             case R.id.owghat:
                 owghat1.setVisibility(View.VISIBLE);
@@ -265,6 +263,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
                 divider5.setVisibility(View.VISIBLE);
                 divider6.setVisibility(View.VISIBLE);
                 divider7.setVisibility(View.VISIBLE);
+
+                moreOwghat.setVisibility(View.GONE);
                 break;
 
             case R.id.today:
