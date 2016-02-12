@@ -1,12 +1,12 @@
-package com.byagowi.persiancalendar.Adapter;
+package com.byagowi.persiancalendar.adapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
-import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
+import com.byagowi.persiancalendar.view.fragment.CalendarMainFragment;
+import com.byagowi.persiancalendar.view.fragment.MonthNewFragment;
 
 public class CalendarAdapter extends FragmentStatePagerAdapter {
 

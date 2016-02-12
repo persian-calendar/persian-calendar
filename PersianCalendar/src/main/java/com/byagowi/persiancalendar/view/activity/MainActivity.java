@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.Activity;
+package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -18,16 +18,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.Adapter.DrawerAdapter;
+import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.ApplicationService;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.service.DatabaseInitService;
-import com.byagowi.persiancalendar.view.Fragment.AboutFragment;
-import com.byagowi.persiancalendar.view.Fragment.ApplicationPreferenceFragment;
-import com.byagowi.persiancalendar.view.Fragment.CalendarMainFragment;
-import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
-import com.byagowi.persiancalendar.view.Fragment.ConverterFragment;
+import com.byagowi.persiancalendar.view.fragment.AboutFragment;
+import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
+import com.byagowi.persiancalendar.view.fragment.CalendarMainFragment;
+import com.byagowi.persiancalendar.view.fragment.CompassFragment;
+import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
 /**
  * Program activity for android

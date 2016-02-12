@@ -1,6 +1,5 @@
-package com.byagowi.persiancalendar.view.Fragment;
+package com.byagowi.persiancalendar.view.fragment;
 
-import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;

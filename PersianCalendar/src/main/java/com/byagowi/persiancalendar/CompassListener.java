@@ -4,7 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
-import com.byagowi.persiancalendar.view.Fragment.CompassFragment;
+import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 
 public final class CompassListener implements SensorEventListener {
     /*

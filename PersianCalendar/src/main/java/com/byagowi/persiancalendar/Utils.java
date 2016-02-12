@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.IterableNodeList;
 import com.byagowi.common.Range;
-import com.byagowi.persiancalendar.Entity.Day;
+import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
