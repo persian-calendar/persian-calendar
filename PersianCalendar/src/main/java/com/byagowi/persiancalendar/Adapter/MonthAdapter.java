@@ -92,23 +92,25 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         if (!isPositionHeader(position)) {
             if (position - 7 - days.get(0).getDayOfWeek() >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
-                holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color));
                 holder.num.setTextSize(25);
-                holder.today.setVisibility(View.GONE);
-                holder.selectDay.setVisibility(View.GONE);
                 holder.num.setVisibility(View.VISIBLE);
-                holder.event.setVisibility(View.GONE);
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
                     holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
+                } else {
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color));
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
                     holder.event.setVisibility(View.VISIBLE);
+                } else {
+                    holder.event.setVisibility(View.GONE);
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isToday()) {
                     holder.today.setVisibility(View.VISIBLE);
+                } else {
+                    holder.today.setVisibility(View.GONE);
                 }
 
                 if (position == select_Day) {
@@ -117,14 +119,17 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
                         holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
                     } else {
-                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_background_color));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.winter_color));
                     }
+                } else {
+                    holder.selectDay.setVisibility(View.GONE);
                 }
 
             } else {
                 holder.today.setVisibility(View.GONE);
                 holder.selectDay.setVisibility(View.GONE);
                 holder.num.setVisibility(View.GONE);
+                holder.event.setVisibility(View.GONE);
             }
 
         } else {
@@ -133,6 +138,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
             holder.selectDay.setVisibility(View.GONE);
+            holder.event.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         }
     }
