@@ -57,6 +57,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_converter, container, false);
+<<<<<<< HEAD
 
         //noinspection ConstantConditions
         ((AppCompatActivity) getActivity())
@@ -69,6 +70,11 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                 .setSubtitle("");
 
         clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+=======
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        }
+>>>>>>> 940090552ce93abec9038090a0483266f52429f7
 
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
@@ -257,9 +263,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             TextView textViewDate = (TextView) view;
             CharSequence convertedDate = textViewDate.getText();
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                copyText(convertedDate);
-            } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 ClipData clip = ClipData.newPlainText("converted date", convertedDate);
                 clipboardManager.setPrimaryClip(clip);
             }
@@ -267,11 +271,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             Context context = view.getContext();
             Toast toast = CustomToast.makeToast(context, R.string.date_copied_clipboard, convertedDate, Toast.LENGTH_SHORT);
             toast.show();
-        }
-
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        private void copyText(CharSequence text) {
-            clipboardManager.setText(text);
         }
     }
 }

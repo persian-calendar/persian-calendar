@@ -171,3 +171,9 @@
   with this library's license.
 
       http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=OFL_plaintext&filename=OFL.txt
+
+* kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
+
+  Human Readable License: http://creativecommons.org/licenses/by/4.0/
+  Complete Legal Terms: http://creativecommons.org/licenses/by/4.0/legalcode
+

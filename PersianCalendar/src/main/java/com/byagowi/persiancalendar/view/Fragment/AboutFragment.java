@@ -69,7 +69,7 @@ public class AboutFragment extends Fragment {
         licenseTextView.setText("Android Persian Calendar Version "
                 + version
                 + "\n"
-                + "Copyright (C) 2012-2015  ebrahim@gnu.org "
+                + "Copyright (C) 2012-2016  ebrahim@gnu.org "
                 + Utils.textShaper("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
