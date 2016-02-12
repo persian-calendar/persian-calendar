@@ -6,6 +6,7 @@ import java.util.Calendar;
  * @author Amir
  * @author ebraminio (implementing isLeapYear)
  */
+
 public class PersianDate extends AbstractDate {
     private int year;
     private int month;
@@ -29,19 +30,24 @@ public class PersianDate extends AbstractDate {
 
     public void setDayOfMonth(int day) {
         if (day < 1)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (month <= 6 && day > 31)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (month > 6 && month <= 12 && day > 30)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (isLeapYear() && month == 12 && day > 30)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if ((!isLeapYear()) && month == 12 && day > 29)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         this.day = day;
     }
@@ -52,8 +58,8 @@ public class PersianDate extends AbstractDate {
 
     public void setMonth(int month) {
         if (month < 1 || month > 12)
-            throw new MonthOutOfRangeException("month " + month
-                    + " is out of range!");
+            throw new MonthOutOfRangeException(
+                    Constants.MONTH + " " + month + " " + Constants.IS_OUT_OF_RANGE);
 
         // Set the day again, so that exceptions are thrown if the
         // day is out of range
@@ -63,7 +69,7 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getWeekOfYear() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getYear() {
@@ -72,25 +78,25 @@ public class PersianDate extends AbstractDate {
 
     public void setYear(int year) {
         if (year == 0)
-            throw new YearOutOfRangeException("Year 0 is invalid!");
+            throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
 
         this.year = year;
     }
 
     public void rollDay(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public void rollMonth(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public void rollYear(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public String getEvent() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getDayOfWeek() {
@@ -102,11 +108,11 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getDayOfYear() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getWeekOfMonth() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public boolean isLeapYear() {

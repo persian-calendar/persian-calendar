@@ -1,19 +1,18 @@
 package calendar;
 
-import com.byagowi.persiancalendar.Utils;
-
 import java.util.Calendar;
 
 /**
  * @author Amir
  * @author ebraminio
  */
+
 public class CivilDate extends AbstractDate {
-    private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31,
-            31, 30, 31, 30, 31};
+    private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private int year;
     private int month;
     private int day;
+
     public CivilDate() {
         this(Calendar.getInstance());
     }
@@ -37,16 +36,20 @@ public class CivilDate extends AbstractDate {
 
     public void setDayOfMonth(int day) {
         if (day < 1)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " " + day + " "  + Constants.IS_OUT_OF_RANGE);
 
         if (month != 2 && day > daysInMonth[month])
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
 
         if (month == 2 && isLeapYear() && day > 29)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
 
         if (month == 2 && (!isLeapYear()) && day > 28)
-            throw new DayOutOfRangeException("day " + day + " is out of range!");
+            throw new DayOutOfRangeException(
+                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
 
         // TODO check for the case of leap year for February
         this.day = day;
@@ -61,11 +64,11 @@ public class CivilDate extends AbstractDate {
     }
 
     public int getDayOfYear() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public String getEvent() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getMonth() {
@@ -74,8 +77,8 @@ public class CivilDate extends AbstractDate {
 
     public void setMonth(int month) {
         if (month < 1 || month > 12)
-            throw new MonthOutOfRangeException("month " + month
-                    + " is out of range!");
+            throw new MonthOutOfRangeException(
+                    Constants.MONTH  + " " + month + " "  + Constants.IS_OUT_OF_RANGE);
 
         // Set the day again, so that exceptions are thrown if the
         // day is out of range
@@ -85,11 +88,11 @@ public class CivilDate extends AbstractDate {
     }
 
     public int getWeekOfMonth() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getWeekOfYear() {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public int getYear() {
@@ -98,7 +101,7 @@ public class CivilDate extends AbstractDate {
 
     public void setYear(int year) {
         if (year == 0)
-            throw new YearOutOfRangeException("Year 0 is invalid!");
+            throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
 
         this.year = year;
     }
@@ -106,21 +109,23 @@ public class CivilDate extends AbstractDate {
     public boolean isLeapYear() {
         if (year % 400 == 0)
             return true;
+
         else if (year % 100 == 0)
             return false;
+
         return (year % 4 == 0);
     }
 
     public void rollDay(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public void rollMonth(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public void rollYear(int amount, boolean up) {
-        throw new RuntimeException("not implemented yet!");
+        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
     public boolean equals(CivilDate civilDate) {

@@ -22,6 +22,7 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
+import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,7 +32,7 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment implements View.OnClickListener {
+public class CalendarMainFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     public static final int MONTHS_LIMIT = 1200;
     private ViewPager viewPager;
@@ -58,7 +59,10 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     private TextView ghamariDate;
     private TextView shamsiDate;
     private TextView eventTitle;
+    private TextView holidayTitle;
     private TextView today;
+
+    private IconTextView moreOwghat;
 
     private CardView owghat;
     private CardView event;
@@ -123,15 +127,19 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
 
-        eventTitle = (TextView) view.findViewById(R.id.event_title);
+        moreOwghat = (IconTextView) view.findViewById(R.id.more_owghat);
 
-        CardView infoDay = (CardView) view.findViewById(R.id.info_day);
+        eventTitle = (TextView) view.findViewById(R.id.event_title);
+        holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
+
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.event);
 
         viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
+        utils.loadEvents(getResources().openRawResource(R.raw.events));
+
         utils.loadLanguageFromSettings(getContext());
 
         digits = utils.preferredDigits(getContext());
@@ -142,9 +150,9 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         viewPager.setCurrentItem(MONTHS_LIMIT / 2);
 
-        infoDay.setOnClickListener(this);
-        owghat.setOnClickListener(this);
+        viewPager.addOnPageChangeListener(this);
 
+        owghat.setOnClickListener(this);
         today.setOnClickListener(this);
 
         return view;
@@ -159,7 +167,10 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
         miladiDate.setText(utils.dateToString(civilDate, digits));
-        ghamariDate.setText(utils.dateToString(DateConverter.civilToIslamic(civilDate), digits));
+        ghamariDate.setText(utils.dateToString(
+                DateConverter.civilToIslamic(
+                        civilDate, Utils.getIslamicOffset(getContext())),
+                digits));
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);
@@ -189,15 +200,23 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void showEvent(PersianDate persianDate) {
-        String holidayTitle = utils.getHolidayTitle(persianDate);
+        String holidays = utils.getHolidayTitle(persianDate);
+        String events = utils.getEventTitle(persianDate);
 
-        if (holidayTitle != null) {
-            eventTitle.setText(holidayTitle);
+        event.setVisibility(View.GONE);
+        holidayTitle.setVisibility(View.GONE);
+        eventTitle.setVisibility(View.GONE);
+
+        if (holidays != null) {
+            holidayTitle.setText(holidays);
+            holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
+        }
 
-        } else {
-            event.setVisibility(View.GONE);
-
+        if (events != null) {
+            eventTitle.setText(events);
+            eventTitle.setVisibility(View.VISIBLE);
+            event.setVisibility(View.VISIBLE);
         }
     }
 
@@ -226,10 +245,6 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.info_day:
-                miladiDate.setVisibility(View.VISIBLE);
-                ghamariDate.setVisibility(View.VISIBLE);
-                break;
 
             case R.id.owghat:
                 owghat1.setVisibility(View.VISIBLE);
@@ -248,6 +263,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
                 divider5.setVisibility(View.VISIBLE);
                 divider6.setVisibility(View.VISIBLE);
                 divider7.setVisibility(View.VISIBLE);
+
+                moreOwghat.setVisibility(View.GONE);
                 break;
 
             case R.id.today:
@@ -257,9 +274,14 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void bringTodayYearMonth() {
+        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth"); //todo use fragment tag
+        intent.putExtra("value", 2000);
+        getContext().sendBroadcast(intent);
+
         if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
             viewPager.setCurrentItem(MONTHS_LIMIT / 2);
         }
+
         selectDay(Utils.getToday());
     }
 
@@ -268,5 +290,22 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         return today.getYear() == civilDate.getYear()
                 && today.getMonth() == civilDate.getMonth()
                 && today.getDayOfMonth() == civilDate.getDayOfMonth();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");//todo use fragment tag
+        intent.putExtra("value", position - CalendarMainFragment.MONTHS_LIMIT / 2);
+        getContext().sendBroadcast(intent);
+
+        today.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 }

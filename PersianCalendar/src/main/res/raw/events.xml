@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<events>
+
+    <event day="12" month="11" year="1394">
+        رویداددو
+    </event>
+    <event day="16" month="11" year="1394">
+        رویداد یک
+    </event>
+    <event day="20" month="11" year="1394">
+        رویداد سه
+    </event>
+    <event day="4" month="12" year="1394">
+        رویداد چهارم
+    </event>
+    <event day="4" month="1" year="1395">
+        رویداد ۵
+    </event>
+    <event day="24" month="1" year="1395">
+        رویداد آخر
+    </event>
+</events>

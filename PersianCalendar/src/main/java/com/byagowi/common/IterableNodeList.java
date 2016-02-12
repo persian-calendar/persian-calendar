@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  *
  * @author ebraminio
  */
+
 public class IterableNodeList implements Iterable<Node> {
     private final NodeList nodeList;
 

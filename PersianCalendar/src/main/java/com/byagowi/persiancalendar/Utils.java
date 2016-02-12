@@ -100,7 +100,8 @@ public class Utils {
             R.drawable.day25, R.drawable.day26, R.drawable.day27,
             R.drawable.day28, R.drawable.day29, R.drawable.day30,
             R.drawable.day31};
-    private List<Holiday> holidays;
+    private List<Event> holidays;
+    private List<Event> events;
 
     private Utils() {
     }
@@ -148,6 +149,13 @@ public class Utils {
 
         return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
                 "Jafari")); // Seems Iran using Jafari method
+    }
+
+    public static int getIslamicOffset(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        return Integer.parseInt(prefs.getString("islamicOffset", "0"));
     }
 
     public Coordinate getCoordinate(Context context) {
@@ -227,6 +235,11 @@ public class Utils {
                 String holidayTitle = getHolidayTitle(persianDate);
                 if (holidayTitle != null || dayOfWeek == 6) {
                     day.setHoliday(true);
+                }
+
+                String eventTitle = getEventTitle(persianDate);
+                if (eventTitle != null || holidayTitle != null ) {
+                    day.setEvent(true);
                 }
 
                 day.setPersianDate(persianDate.clone());
@@ -423,7 +436,7 @@ public class Utils {
 
                 String holidayTitle = node.getFirstChild().getNodeValue();
 
-                holidays.add(new Holiday(new PersianDate(year, month, day),
+                holidays.add(new Event(new PersianDate(year, month, day),
                         holidayTitle));
             }
 
@@ -432,11 +445,51 @@ public class Utils {
         }
     }
 
+    public void loadEvents(InputStream xmlStream) {
+        events = new ArrayList<>();
+        DocumentBuilder builder;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            Document document = builder.parse(xmlStream);
+
+            NodeList eventsNodes = document.getElementsByTagName("event");
+            for (Node node : new IterableNodeList(eventsNodes)) {
+                NamedNodeMap attrs = node.getAttributes();
+
+                int year = Integer.parseInt(attrs.getNamedItem("year")
+                        .getNodeValue());
+                int month = Integer.parseInt(attrs.getNamedItem("month")
+                        .getNodeValue());
+                int day = Integer.parseInt(attrs.getNamedItem("day")
+                        .getNodeValue());
+
+                String eventTitle = node.getFirstChild().getNodeValue();
+
+                events.add(new Event(new PersianDate(year, month, day),
+                        eventTitle));
+            }
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
     public String getHolidayTitle(PersianDate day) {
-        for (Holiday holiday : holidays) {
+        for (Event holiday : holidays) {
             if (holiday.getDate().equals(day)) {
                 // trim XML whitespaces and newlines
                 return holiday.getTitle().replaceAll("\n", "").trim();
+            }
+        }
+        return null;
+    }
+
+    public String getEventTitle(PersianDate day) {
+        for (Event event : events) {
+            if (event.getDate().equals(day)) {
+                // trim XML whitespaces and newlines
+                return event.getTitle().replaceAll("\n", "").trim();
             }
         }
         return null;

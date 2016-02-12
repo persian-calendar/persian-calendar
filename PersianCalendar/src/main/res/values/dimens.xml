@@ -13,9 +13,9 @@
     <dimen name="drawer_header_height">150dp</dimen>
     <dimen name="drawer_item_height">48dp</dimen>
 
-    <dimen name="grid_calendar_height">348dp</dimen>
+    <dimen name="grid_calendar_height">290dp</dimen>
     <dimen name="grid_calendar_padding">20dp</dimen>
-    <dimen name="grid_calendar_padding_bottom">10dp</dimen>
+    <dimen name="grid_calendar_padding_bottom">4dp</dimen>
 
     <dimen name="item_calendar_margin_top">4dp</dimen>
 
@@ -28,6 +28,7 @@
 
     <dimen name="day_item_size">40dp</dimen>
     <dimen name="day_item_select_size">38dp</dimen>
+    <dimen name="day_item_event_size">2dp</dimen>
 
 
 </resources>

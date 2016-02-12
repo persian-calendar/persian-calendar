@@ -3,15 +3,15 @@ package com.byagowi.persiancalendar;
 import calendar.PersianDate;
 
 /**
- * Holiday POJO
+ * Event POJO
  *
  * @author ebraminio
  */
-class Holiday {
+class Event {
     private PersianDate date;
     private String title;
 
-    public Holiday(PersianDate date, String title) {
+    public Event(PersianDate date, String title) {
         this.date = date;
         this.title = title;
     }

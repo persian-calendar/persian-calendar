@@ -27,11 +27,26 @@
         <item>Tehran</item>
     </string-array>
 
+    <string-array name="colorNames">
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Black</item>
+    </string-array>
+
+    <string-array name="colorKeys" translatable="false">
+        <item>#ffffffff</item>
+        <item>#ffff0000</item>
+        <item>#ff0000ff</item>
+        <item>#ff000000</item>
+    </string-array>
+
     <string-array name="languageNames">
         <item>English</item>
         <item>Persian</item>
         <item>Pashto</item>
     </string-array>
+
     <string-array name="languageKeys" translatable="false">
         <item>en</item>
         <item>fa</item>
@@ -49,6 +64,7 @@
         <item>prs</item>
         <item>ps</item>
     </string-array>
+
     <string-array name="prayerTimeNames">
         <item>Morning</item>
         <item>Dhohr</item>
@@ -63,6 +79,22 @@
         <item>ASR</item>
         <item>MAGHRIB</item>
         <item>ISHA</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>+2</item>
+    </string-array>
+
+    <string-array name="islamicOffsetKeys">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>+2</item>
     </string-array>
 
     <string-array name="drawerTitles">

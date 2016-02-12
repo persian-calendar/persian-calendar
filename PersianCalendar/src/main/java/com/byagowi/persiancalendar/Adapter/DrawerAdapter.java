@@ -10,10 +10,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.view.Activity.MainActivity;
 import com.malinskiy.materialicons.widget.IconTextView;
 
-/**
- * Created by behdad on 10/14/15.
- */
-
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
     private final MainActivity mainActivity;
     private static final int TYPE_HEADER = 0;
