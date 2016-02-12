@@ -3,6 +3,7 @@
 * Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
 * Icon: Behdad Pournader
 * About icon: Iman Soltanian
+
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
 
   Copyright (C) 2006  Amir Khosroshahi (amir.khosroshahi)
@@ -36,6 +37,9 @@
 
   This program is distributed in the hope that it will
   be useful, but WITHOUT ANY WARRANTY.
+
+* abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due being old
+  and Egypt laws, anyway just a portion of it used in hope to be fair use at least.
 
 * ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache 2.0)
 
