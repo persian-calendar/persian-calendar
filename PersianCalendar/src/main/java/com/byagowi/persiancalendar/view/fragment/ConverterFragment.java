@@ -19,11 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.common.Range;
-import com.byagowi.persiancalendar.CalendarType;
-import com.byagowi.persiancalendar.CalendarTypesSpinnerAdapter;
+import com.byagowi.persiancalendar.enums.CalendarType;
+import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.view.custom.CustomToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +53,11 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     private View divider;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.calendar_converter, container, false);
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_converter, container, false);
 
         //noinspection ConstantConditions
         ((AppCompatActivity) getActivity())
@@ -68,7 +70,8 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                 .setSubtitle("");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboardManager = (ClipboardManager) getContext()
+                    .getSystemService(Context.CLIPBOARD_SERVICE);
         }
 
         // fill members
@@ -90,7 +93,8 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
         // fill views
-        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(), android.R.layout.select_dialog_item));
+        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(),
+                android.R.layout.select_dialog_item));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
@@ -130,6 +134,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     calendarsTextList.add(utils.dateToString(persianDate, digits));
                     calendarsTextList.add(utils.dateToString(islamicDate, digits));
                     break;
+
                 case ISLAMIC:
                     islamicDate = new IslamicDate(year, month, day);
                     civilDate = DateConverter.islamicToCivil(islamicDate);
@@ -139,6 +144,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     calendarsTextList.add(utils.dateToString(civilDate, digits));
                     calendarsTextList.add(utils.dateToString(persianDate, digits));
                     break;
+
                 case SHAMSI:
                     persianDate = new PersianDate(year, month, day);
                     civilDate = DateConverter.persianToCivil(persianDate);
@@ -150,7 +156,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     break;
             }
 
-
             sb.append(utils.getWeekDayName(civilDate));
             sb.append(Utils.PERSIAN_COMMA);
             sb.append(" ");
@@ -159,6 +164,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             date0.setText(sb);
             date1.setText(calendarsTextList.get(1));
             date2.setText(calendarsTextList.get(2));
+
         } catch (RuntimeException e) {
             divider.setVisibility(View.GONE);
             moreDate.setVisibility(View.GONE);
@@ -166,7 +172,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
-    void fillYearMonthDaySpinners() {
+    private void fillYearMonthDaySpinners() {
         char[] digits = utils.preferredDigits(getContext());
 
         AbstractDate date = null;
@@ -179,9 +185,11 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             case GEORGIAN:
                 date = newDateCivil;
                 break;
+
             case ISLAMIC:
                 date = newDateIslamic;
                 break;
+
             case SHAMSI:
                 date = newDatePersian;
                 break;
@@ -255,17 +263,16 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     private class DateTapListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            TextView textViewDate = (TextView) view;
-            CharSequence convertedDate = textViewDate.getText();
+            CharSequence convertedDate = ((TextView) view).getText();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 ClipData clip = ClipData.newPlainText("converted date", convertedDate);
                 clipboardManager.setPrimaryClip(clip);
             }
 
-            Context context = view.getContext();
-            Toast toast = CustomToast.makeToast(context, R.string.date_copied_clipboard, convertedDate, Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(getContext(),
+                    getString(R.string.date_copied_clipboard) + "\n" + convertedDate,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

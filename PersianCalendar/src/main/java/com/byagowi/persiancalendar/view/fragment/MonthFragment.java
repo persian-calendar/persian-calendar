@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.byagowi.Constant;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.R;
@@ -23,7 +24,7 @@ import java.util.List;
 
 import calendar.PersianDate;
 
-public class MonthNewFragment extends Fragment implements View.OnClickListener {
+public class MonthFragment extends Fragment implements View.OnClickListener {
     private final Utils utils = Utils.getInstance();
     private CalendarMainFragment calendarMainFragment;
     private PersianDate persianDate;
@@ -39,8 +40,8 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
             ViewGroup container,
             Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.calendar_month, container, false);
-        offset = getArguments().getInt("offset");
+        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        offset = getArguments().getInt(Constant.OFFSET_ARGUMENT);
         List<Day> days = utils.getDays(getContext(), offset);
         digits = utils.preferredDigits(getActivity());
 
@@ -76,7 +77,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
 
         calendarMainFragment = (CalendarMainFragment) getActivity()
                         .getSupportFragmentManager()
-                        .findFragmentByTag("CalendarMainFragment");
+                        .findFragmentByTag(Constant.CALENDAR_MAIN_FRAGMENT_TAG);
 
         if (calendarMainFragment != null && offset == 0) {
             calendarMainFragment.selectDay(Utils.getToday());
@@ -86,14 +87,14 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
             UpdateTitle();
         }
 
-        filter = new IntentFilter("com.byagowi.persiancalendar.changemounth");
+        filter = new IntentFilter(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int value =  intent.getExtras().getInt("value");
+                int value =  intent.getExtras().getInt(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
                 if (value == offset) {
                     UpdateTitle();
-                } else if (value == 2000) {
+                } else if (value == Constant.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
                     resetSelectDay();
                 }
             }

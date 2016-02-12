@@ -1,5 +1,6 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.view;
 
+import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 
 public class DashClockUpdate extends DashClockExtension {

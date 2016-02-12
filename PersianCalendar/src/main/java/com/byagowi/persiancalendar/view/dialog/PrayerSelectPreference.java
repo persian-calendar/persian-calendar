@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.custom;
+package com.byagowi.persiancalendar.view.dialog;
 
 import android.content.Context;
 import android.os.Parcel;

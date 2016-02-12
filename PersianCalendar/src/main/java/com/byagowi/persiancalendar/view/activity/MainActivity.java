@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,10 +16,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.adapter.DrawerAdapter;
-import com.byagowi.persiancalendar.ApplicationService;
+import com.byagowi.Constant;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.service.DatabaseInitService;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
@@ -68,17 +67,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             toolbar.setPadding(0, 0, 0, 0);
         }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String key = prefs.getString("Theme", "");
-        int theme = R.style.LightTheme;
-
-        if (key.equals("LightTheme")) {
-            theme = R.style.LightTheme;
-        } else if (key.equals("DarkTheme")) {
-            theme = R.style.DarkTheme;
-        }
-        setTheme(theme);
 
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
@@ -136,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment")
+                .replace(R.id.fragment_holder,
+                        new CalendarMainFragment(),
+                        Constant.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
     }
 
@@ -172,12 +162,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectItem(int position) {
         switch (position) {
-
             case CALENDAR:
                 if (menuPosition != CALENDAR) {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, new CalendarMainFragment(), "CalendarMainFragment")
+                            .replace(R.id.fragment_holder,
+                                    new CalendarMainFragment(),
+                                    Constant.CALENDAR_MAIN_FRAGMENT_TAG)
                             .commit();
 
                     menuPosition = CALENDAR;

@@ -26,6 +26,8 @@ import com.byagowi.common.IterableNodeList;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
+import com.byagowi.persiancalendar.service.AlarmReceiver;
+import com.byagowi.persiancalendar.service.AthanResetReceiver;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory android:title="@string/general">
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/general">
 
         <android.support.v7.preference.ListPreference
             android:defaultValue="fa"
@@ -71,7 +72,8 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory android:title="@string/pray_times_calculation_setting">
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/pray_times_calculation_setting">
 
         <android.support.v7.preference.ListPreference
             android:defaultValue="Jafari"
@@ -81,7 +83,7 @@
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
 
-        <com.byagowi.persiancalendar.view.custom.LocationPreference
+        <com.byagowi.persiancalendar.view.dialog.LocationPreference
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location" />
@@ -109,7 +111,6 @@
 
     <android.support.v7.preference.PreferenceCategory
         android:key="Athan"
-        android:layout="@layout/preference_category"
         android:title="@string/athan">
 
         <android.support.v7.preference.EditTextPreference
@@ -118,12 +119,12 @@
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap" />
 
-        <com.byagowi.persiancalendar.view.custom.PrayerSelectPreference
+        <com.byagowi.persiancalendar.view.dialog.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
-        <com.byagowi.persiancalendar.view.custom.AthanVolumePreference
+        <com.byagowi.persiancalendar.view.dialog.AthanVolumePreference
             android:key="AthanVolume"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume" />
