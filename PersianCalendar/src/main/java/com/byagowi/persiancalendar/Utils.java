@@ -189,6 +189,11 @@ public class Utils {
         return prefs.getBoolean("PersianDigits", true) ? persianDigits : arabicDigits;
     }
 
+    public static boolean isPersianDigitSelected(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("PersianDigits", true);
+    }
+
     public boolean clockIn24(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);

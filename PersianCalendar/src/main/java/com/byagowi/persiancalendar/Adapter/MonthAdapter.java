@@ -23,11 +23,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private static final int TYPE_DAY = 1;
     private List<Day> days;
     public int select_Day = -1;
+    private boolean pesianDigit;
 
     public MonthAdapter(Context context, MonthNewFragment monthNewFragment, List<Day> days) {
         this.monthNewFragment = monthNewFragment;
         this.context = context;
         this.days = days;
+        pesianDigit = Utils.isPersianDigitSelected(context);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -92,8 +94,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         if (!isPositionHeader(position)) {
             if (position - 7 - days.get(0).getDayOfWeek() >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
-                holder.num.setTextSize(25);
                 holder.num.setVisibility(View.VISIBLE);
+
+                if (pesianDigit) {
+                    holder.num.setTextSize(25);
+                } else {
+                    holder.num.setTextSize(20);
+                }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
                     holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
