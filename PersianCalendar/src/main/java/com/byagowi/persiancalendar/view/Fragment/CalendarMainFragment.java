@@ -274,13 +274,13 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void bringTodayYearMonth() {
-        if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
-            viewPager.setCurrentItem(MONTHS_LIMIT / 2);
-        }
-
         Intent intent = new Intent("com.byagowi.persiancalendar.changemounth"); //todo use fragment tag
         intent.putExtra("value", 2000);
         getContext().sendBroadcast(intent);
+
+        if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
+            viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+        }
 
         selectDay(Utils.getToday());
     }

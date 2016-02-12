@@ -149,11 +149,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         } else {
             return TYPE_DAY;
         }
-
     }
 
     private boolean isPositionHeader(int position) {
         return position < 7;
     }
-
 }

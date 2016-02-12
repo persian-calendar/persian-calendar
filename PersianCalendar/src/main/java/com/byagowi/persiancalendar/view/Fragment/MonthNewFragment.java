@@ -78,7 +78,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
                         .getSupportFragmentManager()
                         .findFragmentByTag("CalendarMainFragment");
 
-        if (calendarMainFragment != null) {
+        if (calendarMainFragment != null && offset == 0) {
             calendarMainFragment.selectDay(Utils.getToday());
         }
 
@@ -93,9 +93,7 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
                 int value =  intent.getExtras().getInt("value");
                 if (value == offset) {
                     UpdateTitle();
-                }
-
-                if (value == 2000) {
+                } else if (value == 2000) {
                     resetSelectDay();
                 }
             }
@@ -139,7 +137,6 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void UpdateTitle() {
-
         //noinspection ConstantConditions
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
@@ -149,11 +146,12 @@ public class MonthNewFragment extends Fragment implements View.OnClickListener {
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
                 .setTitle(utils.getMonthName(persianDate));
-
     }
 
     private void resetSelectDay() {
-        adapter.select_Day = -1;
-        adapter.notifyDataSetChanged();
+        if (adapter.select_Day != -1) {
+            adapter.select_Day = -1;
+            adapter.notifyDataSetChanged();
+        }
     }
 }
