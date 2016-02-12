@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.util;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +14,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.widget.Widget1x1;
+import com.byagowi.persiancalendar.view.widget.Widget4x1;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
@@ -25,7 +29,6 @@ import calendar.DateConverter;
 import calendar.PersianDate;
 
 public class UpdateUtils {
-    private static final String TAG = "UpdateUtils";
     private static final int NOTIFICATION_ID = 1001;
     private static UpdateUtils myInstance;
     private final Utils utils = Utils.getInstance();

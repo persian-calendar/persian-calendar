@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.byagowi.persiancalendar.CompassListener;
 import com.byagowi.persiancalendar.R;
@@ -28,7 +26,6 @@ import com.github.praytimes.Coordinate;
  */
 public class CompassFragment extends Fragment {
     public QiblaCompassView compassView;
-    TextView degree;
     SensorManager sensorManager;
     Sensor sensor;
     SensorEventListener compassListener;
@@ -52,10 +49,10 @@ public class CompassFragment extends Fragment {
         compassListener = new CompassListener(this);
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
 
-        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
         compassView.setScreenResolution(width, height - 2 * height / 8);
 
         Coordinate coordinate = utils.getCoordinate(getContext());

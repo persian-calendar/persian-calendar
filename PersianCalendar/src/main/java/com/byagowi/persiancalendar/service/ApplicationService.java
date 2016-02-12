@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+
+import com.byagowi.persiancalendar.util.UpdateUtils;
 
 /**
  * The Calendar Service that updates widget time and clock and build/update

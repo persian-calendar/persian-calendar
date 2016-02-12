@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.enums.CalendarType;
 import com.byagowi.persiancalendar.locale.CalendarStrings;
 
 import java.util.HashMap;
@@ -45,8 +47,9 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
         return calendarTypeKeys[position];
     }
 
-    public View getSpinnerItemView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public View getSpinnerItemView(int position, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView textView = (TextView) inflater.inflate(spinnerResource, parent, false);
         textView.setText(calendarTypes.get(calendarTypeKeys[position]));
         return textView;
@@ -54,11 +57,11 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return getSpinnerItemView(position, convertView, parent);
+        return getSpinnerItemView(position, parent);
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return getSpinnerItemView(position, convertView, parent);
+        return getSpinnerItemView(position, parent);
     }
 }

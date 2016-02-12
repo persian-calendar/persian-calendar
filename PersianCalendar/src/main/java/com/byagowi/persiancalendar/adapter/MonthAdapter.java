@@ -12,24 +12,24 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.view.fragment.MonthNewFragment;
+import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
 import java.util.List;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private final Context context;
-    private final MonthNewFragment monthNewFragment;
+    private final MonthFragment monthFragment;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DAY = 1;
     private List<Day> days;
     public int select_Day = -1;
-    private boolean pesianDigit;
+    private boolean persianDigit;
 
-    public MonthAdapter(Context context, MonthNewFragment monthNewFragment, List<Day> days) {
-        this.monthNewFragment = monthNewFragment;
+    public MonthAdapter(Context context, MonthFragment monthFragment, List<Day> days) {
+        this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
-        pesianDigit = Utils.isPersianDigitSelected(context);
+        persianDigit = Utils.isPersianDigitSelected(context);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -53,7 +53,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             if (getAdapterPosition() - 7 - days.get(0).getDayOfWeek() >= 0) {
-                monthNewFragment.onClickItem(days
+                monthFragment.onClickItem(days
                         .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
                         .getPersianDate());
 
@@ -66,7 +66,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         public boolean onLongClick(View v) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 try {
-                    monthNewFragment.onLongClickItem(days
+                    monthFragment.onLongClickItem(days
                             .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
                             .getPersianDate());
                 } catch (Exception e) {
@@ -83,7 +83,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.day_item, parent, false);
+                .inflate(R.layout.item_day, parent, false);
 
         return new ViewHolder(v);
 
@@ -96,7 +96,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
                 holder.num.setVisibility(View.VISIBLE);
 
-                if (pesianDigit) {
+                if (persianDigit) {
                     holder.num.setTextSize(25);
                 } else {
                     holder.num.setTextSize(20);
