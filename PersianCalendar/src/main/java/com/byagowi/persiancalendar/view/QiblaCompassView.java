@@ -308,7 +308,7 @@ public class QiblaCompassView extends View {
         canvas.drawLine(px, py - Radius, px, py + Radius, qiblaPaint);
         qiblaPaint.setPathEffect(null);
         Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-                R.drawable.kabah);
+                R.drawable.kaaba);
         canvas.drawBitmap(bmp, px - bmp.getWidth() / 2, py - Radius
                 - bmp.getHeight() / 2, qiblaPaint);
         canvas.restore();
