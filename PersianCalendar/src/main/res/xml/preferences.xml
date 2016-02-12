@@ -11,6 +11,13 @@
             android:summary="@string/calendar_language_summary"
             android:title="@string/calendar_language" />
 
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="fa"
+            android:entries="@array/languageNames"
+            android:entryValues="@array/languageKeys"
+            android:key="ApplicationLanguage"
+            android:title="@string/language" />
+
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
