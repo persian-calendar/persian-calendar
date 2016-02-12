@@ -57,7 +57,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.calendar_converter, container, false);
-<<<<<<< HEAD
 
         //noinspection ConstantConditions
         ((AppCompatActivity) getActivity())
@@ -69,12 +68,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                 .getSupportActionBar()
                 .setSubtitle("");
 
-        clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-=======
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         }
->>>>>>> 940090552ce93abec9038090a0483266f52429f7
 
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
