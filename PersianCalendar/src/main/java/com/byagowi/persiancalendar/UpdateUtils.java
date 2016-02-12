@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.byagowi.persiancalendar.view.Activity.MainActivity;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.Entity;
+package com.byagowi.persiancalendar.entity;
 
 import calendar.PersianDate;
 

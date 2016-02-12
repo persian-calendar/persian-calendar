@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.Adapter;
+package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.os.Build;
@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Entity.Day;
+import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.view.Fragment.MonthNewFragment;
+import com.byagowi.persiancalendar.view.fragment.MonthNewFragment;
 
 import java.util.List;
 

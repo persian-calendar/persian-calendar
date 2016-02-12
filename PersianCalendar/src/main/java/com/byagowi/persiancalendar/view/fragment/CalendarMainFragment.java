@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.Fragment;
+package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.github.praytimes.Clock;

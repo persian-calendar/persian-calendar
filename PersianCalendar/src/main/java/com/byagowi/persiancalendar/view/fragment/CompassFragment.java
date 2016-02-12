@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.Fragment;
+package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.hardware.Sensor;
