@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -49,6 +50,16 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+        //noinspection ConstantConditions
+        ((AppCompatActivity) getActivity())
+                .getSupportActionBar()
+                .setTitle(getString(R.string.settings));
+
+        //noinspection ConstantConditions
+        ((AppCompatActivity) getActivity())
+                .getSupportActionBar()
+                .setSubtitle("");
+
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         locationName = prefs.getString(PREF_KEY_LOCATION, "");
         String strLat = prefs.getString(PREF_KEY_LATITUDE, "0");
