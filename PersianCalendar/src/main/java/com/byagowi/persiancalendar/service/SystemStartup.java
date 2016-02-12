@@ -1,8 +1,11 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.service.ApplicationService;
 
 /**
  * Startup broadcast receiver

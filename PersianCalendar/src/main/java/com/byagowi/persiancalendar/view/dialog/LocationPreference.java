@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.custom;
+package com.byagowi.persiancalendar.view.dialog;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;

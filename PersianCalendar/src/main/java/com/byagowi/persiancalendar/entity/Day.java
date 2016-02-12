@@ -3,12 +3,12 @@ package com.byagowi.persiancalendar.entity;
 import calendar.PersianDate;
 
 public class Day {
-    String num;
-    boolean holiday;
-    boolean today;
-    int dayOfWeek;
-    PersianDate persianDate;
-    boolean event;
+    private String num;
+    private boolean holiday;
+    private boolean today;
+    private int dayOfWeek;
+    private PersianDate persianDate;
+    private boolean event;
 
     public boolean isEvent() {
         return event;

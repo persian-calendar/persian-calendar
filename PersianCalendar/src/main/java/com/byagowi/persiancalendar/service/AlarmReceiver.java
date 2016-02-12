@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.service;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,8 @@ import android.media.MediaPlayer;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.util.NotificationID;
 import com.byagowi.persiancalendar.view.AthanView;
 

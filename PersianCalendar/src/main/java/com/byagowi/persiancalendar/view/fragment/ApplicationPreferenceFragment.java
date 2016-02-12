@@ -13,15 +13,14 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.custom.AthanVolumeDialog;
-import com.byagowi.persiancalendar.view.custom.AthanVolumePreference;
-import com.byagowi.persiancalendar.view.custom.LocationPreference;
-import com.byagowi.persiancalendar.view.custom.LocationPreferenceDialog;
-import com.byagowi.persiancalendar.view.custom.PrayerSelectDialog;
-import com.byagowi.persiancalendar.view.custom.PrayerSelectPreference;
+import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
+import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
+import com.byagowi.persiancalendar.view.dialog.LocationPreference;
+import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
+import com.byagowi.persiancalendar.view.dialog.PrayerSelectDialog;
+import com.byagowi.persiancalendar.view.dialog.PrayerSelectPreference;
 
 /**
  * Preference activity
@@ -29,7 +28,6 @@ import com.byagowi.persiancalendar.view.custom.PrayerSelectPreference;
  * @author ebraminio
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
-    private static final String TAG = "AppPrefFragment";
     public static final String INTENT_ACTION_PREFERENCES_CHANGED = "com.byagowi.persiancalendar.intent.action.PREFERENCES_CHANGED";
 
     public static final String PREF_KEY_ATHAN = "Athan";
@@ -94,8 +92,6 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         }
 
         boolean locationEmpty = (TextUtils.isEmpty(locationName) || locationName.equalsIgnoreCase("CUSTOM")) && (latitude == 0 || longitude == 0);
-        Log.d(TAG, "new value: " + newValue);
-        Log.d(TAG, "location is empty: " + locationEmpty);
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
             categoryAthan.setSummary(R.string.athan_disabled_summary);

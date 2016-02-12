@@ -3,7 +3,6 @@
 package com.byagowi.persiancalendar.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +11,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -29,14 +29,13 @@ public class QiblaCompassView extends View {
     private int Radius; // Radius of Compass dial
     private int r; // Radius of Sun and Moon
     private String northString, eastString, southString, westString;
-    private int textHeight;
     private DashPathEffect dashPath;
     private float bearing;
-    private Resources rsc;
     private Horizontal sunPosition, moonPosition;
     private EarthHeading qiblaInfo;
     private SunMoonPosition sunMoonPosition;
-    private double longitude = 0.0, latitude = 0.0, altitude = 0.0;
+    private double longitude = 0.0;
+    private double latitude = 0.0;
 
     private Paint textPaint;
 
@@ -63,6 +62,7 @@ public class QiblaCompassView extends View {
         double jd = AstroLib.calculateJulianDay(c);
 
         double ΔT = 0;
+        double altitude = 0.0;
         sunMoonPosition = new SunMoonPosition(jd, latitude, longitude,
                 altitude, ΔT);
         sunPosition = sunMoonPosition.getSunPosition();
@@ -72,7 +72,6 @@ public class QiblaCompassView extends View {
     public void initCompassView() {
         setFocusable(true);
         initAstronomicParameters();
-        rsc = this.getResources();
         northString = "N";
         eastString = "E";
         southString = "S";
@@ -83,10 +82,10 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(rsc.getColor(R.color.marker_color));
+        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.marker_color));
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        textPaint.setColor(rsc.getColor(R.color.text_color));
+        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_color)));
         textPaint.setTextSize(20);
     }
 
@@ -104,7 +103,7 @@ public class QiblaCompassView extends View {
     }
 
     private int measure(int measureSpec) {
-        int result = 0;
+        int result;
 
         // Decode the measurement specifications.
         int specMode = MeasureSpec.getMode(measureSpec);
@@ -177,13 +176,13 @@ public class QiblaCompassView extends View {
         // over here
         Paint markerPaint, circlePaint;
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(rsc.getColor(R.color.background_color));
+        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.background_color));
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.STROKE); // Sadece Cember ciziyor.
 
-        textHeight = (int) textPaint.measureText("yY");
+        int textHeight = (int) textPaint.measureText("yY");
         markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        markerPaint.setColor(rsc.getColor(R.color.marker_color));
+        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.marker_color));
         // Draw the background
         canvas.drawCircle(px, py, Radius, circlePaint);
         canvas.drawCircle(px, py, Radius - 20, circlePaint);

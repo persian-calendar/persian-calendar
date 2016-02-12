@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.byagowi.Constant;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
@@ -32,31 +33,30 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
-
-    public static final int MONTHS_LIMIT = 1200;
-    private ViewPager viewPager;
+public class CalendarMainFragment extends Fragment
+        implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    private ViewPager monthViewPager;
     private final Utils utils = Utils.getInstance();
 
-    private Calendar c = Calendar.getInstance();
+    private Calendar calendar = Calendar.getInstance();
     private char[] digits;
     private boolean clockIn24;
 
-    private Coordinate coord;
+    private Coordinate coordinate;
 
-    private PrayTimesCalculator ptc;
-    private TextView azan1;
-    private TextView azan2;
-    private TextView azan3;
-    private TextView azan4;
-    private TextView azan5;
+    private PrayTimesCalculator prayTimesCalculator;
+    private TextView athan1;
+    private TextView athan2;
+    private TextView athan3;
+    private TextView athan4;
+    private TextView athan5;
     private TextView aftab1;
     private TextView aftab2;
     private TextView aftab3;
 
     private TextView weekDayName;
-    private TextView miladiDate;
-    private TextView ghamariDate;
+    private TextView georgianDate;
+    private TextView islamicDate;
     private TextView shamsiDate;
     private TextView eventTitle;
     private TextView holidayTitle;
@@ -91,7 +91,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_new_calendar, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         owghat1 = (RelativeLayout) view.findViewById(R.id.owghat1);
         owghat2 = (RelativeLayout) view.findViewById(R.id.owghat2);
@@ -110,19 +110,17 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         divider6 = view.findViewById(R.id.div6);
         divider7 = view.findViewById(R.id.div7);
 
-        miladiDate = (TextView) view.findViewById(R.id.miladi_date);
-        ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
-        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
+        georgianDate = (TextView) view.findViewById(R.id.georgian_date);
+        islamicDate = (TextView) view.findViewById(R.id.islamic_date);
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
-        miladiDate = (TextView) view.findViewById(R.id.miladi_date);
-        ghamariDate = (TextView) view.findViewById(R.id.ghamari_date);
+        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
         today = (TextView) view.findViewById(R.id.today);
 
-        azan1 = (TextView) view.findViewById(R.id.azan1);
-        azan2 = (TextView) view.findViewById(R.id.azan2);
-        azan3 = (TextView) view.findViewById(R.id.azan3);
-        azan4 = (TextView) view.findViewById(R.id.azan4);
-        azan5 = (TextView) view.findViewById(R.id.azan5);
+        athan1 = (TextView) view.findViewById(R.id.azan1);
+        athan2 = (TextView) view.findViewById(R.id.azan2);
+        athan3 = (TextView) view.findViewById(R.id.azan3);
+        athan4 = (TextView) view.findViewById(R.id.azan4);
+        athan5 = (TextView) view.findViewById(R.id.azan5);
         aftab1 = (TextView) view.findViewById(R.id.aftab1);
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
@@ -135,7 +133,7 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.event);
 
-        viewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
+        monthViewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
 
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
         utils.loadEvents(getResources().openRawResource(R.raw.events));
@@ -144,13 +142,13 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
         digits = utils.preferredDigits(getContext());
         clockIn24 = utils.clockIn24(getContext());
-        coord = utils.getCoordinate(getContext());
-        ptc = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
+        coordinate = utils.getCoordinate(getContext());
+        prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
 
-        viewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
-        viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+        monthViewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
+        monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
 
-        viewPager.addOnPageChangeListener(this);
+        monthViewPager.addOnPageChangeListener(this);
 
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
@@ -159,15 +157,15 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     public void changeMonth(int position) {
-        viewPager.setCurrentItem(viewPager.getCurrentItem() + position, true);
+        monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
     public void selectDay(PersianDate persianDate) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         weekDayName.setText(utils.getWeekDayName(persianDate));
         shamsiDate.setText(utils.dateToString(persianDate, digits));
-        miladiDate.setText(utils.dateToString(civilDate, digits));
-        ghamariDate.setText(utils.dateToString(
+        georgianDate.setText(utils.dateToString(civilDate, digits));
+        islamicDate.setText(utils.dateToString(
                 DateConverter.civilToIslamic(
                         civilDate, Utils.getIslamicOffset(getContext())),
                 digits));
@@ -186,16 +184,21 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     public void addEventOnCalendar(PersianDate persianDate) {
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setData(CalendarContract.Events.CONTENT_URI);
+
         CivilDate civil = DateConverter.persianToCivil(persianDate);
+
         intent.putExtra(CalendarContract.Events.DESCRIPTION,
                 utils.dayTitleSummary(persianDate, digits));
+
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
+
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                 time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                 time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+
         startActivity(intent);
     }
 
@@ -221,22 +224,22 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void setOwghat(CivilDate civilDate) {
-        if (coord == null) {
+        if (coordinate == null) {
             return;
         }
 
-        c.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-        Date date = c.getTime();
+        calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+        Date date = calendar.getTime();
 
-        Map<PrayTime, Clock> prayTimes = ptc.calculate(date, coord);
+        Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        azan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
+        athan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
         aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24));
-        azan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24));
-        azan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24));
+        athan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24));
+        athan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24));
         aftab2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), digits, clockIn24));
-        azan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24));
-        azan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24));
+        athan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24));
+        athan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24));
         aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24));
 
         owghat.setVisibility(View.VISIBLE);
@@ -274,12 +277,14 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth"); //todo use fragment tag
-        intent.putExtra("value", 2000);
+        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
+        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                Constant.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
+
         getContext().sendBroadcast(intent);
 
-        if (viewPager.getCurrentItem() != MONTHS_LIMIT / 2) {
-            viewPager.setCurrentItem(MONTHS_LIMIT / 2);
+        if (monthViewPager.getCurrentItem() != Constant.MONTHS_LIMIT / 2) {
+            monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
         }
 
         selectDay(Utils.getToday());
@@ -298,8 +303,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onPageSelected(int position) {
-        Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");//todo use fragment tag
-        intent.putExtra("value", position - CalendarMainFragment.MONTHS_LIMIT / 2);
+        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
+        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constant.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);

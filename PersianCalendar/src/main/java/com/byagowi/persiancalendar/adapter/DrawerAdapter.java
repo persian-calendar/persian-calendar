@@ -15,27 +15,22 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
     public int selectedItem = 0;
-    String[] drawerTitles;
-    String[] drawerSubtitles;
-    String[] drawerIcon = {
-            "{zmdi-swap-vertical-circle}",
-            "{zmdi-compass}",
-            "{zmdi-settings}",
-            "{zmdi-info}",
-            "{zmdi-close-circle}"
-    };
+    private String[] drawerTitles;
+    private String[] drawerSubtitles;
+    private String[] drawerIcon;
 
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
+        drawerIcon = mainActivity.getResources().getStringArray(R.array.drawerIcons);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView itemTitle;
-        TextView itemSubtitle;
-        IconTextView itemIcon;
-        View background;
+        private TextView itemTitle;
+        private TextView itemSubtitle;
+        private IconTextView itemIcon;
+        private View background;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -61,16 +56,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     @Override
     public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.drawer_item, parent, false);
+                    .inflate(R.layout.item_drawer, parent, false);
 
             return new ViewHolder(v, viewType);
 
         } else if (viewType == TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.drawer_header, parent, false);
+                    .inflate(R.layout.header_drawer, parent, false);
 
             return new ViewHolder(v, viewType);
         }

@@ -105,6 +105,14 @@
         <item>Exit</item>
     </string-array>
 
+    <string-array name="drawerIcons" translatable="false">
+        <item>{zmdi-swap-vertical-circle}</item>
+        <item>{zmdi-compass}</item>
+        <item>{zmdi-settings}</item>
+        <item>{zmdi-info}</item>
+        <item>{zmdi-close-circle}</item>
+    </string-array>
+
     <string-array name="drawerSubtitles">
         <item></item>
         <item>and Qibla, if location is set in the Settings</item>
