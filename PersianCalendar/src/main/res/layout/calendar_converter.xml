@@ -150,10 +150,11 @@
                 android:orientation="vertical"
                 android:background="?attr/selectableItemBackground">
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="right"
                     android:padding="@dimen/card_padding">
 
                     <android.support.v7.widget.AppCompatTextView
@@ -164,7 +165,7 @@
                         android:textColor="@color/text_color_primary"
                         android:textSize="@dimen/text_size_title"/>
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                </RelativeLayout>
 
                 <View
                     android:id="@+id/divider_line"
