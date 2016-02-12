@@ -301,6 +301,8 @@ public class CalendarMainFragment extends Fragment implements View.OnClickListen
         Intent intent = new Intent("com.byagowi.persiancalendar.changemounth");//todo use fragment tag
         intent.putExtra("value", position - CalendarMainFragment.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
+
+        today.setVisibility(View.VISIBLE);
     }
 
     @Override
