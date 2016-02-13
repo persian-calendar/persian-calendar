@@ -37,7 +37,6 @@ public class CompassFragment extends Fragment {
 
         utils.setTitleSubtitle(getActivity(), getString(R.string.qibla_compass), "");
 
-        // utils.setTheme(this);
         compassListener = new CompassListener(this);
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
 

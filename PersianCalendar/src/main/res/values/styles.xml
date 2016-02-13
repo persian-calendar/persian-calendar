@@ -4,6 +4,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        
+        <item name="android:colorPrimary" tools:targetApi="lollipop">#3F51B5</item>
+        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">#303F9F</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#3F51B5</item>
+
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
