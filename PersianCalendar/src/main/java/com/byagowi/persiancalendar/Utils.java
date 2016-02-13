@@ -75,7 +75,6 @@ public class Utils {
     private static final String TAG = "Utils";
     private static Utils myInstance;
     private LocaleUtils localeUtils;
-    public static Uri athanFileUri;
     private static boolean athanRepeaterSet = false;
 
     public static final char PERSIAN_COMMA = '،';
@@ -136,10 +135,8 @@ public class Utils {
 
     public void prepareTextView(TextView textView) {
         if (typeface == null) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(textView.getContext());
-            String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
             typeface = Typeface.createFromAsset(textView.getContext()
-                    .getAssets(), "fonts/" + calendarFont);
+                    .getAssets(), "fonts/" + "NotoNaskhArabic-Regular.ttf");
         }
         textView.setTypeface(typeface);
         textView.setLineSpacing(0f, 0.8f);
@@ -506,7 +503,6 @@ public class Utils {
         Log.d(TAG, "athan repeater set: " + athanRepeaterSet);
         // load them so the prefs are read for today's alarms
         loadAlarms(context);
-        loadAthanFiles(context);
 
         if (!athanRepeaterSet) {
 
@@ -578,11 +574,7 @@ public class Utils {
 
     public Uri getAthanUri(Context context) {
         String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String athanSoundUri = prefs.getString("AthanSound", defaultSoundUri);
-        if (TextUtils.isEmpty(athanSoundUri))
-            athanSoundUri = defaultSoundUri;
-        return Uri.parse(athanSoundUri);
+        return Uri.parse(defaultSoundUri);
     }
 
     public void changeAppLanguage(String localeCode, Context context) {
@@ -612,66 +604,5 @@ public class Utils {
         // set calendar language
         String calendarLocale = prefs.getString("CalendarLanguage", "fa");
         changeCalendarLanguage(calendarLocale, context);
-
-        String calendarFont = prefs.getString("CalendarFont", "NotoNaskhArabic-Regular.ttf");
-        typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + calendarFont);
-    }
-
-    public void loadAthanFiles(final Context context) {
-        final String fileName = "AbdulBasit.ogg";
-        final String fileTitle = "Athan Abdul Basit";
-        File sdcardPath = Environment.getExternalStorageDirectory();
-        File alarmsDir = new File(sdcardPath.getPath() + "/Alarms");
-        final String outputPath = alarmsDir + "/" + fileName;
-        if (!alarmsDir.exists()) {
-            alarmsDir.mkdirs();
-        }
-
-        if (athanFileUri == null || (!(new File(outputPath).exists()))) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (!(new File(outputPath).exists())) {
-                            FileOutputStream fos = new FileOutputStream(outputPath);
-                            InputStream is = context.getResources().openRawResource(R.raw.abdulbasit);
-                            int len;
-                            byte[] buffer = new byte[1024];
-                            while ((len = is.read(buffer)) != -1) {
-                                fos.write(buffer, 0, len);
-                            }
-                            fos.close();
-                            is.close();
-
-                            ContentValues values = new ContentValues(4);
-                            values.put(MediaStore.Audio.Media.TITLE, fileTitle);
-                            values.put(MediaStore.Audio.Media.DATE_ADDED, System.currentTimeMillis() / 1000);
-                            values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/ogg");
-                            values.put(MediaStore.Audio.Media.DATA, outputPath);
-
-                            Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                            athanFileUri = context.getContentResolver().insert(base, values);
-                            Log.d(TAG, "new uri: " + athanFileUri);
-
-                            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, athanFileUri));
-                        } else {
-                            String[] projection = new String[]{MediaStore.Audio.AudioColumns._ID, MediaStore.Audio.AudioColumns.DATA};
-                            String selection = MediaStore.Audio.AudioColumns.DATA + " LIKE ? ";
-                            String[] selectionArgs = new String[]{outputPath};
-                            Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, selectionArgs, null);
-                            cursor.moveToFirst();
-                            Log.d(TAG, "count: " + cursor.getCount());
-                            if (cursor.getCount() > 0) {
-                                athanFileUri = Uri.parse(MediaStore.Audio.Media.getContentUri("external") + "/" +
-                                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID)));
-                            }
-                            cursor.close();
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "", e);
-                    }
-                }
-            }).start();
-        }
     }
 }

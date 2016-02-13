@@ -33,7 +33,6 @@ public class AthanVolumePreference extends DialogPreference {
 
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-        athanSoundUri = utils.getAthanUri(context);
     }
 
     @Override
