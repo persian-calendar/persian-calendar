@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.widget;
+package com.byagowi.persiancalendar;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
