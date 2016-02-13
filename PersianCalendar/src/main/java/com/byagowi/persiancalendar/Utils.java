@@ -136,10 +136,10 @@ public class Utils {
     public void prepareTextView(TextView textView) {
         if (typeface == null) {
             typeface = Typeface.createFromAsset(textView.getContext()
-                    .getAssets(), "fonts/" + "NotoNaskhArabic-Regular.ttf");
+                    .getAssets(), "fonts/NotoNaskhArabic-Regular.ttf");
         }
         textView.setTypeface(typeface);
-        textView.setLineSpacing(0f, 0.8f);
+        // textView.setLineSpacing(0f, 0.8f);
     }
 
     public CalculationMethod getCalculationMethod(Context context) {
