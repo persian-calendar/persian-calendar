@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.activity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             String locale = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString("AppLanguage", "default");
             if (locale.equals("default")) {
-                locale = Locale.getDefault().getLanguage();
+                locale = Resources.getSystem().getConfiguration().locale.getLanguage();
             }
             if (!locale.equals(prevLocale)) {
                 prevLocale = locale;

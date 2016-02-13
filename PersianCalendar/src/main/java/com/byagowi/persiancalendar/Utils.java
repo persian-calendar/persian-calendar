@@ -600,7 +600,7 @@ public class Utils {
         // set app language
         String locale = prefs.getString("AppLanguage", "default");
         if (locale.equals("default")) {
-            locale = Locale.getDefault().getLanguage();
+            locale = Resources.getSystem().getConfiguration().locale.getLanguage();
         }
         changeAppLanguage(locale.replaceAll("-(IR|AF)", ""), context);
         changeCalendarLanguage(locale, context);
