@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 import calendar.LocaleData;
 
@@ -36,8 +35,6 @@ public class LocaleUtils {
     private static final String TAG = "LocaleUtils";
     private static LocaleUtils instance;
     private static final String CALENDAR_BUNDLE = "CalendarBundle";
-    private static final String DEFAULT_LOCALES = "en|en_us|en_uk|fa|fa_ir";
-    private static final Pattern pattern = Pattern.compile(DEFAULT_LOCALES, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
     private Context context;
     private Map<String, String> cache = new HashMap<>();
@@ -58,7 +55,11 @@ public class LocaleUtils {
     }
 
     public void changeLocale(String localeCode) {
-        String fileSuffix = TextUtils.isEmpty(localeCode) || pattern.matcher(localeCode).matches() ? "" : "_" + localeCode;
+        // These are locales that have extra file named like CalendarBundle_*.properties
+        String fileSuffix = (!TextUtils.isEmpty(localeCode) || localeCode.matches("pr|prs")) ?
+            ("_" + localeCode) :
+            "";
+
         try {
             InputStream pis = context.getAssets().open("locale/" + CALENDAR_BUNDLE + fileSuffix + ".properties");
             ResourceBundle bundle = new PropertyResourceBundle(pis);
