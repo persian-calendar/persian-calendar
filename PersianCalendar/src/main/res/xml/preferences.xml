@@ -5,18 +5,10 @@
         android:title="@string/general">
 
         <android.support.v7.preference.ListPreference
-            android:defaultValue="fa"
-            android:entries="@array/calendarLanguageNames"
-            android:entryValues="@array/calendarLanguageKeys"
-            android:key="CalendarLanguage"
-            android:summary="@string/calendar_language_summary"
-            android:title="@string/calendar_language" />
-
-        <android.support.v7.preference.ListPreference
-            android:defaultValue="fa"
+            android:defaultValue="default"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
-            android:key="ApplicationLanguage"
+            android:key="AppLanguage"
             android:title="@string/language" />
 
         <android.support.v7.preference.CheckBoxPreference

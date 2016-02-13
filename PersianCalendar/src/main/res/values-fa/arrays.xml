@@ -16,8 +16,9 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>انگلیسی</item>
+        <item>پیش‌فرض</item>
         <item>فارسی</item>
+        <item>دری</item>
         <item>پشتو</item>
     </string-array>
 
@@ -28,11 +29,6 @@
         <item>Black</item>
     </string-array>
 
-    <string-array name="calendarLanguageNames">
-        <item>فارسی</item>
-        <item>دری</item>
-        <item>پشتو</item>
-    </string-array>
     <string-array name="prayerTimeNames">
         <item>صبح</item>
         <item>ظهر</item>

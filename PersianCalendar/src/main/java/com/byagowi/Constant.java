@@ -7,6 +7,4 @@ public class Constant {
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = 234423;
-
-
 }

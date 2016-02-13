@@ -2,8 +2,10 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +30,8 @@ import com.byagowi.persiancalendar.view.fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import java.util.Locale;
+
 /**
  * Program activity for android
  *
@@ -47,10 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
+    String initLocale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
+        initLocale = utils.loadLanguageFromSettings(this);
 
         startService(new Intent(this, ApplicationService.class));
         startService(new Intent(this, DatabaseInitService.class));
@@ -140,6 +148,16 @@ public class MainActivity extends AppCompatActivity {
             selectItem(CALENDAR);
             adapter.selectedItem = 0;
             adapter.notifyDataSetChanged();
+
+            String perfsLocale = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString("AppLanguage", "fa");
+            if (!perfsLocale.equals(initLocale)) {
+                utils.loadLanguageFromSettings(this);
+                // restart activity
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
         } else {
             finish();
         }

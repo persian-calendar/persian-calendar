@@ -138,8 +138,6 @@ public class CalendarMainFragment extends Fragment
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
         utils.loadEvents(getResources().openRawResource(R.raw.events));
 
-        utils.loadLanguageFromSettings(getContext());
-
         digits = utils.preferredDigits(getContext());
         clockIn24 = utils.clockIn24(getContext());
         coordinate = utils.getCoordinate(getContext());

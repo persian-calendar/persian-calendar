@@ -594,15 +594,16 @@ public class Utils {
         localeUtils.changeLocale(localeCode);
     }
 
-    public void loadLanguageFromSettings(Context context) {
+    public String loadLanguageFromSettings(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // set app language
-        String appLocale = prefs.getString("ApplicationLanguage", "");
-        changeAppLanguage(appLocale, context);
-
-        // set calendar language
-        String calendarLocale = prefs.getString("CalendarLanguage", "fa");
-        changeCalendarLanguage(calendarLocale, context);
+        String locale = prefs.getString("AppLanguage", "default");
+        if (locale.equals("default")) {
+            locale = Locale.getDefault().getLanguage();
+        }
+        changeAppLanguage(locale.replaceAll("-(IR|AF)", ""), context);
+        changeCalendarLanguage(locale, context);
+        return locale;
     }
 }
