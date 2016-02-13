@@ -18,6 +18,10 @@ android {
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
