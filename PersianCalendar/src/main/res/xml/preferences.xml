@@ -5,7 +5,7 @@
         android:title="@string/general">
 
         <android.support.v7.preference.ListPreference
-            android:defaultValue="fa"
+            android:defaultValue="fa-IR"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
             android:key="AppLanguage"
