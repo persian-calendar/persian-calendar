@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.malinskiy.materialicons.widget.IconTextView;
 
@@ -18,6 +19,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String[] drawerTitles;
     private String[] drawerSubtitles;
     private String[] drawerIcon;
+    private final Utils utils = Utils.getInstance();
 
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -74,10 +76,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
-            holder.itemTitle.setText(drawerTitles[position - 1]);
+            utils.prepareTextView(holder.itemTitle);
+            holder.itemTitle.setText(utils.textShaper(drawerTitles[position - 1]));
             if (drawerSubtitles[position - 1].length() != 0) {
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
-                holder.itemSubtitle.setText(drawerSubtitles[position - 1]);
+                utils.prepareTextView(holder.itemSubtitle);
+                holder.itemSubtitle.setText(utils.textShaper(drawerSubtitles[position - 1]));
             }
             holder.itemIcon.setText(drawerIcon[position - 1]);
             if (selectedItem == position) {

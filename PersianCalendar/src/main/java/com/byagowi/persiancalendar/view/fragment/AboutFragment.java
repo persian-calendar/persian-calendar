@@ -28,21 +28,13 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.about));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
+        utils.setTitleSubtitle(getActivity(), getString(R.string.about), "");
 
         String version = utils.programVersion(getContext());
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
-        versionTextView.setText(getString(R.string.version) + " " +
+        versionTextView.setText(utils.textShaper(getString(R.string.version)) + " " +
                 Utils.formatNumber(version, utils.preferredDigits(getContext())));
 
         StringBuilder sb = new StringBuilder();

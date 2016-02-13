@@ -35,15 +35,7 @@ public class CompassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.qibla_compass));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
+        utils.setTitleSubtitle(getActivity(), getString(R.string.qibla_compass), "");
 
         // utils.setTheme(this);
         compassListener = new CompassListener(this);

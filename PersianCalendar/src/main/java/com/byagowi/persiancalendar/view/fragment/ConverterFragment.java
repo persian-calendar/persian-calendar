@@ -59,15 +59,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.date_converter));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
+        utils.setTitleSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             clipboardManager = (ClipboardManager) getContext()

@@ -138,15 +138,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void UpdateTitle() {
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle(Utils.formatNumber(persianDate.getYear(), digits));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(utils.getMonthName(persianDate));
+        utils.setTitleSubtitle(getActivity(), Utils.formatNumber(persianDate.getYear(), digits),
+                utils.getMonthName(persianDate));
     }
 
     private void resetSelectDay() {

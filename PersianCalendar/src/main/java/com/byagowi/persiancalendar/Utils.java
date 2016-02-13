@@ -1,21 +1,21 @@
 package com.byagowi.persiancalendar;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,6 +34,7 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.Locations;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
+import com.github.twaddington.TypefaceSpan;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,8 +42,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -140,6 +139,25 @@ public class Utils {
         }
         textView.setTypeface(typeface);
         // textView.setLineSpacing(0f, 0.8f);
+    }
+
+    public void setTitleSubtitle(Activity activity, String title, String subtitle) {
+        SpannableString s = new SpannableString(title);
+        if (typeface == null) {
+            typeface = Typeface.createFromAsset(activity.getAssets(),
+                    "fonts/NotoNaskhArabic-Regular.ttf");
+        }
+        s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //noinspection ConstantConditions
+        ((AppCompatActivity) activity)
+                .getSupportActionBar()
+                .setTitle(textShaper(title));
+
+        //noinspection ConstantConditions
+        ((AppCompatActivity) activity)
+                .getSupportActionBar()
+                .setSubtitle(textShaper(subtitle));
     }
 
     public CalculationMethod getCalculationMethod(Context context) {
