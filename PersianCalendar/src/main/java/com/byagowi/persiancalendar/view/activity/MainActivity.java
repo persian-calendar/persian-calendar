@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
-    String initLocale;
+    String prevLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        initLocale = utils.loadLanguageFromSettings(this);
+        prevLocale = utils.loadLanguageFromSettings(this);
 
         startService(new Intent(this, ApplicationService.class));
         startService(new Intent(this, DatabaseInitService.class));
@@ -149,9 +149,13 @@ public class MainActivity extends AppCompatActivity {
             adapter.selectedItem = 0;
             adapter.notifyDataSetChanged();
 
-            String perfsLocale = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString("AppLanguage", "fa");
-            if (!perfsLocale.equals(initLocale)) {
+            String locale = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString("AppLanguage", "default");
+            if (locale.equals("default")) {
+                locale = Locale.getDefault().getLanguage();
+            }
+            if (!locale.equals(prevLocale)) {
+                prevLocale = locale;
                 utils.loadLanguageFromSettings(this);
                 // restart activity
                 Intent intent = getIntent();
