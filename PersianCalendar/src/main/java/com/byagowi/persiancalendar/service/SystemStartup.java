@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.service.ApplicationService;
 
 /**
  * Startup broadcast receiver

@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.db.LocationsHelper;
+import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
 import com.malinskiy.materialicons.widget.IconTextView;

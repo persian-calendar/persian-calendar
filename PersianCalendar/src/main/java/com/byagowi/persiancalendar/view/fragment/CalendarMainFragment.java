@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Constant;
-import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -176,7 +176,7 @@ public class CalendarMainFragment extends Fragment
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
 
         monthViewPager.setAdapter(new CalendarAdapter(activity.getSupportFragmentManager()));
-        monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
+        monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
 
         monthViewPager.addOnPageChangeListener(this);
 
@@ -311,14 +311,14 @@ public class CalendarMainFragment extends Fragment
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
-        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                Constant.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
 
         getContext().sendBroadcast(intent);
 
-        if (monthViewPager.getCurrentItem() != Constant.MONTHS_LIMIT / 2) {
-            monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
+        if (monthViewPager.getCurrentItem() != Constants.MONTHS_LIMIT / 2) {
+            monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
         }
 
         selectDay(Utils.getToday());
@@ -337,8 +337,8 @@ public class CalendarMainFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
-        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
-        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constant.MONTHS_LIMIT / 2);
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);

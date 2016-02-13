@@ -17,11 +17,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.Constant;
-import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.DatabaseInitService;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_holder,
                         new CalendarMainFragment(),
-                        Constant.CALENDAR_MAIN_FRAGMENT_TAG)
+                        Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
     }
 
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                             .beginTransaction()
                             .replace(R.id.fragment_holder,
                                     new CalendarMainFragment(),
-                                    Constant.CALENDAR_MAIN_FRAGMENT_TAG)
+                                    Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                             .commit();
 
                     menuPosition = CALENDAR;
