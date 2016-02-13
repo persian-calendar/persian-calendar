@@ -61,7 +61,7 @@ public class CompassFragment extends Fragment {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            utils.quickToast(getString(R.string.compass_not_found), getContext());
+            utils.quickToast(utils.textShaper(getString(R.string.compass_not_found)), getContext());
         }
         return view;
     }
