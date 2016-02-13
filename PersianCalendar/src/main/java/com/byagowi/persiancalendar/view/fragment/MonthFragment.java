@@ -91,7 +91,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int value =  intent.getExtras().getInt(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
+                int value = intent.getExtras().getInt(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
                 if (value == offset) {
                     UpdateTitle();
                 } else if (value == Constant.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {

@@ -132,21 +132,29 @@ public class Utils {
         return "";
     }
 
-    public void prepareTextView(TextView textView) {
+    private void initTypeface(Context context) {
         if (typeface == null) {
-            typeface = Typeface.createFromAsset(textView.getContext()
-                    .getAssets(), "fonts/NotoNaskhArabic-Regular.ttf");
+            typeface = Typeface.createFromAsset(context.getAssets(),
+                    "fonts/NotoNaskhArabic-Regular.ttf");
         }
+    }
+
+    public void prepareTextView(Context context, TextView textView) {
+        initTypeface(context);
         textView.setTypeface(typeface);
         // textView.setLineSpacing(0f, 0.8f);
     }
 
+    public void prepareShapeTextView(Context context, TextView textView) {
+        initTypeface(context);
+        textView.setTypeface(typeface);
+        textView.setText(textShaper(textView.getText().toString()));
+        // textView.setLineSpacing(0f, 0.8f);
+    }
+
     public void setTitleSubtitle(Activity activity, String title, String subtitle) {
+        initTypeface(activity);
         SpannableString s = new SpannableString(title);
-        if (typeface == null) {
-            typeface = Typeface.createFromAsset(activity.getAssets(),
-                    "fonts/NotoNaskhArabic-Regular.ttf");
-        }
         s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //noinspection ConstantConditions

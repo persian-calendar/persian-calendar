@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment {
         String version = utils.programVersion(getContext());
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
-        utils.prepareTextView(versionTextView);
+        utils.prepareTextView(getActivity(), versionTextView);
         versionTextView.setText(utils.textShaper(getString(R.string.version)) + " " +
                 Utils.formatNumber(version, utils.preferredDigits(getContext())));
 

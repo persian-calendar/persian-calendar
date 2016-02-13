@@ -135,6 +135,7 @@
                     android:padding="@dimen/card_padding">
 
                     <TextView
+                        android:id="@+id/event_card_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -287,6 +288,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/azan1text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan1"
@@ -340,6 +342,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/aftab1text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab1"
@@ -395,6 +398,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/azan2text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan2"
@@ -450,6 +454,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/azan3text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan3"
@@ -505,6 +510,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/aftab2text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab2"
@@ -560,6 +566,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/azan4text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan4"
@@ -615,6 +622,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/azan5text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan5"
@@ -670,6 +678,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/aftab3text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab3"

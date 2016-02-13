@@ -24,6 +24,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private List<Day> days;
     public int select_Day = -1;
     private boolean persianDigit;
+    private Utils utils = Utils.getInstance();
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<Day> days) {
         this.monthFragment = monthFragment;
@@ -148,6 +149,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.event.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         }
+        utils.prepareShapeTextView(context, holder.num);
     }
 
     @Override
