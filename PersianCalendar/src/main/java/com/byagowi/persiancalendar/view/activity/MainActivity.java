@@ -151,10 +151,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
 
             String locale = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString("AppLanguage", "default");
-            if (locale.equals("default")) {
-                locale = Resources.getSystem().getConfiguration().locale.getLanguage();
-            }
+                    .getString("AppLanguage", "fa");
             if (!locale.equals(prevLocale)) {
                 prevLocale = locale;
                 utils.loadLanguageFromSettings(this);

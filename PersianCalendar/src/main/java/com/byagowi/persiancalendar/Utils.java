@@ -598,10 +598,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // set app language
-        String locale = prefs.getString("AppLanguage", "default");
-        if (locale.equals("default")) {
-            locale = Resources.getSystem().getConfiguration().locale.getLanguage();
-        }
+        String locale = prefs.getString("AppLanguage", "fa");
         changeAppLanguage(locale.replaceAll("-(IR|AF)", ""), context);
         changeCalendarLanguage(locale, context);
         return locale;

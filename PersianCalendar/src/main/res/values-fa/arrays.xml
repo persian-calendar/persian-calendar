@@ -16,10 +16,10 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>پیش‌فرض</item>
         <item>فارسی</item>
         <item>دری</item>
         <item>پشتو</item>
+        <item>انگلیسی</item>
     </string-array>
 
     <string-array name="colorNames">

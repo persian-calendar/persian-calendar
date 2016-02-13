@@ -42,17 +42,17 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>Default</item>
         <item>Persian</item>
         <item>Dari</item>
         <item>Pashto</item>
+        <item>English</item>
     </string-array>
 
     <string-array name="languageKeys" translatable="false">
-        <item>default</item>
         <item>fa-IR</item>
         <item>fa-AF</item>
         <item>ps</item>
+        <item>en</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
