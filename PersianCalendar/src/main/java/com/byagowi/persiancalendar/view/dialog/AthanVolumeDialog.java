@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 
 import java.io.IOException;
 
@@ -75,7 +76,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
             AthanVolumePreference.mediaPlayer.setDataSource(
                     getContext(),
-                    ((AthanVolumePreference) getPreference()).athanSoundUri);
+                    Utils.getInstance().getAthanUri(getContext()));
 
             AthanVolumePreference.mediaPlayer.setOnCompletionListener(
                     new MediaPlayer.OnCompletionListener() {
