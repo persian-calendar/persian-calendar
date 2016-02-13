@@ -152,14 +152,17 @@ public class UpdateUtils {
 
             mNotificationManager.notify(
                     NOTIFICATION_ID,
-                    new NotificationCompat.Builder(context)
+                    new NotificationCompat
+                            .Builder(context)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
-                            .setOngoing(true).setLargeIcon(largeIcon)
+                            .setOngoing(true)
+                            .setLargeIcon(largeIcon)
                             .setSmallIcon(icon)
                             .setWhen(0)
                             .setContentIntent(launchAppPendingIntent)
                             .setContentText(Utils.textShaper(body))
-                            .setContentTitle(Utils.textShaper(title)).build());
+                            .setContentTitle(Utils.textShaper(title))
+                            .build());
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }

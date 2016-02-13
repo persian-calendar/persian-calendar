@@ -91,8 +91,9 @@ public class Utils {
     private String PM_IN_PERSIAN = "ب.ظ";
 
     private Typeface typeface;
-    private int[] daysIcons = {0, R.drawable.day1, R.drawable.day2,
-            R.drawable.day3, R.drawable.day4, R.drawable.day5, R.drawable.day6,
+    private int[] daysIcons = {0,
+            R.drawable.day1, R.drawable.day2, R.drawable.day3,
+            R.drawable.day4, R.drawable.day5, R.drawable.day6,
             R.drawable.day7, R.drawable.day8, R.drawable.day9,
             R.drawable.day10, R.drawable.day11, R.drawable.day12,
             R.drawable.day13, R.drawable.day14, R.drawable.day15,
@@ -306,8 +307,7 @@ public class Utils {
         return result;
     }
 
-    public String getPersianFormattedClock(Calendar calendar, char[] digits,
-                                           boolean in24) {
+    public String getPersianFormattedClock(Calendar calendar, char[] digits, boolean in24) {
         String timeText = null;
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);

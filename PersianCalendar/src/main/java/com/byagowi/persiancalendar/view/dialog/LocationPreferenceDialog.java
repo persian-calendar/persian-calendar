@@ -31,7 +31,6 @@ import java.util.Locale;
  * Date: 1/17/16
  */
 public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
-    private static final String TAG = "LocPrefDialog";
     private String selectedCity;
 
     public static LocationPreferenceDialog newInstance(Preference preference) {
