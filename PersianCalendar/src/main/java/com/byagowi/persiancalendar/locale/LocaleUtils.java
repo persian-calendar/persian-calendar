@@ -56,7 +56,7 @@ public class LocaleUtils {
 
     public void changeLocale(String localeCode) {
         // These are locales that have extra file named like CalendarBundle_*.properties
-        String fileSuffix = (!TextUtils.isEmpty(localeCode) || localeCode.matches("pr|prs")) ?
+        String fileSuffix = (!TextUtils.isEmpty(localeCode) && localeCode.matches("ps|prs")) ?
             ("_" + localeCode) :
             "";
 
