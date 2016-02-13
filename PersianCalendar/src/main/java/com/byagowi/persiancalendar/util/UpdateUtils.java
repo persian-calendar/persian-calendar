@@ -16,9 +16,9 @@ import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.widget.Widget1x1;
 import com.byagowi.persiancalendar.view.widget.Widget4x1;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import java.util.Calendar;

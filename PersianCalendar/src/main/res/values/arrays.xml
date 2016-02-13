@@ -42,27 +42,17 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>English</item>
-        <item>Persian</item>
-        <item>Pashto</item>
-    </string-array>
-
-    <string-array name="languageKeys" translatable="false">
-        <item>en</item>
-        <item>fa</item>
-        <item>ps</item>
-    </string-array>
-
-    <string-array name="calendarLanguageNames">
         <item>Persian</item>
         <item>Dari</item>
         <item>Pashto</item>
+        <item>English</item>
     </string-array>
 
-    <string-array name="calendarLanguageKeys" translatable="false">
-        <item>fa</item>
-        <item>prs</item>
+    <string-array name="languageKeys" translatable="false">
+        <item>fa-IR</item>
+        <item>fa-AF</item>
         <item>ps</item>
+        <item>en</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
@@ -89,7 +79,7 @@
         <item>+2</item>
     </string-array>
 
-    <string-array name="islamicOffsetKeys">
+    <string-array name="islamicOffsetKeys" translatable="false">
         <item>-2</item>
         <item>-1</item>
         <item>0</item>

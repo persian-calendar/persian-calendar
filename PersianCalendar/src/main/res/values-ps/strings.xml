@@ -16,6 +16,7 @@
     <string name="clock_in_24">۲۴ ساعته ساعت</string>
     <string name="about">په باره کی</string>
     <string name="gpl_logo">د گنو عمومی مجوز لوگو</string>
+    <string name="widget_text_colors">رنگ متن ویجت</string>
     <string name="clock">ساعت</string>
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>
@@ -83,12 +84,17 @@
     <string name="select_mount">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
     <string name="date_exception">تاریخی که وارد کردید اشتباه بود!</string>
+    <string name="in_city_time">در</string>
+    <string name="default_widget_text_color">#ffffffff</string>
+    <string name="islamic_offset">تنظیم تقویم اسلامی</string>
+    <string name="islamic_offset_summary">تنظیم روز جهت جلو عقب کردن جهت اصلاح تقویم</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>
         <item>هجری قمری</item>
         <item>میلادی</item>
     </string-array>
+
     <string name="date_copied_clipboard">به کلیپ بودر کپی شد</string>
-    <string name="in_city_time">په</string>
+    <string name="stop"><u>توقف</u></string>
 </resources>

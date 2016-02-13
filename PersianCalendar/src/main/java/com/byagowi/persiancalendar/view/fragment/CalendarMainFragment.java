@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -15,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.byagowi.Constant;
-import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -110,25 +111,56 @@ public class CalendarMainFragment extends Fragment
         divider6 = view.findViewById(R.id.div6);
         divider7 = view.findViewById(R.id.div7);
 
+        FragmentActivity activity = getActivity();
+
         georgianDate = (TextView) view.findViewById(R.id.georgian_date);
+        utils.prepareTextView(activity, georgianDate);
         islamicDate = (TextView) view.findViewById(R.id.islamic_date);
+        utils.prepareTextView(activity, islamicDate);
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
+        utils.prepareTextView(activity, shamsiDate);
         weekDayName = (TextView) view.findViewById(R.id.week_day_name);
+        utils.prepareTextView(activity, weekDayName);
         today = (TextView) view.findViewById(R.id.today);
 
         athan1 = (TextView) view.findViewById(R.id.azan1);
+        utils.prepareTextView(activity, athan1);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.azan1text));
+
         athan2 = (TextView) view.findViewById(R.id.azan2);
+        utils.prepareTextView(activity, athan2);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.azan2text));
+
         athan3 = (TextView) view.findViewById(R.id.azan3);
+        utils.prepareTextView(activity, athan3);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.azan3text));
+
         athan4 = (TextView) view.findViewById(R.id.azan4);
+        utils.prepareTextView(activity, athan4);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.azan4text));
+
         athan5 = (TextView) view.findViewById(R.id.azan5);
+        utils.prepareTextView(activity, athan5);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.azan5text));
+
         aftab1 = (TextView) view.findViewById(R.id.aftab1);
+        utils.prepareTextView(activity, aftab1);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.aftab1text));
+
         aftab2 = (TextView) view.findViewById(R.id.aftab2);
+        utils.prepareTextView(activity, aftab2);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.aftab2text));
+
         aftab3 = (TextView) view.findViewById(R.id.aftab3);
+        utils.prepareTextView(activity, aftab3);
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.aftab3text));
+
 
         moreOwghat = (IconTextView) view.findViewById(R.id.more_owghat);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
+        utils.prepareTextView(activity, holidayTitle);
 
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.event);
@@ -138,20 +170,22 @@ public class CalendarMainFragment extends Fragment
         utils.loadHolidays(getResources().openRawResource(R.raw.holidays));
         utils.loadEvents(getResources().openRawResource(R.raw.events));
 
-        utils.loadLanguageFromSettings(getContext());
-
         digits = utils.preferredDigits(getContext());
         clockIn24 = utils.clockIn24(getContext());
         coordinate = utils.getCoordinate(getContext());
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod(getContext()));
 
-        monthViewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
-        monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
+        monthViewPager.setAdapter(new CalendarAdapter(activity.getSupportFragmentManager()));
+        monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
 
         monthViewPager.addOnPageChangeListener(this);
 
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
+
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.event_card_title));
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.today));
+        utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.owghat_text));
 
         return view;
     }
@@ -162,13 +196,13 @@ public class CalendarMainFragment extends Fragment
 
     public void selectDay(PersianDate persianDate) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        weekDayName.setText(utils.getWeekDayName(persianDate));
-        shamsiDate.setText(utils.dateToString(persianDate, digits));
-        georgianDate.setText(utils.dateToString(civilDate, digits));
-        islamicDate.setText(utils.dateToString(
+        weekDayName.setText(utils.textShaper(utils.getWeekDayName(persianDate)));
+        shamsiDate.setText(utils.textShaper(utils.dateToString(persianDate, digits)));
+        georgianDate.setText(utils.textShaper(utils.dateToString(civilDate, digits)));
+        islamicDate.setText(utils.textShaper(utils.dateToString(
                 DateConverter.civilToIslamic(
                         civilDate, Utils.getIslamicOffset(getContext())),
-                digits));
+                digits)));
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);
@@ -211,7 +245,7 @@ public class CalendarMainFragment extends Fragment
         eventTitle.setVisibility(View.GONE);
 
         if (holidays != null) {
-            holidayTitle.setText(holidays);
+            holidayTitle.setText(utils.textShaper(holidays));
             holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
@@ -277,14 +311,14 @@ public class CalendarMainFragment extends Fragment
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
-        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                Constant.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
 
         getContext().sendBroadcast(intent);
 
-        if (monthViewPager.getCurrentItem() != Constant.MONTHS_LIMIT / 2) {
-            monthViewPager.setCurrentItem(Constant.MONTHS_LIMIT / 2);
+        if (monthViewPager.getCurrentItem() != Constants.MONTHS_LIMIT / 2) {
+            monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
         }
 
         selectDay(Utils.getToday());
@@ -303,8 +337,8 @@ public class CalendarMainFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
-        Intent intent = new Intent(Constant.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
-        intent.putExtra(Constant.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constant.MONTHS_LIMIT / 2);
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);

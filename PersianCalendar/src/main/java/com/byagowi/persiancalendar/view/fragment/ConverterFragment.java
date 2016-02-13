@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.common.Range;
-import com.byagowi.persiancalendar.enums.CalendarType;
-import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
+import com.byagowi.persiancalendar.enums.CalendarType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +58,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.date_converter));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
+        utils.setTitleSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             clipboardManager = (ClipboardManager) getContext()

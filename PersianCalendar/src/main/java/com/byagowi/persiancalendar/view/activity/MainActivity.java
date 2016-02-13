@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,11 +17,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.Constant;
-import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.DatabaseInitService;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
@@ -47,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
+    String prevLocale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
+        prevLocale = utils.loadLanguageFromSettings(this);
 
         startService(new Intent(this, ApplicationService.class));
         startService(new Intent(this, DatabaseInitService.class));
@@ -126,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_holder,
                         new CalendarMainFragment(),
-                        Constant.CALENDAR_MAIN_FRAGMENT_TAG)
+                        Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
     }
 
@@ -140,6 +145,17 @@ public class MainActivity extends AppCompatActivity {
             selectItem(CALENDAR);
             adapter.selectedItem = 0;
             adapter.notifyDataSetChanged();
+
+            String locale = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString("AppLanguage", "fa");
+            if (!locale.equals(prevLocale)) {
+                prevLocale = locale;
+                utils.loadLanguageFromSettings(this);
+                // restart activity
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
         } else {
             finish();
         }
@@ -168,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                             .beginTransaction()
                             .replace(R.id.fragment_holder,
                                     new CalendarMainFragment(),
-                                    Constant.CALENDAR_MAIN_FRAGMENT_TAG)
+                                    Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                             .commit();
 
                     menuPosition = CALENDAR;

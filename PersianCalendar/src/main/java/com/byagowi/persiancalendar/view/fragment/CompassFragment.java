@@ -7,7 +7,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,17 +34,8 @@ public class CompassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.qibla_compass));
+        utils.setTitleSubtitle(getActivity(), getString(R.string.qibla_compass), "");
 
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
-
-        // utils.setTheme(this);
         compassListener = new CompassListener(this);
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
 
@@ -69,7 +59,7 @@ public class CompassFragment extends Fragment {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            utils.quickToast(getString(R.string.compass_not_found), getContext());
+            utils.quickToast(utils.textShaper(getString(R.string.compass_not_found)), getContext());
         }
         return view;
     }

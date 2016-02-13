@@ -16,9 +16,10 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>انگلیسی</item>
         <item>فارسی</item>
+        <item>دری</item>
         <item>پشتو</item>
+        <item>انگلیسی</item>
     </string-array>
 
     <string-array name="colorNames">
@@ -28,11 +29,6 @@
         <item>Black</item>
     </string-array>
 
-    <string-array name="calendarLanguageNames">
-        <item>فارسی</item>
-        <item>دری</item>
-        <item>پشتو</item>
-    </string-array>
     <string-array name="prayerTimeNames">
         <item>صبح</item>
         <item>ظهر</item>
@@ -47,6 +43,15 @@
         <item>ASR</item>
         <item>MAGHRIB</item>
         <item>ISHA</item>
+    </string-array>
+
+
+    <string-array name="islamicOffsetNames">
+        <item>-۲</item>
+        <item>-۱</item>
+        <item>۰</item>
+        <item>۱</item>
+        <item>+۲</item>
     </string-array>
 
 

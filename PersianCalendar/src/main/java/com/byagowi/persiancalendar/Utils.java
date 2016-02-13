@@ -1,21 +1,21 @@
 package com.byagowi.persiancalendar;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,6 +34,7 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.Locations;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
+import com.github.twaddington.TypefaceSpan;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,8 +42,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -134,13 +133,40 @@ public class Utils {
         return "";
     }
 
-    public void prepareTextView(TextView textView) {
+    private void initTypeface(Context context) {
         if (typeface == null) {
-            typeface = Typeface.createFromAsset(textView.getContext()
-                    .getAssets(), "fonts/" + "NotoNaskhArabic-Regular.ttf");
+            typeface = Typeface.createFromAsset(context.getAssets(),
+                    "fonts/NotoNaskhArabic-Regular.ttf");
         }
+    }
+
+    public void prepareTextView(Context context, TextView textView) {
+        initTypeface(context);
         textView.setTypeface(typeface);
-        textView.setLineSpacing(0f, 0.8f);
+        // textView.setLineSpacing(0f, 0.8f);
+    }
+
+    public void prepareShapeTextView(Context context, TextView textView) {
+        initTypeface(context);
+        textView.setTypeface(typeface);
+        textView.setText(textShaper(textView.getText().toString()));
+        // textView.setLineSpacing(0f, 0.8f);
+    }
+
+    public void setTitleSubtitle(Activity activity, String title, String subtitle) {
+        initTypeface(activity);
+        SpannableString s = new SpannableString(title);
+        s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //noinspection ConstantConditions
+        ((AppCompatActivity) activity)
+                .getSupportActionBar()
+                .setTitle(textShaper(title));
+
+        //noinspection ConstantConditions
+        ((AppCompatActivity) activity)
+                .getSupportActionBar()
+                .setSubtitle(textShaper(subtitle));
     }
 
     public CalculationMethod getCalculationMethod(Context context) {
@@ -594,15 +620,13 @@ public class Utils {
         localeUtils.changeLocale(localeCode);
     }
 
-    public void loadLanguageFromSettings(Context context) {
+    public String loadLanguageFromSettings(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // set app language
-        String appLocale = prefs.getString("ApplicationLanguage", "");
-        changeAppLanguage(appLocale, context);
-
-        // set calendar language
-        String calendarLocale = prefs.getString("CalendarLanguage", "fa");
-        changeCalendarLanguage(calendarLocale, context);
+        String locale = prefs.getString("AppLanguage", "fa");
+        changeAppLanguage(locale.replaceAll("-(IR|AF)", ""), context);
+        changeCalendarLanguage(locale, context);
+        return locale;
     }
 }

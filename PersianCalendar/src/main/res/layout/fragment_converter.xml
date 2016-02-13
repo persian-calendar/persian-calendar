@@ -95,7 +95,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_description"
                     android:textColor="@color/text_color_dark"
-                    android:entries="@array/calendarLanguageKeys"
                     android:prompt="@string/select_mount"
                     android:spinnerMode="dialog"/>
 

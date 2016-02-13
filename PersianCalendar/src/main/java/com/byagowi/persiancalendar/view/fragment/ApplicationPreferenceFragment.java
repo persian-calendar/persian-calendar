@@ -8,13 +8,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
 import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreference;
@@ -46,17 +46,12 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     private static double latitude;
     private static double longitude;
 
+
+    private final Utils utils = Utils.getInstance();
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(getString(R.string.settings));
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setSubtitle("");
+        utils.setTitleSubtitle(getActivity(), getString(R.string.settings), "");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         locationName = prefs.getString(PREF_KEY_LOCATION, "");

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
@@ -22,7 +21,6 @@ public class AthanVolumePreference extends DialogPreference {
     public SeekBar seekBarVolumeSlider;
     public int initialVolume;
     public Utils utils = Utils.getInstance();
-    public Uri athanSoundUri;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
