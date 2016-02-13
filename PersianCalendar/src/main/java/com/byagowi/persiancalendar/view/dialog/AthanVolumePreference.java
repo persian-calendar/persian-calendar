@@ -22,7 +22,6 @@ public class AthanVolumePreference extends DialogPreference {
     public SeekBar seekBarVolumeSlider;
     public int initialVolume;
     public Utils utils = Utils.getInstance();
-    public Uri athanSoundUri;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);

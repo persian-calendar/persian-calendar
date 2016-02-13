@@ -42,26 +42,16 @@
     </string-array>
 
     <string-array name="languageNames">
-        <item>English</item>
-        <item>Persian</item>
-        <item>Pashto</item>
-    </string-array>
-
-    <string-array name="languageKeys" translatable="false">
-        <item>en</item>
-        <item>fa</item>
-        <item>ps</item>
-    </string-array>
-
-    <string-array name="calendarLanguageNames">
+        <item>Default</item>
         <item>Persian</item>
         <item>Dari</item>
         <item>Pashto</item>
     </string-array>
 
-    <string-array name="calendarLanguageKeys" translatable="false">
-        <item>fa</item>
-        <item>prs</item>
+    <string-array name="languageKeys" translatable="false">
+        <item>default</item>
+        <item>fa-IR</item>
+        <item>fa-AF</item>
         <item>ps</item>
     </string-array>
 
