@@ -54,7 +54,7 @@
         </receiver>
 
         <receiver
-            android:name=".view.widget.Widget1x1"
+            android:name=".Widget1x1"
             android:exported="false"
             android:icon="@drawable/launcher_icon"
             android:label="@string/widget_mini_name">
@@ -67,7 +67,7 @@
                 android:resource="@xml/persiancalendar_provider1x1" />
         </receiver>
         <receiver
-            android:name=".view.widget.Widget4x1"
+            android:name=".Widget4x1"
             android:exported="false"
             android:icon="@drawable/launcher_icon"
             android:label="@string/widget_name">
@@ -81,7 +81,7 @@
         </receiver>
 
         <service
-            android:name=".view.DashClockUpdate"
+            android:name=".DashClockUpdate"
             android:icon="@drawable/day31"
             android:label="@string/app_name"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">

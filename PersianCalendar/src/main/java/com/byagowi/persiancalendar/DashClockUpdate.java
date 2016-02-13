@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar;
 
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.google.android.apps.dashclock.api.DashClockExtension;
