@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,7 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.Constant;
+import com.byagowi.persiancalendar.Constant;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
@@ -30,8 +28,6 @@ import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarMainFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-
-import java.util.Locale;
 
 /**
  * Program activity for android

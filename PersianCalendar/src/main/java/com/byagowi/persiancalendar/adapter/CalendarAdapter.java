@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.byagowi.Constant;
+import com.byagowi.persiancalendar.Constant;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
 public class CalendarAdapter extends FragmentStatePagerAdapter {
