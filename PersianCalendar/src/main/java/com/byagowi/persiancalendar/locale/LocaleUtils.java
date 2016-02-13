@@ -55,7 +55,7 @@ public class LocaleUtils {
 
     public void changeLocale(String localeCode) {
         // We used "prs" instead "fa-AF" as it seems Android Studio doesn't recognize it
-        if (localeCode == "fa-AF") {
+        if (localeCode.equals("fa-AF")) {
             localeCode = "prs";
         }
         // These are locales that have extra file named like CalendarBundle_*.properties
