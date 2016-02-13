@@ -5,15 +5,7 @@ Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidP
 برای دریافت و نصب بر برگهٔ releases در بالای صفحه کلیک کنید.</div>
 -----------------------------
 
-Contents
------------------------------
-<ol>
-    <li>Download</li>
-    <li>License</li>
-    <li>Build</li>
-</ol>
-
-1. Download
+Download
 -----------------------------
 <ul>
     <li> <a href="https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar" >Google Play</a> </li>
@@ -22,7 +14,7 @@ Contents
     <li> <a href="https://github.com/ebraminio/DroidPersianCalendar/releases/" >Github</a> </li>
 </ul>
 
-2. License
+License
 -----------------------------
 Copyright (C) 2012-2015  ebrahim@gnu.org
 
@@ -39,7 +31,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License 
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
-3. Build
+Build
 -----------------------------
 0. git clone --depth=1 https://github.com/ebraminio/DroidPersianCalendar
 1. Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
