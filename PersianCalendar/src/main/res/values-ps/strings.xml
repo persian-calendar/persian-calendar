@@ -16,6 +16,7 @@
     <string name="clock_in_24">۲۴ ساعته ساعت</string>
     <string name="about">په باره کی</string>
     <string name="gpl_logo">د گنو عمومی مجوز لوگو</string>
+    <string name="widget_text_colors">رنگ متن ویجت</string>
     <string name="clock">ساعت</string>
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>

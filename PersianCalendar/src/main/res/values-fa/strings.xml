@@ -16,6 +16,7 @@
     <string name="clock_in_24">ساعت ۲۴ ساعته</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">لوگوی مجوز عمومی گنو</string>
+    <string name="widget_text_colors">رنگ متن ویجت</string>
     <string name="clock">ساعت</string>
     <string name="date">تاریخ</string>
     <string name="date_converter">مبدل تاریخ</string>
@@ -86,7 +87,7 @@
     <string name="in_city_time">به افق</string>
     <string name="default_widget_text_color">#ffffffff</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
-    <string name="islamic_offset_summary">تنظیم روز جهت جلو عقب کردن جهت اصلاح تقویم</string>
+    <string name="islamic_offset_summary"> عقب کردن جهت اصلاح تقویم</string>
 
     <string-array name="calendar_type">
         <item>هجری شمسی</item>
