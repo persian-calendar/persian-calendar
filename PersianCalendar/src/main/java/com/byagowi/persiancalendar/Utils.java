@@ -320,7 +320,7 @@ public class Utils {
             char[] digits = preferredDigits(context);
             boolean clockIn24 = clockIn24(context);
 
-            if (prayTimesCalculator != null) {
+            if (prayTimesCalculator == null) {
                 prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod(context));
                 changeDate = true;
             }
