@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,7 +235,7 @@ public class CalendarMainFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
-        if (events != null) {
+        if (!TextUtils.isEmpty(events)) {
             eventTitle.setText(events);
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
