@@ -1,0 +1,180 @@
+{
+  "zz": {
+    "en": "",
+    "fa": "",
+    "cities": {
+      "CUSTOM": {
+        "en": "None",
+        "fa": "هیچ کدام"
+      }
+    }
+  },
+  "ir": {
+    "en": "Iran",
+    "fa": "ایران",
+    "cities": {
+      "AHVAZ": {
+        "en": "Ahvaz",
+        "fa": "اهواز"
+      },
+      "ALBORZ": {
+        "en": "Alborz",
+        "fa": "البرز"
+      },
+      "ARAK": {
+        "en": "Arak",
+        "fa": "اراک"
+      },
+      "ARDABIL": {
+        "en": "Ardabil",
+        "fa": "اردبیل"
+      },
+      "BANDAR_ABAS": {
+        "en": "Bandar Abbas",
+        "fa": "بندرعباس"
+      },
+      "BIRJAND": {
+        "en": "Birjand",
+        "fa": "بیرجند"
+      },
+      "BOJNURD": {
+        "en": "Bojnurd",
+        "fa": "بجنورد"
+      },
+      "BUSHEHR": {
+        "en": "Bushehr",
+        "fa": "بوشهر"
+      },
+      "ESFEHAN": {
+        "en": "Esfehan",
+        "fa": "اصفهان"
+      },
+      "GHAZVIN": {
+        "en": "Ghazvin",
+        "fa": "قزوین"
+      },
+      "GHOM": {
+        "en": "Qom",
+        "fa": "قم"
+      },
+      "GORGAN": {
+        "en": "Gorgan",
+        "fa": "گرگان"
+      },
+      "HAMEDAN": {
+        "en": "Hamedan",
+        "fa": "همدان"
+      },
+      "ILAM": {
+        "en": "Ilam",
+        "fa": "ایلام"
+      },
+      "KERMAN": {
+        "en": "Kerman",
+        "fa": "کرمان"
+      },
+      "KERMANSHAH": {
+        "en": "Kermanshah",
+        "fa": "کرمانشاه"
+      },
+      "KHORAM_ABAD": {
+        "en": "Khoram Abad",
+        "fa": "خرم‌آباد"
+      },
+      "MASHHAD": {
+        "en": "Mashhad",
+        "fa": "مشهد"
+      },
+      "ORUMIYEH": {
+        "en": "Orumiyeh",
+        "fa": "ارومیه"
+      },
+      "RASHT": {
+        "en": "Rasht",
+        "fa": "رشت"
+      },
+      "SANANDAJ": {
+        "en": "Sanandaj",
+        "fa": "سنندج"
+      },
+      "SARI": {
+        "en": "Sari",
+        "fa": "ساری"
+      },
+      "SEMNAN": {
+        "en": "Semnan",
+        "fa": "سمنان"
+      },
+      "SHAHREKORD": {
+        "en": "Shahr-e-kord",
+        "fa": "شهرکرد"
+      },
+      "SHIRAZ": {
+        "en": "Shiraz",
+        "fa": "شیراز"
+      },
+      "TABRIZ": {
+        "en": "Tabriz",
+        "fa": "تبریز"
+      },
+      "TEHRAN": {
+        "en": "Tehran",
+        "fa": "تهران"
+      },
+      "YASUJ": {
+        "en": "Yasuj",
+        "fa": "یاسوج"
+      },
+      "YAZD": {
+        "en": "Yazd",
+        "fa": "یزد"
+      },
+      "ZAHEDAN": {
+        "en": "Zahedan",
+        "fa": "زاهدان"
+      },
+      "ZANJAN": {
+        "en": "Zanjan",
+        "fa": "زنجان"
+      }
+    }
+  },
+  "af": {
+    "en": "Afghanistan",
+    "fa": "افغانستان",
+    "cities": {
+      "BALKH": {
+        "en": "Balkh",
+        "fa": "بلخ"
+      },
+      "BAMYAN": {
+        "en": "Bamyan",
+        "fa": "بامیان"
+      },
+      "GHAZNI": {
+        "en": "Ghazni",
+        "fa": "غزنی"
+      },
+      "HELMAND": {
+        "en": "Helmand",
+        "fa": "هلمند"
+      },
+      "HERAT": {
+        "en": "Herat",
+        "fa": "هرات"
+      },
+      "KABUL": {
+        "en": "Kabul",
+        "fa": "کابل"
+      },
+      "KANDAHAR": {
+        "en": "Kandahar",
+        "fa": "قندهار"
+      },
+      "NANGARHAR": {
+        "en": "Nangarhar",
+        "fa": "ننگرهار"
+      }
+    }
+  }
+}

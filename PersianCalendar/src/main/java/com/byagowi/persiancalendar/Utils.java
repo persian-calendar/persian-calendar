@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -492,12 +493,67 @@ public class Utils {
         }
     }
 
-    public ArrayList<Event> readEventsFromJSON(InputStream is) {
+    static String convertStreamToString(InputStream is) {
+        // http://stackoverflow.com/a/5445161
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    public class City {
+        public final String key;
+        public final String en;
+        public final String fa;
+        public final String countryCode;
+        public final String countryEn;
+        public final String countryFa;
+        public City(String key, String en, String fa, String countryCode, String countryEn, String countryFa) {
+            this.key = key;
+            this.en = en;
+            this.fa = fa;
+            this.countryCode = countryCode;
+            this.countryEn = countryEn;
+            this.countryFa = countryFa;
+        }
+    }
+
+    private List<City> cities;
+
+    public void loadCities(InputStream is) {
+        ArrayList<City> result = new ArrayList<>();
+        try {
+            JSONObject countries = new JSONObject(convertStreamToString(is));
+
+            Iterator<String> countryIterator = countries.keys();
+            while (countryIterator.hasNext()) {
+                String countryCode = countryIterator.next();
+                JSONObject country = countries.getJSONObject(countryCode);
+
+                String countryEn = country.getString("en");
+                String countryFa = country.getString("fa");
+
+                JSONObject cities = country.getJSONObject("cities");
+
+                Iterator<String> citiesIterator = cities.keys();
+                while (citiesIterator.hasNext()) {
+                    String key = citiesIterator.next();
+                    JSONObject city = cities.getJSONObject(key);
+
+                    String en = city.getString("en");
+                    String fa = city.getString("fa");
+
+                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa));
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        this.cities = result;
+    }
+
+    private ArrayList<Event> readEventsFromJSON(InputStream is) {
         ArrayList<Event> result = new ArrayList<>();
         try {
-            // http://stackoverflow.com/a/14585883
-            Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-            JSONArray days = new JSONObject(s.hasNext() ? s.next() : "").getJSONArray("events");
+            JSONArray days = new JSONObject(convertStreamToString(is)).getJSONArray("events");
 
             int length = days.length();
             for (int i = 0; i < length; ++i) {
