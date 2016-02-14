@@ -59,7 +59,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         View view = inflater.inflate(R.layout.preference_location, (ViewGroup) getView(), false);
         preference.listLocations = (ListView) view.findViewById(R.id.list);
 
-        final CityNameAdapter locationsAdapter = new CityNameAdapter(getContext(), 0);
+        final CityNameAdapter locationsAdapter = new CityNameAdapter(getContext(), R.layout.list_item_city_name);
         preference.listLocations.setAdapter(locationsAdapter);
         preference.listLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,9 +120,13 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         public View getSpinnerItemView(int position, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            TextView textView = (TextView) inflater.inflate(spinnerResource, parent, false);
-            textView.setText(calendarTypes.get("a"));
-            return textView;
+            View view = inflater.inflate(spinnerResource, parent, false);
+
+            TextView city = (TextView) view.findViewById(R.id.text1);
+            city.setText(calendarTypes.get("a"));
+            TextView country = (TextView) view.findViewById(R.id.text2);
+            country.setText(calendarTypes.get("a"));
+            return view;
         }
 
         @Override
