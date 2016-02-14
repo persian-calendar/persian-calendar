@@ -516,9 +516,7 @@ public class Utils {
         }
     }
 
-    private List<City> cities;
-
-    public void loadCities(InputStream is) {
+    public List<City> getAllCities(InputStream is) {
         ArrayList<City> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(is));
@@ -547,10 +545,10 @@ public class Utils {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        this.cities = result;
+        return result;
     }
 
-    public City getCityByKey(String key) {
+    public City getCityByKey(String key, List<City> cities) {
         for (City city : cities)
             if (city.key.equals(key))
                 return city;

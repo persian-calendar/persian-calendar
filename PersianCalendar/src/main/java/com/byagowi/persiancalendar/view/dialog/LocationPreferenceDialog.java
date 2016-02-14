@@ -3,27 +3,27 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.db.LocationsHelper;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * persian_calendar
@@ -55,43 +55,23 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         super.onPrepareDialogBuilder(builder);
         LocationPreference preference = getPreference();
 
-        LocationsHelper helper = new LocationsHelper(getContext());
-        final Cursor locationsCursor = helper.listCities(getCurrentLangCode());
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.preference_location, (ViewGroup) getView(), false);
         preference.listLocations = (ListView) view.findViewById(R.id.list);
 
-        final CityNameAdapter locationsAdapter = new CityNameAdapter(
-                getContext(),
-                R.layout.list_item_city_name,
-                locationsCursor,
-                new String[]{
-                        BaseColumns._ID,
-                        LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_KEY,
-                        LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_COUNTRY,
-                        LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_NAME_EN,
-                        LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_NAME_FA,
-                        LocationsHelper.TABLE_NAME_COUNTRIES + BaseColumns._ID,
-                        LocationsHelper.TABLE_NAME_COUNTRIES + LocationsHelper.COLUMN_KEY,
-                        LocationsHelper.TABLE_NAME_COUNTRIES + LocationsHelper.COLUMN_NAME_EN,
-                        LocationsHelper.TABLE_NAME_COUNTRIES + LocationsHelper.COLUMN_NAME_FA
-                },
-                new int[]{R.id.text1, R.id.text2},
-                0);
+        final CityNameAdapter locationsAdapter = new CityNameAdapter(getContext(), R.layout.list_item_city_name);
         preference.listLocations.setAdapter(locationsAdapter);
         preference.listLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                locationsCursor.moveToPosition(position);
-                selectedCity = locationsCursor.getString(locationsCursor.getColumnIndex(LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_KEY));
-                dismiss();
+                // fish fish
             }
         });
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                locationsCursor.close();
+                // fish fish
             }
         });
 
@@ -112,32 +92,57 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         getPreference().close(true);
     }
 
-    private class CityNameAdapter extends SimpleCursorAdapter {
-        public CityNameAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
-            super(context, layout, c, from, to, flags);
+    private class CityNameAdapter extends ArrayAdapter {
+
+        private Utils utils;
+
+        private Map<String, Utils.City> cityMap = new HashMap<>();
+        List<Utils.City> cities;
+        private int spinnerResource;
+        Context context;
+
+        public CityNameAdapter(Context context, int resource) {
+            super(context, resource);
+            utils = Utils.getInstance();
+            cities = utils.getAllCities(getResources().openRawResource(R.raw.citiesdb));
+            spinnerResource = resource;
+            context = getContext();
         }
 
         @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            TextView textCityName = (TextView) view.findViewById(R.id.text1);
-            TextView textCountryName = (TextView) view.findViewById(R.id.text2);
+        public int getCount() {
+            return cities.size();
+        }
 
-            String langCode = getCurrentLangCode();
-            String columnCityName;
-            String columnCountryName;
-            if (!TextUtils.isEmpty(langCode) && langCode.equalsIgnoreCase("fa")) {
-                columnCityName = LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_NAME_FA;
-                columnCountryName = LocationsHelper.TABLE_NAME_COUNTRIES + LocationsHelper.COLUMN_NAME_FA;
-            } else {
-                columnCityName = LocationsHelper.TABLE_NAME_CITIES + LocationsHelper.COLUMN_NAME_EN;
-                columnCountryName = LocationsHelper.TABLE_NAME_COUNTRIES + LocationsHelper.COLUMN_NAME_EN;
-            }
+        @Override
+        public Object getItem(int position) {
+            return "a";//calendarTypeKeys[position];
+        }
 
-            String cityName = cursor.getString(cursor.getColumnIndex(columnCityName));
-            String countryName = cursor.getString(cursor.getColumnIndex(columnCountryName));
+        public View getSpinnerItemView(int position, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(spinnerResource, parent, false);
 
-            textCityName.setText(cityName);
-            textCountryName.setText(countryName);
+            TextView city = (TextView) view.findViewById(R.id.text1);
+            city.setText(cities.get(position).fa);
+            utils.prepareShapeTextView(context, city);
+
+            TextView country = (TextView) view.findViewById(R.id.text2);
+            country.setText(cities.get(position).countryFa);
+            utils.prepareShapeTextView(context, country);
+
+            return view;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getSpinnerItemView(position, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getSpinnerItemView(position, parent);
         }
     }
 }

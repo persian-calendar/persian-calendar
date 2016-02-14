@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.service.ApplicationService;
-import com.byagowi.persiancalendar.service.DatabaseInitService;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         prevLocale = utils.loadLanguageFromSettings(this);
 
         startService(new Intent(this, ApplicationService.class));
-        startService(new Intent(this, DatabaseInitService.class));
 
 
         UpdateUtils updateUtils = UpdateUtils.getInstance();

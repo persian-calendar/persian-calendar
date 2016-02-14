@@ -5,7 +5,9 @@
     "cities": {
       "CUSTOM": {
         "en": "None",
-        "fa": "هیچ کدام"
+        "fa": "هیچ کدام",
+        "lat": 0,
+        "long": 0
       }
     }
   },
@@ -15,127 +17,189 @@
     "cities": {
       "AHVAZ": {
         "en": "Ahvaz",
-        "fa": "اهواز"
+        "fa": "اهواز",
+        "lat": 31.52,
+        "long": 48.68
       },
       "ALBORZ": {
         "en": "Alborz",
-        "fa": "البرز"
+        "fa": "البرز",
+        "lat": 35.82,
+        "long": 50.97
       },
       "ARAK": {
         "en": "Arak",
-        "fa": "اراک"
+        "fa": "اراک",
+        "lat": 34.08,
+        "long": 49.7
       },
       "ARDABIL": {
         "en": "Ardabil",
-        "fa": "اردبیل"
+        "fa": "اردبیل",
+        "lat": 38.25,
+        "long": 48.28
       },
       "BANDAR_ABAS": {
         "en": "Bandar Abbas",
-        "fa": "بندرعباس"
+        "fa": "بندرعباس",
+        "lat": 27.18,
+        "long": 56.27
       },
       "BIRJAND": {
         "en": "Birjand",
-        "fa": "بیرجند"
+        "fa": "بیرجند",
+        "lat": 32.88,
+        "long": 59.22
       },
       "BOJNURD": {
         "en": "Bojnurd",
-        "fa": "بجنورد"
+        "fa": "بجنورد",
+        "lat": 37.47,
+        "long": 57.33
       },
       "BUSHEHR": {
         "en": "Bushehr",
-        "fa": "بوشهر"
+        "fa": "بوشهر",
+        "lat": 28.96,
+        "long": 50.84
       },
       "ESFEHAN": {
         "en": "Esfehan",
-        "fa": "اصفهان"
+        "fa": "اصفهان",
+        "lat": 32.65,
+        "long": 51.67
       },
       "GHAZVIN": {
         "en": "Ghazvin",
-        "fa": "قزوین"
+        "fa": "قزوین",
+        "lat": 36.45,
+        "long": 50
       },
       "GHOM": {
         "en": "Qom",
-        "fa": "قم"
+        "fa": "قم",
+        "lat": 34.65,
+        "long": 50.95
       },
       "GORGAN": {
         "en": "Gorgan",
-        "fa": "گرگان"
+        "fa": "گرگان",
+        "lat": 36.83,
+        "long": 54.48
       },
       "HAMEDAN": {
         "en": "Hamedan",
-        "fa": "همدان"
+        "fa": "همدان",
+        "lat": 34.77,
+        "long": 48.58
       },
       "ILAM": {
         "en": "Ilam",
-        "fa": "ایلام"
+        "fa": "ایلام",
+        "lat": 33.63,
+        "long": 46.42
       },
       "KERMAN": {
         "en": "Kerman",
-        "fa": "کرمان"
+        "fa": "کرمان",
+        "lat": 30.28,
+        "long": 57.06
       },
       "KERMANSHAH": {
         "en": "Kermanshah",
-        "fa": "کرمانشاه"
+        "fa": "کرمانشاه",
+        "lat": 34.32,
+        "long": 47.06
       },
       "KHORAM_ABAD": {
         "en": "Khoram Abad",
-        "fa": "خرم‌آباد"
+        "fa": "خرم‌آباد",
+        "lat": 33.48,
+        "long": 48.35
       },
       "MASHHAD": {
         "en": "Mashhad",
-        "fa": "مشهد"
+        "fa": "مشهد",
+        "lat": 34.3,
+        "long": 59.57
       },
       "ORUMIYEH": {
         "en": "Orumiyeh",
-        "fa": "ارومیه"
+        "fa": "ارومیه",
+        "lat": 0,
+        "long": 0
       },
       "RASHT": {
         "en": "Rasht",
-        "fa": "رشت"
+        "fa": "رشت",
+        "lat": 37.3,
+        "long": 49.63
       },
       "SANANDAJ": {
         "en": "Sanandaj",
-        "fa": "سنندج"
+        "fa": "سنندج",
+        "lat": 35.3,
+        "long": 47.02
       },
       "SARI": {
         "en": "Sari",
-        "fa": "ساری"
+        "fa": "ساری",
+        "lat": 36.55,
+        "long": 53.1
       },
       "SEMNAN": {
         "en": "Semnan",
-        "fa": "سمنان"
+        "fa": "سمنان",
+        "lat": 35.57,
+        "long": 53.38
       },
       "SHAHREKORD": {
         "en": "Shahr-e-kord",
-        "fa": "شهرکرد"
+        "fa": "شهرکرد",
+        "lat": 32.32,
+        "long": 50.85
       },
       "SHIRAZ": {
         "en": "Shiraz",
-        "fa": "شیراز"
+        "fa": "شیراز",
+        "lat": 29.62,
+        "long": 52.53
       },
       "TABRIZ": {
         "en": "Tabriz",
-        "fa": "تبریز"
+        "fa": "تبریز",
+        "lat": 38.08,
+        "long": 46.3
       },
       "TEHRAN": {
         "en": "Tehran",
-        "fa": "تهران"
+        "fa": "تهران",
+        "lat": 35.68,
+        "long": 51.42
       },
       "YASUJ": {
         "en": "Yasuj",
-        "fa": "یاسوج"
+        "fa": "یاسوج",
+        "lat": 30.82,
+        "long": 51.68
       },
       "YAZD": {
         "en": "Yazd",
-        "fa": "یزد"
+        "fa": "یزد",
+        "lat": 31.9,
+        "long": 54.37
       },
       "ZAHEDAN": {
         "en": "Zahedan",
-        "fa": "زاهدان"
+        "fa": "زاهدان",
+        "lat": 29.5,
+        "long": 60.85
       },
       "ZANJAN": {
         "en": "Zanjan",
-        "fa": "زنجان"
+        "fa": "زنجان",
+        "lat": 36.67,
+        "long": 48.48
       }
     }
   },
@@ -145,35 +209,51 @@
     "cities": {
       "BALKH": {
         "en": "Balkh",
-        "fa": "بلخ"
+        "fa": "بلخ",
+        "lat": 36.7,
+        "long": 67.11
       },
       "BAMYAN": {
         "en": "Bamyan",
-        "fa": "بامیان"
+        "fa": "بامیان",
+        "lat": 34.81,
+        "long": 67.81
       },
       "GHAZNI": {
         "en": "Ghazni",
-        "fa": "غزنی"
+        "fa": "غزنی",
+        "lat": 33.55,
+        "long": 68.41
       },
       "HELMAND": {
         "en": "Helmand",
-        "fa": "هلمند"
+        "fa": "هلمند",
+        "lat": 31.58,
+        "long": 64.36
       },
       "HERAT": {
         "en": "Herat",
-        "fa": "هرات"
+        "fa": "هرات",
+        "lat": 34.34,
+        "long": 62.2
       },
       "KABUL": {
         "en": "Kabul",
-        "fa": "کابل"
+        "fa": "کابل",
+        "lat": 34.53,
+        "long": 69.16
       },
       "KANDAHAR": {
         "en": "Kandahar",
-        "fa": "قندهار"
+        "fa": "قندهار",
+        "lat": 31.61,
+        "long": 65.71
       },
       "NANGARHAR": {
         "en": "Nangarhar",
-        "fa": "ننگرهار"
+        "fa": "ننگرهار",
+        "lat": 34.43,
+        "long": 70.44
       }
     }
   }
