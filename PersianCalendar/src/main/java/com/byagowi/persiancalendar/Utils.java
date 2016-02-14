@@ -152,18 +152,24 @@ public class Utils {
 
     public void setTitleSubtitle(Activity activity, String title, String subtitle) {
         initTypeface(activity);
-        SpannableString s = new SpannableString(title);
-        s.setSpan(new TypefaceSpan(typeface), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        SpannableString titleSpan = new SpannableString(textShaper(title));
+        titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //noinspection ConstantConditions
         ((AppCompatActivity) activity)
                 .getSupportActionBar()
-                .setTitle(textShaper(title));
+                .setTitle(titleSpan);
+
+        SpannableString subtitleSpan = new SpannableString(textShaper(subtitle));
+        subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //noinspection ConstantConditions
         ((AppCompatActivity) activity)
                 .getSupportActionBar()
-                .setSubtitle(textShaper(subtitle));
+                .setSubtitle(subtitleSpan);
     }
 
     public CalculationMethod getCalculationMethod(Context context) {
