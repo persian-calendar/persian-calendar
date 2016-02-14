@@ -1,5 +1,6 @@
 package com.github.twaddington;
 
+// from https://gist.github.com/twaddington/b91341ea5615698b53b8 but a little simplified
 /*
  * Copyright 2013 Simple Finance Corporation. All rights reserved.
  *
