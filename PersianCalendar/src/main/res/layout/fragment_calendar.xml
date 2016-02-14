@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,7 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:divider="@drawable/divider"
+                app:dividerPadding="@dimen/divider_margin"
+                app:showDividers="middle">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -52,13 +56,6 @@
                         android:textSize="@dimen/text_size_title" />
 
                 </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:background="@color/divider_color" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -126,7 +123,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:dividerPadding="@dimen/divider_margin"
+                app:divider="@drawable/divider"
+                app:showDividers="middle">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -144,13 +144,6 @@
                         android:textSize="@dimen/text_size_title" />
 
                 </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:background="@color/divider_color" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -209,7 +202,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:divider="@drawable/divider"
+                app:dividerPadding="@dimen/divider_margin"
+                app:showDividers="middle">
 
                 <!-- title: prayer times -->
                 <RelativeLayout
@@ -240,14 +236,6 @@
 
                 </RelativeLayout>
 
-                <!--divider-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:background="@color/divider_color" />
-
                 <!-- actual content -->
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -257,7 +245,10 @@
                     android:paddingBottom="@dimen/padding_item"
                     android:paddingLeft="@dimen/card_padding"
                     android:paddingRight="@dimen/card_padding"
-                    android:paddingTop="@dimen/padding_item">
+                    android:paddingTop="@dimen/padding_item"
+                    app:divider="@drawable/divider"
+                    app:dividerPadding="@dimen/divider_margin2"
+                    app:showDividers="middle">
 
                     <!--morning-->
                     <RelativeLayout
@@ -307,14 +298,6 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:id="@+id/div1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color" />
-
                     <RelativeLayout
                         android:id="@+id/owghat2"
                         android:layout_width="match_parent"
@@ -360,15 +343,6 @@
                         </android.support.v7.widget.LinearLayoutCompat>
 
                     </RelativeLayout>
-
-                    <View
-                        android:id="@+id/div2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/owghat3"
@@ -417,15 +391,6 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:id="@+id/div3"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
-
                     <RelativeLayout
                         android:id="@+id/owghat4"
                         android:layout_width="match_parent"
@@ -472,15 +437,6 @@
                         </android.support.v7.widget.LinearLayoutCompat>
 
                     </RelativeLayout>
-
-                    <View
-                        android:id="@+id/div4"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/owghat5"
@@ -529,15 +485,6 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:id="@+id/div5"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
-
                     <RelativeLayout
                         android:id="@+id/owghat6"
                         android:layout_width="match_parent"
@@ -585,15 +532,6 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:id="@+id/div6"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
-
                     <RelativeLayout
                         android:id="@+id/owghat7"
                         android:layout_width="match_parent"
@@ -640,15 +578,6 @@
                         </android.support.v7.widget.LinearLayoutCompat>
 
                     </RelativeLayout>
-
-                    <View
-                        android:id="@+id/div7"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/divider_margin"
-                        android:layout_marginRight="@dimen/divider_margin2"
-                        android:background="@color/divider_color"
-                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/owghat8"

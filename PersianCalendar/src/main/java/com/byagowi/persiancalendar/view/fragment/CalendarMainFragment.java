@@ -77,14 +77,6 @@ public class CalendarMainFragment extends Fragment
     private RelativeLayout owghat7;
     private RelativeLayout owghat8;
 
-    private View divider1;
-    private View divider2;
-    private View divider3;
-    private View divider4;
-    private View divider5;
-    private View divider6;
-    private View divider7;
-
     @Nullable
     @Override
     public View onCreateView(
@@ -102,14 +94,6 @@ public class CalendarMainFragment extends Fragment
         owghat6 = (RelativeLayout) view.findViewById(R.id.owghat6);
         owghat7 = (RelativeLayout) view.findViewById(R.id.owghat7);
         owghat8 = (RelativeLayout) view.findViewById(R.id.owghat8);
-
-        divider1 = view.findViewById(R.id.div1);
-        divider2 = view.findViewById(R.id.div2);
-        divider3 = view.findViewById(R.id.div3);
-        divider4 = view.findViewById(R.id.div4);
-        divider5 = view.findViewById(R.id.div5);
-        divider6 = view.findViewById(R.id.div6);
-        divider7 = view.findViewById(R.id.div7);
 
         FragmentActivity activity = getActivity();
 
@@ -292,14 +276,6 @@ public class CalendarMainFragment extends Fragment
                 owghat6.setVisibility(View.VISIBLE);
                 owghat7.setVisibility(View.VISIBLE);
                 owghat8.setVisibility(View.VISIBLE);
-
-                divider1.setVisibility(View.VISIBLE);
-                divider2.setVisibility(View.VISIBLE);
-                divider3.setVisibility(View.VISIBLE);
-                divider4.setVisibility(View.VISIBLE);
-                divider5.setVisibility(View.VISIBLE);
-                divider6.setVisibility(View.VISIBLE);
-                divider7.setVisibility(View.VISIBLE);
 
                 moreOwghat.setVisibility(View.GONE);
                 break;
