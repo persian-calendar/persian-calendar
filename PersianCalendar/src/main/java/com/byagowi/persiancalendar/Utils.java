@@ -550,6 +550,14 @@ public class Utils {
         this.cities = result;
     }
 
+    public City getCityByKey(String key) {
+        for (City city : cities)
+            if (city.key.equals(key))
+                return city;
+
+        return null;
+    }
+
     private ArrayList<Event> readEventsFromJSON(InputStream is) {
         ArrayList<Event> result = new ArrayList<>();
         try {

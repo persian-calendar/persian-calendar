@@ -98,15 +98,4 @@ public class LocationsHelper extends SQLiteOpenHelper {
         Log.v(TAG, "running sql: " + sql);
         return db.rawQuery(sql, null);
     }
-
-    public Cursor getCityByKey(String key) {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME_CITIES, new String[]{
-                BaseColumns._ID,
-                COLUMN_NAME_EN,
-                COLUMN_NAME_FA
-        }, COLUMN_KEY + " = ? ", new String[]{key}, null, null, null);
-        db.close();
-        return cursor;
-    }
 }

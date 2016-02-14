@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -14,13 +13,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.db.LocationsHelper;
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
 import com.malinskiy.materialicons.widget.IconTextView;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class AthanView extends AppCompatActivity {
@@ -31,6 +29,8 @@ public class AthanView extends AppCompatActivity {
 
     private int layoutId = R.layout.activity_athan_dhuhr;
     private int athanIcon = R.string.azan1_icon;
+
+    private Utils utils = Utils.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class AthanView extends AppCompatActivity {
             }
         }, TimeUnit.SECONDS.toMillis(45));
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         TextView textAlarmName = (TextView) findViewById(R.id.textAlarmName);
         TextView textCityName = (TextView) findViewById(R.id.textCityName);
         textAlarmName.setText(getPrayerName(prayerKey));
@@ -63,19 +63,14 @@ public class AthanView extends AppCompatActivity {
         athanIconView.setText(getString(athanIcon));
 
         String cityName;
-        String cityKey = sharedPreferences.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
+        String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
         if (!TextUtils.isEmpty(cityKey)) {
-            LocationsHelper helper = new LocationsHelper(this);
-            Cursor cursor = helper.getCityByKey(cityKey);
-            cursor.moveToFirst();
-            if (Locale.getDefault().getLanguage().equals("fa")) {
-                cityName = cursor.getString(cursor.getColumnIndex(LocationsHelper.COLUMN_NAME_FA));
-            } else {
-                cityName = cursor.getString(cursor.getColumnIndex(LocationsHelper.COLUMN_NAME_EN));
-            }
+            utils.loadCities(getResources().openRawResource(R.raw.citiesdb));
+            Utils.City city = utils.getCityByKey(cityKey);
+            cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.en : city.fa;
         } else {
-            float latitude = sharedPreferences.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
-            float longitude = sharedPreferences.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
+            float latitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
+            float longitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
             cityName = latitude + ", " + longitude;
         }
         textCityName.setText(cityName);
