@@ -269,7 +269,7 @@ public class Utils {
                 }
 
                 String eventTitle = getEventTitle(persianDate);
-                if (eventTitle != null || holidayTitle != null ) {
+                if (!TextUtils.isEmpty(eventTitle) || holidayTitle != null ) {
                     day.setEvent(true);
                 }
 
