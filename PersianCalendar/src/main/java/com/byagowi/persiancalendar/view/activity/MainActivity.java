@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
-    String prevLocale;
+    private String prevLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,17 +151,6 @@ public class MainActivity extends AppCompatActivity {
             selectItem(CALENDAR);
             adapter.selectedItem = 0;
             adapter.notifyDataSetChanged();
-
-            String locale = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString("AppLanguage", "fa");
-            if (!locale.equals(prevLocale)) {
-                prevLocale = locale;
-                utils.loadLanguageFromSettings(this);
-                // restart activity
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
         } else {
             finish();
         }
@@ -181,7 +171,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private final UpdateUtils updateUtils = UpdateUtils.getInstance();
+
+    private void menuChange() {
+        // only if we are returning from preferences
+        if (menuPosition != PREFERENCE)
+            return;
+
+        updateUtils.update(this);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String locale = prefs.getString("AppLanguage", "fa");
+        if (!locale.equals(prevLocale)) {
+            prevLocale = locale;
+            utils.loadLanguageFromSettings(this);
+            // restart activity
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
     public void selectItem(int position) {
+        menuChange();
         switch (position) {
             case CALENDAR:
                 if (menuPosition != CALENDAR) {
