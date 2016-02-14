@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -95,21 +96,22 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
 
         private Utils utils;
 
-        private Map<String, String> calendarTypes = new HashMap<>();
-        private Map<String, String> calendarTypesKeys = new HashMap<>();
+        private Map<String, Utils.City> cityMap = new HashMap<>();
+        List<Utils.City> cities;
         private int spinnerResource;
+        Context context;
 
         public CityNameAdapter(Context context, int resource) {
             super(context, resource);
             utils = Utils.getInstance();
-
+            cities = utils.getAllCities(getResources().openRawResource(R.raw.citiesdb));
             spinnerResource = resource;
-            calendarTypes.put("a", "a");
+            context = getContext();
         }
 
         @Override
         public int getCount() {
-            return calendarTypes.size();
+            return cities.size();
         }
 
         @Override
@@ -123,9 +125,13 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             View view = inflater.inflate(spinnerResource, parent, false);
 
             TextView city = (TextView) view.findViewById(R.id.text1);
-            city.setText(calendarTypes.get("a"));
+            city.setText(cities.get(position).fa);
+            utils.prepareShapeTextView(context, city);
+
             TextView country = (TextView) view.findViewById(R.id.text2);
-            country.setText(calendarTypes.get("a"));
+            country.setText(cities.get(position).countryFa);
+            utils.prepareShapeTextView(context, country);
+
             return view;
         }
 

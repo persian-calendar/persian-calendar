@@ -65,9 +65,12 @@ public class AthanView extends AppCompatActivity {
         String cityName;
         String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
         if (!TextUtils.isEmpty(cityKey)) {
-            utils.loadCities(getResources().openRawResource(R.raw.citiesdb));
-            Utils.City city = utils.getCityByKey(cityKey);
+
+            Utils.City city = utils.getCityByKey(cityKey,
+                    utils.getAllCities(getResources().openRawResource(R.raw.citiesdb)));
+
             cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.en : city.fa;
+
         } else {
             float latitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
             float longitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
