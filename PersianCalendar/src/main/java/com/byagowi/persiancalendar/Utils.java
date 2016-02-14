@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.common.IterableNodeList;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.Day;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
@@ -36,13 +35,10 @@ import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 import com.github.twaddington.TypefaceSpan;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,12 +46,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import calendar.AbstractDate;
 import calendar.CivilDate;
@@ -499,71 +492,43 @@ public class Utils {
         }
     }
 
-    public void loadHolidays(InputStream xmlStream) {
-        holidays = new ArrayList<>();
-        DocumentBuilder builder;
+    public ArrayList<Event> readEventsFromJSON(InputStream is) {
+        ArrayList<Event> result = new ArrayList<>();
         try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            // http://stackoverflow.com/a/14585883
+            Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            JSONArray days = new JSONObject(s.hasNext() ? s.next() : "").getJSONArray("events");
 
-            Document document = builder.parse(xmlStream);
+            int length = days.length();
+            for (int i = 0; i < length; ++i) {
+                JSONObject event = days.getJSONObject(i);
 
-            NodeList holidaysNodes = document.getElementsByTagName("holiday");
-            for (Node node : new IterableNodeList(holidaysNodes)) {
-                NamedNodeMap attrs = node.getAttributes();
+                int year = event.getInt("year");
+                int month = event.getInt("month");
+                int day = event.getInt("day");
+                String title = event.getString("title");
 
-                int year = Integer.parseInt(attrs.getNamedItem("year")
-                        .getNodeValue());
-                int month = Integer.parseInt(attrs.getNamedItem("month")
-                        .getNodeValue());
-                int day = Integer.parseInt(attrs.getNamedItem("day")
-                        .getNodeValue());
-
-                String holidayTitle = node.getFirstChild().getNodeValue();
-
-                holidays.add(new Event(new PersianDate(year, month, day),
-                        holidayTitle));
+                result.add(new Event(new PersianDate(year, month, day), title));
             }
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+        return result;
     }
 
-    public void loadEvents(InputStream xmlStream) {
-        events = new ArrayList<>();
-        DocumentBuilder builder;
-        try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    public void loadHolidays(InputStream is) {
+        holidays = readEventsFromJSON(is);
+    }
 
-            Document document = builder.parse(xmlStream);
-
-            NodeList eventsNodes = document.getElementsByTagName("event");
-            for (Node node : new IterableNodeList(eventsNodes)) {
-                NamedNodeMap attrs = node.getAttributes();
-
-                int year = Integer.parseInt(attrs.getNamedItem("year")
-                        .getNodeValue());
-                int month = Integer.parseInt(attrs.getNamedItem("month")
-                        .getNodeValue());
-                int day = Integer.parseInt(attrs.getNamedItem("day")
-                        .getNodeValue());
-
-                String eventTitle = node.getFirstChild().getNodeValue();
-
-                events.add(new Event(new PersianDate(year, month, day),
-                        eventTitle));
-            }
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
+    public void loadEvents(InputStream is) {
+        events = readEventsFromJSON(is);
     }
 
     public String getHolidayTitle(PersianDate day) {
         for (Event holiday : holidays) {
             if (holiday.getDate().equals(day)) {
-                // trim XML whitespaces and newlines
-                return holiday.getTitle().replaceAll("\n", "").trim();
+                return holiday.getTitle();
             }
         }
         return null;
