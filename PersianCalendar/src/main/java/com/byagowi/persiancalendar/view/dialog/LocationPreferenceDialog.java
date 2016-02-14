@@ -106,7 +106,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             utils = Utils.getInstance();
             cities = utils.getAllCities(getResources().openRawResource(R.raw.citiesdb));
             spinnerResource = resource;
-            context = getContext();
+            this.context = context;
         }
 
         @Override
@@ -116,7 +116,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
 
         @Override
         public Object getItem(int position) {
-            return "a";//calendarTypeKeys[position];
+            return cities.get(position);
         }
 
         public View getSpinnerItemView(int position, ViewGroup parent) {
