@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(this, ApplicationService.class));
         startService(new Intent(this, DatabaseInitService.class));
 
+
+        UpdateUtils updateUtils = UpdateUtils.getInstance();
+        updateUtils.updateDate(getBaseContext());
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

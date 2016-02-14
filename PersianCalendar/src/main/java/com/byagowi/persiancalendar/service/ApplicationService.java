@@ -40,8 +40,20 @@ public class ApplicationService extends Service {
                     updateUtils.update(context);
                 }
             }, intentFilter);
+
+
+            IntentFilter intentFilter2 = new IntentFilter();
+            intentFilter2.addAction(Intent.ACTION_DATE_CHANGED);
+            intentFilter2.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+            registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    updateUtils.updateDate(context);
+                }
+            }, intentFilter2);
         }
         updateUtils.update(getApplicationContext());
+        updateUtils.updateDate(getApplicationContext());
         return START_STICKY;
     }
 }

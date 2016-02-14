@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -145,7 +146,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                app:divider="@drawable/divider"
+                app:dividerPadding="@dimen/divider_margin"
+                app:showDividers="middle">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -163,14 +167,6 @@
                         android:textSize="@dimen/text_size_title"/>
 
                 </RelativeLayout>
-
-                <View
-                    android:id="@+id/divider_line"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:background="@color/divider_color"/>
 
                 <RelativeLayout
                     android:id="@+id/more_date"

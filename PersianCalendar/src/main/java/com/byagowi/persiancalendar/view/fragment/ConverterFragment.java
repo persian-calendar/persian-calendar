@@ -49,7 +49,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     private TextView date1;
     private TextView date2;
     private RelativeLayout moreDate;
-    private View divider;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -80,7 +79,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         date1.setOnClickListener(dateTapListener);
         date2.setOnClickListener(dateTapListener);
 
-        divider = view.findViewById(R.id.divider_line);
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
         // fill views
@@ -157,7 +155,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             date2.setText(calendarsTextList.get(2));
 
         } catch (RuntimeException e) {
-            divider.setVisibility(View.GONE);
             moreDate.setVisibility(View.GONE);
             date0.setText(getString(R.string.date_exception));
         }

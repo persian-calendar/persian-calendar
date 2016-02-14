@@ -6,7 +6,7 @@ public class Clock {
     private final int hour;
     private final int minute;
 
-    private Clock(int hour, int minute) {
+    public Clock(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }
@@ -24,5 +24,9 @@ public class Clock {
 
     public int getMinute() {
         return minute;
+    }
+
+    public int getInt() {
+        return (hour * 100) + minute;
     }
 }

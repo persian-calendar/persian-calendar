@@ -101,8 +101,11 @@ public class Utils {
             R.drawable.day25, R.drawable.day26, R.drawable.day27,
             R.drawable.day28, R.drawable.day29, R.drawable.day30,
             R.drawable.day31};
+
     private List<Event> holidays;
     private List<Event> events;
+    private PrayTimesCalculator prayTimesCalculator;
+    private Map<PrayTime, Clock> prayTimes;
 
     private Utils() {
     }
@@ -269,7 +272,7 @@ public class Utils {
                 }
 
                 String eventTitle = getEventTitle(persianDate);
-                if (eventTitle != null || holidayTitle != null ) {
+                if (!TextUtils.isEmpty(eventTitle) || holidayTitle != null ) {
                     day.setEvent(true);
                 }
 
@@ -308,6 +311,57 @@ public class Utils {
     public String clockToString(int hour, int minute, char[] digits) {
         return formatNumber(
                 String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+    }
+
+    public String getNextOghatTime(Context context, Clock clock, boolean changeDate) {
+        Coordinate coordinate = getCoordinate(context);
+
+        if (coordinate != null) {
+            char[] digits = preferredDigits(context);
+            boolean clockIn24 = clockIn24(context);
+
+            if (prayTimesCalculator == null) {
+                prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod(context));
+                changeDate = true;
+            }
+
+            if (changeDate) {
+                CivilDate civilDate = DateConverter.persianToCivil(Utils.getToday());
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+                Date date = calendar.getTime();
+                prayTimes = prayTimesCalculator.calculate(date, coordinate);
+            }
+
+            if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
+                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
+                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24);
+
+            } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
+                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24);
+
+            } else {
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24); //this is today & not tomorrow
+            }
+
+        } else return null;
     }
 
     public String getPersianFormattedClock(Clock clock, char[] digits, boolean in24) {
@@ -516,13 +570,23 @@ public class Utils {
     }
 
     public String getEventTitle(PersianDate day) {
+        String eventsTitle = "";
+        boolean first = true;
         for (Event event : events) {
             if (event.getDate().equals(day)) {
+
+                if (first) {
+                    first = false;
+                } else {
+                    eventsTitle = eventsTitle + "\n";
+                }
+
                 // trim XML whitespaces and newlines
-                return event.getTitle().replaceAll("\n", "").trim();
+                eventsTitle = eventsTitle + event.getTitle().replaceAll("\n", "").trim();
+
             }
         }
-        return null;
+        return  eventsTitle;
     }
 
     public void setAthanRepeater(Context context) {
