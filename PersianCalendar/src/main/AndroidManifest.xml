@@ -112,10 +112,6 @@
         </service>
 
         <service
-            android:name=".service.DatabaseInitService"
-            android:exported="false" />
-
-        <service
             android:name=".service.ApplicationService"
             android:label="Calendar Service" />
     </application>
