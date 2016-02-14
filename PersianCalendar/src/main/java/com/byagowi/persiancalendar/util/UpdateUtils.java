@@ -71,7 +71,7 @@ public class UpdateUtils {
                 R.layout.widget1x1);
         RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(),
                 R.layout.widget4x1);
-        String colorInt = prefs.getString("WidgetTextColor",
+        String colorInt = prefs.getString("SelectedWidgetTextColor",
                 context.getString(R.string.default_widget_text_color));
         int color = Color.parseColor(colorInt);
 

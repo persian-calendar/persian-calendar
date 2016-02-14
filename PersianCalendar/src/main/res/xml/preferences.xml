@@ -40,7 +40,7 @@
             android:defaultValue="@string/default_widget_text_color"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
-            android:key="WidgetTextColor"
+            android:key="SelectedWidgetTextColor"
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
