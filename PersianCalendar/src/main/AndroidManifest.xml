@@ -79,6 +79,19 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
         </receiver>
+        <receiver
+            android:name=".Widget2x2"
+            android:exported="false"
+            android:icon="@drawable/launcher_icon"
+            android:label="@string/widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider2x2" />
+        </receiver>
 
         <service
             android:name=".DashClockUpdate"

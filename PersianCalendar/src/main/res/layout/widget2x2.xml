@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_layout2x2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Widget2x2">
+
+    <TextView
+        android:id="@+id/time_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="۱۳:۲۸"
+        android:textColor="@android:color/white"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/date_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="یکشنبه ۲۵ بهمن ۱۳۹۴"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/owghat_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="اذان مغرب ۱۳:۲۳"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/holiday_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="۲۲ بهمن"
+        android:textColor="@color/holiday"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/event_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="۲۲ بهمن"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>
