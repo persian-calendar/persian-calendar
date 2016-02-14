@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="۱۳:۲۸"
         android:textColor="@android:color/white"
         android:textSize="34sp" />
 
@@ -23,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="یکشنبه ۲۵ بهمن ۱۳۹۴"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -33,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="اذان مغرب ۱۳:۲۳"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -43,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="۲۲ بهمن"
         android:textColor="@color/holiday"
         android:textSize="14sp" />
 
@@ -53,7 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="۲۲ بهمن"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
