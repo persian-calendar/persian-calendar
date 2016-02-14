@@ -152,7 +152,7 @@ public class UpdateUtils {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE));
 
-        String owghat = utils.getNextOghatTime(context, currentClock);
+        String owghat = utils.getNextOghatTime(context, currentClock, false);
         if (owghat != null) {
             remoteViews2.setTextViewText(R.id.owghat_2x2,
                     Utils.textShaper(owghat));
@@ -270,7 +270,7 @@ public class UpdateUtils {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE));
 
-        String owghat = utils.getNextOghatTime(context, currentClock);
+        String owghat = utils.getNextOghatTime(context, currentClock, true);
         if (owghat != null) {
             remoteViews2.setTextViewText(R.id.owghat_2x2,
                     Utils.textShaper(owghat));

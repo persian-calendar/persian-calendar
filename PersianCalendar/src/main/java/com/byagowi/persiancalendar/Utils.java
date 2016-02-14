@@ -101,8 +101,11 @@ public class Utils {
             R.drawable.day25, R.drawable.day26, R.drawable.day27,
             R.drawable.day28, R.drawable.day29, R.drawable.day30,
             R.drawable.day31};
+
     private List<Event> holidays;
     private List<Event> events;
+    private PrayTimesCalculator prayTimesCalculator;
+    private Map<PrayTime, Clock> prayTimes;
 
     private Utils() {
     }
@@ -310,19 +313,25 @@ public class Utils {
                 String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
     }
 
-    public String getNextOghatTime(Context context, Clock clock) {
+    public String getNextOghatTime(Context context, Clock clock, boolean changeDate) {
         Coordinate coordinate = getCoordinate(context);
 
         if (coordinate != null) {
             char[] digits = preferredDigits(context);
             boolean clockIn24 = clockIn24(context);
-            CivilDate civilDate = DateConverter.persianToCivil(Utils.getToday());
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-            Date date = calendar.getTime();
 
-            PrayTimesCalculator prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod(context));
-            Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
+            if (prayTimesCalculator != null) {
+                prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod(context));
+                changeDate = true;
+            }
+
+            if (changeDate) {
+                CivilDate civilDate = DateConverter.persianToCivil(Utils.getToday());
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+                Date date = calendar.getTime();
+                prayTimes = prayTimesCalculator.calculate(date, coordinate);
+            }
 
             if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
                 return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24);
