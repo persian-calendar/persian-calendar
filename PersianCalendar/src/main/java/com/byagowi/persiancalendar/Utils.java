@@ -530,6 +530,16 @@ public class Utils {
         }
     }
 
+    private static String persianStringToArabic(String text) {
+        return text
+            .replaceAll("ی", "ي")
+            .replaceAll("ک", "ك")
+            .replaceAll("گ", "كی")
+            .replaceAll("ژ", "زی")
+            .replaceAll("چ", "جی")
+            .replaceAll("پ", "بی");
+    }
+
     static private City[] cities;
 
     static private void loadCities(InputStream is) {
@@ -573,7 +583,10 @@ public class Utils {
             public int compare(City l, City r) {
                 if (l.key.equals("CUSTOM")) { return -1; }
                 if (r.key.equals("CUSTOM")) { return 1; }
-                return l.fa.compareTo(r.fa);
+                int compare = r.countryCode.compareTo(l.countryCode);
+                return compare != 0
+                        ? compare
+                        : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa));
             }
         });
 
