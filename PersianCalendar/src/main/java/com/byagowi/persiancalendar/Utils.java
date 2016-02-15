@@ -542,7 +542,7 @@ public class Utils {
 
     static private City[] cities;
 
-    static private void loadCities(InputStream is) {
+    static private void loadCities(InputStream is, Context context) {
         ArrayList<City> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(is));
@@ -575,6 +575,9 @@ public class Utils {
             Log.e(TAG, e.getMessage());
         }
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final String locale = prefs.getString("AppLanguage", "fa");
+
         City[] cities = result.toArray(new City[result.size()]);
 
         // Sort first by country code then city
@@ -586,7 +589,9 @@ public class Utils {
                 int compare = r.countryCode.compareTo(l.countryCode);
                 return compare != 0
                         ? compare
-                        : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa));
+                        : (locale.equals("en")
+                            ? l.en.compareTo(r.en)
+                            : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa)));
             }
         });
 
@@ -595,7 +600,7 @@ public class Utils {
 
     public static City[] getAllCities(Context context) {
         if (cities == null) {
-            loadCities(context.getResources().openRawResource(R.raw.cities));
+            loadCities(context.getResources().openRawResource(R.raw.cities), context);
         }
 
         return cities;
@@ -610,7 +615,7 @@ public class Utils {
         }
 
         if (cities == null) {
-            loadCities(context.getResources().openRawResource(R.raw.cities));
+            loadCities(context.getResources().openRawResource(R.raw.cities), context);
         }
 
         for (City city : cities)

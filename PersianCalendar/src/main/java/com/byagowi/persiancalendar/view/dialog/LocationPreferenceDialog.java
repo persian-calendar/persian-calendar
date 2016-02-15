@@ -3,7 +3,9 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
@@ -101,6 +103,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         List<Utils.City> cities;
         private int spinnerResource;
         Context context;
+        String locale;
 
         public CityNameAdapter(Context context, int resource) {
             super(context, resource);
@@ -108,6 +111,9 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             cities = Arrays.asList(utils.getAllCities(context));
             spinnerResource = resource;
             this.context = context;
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            this.locale = prefs.getString("AppLanguage", "fa");
         }
 
         @Override
@@ -126,11 +132,15 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             View view = inflater.inflate(spinnerResource, parent, false);
 
             TextView city = (TextView) view.findViewById(R.id.text1);
-            city.setText(cities.get(position).fa);
+            city.setText(locale.equals("en")
+                    ? cities.get(position).en
+                    : cities.get(position).fa);
             utils.prepareShapeTextView(context, city);
 
             TextView country = (TextView) view.findViewById(R.id.text2);
-            country.setText(cities.get(position).countryFa);
+            country.setText(locale.equals("en")
+                    ? cities.get(position).countryEn
+                    : cities.get(position).countryFa);
             utils.prepareShapeTextView(context, country);
 
             return view;
