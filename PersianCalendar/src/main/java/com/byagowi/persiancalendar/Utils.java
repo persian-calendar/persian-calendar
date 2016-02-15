@@ -17,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,6 +160,8 @@ public class Utils {
         SpannableString titleSpan = new SpannableString(textShaper(title));
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //noinspection ConstantConditions
         ((AppCompatActivity) activity)
@@ -166,6 +170,8 @@ public class Utils {
 
         SpannableString subtitleSpan = new SpannableString(textShaper(subtitle));
         subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //noinspection ConstantConditions
