@@ -619,8 +619,11 @@ public class Utils {
         }
 
         for (City city : cities)
-            if (city.key.equals(key))
+            if (city.key.equals(key)) {
+                cachedCity = city;
+                cachedCityKey = key;
                 return city;
+            }
 
         return null;
     }
