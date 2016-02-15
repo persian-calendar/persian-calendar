@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -104,7 +105,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         public CityNameAdapter(Context context, int resource) {
             super(context, resource);
             utils = Utils.getInstance();
-            cities = utils.getAllCities(getResources().openRawResource(R.raw.citiesdb));
+            cities = Arrays.asList(utils.getAllCities(context));
             spinnerResource = resource;
             this.context = context;
         }

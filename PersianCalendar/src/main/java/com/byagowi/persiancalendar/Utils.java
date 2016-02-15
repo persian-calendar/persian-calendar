@@ -30,7 +30,6 @@ import com.byagowi.persiancalendar.service.AthanResetReceiver;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
-import com.github.praytimes.Locations;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 import com.github.twaddington.TypefaceSpan;
@@ -41,8 +40,11 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -177,7 +179,7 @@ public class Utils {
                 .getDefaultSharedPreferences(context);
 
         return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
-                "Jafari")); // Seems Iran using Jafari method
+                "Jafari")); // Seems Iran is using Jafari method
     }
 
     public static int getIslamicOffset(Context context) {
@@ -193,7 +195,8 @@ public class Utils {
 
         String location = prefs.getString("Location", "CUSTOM");
         if (!location.equals("CUSTOM")) {
-            return Locations.valueOf(location).getCoordinate();
+            City city = getCityByKey(location, context);
+            return new Coordinate(city.latitude, city.longitude);
         }
 
         try {
@@ -505,24 +508,31 @@ public class Utils {
         return s.hasNext() ? s.next() : "";
     }
 
-    public class City {
+    public static class City {
         public final String key;
         public final String en;
         public final String fa;
         public final String countryCode;
         public final String countryEn;
         public final String countryFa;
-        public City(String key, String en, String fa, String countryCode, String countryEn, String countryFa) {
+        public final double latitude;
+        public final double longitude;
+        public City(String key, String en, String fa, String countryCode, String countryEn,
+                    String countryFa, double latitude, double longitude) {
             this.key = key;
             this.en = en;
             this.fa = fa;
             this.countryCode = countryCode;
             this.countryEn = countryEn;
             this.countryFa = countryFa;
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
     }
 
-    public List<City> getAllCities(InputStream is) {
+    static private City[] cities;
+
+    static private void loadCities(InputStream is) {
         ArrayList<City> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(is));
@@ -545,16 +555,51 @@ public class Utils {
                     String en = city.getString("en");
                     String fa = city.getString("fa");
 
-                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa));
+                    double lat = city.getDouble("latitude");
+                    double lon = city.getDouble("longitude");
+
+                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa, lat, lon));
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        return result;
+
+        City[] cities = result.toArray(new City[result.size()]);
+
+        // Sort first by country code then city
+        Arrays.sort(cities, new Comparator<City>() {
+            @Override
+            public int compare(City l, City r) {
+                if (l.key.equals("CUSTOM")) { return -1; }
+                if (r.key.equals("CUSTOM")) { return 1; }
+                return l.fa.compareTo(r.fa);
+            }
+        });
+
+        Utils.cities = cities;
     }
 
-    public City getCityByKey(String key, List<City> cities) {
+    public static City[] getAllCities(Context context) {
+        if (cities == null) {
+            loadCities(context.getResources().openRawResource(R.raw.cities));
+        }
+
+        return cities;
+    }
+
+    public static String cachedCityKey = "";
+    public static City cachedCity;
+
+    public static City getCityByKey(String key, Context context) {
+        if (cachedCity != null && key.equals(cachedCityKey)) {
+            return cachedCity;
+        }
+
+        if (cities == null) {
+            loadCities(context.getResources().openRawResource(R.raw.cities));
+        }
+
         for (City city : cities)
             if (city.key.equals(key))
                 return city;
