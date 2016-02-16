@@ -251,12 +251,14 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     private class DateTapListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                return;
+            }
+            
             CharSequence convertedDate = ((TextView) view).getText();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                ClipData clip = ClipData.newPlainText("converted date", convertedDate);
-                clipboardManager.setPrimaryClip(clip);
-            }
+            ClipData clip = ClipData.newPlainText("converted date", convertedDate);
+            clipboardManager.setPrimaryClip(clip);
 
             Toast.makeText(getContext(),
                     getString(R.string.date_copied_clipboard) + "\n" + convertedDate,
