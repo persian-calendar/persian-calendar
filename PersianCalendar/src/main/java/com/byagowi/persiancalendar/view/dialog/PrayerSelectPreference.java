@@ -5,8 +5,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
 import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+
+import com.byagowi.persiancalendar.Utils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -149,5 +152,12 @@ public class PrayerSelectPreference extends DialogPreference {
         private static void writeBoolean(Parcel dest, boolean value) {
             dest.writeInt((value) ? 1 : 0);
         }
+    }
+
+    Utils utils = Utils.getInstance();
+    @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        utils.prepareShapePreference(getContext(), holder);
     }
 }

@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
 import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.widget.SeekBar;
 
@@ -92,5 +93,11 @@ public class AthanVolumePreference extends DialogPreference {
                 return new SavedState[size];
             }
         };
+    }
+
+    @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        utils.prepareShapePreference(getContext(), holder);
     }
 }

@@ -15,12 +15,14 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -151,6 +153,18 @@ public class Utils {
     public void prepareShapeTextView(Context context, TextView textView) {
         prepareTextView(context, textView);
         textView.setText(textShaper(textView.getText().toString()));
+    }
+
+    public void prepareShapePreference(Context context, PreferenceViewHolder holder) {
+        // See android.support.v7.preference.Preference#onBindViewHolder
+        TextView titleView = (TextView) holder.findViewById(android.R.id.title);
+        if (titleView != null) {
+            prepareShapeTextView(context, (TextView) holder.findViewById(android.R.id.title));
+        }
+        TextView summaryView = (TextView) holder.findViewById(android.R.id.title);
+        if (titleView != null) {
+            prepareShapeTextView(context, (TextView) holder.findViewById(android.R.id.summary));
+        }
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {

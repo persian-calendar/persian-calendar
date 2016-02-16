@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory
+    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
         android:title="@string/general">
 
-        <android.support.v7.preference.ListPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
             android:defaultValue="fa-IR"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
             android:key="AppLanguage"
             android:title="@string/language" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
-        <android.support.v7.preference.ListPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
@@ -25,18 +25,18 @@
             android:summary="@string/islamic_offset_summary"
             android:title="@string/islamic_offset" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
         android:title="@string/widget_notification_dashclock">
 
-        <android.support.v7.preference.CheckBoxPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <android.support.v7.preference.ListPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
             android:defaultValue="@string/default_widget_text_color"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
@@ -44,30 +44,30 @@
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="false"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
         android:title="@string/pray_times_calculation_setting">
 
-        <android.support.v7.preference.ListPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
             android:defaultValue="Jafari"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
@@ -80,32 +80,32 @@
             android:summary="@string/location_help"
             android:title="@string/location" />
 
-        <android.support.v7.preference.EditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Latitude"
             android:title="@string/latitude" />
 
-        <android.support.v7.preference.EditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Longitude"
             android:title="@string/longitude" />
 
-        <android.support.v7.preference.EditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
             android:defaultValue="0"
             android:inputType="numberDecimal"
             android:key="Altitude"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
         android:key="Athan"
         android:title="@string/athan">
 
-        <android.support.v7.preference.EditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:summary="@string/athan_gap_summary"
@@ -121,6 +121,6 @@
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

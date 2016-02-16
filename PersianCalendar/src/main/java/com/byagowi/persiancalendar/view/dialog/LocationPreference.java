@@ -2,8 +2,11 @@ package com.byagowi.persiancalendar.view.dialog;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.widget.ListView;
+
+import com.byagowi.persiancalendar.Utils;
 
 /**
  * persian_calendar
@@ -34,5 +37,12 @@ public class LocationPreference extends DialogPreference {
                 newValue = getPersistedString("");
             }
         }
+    }
+
+    Utils utils = Utils.getInstance();
+    @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        utils.prepareShapePreference(getContext(), holder);
     }
 }
