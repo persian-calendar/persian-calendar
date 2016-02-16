@@ -137,7 +137,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void UpdateTitle() {
-        utils.setTitleSubtitle(getActivity(), Utils.formatNumber(persianDate.getYear(), digits),
+        utils.setActivityTitleAndSubtitle(getActivity(), Utils.formatNumber(persianDate.getYear(), digits),
                 utils.getMonthName(persianDate));
     }
 

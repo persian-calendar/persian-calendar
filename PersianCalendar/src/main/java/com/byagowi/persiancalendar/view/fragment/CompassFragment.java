@@ -34,7 +34,7 @@ public class CompassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
-        utils.setTitleSubtitle(getActivity(), getString(R.string.qibla_compass), "");
+        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), "");
 
         compassListener = new CompassListener(this);
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);

@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -154,30 +155,21 @@ public class Utils {
         // textView.setLineSpacing(0f, 0.8f);
     }
 
-    public void setTitleSubtitle(Activity activity, String title, String subtitle) {
+    public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
         initTypeface(activity);
 
-        SpannableString titleSpan = new SpannableString(textShaper(title));
-        titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         //noinspection ConstantConditions
-        ((AppCompatActivity) activity)
-                .getSupportActionBar()
-                .setTitle(titleSpan);
+        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
+
+        SpannableString titleSpan = new SpannableString(textShaper(title));
+        titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
+        titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
+        supportActionBar.setTitle(titleSpan);
 
         SpannableString subtitleSpan = new SpannableString(textShaper(subtitle));
-        subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        //noinspection ConstantConditions
-        ((AppCompatActivity) activity)
-                .getSupportActionBar()
-                .setSubtitle(subtitleSpan);
+        subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
+        subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
+        supportActionBar.setSubtitle(subtitleSpan);
     }
 
     public CalculationMethod getCalculationMethod(Context context) {

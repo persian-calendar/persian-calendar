@@ -51,7 +51,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        utils.setTitleSubtitle(getActivity(), getString(R.string.settings), "");
+        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         locationName = prefs.getString(PREF_KEY_LOCATION, "");

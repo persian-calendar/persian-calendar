@@ -27,7 +27,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        utils.setTitleSubtitle(getActivity(), getString(R.string.about), "");
+        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
         String version = utils.programVersion(getContext());
 
