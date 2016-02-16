@@ -129,32 +129,41 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             return cities.get(position);
         }
 
-        public View getSpinnerItemView(int position, ViewGroup parent) {
-            View view = inflater.inflate(spinnerResource, parent, false);
-
-            TextView city = (TextView) view.findViewById(R.id.text1);
-            city.setText(locale.equals("en")
-                    ? cities.get(position).en
-                    : cities.get(position).fa);
-            utils.prepareShapeTextView(context, city);
-
-            TextView country = (TextView) view.findViewById(R.id.text2);
-            country.setText(locale.equals("en")
-                    ? cities.get(position).countryEn
-                    : cities.get(position).countryFa);
-            utils.prepareShapeTextView(context, country);
-
-            return view;
-        }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            return getSpinnerItemView(position, parent);
-        }
+            ViewHolder holder;
 
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getSpinnerItemView(position, parent);
+            if (convertView == null) {
+                convertView = inflater.inflate(spinnerResource, null);
+
+                holder = new ViewHolder();
+                holder.city = (TextView) convertView.findViewById(R.id.text1);
+                holder.country = (TextView) convertView.findViewById(R.id.text2);
+
+                convertView.setTag(holder);
+
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.city.setText(locale.equals("en")
+                    ? cities.get(position).en
+                    : cities.get(position).fa);
+
+            utils.prepareShapeTextView(context, holder.city);
+
+            holder.country.setText(locale.equals("en")
+                    ? cities.get(position).countryEn
+                    : cities.get(position).countryFa);
+            utils.prepareShapeTextView(context, holder.country);
+
+
+            return convertView;
         }
+    }
+
+    static class ViewHolder {
+        TextView country;
+        TextView city;
     }
 }
