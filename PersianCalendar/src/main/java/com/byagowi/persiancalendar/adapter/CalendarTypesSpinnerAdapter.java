@@ -52,6 +52,7 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView textView = (TextView) inflater.inflate(spinnerResource, parent, false);
         textView.setText(calendarTypes.get(calendarTypeKeys[position]));
+        utils.prepareShapeTextView(getContext(), textView);
         return textView;
     }
 
