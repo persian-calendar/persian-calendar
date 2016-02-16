@@ -149,10 +149,8 @@ public class Utils {
     }
 
     public void prepareShapeTextView(Context context, TextView textView) {
-        initTypeface(context);
-        textView.setTypeface(typeface);
+        prepareTextView(context, textView);
         textView.setText(textShaper(textView.getText().toString()));
-        // textView.setLineSpacing(0f, 0.8f);
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
