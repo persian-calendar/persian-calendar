@@ -41,10 +41,10 @@
         <item>#ff000000</item>
     </string-array>
 
-    <string-array name="languageNames">
-        <item>Persian</item>
-        <item>Dari</item>
-        <item>Pashto</item>
+    <string-array name="languageNames" translatable="false">
+        <item>فارسی</item>
+        <item>دری</item>
+        <item>پښتو</item>
         <item>English</item>
     </string-array>
 

@@ -15,13 +15,6 @@
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
     </string-array>
 
-    <string-array name="languageNames">
-        <item>فارسی</item>
-        <item>دری</item>
-        <item>پښتو</item>
-        <item>انګریزی</item>
-    </string-array>
-
     <string-array name="colorNames">
         <item>White</item>
         <item>Red</item>
