@@ -41,7 +41,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-            locationPreferenceDialog.selectItem(getAdapterPosition());
+            locationPreferenceDialog.selectItem(cities.get(getAdapterPosition()).key);
         }
     }
 
@@ -51,7 +51,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 .inflate(R.layout.list_item_city_name, parent, false);
 
         return new ViewHolder(v);
-
     }
 
     @Override
