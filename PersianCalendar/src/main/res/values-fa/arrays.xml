@@ -6,11 +6,11 @@
     </string-array>
 
     <string-array name="prayMethodsNames">
-        <item>شیعه دوازده امامی، انجمن لوا، قم</item>
-        <item>اتحادیه جهانی اسلام،‌ عربستان سعودی</item>
-        <item>جامعه اسلامی آمریکای شمالی</item>
+        <item>شیعهٔ دوازده امامی، انجمن لوا، قم</item>
+        <item>اتّحادیهٔ جهانی اسلام،‌ عربستان سعودی</item>
+        <item>جامعهٔ اسلامی آمریکای شمالی</item>
         <item>مرجع عمومی تحقیقات مصر</item>
-        <item>دانشگاه ام القری،‌ مکه</item>
+        <item>دانشگاه امّ‌القری،‌ مکه</item>
         <item>دانشگاه علوم اسلامی،‌ کراچی</item>
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
     </string-array>
@@ -23,10 +23,10 @@
     </string-array>
 
     <string-array name="colorNames">
-        <item>White</item>
-        <item>Red</item>
-        <item>Blue</item>
-        <item>Black</item>
+        <item>سپید</item>
+        <item>سرخ</item>
+        <item>آبی</item>
+        <item>سیاه</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
@@ -56,7 +56,7 @@
 
 
     <string-array name="drawerTitles">
-        <item>مبدل تاریخ</item>
+        <item>تبدیل تاریخ</item>
         <item>قطب‌نما</item>
         <item>تنظیمات</item>
         <item>درباره</item>
