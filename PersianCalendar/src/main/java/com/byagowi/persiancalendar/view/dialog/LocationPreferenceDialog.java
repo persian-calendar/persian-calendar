@@ -104,6 +104,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         private int spinnerResource;
         Context context;
         String locale;
+        LayoutInflater inflater;
 
         public CityNameAdapter(Context context, int resource) {
             super(context, resource);
@@ -111,6 +112,8 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
             cities = Arrays.asList(utils.getAllCities(context));
             spinnerResource = resource;
             this.context = context;
+            this.inflater = (LayoutInflater)
+                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             this.locale = prefs.getString("AppLanguage", "fa");
@@ -127,8 +130,6 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         }
 
         public View getSpinnerItemView(int position, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(spinnerResource, parent, false);
 
             TextView city = (TextView) view.findViewById(R.id.text1);
