@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -34,7 +36,20 @@ public class CompassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), "");
+        Context context = getContext();
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String location = prefs.getString("Location", "CUSTOM");
+        if (location.equals("CUSTOM")) {
+            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
+        } else {
+            Utils.City city = utils.getCityByKey(location, context);
+            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
+                    prefs.getString("AppLanguage", "fa").equals("en")
+                            ? city.en
+                            : city.fa);
+        }
+
 
         compassListener = new CompassListener(this);
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);

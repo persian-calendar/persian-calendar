@@ -41,6 +41,7 @@
     <string name="showing_iran_time">نمایش ویجت‌ها و نوار مطلع‌سازی به وقت ایران حتی در بیرون از ایران</string>
     <string name="iran_time">وقت ایران</string>
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
+    <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">سنسور قطب‌نما یافت نشد</string>
 
     <string name="month_names">نام ماه ها</string>
