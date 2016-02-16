@@ -24,6 +24,7 @@
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_description"
                 android:textColor="@color/text_color_normal"
+                android:id="@+id/calendarTypeTitle"
                 android:text="@string/select_type_date" />
 
             <android.support.v7.widget.AppCompatSpinner

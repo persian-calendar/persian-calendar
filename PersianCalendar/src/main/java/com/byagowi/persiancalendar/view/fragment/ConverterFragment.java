@@ -81,6 +81,18 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
+        // Shape and set font
+        Context context = getContext();
+        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelDay));
+        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelMonth));
+        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelYear));
+        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.calendarTypeTitle));
+
+        utils.prepareTextView(context, date0);
+        utils.prepareTextView(context, date1);
+        utils.prepareTextView(context, date2);
+        //
+
         // fill views
         calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(getContext(),
                 android.R.layout.select_dialog_item));
@@ -150,9 +162,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
 
-            date0.setText(sb);
-            date1.setText(calendarsTextList.get(1));
-            date2.setText(calendarsTextList.get(2));
+            date0.setText(utils.textShaper(sb.toString()));
+            date1.setText(utils.textShaper(calendarsTextList.get(1)));
+            date2.setText(utils.textShaper(calendarsTextList.get(2)));
 
         } catch (RuntimeException e) {
             moreDate.setVisibility(View.GONE);
