@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/winter_color</item>
         <item name="colorPrimaryDark">@color/winter_color</item>
         <item name="colorAccent">@color/submit</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/winter_color</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/winter_color_status</item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>

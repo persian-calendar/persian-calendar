@@ -10,6 +10,7 @@
     <color name="color_of_button_holo">#191919</color>
     <color name="holiday">#ff0000</color>
     <color name="winter_color">#3F51B5</color>
+    <color name="winter_color_status">#25306C</color>
     <color name="fall_color">#FF8C00</color>
 
     <!-- solely used on QiblaCompassView -->
