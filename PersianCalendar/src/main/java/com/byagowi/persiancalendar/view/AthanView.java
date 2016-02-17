@@ -28,7 +28,7 @@ public class AthanView extends AppCompatActivity {
     private static AthanView instance;
 
     private int layoutId = R.layout.activity_athan_dhuhr;
-    private int athanIcon = R.string.azan1_icon;
+    private int athanIcon = R.drawable.ic_brightness_2;
 
     private Utils utils = Utils.getInstance();
 
@@ -117,23 +117,23 @@ public class AthanView extends AppCompatActivity {
             switch (prayTime) {
                 case FAJR:
                     layoutId = R.layout.activity_athan_fajr;
-                    athanIcon = R.string.azan1_icon;
+                    athanIcon = R.drawable.ic_brightness_4;
                     break;
                 case DHUHR:
                     layoutId = R.layout.activity_athan_dhuhr;
-                    athanIcon = R.string.azan2_icon;
+                    athanIcon = R.drawable.ic_brightness_5;
                     break;
                 case ASR:
                     layoutId = R.layout.activity_athan_asr;
-                    athanIcon = R.string.azan2_icon;
+                    athanIcon = R.drawable.ic_brightness_5;
                     break;
                 case MAGHRIB:
                     layoutId = R.layout.activity_athan_maghrib;
-                    athanIcon = R.string.azan3_icon;
+                    athanIcon = R.drawable.ic_brightness_3;
                     break;
                 case ISHA:
                     layoutId = R.layout.activity_athan_isha;
-                    athanIcon = R.string.azan3_icon;
+                    athanIcon = R.drawable.ic_brightness_3;
                     break;
             }
         }
