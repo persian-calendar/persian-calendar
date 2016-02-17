@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.service.AthanResetReceiver;
@@ -824,5 +825,22 @@ public class Utils {
         Toast.makeText(context,
                 context.getString(R.string.date_copied_clipboard) + "\n" + date,
                 Toast.LENGTH_SHORT).show();
+    }
+
+    public static Season getSeason() {
+        int month = getToday().getMonth();
+
+        if (month < 4) {
+            return Season.spring;
+
+        } else if (month < 7) {
+            return Season.summer;
+
+        } else if (month < 10) {
+            return Season.fall;
+
+        } else {
+            return Season.winter;
+        }
     }
 }

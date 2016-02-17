@@ -32,19 +32,20 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView itemTitle;
         private TextView itemSubtitle;
-        private AppCompatImageView itemIcon;
+        private AppCompatImageView imageView;
         private View background;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
 
             if (ViewType == TYPE_ITEM) {
-                itemView.setClickable(true);
                 itemView.setOnClickListener(this);
                 itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
-                itemIcon = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
+                imageView = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
                 background = itemView.findViewById(R.id.background);
+            } else {
+                imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
             }
         }
 
@@ -86,14 +87,33 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 holder.itemSubtitle.setVisibility(View.GONE);
             }
 
-            holder.itemIcon.setImageResource(drawerIcon.getResourceId(position - 1, 0));
+            holder.imageView.setImageResource(drawerIcon.getResourceId(position - 1, 0));
             if (selectedItem == position) {
                 holder.background.setVisibility(View.VISIBLE);
             } else {
                 holder.background.setVisibility(View.GONE);
             }
+        } else {
+
+            switch (Utils.getSeason()) {
+                case spring:
+                    holder.imageView.setImageResource(R.drawable.spring);
+                    break;
+
+                case summer:
+                    holder.imageView.setImageResource(R.drawable.summer);
+                    break;
+
+                case fall:
+                    holder.imageView.setImageResource(R.drawable.fall);
+                    break;
+
+                case winter:
+                    holder.imageView.setImageResource(R.drawable.winter);
+                    break;
+            }
+
         }
-        holder.itemView.setSelected(false);
     }
 
     @Override

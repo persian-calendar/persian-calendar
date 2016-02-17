@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/winter"
         android:contentDescription="@string/app_name"/>
 
 </RelativeLayout>
