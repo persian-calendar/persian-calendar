@@ -97,12 +97,12 @@
     </string-array>
 
     <string-array name="drawerIcons" translatable="false">
-        <item>{zmdi-swap-vertical-circle}</item>
-        <item>{zmdi-swap-vertical-circle}</item>
-        <item>{zmdi-compass}</item>
-        <item>{zmdi-settings}</item>
-        <item>{zmdi-info}</item>
-        <item>{zmdi-close-circle}</item>
+        <item>@drawable/ic_date_range</item>
+        <item>@drawable/ic_swap_vertical_circle</item>
+        <item>@drawable/ic_explore</item>
+        <item>@drawable/ic_settings</item>
+        <item>@drawable/ic_info</item>
+        <item>@drawable/ic_cancel</item>
     </string-array>
 
     <string-array name="drawerSubtitles">

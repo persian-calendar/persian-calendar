@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.adapter;
 
+import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
     private final MainActivity mainActivity;
@@ -18,20 +19,20 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public int selectedItem = 0;
     private String[] drawerTitles;
     private String[] drawerSubtitles;
-    private String[] drawerIcon;
+    private TypedArray drawerIcon;
     private final Utils utils = Utils.getInstance();
 
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
-        drawerIcon = mainActivity.getResources().getStringArray(R.array.drawerIcons);
+        drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView itemTitle;
         private TextView itemSubtitle;
-        private IconTextView itemIcon;
+        private AppCompatImageView itemIcon;
         private View background;
 
         public ViewHolder(View itemView, int ViewType) {
@@ -42,7 +43,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 itemView.setOnClickListener(this);
                 itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
-                itemIcon = (IconTextView) itemView.findViewById(R.id.ItemIcon);
+                itemIcon = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
                 background = itemView.findViewById(R.id.background);
             }
         }
@@ -84,7 +85,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             } else {
                 holder.itemSubtitle.setVisibility(View.GONE);
             }
-            holder.itemIcon.setText(drawerIcon[position - 1]);
+
+            holder.itemIcon.setImageResource(drawerIcon.getResourceId(position - 1, 0));
             if (selectedItem == position) {
                 holder.background.setVisibility(View.VISIBLE);
             } else {

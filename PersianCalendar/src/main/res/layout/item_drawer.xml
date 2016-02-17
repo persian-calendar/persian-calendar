@@ -11,18 +11,17 @@
         android:layout_height="match_parent"
         android:background="@color/drawer_background" />
 
-    <com.malinskiy.materialicons.widget.IconTextView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/ItemIcon"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:textColor="@color/text_color_normal"
         android:gravity="center"
+        android:tint="@color/winter_color"
         android:layout_marginLeft="@dimen/icon_margin"
-        android:layout_marginRight="@dimen/icon_margin"
-        android:textSize="@dimen/icon_text_size" />
+        android:layout_marginRight="@dimen/icon_margin" />
 
     <LinearLayout
         android:layout_width="wrap_content"

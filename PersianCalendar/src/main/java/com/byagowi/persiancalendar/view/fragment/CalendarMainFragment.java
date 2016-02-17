@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -64,7 +64,7 @@ public class CalendarMainFragment extends Fragment
     private TextView holidayTitle;
     private TextView today;
 
-    private IconTextView moreOwghat;
+    private AppCompatImageView moreOwghat;
 
     private CardView owghat;
     private CardView event;
@@ -141,7 +141,7 @@ public class CalendarMainFragment extends Fragment
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.aftab3text));
 
 
-        moreOwghat = (IconTextView) view.findViewById(R.id.more_owghat);
+        moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);

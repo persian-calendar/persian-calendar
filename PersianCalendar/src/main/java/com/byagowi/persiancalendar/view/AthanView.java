@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -59,8 +59,8 @@ public class AthanView extends AppCompatActivity {
         TextView textCityName = (TextView) findViewById(R.id.textCityName);
         textAlarmName.setText(getPrayerName(prayerKey));
 
-        IconTextView athanIconView = (IconTextView) findViewById(R.id.athan_icon);
-        athanIconView.setText(getString(athanIcon));
+        AppCompatImageView athanIconView = (AppCompatImageView) findViewById(R.id.athan_icon);
+        athanIconView.setImageResource(R.drawable.ic_brightness_2);
 
         String cityName;
         String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
