@@ -36,12 +36,12 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
  * @author ebraminio
  */
 public class MainActivity extends AppCompatActivity {
-    public static final int CALENDAR = 0;
-    public static final int CONVERTER = 1;
-    public static final int COMPASS = 2;
-    public static final int PREFERENCE = 3;
-    public static final int ABOUT = 4;
-    public static final int EXIT = 5;
+    public static final int CALENDAR = 1;
+    public static final int CONVERTER = 2;
+    public static final int COMPASS = 3;
+    public static final int PREFERENCE = 4;
+    public static final int ABOUT = 5;
+    public static final int EXIT = 6;
 
     public int menuPosition = 0;
     public Utils utils = Utils.getInstance();

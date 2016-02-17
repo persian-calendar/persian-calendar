@@ -49,6 +49,7 @@
 
 
     <string-array name="drawerTitles">
+        <item>گاه‌نامه</item>
         <item>تبدیل تاریخ</item>
         <item>قطب‌نما</item>
         <item>تنظیمات</item>
@@ -57,6 +58,7 @@
     </string-array>
 
     <string-array name="drawerSubtitles">
+        <item></item>
         <item></item>
         <item>و قبله‌نما، در صورت تنظیم مکان در تنظیمات</item>
         <item></item>

@@ -88,6 +88,7 @@
     </string-array>
 
     <string-array name="drawerTitles">
+        <item>Calendar</item>
         <item>Calendar Converter</item>
         <item>Compass</item>
         <item>Settings</item>
@@ -97,6 +98,7 @@
 
     <string-array name="drawerIcons" translatable="false">
         <item>{zmdi-swap-vertical-circle}</item>
+        <item>{zmdi-swap-vertical-circle}</item>
         <item>{zmdi-compass}</item>
         <item>{zmdi-settings}</item>
         <item>{zmdi-info}</item>
@@ -104,6 +106,7 @@
     </string-array>
 
     <string-array name="drawerSubtitles">
+        <item></item>
         <item></item>
         <item>and Qibla, if location is set in the Settings</item>
         <item></item>

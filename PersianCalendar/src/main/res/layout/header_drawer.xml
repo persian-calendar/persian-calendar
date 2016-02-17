@@ -3,15 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
-    android:paddingTop="@dimen/status_padding_top"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:elevation="4dp">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/new_icon"
-        android:contentDescription="@string/app_name" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/summer"
+        android:contentDescription="@string/app_name"
+        android:elevation="4dp"/>
 
 </RelativeLayout>

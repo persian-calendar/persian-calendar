@@ -9,8 +9,8 @@
     <dimen name="icon_size">28dp</dimen>
     <dimen name="padding_item">8dp</dimen>
     <dimen name="status_padding_top">23dp</dimen>
-    <dimen name="drawer_width">250dp</dimen>
-    <dimen name="drawer_header_height">150dp</dimen>
+    <dimen name="drawer_width">280dp</dimen>
+    <dimen name="drawer_header_height">190dp</dimen>
     <dimen name="drawer_item_height">48dp</dimen>
 
     <dimen name="grid_calendar_height">290dp</dimen>

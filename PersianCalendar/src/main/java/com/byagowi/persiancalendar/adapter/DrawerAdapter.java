@@ -37,10 +37,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
 
-            itemView.setClickable(true);
-            itemView.setOnClickListener(this);
-
             if (ViewType == TYPE_ITEM) {
+                itemView.setClickable(true);
+                itemView.setOnClickListener(this);
                 itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
                 itemIcon = (IconTextView) itemView.findViewById(R.id.ItemIcon);
@@ -82,6 +81,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
                 utils.prepareTextView(mainActivity, holder.itemSubtitle);
                 holder.itemSubtitle.setText(utils.textShaper(drawerSubtitles[position - 1]));
+            } else {
+                holder.itemSubtitle.setVisibility(View.GONE);
             }
             holder.itemIcon.setText(drawerIcon[position - 1]);
             if (selectedItem == position) {
