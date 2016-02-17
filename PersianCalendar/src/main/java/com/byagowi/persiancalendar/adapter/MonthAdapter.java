@@ -104,9 +104,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_holiday));
                 } else {
-                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color));
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_day));
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
@@ -125,9 +125,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.selectDay.setVisibility(View.VISIBLE);
 
                     if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.holiday));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_holiday));
                     } else {
-                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.winter_color));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.primary));
                     }
                 } else {
                     holder.selectDay.setVisibility(View.GONE);
@@ -142,7 +142,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         } else {
             holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
-            holder.num.setTextColor(ContextCompat.getColor(context, R.color.first_row_text_color2));
+            holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_day_name));
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
             holder.selectDay.setVisibility(View.GONE);

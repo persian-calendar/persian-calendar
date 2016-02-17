@@ -3,18 +3,18 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/winter_color</item>
-        <item name="colorPrimaryDark">@color/winter_color</item>
-        <item name="colorAccent">@color/submit</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/winter_color_status</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/primary_dark</item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:background">@color/background_color</item>
-        <item name="android:textColor">@color/text_color</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/text_normal</item>
     </style>
 
     <style name="ShadowTextStyle">
@@ -27,10 +27,5 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
     </style>
-
-    <declare-styleable name="ProgressBar">
-        <!-- Defines the maximum value the progress can take. -->
-        <attr name="max" format="integer"/>
-    </declare-styleable>
 
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/grid_calendar_height"
     android:orientation="vertical"
-    android:background="@color/winter_color">
+    android:background="@color/primary">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/prev"
@@ -15,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_keyboard_arrow_left"
-        android:tint="@color/text_color_transparent_white"/>
+        android:tint="@color/text_day_name"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/next"
@@ -26,7 +26,7 @@
         android:gravity="center"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:tint="@color/text_color_transparent_white"/>
+        android:tint="@color/text_day_name"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RecyclerView"

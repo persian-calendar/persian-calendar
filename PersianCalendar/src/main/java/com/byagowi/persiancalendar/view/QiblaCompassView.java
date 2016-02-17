@@ -82,10 +82,10 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.marker_color));
+        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.accent));
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_color)));
+        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_normal)));
         textPaint.setTextSize(20);
     }
 
@@ -176,13 +176,13 @@ public class QiblaCompassView extends View {
         // over here
         Paint markerPaint, circlePaint;
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.background_color));
+        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.background));
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.STROKE); // Sadece Cember ciziyor.
 
         int textHeight = (int) textPaint.measureText("yY");
         markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.marker_color));
+        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.accent));
         // Draw the background
         canvas.drawCircle(px, py, Radius, circlePaint);
         canvas.drawCircle(px, py, Radius - 20, circlePaint);

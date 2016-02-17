@@ -19,7 +19,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:gravity="center"
-        android:tint="@color/winter_color"
+        android:tint="@color/icon_drawer"
         android:layout_marginLeft="@dimen/icon_margin"
         android:layout_marginRight="@dimen/icon_margin" />
 
@@ -35,14 +35,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_drawer"
-            android:textColor="@color/text_color_normal"
+            android:textColor="@color/text_drawer"
             android:id="@+id/itemTitle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_drawer_subtitle"
-            android:textColor="@color/text_color_normal"
+            android:textColor="@color/text_drawer"
             android:visibility="gone"
             android:id="@+id/itemSubtitle"/>
 
