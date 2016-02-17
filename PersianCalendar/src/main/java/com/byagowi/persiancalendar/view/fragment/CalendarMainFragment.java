@@ -37,7 +37,7 @@ import calendar.PersianDate;
 
 public class CalendarMainFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    public static int viewPagerPosition;
+    public static int viewPagerPosition = 0;
     private ViewPager monthViewPager;
     private final Utils utils = Utils.getInstance();
 
