@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +37,7 @@ import calendar.PersianDate;
 
 public class CalendarMainFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    public static int viewPagerPosition;
     private ViewPager monthViewPager;
     private final Utils utils = Utils.getInstance();
 
@@ -63,8 +64,9 @@ public class CalendarMainFragment extends Fragment
     private TextView eventTitle;
     private TextView holidayTitle;
     private TextView today;
+    private AppCompatImageView todayIcon;
 
-    private IconTextView moreOwghat;
+    private AppCompatImageView moreOwghat;
 
     private CardView owghat;
     private CardView event;
@@ -107,6 +109,7 @@ public class CalendarMainFragment extends Fragment
         weekDayName = (TextView) view.findViewById(R.id.week_day_name);
         utils.prepareTextView(activity, weekDayName);
         today = (TextView) view.findViewById(R.id.today);
+        todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
 
         athan1 = (TextView) view.findViewById(R.id.azan1);
         utils.prepareTextView(activity, athan1);
@@ -141,7 +144,7 @@ public class CalendarMainFragment extends Fragment
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.aftab3text));
 
 
-        moreOwghat = (IconTextView) view.findViewById(R.id.more_owghat);
+        moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
@@ -167,6 +170,10 @@ public class CalendarMainFragment extends Fragment
 
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
+        todayIcon.setOnClickListener(this);
+        georgianDate.setOnClickListener(this);
+        islamicDate.setOnClickListener(this);
+        shamsiDate.setOnClickListener(this);
 
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.event_card_title));
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.today));
@@ -191,8 +198,10 @@ public class CalendarMainFragment extends Fragment
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);
+            todayIcon.setVisibility(View.GONE);
         } else {
             today.setVisibility(View.VISIBLE);
+            todayIcon.setVisibility(View.VISIBLE);
         }
 
         setOwghat(civilDate);
@@ -284,6 +293,22 @@ public class CalendarMainFragment extends Fragment
             case R.id.today:
                 bringTodayYearMonth();
                 break;
+
+            case R.id.today_icon:
+                bringTodayYearMonth();
+                break;
+
+            case R.id.islamic_date:
+                Utils.copyToClipboard(getContext(), v);
+                break;
+
+            case R.id.shamsi_date:
+                Utils.copyToClipboard(getContext(), v);
+                break;
+
+            case R.id.georgian_date:
+                Utils.copyToClipboard(getContext(), v);
+                break;
         }
     }
 
@@ -314,11 +339,13 @@ public class CalendarMainFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
+        viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);
+        todayIcon.setVisibility(View.VISIBLE);
     }
 
     @Override

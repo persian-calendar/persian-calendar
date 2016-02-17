@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_description"
-                android:textColor="@color/text_color_normal"
+                android:textColor="@color/text_normal"
                 android:id="@+id/calendarTypeTitle"
                 android:text="@string/select_type_date" />
 
@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_description"
-                android:textColor="@color/text_color_dark"
+                android:textColor="@color/text_dark"
                 android:prompt="@string/day"
                 android:entries="@array/calendar_type"/>
 
@@ -61,14 +61,14 @@
                     android:layout_gravity="right"
                     android:text="@string/year"
                     android:textSize="@dimen/text_size_description"
-                    android:textColor="@color/text_color_normal"/>
+                    android:textColor="@color/text_normal"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/yearSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_description"
-                    android:textColor="@color/text_color_dark"
+                    android:textColor="@color/text_dark"
                     android:prompt="@string/select_year"
                     android:spinnerMode="dialog"/>
 
@@ -89,14 +89,14 @@
                     android:text="@string/mount"
                     android:layout_gravity="right"
                     android:textSize="@dimen/text_size_description"
-                    android:textColor="@color/text_color_normal"/>
+                    android:textColor="@color/text_normal"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/monthSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_description"
-                    android:textColor="@color/text_color_dark"
+                    android:textColor="@color/text_dark"
                     android:prompt="@string/select_mount"
                     android:spinnerMode="dialog"/>
 
@@ -117,7 +117,7 @@
                     android:text="@string/day"
                     android:layout_gravity="right"
                     android:textSize="@dimen/text_size_description"
-                    android:textColor="@color/text_color_normal"/>
+                    android:textColor="@color/text_normal"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/daySpinner"
@@ -127,7 +127,7 @@
                     android:gravity="right"
                     android:layout_gravity="right"
                     android:foregroundGravity="right"
-                    android:textColor="@color/text_color_dark"
+                    android:textColor="@color/text_dark"
                     android:entries="@array/calendar_type"
                     android:prompt="@string/select_day"
                     android:spinnerMode="dialog"/>
@@ -164,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:textColor="@color/text_color_primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_size_title"/>
 
                 </RelativeLayout>
@@ -176,15 +176,14 @@
                     android:gravity="right"
                     android:padding="@dimen/card_padding">
 
-                <com.malinskiy.materialicons.widget.IconTextView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="@dimen/icon_size"
                     android:layout_height="@dimen/icon_size"
                     android:layout_marginLeft="@dimen/icon_margin"
                     android:layout_toRightOf="@+id/dateContainer"
-                    android:textColor="@color/text_color_primary"
+                    android:tint="@color/icon"
                     android:gravity="center"
-                    android:text="@string/convert_icon"
-                    android:textSize="@dimen/icon_text_size" />
+                    android:src="@drawable/ic_swap_vertical_circle" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dateContainer"
@@ -198,14 +197,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_description"
-                            android:textColor="@color/text_color_dark"/>
+                            android:textColor="@color/text_dark"/>
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/date2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_description"
-                            android:textColor="@color/text_color_dark"
+                            android:textColor="@color/text_dark"
                             android:layout_marginTop="@dimen/item_calendar_margin_top" />
 
                     </android.support.v7.widget.LinearLayoutCompat>

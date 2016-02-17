@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
             android:paddingTop="@dimen/status_padding_top"
-            android:background="@color/winter_color"
+            android:background="@color/primary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
         </android.support.v7.widget.Toolbar>
 
@@ -31,7 +31,7 @@
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/parent_card_background"
+        android:background="@color/drawer_background"
         android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>

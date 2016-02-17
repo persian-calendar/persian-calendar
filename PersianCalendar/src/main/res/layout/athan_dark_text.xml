@@ -78,7 +78,7 @@
             android:textColor="@android:color/black" />
     </RelativeLayout>
 
-    <com.malinskiy.materialicons.widget.IconTextView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/athan_icon"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -86,7 +86,7 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:gravity="center"
-        android:text="@string/azan1_icon"
-        android:textColor="@android:color/black"
-        android:textSize="120sp" />
+        android:src="@drawable/ic_brightness_2"
+        android:tint="@android:color/black" />
+
 </RelativeLayout>

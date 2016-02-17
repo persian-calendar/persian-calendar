@@ -4,7 +4,7 @@
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/parent_card_background"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat
@@ -37,22 +37,33 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/card_padding">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/today"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="@string/today"
-                        android:textColor="@color/text_color_primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_size_title"
                         android:visibility="gone" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/today_icon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_undo"
+                        android:tint="@color/text_primary"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/today"
+                        android:layout_marginLeft="4dp"
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/week_day_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textColor="@color/text_color_primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_size_title" />
 
                 </RelativeLayout>
@@ -63,15 +74,14 @@
                     android:gravity="right"
                     android:padding="@dimen/card_padding">
 
-                    <com.malinskiy.materialicons.widget.IconTextView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_marginLeft="@dimen/icon_margin"
                         android:layout_toRightOf="@+id/dayInfoContainer"
                         android:gravity="center"
-                        android:text="@string/calendar_icon"
-                        android:textColor="@color/text_color_primary"
-                        android:textSize="@dimen/icon_text_size" />
+                        android:src="@drawable/ic_event"
+                        android:tint="@color/icon" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dayInfoContainer"
@@ -80,27 +90,27 @@
                         android:gravity="right"
                         android:orientation="vertical">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/shamsi_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/text_color_dark"
+                            android:textColor="@color/text_dark"
                             android:textSize="@dimen/text_size_description" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/georgian_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
-                            android:textColor="@color/text_color_dark"
+                            android:textColor="@color/text_dark"
                             android:textSize="@dimen/text_size_description" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/islamic_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/item_calendar_margin_top"
-                            android:textColor="@color/text_color_dark"
+                            android:textColor="@color/text_dark"
                             android:textSize="@dimen/text_size_description" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
@@ -134,13 +144,13 @@
                     android:gravity="right"
                     android:padding="@dimen/card_padding">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/event_card_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:text="@string/events"
-                        android:textColor="@color/text_color_primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_size_title" />
 
                 </RelativeLayout>
@@ -151,15 +161,14 @@
                     android:gravity="right"
                     android:padding="@dimen/card_padding">
 
-                    <com.malinskiy.materialicons.widget.IconTextView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_marginLeft="@dimen/icon_margin"
                         android:layout_toRightOf="@+id/eventContainer"
                         android:gravity="center"
-                        android:text="@string/event_icon"
-                        android:textColor="@color/text_color_primary"
-                        android:textSize="@dimen/icon_text_size" />
+                        android:src="@drawable/ic_event_note"
+                        android:tint="@color/icon" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/eventContainer"
@@ -168,18 +177,18 @@
                         android:gravity="right"
                         android:orientation="vertical">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/holiday_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/holiday"
+                            android:textColor="@color/text_holiday"
                             android:textSize="@dimen/text_size_description" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/event_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/text_color_dark"
+                            android:textColor="@color/text_dark"
                             android:textSize="@dimen/text_size_description" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
@@ -215,24 +224,23 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/owghat_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:text="@string/owghat"
-                        android:textColor="@color/text_color_primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_size_title" />
 
-                    <com.malinskiy.materialicons.widget.IconTextView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/more_owghat"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_toLeftOf="@+id/owghat_text"
                         android:gravity="center"
-                        android:text="@string/more_icon"
-                        android:textColor="@color/text_color_primary"
-                        android:textSize="@dimen/icon_text_size" />
+                        android:src="@drawable/ic_keyboard_arrow_down"
+                        android:tint="@color/icon" />
 
                 </RelativeLayout>
 
@@ -260,16 +268,15 @@
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/iconMorning"
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat1TextContainer"
                             android:gravity="center"
-                            android:text="@string/azan1_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_4"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat1TextContainer"
@@ -278,20 +285,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan1text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan1"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -307,15 +314,14 @@
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/aftab1TextContainer"
                             android:gravity="center"
-                            android:text="@string/aftab1_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_7"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/aftab1TextContainer"
@@ -324,20 +330,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab1text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab1"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -354,15 +360,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat3TextContainer"
                             android:gravity="center"
-                            android:text="@string/azan2_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_5"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat3TextContainer"
@@ -371,20 +376,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan2text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan2"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -401,15 +406,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat4TextContainer"
                             android:gravity="center"
-                            android:text="@string/azan2_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_5"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat4TextContainer"
@@ -418,20 +422,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan3text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan3"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -448,15 +452,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat5TextContainer"
                             android:gravity="center"
-                            android:text="@string/aftab2_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_6"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat5TextContainer"
@@ -465,20 +468,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab2text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab2"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -495,15 +498,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat6TextContainer"
                             android:gravity="center"
-                            android:text="@string/azan3_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_3"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat6TextContainer"
@@ -512,20 +514,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan4text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan4"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -542,15 +544,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat7TextContainer"
                             android:gravity="center"
-                            android:text="@string/azan3_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_3"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat7TextContainer"
@@ -559,20 +560,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan5text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan5"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/azan5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
@@ -589,15 +590,14 @@
                         android:paddingTop="@dimen/padding_item"
                         android:visibility="gone">
 
-                        <com.malinskiy.materialicons.widget.IconTextView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat8TextContainer"
                             android:gravity="center"
-                            android:text="@string/aftab3_icon"
-                            android:textColor="@color/text_color_primary"
-                            android:textSize="@dimen/icon_text_size" />
+                            android:src="@drawable/ic_brightness_2"
+                            android:tint="@color/icon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:id="@+id/owghat8TextContainer"
@@ -606,20 +606,20 @@
                             android:gravity="right"
                             android:orientation="vertical">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab3text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab3"
-                                android:textColor="@color/text_color_normal"
+                                android:textColor="@color/text_normal"
                                 android:textSize="@dimen/text_size_note" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/aftab3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
-                                android:textColor="@color/text_color_dark"
+                                android:textColor="@color/text_dark"
                                 android:textSize="@dimen/text_size_description" />
 
                         </android.support.v7.widget.LinearLayoutCompat>

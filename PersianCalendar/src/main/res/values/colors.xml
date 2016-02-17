@@ -1,46 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="first_row_text_color">#FFFFFF</color>
-    <color name="first_row_text_color2">#CCFFFFFF</color>
-    <color name="holidays_text_color">#6E97B9</color>
-    <color name="first_row_background_color">#6E97B9</color>
-    <color name="shadow_color_for_light_theme">#587994</color>
-    <color name="shadow_color_for_dark_theme">#6E97B9</color>
-    <color name="color_of_button_holo">#191919</color>
-    <color name="holiday">#ff0000</color>
-    <color name="winter_color">#3F51B5</color>
-    <color name="winter_color_status">#25306C</color>
-    <color name="fall_color">#FF8C00</color>
+    <color name="primary">#3F51B5</color>
+    <color name="primary_dark">#0c2782</color>
+    <color name="accent">#17a05d</color>
 
-    <!-- solely used on QiblaCompassView -->
-    <color name="background_color">#6E97B9</color>
-    <color name="marker_color">#FFFFFF</color>
-    <color name="text_color">#FFFFFF</color>
+    <color name="text_dark">#232323</color>
+    <color name="text_normal">#737373</color>
+    <color name="text_primary">#3F51B5</color>
+    <color name="text_drawer">#737373</color>
+    <color name="text_holiday">#ff0000</color>
+    <color name="text_day">#ffffff</color>
+    <color name="text_day_name">#aaffffff</color>
 
-    <color name="text_color_light">#ffffff</color>
-    <color name="text_color_dark">#232323</color>
-    <color name="text_color_primary">#2f65ca</color>
-    <color name="icon_color_primary">#2f65ca</color>
-    <color name="text_color_normal">#737373</color>
-    <color name="text_color_transparent_white">#CCFFFFFF</color>
-    <color name="submit">#17a05d</color>
-    <color name="error">#ff0000</color>
-
+    <color name="divider">#e0e0e0</color>
+    <color name="background">#f4f4f4</color>
     <color name="card_background">#fafafa</color>
-    <color name="card_text">#757575</color>
-    <color name="parent_card_background">#f4f4f4</color>
-    <color name="drawer_background">#eeeeee</color>
-    <color name="divider_color">#e0e0e0</color>
+    <color name="select_day">#fafafa</color>
+    <color name="drawer_background">#f4f4f4</color>
+    <color name="drawer_select">#eeeeee</color>
 
-    <color name="black">#00000000</color>
-    <color name="black_transparent">#aa000000</color>
+    <color name="icon">#3F51B5</color>
+    <color name="icon_drawer">#3F51B5</color>
 
-    <color name="white">#ffffff</color>
-
-    <color name="bg_fajr">#1f8ec1</color>
-    <color name="bg_dhuhr">#f2ea00</color>
-    <color name="bg_asr">#ed7b00</color>
-    <color name="bg_maghrib">#2284b1</color>
-    <color name="bg_isha">#0e4f6c</color>
 </resources>

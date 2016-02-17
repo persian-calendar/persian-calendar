@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:textColor="@color/holiday"
+        android:textColor="@color/text_holiday"
         android:textSize="14sp" />
 
     <TextView

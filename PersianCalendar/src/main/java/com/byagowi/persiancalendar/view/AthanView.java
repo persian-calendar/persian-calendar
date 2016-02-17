@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +28,7 @@ public class AthanView extends AppCompatActivity {
     private static AthanView instance;
 
     private int layoutId = R.layout.activity_athan_dhuhr;
-    private int athanIcon = R.string.azan1_icon;
+    private int athanIcon = R.drawable.ic_brightness_2;
 
     private Utils utils = Utils.getInstance();
 
@@ -59,8 +59,8 @@ public class AthanView extends AppCompatActivity {
         TextView textCityName = (TextView) findViewById(R.id.textCityName);
         textAlarmName.setText(getPrayerName(prayerKey));
 
-        IconTextView athanIconView = (IconTextView) findViewById(R.id.athan_icon);
-        athanIconView.setText(getString(athanIcon));
+        AppCompatImageView athanIconView = (AppCompatImageView) findViewById(R.id.athan_icon);
+        athanIconView.setImageResource(R.drawable.ic_brightness_2);
 
         String cityName;
         String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
@@ -117,23 +117,23 @@ public class AthanView extends AppCompatActivity {
             switch (prayTime) {
                 case FAJR:
                     layoutId = R.layout.activity_athan_fajr;
-                    athanIcon = R.string.azan1_icon;
+                    athanIcon = R.drawable.ic_brightness_4;
                     break;
                 case DHUHR:
                     layoutId = R.layout.activity_athan_dhuhr;
-                    athanIcon = R.string.azan2_icon;
+                    athanIcon = R.drawable.ic_brightness_5;
                     break;
                 case ASR:
                     layoutId = R.layout.activity_athan_asr;
-                    athanIcon = R.string.azan2_icon;
+                    athanIcon = R.drawable.ic_brightness_5;
                     break;
                 case MAGHRIB:
                     layoutId = R.layout.activity_athan_maghrib;
-                    athanIcon = R.string.azan3_icon;
+                    athanIcon = R.drawable.ic_brightness_3;
                     break;
                 case ISHA:
                     layoutId = R.layout.activity_athan_isha;
-                    athanIcon = R.string.azan3_icon;
+                    athanIcon = R.drawable.ic_brightness_3;
                     break;
             }
         }

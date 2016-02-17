@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.Day;
-import com.malinskiy.materialicons.widget.IconTextView;
 
 import java.util.List;
 
@@ -44,8 +44,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         List<Day> days = utils.getDays(getContext(), offset);
         digits = utils.preferredDigits(getActivity());
 
-        IconTextView prev = (IconTextView) view.findViewById(R.id.prev);
-        IconTextView next = (IconTextView) view.findViewById(R.id.next);
+        AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
+        AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
@@ -78,11 +78,14 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                         .getSupportFragmentManager()
                         .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
 
-        if (calendarMainFragment != null && offset == 0) {
+        if (calendarMainFragment != null
+                && offset == 0
+                && CalendarMainFragment.viewPagerPosition == offset) {
+
             calendarMainFragment.selectDay(Utils.getToday());
         }
 
-        if (offset == 0) {
+        if (offset == 0 && CalendarMainFragment.viewPagerPosition == offset) {
             UpdateTitle();
         }
 

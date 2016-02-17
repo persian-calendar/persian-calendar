@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.R;
@@ -37,9 +33,8 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
     private final Utils utils = Utils.getInstance();
-    private static ClipboardManager clipboardManager;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -59,11 +54,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            clipboardManager = (ClipboardManager) getContext()
-                    .getSystemService(Context.CLIPBOARD_SERVICE);
-        }
-
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
         yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
@@ -74,10 +64,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         date1 = (TextView) view.findViewById(R.id.date1);
         date2 = (TextView) view.findViewById(R.id.date2);
 
-        DateTapListener dateTapListener = new DateTapListener();
-        date0.setOnClickListener(dateTapListener);
-        date1.setOnClickListener(dateTapListener);
-        date2.setOnClickListener(dateTapListener);
+        date0.setOnClickListener(this);
+        date1.setOnClickListener(this);
+        date2.setOnClickListener(this);
 
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
@@ -250,21 +239,8 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
     }
 
-    private class DateTapListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                return;
-            }
-            
-            CharSequence convertedDate = ((TextView) view).getText();
-
-            ClipData clip = ClipData.newPlainText("converted date", convertedDate);
-            clipboardManager.setPrimaryClip(clip);
-
-            Toast.makeText(getContext(),
-                    getString(R.string.date_copied_clipboard) + "\n" + convertedDate,
-                    Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onClick(View view) {
+        Utils.copyToClipboard(getContext(), view);
     }
 }
