@@ -261,17 +261,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onClick(View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return;
-        }
-
-        CharSequence convertedDate = ((TextView) view).getText();
-
-        ClipData clip = ClipData.newPlainText("converted date", convertedDate);
-        clipboardManager.setPrimaryClip(clip);
-
-        Toast.makeText(getContext(),
-                getString(R.string.date_copied_clipboard) + "\n" + convertedDate,
-                Toast.LENGTH_SHORT).show();
+        Utils.copyToClipboard(getContext(), view);
     }
 }

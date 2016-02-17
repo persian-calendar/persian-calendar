@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -801,5 +803,24 @@ public class Utils {
         changeAppLanguage(locale.replaceAll("-(IR|AF)", ""), context);
         changeCalendarLanguage(locale, context);
         return locale;
+    }
+
+    public static void copyToClipboard(Context context, View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            return;
+        }
+        ClipboardManager clipboardManager;
+
+        clipboardManager = (ClipboardManager) context
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+
+        CharSequence date = ((TextView) view).getText();
+
+        ClipData clip = ClipData.newPlainText("converted date", date);
+        clipboardManager.setPrimaryClip(clip);
+
+        Toast.makeText(context,
+                context.getString(R.string.date_copied_clipboard) + "\n" + date,
+                Toast.LENGTH_SHORT).show();
     }
 }

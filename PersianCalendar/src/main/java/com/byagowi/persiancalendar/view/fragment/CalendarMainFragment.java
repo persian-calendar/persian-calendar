@@ -1,6 +1,9 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -170,6 +174,9 @@ public class CalendarMainFragment extends Fragment
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
+        georgianDate.setOnClickListener(this);
+        islamicDate.setOnClickListener(this);
+        shamsiDate.setOnClickListener(this);
 
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.event_card_title));
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.today));
@@ -292,6 +299,18 @@ public class CalendarMainFragment extends Fragment
 
             case R.id.today_icon:
                 bringTodayYearMonth();
+                break;
+
+            case R.id.islamic_date:
+                Utils.copyToClipboard(getContext(), v);
+                break;
+
+            case R.id.shamsi_date:
+                Utils.copyToClipboard(getContext(), v);
+                break;
+
+            case R.id.georgian_date:
+                Utils.copyToClipboard(getContext(), v);
                 break;
         }
     }
