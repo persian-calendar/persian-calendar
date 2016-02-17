@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/summer"
+        android:src="@drawable/winter"
         android:contentDescription="@string/app_name"/>
 
 </RelativeLayout>

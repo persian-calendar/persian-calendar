@@ -63,6 +63,7 @@ public class CalendarMainFragment extends Fragment
     private TextView eventTitle;
     private TextView holidayTitle;
     private TextView today;
+    private AppCompatImageView todayIcon;
 
     private AppCompatImageView moreOwghat;
 
@@ -107,6 +108,7 @@ public class CalendarMainFragment extends Fragment
         weekDayName = (TextView) view.findViewById(R.id.week_day_name);
         utils.prepareTextView(activity, weekDayName);
         today = (TextView) view.findViewById(R.id.today);
+        todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
 
         athan1 = (TextView) view.findViewById(R.id.azan1);
         utils.prepareTextView(activity, athan1);
@@ -167,6 +169,7 @@ public class CalendarMainFragment extends Fragment
 
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
+        todayIcon.setOnClickListener(this);
 
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.event_card_title));
         utils.prepareShapeTextView(activity, (TextView) view.findViewById(R.id.today));
@@ -191,8 +194,10 @@ public class CalendarMainFragment extends Fragment
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);
+            todayIcon.setVisibility(View.GONE);
         } else {
             today.setVisibility(View.VISIBLE);
+            todayIcon.setVisibility(View.VISIBLE);
         }
 
         setOwghat(civilDate);
@@ -284,6 +289,10 @@ public class CalendarMainFragment extends Fragment
             case R.id.today:
                 bringTodayYearMonth();
                 break;
+
+            case R.id.today_icon:
+                bringTodayYearMonth();
+                break;
         }
     }
 
@@ -319,6 +328,7 @@ public class CalendarMainFragment extends Fragment
         getContext().sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);
+        todayIcon.setVisibility(View.VISIBLE);
     }
 
     @Override
