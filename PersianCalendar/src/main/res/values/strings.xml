@@ -71,19 +71,19 @@
     <string name="azan3">عصر</string>
     <string name="azan4">اذان مغرب</string>
     <string name="azan5">عشا</string>
-    <string name="aftab1">طلوع آفتاب</string>
-    <string name="aftab2">غروب آفتاب</string>
+    <string name="aftab1">sunrise</string>
+    <string name="aftab2">sunset</string>
     <string name="aftab3">نیمه وقت شرعی</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">رویداد‌ها</string>
-    <string name="today">امروز</string>
-    <string name="select_type_date">انتخاب نوع تاریخ</string>
-    <string name="year">سال</string>
-    <string name="mount">ماه</string>
-    <string name="day">روز</string>
-    <string name="select_year">انتخاب سال</string>
-    <string name="select_mount">انتخاب ماه</string>
-    <string name="select_day">انتخاب روز</string>
+    <string name="today">today</string>
+    <string name="select_type_date">select date type</string>
+    <string name="year">year</string>
+    <string name="mount">month</string>
+    <string name="day">day</string>
+    <string name="select_year">select year</string>
+    <string name="select_mount">select month</string>
+    <string name="select_day">select day</string>
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
     <string name="default_widget_text_color">#ffffffff</string>
@@ -93,7 +93,7 @@
     <string-array name="calendar_type">
         <item>هجری شمسی</item>
         <item>هجری قمری</item>
-        <item>میلادی</item>
+        <item>gregorian</item>
     </string-array>
 
     <string name="date_copied_clipboard">Copied to clipboard</string>
