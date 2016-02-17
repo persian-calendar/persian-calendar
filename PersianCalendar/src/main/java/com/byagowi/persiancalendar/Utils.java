@@ -540,7 +540,7 @@ public class Utils {
         }
     }
 
-    private static String persianStringToArabic(String text) {
+    private String persianStringToArabic(String text) {
         return text
             .replaceAll("ی", "ي")
             .replaceAll("ک", "ك")
@@ -550,12 +550,11 @@ public class Utils {
             .replaceAll("پ", "بی");
     }
 
-    static private City[] cities;
-
-    static private void loadCities(InputStream is, Context context) {
+    public List<City> getAllCities(Context context, boolean needsSort) {
         ArrayList<City> result = new ArrayList<>();
         try {
-            JSONObject countries = new JSONObject(convertStreamToString(is));
+            JSONObject countries = new JSONObject(convertStreamToString(
+                    context.getResources().openRawResource(R.raw.cities)));
 
             Iterator<String> countryIterator = countries.keys();
             while (countryIterator.hasNext()) {
@@ -588,50 +587,53 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String locale = prefs.getString("AppLanguage", "fa");
 
+        if (!needsSort) {
+            return result;
+        }
+
         City[] cities = result.toArray(new City[result.size()]);
 
         // Sort first by country code then city
         Arrays.sort(cities, new Comparator<City>() {
             @Override
             public int compare(City l, City r) {
-                if (l.key.equals("CUSTOM")) { return -1; }
-                if (r.key.equals("CUSTOM")) { return 1; }
+                if (l.key.equals("CUSTOM")) {
+                    return -1;
+                }
+                if (r.key.equals("CUSTOM")) {
+                    return 1;
+                }
                 int compare = r.countryCode.compareTo(l.countryCode);
                 return compare != 0
                         ? compare
                         : (locale.equals("en")
-                            ? l.en.compareTo(r.en)
-                            : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa)));
+                        ? l.en.compareTo(r.en)
+                        : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa)));
             }
         });
 
-        Utils.cities = cities;
+        return Arrays.asList(cities);
     }
 
-    public static City[] getAllCities(Context context) {
-        if (cities == null) {
-            loadCities(context.getResources().openRawResource(R.raw.cities), context);
+    public String cachedCityKey = "";
+    public City cachedCity;
+
+    public City getCityByKey(String key, Context context) {
+        if (TextUtils.isEmpty(key) || key.equals("CUSTOM")) {
+            return null;
         }
 
-        return cities;
-    }
-
-    public static String cachedCityKey = "";
-    public static City cachedCity;
-
-    public static City getCityByKey(String key, Context context) {
-        if (cachedCity != null && key.equals(cachedCityKey)) {
+        if (key.equals(cachedCityKey)) {
             return cachedCity;
         }
 
-        if (cities == null) {
-            loadCities(context.getResources().openRawResource(R.raw.cities), context);
-        }
+        // cache last query even if no city avialable under the key, useful in case invalid
+        // value is somehow inserted on the preference
+        cachedCityKey = key;
 
-        for (City city : cities)
+        for (City city : getAllCities(context, false))
             if (city.key.equals(key)) {
                 cachedCity = city;
-                cachedCityKey = key;
                 return city;
             }
 

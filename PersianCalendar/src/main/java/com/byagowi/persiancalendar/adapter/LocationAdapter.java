@@ -23,7 +23,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
         this.locationPreferenceDialog = locationPreferenceDialog;
-        cities = Arrays.asList(utils.getAllCities(locationPreferenceDialog.getContext()));
+        cities = utils.getAllCities(locationPreferenceDialog.getContext(), true);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(locationPreferenceDialog.getContext());
         this.locale = prefs.getString("AppLanguage", "fa");
     }
