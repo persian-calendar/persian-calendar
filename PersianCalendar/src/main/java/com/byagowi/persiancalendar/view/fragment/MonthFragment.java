@@ -78,11 +78,14 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                         .getSupportFragmentManager()
                         .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
 
-        if (calendarMainFragment != null && offset == 0) {
+        if (calendarMainFragment != null
+                && offset == 0
+                && CalendarMainFragment.viewPagerPosition == offset) {
+
             calendarMainFragment.selectDay(Utils.getToday());
         }
 
-        if (offset == 0) {
+        if (offset == 0 && CalendarMainFragment.viewPagerPosition == offset) {
             UpdateTitle();
         }
 

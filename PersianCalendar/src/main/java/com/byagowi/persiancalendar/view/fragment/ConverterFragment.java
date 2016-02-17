@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.R;
@@ -39,7 +35,6 @@ import calendar.PersianDate;
  */
 public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
     private final Utils utils = Utils.getInstance();
-    private static ClipboardManager clipboardManager;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -58,11 +53,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
 
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            clipboardManager = (ClipboardManager) getContext()
-                    .getSystemService(Context.CLIPBOARD_SERVICE);
-        }
 
         // fill members
         calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);

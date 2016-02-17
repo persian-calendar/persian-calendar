@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -41,6 +37,7 @@ import calendar.PersianDate;
 
 public class CalendarMainFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    public static int viewPagerPosition;
     private ViewPager monthViewPager;
     private final Utils utils = Utils.getInstance();
 
@@ -342,6 +339,7 @@ public class CalendarMainFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
+        viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
         getContext().sendBroadcast(intent);
