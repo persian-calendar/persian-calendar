@@ -76,7 +76,6 @@
             android:title="@string/pray_methods" />
 
         <com.byagowi.persiancalendar.view.dialog.LocationPreference
-            android:defaultValue="CUSTOM"
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location" />
