@@ -13,6 +13,6 @@ public class AthanResetReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "AthanResetReceiver received alarm");
-        Utils.getInstance().loadAlarms(context);
+        Utils.getInstance(context).loadAlarms();
     }
 }

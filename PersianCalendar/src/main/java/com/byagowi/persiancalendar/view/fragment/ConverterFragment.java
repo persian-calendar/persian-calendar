@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.common.Range;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
@@ -34,7 +35,7 @@ import calendar.PersianDate;
  * @author ebraminio
  */
 public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
-    private final Utils utils = Utils.getInstance();
+    private Utils utils;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -51,7 +52,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
-
+        utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         // fill members
@@ -72,14 +73,14 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         // Shape and set font
         Context context = getContext();
-        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelDay));
-        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.converterLabelYear));
-        utils.prepareShapeTextView(context, (TextView) view.findViewById(R.id.calendarTypeTitle));
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelDay));
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelMonth));
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelYear));
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.calendarTypeTitle));
 
-        utils.prepareTextView(context, date0);
-        utils.prepareTextView(context, date1);
-        utils.prepareTextView(context, date2);
+        utils.prepareTextView(date0);
+        utils.prepareTextView(date1);
+        utils.prepareTextView(date2);
         //
 
         // fill views
@@ -109,7 +110,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         PersianDate persianDate;
         IslamicDate islamicDate;
 
-        char[] digits = utils.preferredDigits(getContext());
+        char[] digits = utils.preferredDigits();
         StringBuilder sb = new StringBuilder();
 
         try {
@@ -147,13 +148,13 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             }
 
             sb.append(utils.getWeekDayName(civilDate));
-            sb.append(Utils.PERSIAN_COMMA);
+            sb.append(Constants.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
 
-            date0.setText(Utils.shape(sb.toString()));
-            date1.setText(Utils.shape(calendarsTextList.get(1)));
-            date2.setText(Utils.shape(calendarsTextList.get(2)));
+            date0.setText(utils.shape(sb.toString()));
+            date1.setText(utils.shape(calendarsTextList.get(1)));
+            date2.setText(utils.shape(calendarsTextList.get(2)));
 
         } catch (RuntimeException e) {
             moreDate.setVisibility(View.GONE);
@@ -162,10 +163,10 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void fillYearMonthDaySpinners() {
-        char[] digits = utils.preferredDigits(getContext());
+        char[] digits = utils.preferredDigits();
 
         AbstractDate date = null;
-        PersianDate newDatePersian = Utils.getToday();
+        PersianDate newDatePersian = utils.getToday();
         CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
         IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
 
@@ -190,7 +191,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         int yearDiffRange = 200;
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
-            yearsList.add(Utils.formatNumber(i, digits));
+            yearsList.add(utils.formatNumber(i, digits));
         }
         yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, yearsList));
         yearSpinner.setSelection(yearDiffRange / 2);
@@ -205,7 +206,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         // days spinner init.
         List<String> daysList = new ArrayList<>();
         for (int i : new Range(1, 31)) {
-            daysList.add(Utils.formatNumber(i, digits));
+            daysList.add(utils.formatNumber(i, digits));
         }
         daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, daysList));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
@@ -241,6 +242,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onClick(View view) {
-        Utils.copyToClipboard(getContext(), view);
+        utils.copyToClipboard(view);
     }
 }

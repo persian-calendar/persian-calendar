@@ -31,8 +31,6 @@ public class AthanView extends AppCompatActivity {
     private int layoutId = R.layout.activity_athan_dhuhr;
     private int athanIcon = R.drawable.ic_brightness_2;
 
-    private Utils utils = Utils.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +40,8 @@ public class AthanView extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        Utils utils = Utils.getInstance(getApplicationContext());
 
         instance = this;
         displayed = true;
@@ -66,7 +66,7 @@ public class AthanView extends AppCompatActivity {
         String cityName;
         String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
         if (!TextUtils.isEmpty(cityKey)) {
-            City city = utils.getCityByKey(cityKey, this);
+            City city = utils.getCityByKey(cityKey);
             cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.en : city.fa;
         } else {
             float latitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);

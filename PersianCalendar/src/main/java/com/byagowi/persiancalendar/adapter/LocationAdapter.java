@@ -18,17 +18,17 @@ import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
-    private Context context;
-    List<City> cities;
-    private final Utils utils = Utils.getInstance();
+    private List<City> cities;
+    private Utils utils;
     LocationPreferenceDialog locationPreferenceDialog;
     LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
-        context = locationPreferenceDialog.getContext();
+        Context context = locationPreferenceDialog.getContext();
+        utils = Utils.getInstance(locationPreferenceDialog.getContext());
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
-        cities = utils.getAllCities(context, true);
+        cities = utils.getAllCities(true);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.locale = prefs.getString("AppLanguage", "fa");
     }
@@ -57,15 +57,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        utils.prepareTextView(context, holder.city);
+        utils.prepareTextView(holder.city);
         holder.city.setText(locale.equals("en")
                 ? cities.get(position).en
-                : Utils.shape(cities.get(position).fa));
+                : utils.shape(cities.get(position).fa));
 
-        utils.prepareTextView(context, holder.country);
+        utils.prepareTextView(holder.country);
         holder.country.setText(locale.equals("en")
                 ? cities.get(position).countryEn
-                : Utils.shape(cities.get(position).countryFa));
+                : utils.shape(cities.get(position).countryFa));
     }
 
     @Override

@@ -20,10 +20,11 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String[] drawerTitles;
     private String[] drawerSubtitles;
     private TypedArray drawerIcon;
-    private final Utils utils = Utils.getInstance();
+    private Utils utils;
 
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+        utils = Utils.getInstance(mainActivity);
         drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
         drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
@@ -77,12 +78,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
-            utils.prepareTextView(mainActivity, holder.itemTitle);
-            holder.itemTitle.setText(Utils.shape(drawerTitles[position - 1]));
+            utils.prepareTextView(holder.itemTitle);
+            holder.itemTitle.setText(utils.shape(drawerTitles[position - 1]));
             if (drawerSubtitles[position - 1].length() != 0) {
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
-                utils.prepareTextView(mainActivity, holder.itemSubtitle);
-                holder.itemSubtitle.setText(Utils.shape(drawerSubtitles[position - 1]));
+                utils.prepareTextView(holder.itemSubtitle);
+                holder.itemSubtitle.setText(utils.shape(drawerSubtitles[position - 1]));
             } else {
                 holder.itemSubtitle.setVisibility(View.GONE);
             }
@@ -95,7 +96,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             }
         } else {
 
-            switch (Utils.getSeason()) {
+            switch (utils.getSeason()) {
                 case spring:
                     holder.imageView.setImageResource(R.drawable.spring);
                     break;

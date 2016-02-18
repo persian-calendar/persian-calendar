@@ -21,20 +21,20 @@ import java.io.InputStreamReader;
  * @author ebraminio
  */
 public class AboutFragment extends Fragment {
-    private final Utils utils = Utils.getInstance();
+    private Utils utils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-
+        utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
-        String version = utils.programVersion(getContext());
+        String version = utils.programVersion();
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
-        utils.prepareTextView(getActivity(), versionTextView);
+        utils.prepareTextView(versionTextView);
         versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
-                Utils.formatNumber(version, utils.preferredDigits(getContext())));
+                utils.formatNumber(version, utils.preferredDigits()));
 
         StringBuilder sb = new StringBuilder();
 
@@ -61,7 +61,7 @@ public class AboutFragment extends Fragment {
                 + version
                 + "\n"
                 + "Copyright (C) 2012-2016  ebrahim@gnu.org "
-                + Utils.shape("ابراهیم بیاگوی")
+                + utils.shape("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
                 + "it under the terms of the GNU General Public License as published by "

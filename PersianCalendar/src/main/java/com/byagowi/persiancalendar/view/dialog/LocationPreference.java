@@ -16,10 +16,11 @@ import com.byagowi.persiancalendar.Utils;
 public class LocationPreference extends DialogPreference {
     public String value;
     public String newValue;
-    public ListView listLocations;
+    private Utils utils;
 
     public LocationPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        utils = Utils.getInstance(context);
     }
 
     @Override
@@ -39,10 +40,9 @@ public class LocationPreference extends DialogPreference {
         }
     }
 
-    Utils utils = Utils.getInstance();
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        utils.prepareShapePreference(getContext(), holder);
+        utils.prepareShapePreference(holder);
     }
 }

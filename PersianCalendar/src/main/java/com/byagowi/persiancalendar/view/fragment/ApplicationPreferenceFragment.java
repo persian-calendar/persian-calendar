@@ -46,11 +46,9 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     private static double latitude;
     private static double longitude;
 
-
-    private final Utils utils = Utils.getInstance();
-
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+        Utils utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());

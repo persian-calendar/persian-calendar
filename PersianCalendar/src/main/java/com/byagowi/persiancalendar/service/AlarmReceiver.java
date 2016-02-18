@@ -20,7 +20,6 @@ public class AlarmReceiver extends BroadcastReceiver implements MediaPlayer.OnCo
     private static final String TAG = "AlarmReceiver";
     private static MediaPlayer mediaPlayer;
     private static NotificationManager notificationManager;
-    private Utils utils = Utils.getInstance();
 
     public static final int NOTIFICATION_ID = NotificationID.getID();
     public static final String ACTION_STOP_ALARM = "com.byagowi.persiancalendar.stop_athan";
@@ -28,6 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver implements MediaPlayer.OnCo
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Utils utils = Utils.getInstance(context);
         Log.d(TAG, "received an alarm trigger. playing sound file.");
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent athanViewIntent = new Intent(context, AthanView.class);
@@ -48,7 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver implements MediaPlayer.OnCo
         try {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setDataSource(context, utils.getAthanUri(context));
+            mediaPlayer.setDataSource(context, utils.getAthanUri());
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {

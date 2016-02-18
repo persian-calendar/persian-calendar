@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.entity.Day;
@@ -24,13 +25,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private List<Day> days;
     public int select_Day = -1;
     private boolean persianDigit;
-    private Utils utils = Utils.getInstance();
+    private Utils utils;
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<Day> days) {
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
-        persianDigit = Utils.isPersianDigitSelected(context);
+        utils = Utils.getInstance(context);
+        persianDigit = utils.isPersianDigitSelected();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -141,7 +143,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             }
 
         } else {
-            holder.num.setText(Utils.firstCharOfDaysOfWeekName[position]);
+            holder.num.setText(Constants.FIRST_CHAR_OF_DAYS_OF_WEEK_NAME[position]);
             holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_day_name));
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
@@ -149,7 +151,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.event.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         }
-        utils.prepareShapeTextView(context, holder.num);
+        utils.prepareShapeTextView(holder.num);
     }
 
     @Override

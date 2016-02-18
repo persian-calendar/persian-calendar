@@ -76,7 +76,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
             AthanVolumePreference.mediaPlayer.setDataSource(
                     getContext(),
-                    Utils.getInstance().getAthanUri(getContext()));
+                    Utils.getInstance(getContext()).getAthanUri());
 
             AthanVolumePreference.mediaPlayer.setOnCompletionListener(
                     new MediaPlayer.OnCompletionListener() {

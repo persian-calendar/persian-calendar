@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int EXIT = 6;
 
     public int menuPosition = 0;
-    public Utils utils = Utils.getInstance();
+    public Utils utils;
 
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-
-        prevLocale = utils.loadLanguageFromSettings(this);
+        utils = Utils.getInstance(getApplicationContext());
+        prevLocale = utils.loadLanguageFromSettings();
 
         startService(new Intent(this, ApplicationService.class));
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         String locale = prefs.getString("AppLanguage", "fa");
         if (!locale.equals(prevLocale)) {
             prevLocale = locale;
-            utils.loadLanguageFromSettings(this);
+            utils.loadLanguageFromSettings();
             // restart activity
             Intent intent = getIntent();
             finish();
