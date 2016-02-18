@@ -37,7 +37,7 @@ import calendar.PersianDate;
 
 public class CalendarMainFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    public static int viewPagerPosition = 0;
+    public static int viewPagerPosition;
     private ViewPager monthViewPager;
     private final Utils utils = Utils.getInstance();
 
@@ -88,6 +88,8 @@ public class CalendarMainFragment extends Fragment
             @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        viewPagerPosition = 0;
 
         owghat1 = (RelativeLayout) view.findViewById(R.id.owghat1);
         owghat2 = (RelativeLayout) view.findViewById(R.id.owghat2);
