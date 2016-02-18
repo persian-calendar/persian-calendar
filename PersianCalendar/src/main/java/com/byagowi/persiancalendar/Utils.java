@@ -714,9 +714,7 @@ public class Utils {
         ClipData clip = ClipData.newPlainText("converted date", date);
         clipboardManager.setPrimaryClip(clip);
 
-        Toast.makeText(context,
-                context.getString(R.string.date_copied_clipboard) + "\n"
-                        + date, Toast.LENGTH_SHORT).show();
+        quickToast("«" + date + "»\n" + context.getString(R.string.date_copied_clipboard));
     }
 
     public Season getSeason() {
