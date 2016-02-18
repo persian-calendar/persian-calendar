@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
@@ -100,8 +99,6 @@ public class CalendarMainFragment extends Fragment
         owghat7 = (RelativeLayout) view.findViewById(R.id.owghat7);
         owghat8 = (RelativeLayout) view.findViewById(R.id.owghat8);
 
-        FragmentActivity activity = getActivity();
-
         georgianDate = (TextView) view.findViewById(R.id.georgian_date);
         utils.prepareTextView(georgianDate);
         islamicDate = (TextView) view.findViewById(R.id.islamic_date);
@@ -162,7 +159,7 @@ public class CalendarMainFragment extends Fragment
         coordinate = utils.getCoordinate();
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
 
-        monthViewPager.setAdapter(new CalendarAdapter(activity.getSupportFragmentManager()));
+        monthViewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
         monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
 
         monthViewPager.addOnPageChangeListener(this);

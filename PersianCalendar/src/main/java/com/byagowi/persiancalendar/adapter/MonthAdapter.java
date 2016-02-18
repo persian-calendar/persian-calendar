@@ -18,10 +18,10 @@ import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 import java.util.List;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
-    private final Context context;
-    private final MonthFragment monthFragment;
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_DAY = 1;
+    private Context context;
+    private MonthFragment monthFragment;
+    private final int TYPE_HEADER = 0;
+    private final int TYPE_DAY = 1;
     private List<Day> days;
     public int select_Day = -1;
     private boolean persianDigit;
@@ -84,12 +84,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_day, parent, false);
 
         return new ViewHolder(v);
-
     }
 
     @Override

@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int ABOUT = 5;
     public static final int EXIT = 6;
 
+    private UpdateUtils updateUtils;
+
     public int menuPosition = 0;
     public Utils utils;
 
@@ -57,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         utils = Utils.getInstance(getApplicationContext());
         prevLocale = utils.loadLanguageFromSettings();
+        updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         startService(new Intent(this, ApplicationService.class));
 
-
-        UpdateUtils updateUtils = UpdateUtils.getInstance();
-        updateUtils.updateDate(getBaseContext());
+        updateUtils.update();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -169,14 +170,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private final UpdateUtils updateUtils = UpdateUtils.getInstance();
-
     private void menuChange() {
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
 
-        updateUtils.update(this);
+        updateUtils.update();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String locale = prefs.getString("AppLanguage", "fa");

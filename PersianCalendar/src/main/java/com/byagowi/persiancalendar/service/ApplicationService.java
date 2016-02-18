@@ -16,8 +16,8 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
 public class ApplicationService extends Service {
-    private final UpdateUtils updateUtils = UpdateUtils.getInstance();
-    private int count = 0;
+    private UpdateUtils updateUtils;
+    private boolean first = true;
 
     @Override
     public IBinder onBind(Intent paramIntent) {
@@ -26,8 +26,9 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        count++;
-        if (count == 1) {
+        updateUtils = UpdateUtils.getInstance(getApplicationContext());
+        if (first) {
+            first = false;
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
             intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
@@ -37,23 +38,11 @@ public class ApplicationService extends Service {
             registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    updateUtils.update(context);
+                    updateUtils.update();
                 }
             }, intentFilter);
-
-
-            IntentFilter intentFilter2 = new IntentFilter();
-            intentFilter2.addAction(Intent.ACTION_DATE_CHANGED);
-            intentFilter2.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-            registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    updateUtils.updateDate(context);
-                }
-            }, intentFilter2);
         }
-        updateUtils.update(getApplicationContext());
-        updateUtils.updateDate(getApplicationContext());
+        updateUtils.update();
         return START_STICKY;
     }
 }

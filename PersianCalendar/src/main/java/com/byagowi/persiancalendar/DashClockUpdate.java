@@ -4,12 +4,13 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 
 public class DashClockUpdate extends DashClockExtension {
-    private final UpdateUtils updateUtils = UpdateUtils.getInstance();
+    private UpdateUtils updateUtils;
 
     @Override
     protected void onUpdateData(int reason) {
         setUpdateWhenScreenOn(true);
-        updateUtils.update(this);
+        updateUtils = UpdateUtils.getInstance(getApplicationContext());
+        updateUtils.update();
         publishUpdate(updateUtils.getExtensionData());
     }
 
