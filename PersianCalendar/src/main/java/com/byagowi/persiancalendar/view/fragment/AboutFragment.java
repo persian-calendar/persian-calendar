@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment {
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.prepareTextView(getActivity(), versionTextView);
-        versionTextView.setText(utils.textShaper(getString(R.string.version)) + " " +
+        versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
                 Utils.formatNumber(version, utils.preferredDigits(getContext())));
 
         StringBuilder sb = new StringBuilder();
@@ -61,7 +61,7 @@ public class AboutFragment extends Fragment {
                 + version
                 + "\n"
                 + "Copyright (C) 2012-2016  ebrahim@gnu.org "
-                + Utils.textShaper("ابراهیم بیاگوی")
+                + Utils.shape("ابراهیم بیاگوی")
                 + "\n\n"
                 + "This program is free software: you can redistribute it and/or modify "
                 + "it under the terms of the GNU General Public License as published by "

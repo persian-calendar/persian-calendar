@@ -87,7 +87,7 @@ public class UpdateUtils {
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                 Utils.formatNumber(persian.getDayOfMonth(), digits));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                Utils.textShaper(utils.getMonthName(persian)));
+                Utils.shape(utils.getMonthName(persian)));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
                 launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget1x1.class),
@@ -122,11 +122,11 @@ public class UpdateUtils {
         }
 
         remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
-                Utils.textShaper(text1));
+                Utils.shape(text1));
         remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
-                Utils.textShaper(text2));
+                Utils.shape(text2));
         remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1,
-                Utils.textShaper(text3));
+                Utils.shape(text3));
 
         remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
                 launchAppPendingIntent);
@@ -155,16 +155,16 @@ public class UpdateUtils {
         String owghat = utils.getNextOghatTime(context, currentClock, false);
         if (owghat != null) {
             remoteViews2.setTextViewText(R.id.owghat_2x2,
-                    Utils.textShaper(owghat));
+                    Utils.shape(owghat));
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
         }
 
         remoteViews2.setTextViewText(R.id.time_2x2,
-                Utils.textShaper(text1));
+                Utils.shape(text1));
         remoteViews2.setTextViewText(R.id.date_2x2,
-                Utils.textShaper(text2));
+                Utils.shape(text2));
 
         remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2,
                 launchAppPendingIntent);
@@ -209,17 +209,17 @@ public class UpdateUtils {
                             .setSmallIcon(icon)
                             .setWhen(0)
                             .setContentIntent(launchAppPendingIntent)
-                            .setContentText(Utils.textShaper(body))
-                            .setContentTitle(Utils.textShaper(title))
+                            .setContentText(Utils.shape(body))
+                            .setContentTitle(Utils.shape(title))
                             .build());
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
-                .status(Utils.textShaper(status))
-                .expandedTitle(Utils.textShaper(title))
-                .expandedBody(Utils.textShaper(body)).clickIntent(intent);
+                .status(Utils.shape(status))
+                .expandedTitle(Utils.shape(title))
+                .expandedBody(Utils.shape(body)).clickIntent(intent);
     }
 
 
@@ -273,7 +273,7 @@ public class UpdateUtils {
         String owghat = utils.getNextOghatTime(context, currentClock, true);
         if (owghat != null) {
             remoteViews2.setTextViewText(R.id.owghat_2x2,
-                    Utils.textShaper(owghat));
+                    Utils.shape(owghat));
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
@@ -283,7 +283,7 @@ public class UpdateUtils {
 
         if (!TextUtils.isEmpty(holidays)) {
             remoteViews2.setTextViewText(R.id.holiday_2x2,
-                    Utils.textShaper(holidays));
+                    Utils.shape(holidays));
             remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
@@ -293,16 +293,16 @@ public class UpdateUtils {
 
         if (!TextUtils.isEmpty(events)) {
             remoteViews2.setTextViewText(R.id.event_2x2,
-                    Utils.textShaper(events));
+                    Utils.shape(events));
             remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
         }
 
         remoteViews2.setTextViewText(R.id.time_2x2,
-                Utils.textShaper(text1));
+                Utils.shape(text1));
         remoteViews2.setTextViewText(R.id.date_2x2,
-                Utils.textShaper(text2));
+                Utils.shape(text2));
 
 
         Intent intent = new Intent(context, MainActivity.class);

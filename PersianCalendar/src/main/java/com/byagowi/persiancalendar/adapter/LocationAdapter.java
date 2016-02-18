@@ -60,12 +60,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         utils.prepareTextView(context, holder.city);
         holder.city.setText(locale.equals("en")
                 ? cities.get(position).en
-                : utils.textShaper(cities.get(position).fa));
+                : Utils.shape(cities.get(position).fa));
 
         utils.prepareTextView(context, holder.country);
         holder.country.setText(locale.equals("en")
                 ? cities.get(position).countryEn
-                : utils.textShaper(cities.get(position).countryFa));
+                : Utils.shape(cities.get(position).countryFa));
     }
 
     @Override

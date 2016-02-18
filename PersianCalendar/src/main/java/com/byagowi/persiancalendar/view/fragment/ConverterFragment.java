@@ -151,9 +151,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
 
-            date0.setText(Utils.textShaper(sb.toString()));
-            date1.setText(Utils.textShaper(calendarsTextList.get(1)));
-            date2.setText(Utils.textShaper(calendarsTextList.get(2)));
+            date0.setText(Utils.shape(sb.toString()));
+            date1.setText(Utils.shape(calendarsTextList.get(1)));
+            date2.setText(Utils.shape(calendarsTextList.get(2)));
 
         } catch (RuntimeException e) {
             moreDate.setVisibility(View.GONE);

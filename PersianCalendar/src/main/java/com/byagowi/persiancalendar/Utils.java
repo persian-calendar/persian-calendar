@@ -118,7 +118,15 @@ public class Utils {
         return myInstance;
     }
 
-    public static String textShaper(String text) {
+    /**
+     * Text shaping is a essential thing on supporting Arabic script text on older Android versions.
+     * It converts normal Arabic character to their presentation forms according to their position
+     * on the text.
+     * 
+     * @param text Arabic string
+     * @return Shaped text
+     */
+    public static String shape(String text) {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
                 ? ArabicShaping.shape(text)
                 : text;
@@ -127,7 +135,7 @@ public class Utils {
     public String getString(String key) {
         return localeUtils == null
                 ? ""
-                : textShaper(localeUtils.getString(key));
+                : shape(localeUtils.getString(key));
     }
 
     public String programVersion(Context context) {
@@ -155,7 +163,7 @@ public class Utils {
 
     public void prepareShapeTextView(Context context, TextView textView) {
         prepareTextView(context, textView);
-        textView.setText(textShaper(textView.getText().toString()));
+        textView.setText(shape(textView.getText().toString()));
     }
 
     public void prepareShapePreference(Context context, PreferenceViewHolder holder) {
@@ -176,12 +184,12 @@ public class Utils {
         //noinspection ConstantConditions
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
 
-        SpannableString titleSpan = new SpannableString(textShaper(title));
+        SpannableString titleSpan = new SpannableString(shape(title));
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
         titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
         supportActionBar.setTitle(titleSpan);
 
-        SpannableString subtitleSpan = new SpannableString(textShaper(subtitle));
+        SpannableString subtitleSpan = new SpannableString(shape(subtitle));
         subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
         subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
         supportActionBar.setSubtitle(subtitleSpan);
@@ -387,7 +395,7 @@ public class Utils {
     }
 
     public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-        return textShaper(getMonthName(persianDate) + ' '
+        return shape(getMonthName(persianDate) + ' '
                 + formatNumber(persianDate.getYear(), digits));
     }
 
@@ -415,7 +423,7 @@ public class Utils {
         List<String> monthNameList = new ArrayList<>();
         for (int month : new Range(1, 12)) {
             dateClone.setMonth(month);
-            monthNameList.add(textShaper(getMonthName(dateClone)));
+            monthNameList.add(shape(getMonthName(dateClone)));
         }
         return monthNameList;
     }
@@ -438,7 +446,7 @@ public class Utils {
     }
 
     public void quickToast(String message, Context context) {
-        Toast.makeText(context, textShaper(message), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
     }
 
     public int getDayIconResource(int day) {
