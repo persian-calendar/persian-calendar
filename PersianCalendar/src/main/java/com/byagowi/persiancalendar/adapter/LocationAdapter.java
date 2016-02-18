@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
     private Context context;
-    List<Utils.City> cities;
+    List<City> cities;
     private final Utils utils = Utils.getInstance();
     LocationPreferenceDialog locationPreferenceDialog;
     LayoutInflater layoutInflater;

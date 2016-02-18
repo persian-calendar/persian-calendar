@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.Range;
-import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
@@ -61,7 +61,6 @@ import java.util.concurrent.TimeUnit;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.LocaleData;
 import calendar.PersianDate;
@@ -454,28 +453,6 @@ public class Utils {
         // http://stackoverflow.com/a/5445161
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
-    }
-
-    public static class City {
-        public final String key;
-        public final String en;
-        public final String fa;
-        public final String countryCode;
-        public final String countryEn;
-        public final String countryFa;
-        public final double latitude;
-        public final double longitude;
-        public City(String key, String en, String fa, String countryCode, String countryEn,
-                    String countryFa, double latitude, double longitude) {
-            this.key = key;
-            this.en = en;
-            this.fa = fa;
-            this.countryCode = countryCode;
-            this.countryEn = countryEn;
-            this.countryFa = countryFa;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
     }
 
     private String persianStringToArabic(String text) {

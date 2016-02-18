@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.CompassListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
 
@@ -43,7 +44,7 @@ public class CompassFragment extends Fragment {
         if (location.equals("CUSTOM")) {
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            Utils.City city = utils.getCityByKey(location, context);
+            City city = utils.getCityByKey(location, context);
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
                     prefs.getString("AppLanguage", "fa").equals("en")
                             ? city.en
