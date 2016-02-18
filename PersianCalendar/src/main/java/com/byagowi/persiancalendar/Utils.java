@@ -231,7 +231,7 @@ public class Utils {
         return prefs.getBoolean("PersianDigits", true) ? persianDigits : arabicDigits;
     }
 
-    public static boolean isPersianDigitSelected(Context context){
+    public static boolean isPersianDigitSelected(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("PersianDigits", true);
     }
@@ -458,12 +458,12 @@ public class Utils {
 
     private String persianStringToArabic(String text) {
         return text
-            .replaceAll("ی", "ي")
-            .replaceAll("ک", "ك")
-            .replaceAll("گ", "كی")
-            .replaceAll("ژ", "زی")
-            .replaceAll("چ", "جی")
-            .replaceAll("پ", "بی");
+                .replaceAll("ی", "ي")
+                .replaceAll("ک", "ك")
+                .replaceAll("گ", "كی")
+                .replaceAll("ژ", "زی")
+                .replaceAll("چ", "جی")
+                .replaceAll("پ", "بی");
     }
 
     public List<City> getAllCities(Context context, boolean needsSort) {
@@ -725,10 +725,8 @@ public class Utils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return;
         }
-        ClipboardManager clipboardManager;
-
-        clipboardManager = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         CharSequence date = ((TextView) view).getText();
 
