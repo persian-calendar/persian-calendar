@@ -119,17 +119,20 @@ public class Utils {
     }
 
     public static String textShaper(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
+        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
+                ? ArabicShaping.shape(text)
+                : text;
     }
 
     public String getString(String key) {
-        return localeUtils == null ? "" : textShaper(localeUtils.getString(key));
+        return localeUtils == null
+                ? ""
+                : textShaper(localeUtils.getString(key));
     }
 
     public String programVersion(Context context) {
         try {
-            return context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0).versionName;
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
             Log.e(context.getPackageName(),
                     "Name not found on PersianCalendarUtils.programVersion");
@@ -159,11 +162,11 @@ public class Utils {
         // See android.support.v7.preference.Preference#onBindViewHolder
         TextView titleView = (TextView) holder.findViewById(android.R.id.title);
         if (titleView != null) {
-            prepareShapeTextView(context, (TextView) holder.findViewById(android.R.id.title));
+            prepareShapeTextView(context, titleView);
         }
-        TextView summaryView = (TextView) holder.findViewById(android.R.id.title);
-        if (titleView != null) {
-            prepareShapeTextView(context, (TextView) holder.findViewById(android.R.id.summary));
+        TextView summaryView = (TextView) holder.findViewById(android.R.id.summary);
+        if (summaryView != null) {
+            prepareShapeTextView(context, summaryView);
         }
     }
 
@@ -185,23 +188,20 @@ public class Utils {
     }
 
     public CalculationMethod getCalculationMethod(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
-                "Jafari")); // Seems Iran is using Jafari method
+        // It seems Iran is using Jafari method
+        return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod", "Jafari"));
     }
 
     public static int getIslamicOffset(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         return Integer.parseInt(prefs.getString("islamicOffset", "0"));
     }
 
     public Coordinate getCoordinate(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String location = prefs.getString("Location", "CUSTOM");
         if (!location.equals("CUSTOM")) {
@@ -210,12 +210,12 @@ public class Utils {
         }
 
         try {
-            Coordinate coord = new Coordinate(Double.parseDouble(prefs
-                    .getString("Latitude", "0")), Double.parseDouble(prefs
-                    .getString("Longitude", "0")), Double.parseDouble(prefs
-                    .getString("Altitude", "0")));
+            Coordinate coord = new Coordinate(
+                    Double.parseDouble(prefs.getString("Latitude", "0")),
+                    Double.parseDouble(prefs.getString("Longitude", "0")),
+                    Double.parseDouble(prefs.getString("Altitude", "0")));
 
-            // If latitude or longitude is zero probably preference not set yet
+            // If latitude or longitude is zero probably preference is not set yet
             if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
                 return null;
             }
@@ -237,75 +237,13 @@ public class Utils {
     }
 
     public boolean clockIn24(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("WidgetIn24", true);
     }
 
     public static PersianDate getToday() {
         CivilDate civilDate = new CivilDate();
         return DateConverter.civilToPersian(civilDate);
-    }
-
-    public List<Day> getDays(Context context, int offset) {
-        List<Day> days = new ArrayList<>();
-        PersianDate persianDate = getToday();
-        int month = persianDate.getMonth() - offset;
-        month -= 1;
-        int year = persianDate.getYear();
-
-        year = year + (month / 12);
-        month = month % 12;
-        if (month < 0) {
-            year -= 1;
-            month += 12;
-        }
-        month += 1;
-        persianDate.setMonth(month);
-        persianDate.setYear(year);
-        persianDate.setDayOfMonth(1);
-
-        char[] digits = preferredDigits(context);
-
-        int dayOfWeek = DateConverter.persianToCivil(persianDate)
-                .getDayOfWeek() % 7;
-
-        try {
-            PersianDate today = getToday();
-            for (int i = 1; i <= 31; i++) {
-                persianDate.setDayOfMonth(i);
-
-                Day day = new Day();
-                day.setNum(Utils.formatNumber(i, digits));
-                day.setDayOfWeek(dayOfWeek);
-
-                String holidayTitle = getHolidayTitle(persianDate);
-                if (holidayTitle != null || dayOfWeek == 6) {
-                    day.setHoliday(true);
-                }
-
-                String eventTitle = getEventTitle(persianDate);
-                if (!TextUtils.isEmpty(eventTitle) || holidayTitle != null ) {
-                    day.setEvent(true);
-                }
-
-                day.setPersianDate(persianDate.clone());
-
-                if (persianDate.equals(today)) {
-                    day.setToday(true);
-                }
-
-                days.add(day);
-                dayOfWeek++;
-                if (dayOfWeek == 7) {
-                    dayOfWeek = 0;
-                }
-            }
-        } catch (DayOutOfRangeException e) {
-            // okay, it was expected
-        }
-
-        return days;
     }
 
     public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
@@ -819,9 +757,7 @@ public class Utils {
         ClipData clip = ClipData.newPlainText("converted date", date);
         clipboardManager.setPrimaryClip(clip);
 
-        Toast.makeText(context,
-                context.getString(R.string.date_copied_clipboard) + "\n" + date,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.date_copied_clipboard) + "\n" + date, Toast.LENGTH_SHORT).show();
     }
 
     public static Season getSeason() {
