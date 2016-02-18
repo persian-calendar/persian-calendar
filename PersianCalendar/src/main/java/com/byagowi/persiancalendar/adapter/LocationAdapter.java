@@ -18,7 +18,7 @@ import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
-    List<City> cities;
+    private List<City> cities;
     private Utils utils;
     LocationPreferenceDialog locationPreferenceDialog;
     LayoutInflater layoutInflater;
@@ -60,12 +60,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         utils.prepareTextView(holder.city);
         holder.city.setText(locale.equals("en")
                 ? cities.get(position).en
-                : utils.textShaper(cities.get(position).fa));
+                : utils.shape(cities.get(position).fa));
 
         utils.prepareTextView(holder.country);
         holder.country.setText(locale.equals("en")
                 ? cities.get(position).countryEn
-                : utils.textShaper(cities.get(position).countryFa));
+                : utils.shape(cities.get(position).countryFa));
     }
 
     @Override

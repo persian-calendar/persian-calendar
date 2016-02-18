@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.entity;
 
 import calendar.PersianDate;
 
@@ -7,7 +7,7 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-class Event {
+public class Event {
     private PersianDate date;
     private String title;
 

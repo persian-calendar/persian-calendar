@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.City;
-import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
@@ -62,7 +62,6 @@ import java.util.concurrent.TimeUnit;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.LocaleData;
 import calendar.PersianDate;
@@ -102,18 +101,29 @@ public class Utils {
         return myInstance;
     }
 
-    public String textShaper(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) ? ArabicShaping.shape(text) : text;
+    /**
+     * Text shaping is a essential thing on supporting Arabic script text on older Android versions.
+     * It converts normal Arabic character to their presentation forms according to their position
+     * on the text.
+     * 
+     * @param text Arabic string
+     * @return Shaped text
+     */
+    public String shape(String text) {
+        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
+                ? ArabicShaping.shape(text)
+                : text;
     }
 
     public String getString(String key) {
-        return localeUtils == null ? "" : textShaper(localeUtils.getString(key));
+        return localeUtils == null
+                ? ""
+                : shape(localeUtils.getString(key));
     }
 
     public String programVersion() {
         try {
-            return context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0).versionName;
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
             Log.e(context.getPackageName(),
                     "Name not found on PersianCalendarUtils.programVersion");
@@ -136,18 +146,18 @@ public class Utils {
 
     public void prepareShapeTextView(TextView textView) {
         prepareTextView(textView);
-        textView.setText(textShaper(textView.getText().toString()));
+        textView.setText(shape(textView.getText().toString()));
     }
 
     public void prepareShapePreference(PreferenceViewHolder holder) {
         // See android.support.v7.preference.Preference#onBindViewHolder
         TextView titleView = (TextView) holder.findViewById(android.R.id.title);
         if (titleView != null) {
-            prepareShapeTextView((TextView) holder.findViewById(android.R.id.title));
+            prepareShapeTextView(titleView);
         }
-        TextView summaryView = (TextView) holder.findViewById(android.R.id.title);
-        if (titleView != null) {
-            prepareShapeTextView((TextView) holder.findViewById(android.R.id.summary));
+        TextView summaryView = (TextView) holder.findViewById(android.R.id.summary);
+        if (summaryView != null) {
+            prepareShapeTextView(summaryView);
         }
     }
 
@@ -157,20 +167,20 @@ public class Utils {
         //noinspection ConstantConditions
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
 
-        SpannableString titleSpan = new SpannableString(textShaper(title));
+        SpannableString titleSpan = new SpannableString(shape(title));
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
         titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
         supportActionBar.setTitle(titleSpan);
 
-        SpannableString subtitleSpan = new SpannableString(textShaper(subtitle));
+        SpannableString subtitleSpan = new SpannableString(shape(subtitle));
         subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
         subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
         supportActionBar.setSubtitle(subtitleSpan);
     }
 
     public CalculationMethod getCalculationMethod() {
-        return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod",
-                "Jafari")); // Seems Iran is using Jafari method
+        // It seems Iran is using Jafari method
+        return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod", "Jafari"));
     }
 
     public int getIslamicOffset() {
@@ -185,12 +195,12 @@ public class Utils {
         }
 
         try {
-            Coordinate coord = new Coordinate(Double.parseDouble(prefs
-                    .getString("Latitude", "0")), Double.parseDouble(prefs
-                    .getString("Longitude", "0")), Double.parseDouble(prefs
-                    .getString("Altitude", "0")));
+            Coordinate coord = new Coordinate(
+                    Double.parseDouble(prefs.getString("Latitude", "0")),
+                    Double.parseDouble(prefs.getString("Longitude", "0")),
+                    Double.parseDouble(prefs.getString("Altitude", "0")));
 
-            // If latitude or longitude is zero probably preference not set yet
+            // If latitude or longitude is zero probably preference is not set yet
             if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
                 return null;
             }
@@ -216,67 +226,6 @@ public class Utils {
     public PersianDate getToday() {
         CivilDate civilDate = new CivilDate();
         return DateConverter.civilToPersian(civilDate);
-    }
-
-    public List<Day> getDays(int offset) {
-        List<Day> days = new ArrayList<>();
-        PersianDate persianDate = getToday();
-        int month = persianDate.getMonth() - offset;
-        month -= 1;
-        int year = persianDate.getYear();
-
-        year = year + (month / 12);
-        month = month % 12;
-        if (month < 0) {
-            year -= 1;
-            month += 12;
-        }
-        month += 1;
-        persianDate.setMonth(month);
-        persianDate.setYear(year);
-        persianDate.setDayOfMonth(1);
-
-        char[] digits = preferredDigits();
-
-        int dayOfWeek = DateConverter.persianToCivil(persianDate)
-                .getDayOfWeek() % 7;
-
-        try {
-            PersianDate today = getToday();
-            for (int i = 1; i <= 31; i++) {
-                persianDate.setDayOfMonth(i);
-
-                Day day = new Day();
-                day.setNum(formatNumber(i, digits));
-                day.setDayOfWeek(dayOfWeek);
-
-                String holidayTitle = getHolidayTitle(persianDate);
-                if (holidayTitle != null || dayOfWeek == 6) {
-                    day.setHoliday(true);
-                }
-
-                String eventTitle = getEventTitle(persianDate);
-                if (!TextUtils.isEmpty(eventTitle) || holidayTitle != null ) {
-                    day.setEvent(true);
-                }
-
-                day.setPersianDate(persianDate.clone());
-
-                if (persianDate.equals(today)) {
-                    day.setToday(true);
-                }
-
-                days.add(day);
-                dayOfWeek++;
-                if (dayOfWeek == 7) {
-                    dayOfWeek = 0;
-                }
-            }
-        } catch (DayOutOfRangeException e) {
-            // okay, it was expected
-        }
-
-        return days;
     }
 
     public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
@@ -420,7 +369,7 @@ public class Utils {
     }
 
     public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-        return textShaper(getMonthName(persianDate) + ' '
+        return shape(getMonthName(persianDate) + ' '
                 + formatNumber(persianDate.getYear(), digits));
     }
 
@@ -448,7 +397,7 @@ public class Utils {
         List<String> monthNameList = new ArrayList<>();
         for (int month : new Range(1, 12)) {
             dateClone.setMonth(month);
-            monthNameList.add(textShaper(getMonthName(dateClone)));
+            monthNameList.add(shape(getMonthName(dateClone)));
         }
         return monthNameList;
     }
@@ -471,7 +420,7 @@ public class Utils {
     }
 
     public void quickToast(String message) {
-        Toast.makeText(context, textShaper(message), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
     }
 
     public int getDayIconResource(int day) {
@@ -650,7 +599,7 @@ public class Utils {
 
             }
         }
-        return  eventsTitle;
+        return eventsTitle;
     }
 
     public void setAthanRepeater() {
@@ -757,10 +706,8 @@ public class Utils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return;
         }
-        ClipboardManager clipboardManager;
-
-        clipboardManager = (ClipboardManager) context
-                .getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         CharSequence date = ((TextView) view).getText();
 
@@ -768,8 +715,8 @@ public class Utils {
         clipboardManager.setPrimaryClip(clip);
 
         Toast.makeText(context,
-                context.getString(R.string.date_copied_clipboard) + "\n" + date,
-                Toast.LENGTH_SHORT).show();
+                context.getString(R.string.date_copied_clipboard) + "\n"
+                        + date, Toast.LENGTH_SHORT).show();
     }
 
     public Season getSeason() {

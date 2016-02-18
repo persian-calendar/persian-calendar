@@ -187,10 +187,10 @@ public class CalendarMainFragment extends Fragment
 
     public void selectDay(PersianDate persianDate) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        weekDayName.setText(utils.textShaper(utils.getWeekDayName(persianDate)));
-        shamsiDate.setText(utils.textShaper(utils.dateToString(persianDate, digits)));
-        georgianDate.setText(utils.textShaper(utils.dateToString(civilDate, digits)));
-        islamicDate.setText(utils.textShaper(utils.dateToString(
+        weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
+        shamsiDate.setText(utils.shape(utils.dateToString(persianDate, digits)));
+        georgianDate.setText(utils.shape(utils.dateToString(civilDate, digits)));
+        islamicDate.setText(utils.shape(utils.dateToString(
                 DateConverter.civilToIslamic(
                         civilDate, utils.getIslamicOffset()),
                 digits)));
@@ -238,7 +238,7 @@ public class CalendarMainFragment extends Fragment
         eventTitle.setVisibility(View.GONE);
 
         if (holidays != null) {
-            holidayTitle.setText(utils.textShaper(holidays));
+            holidayTitle.setText(utils.shape(holidays));
             holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
