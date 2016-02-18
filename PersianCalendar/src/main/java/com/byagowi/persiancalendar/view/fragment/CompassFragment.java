@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.CompassListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
 
@@ -27,23 +28,23 @@ import com.github.praytimes.Coordinate;
  */
 public class CompassFragment extends Fragment {
     public QiblaCompassView compassView;
-    SensorManager sensorManager;
-    Sensor sensor;
-    SensorEventListener compassListener;
-    private Utils utils = Utils.getInstance();
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private SensorEventListener compassListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
         Context context = getContext();
+        Utils utils = Utils.getInstance(context);
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
         String location = prefs.getString("Location", "CUSTOM");
         if (location.equals("CUSTOM")) {
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            Utils.City city = utils.getCityByKey(location, context);
+            City city = utils.getCityByKey(location);
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
                     prefs.getString("AppLanguage", "fa").equals("en")
                             ? city.en
@@ -60,7 +61,7 @@ public class CompassFragment extends Fragment {
         int height = displayMetrics.heightPixels;
         compassView.setScreenResolution(width, height - 2 * height / 8);
 
-        Coordinate coordinate = utils.getCoordinate(getContext());
+        Coordinate coordinate = utils.getCoordinate();
         if (coordinate != null) {
             compassView.setLongitude(coordinate.getLongitude());
             compassView.setLatitude(coordinate.getLatitude());
@@ -74,7 +75,7 @@ public class CompassFragment extends Fragment {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            utils.quickToast(utils.textShaper(getString(R.string.compass_not_found)), getContext());
+            utils.quickToast(utils.textShaper(getString(R.string.compass_not_found)));
         }
         return view;
     }

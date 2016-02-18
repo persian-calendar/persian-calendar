@@ -28,8 +28,8 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
 
     public CalendarTypesSpinnerAdapter(Context context, int resource) {
         super(context, resource);
-        utils = Utils.getInstance();
-        utils.loadLanguageFromSettings(context);
+        utils = Utils.getInstance(context);
+        utils.loadLanguageFromSettings();
 
         spinnerResource = resource;
         calendarTypes.put(CalendarType.SHAMSI, utils.getString(CalendarStrings.HIJRI_SHAMSI));
@@ -52,7 +52,7 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView textView = (TextView) inflater.inflate(spinnerResource, parent, false);
         textView.setText(calendarTypes.get(calendarTypeKeys[position]));
-        utils.prepareShapeTextView(getContext(), textView);
+        utils.prepareShapeTextView(textView);
         return textView;
     }
 

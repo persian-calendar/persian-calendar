@@ -24,7 +24,7 @@ import java.util.List;
 import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
-    private final Utils utils = Utils.getInstance();
+    private Utils utils;
     private CalendarMainFragment calendarMainFragment;
     private PersianDate persianDate;
     private char[] digits;
@@ -39,17 +39,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             ViewGroup container,
             Bundle savedInstanceState) {
 
+        utils = Utils.getInstance(getContext());
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<Day> days = utils.getDays(getContext(), offset);
-        digits = utils.preferredDigits(getActivity());
+        List<Day> days = utils.getDays(offset);
+        digits = utils.preferredDigits();
 
         AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
         AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
-        persianDate = Utils.getToday();
+        persianDate = utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
         int year = persianDate.getYear();
@@ -82,7 +83,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 && offset == 0
                 && CalendarMainFragment.viewPagerPosition == offset) {
 
-            calendarMainFragment.selectDay(Utils.getToday());
+            calendarMainFragment.selectDay(utils.getToday());
         }
 
         if (offset == 0 && CalendarMainFragment.viewPagerPosition == offset) {
@@ -143,7 +144,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         utils.setActivityTitleAndSubtitle(
                 getActivity(),
                 utils.getMonthName(persianDate),
-                Utils.formatNumber(persianDate.getYear(), digits));
+                utils.formatNumber(persianDate.getYear(), digits));
     }
 
     private void resetSelectDay() {

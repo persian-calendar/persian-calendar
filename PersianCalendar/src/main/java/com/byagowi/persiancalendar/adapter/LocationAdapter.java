@@ -11,24 +11,24 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
-    private Context context;
-    List<Utils.City> cities;
-    private final Utils utils = Utils.getInstance();
+    List<City> cities;
+    private Utils utils;
     LocationPreferenceDialog locationPreferenceDialog;
     LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
-        context = locationPreferenceDialog.getContext();
+        Context context = locationPreferenceDialog.getContext();
+        utils = Utils.getInstance(locationPreferenceDialog.getContext());
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
-        cities = utils.getAllCities(context, true);
+        cities = utils.getAllCities(true);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.locale = prefs.getString("AppLanguage", "fa");
     }
@@ -57,12 +57,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        utils.prepareTextView(context, holder.city);
+        utils.prepareTextView(holder.city);
         holder.city.setText(locale.equals("en")
                 ? cities.get(position).en
                 : utils.textShaper(cities.get(position).fa));
 
-        utils.prepareTextView(context, holder.country);
+        utils.prepareTextView(holder.country);
         holder.country.setText(locale.equals("en")
                 ? cities.get(position).countryEn
                 : utils.textShaper(cities.get(position).countryFa));

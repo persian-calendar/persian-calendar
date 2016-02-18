@@ -21,12 +21,12 @@ public class AthanVolumePreference extends DialogPreference {
     public Context context;
     public SeekBar seekBarVolumeSlider;
     public int initialVolume;
-    public Utils utils = Utils.getInstance();
+    public Utils utils;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         this.context = context;
+        utils = Utils.getInstance(context);
         setDialogLayoutResource(R.layout.preference_volume);
         setDialogIcon(null);
 
@@ -98,6 +98,6 @@ public class AthanVolumePreference extends DialogPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        utils.prepareShapePreference(getContext(), holder);
+        utils.prepareShapePreference(holder);
     }
 }
