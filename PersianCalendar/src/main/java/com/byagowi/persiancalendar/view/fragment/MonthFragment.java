@@ -140,8 +140,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void UpdateTitle() {
-        utils.setActivityTitleAndSubtitle(getActivity(), Utils.formatNumber(persianDate.getYear(), digits),
-                utils.getMonthName(persianDate));
+        utils.setActivityTitleAndSubtitle(
+                getActivity(),
+                utils.getMonthName(persianDate),
+                Utils.formatNumber(persianDate.getYear(), digits));
     }
 
     private void resetSelectDay() {

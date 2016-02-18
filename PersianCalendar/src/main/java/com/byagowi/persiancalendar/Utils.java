@@ -18,11 +18,9 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceViewHolder;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +29,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
 import com.byagowi.persiancalendar.service.AthanResetReceiver;
@@ -51,7 +50,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -824,5 +822,22 @@ public class Utils {
         Toast.makeText(context,
                 context.getString(R.string.date_copied_clipboard) + "\n" + date,
                 Toast.LENGTH_SHORT).show();
+    }
+
+    public static Season getSeason() {
+        int month = getToday().getMonth();
+
+        if (month < 4) {
+            return Season.spring;
+
+        } else if (month < 7) {
+            return Season.summer;
+
+        } else if (month < 10) {
+            return Season.fall;
+
+        } else {
+            return Season.winter;
+        }
     }
 }

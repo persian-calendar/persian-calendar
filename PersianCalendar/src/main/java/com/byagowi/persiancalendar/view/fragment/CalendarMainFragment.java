@@ -89,6 +89,8 @@ public class CalendarMainFragment extends Fragment
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        viewPagerPosition = 0;
+
         owghat1 = (RelativeLayout) view.findViewById(R.id.owghat1);
         owghat2 = (RelativeLayout) view.findViewById(R.id.owghat2);
         owghat3 = (RelativeLayout) view.findViewById(R.id.owghat3);
