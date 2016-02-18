@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.City;
+import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
@@ -612,7 +613,7 @@ public class Utils {
 
             }
         }
-        return  eventsTitle;
+        return eventsTitle;
     }
 
     public void setAthanRepeater(Context context) {
