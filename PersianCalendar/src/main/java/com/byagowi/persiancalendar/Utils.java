@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
@@ -392,7 +391,7 @@ public class Utils {
     public List<String> getMonthNameList(AbstractDate date) {
         AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
-        for (int month : new Range(1, 12)) {
+        for (int month = 1; month <= 12; ++month) {
             dateClone.setMonth(month);
             monthNameList.add(shape(getMonthName(dateClone)));
         }
