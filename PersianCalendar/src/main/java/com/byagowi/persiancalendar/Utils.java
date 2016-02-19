@@ -162,6 +162,7 @@ public class Utils {
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
+        if (title == null || subtitle == null) { return; }
         initTypeface();
 
         //noinspection ConstantConditions
