@@ -175,6 +175,12 @@ public class CalendarMainFragment extends Fragment
         utils.prepareShapeTextView((TextView) view.findViewById(R.id.today));
         utils.prepareShapeTextView((TextView) view.findViewById(R.id.owghat_text));
 
+        // This will immediately be replaced by the same functionallity on fragment but is here to
+        // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
+        PersianDate today = utils.getToday();
+        utils.setActivityTitleAndSubtitle(getActivity(), utils.getMonthName(today),
+                utils.formatNumber(today.getYear(), utils.preferredDigits()));
+
         return view;
     }
 
