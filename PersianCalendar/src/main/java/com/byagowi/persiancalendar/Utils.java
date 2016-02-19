@@ -260,11 +260,7 @@ public class Utils {
             }
 
             if (changeDate) {
-                CivilDate civilDate = DateConverter.persianToCivil(getToday());
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-                Date date = calendar.getTime();
-                prayTimes = prayTimesCalculator.calculate(date, coordinate);
+                prayTimes = prayTimesCalculator.calculate(new Date(), coordinate);
             }
 
             if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
@@ -613,7 +609,7 @@ public class Utils {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Calendar repeatTime = Calendar.getInstance();
             repeatTime.set(Calendar.HOUR_OF_DAY, 0);
-            repeatTime.set(Calendar.MINUTE, 0);
+            repeatTime.set(Calendar.MINUTE, 1);
             Intent intent = new Intent(context, AthanResetReceiver.class);
             PendingIntent repeatIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.setInexactRepeating(AlarmManager.RTC, repeatTime.getTimeInMillis(), (24 * 60 * 60 * 1000), repeatIntent);

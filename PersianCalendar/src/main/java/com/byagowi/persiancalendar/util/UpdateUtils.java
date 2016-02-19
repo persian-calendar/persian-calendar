@@ -154,17 +154,12 @@ public class UpdateUtils {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE));
 
-        String owghat = utils.getNextOghatTime(currentClock, false);
-        if (owghat != null) {
-            remoteViews2.setTextViewText(R.id.owghat_2x2,
-                    utils.shape(owghat));
-            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
-        } else {
-            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
-        }
+        String owghat;
 
         if (pastDate == null || !pastDate.equals(persian)) {
             pastDate = persian;
+
+            owghat = utils.getNextOghatTime(currentClock, true);
 
             String holidays = utils.getHolidayTitle(persian);
 
@@ -185,6 +180,16 @@ public class UpdateUtils {
             } else {
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
             }
+        } else {
+            owghat = utils.getNextOghatTime(currentClock, false);
+        }
+
+        if (owghat != null) {
+            remoteViews2.setTextViewText(R.id.owghat_2x2,
+                    utils.shape(owghat));
+            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
+        } else {
+            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
         }
 
         remoteViews2.setTextViewText(R.id.time_2x2,
