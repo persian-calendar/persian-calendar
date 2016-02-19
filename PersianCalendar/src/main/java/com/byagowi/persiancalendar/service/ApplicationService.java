@@ -39,13 +39,13 @@ public class ApplicationService extends Service {
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateUtils.update();
+                updateUtils.update(false);
             }
         }, intentFilter);
 
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
-        updateUtils.update();
+        updateUtils.update(true);
         utils.loadAlarms();
         return START_STICKY;
     }

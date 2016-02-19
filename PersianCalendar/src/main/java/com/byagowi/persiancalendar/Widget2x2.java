@@ -13,6 +13,6 @@ public class Widget2x2 extends AppWidgetProvider {
         if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
             context.startService(new Intent(context, ApplicationService.class));
         }
-        UpdateUtils.getInstance(context).update();
+        UpdateUtils.getInstance(context).update(true);
     }
 }

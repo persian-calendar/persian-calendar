@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             startService(new Intent(getBaseContext(), ApplicationService.class));
         }
 
-        updateUtils.update();
+        updateUtils.update(true);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         if (menuPosition != PREFERENCE)
             return;
 
-        updateUtils.update();
+        updateUtils.update(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String locale = prefs.getString("AppLanguage", "fa");

@@ -56,7 +56,7 @@ public class UpdateUtils {
         return myInstance;
     }
 
-    public void update() {
+    public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         utils.loadLanguageFromSettings();
@@ -158,8 +158,11 @@ public class UpdateUtils {
 
         String owghat;
 
-        if (pastDate == null || !pastDate.equals(persian)) {
+        if (pastDate == null || !pastDate.equals(persian) || updateDate) {
+            Log.d("UpdateUtils", "change date");
             pastDate = persian;
+
+            utils.loadAlarms();
 
             owghat = utils.getNextOghatTime(currentClock, true);
 

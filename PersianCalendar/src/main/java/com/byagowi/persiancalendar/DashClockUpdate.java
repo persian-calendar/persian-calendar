@@ -9,7 +9,7 @@ public class DashClockUpdate extends DashClockExtension {
     protected void onUpdateData(int reason) {
         setUpdateWhenScreenOn(true);
         UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
-        updateUtils.update();
+        updateUtils.update(false);
         publishUpdate(updateUtils.getExtensionData());
     }
 
