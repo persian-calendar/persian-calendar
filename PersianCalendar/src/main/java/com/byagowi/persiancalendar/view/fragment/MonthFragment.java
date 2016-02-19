@@ -76,7 +76,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MonthAdapter(getActivity(), this, days);
+        adapter = new MonthAdapter(getContext(), this, days);
         recyclerView.setAdapter(adapter);
 
         calendarMainFragment = (CalendarMainFragment) getActivity()
