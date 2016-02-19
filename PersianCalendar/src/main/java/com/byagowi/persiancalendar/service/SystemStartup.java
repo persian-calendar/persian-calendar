@@ -14,7 +14,8 @@ import com.byagowi.persiancalendar.Utils;
 public class SystemStartup extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, ApplicationService.class));
-        Utils.getInstance(context).setAthanRepeater();
+        if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+            context.startService(new Intent(context, ApplicationService.class));
+        }
     }
 }

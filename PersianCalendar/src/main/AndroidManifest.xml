@@ -43,10 +43,6 @@
             android:exported="false" />
 
         <receiver
-            android:name=".service.AthanResetReceiver"
-            android:exported="false" />
-
-        <receiver
             android:name=".service.AlarmReceiver$StopAthanPlaybackReceiver"
             android:exported="false">
             <intent-filter>
@@ -67,6 +63,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider1x1" />
         </receiver>
+
         <receiver
             android:name=".Widget4x1"
             android:exported="false"
@@ -80,6 +77,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
         </receiver>
+
         <receiver
             android:name=".Widget2x2"
             android:exported="false"
