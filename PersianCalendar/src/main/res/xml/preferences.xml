@@ -5,7 +5,7 @@
         android:title="@string/general">
 
         <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
-            android:defaultValue="fa-IR"
+            android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
             android:key="AppLanguage"
