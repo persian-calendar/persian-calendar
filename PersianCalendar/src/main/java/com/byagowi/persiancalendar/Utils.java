@@ -33,7 +33,7 @@ import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.AlarmReceiver;
-import com.byagowi.persiancalendar.service.AthanResetReceiver;
+import com.byagowi.persiancalendar.service.SystemStartup;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -87,7 +87,6 @@ public class Utils {
 
     public String cachedCityKey = "";
     public City cachedCity;
-    private boolean athanRepeaterSet = false;
 
     private Utils(Context context) {
         this.context = context;
@@ -599,23 +598,14 @@ public class Utils {
         return eventsTitle;
     }
 
-    public void setAthanRepeater() {
-        Log.d(TAG, "athan repeater set: " + athanRepeaterSet);
-        // load them so the prefs are read for today's alarms
-        loadAlarms();
-
-        if (!athanRepeaterSet) {
-
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Calendar repeatTime = Calendar.getInstance();
-            repeatTime.set(Calendar.HOUR_OF_DAY, 0);
-            repeatTime.set(Calendar.MINUTE, 1);
-            Intent intent = new Intent(context, AthanResetReceiver.class);
-            PendingIntent repeatIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.setInexactRepeating(AlarmManager.RTC, repeatTime.getTimeInMillis(), (24 * 60 * 60 * 1000), repeatIntent);
-
-            athanRepeaterSet = true;
-        }
+    public void loadApp() {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 1);
+        Intent intent = new Intent(context, SystemStartup.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
     }
 
     public void loadAlarms() {

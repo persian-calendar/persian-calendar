@@ -43,10 +43,6 @@
             android:exported="false" />
 
         <receiver
-            android:name=".service.AthanResetReceiver"
-            android:exported="false" />
-
-        <receiver
             android:name=".service.AlarmReceiver$StopAthanPlaybackReceiver"
             android:exported="false">
             <intent-filter>

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
+import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 
 /**
@@ -42,7 +43,11 @@ public class ApplicationService extends Service {
                 }
             }, intentFilter);
         }
+
+        Utils utils = Utils.getInstance(getBaseContext());
+        utils.loadApp();
         updateUtils.update();
+        utils.loadAlarms();
         return START_STICKY;
     }
 }
