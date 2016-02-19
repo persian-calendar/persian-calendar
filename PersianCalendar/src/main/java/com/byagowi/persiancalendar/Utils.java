@@ -444,15 +444,23 @@ public class Utils {
                 .replaceAll("پ", "بی");
     }
 
+    private <T> Iterable<T> iteratorToIterable(final Iterator<T> iterator) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return iterator;
+            }
+        };
+    }
+
+
     public List<City> getAllCities(boolean needsSort) {
         ArrayList<City> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(
                     context.getResources().openRawResource(R.raw.cities)));
 
-            Iterator<String> countryIterator = countries.keys();
-            while (countryIterator.hasNext()) {
-                String countryCode = countryIterator.next();
+            for (String countryCode : iteratorToIterable(countries.keys())) {
                 JSONObject country = countries.getJSONObject(countryCode);
 
                 String countryEn = country.getString("en");
@@ -460,9 +468,7 @@ public class Utils {
 
                 JSONObject cities = country.getJSONObject("cities");
 
-                Iterator<String> citiesIterator = cities.keys();
-                while (citiesIterator.hasNext()) {
-                    String key = citiesIterator.next();
+                for (String key : iteratorToIterable(cities.keys())) {
                     JSONObject city = cities.getJSONObject(key);
 
                     String en = city.getString("en");
