@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         prevLocale = utils.loadLanguageFromSettings();
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
-        startService(new Intent(this, ApplicationService.class));
+        if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
+            startService(new Intent(getBaseContext(), ApplicationService.class));
+        }
 
         updateUtils.update();
 

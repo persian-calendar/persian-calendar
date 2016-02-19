@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.util.UpdateUtils;
 
 /**
  * 1x1 widget provider, implementation is on {@code CalendarWidget}
@@ -14,6 +15,9 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 public class Widget1x1 extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, ApplicationService.class));
+        if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+            context.startService(new Intent(context, ApplicationService.class));
+        }
+        UpdateUtils.getInstance(context).update();
     }
 }

@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -56,6 +57,7 @@ public class UpdateUtils {
     }
 
     public void update() {
+        Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         utils.loadLanguageFromSettings();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

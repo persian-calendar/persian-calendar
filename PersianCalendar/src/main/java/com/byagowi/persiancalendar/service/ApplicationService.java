@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
@@ -18,7 +19,6 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
  */
 public class ApplicationService extends Service {
     private UpdateUtils updateUtils;
-    private boolean first = true;
 
     @Override
     public IBinder onBind(Intent paramIntent) {
@@ -27,22 +27,21 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("ApplicationService" , "start");
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
-        if (first) {
-            first = false;
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
-            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-            intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
-            intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-            intentFilter.addAction(Intent.ACTION_TIME_TICK);
-            registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    updateUtils.update();
-                }
-            }, intentFilter);
-        }
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateUtils.update();
+            }
+        }, intentFilter);
 
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
