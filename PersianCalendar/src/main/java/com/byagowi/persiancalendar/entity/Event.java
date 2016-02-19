@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.entity;
 import calendar.PersianDate;
 
 /**
- * Event POJO
+ * Event
  *
  * @author ebraminio
  */

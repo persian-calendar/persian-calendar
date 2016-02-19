@@ -191,7 +191,7 @@ public class Utils {
         String location = prefs.getString("Location", "CUSTOM");
         if (!location.equals("CUSTOM")) {
             City city = getCityByKey(location);
-            return new Coordinate(city.latitude, city.longitude);
+            return new Coordinate(city.getLatitude(), city.getLongitude());
         }
 
         try {
@@ -490,18 +490,18 @@ public class Utils {
         Arrays.sort(cities, new Comparator<City>() {
             @Override
             public int compare(City l, City r) {
-                if (l.key.equals("CUSTOM")) {
+                if (l.getKey().equals("CUSTOM")) {
                     return -1;
                 }
-                if (r.key.equals("CUSTOM")) {
+                if (r.getKey().equals("CUSTOM")) {
                     return 1;
                 }
-                int compare = r.countryCode.compareTo(l.countryCode);
+                int compare = r.getCountryCode().compareTo(l.getCountryCode());
                 return compare != 0
                         ? compare
                         : (locale.equals("en")
-                        ? l.en.compareTo(r.en)
-                        : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa)));
+                        ? l.getEn().compareTo(r.getEn())
+                        : persianStringToArabic(l.getFa()).compareTo(persianStringToArabic(r.getFa())));
             }
         });
 
@@ -522,7 +522,7 @@ public class Utils {
         cachedCityKey = key;
 
         for (City city : getAllCities(false))
-            if (city.key.equals(key)) {
+            if (city.getKey().equals(key)) {
                 cachedCity = city;
                 return city;
             }
