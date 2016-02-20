@@ -475,7 +475,8 @@ public class Utils {
                     Coordinate coordinate = new Coordinate(
                             city.getDouble("latitude"),
                             city.getDouble("longitude"),
-                            city.getDouble("elevation"));
+                            0 // city.getDouble("elevation")
+                    );
 
                     result.add(new City(key, en, fa, countryCode, countryEn, countryFa, coordinate));
                 }
