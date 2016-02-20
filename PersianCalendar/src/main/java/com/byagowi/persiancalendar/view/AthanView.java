@@ -13,10 +13,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.entity.City;
-import com.byagowi.persiancalendar.service.AlarmReceiver;
+import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.PrayTime;
 
@@ -34,7 +35,7 @@ public class AthanView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String prayerKey = getIntent().getStringExtra(AlarmReceiver.KEY_EXTRA_PRAYER_KEY);
+        String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
         setFlavor(prayerKey);
         setContentView(layoutId);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
@@ -79,7 +80,9 @@ public class AthanView extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AthanView.this.sendBroadcast(new Intent(AlarmReceiver.ACTION_STOP_ALARM));
+                Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
+                intent.setAction(Constants.ACTION_STOP_ALARM);
+                AthanView.this.sendBroadcast(intent);
                 finish();
             }
         });

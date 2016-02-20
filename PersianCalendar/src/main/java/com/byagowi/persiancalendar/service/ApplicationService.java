@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -18,7 +16,6 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
  * @author Ebrahim Byagowi <ebrahim@byagowi.com>
  */
 public class ApplicationService extends Service {
-    private UpdateUtils updateUtils;
 
     @Override
     public IBinder onBind(Intent paramIntent) {
@@ -27,8 +24,8 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("ApplicationService" , "start");
-        updateUtils = UpdateUtils.getInstance(getApplicationContext());
+        Log.d(ApplicationService.class.getName() , "start");
+        UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
@@ -36,16 +33,11 @@ public class ApplicationService extends Service {
         intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateUtils.update();
-            }
-        }, intentFilter);
+        registerReceiver(new BroadcastReceivers(), intentFilter);
 
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
-        updateUtils.update();
+        updateUtils.update(true);
         utils.loadAlarms();
         return START_STICKY;
     }
