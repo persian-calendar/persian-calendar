@@ -1,4 +1,8 @@
 {
+  "#source": [
+    "https://github.com/RaminNietzsche/pyzeshtcal/blob/master/shamsievent.py",
+    "Ramin Najjarbashi"
+  ],
   "events": [
     {
       "month": 2,
