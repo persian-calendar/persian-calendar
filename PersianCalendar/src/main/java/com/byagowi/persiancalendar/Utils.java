@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
@@ -191,7 +190,7 @@ public class Utils {
         String location = prefs.getString("Location", "CUSTOM");
         if (!location.equals("CUSTOM")) {
             City city = getCityByKey(location);
-            return new Coordinate(city.latitude, city.longitude);
+            return new Coordinate(city.getLatitude(), city.getLongitude());
         }
 
         try {
@@ -391,7 +390,7 @@ public class Utils {
     public List<String> getMonthNameList(AbstractDate date) {
         AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
-        for (int month : new Range(1, 12)) {
+        for (int month = 1; month <= 12; ++month) {
             dateClone.setMonth(month);
             monthNameList.add(shape(getMonthName(dateClone)));
         }
@@ -444,15 +443,23 @@ public class Utils {
                 .replaceAll("پ", "بی");
     }
 
+    private <T> Iterable<T> iteratorToIterable(final Iterator<T> iterator) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return iterator;
+            }
+        };
+    }
+
+
     public List<City> getAllCities(boolean needsSort) {
         ArrayList<City> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(
                     context.getResources().openRawResource(R.raw.cities)));
 
-            Iterator<String> countryIterator = countries.keys();
-            while (countryIterator.hasNext()) {
-                String countryCode = countryIterator.next();
+            for (String countryCode : iteratorToIterable(countries.keys())) {
                 JSONObject country = countries.getJSONObject(countryCode);
 
                 String countryEn = country.getString("en");
@@ -460,9 +467,7 @@ public class Utils {
 
                 JSONObject cities = country.getJSONObject("cities");
 
-                Iterator<String> citiesIterator = cities.keys();
-                while (citiesIterator.hasNext()) {
-                    String key = citiesIterator.next();
+                for (String key : iteratorToIterable(cities.keys())) {
                     JSONObject city = cities.getJSONObject(key);
 
                     String en = city.getString("en");
@@ -490,18 +495,18 @@ public class Utils {
         Arrays.sort(cities, new Comparator<City>() {
             @Override
             public int compare(City l, City r) {
-                if (l.key.equals("CUSTOM")) {
+                if (l.getKey().equals("CUSTOM")) {
                     return -1;
                 }
-                if (r.key.equals("CUSTOM")) {
+                if (r.getKey().equals("CUSTOM")) {
                     return 1;
                 }
-                int compare = r.countryCode.compareTo(l.countryCode);
+                int compare = r.getCountryCode().compareTo(l.getCountryCode());
                 return compare != 0
                         ? compare
                         : (locale.equals("en")
-                        ? l.en.compareTo(r.en)
-                        : persianStringToArabic(l.fa).compareTo(persianStringToArabic(r.fa)));
+                        ? l.getEn().compareTo(r.getEn())
+                        : persianStringToArabic(l.getFa()).compareTo(persianStringToArabic(r.getFa())));
             }
         });
 
@@ -522,7 +527,7 @@ public class Utils {
         cachedCityKey = key;
 
         for (City city : getAllCities(false))
-            if (city.key.equals(key)) {
+            if (city.getKey().equals(key)) {
                 cachedCity = city;
                 return city;
             }

@@ -49,7 +49,7 @@
     </string-array>
 
     <string-array name="languageKeys" translatable="false">
-        <item>fa-IR</item>
+        <item>fa</item>
         <item>fa-AF</item>
         <item>ps</item>
         <item>en</item>

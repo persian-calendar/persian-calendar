@@ -47,8 +47,8 @@ public class CompassFragment extends Fragment {
             City city = utils.getCityByKey(location);
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
                     prefs.getString("AppLanguage", "fa").equals("en")
-                            ? city.en
-                            : city.fa);
+                            ? city.getEn()
+                            : city.getFa());
         }
 
 

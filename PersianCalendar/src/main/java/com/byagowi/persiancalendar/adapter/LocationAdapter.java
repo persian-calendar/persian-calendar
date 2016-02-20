@@ -46,7 +46,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-            locationPreferenceDialog.selectItem(cities.get(getAdapterPosition()).key);
+            locationPreferenceDialog.selectItem(cities.get(getAdapterPosition()).getKey());
         }
     }
 
@@ -59,13 +59,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         utils.prepareTextView(holder.city);
         holder.city.setText(locale.equals("en")
-                ? cities.get(position).en
-                : utils.shape(cities.get(position).fa));
+                ? cities.get(position).getEn()
+                : utils.shape(cities.get(position).getFa()));
 
         utils.prepareTextView(holder.country);
         holder.country.setText(locale.equals("en")
-                ? cities.get(position).countryEn
-                : utils.shape(cities.get(position).countryFa));
+                ? cities.get(position).getCountryEn()
+                : utils.shape(cities.get(position).getCountryFa()));
     }
 
     @Override

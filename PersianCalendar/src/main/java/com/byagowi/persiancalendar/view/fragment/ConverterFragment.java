@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.byagowi.common.Range;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
@@ -190,7 +189,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         List<String> yearsList = new ArrayList<>();
         int yearDiffRange = 200;
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
-        for (int i : new Range(startingYearOnYearSpinner, yearDiffRange)) {
+        for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
             yearsList.add(utils.formatNumber(i, digits));
         }
         yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, yearsList));
@@ -205,7 +204,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
 
         // days spinner init.
         List<String> daysList = new ArrayList<>();
-        for (int i : new Range(1, 31)) {
+        for (int i = 1; i <= 31; ++i) {
             daysList.add(utils.formatNumber(i, digits));
         }
         daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, daysList));
