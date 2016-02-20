@@ -29,26 +29,25 @@
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name=".service.SystemStartup"
+            android:name=".service.BroadcastReceivers"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".service.AlarmReceiver"
-            android:exported="false" />
+        <!--<receiver-->
+            <!--android:name=".service.AlarmReceiver"-->
+            <!--android:exported="false" />-->
 
-        <receiver
-            android:name=".service.AlarmReceiver$StopAthanPlaybackReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.byagowi.persiancalendar.stop_athan" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".service.AlarmReceiver$StopAthanPlaybackReceiver"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.byagowi.persiancalendar.stop_athan" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <receiver
             android:name=".Widget1x1"

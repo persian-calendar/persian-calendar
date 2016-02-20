@@ -33,8 +33,7 @@ import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
-import com.byagowi.persiancalendar.service.AlarmReceiver;
-import com.byagowi.persiancalendar.service.SystemStartup;
+import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -604,7 +603,7 @@ public class Utils {
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 0);
         startTime.set(Calendar.MINUTE, 1);
-        Intent intent = new Intent(context, SystemStartup.class);
+        Intent intent = new Intent(context, BroadcastReceivers.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
     }
@@ -624,29 +623,31 @@ public class Utils {
         String prefString = prefs.getString("AthanAlarm", "");
         CalculationMethod calculationMethod = getCalculationMethod();
         Coordinate coordinate = getCoordinate();
+
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
 
             String[] alarmTimesNames = TextUtils.split(prefString, ",");
-            for (String prayerName : alarmTimesNames) {
-                Clock alarmTime = prayTimes.get(PrayTime.valueOf(prayerName));
+            for (int i = 0; i < alarmTimesNames.length; i++) {
+
+                Clock alarmTime = prayTimes.get(PrayTime.valueOf(alarmTimesNames[i]));
 
                 if (alarmTime != null) {
-                    setAlarm(PrayTime.valueOf(prayerName), alarmTime);
+                    setAlarm(PrayTime.valueOf(alarmTimesNames[i]), alarmTime, i);
                 }
             }
         }
     }
 
-    public void setAlarm(PrayTime prayTime, Clock clock) {
+    public void setAlarm(PrayTime prayTime, Clock clock, int id) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(prayTime, triggerTime.getTimeInMillis());
+        setAlarm(prayTime, triggerTime.getTimeInMillis(), id);
     }
 
-    public void setAlarm(PrayTime prayTime, long timeInMillis) {
+    public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
         String valAthanGap = prefs.getString("AthanGap", "0");
         long athanGap = TextUtils.isEmpty(valAthanGap) ? 0 : Long.parseLong(valAthanGap);
 
@@ -658,9 +659,10 @@ public class Utils {
         if (!triggerTime.before(Calendar.getInstance())) {
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
-            Intent intent = new Intent(context, AlarmReceiver.class);
-            intent.putExtra(AlarmReceiver.KEY_EXTRA_PRAYER_KEY, prayTime.name());
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            Intent intent = new Intent(context, BroadcastReceivers.class);
+            intent.setAction(Constants.BROADCAST_ALARM);
+            intent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTime.name());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
