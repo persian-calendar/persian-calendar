@@ -189,8 +189,7 @@ public class Utils {
     public Coordinate getCoordinate() {
         String location = prefs.getString("Location", "CUSTOM");
         if (!location.equals("CUSTOM")) {
-            City city = getCityByKey(location);
-            return new Coordinate(city.getLatitude(), city.getLongitude());
+            return getCityByKey(location).getCoordinate();
         }
 
         try {
@@ -473,10 +472,12 @@ public class Utils {
                     String en = city.getString("en");
                     String fa = city.getString("fa");
 
-                    double lat = city.getDouble("latitude");
-                    double lon = city.getDouble("longitude");
+                    Coordinate coordinate = new Coordinate(
+                            city.getDouble("latitude"),
+                            city.getDouble("longitude"),
+                            city.getDouble("elevation"));
 
-                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa, lat, lon));
+                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa, coordinate));
                 }
             }
         } catch (JSONException e) {

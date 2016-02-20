@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.entity;
 
+import com.github.praytimes.Coordinate;
+
 /**
  * Created by ebraminio on 2/18/16.
  */
@@ -10,18 +12,16 @@ public class City {
     private String countryCode;
     private String countryEn;
     private String countryFa;
-    private double latitude;
-    private double longitude;
+    private Coordinate coordinate;
     public City(String key, String en, String fa, String countryCode, String countryEn,
-                String countryFa, double latitude, double longitude) {
+                String countryFa, Coordinate coordinate) {
         this.key = key;
         this.en = en;
         this.fa = fa;
         this.countryCode = countryCode;
         this.countryEn = countryEn;
         this.countryFa = countryFa;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.coordinate = coordinate;
     }
 
     public String getCountryCode() {
@@ -72,19 +72,11 @@ public class City {
         this.key = key;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLatitude(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 }
