@@ -12,6 +12,7 @@
     <color name="text_holiday">#ff0000</color>
     <color name="text_day">#ffffff</color>
     <color name="text_day_name">#aaffffff</color>
+    <color name="text_athan">#ffffff</color>
 
     <color name="divider">#e0e0e0</color>
     <color name="background">#f4f4f4</color>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/zohr"
+        android:scaleType="centerCrop"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/athan_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/text_athan"
+        android:textStyle="bold"
+        android:layout_marginTop="80dp"
+        style="@style/ShadowTextStyle"
+        android:background="@null"
+        android:layout_marginRight="30dp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/athan_name"
+        android:textColor="@color/text_athan"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        style="@style/ShadowTextStyle"
+        android:background="@null"
+        android:layout_marginRight="30dp"/>
+
+</RelativeLayout>

@@ -35,7 +35,8 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
 
         if (intent != null && intent.getAction() != null && !TextUtils.isEmpty(intent.getAction())) {
             if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
-                    intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
+                    intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
+                    intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
                 if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
                     context.startService(new Intent(context, ApplicationService.class));
@@ -51,6 +52,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
                 updateUtils.update(true);
+                utils.loadApp();
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
@@ -63,10 +65,10 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
     }
 
     private void startAthanActivity(String string) {
-        Intent athanViewIntent = new Intent(context, AthanView.class);
-        athanViewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        athanViewIntent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, string);
-        context.startActivity(athanViewIntent);
+        Intent intent = new Intent(context, AthanView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, string);
+        context.startActivity(intent);
     }
 
     private void play() {
