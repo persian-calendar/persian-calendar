@@ -84,9 +84,4 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             athanPref.setVolume(volume);
         }
     }
-
-    @Override
-    public void setInitialSavedState(SavedState state) {
-        super.setInitialSavedState(state);
-    }
 }
