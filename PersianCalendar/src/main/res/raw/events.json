@@ -1,52 +1,18 @@
 {
   "events": [
     {
-      "year": 1394,
-      "month": 11,
-      "day": 12,
-      "title": "رویداددو"
+      "year": -1,
+      "month": 2,
+      "day": 3,
+      "holiday": false,
+      "title": "اردیبهشت‌روز، جشن اردیبهشتگان"
     },
     {
-      "year": 1394,
-      "month": 11,
-      "day": 16,
-      "title": "رویداد یک"
-    },
-    {
-      "year": 1394,
-      "month": 11,
-      "day": 20,
-      "title": "رویداد سه"
-    },
-    {
-      "year": 1394,
-      "month": 12,
-      "day": 4,
-      "title": "رویداد چهارم"
-    },
-    {
-      "year": 1395,
-      "month": 1,
-      "day": 4,
-      "title": "رویداد ۵"
-    },
-    {
-      "year": 1395,
-      "month": 1,
-      "day": 24,
-      "title": "رویداد آخر"
-    },
-    {
-      "year": 1394,
-      "month": 11,
-      "day": 25,
-      "title": "تولد بهداد"
-    },
-    {
-      "year": 1394,
-      "month": 11,
-      "day": 25,
-      "title": "تست ویجت"
+      "year": -1,
+      "month": 2,
+      "day": 10,
+      "holiday": false,
+      "title": "جشن چهلم نوروز"
     }
   ]
 }

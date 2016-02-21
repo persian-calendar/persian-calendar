@@ -553,8 +553,9 @@ public class Utils {
                 int month = event.getInt("month");
                 int day = event.getInt("day");
                 String title = event.getString("title");
+                boolean holiday = event.getBoolean("holiday");
 
-                result.add(new Event(new PersianDate(year, month, day), title));
+                result.add(new Event(new PersianDate(year, month, day), title, holiday));
             }
 
         } catch (JSONException e) {
@@ -563,49 +564,37 @@ public class Utils {
         return result;
     }
 
-    private void loadHolidays(InputStream is) {
-        holidays = readEventsFromJSON(is);
-    }
-
-    private void loadEvents(InputStream is) {
-        events = readEventsFromJSON(is);
-    }
-
-    public String getHolidayTitle(PersianDate day) {
-        if (holidays == null) {
-            loadHolidays(context.getResources().openRawResource(R.raw.holidays));
-        }
-
-        for (Event holiday : holidays) {
-            if (holiday.getDate().equals(day)) {
-                return holiday.getTitle();
-            }
-        }
-        return null;
-    }
-
-    public String getEventTitle(PersianDate day) {
+    public ArrayList<Event> getEvents(PersianDate day) {
         if (events == null) {
-            loadEvents(context.getResources().openRawResource(R.raw.events));
+            events = readEventsFromJSON(context.getResources().openRawResource(R.raw.events));
         }
 
-        String eventsTitle = "";
-        boolean first = true;
+        ArrayList<Event> result = new ArrayList<>();
         for (Event event : events) {
             if (event.getDate().equals(day)) {
-
-                if (first) {
-                    first = false;
-                } else {
-                    eventsTitle = eventsTitle + "\n";
-                }
-
-                // trim XML whitespaces and newlines
-                eventsTitle = eventsTitle + event.getTitle().replaceAll("\n", "").trim();
-
+                result.add(event);
             }
         }
-        return eventsTitle;
+        return result;
+    }
+
+    public String getEventsTitle(PersianDate day, boolean holiday) {
+        String titles = "";
+        boolean first = true;
+        ArrayList<Event> dayEvents = getEvents(day);
+
+        for (int i = 0; i < dayEvents.size(); i++) {
+            if (dayEvents.get(i).isHoliday() == holiday) {
+                if (first) {
+                    first = false;
+
+                } else {
+                    titles = titles + "\n";
+                }
+                titles = titles + dayEvents.get(i).getTitle();
+            }
+        }
+        return titles;
     }
 
     public void loadApp() {
