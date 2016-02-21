@@ -1887,6 +1887,278 @@
       "day": 29,
       "type": "iran_ancient",
       "title": "گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان (در آخرین روز سال)/ زادروز زرتشت/ جشن اوشیدر (نجات‌بخش ایرانی) در دریاچهٔ هامون و کوه خواجه/ آتش‌افروزی بر بام‌ها در استقبال از نوروز"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 1,
+      "day": 4,
+      "type": "hijri",
+      "title": "شهادت حضرت فاطمه زهرا سلام اﷲ علیها (۱۱ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 2,
+      "day": 12,
+      "type": "hijri",
+      "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 2,
+      "day": 26,
+      "type": "hijri",
+      "title": "مبعث حضرت رسول اکرم صلی اﷲ علیه و آله (۱۳ سال قبل از هجرت)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 3,
+      "day": 13,
+      "type": "hijri",
+      "title": "ولادت حضرت قائم عجلاﷲ تعالی فرجه (۲۵۵ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 4,
+      "day": 17,
+      "type": "hijri",
+      "title": "شهادت حضرت علی علیه‌السلام (۴۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 4,
+      "day": 27,
+      "type": "hijri",
+      "title": "عید سعید فطر"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 4,
+      "day": 28,
+      "type": "hijri",
+      "title": "تعطیل به مناسبت عید سعید فطر"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 5,
+      "day": 20,
+      "type": "hijri",
+      "title": "شهادت حضرت امام جعفر صادق علیه‌السلام (۱۴۸ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 7,
+      "day": 2,
+      "type": "hijri",
+      "title": "عید سعید قربان"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 7,
+      "day": 10,
+      "type": "hijri",
+      "title": "عید سعید غدیر خم (۱۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 8,
+      "day": 1,
+      "type": "hijri",
+      "title": "تاسوعای حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 8,
+      "day": 2,
+      "type": "hijri",
+      "title": "عاشورای حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 9,
+      "day": 11,
+      "type": "hijri",
+      "title": "اربعین حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 9,
+      "day": 19,
+      "type": "hijri",
+      "title": "رحلت حضرت رسول اکرم صلیاﷲ علیه و آله (۱۱ هـ ق) - شهادت حضرت امام حسن مجتبی علیه‌السلام (۵۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 9,
+      "day": 21,
+      "type": "hijri",
+      "title": "شهادت حضرت امام رضا علیه‌السلام (۲۰۳ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 10,
+      "day": 8,
+      "type": "hijri",
+      "title": "میلاد حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت) - میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1394,
+      "month": 12,
+      "day": 23,
+      "type": "hijri",
+      "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 1,
+      "day": 4,
+      "type": "hijri",
+      "title": "سالروز وفات حضرت امالبنین سلام الله علیها - روز تکریم مادران و همسران شهدا - عید\nنوروز"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 2,
+      "day": 2,
+      "type": "hijri",
+      "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 2,
+      "day": 16,
+      "type": "hijri",
+      "title": "مبعث حضرت رسول اکرم صلی اﷲ علیه و آله (۱۳ سال قبل از هجرت)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 3,
+      "day": 2,
+      "type": "hijri",
+      "title": "ولادت حضرت قائم عجلاﷲ تعالی فرجه (۲۵۵ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 4,
+      "day": 7,
+      "type": "hijri",
+      "title": "شهادت حضرت علی علیه‌السلام (۴۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 4,
+      "day": 16,
+      "type": "hijri",
+      "title": "عید سعید فطر"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 4,
+      "day": 17,
+      "type": "hijri",
+      "title": "تعطیل به مناسبت عید سعید فطر"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 5,
+      "day": 9,
+      "type": "hijri",
+      "title": "شهادت حضرت امام جعفر صادق علیه‌السلام (۱۴۸ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 6,
+      "day": 22,
+      "type": "hijri",
+      "title": "عید سعید قربان"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 6,
+      "day": 30,
+      "type": "hijri",
+      "title": "عید سعید غدیر خم (۱۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 7,
+      "day": 20,
+      "type": "hijri",
+      "title": "تاسوعای حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 7,
+      "day": 21,
+      "type": "hijri",
+      "title": "عاشورای حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 8,
+      "day": 30,
+      "type": "hijri",
+      "title": "اربعین حسینی"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 9,
+      "day": 8,
+      "type": "hijri",
+      "title": "رحلت حضرت رسول اکرم صلیاﷲ علیه و آله (۱۱ هـ ق) - شهادت حضرت امام حسن مجتبی علیه‌السلام (۵۰ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 9,
+      "day": 10,
+      "type": "hijri",
+      "title": "شهادت حضرت امام رضا علیه‌السلام (۲۰۳ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 9,
+      "day": 27,
+      "type": "hijri",
+      "title": "میلاد حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت) - میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ هـ ق)"
+    },
+    {
+      "holiday": true,
+      "year": 1395,
+      "month": 12,
+      "day": 12,
+      "type": "hijri",
+      "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ هـ ق)"
     }
   ]
 }
