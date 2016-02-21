@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.support.v7.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -76,7 +77,8 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(context, utils.getAthanUri());
-            //mediaPlayer.setVolume(utils);
+            float volume = utils.getAthanVolume();
+            mediaPlayer.setVolume(volume, volume);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {
