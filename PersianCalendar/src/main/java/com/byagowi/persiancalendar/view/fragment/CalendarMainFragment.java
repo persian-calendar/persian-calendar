@@ -233,21 +233,21 @@ public class CalendarMainFragment extends Fragment
     }
 
     private void showEvent(PersianDate persianDate) {
-        String holidays = utils.getHolidayTitle(persianDate);
-        String events = utils.getEventTitle(persianDate);
+        String holidays = utils.getEventsTitle(persianDate, true);
+        String events = utils.getEventsTitle(persianDate, false);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
         eventTitle.setVisibility(View.GONE);
 
-        if (holidays != null) {
+        if (!TextUtils.isEmpty(holidays)) {
             holidayTitle.setText(utils.shape(holidays));
             holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(events)) {
-            eventTitle.setText(events);
+            eventTitle.setText(utils.shape(events));
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }

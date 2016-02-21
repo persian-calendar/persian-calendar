@@ -10,10 +10,12 @@ import calendar.PersianDate;
 public class Event {
     private PersianDate date;
     private String title;
+    private boolean holiday;
 
-    public Event(PersianDate date, String title) {
+    public Event(PersianDate date, String title, boolean holiday) {
         this.date = date;
         this.title = title;
+        this.holiday = holiday;
     }
 
     public PersianDate getDate() {
@@ -30,5 +32,13 @@ public class Event {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isHoliday() {
+        return holiday;
+    }
+
+    public void setHoliday(boolean holiday) {
+        this.holiday = holiday;
     }
 }

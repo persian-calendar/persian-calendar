@@ -190,13 +190,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 day.setNum(utils.formatNumber(i, digits));
                 day.setDayOfWeek(dayOfWeek);
 
-                String holidayTitle = utils.getHolidayTitle(persianDate);
-                if (holidayTitle != null || dayOfWeek == 6) {
+                if (dayOfWeek == 6 || !TextUtils.isEmpty(utils.getEventsTitle(persianDate, true))) {
                     day.setHoliday(true);
                 }
 
-                String eventTitle = utils.getEventTitle(persianDate);
-                if (!TextUtils.isEmpty(eventTitle) || holidayTitle != null ) {
+                if (utils.getEvents(persianDate).size() > 0) {
                     day.setEvent(true);
                 }
 

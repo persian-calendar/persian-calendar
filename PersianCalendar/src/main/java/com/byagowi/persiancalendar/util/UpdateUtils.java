@@ -166,7 +166,7 @@ public class UpdateUtils {
 
             owghat = utils.getNextOghatTime(currentClock, true);
 
-            String holidays = utils.getHolidayTitle(persian);
+            String holidays = utils.getEventsTitle(persian, true);
 
             if (!TextUtils.isEmpty(holidays)) {
                 remoteViews2.setTextViewText(R.id.holiday_2x2,
@@ -176,7 +176,7 @@ public class UpdateUtils {
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
             }
 
-            String events = utils.getEventTitle(persian);
+            String events = utils.getEventsTitle(persian, false);
 
             if (!TextUtils.isEmpty(events)) {
                 remoteViews2.setTextViewText(R.id.event_2x2,

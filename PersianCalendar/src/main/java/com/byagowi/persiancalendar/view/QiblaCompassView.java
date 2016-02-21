@@ -127,7 +127,7 @@ public class QiblaCompassView extends View {
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(Color.WHITE);
+        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_dark)));
         canvas.rotate(-bearing, px, py);// Attach and Detach capability lies
         canvas.save();
         drawDial(canvas);
@@ -176,13 +176,13 @@ public class QiblaCompassView extends View {
         // over here
         Paint markerPaint, circlePaint;
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.text_normal));
+        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.STROKE); // Sadece Cember ciziyor.
 
         int textHeight = (int) textPaint.measureText("yY");
         markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_normal));
+        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
         // Draw the background
         canvas.drawCircle(px, py, Radius, circlePaint);
         canvas.drawCircle(px, py, Radius - 20, circlePaint);
