@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.dialog;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.EditTextPreferenceDialogFragmentCompat;
 import android.text.InputType;
@@ -22,7 +23,13 @@ public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
-        ((EditText) view.findViewById(android.R.id.edit)).setInputType(
-                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        EditText editText = (EditText) view.findViewById(android.R.id.edit);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+        // on platforms supporting direction
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            editText.setTextDirection(View.TEXT_DIRECTION_LTR);
+            editText.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
     }
 }
