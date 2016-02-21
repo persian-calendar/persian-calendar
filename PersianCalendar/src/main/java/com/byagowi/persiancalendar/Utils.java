@@ -660,7 +660,12 @@ public class Utils {
 
     public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
         String valAthanGap = prefs.getString("AthanGap", "0");
-        long athanGap = TextUtils.isEmpty(valAthanGap) ? 0 : Long.parseLong(valAthanGap);
+        long athanGap;
+        try {
+            athanGap = (long)(Double.parseDouble(valAthanGap) * 60);
+        } catch (NumberFormatException e) {
+            athanGap = 0;
+        }
 
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.setTimeInMillis(timeInMillis - TimeUnit.SECONDS.toMillis(athanGap));
