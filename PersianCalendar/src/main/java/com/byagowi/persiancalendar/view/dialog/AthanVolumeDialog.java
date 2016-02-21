@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -20,33 +21,39 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         Bundle bundle = new Bundle(1);
         bundle.putString("key", preference.getKey());
         fragment.setArguments(bundle);
-
         return fragment;
     }
+
+    int volume;
+    AudioManager audioManager;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected View onCreateDialogView(Context context) {
         View view = super.onCreateDialogView(context);
-        instantiateMediaPlayer();
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
+        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.setDataSource(
+                    getContext(),
+                    Utils.getInstance(getContext()).getAthanUri());
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
+        } catch (IOException e) {
+            Log.e("AthanPref", "", e);
+        }
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider
-                .setProgress(AthanVolumePreference
-                                .audioManager
-                                .getStreamVolume(AudioManager.STREAM_ALARM));
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setProgress(athanPref.getVolume());
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                AthanVolumePreference
-                        .audioManager
-                        .setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
+                volume = progress;
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
             }
 
             @Override
@@ -56,9 +63,9 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 try {
-                    if (!AthanVolumePreference.mediaPlayer.isPlaying()) {
-                        AthanVolumePreference.mediaPlayer.prepare();
-                        AthanVolumePreference.mediaPlayer.start();
+                    if (!mediaPlayer.isPlaying()) {
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
                     }
                 } catch (IOException ignored) {
                 }
@@ -68,35 +75,12 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         return view;
     }
 
-    public void instantiateMediaPlayer() {
-        try {
-            AthanVolumePreference.mediaPlayer = null;
-            AthanVolumePreference.mediaPlayer = new MediaPlayer();
-            AthanVolumePreference.mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-
-            AthanVolumePreference.mediaPlayer.setDataSource(
-                    getContext(),
-                    Utils.getInstance(getContext()).getAthanUri());
-
-            AthanVolumePreference.mediaPlayer.setOnCompletionListener(
-                    new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            instantiateMediaPlayer();
-                        }
-                    });
-        } catch (IOException ignored) {
-        }
-    }
-
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        AthanVolumePreference.mediaPlayer.release();
-
-        if (!positiveResult) {
-            AthanVolumePreference.audioManager.setStreamVolume(
-                    AudioManager.STREAM_ALARM,
-                    ((AthanVolumePreference) getPreference()).initialVolume, 0);
+        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        mediaPlayer.release();
+        if (positiveResult) {
+            athanPref.setVolume(volume);
         }
     }
 

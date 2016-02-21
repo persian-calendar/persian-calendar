@@ -688,6 +688,10 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
+    public int getAthanVolume() {
+        return prefs.getInt("AthanVolume", 1);
+    }
+
     public void changeAppLanguage(String localeCode) {
         Locale locale = TextUtils.isEmpty(localeCode) ? Locale.getDefault() : new Locale(localeCode);
         Locale.setDefault(locale);
