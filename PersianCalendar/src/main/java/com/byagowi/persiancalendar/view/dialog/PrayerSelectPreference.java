@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.view.dialog;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.preference.Preference;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.text.TextUtils;
@@ -12,7 +9,6 @@ import android.util.AttributeSet;
 import com.byagowi.persiancalendar.Utils;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
