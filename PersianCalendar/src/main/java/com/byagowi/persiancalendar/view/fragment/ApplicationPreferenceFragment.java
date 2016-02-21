@@ -23,6 +23,8 @@ import com.byagowi.persiancalendar.view.dialog.LocationPreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.dialog.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.dialog.PrayerSelectPreference;
+import com.byagowi.persiancalendar.view.dialog.ShapedListDialog;
+import com.byagowi.persiancalendar.view.dialog.ShapedListPreference;
 
 /**
  * Preference activity
@@ -124,6 +126,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             LocalBroadcastManager.getInstance(getContext()).registerReceiver(
                     new PreferenceChangeListener(),
                     new IntentFilter(INTENT_ACTION_PREFERENCES_CHANGED));
+        } else if (preference instanceof ShapedListPreference) {
+            fragment = ShapedListDialog.newInstance(preference);
+            fragment.setTargetFragment(this, 0);
+            fragment.show(getFragmentManager(),
+                    "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else {
             super.onDisplayPreferenceDialog(preference);
         }

@@ -32,4 +32,24 @@ public class ShapedListPreference extends ListPreference {
         super.onBindViewHolder(holder);
         Utils.getInstance(getContext()).prepareShapePreference(holder);
     }
+
+    public void setSelected(String selected) {
+        final boolean wasBlocking = shouldDisableDependents();
+        persistString(selected);
+        final boolean isBlocking = shouldDisableDependents();
+        if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
+    }
+
+    String defaultValue = "";
+
+    // steal default value, well, don't know a better value
+    @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        super.onSetInitialValue(restoreValue, defaultValue);
+        this.defaultValue = (String)defaultValue;
+    }
+
+    public String getSelected() {
+        return getPersistedString(defaultValue);
+    }
 }
