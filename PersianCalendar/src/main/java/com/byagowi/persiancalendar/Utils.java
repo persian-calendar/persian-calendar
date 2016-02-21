@@ -688,8 +688,8 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
-    public float getAthanVolume() {
-        return prefs.getFloat("AthanVolume", 1);
+    public int getAthanVolume() {
+        return prefs.getInt("AthanVolume", 1);
     }
 
     public void changeAppLanguage(String localeCode) {

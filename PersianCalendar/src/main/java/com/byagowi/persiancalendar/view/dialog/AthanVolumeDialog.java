@@ -24,7 +24,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         return fragment;
     }
 
-    float volume;
+    int volume;
     AudioManager audioManager;
     MediaPlayer mediaPlayer;
 
@@ -40,14 +40,14 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             mediaPlayer.setDataSource(
                     getContext(),
                     Utils.getInstance(getContext()).getAthanUri());
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, (int)athanPref.getVolume(), 0);
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
         } catch (IOException e) {
             Log.e("AthanPref", "", e);
         }
 
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
 
-        seekBar.setProgress((int)athanPref.getVolume());
+        seekBar.setProgress(athanPref.getVolume());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override

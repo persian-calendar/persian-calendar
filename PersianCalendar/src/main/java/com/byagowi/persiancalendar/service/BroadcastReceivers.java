@@ -81,7 +81,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
             mediaPlayer.setDataSource(context, utils.getAthanUri());
             mediaPlayer.prepare();
             mediaPlayer.start();
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, (int) utils.getAthanVolume(), 0);
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, utils.getAthanVolume(), 0);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }

@@ -26,14 +26,14 @@ public class AthanVolumePreference extends DialogPreference {
         utils.prepareShapePreference(holder);
     }
 
-    public void setVolume(float volume) {
+    public void setVolume(int volume) {
         final boolean wasBlocking = shouldDisableDependents();
-        persistFloat(volume);
+        persistInt(volume);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 
-    public float getVolume() {
-        return getPersistedFloat(1);
+    public int getVolume() {
+        return getPersistedInt(1);
     }
 }
