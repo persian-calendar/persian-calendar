@@ -23,77 +23,38 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
         return fragment;
     }
 
+    Set<String> prayers;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((PrayerSelectPreference)getPreference()).mEntries = getResources()
-                .getStringArray(R.array.prayerTimeNames);
+    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+        super.onPrepareDialogBuilder(builder);
+        PrayerSelectPreference prayerspref = (PrayerSelectPreference)getPreference();
 
-        ((PrayerSelectPreference)getPreference()).mEntryValues = getResources()
-                .getStringArray(R.array.prayerTimeKeys);
+        CharSequence[] entries = getResources().getStringArray(R.array.prayerTimeNames);
+        final CharSequence[] entriesKeys = getResources().getStringArray(R.array.prayerTimeKeys);
+
+        prayers = prayerspref.getPrayers();
+
+        boolean[] checked = new boolean[entriesKeys.length];
+        for (int i = 0; i < entriesKeys.length; ++i) {
+            checked[i] = prayers.contains(entriesKeys[i]);
+        }
+
+        builder.setMultiChoiceItems(entries, checked, new DialogInterface.OnMultiChoiceClickListener() {
+            public void onClick(DialogInterface dialog, int which,
+                                boolean isChecked) {
+                if (isChecked) {
+                    prayers.add(entriesKeys[which].toString());
+                } else {
+                    prayers.remove(entriesKeys[which].toString());
+                }
+            }
+        });
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        ((PrayerSelectPreference)getPreference()).close(positiveResult);
-    }
-
-    @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-
-        if (((PrayerSelectPreference)getPreference()).mEntries == null
-                || ((PrayerSelectPreference)getPreference()).mEntryValues == null) {
-            throw new IllegalStateException(
-                    "MultiSelectListPreference requires an entries array and "
-                            + "an entryValues array.");
+        if (positiveResult) {
+            ((PrayerSelectPreference)getPreference()).setPrayers(prayers);
         }
-
-        if (((PrayerSelectPreference)getPreference()).mNewValues == null) {
-            ((PrayerSelectPreference)getPreference()).mNewValues = new HashSet<>();
-            ((PrayerSelectPreference)getPreference()).mNewValues.addAll(
-                    ((PrayerSelectPreference)getPreference()).mValues);
-
-            ((PrayerSelectPreference)getPreference()).mPreferenceChanged = false;
-        }
-
-        final boolean[] checkedItems = getSelectedItems(
-                ((PrayerSelectPreference)getPreference()).mNewValues);
-
-        builder.setMultiChoiceItems(
-                ((PrayerSelectPreference)getPreference()).mEntries, checkedItems,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    public void onClick(DialogInterface dialog, int which,
-                                        boolean isChecked) {
-                        if (isChecked) {
-                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged
-                                    |= ((PrayerSelectPreference)getPreference()).mNewValues
-                                    .add(((PrayerSelectPreference)getPreference())
-                                            .mEntryValues[which].toString());
-                        } else {
-                            ((PrayerSelectPreference)getPreference()).mPreferenceChanged
-                                    |= ((PrayerSelectPreference)getPreference()).mNewValues
-                                    .remove(((PrayerSelectPreference)getPreference())
-                                            .mEntryValues[which].toString());
-                        }
-                    }
-                });
-    }
-
-    private boolean[] getSelectedItems(final Set<String> values) {
-        final CharSequence[] entries = ((PrayerSelectPreference)getPreference()).mEntryValues;
-        final int entryCount = entries.length;
-        boolean[] result = new boolean[entryCount];
-
-        for (int i = 0; i < entryCount; i++) {
-            result[i] = values.contains(entries[i].toString());
-        }
-
-        return result;
-    }
-
-    @Override
-    public void setInitialSavedState(Fragment.SavedState state) {
-        super.setInitialSavedState(state);
     }
 }
