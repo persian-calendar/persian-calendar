@@ -40,15 +40,20 @@ public class CompassFragment extends Fragment {
         Utils utils = Utils.getInstance(context);
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        String location = prefs.getString("Location", "CUSTOM");
-        if (location.equals("CUSTOM")) {
+        Coordinate coordinate = utils.getCoordinate();
+        if (coordinate == null) {
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            City city = utils.getCityByKey(location);
-            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
-                    prefs.getString("AppLanguage", "fa").equals("en")
-                            ? city.getEn()
-                            : city.getFa());
+            City city = utils.getCityFromPreference();
+            String subtitle;
+            if (city != null) {
+                subtitle = prefs.getString("AppLanguage", "fa").equals("en")
+                    ? city.getEn()
+                    : city.getFa();
+            } else {
+                subtitle = coordinate.getLatitude() + ", " + coordinate.getLongitude();
+            }
+            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), subtitle);
         }
 
 
@@ -61,7 +66,6 @@ public class CompassFragment extends Fragment {
         int height = displayMetrics.heightPixels;
         compassView.setScreenResolution(width, height - 2 * height / 8);
 
-        Coordinate coordinate = utils.getCoordinate();
         if (coordinate != null) {
             compassView.setLongitude(coordinate.getLongitude());
             compassView.setLatitude(coordinate.getLatitude());

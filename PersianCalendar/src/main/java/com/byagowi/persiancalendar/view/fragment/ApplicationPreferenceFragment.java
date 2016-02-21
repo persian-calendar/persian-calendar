@@ -17,6 +17,8 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
 import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
+import com.byagowi.persiancalendar.view.dialog.AthanNumericDialog;
+import com.byagowi.persiancalendar.view.dialog.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.dialog.PrayerSelectDialog;
@@ -108,6 +110,14 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else if (preference instanceof LocationPreference) {
             fragment = LocationPreferenceDialog.newInstance(preference);
+            fragment.setTargetFragment(this, 0);
+            fragment.show(getFragmentManager(),
+                    "android.support.v7.preference.PreferenceFragment.DIALOG");
+            LocalBroadcastManager.getInstance(getContext()).registerReceiver(
+                    new PreferenceChangeListener(),
+                    new IntentFilter(INTENT_ACTION_PREFERENCES_CHANGED));
+        } else if (preference instanceof AthanNumericPreference) {
+            fragment = AthanNumericDialog.newInstance(preference.getKey());
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");

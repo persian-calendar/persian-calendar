@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
+import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 
 import java.util.concurrent.TimeUnit;
@@ -47,16 +48,14 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
 
         setPrayerView(prayerKey);
 
-        String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
-        if (!TextUtils.isEmpty(cityKey)) {
-            City city = utils.getCityByKey(cityKey);
+        City city = utils.getCityFromPreference();
+        if (city != null) {
             String cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.getEn() : city.getFa();
             textCityName.setText(getString(R.string.in_city_time) + " " + cityName);
         } else {
-            float latitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
-            float longitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
+            Coordinate coordinate = utils.getCoordinate();
             textCityName.setText(getString(R.string.in_city_time) + " "
-                    + latitude + ", " + longitude);
+                    + coordinate.getLatitude() + ", " + coordinate.getLongitude());
         }
 
         new Handler().postDelayed(new Runnable() {

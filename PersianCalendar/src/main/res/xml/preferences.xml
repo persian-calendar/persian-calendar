@@ -80,20 +80,23 @@
             android:summary="@string/location_help"
             android:title="@string/location" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
             android:defaultValue="0"
+            android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Latitude"
             android:title="@string/latitude" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
             android:defaultValue="0"
+            android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Longitude"
             android:title="@string/longitude" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
             android:defaultValue="0"
+            android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Altitude"
             android:summary="@string/altitude_praytime"
@@ -105,7 +108,7 @@
         android:key="Athan"
         android:title="@string/athan">
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedEditTextPreference
+        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:summary="@string/athan_gap_summary"

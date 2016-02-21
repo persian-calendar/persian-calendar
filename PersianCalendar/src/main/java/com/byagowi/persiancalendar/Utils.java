@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
+import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -187,9 +188,9 @@ public class Utils {
     }
 
     public Coordinate getCoordinate() {
-        String location = prefs.getString("Location", "CUSTOM");
-        if (!location.equals("CUSTOM")) {
-            return getCityByKey(location).getCoordinate();
+        City city = getCityFromPreference();
+        if (city != null) {
+            return city.getCoordinate();
         }
 
         try {
@@ -515,7 +516,9 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    public City getCityByKey(String key) {
+    public City getCityFromPreference() {
+        String key = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
+
         if (TextUtils.isEmpty(key) || key.equals("CUSTOM")) {
             return null;
         }
