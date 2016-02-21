@@ -17,7 +17,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 import com.byagowi.persiancalendar.entity.City;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 

@@ -15,10 +15,10 @@ import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
-import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
 import com.byagowi.persiancalendar.view.dialog.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.dialog.AthanNumericPreference;
+import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
+import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreference;
 import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.dialog.PrayerSelectDialog;

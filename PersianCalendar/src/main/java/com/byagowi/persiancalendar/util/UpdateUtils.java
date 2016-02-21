@@ -20,10 +20,10 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.Widget2x2;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.Widget1x1;
+import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
