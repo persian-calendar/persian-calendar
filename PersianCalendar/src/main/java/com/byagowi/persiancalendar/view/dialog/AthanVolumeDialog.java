@@ -27,26 +27,19 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     @Override
     protected View onCreateDialogView(Context context) {
         View view = super.onCreateDialogView(context);
-        instantiateMediaPlayer();
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
+        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        instantiateMediaPlayer(athanPref);
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider
-                .setProgress(AthanVolumePreference
-                                .audioManager
-                                .getStreamVolume(AudioManager.STREAM_ALARM));
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
+        athanPref.seekBarVolumeSlider = seekBar;
 
-        ((AthanVolumePreference)getPreference())
-                .seekBarVolumeSlider
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setProgress(athanPref.audioManager.getStreamVolume(AudioManager.STREAM_ALARM));
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                AthanVolumePreference
-                        .audioManager
-                        .setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
+                athanPref.audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
             }
 
             @Override
@@ -56,9 +49,9 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 try {
-                    if (!AthanVolumePreference.mediaPlayer.isPlaying()) {
-                        AthanVolumePreference.mediaPlayer.prepare();
-                        AthanVolumePreference.mediaPlayer.start();
+                    if (!athanPref.mediaPlayer.isPlaying()) {
+                        athanPref.mediaPlayer.prepare();
+                        athanPref.mediaPlayer.start();
                     }
                 } catch (IOException ignored) {
                 }
@@ -68,21 +61,21 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         return view;
     }
 
-    public void instantiateMediaPlayer() {
+    public void instantiateMediaPlayer(final AthanVolumePreference athanPref) {
         try {
-            AthanVolumePreference.mediaPlayer = null;
-            AthanVolumePreference.mediaPlayer = new MediaPlayer();
-            AthanVolumePreference.mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            final MediaPlayer mediaPlayer = new MediaPlayer();
+            athanPref.mediaPlayer = mediaPlayer;
 
-            AthanVolumePreference.mediaPlayer.setDataSource(
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.setDataSource(
                     getContext(),
                     Utils.getInstance(getContext()).getAthanUri());
 
-            AthanVolumePreference.mediaPlayer.setOnCompletionListener(
+            mediaPlayer.setOnCompletionListener(
                     new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            instantiateMediaPlayer();
+                            instantiateMediaPlayer(athanPref);
                         }
                     });
         } catch (IOException ignored) {
@@ -91,12 +84,13 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        AthanVolumePreference.mediaPlayer.release();
+        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        athanPref.mediaPlayer.release();
 
         if (!positiveResult) {
-            AthanVolumePreference.audioManager.setStreamVolume(
+            athanPref.audioManager.setStreamVolume(
                     AudioManager.STREAM_ALARM,
-                    ((AthanVolumePreference) getPreference()).initialVolume, 0);
+                    athanPref.initialVolume, 0);
         }
     }
 

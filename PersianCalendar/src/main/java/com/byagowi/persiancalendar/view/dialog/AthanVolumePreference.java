@@ -15,13 +15,12 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 
 public class AthanVolumePreference extends DialogPreference {
-    public static AudioManager audioManager;
-    public static MediaPlayer mediaPlayer;
-
-    public Context context;
+    public AudioManager audioManager;
+    public MediaPlayer mediaPlayer;
+    private Context context;
     public SeekBar seekBarVolumeSlider;
     public int initialVolume;
-    public Utils utils;
+    private Utils utils;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);

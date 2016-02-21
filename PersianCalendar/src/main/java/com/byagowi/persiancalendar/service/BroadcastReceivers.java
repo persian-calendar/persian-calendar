@@ -76,6 +76,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(context, utils.getAthanUri());
+            //mediaPlayer.setVolume(utils);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {
