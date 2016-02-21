@@ -9,12 +9,10 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
 
 public class AthanVolumePreference extends DialogPreference {
-    private Context context;
     private Utils utils;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         utils = Utils.getInstance(context);
         setDialogLayoutResource(R.layout.preference_volume);
         setDialogIcon(null);
