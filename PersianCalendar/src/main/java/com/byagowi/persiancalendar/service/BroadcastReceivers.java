@@ -51,6 +51,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
                 updateUtils.update(true);
+                utils.loadApp();
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
