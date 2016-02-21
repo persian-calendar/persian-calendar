@@ -8,6 +8,7 @@ public class Constants {
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
     public static final String ACTION_STOP_ALARM = "ACTION_STOP_ALARM";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
+    public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String KEY_EXTRA_PRAYER_KEY = "prayer_name";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = 234423;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";

@@ -611,6 +611,7 @@ public class Utils {
         startTime.set(Calendar.HOUR_OF_DAY, 0);
         startTime.set(Calendar.MINUTE, 1);
         Intent intent = new Intent(context, BroadcastReceivers.class);
+        intent.setAction(Constants.BROADCAST_ALARM);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
     }
