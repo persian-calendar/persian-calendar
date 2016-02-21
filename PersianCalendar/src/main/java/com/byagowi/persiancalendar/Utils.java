@@ -167,6 +167,10 @@ public class Utils {
         //noinspection ConstantConditions
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
 
+        if (supportActionBar == null) {
+            return;
+        }
+
         SpannableString titleSpan = new SpannableString(shape(title));
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
         titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
