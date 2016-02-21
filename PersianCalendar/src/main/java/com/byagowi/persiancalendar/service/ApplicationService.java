@@ -38,7 +38,6 @@ public class ApplicationService extends Service {
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
         updateUtils.update(true);
-        utils.loadAlarms();
         return START_STICKY;
     }
 }
