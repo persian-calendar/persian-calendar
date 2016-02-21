@@ -184,7 +184,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                 break;
         }
 
-        int dropdownLayout = android.R.layout.simple_spinner_dropdown_item;
+        int dropdownLayout = R.layout.select_dialog_item_material;
         // years spinner init.
         List<String> yearsList = new ArrayList<>();
         int yearDiffRange = 200;

@@ -42,7 +42,7 @@ public class ShapedListPreference extends ListPreference {
 
     String defaultValue = "";
 
-    // steal default value, well, don't know a better value
+    // steal default value, well, not aware of a better way
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.onSetInitialValue(restoreValue, defaultValue);
