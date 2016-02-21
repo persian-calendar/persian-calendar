@@ -25,6 +25,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     }
 
     float volume;
+    AudioManager audioManager;
     MediaPlayer mediaPlayer;
 
     @Override
@@ -32,13 +33,14 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         View view = super.onCreateDialogView(context);
 
         final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.setDataSource(
                     getContext(),
                     Utils.getInstance(getContext()).getAthanUri());
-            mediaPlayer.setVolume(athanPref.getVolume(), athanPref.getVolume());
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, (int)athanPref.getVolume(), 0);
         } catch (IOException e) {
             Log.e("AthanPref", "", e);
         }
@@ -51,7 +53,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 volume = progress;
-                mediaPlayer.setVolume(progress, progress);
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0);
             }
 
             @Override

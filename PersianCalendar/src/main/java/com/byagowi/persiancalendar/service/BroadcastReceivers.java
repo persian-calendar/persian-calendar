@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
@@ -23,7 +24,7 @@ import java.io.IOException;
  */
 public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer.OnCompletionListener {
     private static final String TAG = BroadcastReceivers.class.getName();
-    private static MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private Context context;
     private UpdateUtils updateUtils;
     private Utils utils;
@@ -74,13 +75,13 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
 
     private void play() {
         try {
+            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(context, utils.getAthanUri());
-            float volume = utils.getAthanVolume();
-            mediaPlayer.setVolume(volume, volume);
             mediaPlayer.prepare();
             mediaPlayer.start();
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, (int) utils.getAthanVolume(), 0);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
