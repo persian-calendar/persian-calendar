@@ -1,7 +1,7 @@
 {
   "events": [
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 1,
@@ -9,7 +9,7 @@
       "title": "آغاز عید نوروز"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 2,
@@ -17,7 +17,7 @@
       "title": "عید نوروز – هجوم مأموران ستم‌شاهی پهلوی به مدرسهٔ فیضیهٔ قم(۱۳۴۲ ه‍.ش) – آغاز عملیات فتح‌المبین(۱۳۶۱ ه‍.ش)"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 3,
@@ -25,7 +25,7 @@
       "title": "عید نوروز"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 4,
@@ -33,7 +33,7 @@
       "title": "عید نوروز"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 12,
@@ -41,7 +41,7 @@
       "title": "روز جمهوری اسلامی ایران"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 1,
       "day": 13,
@@ -217,15 +217,23 @@
       "title": "روز مقاومت و پایداری – روز دزفول"
     },
     {
+      "holiday": true,
+      "year": -1,
+      "month": 3,
+      "day": 14,
+      "type": "iran",
+      "title": "رحلت امام خمینی رهبر کبیر انقلاب اسلامی(۱۳۶۸ ه‍.ش)"
+    },
+    {
       "holiday": false,
       "year": -1,
       "month": 3,
       "day": 14,
       "type": "iran",
-      "title": "رحلت امام خمینی رهبر کبیر انقلاب اسلامی(۱۳۶۸ ه‍.ش) – انتخاب آیت‌الله خامنه‌ای به رهبری(۱۳۶۸ ه‍.ش)"
+      "title": "انتخاب آیت‌الله خامنه‌ای به رهبری(۱۳۶۸ ه‍.ش)"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 3,
       "day": 15,
@@ -889,7 +897,7 @@
       "title": "روز نیروی هوایی"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 11,
       "day": 22,
@@ -961,7 +969,7 @@
       "title": "روز بزرگداشت پروین اعتصامی"
     },
     {
-      "holiday": false,
+      "holiday": true,
       "year": -1,
       "month": 12,
       "day": 29,
