@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -23,131 +22,89 @@ import com.github.praytimes.PrayTime;
 
 import java.util.concurrent.TimeUnit;
 
-public class AthanView extends AppCompatActivity {
-    private static final String TAG = "AthanView";
-    public static boolean displayed = false;
-    private static boolean handlerRunning = false;
-    private static AthanView instance;
-
-    private int layoutId = R.layout.activity_athan_dhuhr;
-    private int athanIcon = R.drawable.ic_brightness_2;
+public class AthanView extends AppCompatActivity implements View.OnClickListener {
+    private TextView textAlarmName;
+    private AppCompatImageView athanIconView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        setFlavor(prayerKey);
-        setContentView(layoutId);
+        Utils utils = Utils.getInstance(getApplicationContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        setContentView(R.layout.activity_athan);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Utils utils = Utils.getInstance(getApplicationContext());
+        textAlarmName = (TextView) findViewById(R.id.athan_name);
+        TextView textCityName = (TextView) findViewById(R.id.place);
+        athanIconView = (AppCompatImageView) findViewById(R.id.background_image);
+        athanIconView.setOnClickListener(this);
 
-        instance = this;
-        displayed = true;
+        setPrayerView(prayerKey);
 
-        handlerRunning = true;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handlerRunning = false;
-                hideAthan();
-            }
-        }, TimeUnit.SECONDS.toMillis(45));
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView textAlarmName = (TextView) findViewById(R.id.textAlarmName);
-        TextView textCityName = (TextView) findViewById(R.id.textCityName);
-        textAlarmName.setText(getPrayerName(prayerKey));
-
-        AppCompatImageView athanIconView = (AppCompatImageView) findViewById(R.id.athan_icon);
-        athanIconView.setImageResource(R.drawable.ic_brightness_2);
-
-        String cityName;
         String cityKey = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
         if (!TextUtils.isEmpty(cityKey)) {
             City city = utils.getCityByKey(cityKey);
-            cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.getEn() : city.getFa();
+            String cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.getEn() : city.getFa();
+            textCityName.setText(getString(R.string.in_city_time) + " " + cityName);
         } else {
             float latitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LATITUDE, 0);
             float longitude = prefs.getFloat(ApplicationPreferenceFragment.PREF_KEY_LONGITUDE, 0);
-            cityName = latitude + ", " + longitude;
+            textCityName.setText(getString(R.string.in_city_time) + " "
+                    + latitude + ", " + longitude);
         }
-        textCityName.setText(cityName);
 
-        View view = findViewById(R.id.ctlStopAlarm);
-        view.setOnClickListener(new View.OnClickListener() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
-                intent.setAction(Constants.ACTION_STOP_ALARM);
-                AthanView.this.sendBroadcast(intent);
+            public void run() {
                 finish();
             }
-        });
+        }, TimeUnit.SECONDS.toMillis(45));
     }
 
-    private String getPrayerName(String key) {
-        String name = "";
+    private void setPrayerView(String key) {
         if (!TextUtils.isEmpty(key)) {
             PrayTime prayTime = PrayTime.valueOf(key);
-            int stringId = 0;
-            switch (prayTime) {
-                case FAJR:
-                    stringId = R.string.azan1;
-                    break;
-                case DHUHR:
-                    stringId = R.string.azan2;
-                    break;
-                case ASR:
-                    stringId = R.string.azan3;
-                    break;
-                case MAGHRIB:
-                    stringId = R.string.azan4;
-                    break;
-                case ISHA:
-                    stringId = R.string.azan5;
-                    break;
-            }
-            name = getString(stringId);
-        }
-        return name;
-    }
 
-    private void setFlavor(String key) {
-        if (!TextUtils.isEmpty(key)) {
-            PrayTime prayTime = PrayTime.valueOf(key);
             switch (prayTime) {
-                case FAJR:
-                    layoutId = R.layout.activity_athan_fajr;
-                    athanIcon = R.drawable.ic_brightness_4;
+                case IMSAK:
+                    textAlarmName.setText(getString(R.string.azan1));
+                    athanIconView.setImageResource(R.drawable.zohr);
                     break;
+
                 case DHUHR:
-                    layoutId = R.layout.activity_athan_dhuhr;
-                    athanIcon = R.drawable.ic_brightness_5;
+                    textAlarmName.setText(getString(R.string.azan2));
+                    athanIconView.setImageResource(R.drawable.zohr);
                     break;
+
                 case ASR:
-                    layoutId = R.layout.activity_athan_asr;
-                    athanIcon = R.drawable.ic_brightness_5;
+                    textAlarmName.setText(getString(R.string.azan3));
+                    athanIconView.setImageResource(R.drawable.zohr);
                     break;
+
                 case MAGHRIB:
-                    layoutId = R.layout.activity_athan_maghrib;
-                    athanIcon = R.drawable.ic_brightness_3;
+                    textAlarmName.setText(getString(R.string.azan4));
+                    athanIconView.setImageResource(R.drawable.zohr);
                     break;
+
                 case ISHA:
-                    layoutId = R.layout.activity_athan_isha;
-                    athanIcon = R.drawable.ic_brightness_3;
+                    textAlarmName.setText(getString(R.string.azan5));
+                    athanIconView.setImageResource(R.drawable.zohr);
                     break;
             }
         }
     }
 
-    public static void hideAthan() {
-        Log.d(TAG, "trying to hide athan screen. handler running: " + handlerRunning);
-        if (instance != null && !handlerRunning) {
-            displayed = false;
-            instance.finish();
-        }
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
+        intent.setAction(Constants.ACTION_STOP_ALARM);
+        AthanView.this.sendBroadcast(intent);
+        finish();
     }
 }
