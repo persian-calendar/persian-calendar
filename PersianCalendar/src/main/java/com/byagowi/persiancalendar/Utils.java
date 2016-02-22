@@ -528,6 +528,7 @@ public class Utils {
                 return city;
             }
 
+        cachedCity = null;
         return null;
     }
 
