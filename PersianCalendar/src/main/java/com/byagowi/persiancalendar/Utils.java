@@ -477,14 +477,13 @@ public class Utils {
             Log.e(TAG, e.getMessage());
         }
 
-        final String locale = prefs.getString("AppLanguage", "fa");
-
         if (!needsSort) {
             return result;
         }
 
-        City[] cities = result.toArray(new City[result.size()]);
+        final String locale = prefs.getString("AppLanguage", "fa");
 
+        City[] cities = result.toArray(new City[result.size()]);
         // Sort first by country code then city
         Arrays.sort(cities, new Comparator<City>() {
             @Override
@@ -496,11 +495,13 @@ public class Utils {
                     return 1;
                 }
                 int compare = r.getCountryCode().compareTo(l.getCountryCode());
-                return compare != 0
-                        ? compare
-                        : (locale.equals("en")
-                        ? l.getEn().compareTo(r.getEn())
-                        : persianStringToArabic(l.getFa()).compareTo(persianStringToArabic(r.getFa())));
+                if (compare != 0) return compare;
+                if (locale.equals("en")) {
+                    return l.getEn().compareTo(r.getEn());
+                } else {
+                    return persianStringToArabic(l.getFa())
+                            .compareTo(persianStringToArabic(r.getFa()));
+                }
             }
         });
 
