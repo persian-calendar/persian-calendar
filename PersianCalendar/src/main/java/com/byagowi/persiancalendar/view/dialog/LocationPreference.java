@@ -13,35 +13,21 @@ import com.byagowi.persiancalendar.Utils;
  * Date: 1/17/16
  */
 public class LocationPreference extends DialogPreference {
-    public String value;
-    public String newValue;
-    private Utils utils;
 
     public LocationPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        utils = Utils.getInstance(context);
-    }
-
-    @Override
-    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        super.onSetInitialValue(restorePersistedValue, defaultValue);
-        value = restorePersistedValue ? getPersistedString("") : String.valueOf(defaultValue);
-    }
-
-    public void close(boolean positiveResult) {
-        if (positiveResult) {
-            if (callChangeListener(newValue)) {
-                value = newValue;
-                persistString(value);
-            } else {
-                newValue = getPersistedString("");
-            }
-        }
     }
 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        utils.prepareShapePreference(holder);
+        Utils.getInstance(getContext()).prepareShapePreference(holder);
+    }
+
+    public void setSelected(String selected) {
+        final boolean wasBlocking = shouldDisableDependents();
+        persistString(selected);
+        final boolean isBlocking = shouldDisableDependents();
+        if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 }

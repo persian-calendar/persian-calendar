@@ -22,7 +22,6 @@ import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
  * Date: 1/17/16
  */
 public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
-    private String selectedCity;
 
     public static LocationPreferenceDialog newInstance(Preference preference) {
         Bundle args = new Bundle(1);
@@ -33,15 +32,8 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
     }
 
     @Override
-    public LocationPreference getPreference() {
-        return (LocationPreference) super.getPreference();
-    }
-
-    @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        LocationPreference preference = getPreference();
-
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.preference_location, (ViewGroup) getView(), false);
 
@@ -56,19 +48,13 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
     }
 
     @Override
-    public void onDialogClosed(boolean positiveResult) {
-        getPreference().newValue = selectedCity;
-
-        Intent intent = new Intent(ApplicationPreferenceFragment.INTENT_ACTION_PREFERENCES_CHANGED);
-        intent.putExtra(ApplicationPreferenceFragment.PREF_KEY_LOCATION, selectedCity);
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-
-        // we haven't included buttons so we always send true
-        getPreference().close(true);
-    }
+    public void onDialogClosed(boolean positiveResult) { }
 
     public void selectItem(String city) {
-        selectedCity = city;
+        ((LocationPreference)getPreference()).setSelected(city);
+        Intent intent = new Intent(ApplicationPreferenceFragment.INTENT_ACTION_PREFERENCES_CHANGED);
+        intent.putExtra(ApplicationPreferenceFragment.PREF_KEY_LOCATION, city);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         dismiss();
     }
 }
