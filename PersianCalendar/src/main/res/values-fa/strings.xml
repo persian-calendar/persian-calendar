@@ -86,7 +86,6 @@
     <string name="select_day">گزینش روز</string>
     <string name="date_exception">تاریخ وارد شده اشتباه است!</string>
     <string name="in_city_time">به افق</string>
-    <string name="default_widget_text_color">#ffffffff</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">بازگشت برای اصلاح گاه‌شمار</string>
 

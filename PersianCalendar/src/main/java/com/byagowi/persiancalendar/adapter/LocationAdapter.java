@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +26,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         utils = Utils.getInstance(locationPreferenceDialog.getContext());
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
-        cities = utils.getAllCities(true);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        this.locale = prefs.getString("AppLanguage", "fa");
+        this.cities = utils.getAllCities(true);
+        this.locale = utils.getAppLanguage();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

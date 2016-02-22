@@ -6,11 +6,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -60,10 +58,7 @@ public class UpdateUtils {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         utils.loadLanguageFromSettings();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        char[] digits = utils.preferredDigits();
-        boolean iranTime = prefs.getBoolean("IranTime", false);
-        Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
+        Calendar calendar = utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = utils.getToday();
 
@@ -82,15 +77,14 @@ public class UpdateUtils {
                 R.layout.widget4x1);
         RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(),
                 R.layout.widget2x2);
-        String colorInt = prefs.getString("SelectedWidgetTextColor",
-                context.getString(R.string.default_widget_text_color));
+        String colorInt = utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
         // Widget 1x1
         remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
         remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                utils.formatNumber(persian.getDayOfMonth(), digits));
+                utils.formatNumber(persian.getDayOfMonth()));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
                 utils.shape(utils.getMonthName(persian)));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
@@ -107,18 +101,17 @@ public class UpdateUtils {
         String text2;
         String text3 = "";
         String weekDayName = utils.getWeekDayName(civil);
-        String persianDate = utils.dateToString(persian, digits);
-        String civilDate = utils.dateToString(civil, digits);
+        String persianDate = utils.dateToString(persian);
+        String civilDate = utils.dateToString(civil);
         String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
-        boolean in24 = prefs.getBoolean("WidgetIn24", true);
-        String time = utils.getPersianFormattedClock(calendar, digits, in24);
-        boolean enableClock = prefs.getBoolean("WidgetClock", true);
+        String time = utils.getPersianFormattedClock(calendar);
+        boolean enableClock = utils.isWidgetClock();
 
         if (enableClock) {
             text2 = weekDayName + " " + date;
             text1 = time;
-            if (iranTime) {
+            if (utils.iranTime) {
                 text3 = "(" + context.getString(R.string.iran_time) + ")";
             }
         } else {
@@ -214,15 +207,14 @@ public class UpdateUtils {
         String status = utils.getMonthName(persian);
 
         String title = utils.getWeekDayName(civil) + " "
-                + utils.dateToString(persian, digits);
+                + utils.dateToString(persian);
 
-        String body = utils.dateToString(civil, digits)
+        String body = utils.dateToString(civil)
                 + Constants.PERSIAN_COMMA
                 + " "
                 + utils.dateToString(
                 DateConverter.civilToIslamic(
-                        civil, utils.getIslamicOffset()),
-                digits);
+                        civil, utils.getIslamicOffset()));
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 
@@ -230,7 +222,7 @@ public class UpdateUtils {
             mNotificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
         }
-        if (prefs.getBoolean("NotifyDate", true)) {
+        if (utils.isNotifyDate()) {
             if (largeIcon == null)
                 largeIcon = BitmapFactory.decodeResource(
                         context.getResources(), R.drawable.launcher_icon);
