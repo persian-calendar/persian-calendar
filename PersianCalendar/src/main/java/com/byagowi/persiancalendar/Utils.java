@@ -394,6 +394,7 @@ public class Utils {
     public List<String> getMonthNameList(AbstractDate date) {
         AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
+        dateClone.setDayOfMonth(1);
         for (int month = 1; month <= 12; ++month) {
             dateClone.setMonth(month);
             monthNameList.add(shape(getMonthName(dateClone)));
