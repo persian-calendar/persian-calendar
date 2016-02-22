@@ -53,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        utils = Utils.getInstance(getApplicationContext());
+        utils.setTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        utils = Utils.getInstance(getApplicationContext());
         prevLocale = utils.loadLanguageFromSettings();
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 

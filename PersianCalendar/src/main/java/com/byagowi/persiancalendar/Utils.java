@@ -228,6 +228,22 @@ public class Utils {
         return prefs.getBoolean("PersianDigits", true);
     }
 
+
+    public void setTheme(Context context) {
+        String key = prefs.getString("Theme", "");
+
+        int theme = R.style.LightTheme; // default theme
+
+        if (key.equals("LightTheme")) {
+            theme = R.style.LightTheme;
+        } else if (key.equals("DarkTheme")) {
+            theme = R.style.DarkTheme;
+        }
+
+        context.setTheme(theme);
+    }
+
+
     public boolean isWidgetClock() {
         return prefs.getBoolean("WidgetClock", true);
     }

@@ -11,6 +11,14 @@
             android:key="AppLanguage"
             android:title="@string/language" />
 
+        <ListPreference
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
+            android:summary="@string/select_skin"
+            android:title="@string/skin" />
+
         <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"

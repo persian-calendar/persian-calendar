@@ -19,7 +19,7 @@
     <attr format="reference" name="colorDrawerIcon"/>
 
     <!-- Base application theme. -->
-    <style name="ThemeDark" parent="Theme.AppCompat.NoActionBar">
+    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
@@ -47,7 +47,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="ThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
@@ -73,7 +73,7 @@
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
     </style>
 
-    <style name="FullscreenTheme" parent="ThemeLight">
+    <style name="FullscreenTheme" parent="LightTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
 
