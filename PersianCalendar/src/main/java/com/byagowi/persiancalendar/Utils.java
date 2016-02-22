@@ -260,6 +260,10 @@ public class Utils {
         return prefs.getString("AppLanguage", "fa");
     }
 
+    public String getTheme() {
+        return prefs.getString("Theme", "LightTheme");
+    }
+
     public String getSelectedWidgetTextColor() {
         return prefs.getString("SelectedWidgetTextColor", "#ffffffff");
     }
