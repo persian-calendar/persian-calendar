@@ -734,16 +734,16 @@ public class Utils {
         int month = getToday().getMonth();
 
         if (month < 4) {
-            return Season.spring;
+            return Season.SPRING;
 
         } else if (month < 7) {
-            return Season.summer;
+            return Season.SUMMER;
 
         } else if (month < 10) {
-            return Season.fall;
+            return Season.FALL;
 
         } else {
-            return Season.winter;
+            return Season.WINTER;
         }
     }
 }

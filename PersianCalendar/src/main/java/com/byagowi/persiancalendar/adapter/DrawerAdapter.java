@@ -97,19 +97,19 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         } else {
 
             switch (utils.getSeason()) {
-                case spring:
+                case SPRING:
                     holder.imageView.setImageResource(R.drawable.spring);
                     break;
 
-                case summer:
+                case SUMMER:
                     holder.imageView.setImageResource(R.drawable.summer);
                     break;
 
-                case fall:
+                case FALL:
                     holder.imageView.setImageResource(R.drawable.fall);
                     break;
 
-                case winter:
+                case WINTER:
                     holder.imageView.setImageResource(R.drawable.winter);
                     break;
             }
