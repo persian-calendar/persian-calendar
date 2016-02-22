@@ -41,7 +41,6 @@ public class CalendarMainFragment extends Fragment
     private Utils utils;
 
     private Calendar calendar = Calendar.getInstance();
-    private char[] digits;
     private boolean clockIn24;
 
     private Coordinate coordinate;
@@ -154,7 +153,6 @@ public class CalendarMainFragment extends Fragment
 
         monthViewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
 
-        digits = utils.preferredDigits();
         clockIn24 = utils.clockIn24();
         coordinate = utils.getCoordinate();
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
@@ -179,7 +177,7 @@ public class CalendarMainFragment extends Fragment
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
         PersianDate today = utils.getToday();
         utils.setActivityTitleAndSubtitle(getActivity(), utils.getMonthName(today),
-                utils.formatNumber(today.getYear(), utils.preferredDigits()));
+                utils.formatNumber(today.getYear()));
 
         return view;
     }
@@ -191,12 +189,10 @@ public class CalendarMainFragment extends Fragment
     public void selectDay(PersianDate persianDate) {
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
-        shamsiDate.setText(utils.shape(utils.dateToString(persianDate, digits)));
-        georgianDate.setText(utils.shape(utils.dateToString(civilDate, digits)));
+        shamsiDate.setText(utils.shape(utils.dateToString(persianDate)));
+        georgianDate.setText(utils.shape(utils.dateToString(civilDate)));
         islamicDate.setText(utils.shape(utils.dateToString(
-                DateConverter.civilToIslamic(
-                        civilDate, utils.getIslamicOffset()),
-                digits)));
+                DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset()))));
 
         if (isToday(civilDate)) {
             today.setVisibility(View.GONE);
@@ -218,7 +214,7 @@ public class CalendarMainFragment extends Fragment
         CivilDate civil = DateConverter.persianToCivil(persianDate);
 
         intent.putExtra(CalendarContract.Events.DESCRIPTION,
-                utils.dayTitleSummary(persianDate, digits));
+                utils.dayTitleSummary(persianDate));
 
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -263,14 +259,14 @@ public class CalendarMainFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        athan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24));
-        aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24));
-        athan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24));
-        athan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24));
-        aftab2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), digits, clockIn24));
-        athan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24));
-        athan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24));
-        aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24));
+        athan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), clockIn24));
+        aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), clockIn24));
+        athan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), clockIn24));
+        athan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR), clockIn24));
+        aftab2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), clockIn24));
+        athan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), clockIn24));
+        athan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), clockIn24));
+        aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), clockIn24));
 
         owghat.setVisibility(View.VISIBLE);
     }

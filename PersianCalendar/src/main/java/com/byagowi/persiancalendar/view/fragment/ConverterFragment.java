@@ -109,7 +109,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         PersianDate persianDate;
         IslamicDate islamicDate;
 
-        char[] digits = utils.preferredDigits();
         StringBuilder sb = new StringBuilder();
 
         try {
@@ -120,9 +119,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
 
-                    calendarsTextList.add(utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(utils.dateToString(persianDate, digits));
-                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
+                    calendarsTextList.add(utils.dateToString(civilDate));
+                    calendarsTextList.add(utils.dateToString(persianDate));
+                    calendarsTextList.add(utils.dateToString(islamicDate));
                     break;
 
                 case ISLAMIC:
@@ -130,9 +129,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     civilDate = DateConverter.islamicToCivil(islamicDate);
                     persianDate = DateConverter.islamicToPersian(islamicDate);
 
-                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
-                    calendarsTextList.add(utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(utils.dateToString(persianDate, digits));
+                    calendarsTextList.add(utils.dateToString(islamicDate));
+                    calendarsTextList.add(utils.dateToString(civilDate));
+                    calendarsTextList.add(utils.dateToString(persianDate));
                     break;
 
                 case SHAMSI:
@@ -140,9 +139,9 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                     civilDate = DateConverter.persianToCivil(persianDate);
                     islamicDate = DateConverter.persianToIslamic(persianDate);
 
-                    calendarsTextList.add(utils.dateToString(persianDate, digits));
-                    calendarsTextList.add(utils.dateToString(civilDate, digits));
-                    calendarsTextList.add(utils.dateToString(islamicDate, digits));
+                    calendarsTextList.add(utils.dateToString(persianDate));
+                    calendarsTextList.add(utils.dateToString(civilDate));
+                    calendarsTextList.add(utils.dateToString(islamicDate));
                     break;
             }
 
@@ -162,8 +161,6 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void fillYearMonthDaySpinners() {
-        char[] digits = utils.preferredDigits();
-
         AbstractDate date = null;
         PersianDate newDatePersian = utils.getToday();
         CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
@@ -190,7 +187,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         int yearDiffRange = 200;
         startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
         for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
-            yearsList.add(utils.formatNumber(i, digits));
+            yearsList.add(utils.formatNumber(i));
         }
         yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, yearsList));
         yearSpinner.setSelection(yearDiffRange / 2);
@@ -205,7 +202,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         // days spinner init.
         List<String> daysList = new ArrayList<>();
         for (int i = 1; i <= 31; ++i) {
-            daysList.add(utils.formatNumber(i, digits));
+            daysList.add(utils.formatNumber(i));
         }
         daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, daysList));
         daySpinner.setSelection(date.getDayOfMonth() - 1);

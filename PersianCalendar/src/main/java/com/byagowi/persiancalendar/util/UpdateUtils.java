@@ -61,7 +61,6 @@ public class UpdateUtils {
         Utils utils = Utils.getInstance(context);
         utils.loadLanguageFromSettings();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        char[] digits = utils.preferredDigits();
         boolean iranTime = prefs.getBoolean("IranTime", false);
         Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
         CivilDate civil = new CivilDate(calendar);
@@ -90,7 +89,7 @@ public class UpdateUtils {
         remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
         remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                utils.formatNumber(persian.getDayOfMonth(), digits));
+                utils.formatNumber(persian.getDayOfMonth()));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
                 utils.shape(utils.getMonthName(persian)));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
@@ -107,12 +106,12 @@ public class UpdateUtils {
         String text2;
         String text3 = "";
         String weekDayName = utils.getWeekDayName(civil);
-        String persianDate = utils.dateToString(persian, digits);
-        String civilDate = utils.dateToString(civil, digits);
+        String persianDate = utils.dateToString(persian);
+        String civilDate = utils.dateToString(civil);
         String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
         boolean in24 = prefs.getBoolean("WidgetIn24", true);
-        String time = utils.getPersianFormattedClock(calendar, digits, in24);
+        String time = utils.getPersianFormattedClock(calendar, in24);
         boolean enableClock = prefs.getBoolean("WidgetClock", true);
 
         if (enableClock) {
@@ -214,15 +213,14 @@ public class UpdateUtils {
         String status = utils.getMonthName(persian);
 
         String title = utils.getWeekDayName(civil) + " "
-                + utils.dateToString(persian, digits);
+                + utils.dateToString(persian);
 
-        String body = utils.dateToString(civil, digits)
+        String body = utils.dateToString(civil)
                 + Constants.PERSIAN_COMMA
                 + " "
                 + utils.dateToString(
                 DateConverter.civilToIslamic(
-                        civil, utils.getIslamicOffset()),
-                digits);
+                        civil, utils.getIslamicOffset()));
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 

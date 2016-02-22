@@ -31,7 +31,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private Utils utils;
     private CalendarMainFragment calendarMainFragment;
     private PersianDate persianDate;
-    private char[] digits;
     private int offset;
     private IntentFilter filter;
     private BroadcastReceiver receiver;
@@ -47,7 +46,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
         List<Day> days = getDays(offset);
-        digits = utils.preferredDigits();
 
         AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
         AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
@@ -148,7 +146,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         utils.setActivityTitleAndSubtitle(
                 getActivity(),
                 utils.getMonthName(persianDate),
-                utils.formatNumber(persianDate.getYear(), digits));
+                utils.formatNumber(persianDate.getYear()));
     }
 
     private void resetSelectDay() {
@@ -176,8 +174,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
 
-        char[] digits = utils.preferredDigits();
-
         int dayOfWeek = DateConverter.persianToCivil(persianDate)
                 .getDayOfWeek() % 7;
 
@@ -187,7 +183,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 persianDate.setDayOfMonth(i);
 
                 Day day = new Day();
-                day.setNum(utils.formatNumber(i, digits));
+                day.setNum(utils.formatNumber(i));
                 day.setDayOfWeek(dayOfWeek);
 
                 if (dayOfWeek == 6 || !TextUtils.isEmpty(utils.getEventsTitle(persianDate, true))) {

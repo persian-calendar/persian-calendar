@@ -34,7 +34,7 @@ public class AboutFragment extends Fragment {
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.prepareTextView(versionTextView);
         versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
-                utils.formatNumber(version, utils.preferredDigits()));
+                utils.formatNumber(version));
 
         StringBuilder sb = new StringBuilder();
 

@@ -78,17 +78,19 @@ public class Utils {
     private Context context;
     private Typeface typeface;
     private SharedPreferences prefs;
+    private char[] preferredDigits;
 
     private List<Event> events;
     private PrayTimesCalculator prayTimesCalculator;
     private Map<PrayTime, Clock> prayTimes;
 
-    public String cachedCityKey = "";
-    public City cachedCity;
+    private String cachedCityKey = "";
+    private City cachedCity;
 
     private Utils(Context context) {
         this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        updatePreferredDigits();
     }
 
     public static Utils getInstance(Context context) {
@@ -210,8 +212,8 @@ public class Utils {
         }
     }
 
-    public char[] preferredDigits() {
-        return prefs.getBoolean("PersianDigits", true) ? Constants.PERSIAN_DIGITS : Constants.ARABIC_DIGITS;
+    public void updatePreferredDigits() {
+        preferredDigits = prefs.getBoolean("PersianDigits", true) ? Constants.PERSIAN_DIGITS : Constants.ARABIC_DIGITS;
     }
 
     public boolean isPersianDigitSelected(){
@@ -236,15 +238,14 @@ public class Utils {
         return calendar;
     }
 
-    public String clockToString(int hour, int minute, char[] digits) {
-        return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+    public String clockToString(int hour, int minute) {
+        return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
     public String getNextOghatTime(Clock clock, boolean changeDate) {
         Coordinate coordinate = getCoordinate();
 
         if (coordinate != null) {
-            char[] digits = preferredDigits();
             boolean clockIn24 = clockIn24();
 
             if (prayTimesCalculator == null) {
@@ -257,37 +258,37 @@ public class Utils {
             }
 
             if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24);
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), clockIn24);
 
             } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), digits, clockIn24);
+                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), clockIn24);
 
             } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), digits, clockIn24);
+                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), clockIn24);
 
             } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR), digits, clockIn24);
+                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR), clockIn24);
 
             } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), digits, clockIn24);
+                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), clockIn24);
 
             } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), digits, clockIn24);
+                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), clockIn24);
 
             } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), digits, clockIn24);
+                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), clockIn24);
 
             } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), digits, clockIn24);
+                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), clockIn24);
 
             } else {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), digits, clockIn24); //this is today & not tomorrow
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), clockIn24); //this is today & not tomorrow
             }
 
         } else return null;
     }
 
-    public String getPersianFormattedClock(Clock clock, char[] digits, boolean in24) {
+    public String getPersianFormattedClock(Clock clock, boolean in24) {
         String timeText = null;
 
         int hour = clock.getHour();
@@ -300,14 +301,14 @@ public class Utils {
             }
         }
 
-        String result = clockToString(hour, clock.getMinute(), digits);
+        String result = clockToString(hour, clock.getMinute());
         if (!in24) {
             result = result + " " + timeText;
         }
         return result;
     }
 
-    public String getPersianFormattedClock(Calendar calendar, char[] digits, boolean in24) {
+    public String getPersianFormattedClock(Calendar calendar, boolean in24) {
         String timeText = null;
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -320,26 +321,25 @@ public class Utils {
             }
         }
 
-        String result = clockToString(hour, calendar.get(Calendar.MINUTE),
-                digits);
+        String result = clockToString(hour, calendar.get(Calendar.MINUTE));
         if (!in24) {
             result = result + " " + timeText;
         }
         return result;
     }
 
-    public String formatNumber(int number, char[] digits) {
-        return formatNumber(Integer.toString(number), digits);
+    public String formatNumber(int number) {
+        return formatNumber(Integer.toString(number));
     }
 
-    public String formatNumber(String number, char[] digits) {
-        if (digits == Constants.ARABIC_DIGITS)
+    public String formatNumber(String number) {
+        if (preferredDigits == Constants.ARABIC_DIGITS)
             return number;
 
         StringBuilder sb = new StringBuilder();
         for (char i : number.toCharArray()) {
             if (Character.isDigit(i)) {
-                sb.append(digits[Integer.parseInt(i + "")]);
+                sb.append(preferredDigits[Integer.parseInt(i + "")]);
             } else {
                 sb.append(i);
             }
@@ -347,15 +347,15 @@ public class Utils {
         return sb.toString();
     }
 
-    public String dateToString(AbstractDate date, char[] digits) {
-        return formatNumber(date.getDayOfMonth(), digits) + ' '
+    public String dateToString(AbstractDate date) {
+        return formatNumber(date.getDayOfMonth()) + ' '
                 + getMonthName(date) + ' '
-                + formatNumber(date.getYear(), digits);
+                + formatNumber(date.getYear());
     }
 
-    public String dayTitleSummary(PersianDate persianDate, char[] digits) {
+    public String dayTitleSummary(PersianDate persianDate) {
         return getWeekDayName(persianDate) + Constants.PERSIAN_COMMA + " "
-                + dateToString(persianDate, digits);
+                + dateToString(persianDate);
     }
 
     public String getMonthName(AbstractDate date) {
