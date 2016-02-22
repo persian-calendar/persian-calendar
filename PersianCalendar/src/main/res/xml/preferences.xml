@@ -37,7 +37,7 @@
             android:title="@string/notify_date" />
 
         <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
-            android:defaultValue="@string/default_widget_text_color"
+            android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
             android:key="SelectedWidgetTextColor"

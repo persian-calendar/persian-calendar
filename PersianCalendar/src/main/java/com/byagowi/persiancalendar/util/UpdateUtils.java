@@ -80,8 +80,7 @@ public class UpdateUtils {
         RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(),
                 R.layout.widget2x2);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String colorInt = prefs.getString("SelectedWidgetTextColor",
-                context.getString(R.string.default_widget_text_color));
+        String colorInt = prefs.getString("SelectedWidgetTextColor", "#ffffffff");
         int color = Color.parseColor(colorInt);
 
         // Widget 1x1
