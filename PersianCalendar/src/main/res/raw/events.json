@@ -1,4 +1,20 @@
 {
+  "#source": [
+    "http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1394.pdf",
+    "http://pcci.ir/file/2015/11/1395.zip",
+
+    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
+    "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬(مناسبت‌ها از شورای فرهنگ عمومی)",
+    "گردآوری، فرمت‌بندی و به روزآوری: سعید رسولی <saeed.gnu@gmail.com> ، مولا پهنادایان <mola.mp@gmail.com>",
+
+    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-2-data.txt",
+    "شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی",
+    "سعید رسولی <saeed.gnu@gmail.com> مولا پهنادایان <mola.mp@gmail.com>",
+
+    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
+    "جشن‌های باستانی ایران",
+    "رضا مرادی قیاس آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>"
+  ],
   "events": [
     { "holiday": true, "year": -1, "month": 1, "day": 1, "type": "Iran",
       "title": "آغاز عید نوروز" },
