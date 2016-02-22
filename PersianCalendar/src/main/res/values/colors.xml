@@ -1,27 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="qibla_color">#888</color>
 
-    <color name="primary">#3F51B5</color>
-    <color name="primary_dark">#0c2782</color>
-    <color name="accent">#17a05d</color>
+    <color name="dark_primary">#212121</color>
+    <color name="dark_primary_dark">#212121</color>
+    <color name="dark_accent">#17a05d</color>
 
-    <color name="text_dark">#232323</color>
-    <color name="text_normal">#737373</color>
-    <color name="text_primary">#3F51B5</color>
-    <color name="text_drawer">#737373</color>
-    <color name="text_holiday">#ff0000</color>
-    <color name="text_day">#ffffff</color>
-    <color name="text_day_name">#aaffffff</color>
-    <color name="text_athan">#ffffff</color>
+    <color name="dark_text_normal">#ffffff</color>
+    <color name="dark_text_second">#cfcfcf</color>
+    <color name="dark_text_primary">#009688</color>
+    <color name="dark_text_drawer">#ffffff</color>
+    <color name="dark_text_holiday">#ff0000</color>
+    <color name="dark_text_day">#ffffff</color>
+    <color name="dark_text_day_name">#aaffffff</color>
+    <color name="dark_text_athan">#ffffff</color>
 
-    <color name="divider">#e0e0e0</color>
-    <color name="background">#f4f4f4</color>
-    <color name="card_background">#fafafa</color>
-    <color name="select_day">#fafafa</color>
-    <color name="drawer_background">#f4f4f4</color>
-    <color name="drawer_select">#eeeeee</color>
+    <color name="dark_divider">#272727</color>
+    <color name="dark_background">#212121</color>
+    <color name="dark_card_background">#202020</color>
+    <color name="dark_select_day">#fafafa</color>
+    <color name="dark_drawer_background">#212121</color>
+    <color name="dark_drawer_select">#eeeeee</color>
 
-    <color name="icon">#3F51B5</color>
-    <color name="icon_drawer">#3F51B5</color>
+    <color name="dark_icon">#009688</color>
+    <color name="dark_icon_drawer">#009688</color>
+
+    <color name="light_primary">#3F51B5</color>
+    <color name="light_primary_dark">#0c2782</color>
+    <color name="light_accent">#17a05d</color>
+
+    <color name="light_text_normal">#232323</color>
+    <color name="light_text_second">#737373</color>
+    <color name="light_text_primary">#3F51B5</color>
+    <color name="light_text_drawer">#737373</color>
+    <color name="light_text_holiday">#ff0000</color>
+    <color name="light_text_day">#ffffff</color>
+    <color name="light_text_day_name">#aaffffff</color>
+    <color name="light_text_athan">#ffffff</color>
+
+    <color name="light_divider">#e0e0e0</color>
+    <color name="light_background">#f4f4f4</color>
+    <color name="light_card_background">#fafafa</color>
+    <color name="light_select_day">#fafafa</color>
+    <color name="light_drawer_background">#f4f4f4</color>
+    <color name="light_drawer_select">#eeeeee</color>
+
+    <color name="light_icon">#3F51B5</color>
+    <color name="light_icon_drawer">#3F51B5</color>
 
 </resources>

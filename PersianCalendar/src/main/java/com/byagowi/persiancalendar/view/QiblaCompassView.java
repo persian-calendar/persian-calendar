@@ -82,10 +82,10 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_normal));
+        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_normal)));
+        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
         textPaint.setTextSize(20);
     }
 
@@ -127,7 +127,7 @@ public class QiblaCompassView extends View {
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.text_dark)));
+        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
         canvas.rotate(-bearing, px, py);// Attach and Detach capability lies
         canvas.save();
         drawDial(canvas);
@@ -176,13 +176,13 @@ public class QiblaCompassView extends View {
         // over here
         Paint markerPaint, circlePaint;
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
+        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.STROKE); // Sadece Cember ciziyor.
 
         int textHeight = (int) textPaint.measureText("yY");
         markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
+        markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
         // Draw the background
         canvas.drawCircle(px, py, Radius, circlePaint);
         canvas.drawCircle(px, py, Radius - 20, circlePaint);

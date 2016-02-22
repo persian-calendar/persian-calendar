@@ -9,7 +9,7 @@
         style="?android:attr/listSelector"
         android:layout_width="wrap_content"
         android:layout_marginTop="6dp"
-        android:textColor="@color/accent"
+        android:textColor="?attr/colorAccent"
         android:layout_height="wrap_content"/>
 
     <TextView

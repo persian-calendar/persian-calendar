@@ -9,7 +9,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/drawer_background" />
+        android:background="@color/dark_drawer_background" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
             android:layout_height="@dimen/icon_size"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:tint="@color/icon_drawer"
+            android:tint="?attr/colorDrawerIcon"
             android:layout_marginLeft="@dimen/icon_margin"
             android:layout_marginRight="@dimen/icon_margin" />
 
@@ -37,14 +37,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_drawer"
-                android:textColor="@color/text_drawer"
+                android:textColor="?attr/colorTextDrawer"
                 android:id="@+id/itemTitle" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_drawer_subtitle"
-                android:textColor="@color/text_drawer"
+                android:textColor="?attr/colorTextDrawer"
                 android:visibility="gone"
                 android:id="@+id/itemSubtitle"/>
 

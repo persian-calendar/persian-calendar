@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,9 +106,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_holiday));
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_holiday));
                 } else {
-                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_day));
+                    holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_day));
                 }
 
                 if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
@@ -125,9 +127,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.selectDay.setVisibility(View.VISIBLE);
 
                     if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
-                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_holiday));
+                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_holiday));
                     } else {
-                        holder.num.setTextColor(ContextCompat.getColor(context, R.color.primary));
+                        TypedValue typedValue = new TypedValue();
+                        context.getTheme().resolveAttribute(R.attr.colorTextPrimary, typedValue, true);
+                        holder.num.setTextColor(ContextCompat.getColor(context, typedValue.resourceId));
                     }
                 } else {
                     holder.selectDay.setVisibility(View.GONE);
@@ -142,7 +146,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         } else {
             holder.num.setText(Constants.FIRST_CHAR_OF_DAYS_OF_WEEK_NAME[position]);
-            holder.num.setTextColor(ContextCompat.getColor(context, R.color.text_day_name));
+            holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_day_name));
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
             holder.selectDay.setVisibility(View.GONE);

@@ -1,20 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
+    <attr format="reference" name="colorCard"/>
+    <attr format="reference" name="colorBackground"/>
+    <attr format="reference" name="colorTextPrimary"/>
+    <attr format="reference" name="colorIcon"/>
+    <attr format="reference" name="colorTextNormal"/>
+    <attr format="reference" name="colorTextSecond"/>
+    <attr format="reference" name="colorTextHoliday"/>
+    <attr format="reference" name="colorTextDrawer"/>
+    <attr format="reference" name="colorTextDay"/>
+    <attr format="reference" name="colorTextDayName"/>
+    <attr format="reference" name="colorTextAthan"/>
+    <attr format="reference" name="colorDivider"/>
+    <attr format="reference" name="colorSelectDay"/>
+    <attr format="reference" name="colorDrawerBackground"/>
+    <attr format="reference" name="colorDrawerSelect"/>
+    <attr format="reference" name="colorDrawerIcon"/>
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/primary_dark</item>
+    <style name="ThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_primary_dark</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/dark_primary_dark</item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="android:background">@color/dark_background</item>
+        <item name="colorCard">@color/dark_card_background</item>
+        <item name="colorBackground">@color/dark_background</item>
+        <item name="colorTextPrimary">@color/dark_text_primary</item>
+        <item name="colorIcon">@color/dark_icon</item>
+        <item name="colorTextNormal">@color/dark_text_normal</item>
+        <item name="colorTextSecond">@color/dark_text_second</item>
+        <item name="colorTextHoliday">@color/dark_text_holiday</item>
+        <item name="colorTextDrawer">@color/dark_text_drawer</item>
+        <item name="colorTextDay">@color/dark_text_day</item>
+        <item name="colorTextDayName">@color/dark_text_day_name</item>
+        <item name="colorTextAthan">@color/dark_text_athan</item>
+        <item name="colorDivider">@color/dark_divider</item>
+        <item name="colorSelectDay">@color/dark_select_day</item>
+        <item name="colorDrawerBackground">@color/dark_drawer_background</item>
+        <item name="colorDrawerSelect">@color/dark_drawer_select</item>
+        <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
     </style>
 
-    <style name="FullscreenTheme" parent="AppTheme">
+    <!-- Base application theme. -->
+    <style name="ThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/light_primary_dark</item>
+        <!-- Customize your theme here. -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="colorCard">@color/light_card_background</item>
+        <item name="colorBackground">@color/light_background</item>
+        <item name="colorTextPrimary">@color/light_text_primary</item>
+        <item name="colorIcon">@color/light_icon</item>
+        <item name="colorTextNormal">@color/light_text_normal</item>
+        <item name="colorTextSecond">@color/light_text_second</item>
+        <item name="colorTextHoliday">@color/light_text_holiday</item>
+        <item name="colorTextDrawer">@color/light_text_drawer</item>
+        <item name="colorTextDay">@color/light_text_day</item>
+        <item name="colorTextDayName">@color/light_text_day_name</item>
+        <item name="colorTextAthan">@color/light_text_athan</item>
+        <item name="colorDivider">@color/light_divider</item>
+        <item name="colorSelectDay">@color/light_select_day</item>
+        <item name="colorDrawerBackground">@color/light_drawer_background</item>
+        <item name="colorDrawerSelect">@color/light_drawer_select</item>
+        <item name="colorDrawerIcon">@color/light_icon_drawer</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="ThemeLight">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:background">@color/background</item>
-        <item name="android:textColor">@color/text_normal</item>
     </style>
 
     <style name="ShadowTextStyle">
