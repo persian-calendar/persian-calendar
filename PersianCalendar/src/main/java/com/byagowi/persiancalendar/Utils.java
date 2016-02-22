@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.entity.Event;
 import com.byagowi.persiancalendar.enums.Season;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -80,7 +79,6 @@ public class Utils {
     private Typeface typeface;
     private SharedPreferences prefs;
 
-    private List<Event> holidays;
     private List<Event> events;
     private PrayTimesCalculator prayTimesCalculator;
     private Map<PrayTime, Clock> prayTimes;
@@ -124,23 +122,20 @@ public class Utils {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
-            Log.e(context.getPackageName(),
-                    "Name not found on PersianCalendarUtils.programVersion");
+            Log.e(TAG, "Name not found on PersianCalendarUtils.programVersion");
+            return "";
         }
-        return "";
     }
 
     private void initTypeface() {
         if (typeface == null) {
-            typeface = Typeface.createFromAsset(context.getAssets(),
-                    Constants.FONT_PATH);
+            typeface = Typeface.createFromAsset(context.getAssets(), Constants.FONT_PATH);
         }
     }
 
     public void prepareTextView(TextView textView) {
         initTypeface();
         textView.setTypeface(typeface);
-        // textView.setLineSpacing(0f, 0.8f);
     }
 
     public void prepareShapeTextView(TextView textView) {
@@ -201,7 +196,8 @@ public class Utils {
             Coordinate coord = new Coordinate(
                     Double.parseDouble(prefs.getString("Latitude", "0")),
                     Double.parseDouble(prefs.getString("Longitude", "0")),
-                    Double.parseDouble(prefs.getString("Altitude", "0")));
+                    Double.parseDouble(prefs.getString("Altitude", "0"))
+            );
 
             // If latitude or longitude is zero probably preference is not set yet
             if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
@@ -240,13 +236,8 @@ public class Utils {
         return calendar;
     }
 
-    public String clockToString(Clock clock, char[] digits) {
-        return clockToString(clock.getHour(), clock.getMinute(), digits);
-    }
-
     public String clockToString(int hour, int minute, char[] digits) {
-        return formatNumber(
-                String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
+        return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute), digits);
     }
 
     public String getNextOghatTime(Clock clock, boolean changeDate) {
@@ -365,11 +356,6 @@ public class Utils {
     public String dayTitleSummary(PersianDate persianDate, char[] digits) {
         return getWeekDayName(persianDate) + Constants.PERSIAN_COMMA + " "
                 + dateToString(persianDate, digits);
-    }
-
-    public String getMonthYearTitle(PersianDate persianDate, char[] digits) {
-        return shape(getMonthName(persianDate) + ' '
-                + formatNumber(persianDate.getYear(), digits));
     }
 
     public String getMonthName(AbstractDate date) {
