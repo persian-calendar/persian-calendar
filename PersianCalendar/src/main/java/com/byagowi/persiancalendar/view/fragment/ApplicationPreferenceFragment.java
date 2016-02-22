@@ -1,17 +1,9 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
-import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Utils;
@@ -40,55 +32,24 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public static final String PREF_KEY_LONGITUDE = "Longitude";
 
     //    private final Utils utils = Utils.getInstance();
-    private static SharedPreferences prefs;
-    private static Preference categoryAthan;
-    private static Preference prefLocation;
-    private static Preference prefLatitude;
-    private static Preference prefLongitude;
-
-    private static String locationName;
-    private static double latitude;
-    private static double longitude;
+    private Preference categoryAthan;
+    Utils utils;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        Utils utils = Utils.getInstance(getContext());
+        utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        locationName = prefs.getString(PREF_KEY_LOCATION, "");
-        String strLat = prefs.getString(PREF_KEY_LATITUDE, "0");
-        String strLng = prefs.getString(PREF_KEY_LONGITUDE, "0");
-        latitude = TextUtils.isEmpty(strLat) ? 0 : Double.parseDouble(strLat);
-        longitude = TextUtils.isEmpty(strLng) ? 0 : Double.parseDouble(strLng);
 
         addPreferencesFromResource(R.xml.preferences);
 
-        LocationPreferencesChangeListener prefChangeListener = new LocationPreferencesChangeListener();
         categoryAthan = findPreference(PREF_KEY_ATHAN);
-        prefLocation = findPreference(PREF_KEY_LOCATION);
-        prefLatitude = findPreference(PREF_KEY_LATITUDE);
-        prefLongitude = findPreference(PREF_KEY_LONGITUDE);
-        prefLocation.setOnPreferenceChangeListener(prefChangeListener);
-        prefLatitude.setOnPreferenceChangeListener(prefChangeListener);
-        prefLongitude.setOnPreferenceChangeListener(prefChangeListener);
+        updateAthanPreferencesState();
 
-        updateAthanPreferencesState(null, null);
+        instance = this;
     }
 
-    public static void updateAthanPreferencesState(Preference pref, Object newValue) {
-        if (pref != null && newValue != null) {
-            String strNewValue = String.valueOf(newValue);
-            if (pref.getKey().equals("Location")) {
-                locationName = strNewValue;
-            } else if (pref.getKey().equals("Latitude")) {
-                latitude = TextUtils.isEmpty(strNewValue) ? 0 : Double.parseDouble(strNewValue);
-            } else if (pref.getKey().equals("Longitude")) {
-                longitude = TextUtils.isEmpty(strNewValue) ? 0 : Double.parseDouble(strNewValue);
-            }
-        }
-
-        boolean locationEmpty = (TextUtils.isEmpty(locationName) || locationName.equalsIgnoreCase("CUSTOM")) && (latitude == 0 || longitude == 0);
+    public void updateAthanPreferencesState() {
+        boolean locationEmpty = utils.getCoordinate() == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
             categoryAthan.setSummary(R.string.athan_disabled_summary);
@@ -115,17 +76,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
-            LocalBroadcastManager.getInstance(getContext()).registerReceiver(
-                    new PreferenceChangeListener(),
-                    new IntentFilter(INTENT_ACTION_PREFERENCES_CHANGED));
         } else if (preference instanceof AthanNumericPreference) {
             fragment = AthanNumericDialog.newInstance(preference.getKey());
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
-            LocalBroadcastManager.getInstance(getContext()).registerReceiver(
-                    new PreferenceChangeListener(),
-                    new IntentFilter(INTENT_ACTION_PREFERENCES_CHANGED));
         } else if (preference instanceof ShapedListPreference) {
             fragment = ShapedListDialog.newInstance(preference);
             fragment.setTargetFragment(this, 0);
@@ -136,22 +91,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private static class LocationPreferencesChangeListener implements Preference.OnPreferenceChangeListener {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            updateAthanPreferencesState(preference, newValue);
-            return true;
-        }
-    }
-
-    public class PreferenceChangeListener extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(this);
-
-            if (intent.hasExtra(PREF_KEY_LOCATION)) {
-                updateAthanPreferencesState(findPreference(PREF_KEY_LOCATION), intent.getStringExtra(PREF_KEY_LOCATION));
-            }
+    private static ApplicationPreferenceFragment instance;
+    public static void update() {
+        // Total hack but better than using broadcast on wrong places
+        if (instance != null) {
+            instance.updateAthanPreferencesState();
         }
     }
 }

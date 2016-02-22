@@ -6,6 +6,7 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
 /**
  * Created by ebraminio on 2/16/16.
@@ -44,6 +45,7 @@ public class AthanNumericPreference extends EditTextPreference {
         persistString(mDouble != null ? mDouble.toString() : null);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
+        ApplicationPreferenceFragment.update();
     }
 
     @Override

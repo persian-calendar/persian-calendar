@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.view.dialog;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.LocationAdapter;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
 /**
  * persian_calendar
@@ -52,9 +49,6 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
 
     public void selectItem(String city) {
         ((LocationPreference)getPreference()).setSelected(city);
-        Intent intent = new Intent(ApplicationPreferenceFragment.INTENT_ACTION_PREFERENCES_CHANGED);
-        intent.putExtra(ApplicationPreferenceFragment.PREF_KEY_LOCATION, city);
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         dismiss();
     }
 }
