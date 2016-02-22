@@ -63,48 +63,25 @@ public class PrayTimesCalculator {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        _jDate = julian(year, month, day) - _coordinate.getLongitude()
-                / (15d * 24d);
+        _jDate = julian(year, month, day) - _coordinate.getLongitude() / (15d * 24d);
 
         // compute prayer times at given julian date
         Map<PrayTime, Double> times = new HashMap<>();
-        times.put(PrayTime.IMSAK,
-                sunAngleTime(_imsak, _defaultTimes.get(PrayTime.IMSAK), true));
-        times.put(
-                PrayTime.FAJR,
-                sunAngleTime(_method.getFajr(),
-                        _defaultTimes.get(PrayTime.FAJR), true));
-        times.put(
-                PrayTime.SUNRISE,
-                sunAngleTime(riseSetAngle(),
-                        _defaultTimes.get(PrayTime.SUNRISE), true));
+        times.put(PrayTime.IMSAK, sunAngleTime(_imsak, _defaultTimes.get(PrayTime.IMSAK), true));
+        times.put(PrayTime.FAJR, sunAngleTime(_method.getFajr(), _defaultTimes.get(PrayTime.FAJR), true));
+        times.put(PrayTime.SUNRISE, sunAngleTime(riseSetAngle(), _defaultTimes.get(PrayTime.SUNRISE), true));
         times.put(PrayTime.DHUHR, midDay(_defaultTimes.get(PrayTime.DHUHR)));
-        times.put(PrayTime.ASR,
-                asrTime(asrFactor(), _defaultTimes.get(PrayTime.ASR)));
-        times.put(
-                PrayTime.SUNSET,
-                sunAngleTime(riseSetAngle(), _defaultTimes.get(PrayTime.SUNSET)));
-        times.put(
-                PrayTime.MAGHRIB,
-                sunAngleTime(_method.getMaghrib(),
-                        _defaultTimes.get(PrayTime.MAGHRIB)));
-        times.put(
-                PrayTime.ISHA,
-                sunAngleTime(_method.getIsha(),
-                        _defaultTimes.get(PrayTime.ISHA)));
+        times.put(PrayTime.ASR, asrTime(asrFactor(), _defaultTimes.get(PrayTime.ASR)));
+        times.put(PrayTime.SUNSET, sunAngleTime(riseSetAngle(), _defaultTimes.get(PrayTime.SUNSET)));
+        times.put(PrayTime.MAGHRIB, sunAngleTime(_method.getMaghrib(), _defaultTimes.get(PrayTime.MAGHRIB)));
+        times.put(PrayTime.ISHA, sunAngleTime(_method.getIsha(), _defaultTimes.get(PrayTime.ISHA)));
 
         times = adjustTimes(times);
 
         // add midnight time
-        times.put(
-                PrayTime.MIDNIGHT,
-                (_method.getMidnight() == CalculationMethod.MidnightType.Jafari) ? times
-                        .get(PrayTime.SUNSET)
-                        + timeDiff(times.get(PrayTime.SUNSET),
-                        times.get(PrayTime.FAJR)) / 2 : times
-                        .get(PrayTime.SUNSET)
-                        + timeDiff(times.get(PrayTime.SUNSET),
-                        times.get(PrayTime.SUNRISE)) / 2);
+        times.put(PrayTime.MIDNIGHT, (_method.getMidnight() == CalculationMethod.MidnightType.Jafari)
+                ? times.get(PrayTime.SUNSET) + timeDiff(times.get(PrayTime.SUNSET), times.get(PrayTime.FAJR)) / 2
+                : times.get(PrayTime.SUNSET) + timeDiff(times.get(PrayTime.SUNSET), times.get(PrayTime.SUNRISE)) / 2);
 
         Map<PrayTime, Clock> result = new HashMap<>();
         for (Map.Entry<PrayTime, Double> i : times.entrySet()) {
@@ -133,8 +110,7 @@ public class PrayTimesCalculator {
     private double sunAngleTime(MinuteOrAngleDouble angle, double time,
                                 boolean ccw) {
         // TODO: I must enable below line!
-        // if (angle.isMin()) throw new
-        // IllegalArgumentException("angle argument must be degree, not minute!");
+        // if (angle.isMin()) throw new IllegalArgumentException("angle argument must be degree, not minute!");
         double decl = sunPosition(_jDate + time).getDeclination();
         double noon = dtr(midDay(time));
         double t = Math.acos((-Math.sin(dtr(angle.getValue())) - Math.sin(decl)
@@ -150,8 +126,7 @@ public class PrayTimesCalculator {
     // compute asr time
     private double asrTime(double factor, double time) {
         double decl = sunPosition(_jDate + time).getDeclination();
-        double angle = -Math.atan(1 / (factor + Math.tan(dtr(_coordinate
-                .getLatitude()) - decl)));
+        double angle = -Math.atan(1 / (factor + Math.tan(dtr(_coordinate.getLatitude()) - decl)));
         return sunAngleTime(deg(rtd(angle)), time);
     }
 
@@ -161,8 +136,7 @@ public class PrayTimesCalculator {
         double D = jd - 2451545d;
         double g = (357.529 + 0.98560028 * D) % 360;
         double q = (280.459 + 0.98564736 * D) % 360;
-        double L = (q + 1.915 * Math.sin(dtr(g)) + 0.020 * Math
-                .sin(dtr(2d * g))) % 360;
+        double L = (q + 1.915 * Math.sin(dtr(g)) + 0.020 * Math.sin(dtr(2d * g))) % 360;
 
         // weird!
         // double R = 1.00014 - 0.01671 * Math.cos(dtr(g)) - 0.00014 *
@@ -170,8 +144,7 @@ public class PrayTimesCalculator {
 
         double e = 23.439 - 0.00000036 * D;
 
-        double RA = rtd(Math.atan2(Math.cos(dtr(e)) * Math.sin(dtr(L)),
-                Math.cos(dtr(L)))) / 15d;
+        double RA = rtd(Math.atan2(Math.cos(dtr(e)) * Math.sin(dtr(L)), Math.cos(dtr(L)))) / 15d;
         double eqt = q / 15d - fixHour(RA);
         double decl = Math.asin(Math.sin(dtr(e)) * Math.sin(dtr(L)));
 
@@ -188,8 +161,7 @@ public class PrayTimesCalculator {
         double A = Math.floor((double) year / 100);
         double B = 2 - A + Math.floor(A / 4);
 
-        double JD = Math.floor(365.25 * (year + 4716))
-                + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
+        double JD = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
         return JD;
     }
 
@@ -197,8 +169,7 @@ public class PrayTimesCalculator {
     private Map<PrayTime, Double> adjustTimes(Map<PrayTime, Double> times) {
         Map<PrayTime, Double> result = new HashMap<PrayTime, Double>();
         for (Map.Entry<PrayTime, Double> i : times.entrySet()) {
-            result.put(i.getKey(),
-                    i.getValue() + _timeZone - _coordinate.getLongitude() / 15d);
+            result.put(i.getKey(), i.getValue() + _timeZone - _coordinate.getLongitude() / 15d);
         }
 
         if (_highLats != CalculationMethod.HighLatMethods.None) {
@@ -206,19 +177,15 @@ public class PrayTimesCalculator {
         }
 
         if (_imsak.isMin()) {
-            result.put(PrayTime.IMSAK,
-                    result.get(PrayTime.FAJR) - _imsak.getValue() / 60);
+            result.put(PrayTime.IMSAK, result.get(PrayTime.FAJR) - _imsak.getValue() / 60);
         }
         if (_method.getMaghrib().isMin()) {
-            result.put(PrayTime.MAGHRIB, result.get(PrayTime.SUNSET)
-                    + _method.getMaghrib().getValue() / 60d);
+            result.put(PrayTime.MAGHRIB, result.get(PrayTime.SUNSET) + _method.getMaghrib().getValue() / 60d);
         }
         if (_method.getIsha().isMin()) {
-            result.put(PrayTime.ISHA, result.get(PrayTime.MAGHRIB)
-                    + _method.getIsha().getValue() / 60d);
+            result.put(PrayTime.ISHA, result.get(PrayTime.MAGHRIB) + _method.getIsha().getValue() / 60d);
         }
-        result.put(PrayTime.DHUHR,
-                result.get(PrayTime.DHUHR) + _dhuhr.getValue() / 60d);
+        result.put(PrayTime.DHUHR, result.get(PrayTime.DHUHR) + _dhuhr.getValue() / 60d);
 
         return result;
     }
@@ -235,8 +202,7 @@ public class PrayTimesCalculator {
     private MinuteOrAngleDouble riseSetAngle() {
         // var earthRad = 6371009; // in meters
         // var angle = DMath.arccos(earthRad/(earthRad+ elv));
-        double angle = 0.0347 * Math.sqrt(_coordinate.getElevation()); // an
-        // approximation
+        double angle = 0.0347 * Math.sqrt(_coordinate.getElevation()); // an approximation
         return deg(0.833 + angle);
     }
 
@@ -245,29 +211,17 @@ public class PrayTimesCalculator {
         double nightTime = timeDiff(times.get(PrayTime.SUNSET),
                 times.get(PrayTime.SUNRISE));
 
-        times.put(
-                PrayTime.IMSAK,
-                adjustHLTime(times.get(PrayTime.IMSAK),
-                        times.get(PrayTime.SUNRISE), _imsak.getValue(),
-                        nightTime, true));
+        times.put(PrayTime.IMSAK, adjustHLTime(times.get(PrayTime.IMSAK),
+                times.get(PrayTime.SUNRISE), _imsak.getValue(), nightTime, true));
 
-        times.put(
-                PrayTime.FAJR,
-                adjustHLTime(times.get(PrayTime.FAJR), times
-                                .get(PrayTime.SUNRISE), _method.getFajr().getValue(),
-                        nightTime, true));
+        times.put(PrayTime.FAJR, adjustHLTime(times.get(PrayTime.FAJR), times.get(PrayTime.SUNRISE),
+                _method.getFajr().getValue(), nightTime, true));
 
-        times.put(
-                PrayTime.ISHA,
-                adjustHLTime(times.get(PrayTime.ISHA), times
-                                .get(PrayTime.SUNSET), _method.getIsha().getValue(),
-                        nightTime));
+        times.put(PrayTime.ISHA, adjustHLTime(times.get(PrayTime.ISHA), times.get(PrayTime.SUNSET),
+                _method.getIsha().getValue(), nightTime));
 
-        times.put(
-                PrayTime.MAGHRIB,
-                adjustHLTime(times.get(PrayTime.MAGHRIB), times
-                                .get(PrayTime.SUNSET), _method.getMaghrib().getValue(),
-                        nightTime));
+        times.put(PrayTime.MAGHRIB, adjustHLTime(times.get(PrayTime.MAGHRIB),
+                times.get(PrayTime.SUNSET), _method.getMaghrib().getValue(), nightTime));
 
         return times;
     }
