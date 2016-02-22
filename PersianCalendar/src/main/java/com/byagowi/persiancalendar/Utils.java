@@ -503,7 +503,7 @@ public class Utils {
             return result;
         }
 
-        final String locale = prefs.getString("AppLanguage", "fa");
+        final String locale = getAppLanguage();
 
         City[] cities = result.toArray(new City[result.size()]);
         // Sort first by country code then city
@@ -716,7 +716,7 @@ public class Utils {
 
     public String loadLanguageFromSettings() {
         // set app language
-        String locale = prefs.getString("AppLanguage", "fa");
+        String locale = getAppLanguage();
         changeAppLanguage(locale.replaceAll("-(IR|AF)", ""));
         changeCalendarLanguage(locale);
         return locale;
