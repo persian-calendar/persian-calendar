@@ -521,7 +521,7 @@ public class Utils {
     }
 
     public City getCityFromPreference() {
-        String key = prefs.getString(ApplicationPreferenceFragment.PREF_KEY_LOCATION, "");
+        String key = prefs.getString("Location", "");
 
         if (TextUtils.isEmpty(key) || key.equals("CUSTOM")) {
             return null;

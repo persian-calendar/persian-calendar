@@ -27,9 +27,6 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public static final String INTENT_ACTION_PREFERENCES_CHANGED = "com.byagowi.persiancalendar.intent.action.PREFERENCES_CHANGED";
 
     public static final String PREF_KEY_ATHAN = "Athan";
-    public static final String PREF_KEY_LOCATION = "Location";
-    public static final String PREF_KEY_LATITUDE = "Latitude";
-    public static final String PREF_KEY_LONGITUDE = "Longitude";
 
     //    private final Utils utils = Utils.getInstance();
     private Preference categoryAthan;
