@@ -57,34 +57,25 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        DialogFragment fragment;
+        DialogFragment fragment = null;
         if (preference instanceof PrayerSelectPreference) {
             fragment = PrayerSelectDialog.newInstance(preference);
-            fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else if (preference instanceof AthanVolumePreference) {
             fragment = AthanVolumeDialog.newInstance(preference);
-            fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else if (preference instanceof LocationPreference) {
             fragment = LocationPreferenceDialog.newInstance(preference);
-            fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else if (preference instanceof AthanNumericPreference) {
-            fragment = AthanNumericDialog.newInstance(preference.getKey());
-            fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
+            fragment = AthanNumericDialog.newInstance(preference);
         } else if (preference instanceof ShapedListPreference) {
             fragment = ShapedListDialog.newInstance(preference);
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+
+        if (fragment != null) {
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
-        } else {
-            super.onDisplayPreferenceDialog(preference);
         }
     }
 

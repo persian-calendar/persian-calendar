@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.EditTextPreferenceDialogFragmentCompat;
+import android.support.v7.preference.Preference;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
@@ -14,11 +15,11 @@ import com.byagowi.persiancalendar.Utils;
  * Created by ebraminio on 2/21/16.
  */
 public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
-    public static AthanNumericDialog newInstance(String key) {
+    public static AthanNumericDialog newInstance(Preference preference) {
         final AthanNumericDialog
                 fragment = new AthanNumericDialog();
         final Bundle b = new Bundle(1);
-        b.putString(ARG_KEY, key);
+        b.putString(ARG_KEY, preference.getKey());
         fragment.setArguments(b);
         return fragment;
     }
