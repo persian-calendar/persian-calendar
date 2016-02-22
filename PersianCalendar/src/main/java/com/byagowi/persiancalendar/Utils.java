@@ -216,7 +216,7 @@ public class Utils {
     public boolean iranTime;
 
     public void updateStoredPreference() {
-        preferredDigits = prefs.getBoolean("PersianDigits", true)
+        preferredDigits = isPersianDigitSelected()
                 ? Constants.PERSIAN_DIGITS
                 : Constants.ARABIC_DIGITS;
 
