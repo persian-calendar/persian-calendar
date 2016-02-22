@@ -27,7 +27,6 @@
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
-        <item name="android:background">@color/dark_background</item>
         <item name="colorCard">@color/dark_card_background</item>
         <item name="colorBackground">@color/dark_background</item>
         <item name="colorTextPrimary">@color/dark_text_primary</item>

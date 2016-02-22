@@ -2,7 +2,7 @@
 <resources>
     <color name="qibla_color">#888</color>
 
-    <color name="dark_primary">#212121</color>
+    <color name="dark_primary">#202020</color>
     <color name="dark_primary_dark">#212121</color>
     <color name="dark_accent">#17a05d</color>
 
@@ -20,7 +20,7 @@
     <color name="dark_card_background">#202020</color>
     <color name="dark_select_day">#fafafa</color>
     <color name="dark_drawer_background">#212121</color>
-    <color name="dark_drawer_select">#eeeeee</color>
+    <color name="dark_drawer_select">#282828</color>
 
     <color name="dark_icon">#009688</color>
     <color name="dark_icon_drawer">#009688</color>
