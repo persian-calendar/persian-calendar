@@ -115,7 +115,7 @@ public class Utils {
     public String getString(String key) {
         return localeUtils == null
                 ? ""
-                : shape(localeUtils.getString(key));
+                : localeUtils.getString(key);
     }
 
     public String programVersion() {
@@ -383,7 +383,7 @@ public class Utils {
         dateClone.setDayOfMonth(1);
         for (int month = 1; month <= 12; ++month) {
             dateClone.setMonth(month);
-            monthNameList.add(shape(getMonthName(dateClone)));
+            monthNameList.add(getMonthName(dateClone));
         }
         return monthNameList;
     }
