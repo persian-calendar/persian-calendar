@@ -16,8 +16,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.LocationAdapter;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
-import java.util.Locale;
-
 /**
  * persian_calendar
  * Author: hamidsafdari22@gmail.com
@@ -32,10 +30,6 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         LocationPreferenceDialog fragment = new LocationPreferenceDialog();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public String getCurrentLangCode() {
-        return Locale.getDefault().getLanguage();
     }
 
     @Override
