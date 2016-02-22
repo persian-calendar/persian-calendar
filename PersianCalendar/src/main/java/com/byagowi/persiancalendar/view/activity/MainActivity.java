@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         if (menuPosition != PREFERENCE)
             return;
 
-        utils.updatePreferredDigits();
+        utils.updateStoredPreference();
         updateUtils.update(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

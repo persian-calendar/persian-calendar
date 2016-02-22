@@ -60,9 +60,7 @@ public class UpdateUtils {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         utils.loadLanguageFromSettings();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean iranTime = prefs.getBoolean("IranTime", false);
-        Calendar calendar = utils.makeCalendarFromDate(new Date(), iranTime);
+        Calendar calendar = utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = utils.getToday();
 
@@ -81,6 +79,7 @@ public class UpdateUtils {
                 R.layout.widget4x1);
         RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(),
                 R.layout.widget2x2);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String colorInt = prefs.getString("SelectedWidgetTextColor",
                 context.getString(R.string.default_widget_text_color));
         int color = Color.parseColor(colorInt);
@@ -110,14 +109,13 @@ public class UpdateUtils {
         String civilDate = utils.dateToString(civil);
         String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
-        boolean in24 = prefs.getBoolean("WidgetIn24", true);
-        String time = utils.getPersianFormattedClock(calendar, in24);
+        String time = utils.getPersianFormattedClock(calendar);
         boolean enableClock = prefs.getBoolean("WidgetClock", true);
 
         if (enableClock) {
             text2 = weekDayName + " " + date;
             text1 = time;
-            if (iranTime) {
+            if (utils.iranTime) {
                 text3 = "(" + context.getString(R.string.iran_time) + ")";
             }
         } else {

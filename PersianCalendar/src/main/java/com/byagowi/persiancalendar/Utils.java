@@ -78,7 +78,6 @@ public class Utils {
     private Context context;
     private Typeface typeface;
     private SharedPreferences prefs;
-    private char[] preferredDigits;
 
     private List<Event> events;
     private PrayTimesCalculator prayTimesCalculator;
@@ -90,7 +89,7 @@ public class Utils {
     private Utils(Context context) {
         this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        updatePreferredDigits();
+        updateStoredPreference();
     }
 
     public static Utils getInstance(Context context) {
@@ -212,16 +211,25 @@ public class Utils {
         }
     }
 
-    public void updatePreferredDigits() {
-        preferredDigits = prefs.getBoolean("PersianDigits", true) ? Constants.PERSIAN_DIGITS : Constants.ARABIC_DIGITS;
+    private char[] preferredDigits;
+    private boolean clockIn24;
+    public boolean iranTime;
+
+    public void updateStoredPreference() {
+        preferredDigits = prefs.getBoolean("PersianDigits", true)
+                ? Constants.PERSIAN_DIGITS
+                : Constants.ARABIC_DIGITS;
+
+        clockIn24 = prefs.getBoolean("WidgetIn24", true);
+        iranTime = prefs.getBoolean("IranTime", false);
     }
 
     public boolean isPersianDigitSelected(){
         return prefs.getBoolean("PersianDigits", true);
     }
 
-    public boolean clockIn24() {
-        return prefs.getBoolean("WidgetIn24", true);
+    public int getAthanVolume() {
+        return prefs.getInt("AthanVolume", 1);
     }
 
     public PersianDate getToday() {
@@ -229,7 +237,7 @@ public class Utils {
         return DateConverter.civilToPersian(civilDate);
     }
 
-    public Calendar makeCalendarFromDate(Date date, boolean iranTime) {
+    public Calendar makeCalendarFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         if (iranTime) {
             calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
@@ -246,8 +254,6 @@ public class Utils {
         Coordinate coordinate = getCoordinate();
 
         if (coordinate != null) {
-            boolean clockIn24 = clockIn24();
-
             if (prayTimesCalculator == null) {
                 prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod());
                 changeDate = true;
@@ -258,41 +264,41 @@ public class Utils {
             }
 
             if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), clockIn24);
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK));
 
             } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE), clockIn24);
+                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE));
 
             } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR), clockIn24);
+                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR));
 
             } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR), clockIn24);
+                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR));
 
             } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET), clockIn24);
+                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET));
 
             } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB), clockIn24);
+                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
 
             } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA), clockIn24);
+                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA));
 
             } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT), clockIn24);
+                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
 
             } else {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK), clockIn24); //this is today & not tomorrow
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)); //this is today & not tomorrow
             }
 
         } else return null;
     }
 
-    public String getPersianFormattedClock(Clock clock, boolean in24) {
+    public String getPersianFormattedClock(Clock clock) {
         String timeText = null;
 
         int hour = clock.getHour();
-        if (!in24) {
+        if (!clockIn24) {
             if (hour >= 12) {
                 timeText = Constants.PM_IN_PERSIAN;
                 hour -= 12;
@@ -302,17 +308,17 @@ public class Utils {
         }
 
         String result = clockToString(hour, clock.getMinute());
-        if (!in24) {
+        if (!clockIn24) {
             result = result + " " + timeText;
         }
         return result;
     }
 
-    public String getPersianFormattedClock(Calendar calendar, boolean in24) {
+    public String getPersianFormattedClock(Calendar calendar) {
         String timeText = null;
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (!in24) {
+        if (!clockIn24) {
             if (calendar.get(Calendar.HOUR_OF_DAY) >= 12) {
                 timeText = Constants.PM_IN_PERSIAN;
                 hour -= 12;
@@ -322,7 +328,7 @@ public class Utils {
         }
 
         String result = clockToString(hour, calendar.get(Calendar.MINUTE));
-        if (!in24) {
+        if (!clockIn24) {
             result = result + " " + timeText;
         }
         return result;
@@ -673,10 +679,6 @@ public class Utils {
     public Uri getAthanUri() {
         String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
         return Uri.parse(defaultSoundUri);
-    }
-
-    public int getAthanVolume() {
-        return prefs.getInt("AthanVolume", 1);
     }
 
     public void changeAppLanguage(String localeCode) {
