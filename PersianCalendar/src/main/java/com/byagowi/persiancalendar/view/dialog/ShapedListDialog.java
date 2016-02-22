@@ -21,7 +21,6 @@ public class ShapedListDialog extends PreferenceDialogFragmentCompat {
         Bundle bundle = new Bundle(1);
         bundle.putString("key", preference.getKey());
         fragment.setArguments(bundle);
-
         return fragment;
     }
 

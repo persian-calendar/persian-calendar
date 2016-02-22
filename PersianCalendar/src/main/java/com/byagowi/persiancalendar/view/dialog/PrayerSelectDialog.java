@@ -17,7 +17,6 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
         Bundle bundle = new Bundle(1);
         bundle.putString("key", preference.getKey());
         fragment.setArguments(bundle);
-
         return fragment;
     }
 

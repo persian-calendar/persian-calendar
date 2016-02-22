@@ -16,9 +16,8 @@ import com.byagowi.persiancalendar.Utils;
  */
 public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
     public static AthanNumericDialog newInstance(Preference preference) {
-        final AthanNumericDialog
-                fragment = new AthanNumericDialog();
-        final Bundle b = new Bundle(1);
+        AthanNumericDialog fragment = new AthanNumericDialog();
+        Bundle b = new Bundle(1);
         b.putString(ARG_KEY, preference.getKey());
         fragment.setArguments(b);
         return fragment;
