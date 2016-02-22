@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -180,8 +178,7 @@ public class MainActivity extends AppCompatActivity {
         utils.updateStoredPreference();
         updateUtils.update(true);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String locale = prefs.getString("AppLanguage", "fa");
+        String locale = utils.getAppLanguage();
         if (!locale.equals(prevLocale)) {
             prevLocale = locale;
             utils.loadLanguageFromSettings();

@@ -1,12 +1,10 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -38,8 +36,6 @@ public class CompassFragment extends Fragment {
 
         Context context = getContext();
         Utils utils = Utils.getInstance(context);
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
         Coordinate coordinate = utils.getCoordinate();
         if (coordinate == null) {
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
@@ -47,7 +43,7 @@ public class CompassFragment extends Fragment {
             City city = utils.getCityFromPreference();
             String subtitle;
             if (city != null) {
-                subtitle = prefs.getString("AppLanguage", "fa").equals("en")
+                subtitle = utils.getAppLanguage().equals("en")
                     ? city.getEn()
                     : city.getFa();
             } else {

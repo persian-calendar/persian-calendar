@@ -228,8 +228,24 @@ public class Utils {
         return prefs.getBoolean("PersianDigits", true);
     }
 
+    public boolean isWidgetClock() {
+        return prefs.getBoolean("WidgetClock", true);
+    }
+
+    public boolean isNotifyDate() {
+        return prefs.getBoolean("NotifyDate", true);
+    }
+
     public int getAthanVolume() {
         return prefs.getInt("AthanVolume", 1);
+    }
+
+    public String getAppLanguage() {
+        return prefs.getString("AppLanguage", "fa");
+    }
+
+    public String getSelectedWidgetTextColor() {
+        return prefs.getString("SelectedWidgetTextColor", "#ffffffff");
     }
 
     public PersianDate getToday() {

@@ -1,10 +1,8 @@
 package com.byagowi.persiancalendar.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
@@ -32,7 +30,6 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
         Utils utils = Utils.getInstance(getApplicationContext());
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_athan);
 
@@ -49,7 +46,7 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
 
         City city = utils.getCityFromPreference();
         if (city != null) {
-            String cityName = prefs.getString("AppLanguage", "fa").equals("en") ? city.getEn() : city.getFa();
+            String cityName = utils.getAppLanguage().equals("en") ? city.getEn() : city.getFa();
             textCityName.setText(getString(R.string.in_city_time) + " " + cityName);
         } else {
             Coordinate coordinate = utils.getCoordinate();
