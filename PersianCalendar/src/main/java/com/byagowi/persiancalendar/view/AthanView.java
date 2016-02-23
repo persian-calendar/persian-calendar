@@ -97,9 +97,25 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        sendBroadcastStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sendBroadcastStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        sendBroadcastStop();
+    }
+
+    private void sendBroadcastStop() {
         Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
         intent.setAction(Constants.ACTION_STOP_ALARM);
         AthanView.this.sendBroadcast(intent);
         finish();
     }
+
 }
