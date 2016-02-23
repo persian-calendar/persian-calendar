@@ -241,7 +241,9 @@ public class Utils {
     }
 
     public String getAppLanguage() {
-        return prefs.getString("AppLanguage", "fa");
+        String language = prefs.getString("AppLanguage", "fa");
+        // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
+        return TextUtils.isEmpty(language) ? "fa" : language;
     }
 
     public String getSelectedWidgetTextColor() {
