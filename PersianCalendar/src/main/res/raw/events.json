@@ -577,9 +577,6 @@
     { "holiday": false, "year": -1, "month": 6, "day": 12, "type": "Iran",
       "title": "روز بهورز" },
 
-    { "holiday": false, "year": -1, "month": 6, "day": 21, "type": "Iran",
-      "title": "روز سینما" },
-
     { "holiday": false, "year": -1, "month": 6, "day": 30, "type": "Iran",
       "title": "روز گفت‌وگوی تمدن‌ها" },
 
