@@ -74,7 +74,7 @@ import calendar.PersianDate;
  */
 
 public class Utils {
-    private final String TAG = "Utils";
+    private final String TAG = Utils.class.getName();
     private static Utils myInstance;
     private LocaleUtils localeUtils;
     private Context context;
@@ -182,11 +182,15 @@ public class Utils {
 
     public CalculationMethod getCalculationMethod() {
         // It seems Iran is using Jafari method
-        return CalculationMethod.valueOf(prefs.getString("PrayTimeMethod", "Jafari"));
+        return CalculationMethod.valueOf(prefs.getString(
+                Constants.PREF_PRAY_TIME_METHOD,
+                Constants.DEFAULT_PRAY_TIME_METHOD));
     }
 
     public int getIslamicOffset() {
-        return Integer.parseInt(prefs.getString("islamicOffset", "0"));
+        return Integer.parseInt(prefs.getString(
+                Constants.PREF_ISLAMIC_OFFSET,
+                Constants.DEFAULT_ISLAMIC_OFFSET));
     }
 
     public Coordinate getCoordinate() {
@@ -197,9 +201,17 @@ public class Utils {
 
         try {
             Coordinate coord = new Coordinate(
-                    Double.parseDouble(prefs.getString("Latitude", "0")),
-                    Double.parseDouble(prefs.getString("Longitude", "0")),
-                    Double.parseDouble(prefs.getString("Altitude", "0"))
+                    Double.parseDouble(prefs.getString(
+                            Constants.PREF_LATITUDE,
+                            Constants.DEFAULT_LATITUDE)),
+
+                    Double.parseDouble(prefs.getString(
+                            Constants.PREF_LONGITUDE,
+                            Constants.DEFAULT_LONGITUDE)),
+
+                    Double.parseDouble(prefs.getString(
+                            Constants.PREF_ALTITUDE,
+                            Constants.DEFAULT_ALTITUDE))
             );
 
             // If latitude or longitude is zero probably preference is not set yet
@@ -222,23 +234,23 @@ public class Utils {
                 ? Constants.PERSIAN_DIGITS
                 : Constants.ARABIC_DIGITS;
 
-        clockIn24 = prefs.getBoolean("WidgetIn24", true);
-        iranTime = prefs.getBoolean("IranTime", false);
+        clockIn24 = prefs.getBoolean(Constants.PREF_WIDGET_IN_24, Constants.DEFAULT_WIDGET_IN_24);
+        iranTime = prefs.getBoolean(Constants.PREF_IRAN_TIME, Constants.DEFAULT_IRAN_TIME);
     }
 
     public boolean isPersianDigitSelected(){
-        return prefs.getBoolean("PersianDigits", true);
+        return prefs.getBoolean(Constants.PREF_PERSIAN_DIGITS, Constants.DEFAULT_PERSIAN_DIGITS);
     }
 
 
     public void setTheme(Context context) {
-        String key = prefs.getString("Theme", "");
+        String key = prefs.getString(Constants.PREF_THEME, "");
 
         int theme = R.style.LightTheme; // default theme
 
-        if (key.equals("LightTheme")) {
+        if (key.equals(Constants.LIGHT_THEME)) {
             theme = R.style.LightTheme;
-        } else if (key.equals("DarkTheme")) {
+        } else if (key.equals(Constants.DARK_THEME)) {
             theme = R.style.DarkTheme;
         }
 
@@ -247,29 +259,33 @@ public class Utils {
 
 
     public boolean isWidgetClock() {
-        return prefs.getBoolean("WidgetClock", true);
+        return prefs.getBoolean(Constants.PREF_WIDGET_CLOCK, Constants.DEFAULT_WIDGET_CLOCK);
     }
 
     public boolean isNotifyDate() {
-        return prefs.getBoolean("NotifyDate", true);
+        return prefs.getBoolean(Constants.PREF_NOTIFY_DATE, Constants.DEFAULT_NOTIFY_DATE);
     }
 
     public int getAthanVolume() {
-        return prefs.getInt("AthanVolume", 1);
+        return prefs.getInt(Constants.PREF_ATHAN_VOLUME, Constants.DEFAULT_ATHAN_VOLUME);
     }
 
     public String getAppLanguage() {
-        String language = prefs.getString("AppLanguage", "fa");
+        String language = prefs.getString(
+                Constants.PREF_APP_LANGUAGE,
+                Constants.DEFAULT_APP_LANGUAGE);
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
-        return TextUtils.isEmpty(language) ? "fa" : language;
+        return TextUtils.isEmpty(language) ? Constants.DEFAULT_APP_LANGUAGE : language;
     }
 
     public String getTheme() {
-        return prefs.getString("Theme", "LightTheme");
+        return prefs.getString(Constants.PREF_THEME, Constants.LIGHT_THEME);
     }
 
     public String getSelectedWidgetTextColor() {
-        return prefs.getString("SelectedWidgetTextColor", "#ffffffff");
+        return prefs.getString(
+                Constants.PREF_SELECTED_WIDGET_TEXT_COLOR,
+                Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
     }
 
     public PersianDate getToday() {
@@ -659,7 +675,7 @@ public class Utils {
 
     public void loadAlarms() {
         Log.d(TAG, "reading and loading all alarms from prefs");
-        String prefString = prefs.getString("AthanAlarm", "");
+        String prefString = prefs.getString(Constants.PREF_ATHAN_ALARM, "");
         CalculationMethod calculationMethod = getCalculationMethod();
         Coordinate coordinate = getCoordinate();
 
@@ -687,7 +703,7 @@ public class Utils {
     }
 
     public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
-        String valAthanGap = prefs.getString("AthanGap", "0");
+        String valAthanGap = prefs.getString(Constants.PREF_ATHAN_GAP, "0");
         long athanGap;
         try {
             athanGap = (long)(Double.parseDouble(valAthanGap) * 60);

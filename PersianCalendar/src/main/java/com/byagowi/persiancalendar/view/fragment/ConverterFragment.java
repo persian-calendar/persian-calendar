@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,8 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class ConverterFragment extends Fragment implements
+        AdapterView.OnItemSelectedListener, View.OnClickListener {
     private Utils utils;
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;

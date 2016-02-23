@@ -8,9 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
-import com.byagowi.persiancalendar.locale.CalendarStrings;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;

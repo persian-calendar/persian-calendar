@@ -10,8 +10,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 
 import java.io.IOException;

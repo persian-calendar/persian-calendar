@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
@@ -24,11 +25,6 @@ import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
  * @author ebraminio
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
-    public static final String INTENT_ACTION_PREFERENCES_CHANGED = "com.byagowi.persiancalendar.intent.action.PREFERENCES_CHANGED";
-
-    public static final String PREF_KEY_ATHAN = "Athan";
-
-    //    private final Utils utils = Utils.getInstance();
     private Preference categoryAthan;
     private Utils utils;
 
@@ -39,7 +35,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
         addPreferencesFromResource(R.xml.preferences);
 
-        categoryAthan = findPreference(PREF_KEY_ATHAN);
+        categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
         updateAthanPreferencesState();
 
         instance = this;

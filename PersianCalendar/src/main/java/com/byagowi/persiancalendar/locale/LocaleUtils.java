@@ -32,7 +32,7 @@ import static com.byagowi.persiancalendar.Constants.TODAY;
 import static com.byagowi.persiancalendar.Constants.YEAR;
 
 public class LocaleUtils {
-    private static final String TAG = "LocaleUtils";
+    private static final String TAG = LocaleUtils.class.getName();
     private static LocaleUtils instance;
     private static final String CALENDAR_BUNDLE = "CalendarBundle";
 

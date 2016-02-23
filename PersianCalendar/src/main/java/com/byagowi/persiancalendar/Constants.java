@@ -1,6 +1,46 @@
 package com.byagowi.persiancalendar;
 
 public class Constants {
+
+    public static final String PREF_KEY_ATHAN = "Athan";
+    public static final String PREF_PRAY_TIME_METHOD = "PrayTimeMethod";
+    public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";
+    public static final String PREF_LATITUDE = "Latitude";
+    public static final String PREF_LONGITUDE = "Longitude";
+    public static final String PREF_ALTITUDE = "Altitude";
+    public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
+    public static final String PREF_IRAN_TIME = "IranTime";
+    public static final String PREF_PERSIAN_DIGITS = "PersianDigits";
+    public static final String PREF_WIDGET_CLOCK = "WidgetClock";
+    public static final String PREF_NOTIFY_DATE = "NotifyDate";
+    public static final String PREF_ATHAN_VOLUME = "AthanVolume";
+    public static final String PREF_APP_LANGUAGE = "AppLanguage";
+    public static final String PREF_SELECTED_WIDGET_TEXT_COLOR = "SelectedWidgetTextColor";
+    public static final String PREF_ATHAN_ALARM = "AthanAlarm";
+    public static final String PREF_ATHAN_GAP = "AthanGap";
+    public static final String PREF_THEME = "Theme";
+
+
+
+    public static final String DEFAULT_PRAY_TIME_METHOD = "Jafari";
+    public static final String DEFAULT_ISLAMIC_OFFSET = "0";
+    public static final String DEFAULT_LATITUDE = "0";
+    public static final String DEFAULT_LONGITUDE = "0";
+    public static final String DEFAULT_ALTITUDE = "0";
+    public static final String DEFAULT_APP_LANGUAGE = "fa";
+    public static final String DEFAULT_SELECTED_WIDGET_TEXT_COLOR = "#ffffffff";
+    public static final boolean DEFAULT_WIDGET_IN_24 = true;
+    public static final boolean DEFAULT_IRAN_TIME = false;
+    public static final boolean DEFAULT_PERSIAN_DIGITS = true;
+    public static final boolean DEFAULT_WIDGET_CLOCK = true;
+    public static final boolean DEFAULT_NOTIFY_DATE = true;
+    public static final int DEFAULT_ATHAN_VOLUME = 1;
+
+    public static final String LIGHT_THEME = "LightTheme";
+    public static final String DARK_THEME = "DarkTheme";
+
+
+
     public static final String IMSAK = "imsak";
     public static final String SUNRISE = "sunrise";
     public static final String DHUHR = "dhuhr";

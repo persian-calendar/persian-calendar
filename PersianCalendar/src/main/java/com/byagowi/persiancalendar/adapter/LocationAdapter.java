@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.entity.CityEntity;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 
 import java.util.List;

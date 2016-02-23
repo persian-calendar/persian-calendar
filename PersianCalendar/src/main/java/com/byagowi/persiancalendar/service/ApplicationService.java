@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
+import com.byagowi.persiancalendar.util.Utils;
 
 /**
  * The Calendar Service that updates widget time and clock and build/update

@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.io.IOException;
 
 public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
+    private final String TAG = AthanVolumeDialog.class.getName();
     public static AthanVolumeDialog newInstance(Preference preference) {
         AthanVolumeDialog fragment = new AthanVolumeDialog();
         Bundle bundle = new Bundle(1);
@@ -42,7 +43,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
                     Utils.getInstance(getContext()).getAthanUri());
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
         } catch (IOException e) {
-            Log.e("AthanPref", "", e);
+            Log.e(TAG, e.getMessage());
         }
 
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
