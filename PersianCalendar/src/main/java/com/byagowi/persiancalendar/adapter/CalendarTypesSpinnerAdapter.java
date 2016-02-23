@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.enums.CalendarType;
+import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.locale.CalendarStrings;
 
 import java.util.HashMap;
@@ -18,12 +19,12 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
     private Utils utils;
 
     // so there's an order
-    private CalendarType[] calendarTypeKeys = new CalendarType[]{
-            CalendarType.SHAMSI,
-            CalendarType.ISLAMIC,
-            CalendarType.GEORGIAN
+    private CalendarTypeEnum[] calendarTypeKeys = new CalendarTypeEnum[]{
+            CalendarTypeEnum.SHAMSI,
+            CalendarTypeEnum.ISLAMIC,
+            CalendarTypeEnum.GEORGIAN
     };
-    private Map<CalendarType, String> calendarTypes = new HashMap<>();
+    private Map<CalendarTypeEnum, String> calendarTypes = new HashMap<>();
     private int spinnerResource;
 
     public CalendarTypesSpinnerAdapter(Context context, int resource) {
@@ -32,9 +33,9 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
         utils.loadLanguageFromSettings();
 
         spinnerResource = resource;
-        calendarTypes.put(CalendarType.SHAMSI, utils.getString(CalendarStrings.HIJRI_SHAMSI));
-        calendarTypes.put(CalendarType.ISLAMIC, utils.getString(CalendarStrings.HIJRI_QAMARI));
-        calendarTypes.put(CalendarType.GEORGIAN, utils.getString(CalendarStrings.GEORGIAN));
+        calendarTypes.put(CalendarTypeEnum.SHAMSI, utils.getString(Constants.HIJRI_SHAMSI));
+        calendarTypes.put(CalendarTypeEnum.ISLAMIC, utils.getString(Constants.HIJRI_QAMARI));
+        calendarTypes.put(CalendarTypeEnum.GEORGIAN, utils.getString(Constants.GEORGIAN));
     }
 
     @Override

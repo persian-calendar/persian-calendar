@@ -6,17 +6,17 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.view.dialog.AthanNumericDialog;
-import com.byagowi.persiancalendar.view.dialog.AthanNumericPreference;
-import com.byagowi.persiancalendar.view.dialog.AthanVolumeDialog;
-import com.byagowi.persiancalendar.view.dialog.AthanVolumePreference;
-import com.byagowi.persiancalendar.view.dialog.LocationPreference;
-import com.byagowi.persiancalendar.view.dialog.LocationPreferenceDialog;
-import com.byagowi.persiancalendar.view.dialog.PrayerSelectDialog;
-import com.byagowi.persiancalendar.view.dialog.PrayerSelectPreference;
-import com.byagowi.persiancalendar.view.dialog.ShapedListDialog;
-import com.byagowi.persiancalendar.view.dialog.ShapedListPreference;
+import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
+import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
+import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
+import com.byagowi.persiancalendar.view.preferences.AthanVolumePreference;
+import com.byagowi.persiancalendar.view.preferences.LocationPreference;
+import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
+import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
+import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
+import com.byagowi.persiancalendar.view.preferences.ShapedListDialog;
+import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
 
 /**
  * Preference activity
@@ -30,7 +30,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     //    private final Utils utils = Utils.getInstance();
     private Preference categoryAthan;
-    Utils utils;
+    private Utils utils;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {

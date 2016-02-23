@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.List;
 

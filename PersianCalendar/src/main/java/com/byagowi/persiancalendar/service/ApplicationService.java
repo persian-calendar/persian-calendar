@@ -6,7 +6,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 
 /**

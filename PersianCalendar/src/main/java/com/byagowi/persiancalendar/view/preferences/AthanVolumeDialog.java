@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.dialog;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +12,15 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.entity.City;
+import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 
 import java.util.concurrent.TimeUnit;
 
-public class AthanView extends AppCompatActivity implements View.OnClickListener {
+public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView textAlarmName;
     private AppCompatImageView athanIconView;
 
@@ -44,9 +44,9 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
 
         setPrayerView(prayerKey);
 
-        City city = utils.getCityFromPreference();
-        if (city != null) {
-            String cityName = utils.getAppLanguage().equals("en") ? city.getEn() : city.getFa();
+        CityEntity cityEntity = utils.getCityFromPreference();
+        if (cityEntity != null) {
+            String cityName = utils.getAppLanguage().equals("en") ? cityEntity.getEn() : cityEntity.getFa();
             textCityName.setText(getString(R.string.in_city_time) + " " + cityName);
         } else {
             Coordinate coordinate = utils.getCoordinate();
@@ -114,7 +114,7 @@ public class AthanView extends AppCompatActivity implements View.OnClickListener
     private void sendBroadcastStop() {
         Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
         intent.setAction(Constants.ACTION_STOP_ALARM);
-        AthanView.this.sendBroadcast(intent);
+        AthanActivity.this.sendBroadcast(intent);
         finish();
     }
 

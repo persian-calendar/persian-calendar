@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.dialog;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 
 /**
  * Created by ebraminio on 2/21/16.

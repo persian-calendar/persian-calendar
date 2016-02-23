@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -13,8 +12,8 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
-import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
 import java.util.List;
@@ -24,12 +23,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private MonthFragment monthFragment;
     private final int TYPE_HEADER = 0;
     private final int TYPE_DAY = 1;
-    private List<Day> days;
+    private List<DayEntity> days;
     public int select_Day = -1;
     private boolean persianDigit;
     private Utils utils;
 
-    public MonthAdapter(Context context, MonthFragment monthFragment, List<Day> days) {
+    public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days) {
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;

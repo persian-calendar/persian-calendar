@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.UpdateUtils;
+import com.byagowi.persiancalendar.util.Utils;
 
 public class Widget2x2 extends AppWidgetProvider {
     @Override

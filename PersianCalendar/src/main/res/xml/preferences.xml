@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
+    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:title="@string/general">
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
@@ -19,13 +19,13 @@
             android:summary="@string/select_skin"
             android:title="@string/skin" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
@@ -33,18 +33,18 @@
             android:summary="@string/islamic_offset_summary"
             android:title="@string/islamic_offset" />
 
-    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
+    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
 
-    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
+    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:title="@string/widget_notification_dashclock">
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
@@ -52,30 +52,30 @@
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
             android:defaultValue="false"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedCheckBoxPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
 
-    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
+    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
 
-    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
+    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:title="@string/pray_times_calculation_setting">
 
-        <com.byagowi.persiancalendar.view.dialog.ShapedListPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="Jafari"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
@@ -83,26 +83,26 @@
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
 
-        <com.byagowi.persiancalendar.view.dialog.LocationPreference
+        <com.byagowi.persiancalendar.view.preferences.LocationPreference
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location" />
 
-        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
+        <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Latitude"
             android:title="@string/latitude" />
 
-        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
+        <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Longitude"
             android:title="@string/longitude" />
 
-        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
+        <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
@@ -110,28 +110,28 @@
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude" />
 
-    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
+    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
 
-    <com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory
+    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:key="Athan"
         android:title="@string/athan">
 
-        <com.byagowi.persiancalendar.view.dialog.AthanNumericPreference
+        <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap" />
 
-        <com.byagowi.persiancalendar.view.dialog.PrayerSelectPreference
+        <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
             android:key="AthanAlarm"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
-        <com.byagowi.persiancalendar.view.dialog.AthanVolumePreference
+        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
             android:key="AthanVolume"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume" />
 
-    </com.byagowi.persiancalendar.view.dialog.ShapedPreferenceCategory>
+    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

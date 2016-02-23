@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.enums;
 
-public enum Season {
+public enum SeasonEnum {
     SPRING,
     SUMMER,
     FALL,

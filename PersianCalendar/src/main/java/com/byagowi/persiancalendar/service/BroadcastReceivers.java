@@ -10,9 +10,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
-import com.byagowi.persiancalendar.view.AthanView;
+import com.byagowi.persiancalendar.view.activity.AthanActivity;
 
 import java.io.IOException;
 
@@ -66,7 +66,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
     }
 
     private void startAthanActivity(String string) {
-        Intent intent = new Intent(context, AthanView.class);
+        Intent intent = new Intent(context, AthanActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, string);
         context.startActivity(intent);

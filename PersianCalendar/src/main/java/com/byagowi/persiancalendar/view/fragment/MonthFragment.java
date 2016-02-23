@@ -16,9 +16,9 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
-import com.byagowi.persiancalendar.entity.Day;
+import com.byagowi.persiancalendar.entity.DayEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         utils = Utils.getInstance(getContext());
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<Day> days = getDays(offset);
+        List<DayEntity> days = getDays(offset);
 
         AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
         AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
@@ -156,8 +156,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private List<Day> getDays(int offset) {
-        List<Day> days = new ArrayList<>();
+    private List<DayEntity> getDays(int offset) {
+        List<DayEntity> days = new ArrayList<>();
         PersianDate persianDate = utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
@@ -182,25 +182,25 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             for (int i = 1; i <= 31; i++) {
                 persianDate.setDayOfMonth(i);
 
-                Day day = new Day();
-                day.setNum(utils.formatNumber(i));
-                day.setDayOfWeek(dayOfWeek);
+                DayEntity dayEntity = new DayEntity();
+                dayEntity.setNum(utils.formatNumber(i));
+                dayEntity.setDayOfWeek(dayOfWeek);
 
                 if (dayOfWeek == 6 || !TextUtils.isEmpty(utils.getEventsTitle(persianDate, true))) {
-                    day.setHoliday(true);
+                    dayEntity.setHoliday(true);
                 }
 
                 if (utils.getEvents(persianDate).size() > 0) {
-                    day.setEvent(true);
+                    dayEntity.setEvent(true);
                 }
 
-                day.setPersianDate(persianDate.clone());
+                dayEntity.setPersianDate(persianDate.clone());
 
                 if (persianDate.equals(today)) {
-                    day.setToday(true);
+                    dayEntity.setToday(true);
                 }
 
-                days.add(day);
+                days.add(dayEntity);
                 dayOfWeek++;
                 if (dayOfWeek == 7) {
                     dayOfWeek = 0;

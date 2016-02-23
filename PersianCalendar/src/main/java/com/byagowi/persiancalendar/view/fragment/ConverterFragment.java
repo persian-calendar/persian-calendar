@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
-import com.byagowi.persiancalendar.enums.CalendarType;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +103,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
                 + yearSpinner.getSelectedItemPosition();
         int month = monthSpinner.getSelectedItemPosition() + 1;
         int day = daySpinner.getSelectedItemPosition() + 1;
-        CalendarType calendarType = (CalendarType) calendarTypeSpinner.getSelectedItem();
+        CalendarTypeEnum calendarType = (CalendarTypeEnum) calendarTypeSpinner.getSelectedItem();
 
         CivilDate civilDate = null;
         PersianDate persianDate;
@@ -166,7 +166,7 @@ public class ConverterFragment extends Fragment implements AdapterView.OnItemSel
         CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
         IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
 
-        CalendarType selectedCalendarType = (CalendarType) calendarTypeSpinner.getSelectedItem();
+        CalendarTypeEnum selectedCalendarType = (CalendarTypeEnum) calendarTypeSpinner.getSelectedItem();
         switch (selectedCalendarType) {
             case GEORGIAN:
                 date = newDateCivil;

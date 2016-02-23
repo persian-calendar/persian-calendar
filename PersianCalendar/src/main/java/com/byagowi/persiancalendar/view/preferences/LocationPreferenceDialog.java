@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.dialog;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;

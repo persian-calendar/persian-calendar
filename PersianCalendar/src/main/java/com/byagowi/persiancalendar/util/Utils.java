@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar.util;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -28,9 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.persiancalendar.entity.City;
-import com.byagowi.persiancalendar.entity.Event;
-import com.byagowi.persiancalendar.enums.Season;
+import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.CityEntity;
+import com.byagowi.persiancalendar.entity.EventEntity;
+import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.CalculationMethod;
@@ -79,12 +81,12 @@ public class Utils {
     private Typeface typeface;
     private SharedPreferences prefs;
 
-    private List<Event> events;
+    private List<EventEntity> events;
     private PrayTimesCalculator prayTimesCalculator;
     private Map<PrayTime, Clock> prayTimes;
 
     private String cachedCityKey = "";
-    private City cachedCity;
+    private CityEntity cachedCity;
 
     private Utils(Context context) {
         this.context = context;
@@ -188,9 +190,9 @@ public class Utils {
     }
 
     public Coordinate getCoordinate() {
-        City city = getCityFromPreference();
-        if (city != null) {
-            return city.getCoordinate();
+        CityEntity cityEntity = getCityFromPreference();
+        if (cityEntity != null) {
+            return cityEntity.getCoordinate();
         }
 
         try {
@@ -488,8 +490,8 @@ public class Utils {
     }
 
 
-    public List<City> getAllCities(boolean needsSort) {
-        ArrayList<City> result = new ArrayList<>();
+    public List<CityEntity> getAllCities(boolean needsSort) {
+        ArrayList<CityEntity> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(
                     context.getResources().openRawResource(R.raw.cities)));
@@ -514,7 +516,7 @@ public class Utils {
                             0 // city.getDouble("elevation")
                     );
 
-                    result.add(new City(key, en, fa, countryCode, countryEn, countryFa, coordinate));
+                    result.add(new CityEntity(key, en, fa, countryCode, countryEn, countryFa, coordinate));
                 }
             }
         } catch (JSONException e) {
@@ -527,11 +529,11 @@ public class Utils {
 
         final String locale = getAppLanguage();
 
-        City[] cities = result.toArray(new City[result.size()]);
+        CityEntity[] cities = result.toArray(new CityEntity[result.size()]);
         // Sort first by country code then city
-        Arrays.sort(cities, new Comparator<City>() {
+        Arrays.sort(cities, new Comparator<CityEntity>() {
             @Override
-            public int compare(City l, City r) {
+            public int compare(CityEntity l, CityEntity r) {
                 if (l.getKey().equals("CUSTOM")) {
                     return -1;
                 }
@@ -552,7 +554,7 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    public City getCityFromPreference() {
+    public CityEntity getCityFromPreference() {
         String key = prefs.getString("Location", "");
 
         if (TextUtils.isEmpty(key) || key.equals("CUSTOM")) {
@@ -567,18 +569,18 @@ public class Utils {
         // value is somehow inserted on the preference
         cachedCityKey = key;
 
-        for (City city : getAllCities(false))
-            if (city.getKey().equals(key)) {
-                cachedCity = city;
-                return city;
+        for (CityEntity cityEntity : getAllCities(false))
+            if (cityEntity.getKey().equals(key)) {
+                cachedCity = cityEntity;
+                return cityEntity;
             }
 
         cachedCity = null;
         return null;
     }
 
-    private ArrayList<Event> readEventsFromJSON(InputStream is) {
-        ArrayList<Event> result = new ArrayList<>();
+    private ArrayList<EventEntity> readEventsFromJSON(InputStream is) {
+        ArrayList<EventEntity> result = new ArrayList<>();
         try {
             JSONArray days = new JSONObject(convertStreamToString(is)).getJSONArray("events");
 
@@ -592,7 +594,7 @@ public class Utils {
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
-                result.add(new Event(new PersianDate(year, month, day), title, holiday));
+                result.add(new EventEntity(new PersianDate(year, month, day), title, holiday));
             }
 
         } catch (JSONException e) {
@@ -601,15 +603,15 @@ public class Utils {
         return result;
     }
 
-    public ArrayList<Event> getEvents(PersianDate day) {
+    public ArrayList<EventEntity> getEvents(PersianDate day) {
         if (events == null) {
             events = readEventsFromJSON(context.getResources().openRawResource(R.raw.events));
         }
 
-        ArrayList<Event> result = new ArrayList<>();
-        for (Event event : events) {
-            if (event.getDate().equals(day)) {
-                result.add(event);
+        ArrayList<EventEntity> result = new ArrayList<>();
+        for (EventEntity eventEntity : events) {
+            if (eventEntity.getDate().equals(day)) {
+                result.add(eventEntity);
             }
         }
         return result;
@@ -618,7 +620,7 @@ public class Utils {
     public String getEventsTitle(PersianDate day, boolean holiday) {
         String titles = "";
         boolean first = true;
-        ArrayList<Event> dayEvents = getEvents(day);
+        ArrayList<EventEntity> dayEvents = getEvents(day);
 
         for (int i = 0; i < dayEvents.size(); i++) {
             if (dayEvents.get(i).isHoliday() == holiday) {
@@ -759,20 +761,20 @@ public class Utils {
         quickToast("«" + date + "»\n" + context.getString(R.string.date_copied_clipboard));
     }
 
-    public Season getSeason() {
+    public SeasonEnum getSeason() {
         int month = getToday().getMonth();
 
         if (month < 4) {
-            return Season.SPRING;
+            return SeasonEnum.SPRING;
 
         } else if (month < 7) {
-            return Season.SUMMER;
+            return SeasonEnum.SUMMER;
 
         } else if (month < 10) {
-            return Season.FALL;
+            return SeasonEnum.FALL;
 
         } else {
-            return Season.WINTER;
+            return SeasonEnum.WINTER;
         }
     }
 }

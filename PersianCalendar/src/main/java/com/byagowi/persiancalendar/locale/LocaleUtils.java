@@ -14,22 +14,22 @@ import java.util.ResourceBundle;
 
 import calendar.LocaleData;
 
-import static com.byagowi.persiancalendar.locale.CalendarStrings.ASR;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.DAY;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.DHUHR;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.EQUALS_WITH;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.GEORGIAN;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.HIJRI_QAMARI;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.HIJRI_SHAMSI;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.IMSAK;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.ISHA;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.MAGHRIB;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.MIDNIGHT;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.MONTH;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.SUNRISE;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.SUNSET;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.TODAY;
-import static com.byagowi.persiancalendar.locale.CalendarStrings.YEAR;
+import static com.byagowi.persiancalendar.Constants.ASR;
+import static com.byagowi.persiancalendar.Constants.DAY;
+import static com.byagowi.persiancalendar.Constants.DHUHR;
+import static com.byagowi.persiancalendar.Constants.EQUALS_WITH;
+import static com.byagowi.persiancalendar.Constants.GEORGIAN;
+import static com.byagowi.persiancalendar.Constants.HIJRI_QAMARI;
+import static com.byagowi.persiancalendar.Constants.HIJRI_SHAMSI;
+import static com.byagowi.persiancalendar.Constants.IMSAK;
+import static com.byagowi.persiancalendar.Constants.ISHA;
+import static com.byagowi.persiancalendar.Constants.MAGHRIB;
+import static com.byagowi.persiancalendar.Constants.MIDNIGHT;
+import static com.byagowi.persiancalendar.Constants.MONTH;
+import static com.byagowi.persiancalendar.Constants.SUNRISE;
+import static com.byagowi.persiancalendar.Constants.SUNSET;
+import static com.byagowi.persiancalendar.Constants.TODAY;
+import static com.byagowi.persiancalendar.Constants.YEAR;
 
 public class LocaleUtils {
     private static final String TAG = "LocaleUtils";

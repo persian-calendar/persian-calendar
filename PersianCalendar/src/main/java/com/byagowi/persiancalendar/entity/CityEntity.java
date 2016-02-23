@@ -5,7 +5,7 @@ import com.github.praytimes.Coordinate;
 /**
  * Created by ebraminio on 2/18/16.
  */
-public class City {
+public class CityEntity {
     private String key;
     private String en;
     private String fa;
@@ -13,8 +13,8 @@ public class City {
     private String countryEn;
     private String countryFa;
     private Coordinate coordinate;
-    public City(String key, String en, String fa, String countryCode, String countryEn,
-                String countryFa, Coordinate coordinate) {
+    public CityEntity(String key, String en, String fa, String countryCode, String countryEn,
+                      String countryFa, Coordinate coordinate) {
         this.key = key;
         this.en = en;
         this.fa = fa;

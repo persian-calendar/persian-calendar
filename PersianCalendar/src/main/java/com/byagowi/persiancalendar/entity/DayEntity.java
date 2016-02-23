@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.entity;
 
 import calendar.PersianDate;
 
-public class Day {
+public class DayEntity {
     private String num;
     private boolean holiday;
     private boolean today;

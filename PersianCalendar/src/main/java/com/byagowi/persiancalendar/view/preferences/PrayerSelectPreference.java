@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.dialog;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;
@@ -6,7 +6,7 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import com.byagowi.persiancalendar.Utils;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Arrays;
 import java.util.HashSet;
