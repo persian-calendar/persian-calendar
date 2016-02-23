@@ -41,7 +41,6 @@ public class QiblaCompassView extends View {
 
     public QiblaCompassView(Context context) {
         super(context);
-        // initAstronomicParameters();
         initCompassView();
     }
 
@@ -56,8 +55,6 @@ public class QiblaCompassView extends View {
     }
 
     private void initAstronomicParameters() {
-        // longitude = 32.85;
-        // latitude = 39.95;
         GregorianCalendar c = new GregorianCalendar();
         double jd = AstroLib.calculateJulianDay(c);
 
@@ -150,15 +147,16 @@ public class QiblaCompassView extends View {
         return longitude != 0.0 && latitude != 0.0;
     }
 
+    Path mPath = new Path();
+    Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     public void drawTrueNorthArrow(Canvas canvas, float drawnAngle) {
-        Path mPath = new Path();
-        Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        trueNorthArrowPaint.setAntiAlias(true);
+        trueNorthArrowPaint.reset();
         trueNorthArrowPaint.setColor(Color.RED);
         trueNorthArrowPaint.setStyle(Paint.Style.FILL);
         trueNorthArrowPaint.setAlpha(100);
         int r = Radius / 12;
         // Construct a wedge-shaped path
+        mPath.reset();
         mPath.moveTo(px, py - px);
         mPath.lineTo(px - r, py);
         mPath.lineTo(px, py + r);
@@ -172,16 +170,17 @@ public class QiblaCompassView extends View {
         canvas.restore();
     }
 
+    Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     public void drawDial(Canvas canvas) {
         // over here
-        Paint markerPaint, circlePaint;
-        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint.reset();
         circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
         circlePaint.setStrokeWidth(1);
         circlePaint.setStyle(Paint.Style.STROKE); // Sadece Cember ciziyor.
 
         int textHeight = (int) textPaint.measureText("yY");
-        markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+        markerPaint.reset();
         markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_dark));
         // Draw the background
         canvas.drawCircle(px, py, Radius, circlePaint);
@@ -233,9 +232,9 @@ public class QiblaCompassView extends View {
 
     }
 
+    Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     public void drawSun(Canvas canvas) {
-        Paint sunPaint;
-        sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        sunPaint.reset();
         sunPaint.setColor(Color.YELLOW);
         sunPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         // Horizontal sunPosition = new Horizontal(225, 45);
@@ -254,18 +253,23 @@ public class QiblaCompassView extends View {
 
     }
 
+    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    RectF moonRect = new RectF();
+    RectF moonOval = new RectF();
     public void drawMoon(Canvas canvas) {
-        Paint moonPaint, moonPaintB, moonPaintO, moonPaintD;
-        moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        moonPaint.reset();
         moonPaint.setColor(Color.WHITE);
         moonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);// moon Paint Black
+        moonPaintB.reset();// moon Paint Black
         moonPaintB.setColor(Color.BLACK);
         moonPaintB.setStyle(Paint.Style.FILL_AND_STROKE);
-        moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);// moon Paint for Oval
+        moonPaintO.reset();// moon Paint for Oval
         moonPaintO.setColor(Color.WHITE);
         moonPaintO.setStyle(Paint.Style.FILL_AND_STROKE);
-        moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);// moon Paint for Diameter
+        moonPaintD.reset();// moon Paint for Diameter
         // draw
         moonPaintD.setColor(Color.GRAY);
         moonPaintD.setStyle(Paint.Style.STROKE);
@@ -274,15 +278,13 @@ public class QiblaCompassView extends View {
             canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
             int eOffset = (int) ((moonPosition.getElevation() / 90) * Radius);
             // elevation Offset 0 for 0 degree; r for 90 degree
-            RectF moonRect = new RectF(px - r, py + eOffset - Radius - r, px
-                    + r, py + eOffset - Radius + r);
+            moonRect.set(px - r, py + eOffset - Radius - r, px + r, py + eOffset - Radius + r);
             canvas.drawArc(moonRect, 90, 180, false, moonPaint);
             canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
             int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
             moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
-            RectF moonOval = new RectF(px - Math.abs(arcWidth) / 2, py
-                    + eOffset - Radius - r, px + Math.abs(arcWidth) / 2, py
-                    + eOffset - Radius + r);
+            moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - Radius - r,
+                    px + Math.abs(arcWidth) / 2, py + eOffset - Radius + r);
             canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
             canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
             moonPaintD.setPathEffect(dashPath);
@@ -294,11 +296,12 @@ public class QiblaCompassView extends View {
 
     }
 
+    Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
     public void drawQibla(Canvas canvas) {
-        Paint qiblaPaint;
 
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);
-        qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        qiblaPaint.reset();
         qiblaPaint.setColor(Color.GREEN);
         qiblaPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         qiblaPaint.setPathEffect(dashPath);
@@ -306,10 +309,8 @@ public class QiblaCompassView extends View {
 
         canvas.drawLine(px, py - Radius, px, py + Radius, qiblaPaint);
         qiblaPaint.setPathEffect(null);
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-                R.drawable.kaaba);
-        canvas.drawBitmap(bmp, px - bmp.getWidth() / 2, py - Radius
-                - bmp.getHeight() / 2, qiblaPaint);
+        canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - Radius - kaaba.getHeight() / 2,
+                qiblaPaint);
         canvas.restore();
 
     }
