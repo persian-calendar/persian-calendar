@@ -94,7 +94,7 @@ public class Utils {
 
     public static Utils getInstance(Context context) {
         if (myInstance == null) {
-            myInstance = new Utils(context);
+            myInstance = new Utils(context.getApplicationContext());
         }
         return myInstance;
     }
