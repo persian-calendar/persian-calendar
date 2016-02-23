@@ -29,7 +29,7 @@ import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private Utils utils;
-    private CalendarMainFragment calendarMainFragment;
+    private CalendarFragment calendarFragment;
     private PersianDate persianDate;
     private int offset;
     private IntentFilter filter;
@@ -77,18 +77,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         adapter = new MonthAdapter(getContext(), this, days);
         recyclerView.setAdapter(adapter);
 
-        calendarMainFragment = (CalendarMainFragment) getActivity()
+        calendarFragment = (CalendarFragment) getActivity()
                         .getSupportFragmentManager()
                         .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
 
-        if (calendarMainFragment != null
+        if (calendarFragment != null
                 && offset == 0
-                && CalendarMainFragment.viewPagerPosition == offset) {
+                && CalendarFragment.viewPagerPosition == offset) {
 
-            calendarMainFragment.selectDay(utils.getToday());
+            calendarFragment.selectDay(utils.getToday());
         }
 
-        if (offset == 0 && CalendarMainFragment.viewPagerPosition == offset) {
+        if (offset == 0 && CalendarFragment.viewPagerPosition == offset) {
             UpdateTitle();
         }
 
@@ -109,11 +109,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onClickItem(PersianDate day) {
-        calendarMainFragment.selectDay(day);
+        calendarFragment.selectDay(day);
     }
 
     public void onLongClickItem(PersianDate day) {
-        calendarMainFragment.addEventOnCalendar(day);
+        calendarFragment.addEventOnCalendar(day);
     }
 
     @Override
@@ -121,11 +121,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.next:
-                calendarMainFragment.changeMonth(1);
+                calendarFragment.changeMonth(1);
                 break;
 
             case R.id.prev:
-                calendarMainFragment.changeMonth(-1);
+                calendarFragment.changeMonth(-1);
                 break;
         }
     }

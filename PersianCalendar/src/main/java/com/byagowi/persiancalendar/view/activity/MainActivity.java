@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
-import com.byagowi.persiancalendar.view.fragment.CalendarMainFragment;
+import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_holder,
-                        new CalendarMainFragment(),
+                        new CalendarFragment(),
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
     }
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_holder,
-                                    new CalendarMainFragment(),
+                                    new CalendarFragment(),
                                     Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                             .commit();
 

@@ -122,7 +122,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/event"
+            android:id="@+id/cardEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/card_margin"
@@ -260,7 +260,7 @@
 
                     <!--morning-->
                     <RelativeLayout
-                        android:id="@+id/owghat1"
+                        android:id="@+id/ismakLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -286,7 +286,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan1text"
+                                android:id="@+id/ismakText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan1"
@@ -294,7 +294,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan1"
+                                android:id="@+id/ismak"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -306,7 +306,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat2"
+                        android:id="@+id/sunriseLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -331,7 +331,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab1text"
+                                android:id="@+id/sunriseText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab1"
@@ -339,7 +339,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab1"
+                                android:id="@+id/sunrise"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -351,7 +351,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat3"
+                        android:id="@+id/dhuhrLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -377,7 +377,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan2text"
+                                android:id="@+id/dhuhrText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan2"
@@ -385,7 +385,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan2"
+                                android:id="@+id/dhuhr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -397,7 +397,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat4"
+                        android:id="@+id/asrLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -423,7 +423,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan3text"
+                                android:id="@+id/asrText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan3"
@@ -431,7 +431,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan3"
+                                android:id="@+id/asr"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -443,7 +443,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat5"
+                        android:id="@+id/sunsetLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -469,7 +469,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab2text"
+                                android:id="@+id/sunsetText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab2"
@@ -477,7 +477,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab2"
+                                android:id="@+id/sunset"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -489,7 +489,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat6"
+                        android:id="@+id/maghribLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -515,7 +515,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan4text"
+                                android:id="@+id/maghribText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan4"
@@ -523,7 +523,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan4"
+                                android:id="@+id/maghrib"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -535,7 +535,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat7"
+                        android:id="@+id/ishaLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -561,7 +561,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan5text"
+                                android:id="@+id/ishaText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan5"
@@ -569,7 +569,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/azan5"
+                                android:id="@+id/isgha"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"
@@ -581,7 +581,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/owghat8"
+                        android:id="@+id/midnightLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -607,7 +607,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab3text"
+                                android:id="@+id/midnightText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/aftab3"
@@ -615,7 +615,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/aftab3"
+                                android:id="@+id/midnight"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"

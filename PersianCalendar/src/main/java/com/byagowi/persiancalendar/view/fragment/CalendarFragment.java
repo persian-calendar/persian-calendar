@@ -34,7 +34,7 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class CalendarMainFragment extends Fragment
+public class CalendarFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
     public static int viewPagerPosition;
     private ViewPager monthViewPager;
@@ -45,14 +45,14 @@ public class CalendarMainFragment extends Fragment
     private Coordinate coordinate;
 
     private PrayTimesCalculator prayTimesCalculator;
-    private TextView athan1;
-    private TextView athan2;
-    private TextView athan3;
-    private TextView athan4;
-    private TextView athan5;
-    private TextView aftab1;
-    private TextView aftab2;
-    private TextView aftab3;
+    private TextView ismakTextView;
+    private TextView dhuhrTextView;
+    private TextView asrTextView;
+    private TextView maghribTextView;
+    private TextView ishaTextView;
+    private TextView sunriseTextView;
+    private TextView sunsetTextView;
+    private TextView midnightTextView;
 
     private TextView weekDayName;
     private TextView georgianDate;
@@ -68,14 +68,14 @@ public class CalendarMainFragment extends Fragment
     private CardView owghat;
     private CardView event;
 
-    private RelativeLayout owghat1;
-    private RelativeLayout owghat2;
-    private RelativeLayout owghat3;
-    private RelativeLayout owghat4;
-    private RelativeLayout owghat5;
-    private RelativeLayout owghat6;
-    private RelativeLayout owghat7;
-    private RelativeLayout owghat8;
+    private RelativeLayout ismakLayout;
+    private RelativeLayout sunriseLayout;
+    private RelativeLayout dhuhrLayout;
+    private RelativeLayout asrLayout;
+    private RelativeLayout sunsetLayout;
+    private RelativeLayout maghribLayout;
+    private RelativeLayout ishaLayout;
+    private RelativeLayout midnightLayout;
 
     @Nullable
     @Override
@@ -88,14 +88,14 @@ public class CalendarMainFragment extends Fragment
         utils = Utils.getInstance(getContext());
         viewPagerPosition = 0;
 
-        owghat1 = (RelativeLayout) view.findViewById(R.id.owghat1);
-        owghat2 = (RelativeLayout) view.findViewById(R.id.owghat2);
-        owghat3 = (RelativeLayout) view.findViewById(R.id.owghat3);
-        owghat4 = (RelativeLayout) view.findViewById(R.id.owghat4);
-        owghat5 = (RelativeLayout) view.findViewById(R.id.owghat5);
-        owghat6 = (RelativeLayout) view.findViewById(R.id.owghat6);
-        owghat7 = (RelativeLayout) view.findViewById(R.id.owghat7);
-        owghat8 = (RelativeLayout) view.findViewById(R.id.owghat8);
+        ismakLayout = (RelativeLayout) view.findViewById(R.id.ismakLayout);
+        sunriseLayout = (RelativeLayout) view.findViewById(R.id.sunriseLayout);
+        dhuhrLayout = (RelativeLayout) view.findViewById(R.id.dhuhrLayout);
+        asrLayout = (RelativeLayout) view.findViewById(R.id.asrLayout);
+        sunsetLayout = (RelativeLayout) view.findViewById(R.id.sunsetLayout);
+        maghribLayout = (RelativeLayout) view.findViewById(R.id.maghribLayout);
+        ishaLayout = (RelativeLayout) view.findViewById(R.id.ishaLayout);
+        midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
 
         georgianDate = (TextView) view.findViewById(R.id.georgian_date);
         utils.prepareTextView(georgianDate);
@@ -108,37 +108,37 @@ public class CalendarMainFragment extends Fragment
         today = (TextView) view.findViewById(R.id.today);
         todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
 
-        athan1 = (TextView) view.findViewById(R.id.azan1);
-        utils.prepareTextView(athan1);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.azan1text));
+        ismakTextView = (TextView) view.findViewById(R.id.ismak);
+        utils.prepareTextView(ismakTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.ismakText));
 
-        athan2 = (TextView) view.findViewById(R.id.azan2);
-        utils.prepareTextView(athan2);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.azan2text));
+        dhuhrTextView = (TextView) view.findViewById(R.id.dhuhr);
+        utils.prepareTextView(dhuhrTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.dhuhrText));
 
-        athan3 = (TextView) view.findViewById(R.id.azan3);
-        utils.prepareTextView(athan3);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.azan3text));
+        asrTextView = (TextView) view.findViewById(R.id.asr);
+        utils.prepareTextView(asrTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.asrText));
 
-        athan4 = (TextView) view.findViewById(R.id.azan4);
-        utils.prepareTextView(athan4);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.azan4text));
+        maghribTextView = (TextView) view.findViewById(R.id.maghrib);
+        utils.prepareTextView(maghribTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.maghribText));
 
-        athan5 = (TextView) view.findViewById(R.id.azan5);
-        utils.prepareTextView(athan5);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.azan5text));
+        ishaTextView = (TextView) view.findViewById(R.id.isgha);
+        utils.prepareTextView(ishaTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.ishaText));
 
-        aftab1 = (TextView) view.findViewById(R.id.aftab1);
-        utils.prepareTextView(aftab1);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.aftab1text));
+        sunriseTextView = (TextView) view.findViewById(R.id.sunrise);
+        utils.prepareTextView(sunriseTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.sunriseText));
 
-        aftab2 = (TextView) view.findViewById(R.id.aftab2);
-        utils.prepareTextView(aftab2);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.aftab2text));
+        sunsetTextView = (TextView) view.findViewById(R.id.sunset);
+        utils.prepareTextView(sunsetTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.sunsetText));
 
-        aftab3 = (TextView) view.findViewById(R.id.aftab3);
-        utils.prepareTextView(aftab3);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.aftab3text));
+        midnightTextView = (TextView) view.findViewById(R.id.midnight);
+        utils.prepareTextView(midnightTextView);
+        utils.prepareShapeTextView((TextView) view.findViewById(R.id.midnightText));
 
 
         moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
@@ -148,7 +148,7 @@ public class CalendarMainFragment extends Fragment
         utils.prepareTextView(holidayTitle);
 
         owghat = (CardView) view.findViewById(R.id.owghat);
-        event = (CardView) view.findViewById(R.id.event);
+        event = (CardView) view.findViewById(R.id.cardEvent);
 
         monthViewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
 
@@ -257,14 +257,14 @@ public class CalendarMainFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        athan1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        aftab1.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        athan2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
-        athan3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
-        aftab2.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        athan4.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
-        athan5.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        aftab3.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        ismakTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        sunriseTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        dhuhrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
+        asrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
+        sunsetTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        maghribTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
+        ishaTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        midnightTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
 
         owghat.setVisibility(View.VISIBLE);
     }
@@ -274,14 +274,14 @@ public class CalendarMainFragment extends Fragment
         switch (v.getId()) {
 
             case R.id.owghat:
-                owghat1.setVisibility(View.VISIBLE);
-                owghat2.setVisibility(View.VISIBLE);
-                owghat3.setVisibility(View.VISIBLE);
-                owghat4.setVisibility(View.VISIBLE);
-                owghat5.setVisibility(View.VISIBLE);
-                owghat6.setVisibility(View.VISIBLE);
-                owghat7.setVisibility(View.VISIBLE);
-                owghat8.setVisibility(View.VISIBLE);
+                ismakLayout.setVisibility(View.VISIBLE);
+                sunriseLayout.setVisibility(View.VISIBLE);
+                dhuhrLayout.setVisibility(View.VISIBLE);
+                asrLayout.setVisibility(View.VISIBLE);
+                sunsetLayout.setVisibility(View.VISIBLE);
+                maghribLayout.setVisibility(View.VISIBLE);
+                ishaLayout.setVisibility(View.VISIBLE);
+                midnightLayout.setVisibility(View.VISIBLE);
 
                 moreOwghat.setVisibility(View.GONE);
                 break;
