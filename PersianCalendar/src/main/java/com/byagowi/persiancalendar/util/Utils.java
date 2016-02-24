@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -763,18 +764,19 @@ public class Utils {
     }
 
     public void copyToClipboard(View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            CharSequence text = ((TextView) view).getText();
+            CopyToClipboard.copyToCliboard(text, context);
+            quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
         }
-        ClipboardManager clipboardManager =
-                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    }
 
-        CharSequence date = ((TextView) view).getText();
-
-        ClipData clip = ClipData.newPlainText("converted date", date);
-        clipboardManager.setPrimaryClip(clip);
-
-        quickToast("«" + date + "»\n" + context.getString(R.string.date_copied_clipboard));
+    private static class CopyToClipboard {
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        public static void copyToCliboard(CharSequence text, Context context) {
+            ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
+                    .setPrimaryClip(ClipData.newPlainText("converted date", text));
+        }
     }
 
     public SeasonEnum getSeason() {
