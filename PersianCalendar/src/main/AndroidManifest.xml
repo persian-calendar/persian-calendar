@@ -37,18 +37,6 @@
             </intent-filter>
         </receiver>
 
-        <!--<receiver-->
-            <!--android:name=".service.AlarmReceiver"-->
-            <!--android:exported="false" />-->
-
-        <!--<receiver-->
-            <!--android:name=".service.AlarmReceiver$StopAthanPlaybackReceiver"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.byagowi.persiancalendar.stop_athan" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-
         <receiver
             android:name=".Widget1x1"
             android:exported="false"

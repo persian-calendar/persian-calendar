@@ -20,8 +20,6 @@ public class Constants {
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
 
-
-
     public static final String DEFAULT_PRAY_TIME_METHOD = "Jafari";
     public static final String DEFAULT_ISLAMIC_OFFSET = "0";
     public static final String DEFAULT_LATITUDE = "0";
@@ -38,8 +36,6 @@ public class Constants {
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
-
-
 
     public static final String IMSAK = "imsak";
     public static final String SUNRISE = "sunrise";
@@ -95,5 +91,4 @@ public class Constants {
             R.drawable.day25, R.drawable.day26, R.drawable.day27,
             R.drawable.day28, R.drawable.day29, R.drawable.day30,
             R.drawable.day31};
-
 }

@@ -113,7 +113,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                     holder.imageView.setImageResource(R.drawable.winter);
                     break;
             }
-
         }
     }
 
