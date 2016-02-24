@@ -30,15 +30,6 @@
         <item>Isha</item>
     </string-array>
 
-    <string-array name="prayerTimeKeys">
-        <item>FAJR</item>
-        <item>DHUHR</item>
-        <item>ASR</item>
-        <item>MAGHRIB</item>
-        <item>ISHA</item>
-    </string-array>
-
-
     <string-array name="islamicOffsetNames">
         <item>-۲</item>
         <item>-۱</item>
