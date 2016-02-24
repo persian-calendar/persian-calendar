@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,10 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         Utils utils = Utils.getInstance(getApplicationContext());
 
         setContentView(R.layout.activity_athan);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        }
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
@@ -69,27 +74,27 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             switch (prayTime) {
                 case IMSAK:
                     textAlarmName.setText(getString(R.string.azan1));
-                    athanIconView.setImageResource(R.drawable.zohr);
+                    athanIconView.setImageResource(R.drawable.ismak);
                     break;
 
                 case DHUHR:
                     textAlarmName.setText(getString(R.string.azan2));
-                    athanIconView.setImageResource(R.drawable.zohr);
+                    athanIconView.setImageResource(R.drawable.dhuhr);
                     break;
 
                 case ASR:
                     textAlarmName.setText(getString(R.string.azan3));
-                    athanIconView.setImageResource(R.drawable.zohr);
+                    athanIconView.setImageResource(R.drawable.asr);
                     break;
 
                 case MAGHRIB:
                     textAlarmName.setText(getString(R.string.azan4));
-                    athanIconView.setImageResource(R.drawable.zohr);
+                    athanIconView.setImageResource(R.drawable.maghrib);
                     break;
 
                 case ISHA:
                     textAlarmName.setText(getString(R.string.azan5));
-                    athanIconView.setImageResource(R.drawable.zohr);
+                    athanIconView.setImageResource(R.drawable.isha);
                     break;
             }
         }
