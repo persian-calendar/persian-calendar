@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval" >
 
-    <stroke
-        android:width="1dp"
-        android:color="?attr/colorSelectDay"/>
+    <solid
+        android:color="@color/dark_select_day"/>
 
 </shape>

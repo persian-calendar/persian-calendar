@@ -12,7 +12,7 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:background="@drawable/circle_select"
+        android:background="?attr/circleSelect"
         android:id="@+id/select_day"/>
 
     <View
@@ -21,7 +21,7 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:background="@drawable/circle_current_day"
+        android:background="?attr/circleCurrentDay"
         android:id="@+id/today"/>
 
     <TextView

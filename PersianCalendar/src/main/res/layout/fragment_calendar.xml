@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
-                app:divider="@drawable/divider"
+                app:divider="?attr/appDivider"
                 app:dividerPadding="@dimen/divider_margin"
                 app:showDividers="middle">
 
@@ -135,7 +135,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
                 app:dividerPadding="@dimen/divider_margin"
-                app:divider="@drawable/divider"
+                app:divider="?attr/appDivider"
                 app:showDividers="middle">
 
                 <RelativeLayout
@@ -212,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
-                app:divider="@drawable/divider"
+                app:divider="?attr/appDivider"
                 app:dividerPadding="@dimen/divider_margin"
                 app:showDividers="middle">
 
@@ -254,7 +254,7 @@
                     android:paddingLeft="@dimen/card_padding"
                     android:paddingRight="@dimen/card_padding"
                     android:paddingTop="@dimen/padding_item"
-                    app:divider="@drawable/divider"
+                    app:divider="?attr/appDivider"
                     app:dividerPadding="@dimen/divider_margin2"
                     app:showDividers="middle">
 

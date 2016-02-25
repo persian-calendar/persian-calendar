@@ -18,6 +18,10 @@
     <attr format="reference" name="colorDrawerSelect"/>
     <attr format="reference" name="colorDrawerIcon"/>
 
+    <attr format="reference" name="circleCurrentDay" />
+    <attr format="reference" name="circleSelect" />
+    <attr format="reference" name="appDivider" />
+
     <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/dark_primary</item>
@@ -43,6 +47,10 @@
         <item name="colorDrawerBackground">@color/dark_drawer_background</item>
         <item name="colorDrawerSelect">@color/dark_drawer_select</item>
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
+
+        <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
+        <item name="circleSelect">@drawable/circle_select_light</item>
+        <item name="appDivider">@drawable/app_divider_light</item>
     </style>
 
     <!-- Base application theme. -->

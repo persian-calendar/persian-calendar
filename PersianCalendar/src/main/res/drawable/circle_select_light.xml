@@ -4,6 +4,6 @@
     android:shape="oval" >
 
     <solid
-        android:color="?attr/colorSelectDay"/>
+        android:color="@color/dark_select_day"/>
 
 </shape>

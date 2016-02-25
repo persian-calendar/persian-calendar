@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="?attr/selectableItemBackground"
-                app:divider="@drawable/divider"
+                app:divider="?attr/appDivider"
                 app:dividerPadding="@dimen/divider_margin"
                 app:showDividers="middle">
 
