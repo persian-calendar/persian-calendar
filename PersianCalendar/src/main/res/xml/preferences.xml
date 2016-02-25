@@ -11,7 +11,7 @@
             android:key="AppLanguage"
             android:title="@string/language" />
 
-        <ListPreference
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
