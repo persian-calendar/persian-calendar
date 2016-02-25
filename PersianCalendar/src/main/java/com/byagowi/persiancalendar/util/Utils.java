@@ -510,7 +510,7 @@ public class Utils {
 
 
     public List<CityEntity> getAllCities(boolean needsSort) {
-        ArrayList<CityEntity> result = new ArrayList<>();
+        List<CityEntity> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(convertStreamToString(
                     context.getResources().openRawResource(R.raw.cities)));
@@ -598,8 +598,8 @@ public class Utils {
         return null;
     }
 
-    private ArrayList<EventEntity> readEventsFromJSON(InputStream is) {
-        ArrayList<EventEntity> result = new ArrayList<>();
+    private List<EventEntity> readEventsFromJSON(InputStream is) {
+        List<EventEntity> result = new ArrayList<>();
         try {
             JSONArray days = new JSONObject(convertStreamToString(is)).getJSONArray("events");
 
@@ -622,12 +622,12 @@ public class Utils {
         return result;
     }
 
-    public ArrayList<EventEntity> getEvents(PersianDate day) {
+    public List<EventEntity> getEvents(PersianDate day) {
         if (events == null) {
             events = readEventsFromJSON(context.getResources().openRawResource(R.raw.events));
         }
 
-        ArrayList<EventEntity> result = new ArrayList<>();
+        List<EventEntity> result = new ArrayList<>();
         for (EventEntity eventEntity : events) {
             if (eventEntity.getDate().equals(day)) {
                 result.add(eventEntity);
@@ -639,17 +639,17 @@ public class Utils {
     public String getEventsTitle(PersianDate day, boolean holiday) {
         String titles = "";
         boolean first = true;
-        ArrayList<EventEntity> dayEvents = getEvents(day);
+        List<EventEntity> dayEvents = getEvents(day);
 
-        for (int i = 0; i < dayEvents.size(); i++) {
-            if (dayEvents.get(i).isHoliday() == holiday) {
+        for (EventEntity event : dayEvents) {
+            if (event.isHoliday() == holiday) {
                 if (first) {
                     first = false;
 
                 } else {
                     titles = titles + "\n";
                 }
-                titles = titles + dayEvents.get(i).getTitle();
+                titles = titles + event.getTitle();
             }
         }
         return titles;
