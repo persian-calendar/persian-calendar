@@ -54,12 +54,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        utils.prepareTextView(holder.city);
+        utils.setFont(holder.city);
         holder.city.setText(locale.equals("en")
                 ? cities.get(position).getEn()
                 : utils.shape(cities.get(position).getFa()));
 
-        utils.prepareTextView(holder.country);
+        utils.setFont(holder.country);
         holder.country.setText(locale.equals("en")
                 ? cities.get(position).getCountryEn()
                 : utils.shape(cities.get(position).getCountryFa()));

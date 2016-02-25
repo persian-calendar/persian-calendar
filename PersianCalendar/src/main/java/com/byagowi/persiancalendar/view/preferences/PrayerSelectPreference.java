@@ -33,6 +33,6 @@ public class PrayerSelectPreference extends DialogPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).prepareShapePreference(holder);
+        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 }

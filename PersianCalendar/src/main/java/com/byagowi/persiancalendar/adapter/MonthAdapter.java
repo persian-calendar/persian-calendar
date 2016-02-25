@@ -142,7 +142,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.num.setVisibility(View.GONE);
                 holder.event.setVisibility(View.GONE);
             }
-
+            utils.setFontAndShape(holder.num);
         } else {
             holder.num.setText(Constants.FIRST_CHAR_OF_DAYS_OF_WEEK_NAME[position]);
             holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_day_name));
@@ -151,8 +151,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.selectDay.setVisibility(View.GONE);
             holder.event.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
+            utils.setFont(holder.num);
         }
-        utils.prepareShapeTextView(holder.num);
     }
 
     @Override

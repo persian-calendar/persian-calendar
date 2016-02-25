@@ -30,6 +30,6 @@ public class ShapedCheckBoxPreference extends CheckBoxPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).prepareShapePreference(holder);
+        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 }

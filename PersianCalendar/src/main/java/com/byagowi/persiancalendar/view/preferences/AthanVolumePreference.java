@@ -21,7 +21,7 @@ public class AthanVolumePreference extends DialogPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        utils.prepareShapePreference(holder);
+        utils.setFontAndShape(holder);
     }
 
     public void setVolume(int volume) {
