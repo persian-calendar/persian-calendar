@@ -181,21 +181,23 @@ public class MainActivity extends AppCompatActivity {
         utils.updateStoredPreference();
         updateUtils.update(true);
 
+        boolean needsActivityRestart = false;
+
         String locale = utils.getAppLanguage();
         if (!locale.equals(prevLocale)) {
             prevLocale = locale;
             utils.loadLanguageFromSettings();
-            // restart activity
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+            needsActivityRestart = true;
         }
 
         if (!prevTheme.equals(utils.getTheme())) {
+            needsActivityRestart = true;
+        }
+
+        if (needsActivityRestart) {
             Intent intent = getIntent();
             finish();
             startActivity(intent);
-
         }
     }
 
