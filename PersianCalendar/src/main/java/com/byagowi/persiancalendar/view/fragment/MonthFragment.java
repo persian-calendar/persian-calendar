@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,8 @@ import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import calendar.DateConverter;
-import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
@@ -45,7 +41,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         utils = Utils.getInstance(getContext());
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<DayEntity> days = getDays(offset);
+        List<DayEntity> days = utils.getDays(offset);
 
         AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
         AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
@@ -89,7 +85,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
 
         if (offset == 0 && CalendarFragment.viewPagerPosition == offset) {
-            UpdateTitle();
+            updateTitle();
         }
 
         filter = new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
@@ -98,7 +94,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             public void onReceive(Context context, Intent intent) {
                 int value = intent.getExtras().getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
                 if (value == offset) {
-                    UpdateTitle();
+                    updateTitle();
                 } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
                     resetSelectDay();
                 }
@@ -142,7 +138,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         getContext().unregisterReceiver(receiver);
     }
 
-    private void UpdateTitle() {
+    private void updateTitle() {
         utils.setActivityTitleAndSubtitle(
                 getActivity(),
                 utils.getMonthName(persianDate),
@@ -156,60 +152,4 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private List<DayEntity> getDays(int offset) {
-        List<DayEntity> days = new ArrayList<>();
-        PersianDate persianDate = utils.getToday();
-        int month = persianDate.getMonth() - offset;
-        month -= 1;
-        int year = persianDate.getYear();
-
-        year = year + (month / 12);
-        month = month % 12;
-        if (month < 0) {
-            year -= 1;
-            month += 12;
-        }
-        month += 1;
-        persianDate.setMonth(month);
-        persianDate.setYear(year);
-        persianDate.setDayOfMonth(1);
-
-        int dayOfWeek = DateConverter.persianToCivil(persianDate)
-                .getDayOfWeek() % 7;
-
-        try {
-            PersianDate today = utils.getToday();
-            for (int i = 1; i <= 31; i++) {
-                persianDate.setDayOfMonth(i);
-
-                DayEntity dayEntity = new DayEntity();
-                dayEntity.setNum(utils.formatNumber(i));
-                dayEntity.setDayOfWeek(dayOfWeek);
-
-                if (dayOfWeek == 6 || !TextUtils.isEmpty(utils.getEventsTitle(persianDate, true))) {
-                    dayEntity.setHoliday(true);
-                }
-
-                if (utils.getEvents(persianDate).size() > 0) {
-                    dayEntity.setEvent(true);
-                }
-
-                dayEntity.setPersianDate(persianDate.clone());
-
-                if (persianDate.equals(today)) {
-                    dayEntity.setToday(true);
-                }
-
-                days.add(dayEntity);
-                dayOfWeek++;
-                if (dayOfWeek == 7) {
-                    dayOfWeek = 0;
-                }
-            }
-        } catch (DayOutOfRangeException e) {
-            // okay, it was expected
-        }
-
-        return days;
-    }
 }

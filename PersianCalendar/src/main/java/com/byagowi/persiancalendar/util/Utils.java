@@ -32,6 +32,7 @@ import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
+import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.locale.LocaleUtils;
@@ -64,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.LocaleData;
 import calendar.PersianDate;
@@ -796,5 +798,62 @@ public class Utils {
         } else {
             return SeasonEnum.WINTER;
         }
+    }
+
+    public List<DayEntity> getDays(int offset) {
+        List<DayEntity> days = new ArrayList<>();
+        PersianDate persianDate = getToday();
+        int month = persianDate.getMonth() - offset;
+        month -= 1;
+        int year = persianDate.getYear();
+
+        year = year + (month / 12);
+        month = month % 12;
+        if (month < 0) {
+            year -= 1;
+            month += 12;
+        }
+        month += 1;
+        persianDate.setMonth(month);
+        persianDate.setYear(year);
+        persianDate.setDayOfMonth(1);
+
+        int dayOfWeek = DateConverter.persianToCivil(persianDate)
+                .getDayOfWeek() % 7;
+
+        try {
+            PersianDate today = getToday();
+            for (int i = 1; i <= 31; i++) {
+                persianDate.setDayOfMonth(i);
+
+                DayEntity dayEntity = new DayEntity();
+                dayEntity.setNum(formatNumber(i));
+                dayEntity.setDayOfWeek(dayOfWeek);
+
+                if (dayOfWeek == 6 || !TextUtils.isEmpty(getEventsTitle(persianDate, true))) {
+                    dayEntity.setHoliday(true);
+                }
+
+                if (getEvents(persianDate).size() > 0) {
+                    dayEntity.setEvent(true);
+                }
+
+                dayEntity.setPersianDate(persianDate.clone());
+
+                if (persianDate.equals(today)) {
+                    dayEntity.setToday(true);
+                }
+
+                days.add(dayEntity);
+                dayOfWeek++;
+                if (dayOfWeek == 7) {
+                    dayOfWeek = 0;
+                }
+            }
+        } catch (DayOutOfRangeException e) {
+            // okay, it was expected
+        }
+
+        return days;
     }
 }
