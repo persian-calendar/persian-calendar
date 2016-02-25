@@ -96,5 +96,5 @@
     </string-array>
 
     <string name="date_copied_clipboard">Copied to clipboard</string>
-    <string name="stop"><u>Stop</u></string>
+    <string name="stop">Stop</string>
 </resources>

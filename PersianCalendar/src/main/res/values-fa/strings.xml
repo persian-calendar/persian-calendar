@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">گاه‌شمار فارسی</string>
-    <string name="widget_name">گاه‌شمار فارسی</string>
-    <string name="widget_mini_name">گاه‌شمار فارسی (کوچک)</string>
+    <string name="app_name">تقویم فارسی</string>
+    <string name="widget_name">تقویم فارسی</string>
+    <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
     <string name="latitude">عرض جغرافیایی</string>
     <string name="longitude">طول جغرافیایی</string>
     <string name="settings">تنظیمات</string>
@@ -22,13 +22,13 @@
     <string name="date_converter">تبدیل تاریخ</string>
     <string name="logo">نشان</string>
     <string name="dari_months">ماه‌های دری</string>
-    <string name="enable_dari">فعّال کردن ماه‌های دری</string>
+    <string name="enable_dari">فعال کردن ماه‌های دری</string>
     <string name="widget_notification_dashclock">ابزارک، نوار آگاهی و دش‌کلاک</string>
     <string name="general">عمومی</string>
     <string name="widget_text_color">رنگ نوشته‌های ابزارک</string>
     <string name="select_widgets_text_color">انتخاب رنگ دل‌خواه برای نوشته‌های ابزارک</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
-    <string name="notify_date">فعّال کردن آگاهی</string>
+    <string name="notify_date">فعال کردن آگاهی</string>
     <string name="enable_notify">آگاهی همیشگی از تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
@@ -45,13 +45,13 @@
     <string name="compass_not_found">حسگر قطب‌نما پیدا نشد</string>
 
     <string name="month_names">نام ماه‌ها</string>
-    <string name="calendar_font">قلم گاه‌شمار</string>
+    <string name="calendar_font">قلم تقویم</string>
     <string name="application_language">زبان برنامه</string>
     <string name="language">زبان</string>
-    <string name="calendar_language">زبان گاه‌شمار</string>
+    <string name="calendar_language">زبان تقویم</string>
     <string name="calendar_language_summary">زبانی که ماه‌ها و روزها به آن نمایش داده می‌شوند</string>
     <string name="version">نگارش</string>
-    <string name="calendar_font_summary">دگرگونی قلم گاه‌شمار</string>
+    <string name="calendar_font_summary">تغییر قلم تقویم</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">برای این نمازها اذان گفته شود</string>
     <string name="athan_alarm">هشدار اذان</string>
@@ -59,9 +59,9 @@
     <string name="match_system">تطبیق با سامانه</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">حجم صدا</string>
-    <string name="tap_to_stop_athan">برای توقّف اذان ضربه بزنید</string>
+    <string name="tap_to_stop_athan">برای توقف اذان ضربه بزنید</string>
     <string name="playing_athan">در حال پخش اذان</string>
-    <string name="athan_disabled_summary">برای فعّال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیّتتان را وارد کنید</string>
+    <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیتتان را وارد کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان و هشدار</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
     <string name="closeDrawer">بستن</string>
@@ -87,14 +87,14 @@
     <string name="date_exception">تاریخ وارد شده اشتباه است!</string>
     <string name="in_city_time">به افق</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
-    <string name="islamic_offset_summary">بازگشت برای اصلاح گاه‌شمار</string>
+    <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
 
     <string-array name="calendar_type">
-        <item>هجری خورشیدی</item>
+        <item>هجری شمسی</item>
         <item>هجری قمری</item>
         <item>میلادی</item>
     </string-array>
 
     <string name="date_copied_clipboard">به حافظه رونوشت شد</string>
-    <string name="stop"><u>توقّف</u></string>
+    <string name="stop">توقف</string>
 </resources>

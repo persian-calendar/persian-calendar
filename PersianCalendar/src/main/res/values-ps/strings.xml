@@ -96,5 +96,5 @@
     </string-array>
 
     <string name="date_copied_clipboard">به کلیپ بودر کپی شد</string>
-    <string name="stop"><u>توقف</u></string>
+    <string name="stop">توقف</string>
 </resources>
