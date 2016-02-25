@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/new_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/LightTheme">
@@ -40,7 +40,7 @@
         <receiver
             android:name=".Widget1x1"
             android:exported="false"
-            android:icon="@drawable/launcher_icon"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/widget_mini_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -54,7 +54,7 @@
         <receiver
             android:name=".Widget4x1"
             android:exported="false"
-            android:icon="@drawable/launcher_icon"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/widget_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -68,7 +68,7 @@
         <receiver
             android:name=".Widget2x2"
             android:exported="false"
-            android:icon="@drawable/launcher_icon"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/widget_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

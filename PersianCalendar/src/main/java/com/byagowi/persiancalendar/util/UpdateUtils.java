@@ -224,7 +224,7 @@ public class UpdateUtils {
         if (utils.isNotifyDate()) {
             if (largeIcon == null)
                 largeIcon = BitmapFactory.decodeResource(
-                        context.getResources(), R.drawable.launcher_icon);
+                        context.getResources(), R.mipmap.ic_launcher);
 
             mNotificationManager.notify(
                     NOTIFICATION_ID,
