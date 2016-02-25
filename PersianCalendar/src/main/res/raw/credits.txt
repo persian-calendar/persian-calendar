@@ -39,7 +39,7 @@
   This program is distributed in the hope that it will
   be useful, but WITHOUT ANY WARRANTY.
 
-* spring.png, summer.png, fall.png, winter.png by Lotta Nieminen (CC NC 4.0)
+* spring.png, summer.png, fall.png, winter.png by Lotta Nieminen (CC BY NC 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
 
 * abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due being old
@@ -142,25 +142,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-* Android Material Icons https://github.com/Malinskiy/android-material-icons (Apache 2.0, OFL 1.1)
-
-  Copyright 2013 Joan Zapata
-  Copyright 2014 Anton Malinskiy
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
-  It uses Google's material font licensed under OFL 1.1, which is compatible
-  with this library's license.
+* Google Material design (OFL 1.1)
 
       http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=OFL_plaintext&filename=OFL.txt
 
