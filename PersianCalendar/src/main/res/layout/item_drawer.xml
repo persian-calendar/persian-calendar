@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_drawer_subtitle"
-                android:textColor="?attr/colorTextDrawer"
+                android:textColor="?attr/colorTextSecond"
                 android:layout_gravity="center_vertical|start|left"
                 android:visibility="gone"
                 android:id="@+id/itemSubtitle"/>
