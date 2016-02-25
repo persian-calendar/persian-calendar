@@ -215,13 +215,7 @@ public class ConverterFragment extends Fragment implements
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.yearSpinner:
-                fillCalendarInfo();
-                break;
-
             case R.id.monthSpinner:
-                fillCalendarInfo();
-                break;
-
             case R.id.daySpinner:
                 fillCalendarInfo();
                 break;

@@ -288,21 +288,12 @@ public class CalendarFragment extends Fragment
                 break;
 
             case R.id.today:
-                bringTodayYearMonth();
-                break;
-
             case R.id.today_icon:
                 bringTodayYearMonth();
                 break;
 
             case R.id.islamic_date:
-                utils.copyToClipboard(v);
-                break;
-
             case R.id.shamsi_date:
-                utils.copyToClipboard(v);
-                break;
-
             case R.id.georgian_date:
                 utils.copyToClipboard(v);
                 break;
