@@ -1,8 +1,9 @@
 * Author: Ebrahim Byagowi
 * Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222)
 * Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
-* Icon: Behdad Pournader
-* About icon: Iman Soltanian
+* Icon design: Mehrara Abedi
+* Athan time backgrounds (imsak.png, dhuhr.png, asr.png, maghrib.png, isha.png): Mehrara Abedi
+* Previous art designs: Behdad Pournader, Iman Soltanian
 
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
 
@@ -37,6 +38,9 @@
 
   This program is distributed in the hope that it will
   be useful, but WITHOUT ANY WARRANTY.
+
+* spring.png, summer.png, fall.png, winter.png by Lotta Nieminen (CC NC 4.0)
+  https://www.behance.net/gallery/21015893/Google-Calendar
 
 * abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due being old
   and Egypt laws, anyway just a portion of it used in hope to be fair use at least.
@@ -196,4 +200,3 @@
 
   Human Readable License: http://creativecommons.org/licenses/by/4.0/
   Complete Legal Terms: http://creativecommons.org/licenses/by/4.0/legalcode
-
