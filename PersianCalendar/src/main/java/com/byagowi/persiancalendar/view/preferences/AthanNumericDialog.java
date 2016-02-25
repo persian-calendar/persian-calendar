@@ -29,7 +29,7 @@ public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
 
         View dialogMessageView = view.findViewById(android.R.id.message);
         if (dialogMessageView != null && dialogMessageView instanceof TextView) {
-            Utils.getInstance(getContext()).prepareShapeTextView((TextView) dialogMessageView);
+            Utils.getInstance(getContext()).setFontAndShape((TextView) dialogMessageView);
         }
 
         EditText editText = (EditText) view.findViewById(android.R.id.edit);

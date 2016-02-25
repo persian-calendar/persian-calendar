@@ -30,6 +30,6 @@ public class ShapedPreferenceCategory extends PreferenceCategory {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).prepareShapePreference(holder);
+        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 }

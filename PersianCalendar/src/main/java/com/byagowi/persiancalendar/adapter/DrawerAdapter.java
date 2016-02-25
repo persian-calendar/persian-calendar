@@ -78,11 +78,11 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
-            utils.prepareTextView(holder.itemTitle);
+            utils.setFont(holder.itemTitle);
             holder.itemTitle.setText(utils.shape(drawerTitles[position - 1]));
             if (drawerSubtitles[position - 1].length() != 0) {
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
-                utils.prepareTextView(holder.itemSubtitle);
+                utils.setFont(holder.itemSubtitle);
                 holder.itemSubtitle.setText(utils.shape(drawerSubtitles[position - 1]));
             } else {
                 holder.itemSubtitle.setVisibility(View.GONE);

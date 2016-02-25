@@ -98,54 +98,55 @@ public class CalendarFragment extends Fragment
         midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
 
         georgianDate = (TextView) view.findViewById(R.id.georgian_date);
-        utils.prepareTextView(georgianDate);
+        utils.setFont(georgianDate);
         islamicDate = (TextView) view.findViewById(R.id.islamic_date);
-        utils.prepareTextView(islamicDate);
+        utils.setFont(islamicDate);
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
-        utils.prepareTextView(shamsiDate);
+        utils.setFont(shamsiDate);
         weekDayName = (TextView) view.findViewById(R.id.week_day_name);
-        utils.prepareTextView(weekDayName);
+        utils.setFont(weekDayName);
         today = (TextView) view.findViewById(R.id.today);
         todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
 
         ismakTextView = (TextView) view.findViewById(R.id.ismak);
-        utils.prepareTextView(ismakTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.ismakText));
+        utils.setFont(ismakTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.ismakText));
 
         dhuhrTextView = (TextView) view.findViewById(R.id.dhuhr);
-        utils.prepareTextView(dhuhrTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.dhuhrText));
+        utils.setFont(dhuhrTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.dhuhrText));
 
         asrTextView = (TextView) view.findViewById(R.id.asr);
-        utils.prepareTextView(asrTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.asrText));
+        utils.setFont(asrTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.asrText));
 
         maghribTextView = (TextView) view.findViewById(R.id.maghrib);
-        utils.prepareTextView(maghribTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.maghribText));
+        utils.setFont(maghribTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.maghribText));
 
         ishaTextView = (TextView) view.findViewById(R.id.isgha);
-        utils.prepareTextView(ishaTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.ishaText));
+        utils.setFont(ishaTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.ishaText));
 
         sunriseTextView = (TextView) view.findViewById(R.id.sunrise);
-        utils.prepareTextView(sunriseTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.sunriseText));
+        utils.setFont(sunriseTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.sunriseText));
 
         sunsetTextView = (TextView) view.findViewById(R.id.sunset);
-        utils.prepareTextView(sunsetTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.sunsetText));
+        utils.setFont(sunsetTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.sunsetText));
 
         midnightTextView = (TextView) view.findViewById(R.id.midnight);
-        utils.prepareTextView(midnightTextView);
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.midnightText));
+        utils.setFont(midnightTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.midnightText));
 
 
         moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
+        utils.setFont(eventTitle);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
-        utils.prepareTextView(holidayTitle);
+        utils.setFont(holidayTitle);
 
         owghat = (CardView) view.findViewById(R.id.owghat);
         event = (CardView) view.findViewById(R.id.cardEvent);
@@ -167,9 +168,9 @@ public class CalendarFragment extends Fragment
         islamicDate.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
 
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.event_card_title));
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.today));
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.owghat_text));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.event_card_title));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.today));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.owghat_text));
 
         // This will immediately be replaced by the same functionallity on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
@@ -287,21 +288,12 @@ public class CalendarFragment extends Fragment
                 break;
 
             case R.id.today:
-                bringTodayYearMonth();
-                break;
-
             case R.id.today_icon:
                 bringTodayYearMonth();
                 break;
 
             case R.id.islamic_date:
-                utils.copyToClipboard(v);
-                break;
-
             case R.id.shamsi_date:
-                utils.copyToClipboard(v);
-                break;
-
             case R.id.georgian_date:
                 utils.copyToClipboard(v);
                 break;

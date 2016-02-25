@@ -32,7 +32,7 @@ public class AthanNumericPreference extends EditTextPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).prepareShapePreference(holder);
+        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 
     private Double mDouble;

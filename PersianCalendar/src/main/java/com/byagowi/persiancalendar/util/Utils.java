@@ -137,25 +137,25 @@ public class Utils {
         }
     }
 
-    public void prepareTextView(TextView textView) {
+    public void setFont(TextView textView) {
         initTypeface();
         textView.setTypeface(typeface);
     }
 
-    public void prepareShapeTextView(TextView textView) {
-        prepareTextView(textView);
+    public void setFontAndShape(TextView textView) {
+        setFont(textView);
         textView.setText(shape(textView.getText().toString()));
     }
 
-    public void prepareShapePreference(PreferenceViewHolder holder) {
+    public void setFontAndShape(PreferenceViewHolder holder) {
         // See android.support.v7.preference.Preference#onBindViewHolder
         TextView titleView = (TextView) holder.findViewById(android.R.id.title);
         if (titleView != null) {
-            prepareShapeTextView(titleView);
+            setFontAndShape(titleView);
         }
         TextView summaryView = (TextView) holder.findViewById(android.R.id.summary);
         if (summaryView != null) {
-            prepareShapeTextView(summaryView);
+            setFontAndShape(summaryView);
         }
     }
 
@@ -764,6 +764,8 @@ public class Utils {
     }
 
     public void copyToClipboard(View view) {
+        // if it is older than this, the view is also shaped which is not good for copying, so just
+        // nvm about backup solution for older Androids
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             CharSequence text = ((TextView) view).getText();
             CopyToClipboard.copyToCliboard(text, context);

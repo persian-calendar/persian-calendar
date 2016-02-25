@@ -73,14 +73,14 @@ public class ConverterFragment extends Fragment implements
 
         // Shape and set font
         Context context = getContext();
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.prepareShapeTextView((TextView) view.findViewById(R.id.calendarTypeTitle));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
+        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
 
-        utils.prepareTextView(date0);
-        utils.prepareTextView(date1);
-        utils.prepareTextView(date2);
+        utils.setFont(date0);
+        utils.setFont(date1);
+        utils.setFont(date2);
         //
 
         // fill views
@@ -215,13 +215,7 @@ public class ConverterFragment extends Fragment implements
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.yearSpinner:
-                fillCalendarInfo();
-                break;
-
             case R.id.monthSpinner:
-                fillCalendarInfo();
-                break;
-
             case R.id.daySpinner:
                 fillCalendarInfo();
                 break;

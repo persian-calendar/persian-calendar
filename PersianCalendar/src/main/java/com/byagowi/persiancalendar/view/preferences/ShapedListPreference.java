@@ -30,7 +30,7 @@ public class ShapedListPreference extends ListPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).prepareShapePreference(holder);
+        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 
     public void setSelected(String selected) {
