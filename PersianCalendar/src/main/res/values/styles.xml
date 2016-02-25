@@ -48,9 +48,9 @@
         <item name="colorDrawerSelect">@color/dark_drawer_select</item>
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
 
-        <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
-        <item name="circleSelect">@drawable/circle_select_light</item>
-        <item name="appDivider">@drawable/app_divider_light</item>
+        <item name="circleCurrentDay">@drawable/circle_current_day_dark</item>
+        <item name="circleSelect">@drawable/circle_select_dark</item>
+        <item name="appDivider">@drawable/app_divider_dark</item>
     </style>
 
     <!-- Base application theme. -->
@@ -78,6 +78,10 @@
         <item name="colorDrawerBackground">@color/light_drawer_background</item>
         <item name="colorDrawerSelect">@color/light_drawer_select</item>
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
+
+        <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
+        <item name="circleSelect">@drawable/circle_select_light</item>
+        <item name="appDivider">@drawable/app_divider_light</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
