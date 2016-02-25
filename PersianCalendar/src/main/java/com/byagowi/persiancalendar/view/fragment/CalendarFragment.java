@@ -144,6 +144,7 @@ public class CalendarFragment extends Fragment
         moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
 
         eventTitle = (TextView) view.findViewById(R.id.event_title);
+        utils.prepareTextView(eventTitle);
         holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
         utils.prepareTextView(holidayTitle);
 
