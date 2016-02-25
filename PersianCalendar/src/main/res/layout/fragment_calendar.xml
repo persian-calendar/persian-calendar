@@ -260,7 +260,7 @@
 
                     <!--morning-->
                     <RelativeLayout
-                        android:id="@+id/ismakLayout"
+                        android:id="@+id/imsakLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
@@ -286,7 +286,7 @@
                             android:orientation="vertical">
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/ismakText"
+                                android:id="@+id/imsakText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/azan1"
@@ -294,7 +294,7 @@
                                 android:textSize="@dimen/text_size_note" />
 
                             <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/ismak"
+                                android:id="@+id/imsak"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/item_calendar_margin_top"

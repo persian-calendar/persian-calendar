@@ -74,7 +74,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             switch (prayTime) {
                 case IMSAK:
                     textAlarmName.setText(getString(R.string.azan1));
-                    athanIconView.setImageResource(R.drawable.ismak);
+                    athanIconView.setImageResource(R.drawable.imsak);
                     break;
 
                 case DHUHR:
