@@ -55,6 +55,6 @@ public class AthanNumericPreference extends EditTextPreference {
 
     private static Double parseDouble(String text) {
         try { return Double.parseDouble(text); }
-        catch (NumberFormatException e) { return null; }
+        catch (NumberFormatException | NullPointerException e) { return null; }
     }
 }

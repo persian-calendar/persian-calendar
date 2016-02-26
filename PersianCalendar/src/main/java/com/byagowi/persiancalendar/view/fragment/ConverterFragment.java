@@ -195,7 +195,7 @@ public class ConverterFragment extends Fragment implements
         //
 
         // month spinner init.
-        List<String> monthsList = utils.getMonthNameList(date);
+        List<String> monthsList = utils.getMonthsNamesListWithOrdinal(date);
         monthSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, monthsList));
         monthSpinner.setSelection(date.getMonth() - 1);
         //

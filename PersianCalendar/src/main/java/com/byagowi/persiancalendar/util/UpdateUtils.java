@@ -39,7 +39,6 @@ public class UpdateUtils {
 
     //
     private NotificationManager mNotificationManager;
-    private Bitmap largeIcon;
     private ExtensionData mExtensionData;
 
     private UpdateUtils(Context context) {
@@ -222,17 +221,12 @@ public class UpdateUtils {
                     .getSystemService(Context.NOTIFICATION_SERVICE);
         }
         if (utils.isNotifyDate()) {
-            if (largeIcon == null)
-                largeIcon = BitmapFactory.decodeResource(
-                        context.getResources(), R.mipmap.ic_launcher);
-
             mNotificationManager.notify(
                     NOTIFICATION_ID,
                     new NotificationCompat
                             .Builder(context)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                             .setOngoing(true)
-                            .setLargeIcon(largeIcon)
                             .setSmallIcon(icon)
                             .setWhen(0)
                             .setContentIntent(launchAppPendingIntent)
