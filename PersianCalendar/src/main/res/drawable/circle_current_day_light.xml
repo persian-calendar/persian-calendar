@@ -7,4 +7,7 @@
         android:width="1dp"
         android:color="@color/light_current_day"/>
 
+    <solid
+        android:color="@null"/>
+
 </shape>
