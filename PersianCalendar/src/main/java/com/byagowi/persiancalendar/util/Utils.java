@@ -442,13 +442,13 @@ public class Utils {
         return monthName;
     }
 
-    public List<String> getMonthNameList(AbstractDate date) {
+    public List<String> getMonthsNamesListWithOrdinal(AbstractDate date) {
         AbstractDate dateClone = date.clone();
         List<String> monthNameList = new ArrayList<>();
         dateClone.setDayOfMonth(1);
         for (int month = 1; month <= 12; ++month) {
             dateClone.setMonth(month);
-            monthNameList.add(getMonthName(dateClone));
+            monthNameList.add(getMonthName(dateClone) + " / " + formatNumber(month));
         }
         return monthNameList;
     }
