@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:id="@+id/main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -185,7 +185,7 @@
                     android:layout_toRightOf="@+id/dateContainer"
                     android:tint="?attr/colorIcon"
                     android:gravity="center"
-                    android:src="@drawable/ic_swap_vertical_circle" />
+                    app:srcCompat="@drawable/ic_swap_vertical_circle" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dateContainer"
