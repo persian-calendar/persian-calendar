@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/title"
         style="?android:attr/listSelector"
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:textColor="?attr/colorAccent"
         android:layout_height="wrap_content"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@android:id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

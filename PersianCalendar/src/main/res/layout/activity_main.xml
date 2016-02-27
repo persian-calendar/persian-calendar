@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer">
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -25,7 +25,7 @@
             android:background="?attr/colorBackground"
             android:layout_height="match_parent"/>
 
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navigation_view"
