@@ -51,6 +51,7 @@ public class UpdateUtils {
     }
 
     boolean firstTime = true;
+    Bitmap watchBackground;
 
     public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");
@@ -202,10 +203,16 @@ public class UpdateUtils {
                     .getSystemService(Context.NOTIFICATION_SERVICE);
         }
         if (utils.isNotifyDate()) {
+            if (watchBackground == null) {
+                watchBackground = BitmapFactory
+                        .decodeResource(context.getResources(), R.drawable.imsak);
+            }
+            NotificationCompat.WearableExtender extender = new NotificationCompat.WearableExtender();
+            extender.setBackground(watchBackground);
+
             mNotificationManager.notify(
                     NOTIFICATION_ID,
-                    new NotificationCompat
-                            .Builder(context)
+                    new NotificationCompat.Builder(context)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                             .setOngoing(true)
                             .setSmallIcon(icon)
@@ -213,7 +220,9 @@ public class UpdateUtils {
                             .setContentIntent(launchAppPendingIntent)
                             .setContentText(utils.shape(body))
                             .setContentTitle(utils.shape(title))
+                            .extend(extender)
                             .build());
+
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
