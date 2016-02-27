@@ -16,14 +16,6 @@ import java.util.Arrays;
  */
 public class ShapedListDialog extends PreferenceDialogFragmentCompat {
 
-    public static ShapedListDialog newInstance(Preference preference) {
-        ShapedListDialog fragment = new ShapedListDialog();
-        Bundle bundle = new Bundle(1);
-        bundle.putString("key", preference.getKey());
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     CharSequence selected;
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
