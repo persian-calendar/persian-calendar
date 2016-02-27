@@ -10,7 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 501
         versionName "5.0.1"
-        vectorDrawables.useSupportLibrary = true
+        // vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -26,11 +26,11 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
-    compile 'com.android.support:preference-v7:23.2.0'
-    compile 'com.android.support:recyclerview-v7:23.2.0'
-    compile 'com.android.support:support-v4:23.2.0'
-    compile 'com.android.support:cardview-v7:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:preference-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
 }

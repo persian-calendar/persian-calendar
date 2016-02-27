@@ -185,7 +185,7 @@
                     android:layout_toRightOf="@+id/dateContainer"
                     android:tint="?attr/colorIcon"
                     android:gravity="center"
-                    app:srcCompat="@drawable/ic_swap_vertical_circle" />
+                    android:src="@drawable/ic_swap_vertical_circle" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dateContainer"
