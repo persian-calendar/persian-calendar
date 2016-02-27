@@ -193,7 +193,7 @@ public class Utils {
     public int getIslamicOffset() {
         return Integer.parseInt(prefs.getString(
                 Constants.PREF_ISLAMIC_OFFSET,
-                Constants.DEFAULT_ISLAMIC_OFFSET));
+                Constants.DEFAULT_ISLAMIC_OFFSET).replace("+", ""));
     }
 
     public Coordinate getCoordinate() {
