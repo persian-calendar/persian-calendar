@@ -78,7 +78,7 @@
         <item>-2</item>
         <item>-1</item>
         <item>0</item>
-        <item>1</item>
+        <item>+1</item>
         <item>+2</item>
     </string-array>
 
@@ -86,7 +86,7 @@
         <item>-2</item>
         <item>-1</item>
         <item>0</item>
-        <item>1</item>
+        <item>+1</item>
         <item>+2</item>
     </string-array>
 

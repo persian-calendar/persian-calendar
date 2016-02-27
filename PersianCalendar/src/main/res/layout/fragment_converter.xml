@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:id="@+id/main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -45,14 +45,15 @@
             android:layout_height="wrap_content"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:weightSum="7">
+            android:padding="@dimen/converter_padding"
+            android:weightSum="12">
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/containerYearSelector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding"
-                android:layout_weight="2"
+                android:padding="@dimen/converter_padding"
+                android:layout_weight="4"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -79,8 +80,8 @@
                 android:id="@+id/containerMonthSelector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding"
-                android:layout_weight="3"
+                android:padding="@dimen/converter_padding"
+                android:layout_weight="5"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -107,8 +108,8 @@
                 android:id="@+id/containerDaySelector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding"
-                android:layout_weight="2"
+                android:padding="@dimen/converter_padding"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
@@ -184,7 +185,7 @@
                     android:layout_toRightOf="@+id/dateContainer"
                     android:tint="?attr/colorIcon"
                     android:gravity="center"
-                    android:src="@drawable/ic_swap_vertical_circle" />
+                    app:srcCompat="@drawable/ic_swap_vertical_circle" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dateContainer"

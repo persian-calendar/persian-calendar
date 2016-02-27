@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="?attr/colorDrawerSelect" />
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -32,7 +32,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_drawer"
@@ -40,7 +40,7 @@
                 android:layout_gravity="center_vertical|start|left"
                 android:id="@+id/itemTitle" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_drawer_subtitle"
@@ -51,6 +51,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
 </RelativeLayout>

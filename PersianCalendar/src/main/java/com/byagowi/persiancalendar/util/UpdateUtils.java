@@ -52,10 +52,15 @@ public class UpdateUtils {
         return myInstance;
     }
 
+    boolean firstTime = true;
+
     public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
-        utils.loadLanguageFromSettings();
+        if (firstTime) {
+            utils.loadLanguageFromSettings();
+            firstTime = false;
+        }
         Calendar calendar = utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = utils.getToday();
