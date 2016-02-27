@@ -728,10 +728,19 @@ public class Utils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
+                SetExactAlarm.setExactAlarm(alarmManager,
+                        AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             }
+        }
+    }
+
+    private static class SetExactAlarm {
+        @TargetApi(Build.VERSION_CODES.KITKAT)
+        public static void setExactAlarm(AlarmManager alarmManager,
+                                         int type, long triggerAtMillis, PendingIntent pendingIntent) {
+            alarmManager.setExact(type, triggerAtMillis, pendingIntent);
         }
     }
 
