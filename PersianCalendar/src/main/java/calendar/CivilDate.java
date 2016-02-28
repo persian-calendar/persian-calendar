@@ -26,6 +26,8 @@ public class CivilDate extends AbstractDate {
     public CivilDate(int year, int month, int day) {
         this();
         setYear(year);
+        // Initialize day, so that we get no exceptions when setting month
+        this.day = 1;
         setMonth(month);
         setDayOfMonth(day);
     }
