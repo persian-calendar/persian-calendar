@@ -17,13 +17,6 @@ import java.io.IOException;
 
 public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     private final String TAG = AthanVolumeDialog.class.getName();
-    public static AthanVolumeDialog newInstance(Preference preference) {
-        AthanVolumeDialog fragment = new AthanVolumeDialog();
-        Bundle bundle = new Bundle(1);
-        bundle.putString("key", preference.getKey());
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     int volume;
     AudioManager audioManager;

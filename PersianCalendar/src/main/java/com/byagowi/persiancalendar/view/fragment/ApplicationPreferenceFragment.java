@@ -55,20 +55,23 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment = null;
         if (preference instanceof PrayerSelectPreference) {
-            fragment = PrayerSelectDialog.newInstance(preference);
+            fragment = new PrayerSelectDialog();
         } else if (preference instanceof AthanVolumePreference) {
-            fragment = AthanVolumeDialog.newInstance(preference);
+            fragment = new AthanVolumeDialog();
         } else if (preference instanceof LocationPreference) {
-            fragment = LocationPreferenceDialog.newInstance(preference);
+            fragment = new LocationPreferenceDialog();
         } else if (preference instanceof AthanNumericPreference) {
-            fragment = AthanNumericDialog.newInstance(preference);
+            fragment = new AthanNumericDialog();
         } else if (preference instanceof ShapedListPreference) {
-            fragment = ShapedListDialog.newInstance(preference);
+            fragment = new ShapedListDialog();
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
 
         if (fragment != null) {
+            Bundle bundle = new Bundle(1);
+            bundle.putString("key", preference.getKey());
+            fragment.setArguments(bundle);
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");

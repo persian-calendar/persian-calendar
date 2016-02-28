@@ -12,14 +12,6 @@ import java.util.Set;
 
 public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 
-    public static PrayerSelectDialog newInstance(Preference preference) {
-        PrayerSelectDialog fragment = new PrayerSelectDialog();
-        Bundle bundle = new Bundle(1);
-        bundle.putString("key", preference.getKey());
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     Set<String> prayers;
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {

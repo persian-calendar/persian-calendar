@@ -20,14 +20,6 @@ import com.byagowi.persiancalendar.adapter.LocationAdapter;
  */
 public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
 
-    public static LocationPreferenceDialog newInstance(Preference preference) {
-        LocationPreferenceDialog fragment = new LocationPreferenceDialog();
-        Bundle args = new Bundle(1);
-        args.putString("key", preference.getKey());
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
