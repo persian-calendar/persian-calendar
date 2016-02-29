@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
-    private String prevLocale;
-    private String prevTheme;
+    private String lastLocale;
+    private String lastTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
         utils.setTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        prevLocale = utils.loadLanguageFromSettings();
-        prevTheme = utils.getTheme();
+        utils.changeAppLanguage(this);
+        utils.loadLanguageResource();
+        lastLocale = utils.getAppLanguage();
+        lastTheme = utils.getTheme();
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
@@ -184,13 +186,14 @@ public class MainActivity extends AppCompatActivity {
         boolean needsActivityRestart = false;
 
         String locale = utils.getAppLanguage();
-        if (!locale.equals(prevLocale)) {
-            prevLocale = locale;
-            utils.loadLanguageFromSettings();
+        if (!locale.equals(lastLocale)) {
+            lastLocale = locale;
+            utils.changeAppLanguage(this);
+            utils.loadLanguageResource();
             needsActivityRestart = true;
         }
 
-        if (!prevTheme.equals(utils.getTheme())) {
+        if (!lastTheme.equals(utils.getTheme())) {
             needsActivityRestart = true;
         }
 

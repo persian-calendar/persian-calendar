@@ -56,7 +56,8 @@ public class UpdateUtils {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         if (firstTime) {
-            utils.loadLanguageFromSettings();
+            utils.changeAppLanguage(context);
+            utils.loadLanguageResource();
             firstTime = false;
         }
         Calendar calendar = utils.makeCalendarFromDate(new Date());

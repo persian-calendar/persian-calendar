@@ -751,7 +751,9 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
-    public void changeAppLanguage(String localeCode) {
+    // Context preferably should be activity context not application
+    public void changeAppLanguage(Context context) {
+        String localeCode = getAppLanguage().replaceAll("-(IR|AF)", "");
         Locale locale = TextUtils.isEmpty(localeCode) ? Locale.getDefault() : new Locale(localeCode);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
@@ -760,20 +762,14 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    private void changeCalendarLanguage(String localeCode) {
+    public void loadLanguageResource() {
+        String localeCode = getAppLanguage();
+
         if (localeUtils == null) {
             localeUtils = LocaleUtils.getInstance(context, localeCode);
         }
 
         localeUtils.changeLocale(localeCode);
-    }
-
-    public String loadLanguageFromSettings() {
-        // set app language
-        String locale = getAppLanguage();
-        changeAppLanguage(locale.replaceAll("-(IR|AF)", ""));
-        changeCalendarLanguage(locale);
-        return locale;
     }
 
     public void copyToClipboard(View view) {

@@ -29,7 +29,6 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
     public CalendarTypesSpinnerAdapter(Context context, int resource) {
         super(context, resource);
         utils = Utils.getInstance(context);
-        utils.loadLanguageFromSettings();
 
         spinnerResource = resource;
         calendarTypes.put(CalendarTypeEnum.SHAMSI, utils.getString(Constants.HIJRI_SHAMSI));

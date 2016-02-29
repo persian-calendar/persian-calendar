@@ -32,6 +32,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
         Utils utils = Utils.getInstance(getApplicationContext());
 
+        utils.changeAppLanguage(this);
+        utils.loadLanguageResource();
+
         setContentView(R.layout.activity_athan);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
