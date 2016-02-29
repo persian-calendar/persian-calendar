@@ -74,8 +74,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
 
         calendarFragment = (CalendarFragment) getActivity()
-                        .getSupportFragmentManager()
-                        .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
+                .getSupportFragmentManager()
+                .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
 
         if (calendarFragment != null
                 && offset == 0

@@ -44,8 +44,8 @@ public class CompassFragment extends Fragment {
             String subtitle;
             if (cityEntity != null) {
                 subtitle = utils.getAppLanguage().equals("en")
-                    ? cityEntity.getEn()
-                    : cityEntity.getFa();
+                        ? cityEntity.getEn()
+                        : cityEntity.getFa();
             } else {
                 subtitle = coordinate.getLatitude() + ", " + coordinate.getLongitude();
             }

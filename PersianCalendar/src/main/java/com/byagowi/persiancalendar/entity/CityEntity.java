@@ -13,6 +13,7 @@ public class CityEntity {
     private String countryEn;
     private String countryFa;
     private Coordinate coordinate;
+
     public CityEntity(String key, String en, String fa, String countryCode, String countryEn,
                       String countryFa, Coordinate coordinate) {
         this.key = key;

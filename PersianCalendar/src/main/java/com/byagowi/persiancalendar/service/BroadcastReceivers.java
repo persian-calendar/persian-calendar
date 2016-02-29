@@ -74,7 +74,7 @@ public class BroadcastReceivers extends BroadcastReceiver implements MediaPlayer
 
     private void play() {
         try {
-            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(context, utils.getAthanUri());

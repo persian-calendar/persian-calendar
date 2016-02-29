@@ -3,8 +3,7 @@ package com.github.praytimes;
 import static com.github.praytimes.StaticUtils.deg;
 import static com.github.praytimes.StaticUtils.min;
 
-public enum
-        CalculationMethod {
+public enum CalculationMethod {
     MWL("Muslim World League", deg(18), deg(17)),
     ISNA("Islamic Society of North America (ISNA)", deg(15), deg(15)),
     Egypt("Egyptian General Authority of Survey", deg(19.5), deg(17.5)),

@@ -149,6 +149,7 @@ public class QiblaCompassView extends View {
 
     Path mPath = new Path();
     Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     public void drawTrueNorthArrow(Canvas canvas, float drawnAngle) {
         trueNorthArrowPaint.reset();
         trueNorthArrowPaint.setColor(Color.RED);
@@ -172,6 +173,7 @@ public class QiblaCompassView extends View {
 
     Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
     Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     public void drawDial(Canvas canvas) {
         // over here
         circlePaint.reset();
@@ -233,6 +235,7 @@ public class QiblaCompassView extends View {
     }
 
     Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     public void drawSun(Canvas canvas) {
         sunPaint.reset();
         sunPaint.setColor(Color.YELLOW);
@@ -259,6 +262,7 @@ public class QiblaCompassView extends View {
     Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
     RectF moonRect = new RectF();
     RectF moonOval = new RectF();
+
     public void drawMoon(Canvas canvas) {
         moonPaint.reset();
         moonPaint.setColor(Color.WHITE);
@@ -298,6 +302,7 @@ public class QiblaCompassView extends View {
 
     Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
+
     public void drawQibla(Canvas canvas) {
 
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);

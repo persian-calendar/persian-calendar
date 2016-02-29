@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
 import com.byagowi.persiancalendar.R;
@@ -13,10 +11,11 @@ import java.util.Set;
 public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 
     Set<String> prayers;
+
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        PrayerSelectPreference prayerspref = (PrayerSelectPreference)getPreference();
+        PrayerSelectPreference prayerspref = (PrayerSelectPreference) getPreference();
 
         CharSequence[] entries = getResources().getStringArray(R.array.prayerTimeNames);
         final CharSequence[] entriesKeys = getResources().getStringArray(R.array.prayerTimeKeys);
@@ -43,7 +42,7 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            ((PrayerSelectPreference)getPreference()).setPrayers(prayers);
+            ((PrayerSelectPreference) getPreference()).setPrayers(prayers);
         }
     }
 }

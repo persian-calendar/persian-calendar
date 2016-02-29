@@ -108,7 +108,7 @@ public class Utils {
      * Text shaping is a essential thing on supporting Arabic script text on older Android versions.
      * It converts normal Arabic character to their presentation forms according to their position
      * on the text.
-     * 
+     *
      * @param text Arabic string
      * @return Shaped text
      */
@@ -162,7 +162,9 @@ public class Utils {
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
-        if (title == null || subtitle == null) { return; }
+        if (title == null || subtitle == null) {
+            return;
+        }
         initTypeface();
 
         //noinspection ConstantConditions
@@ -241,7 +243,7 @@ public class Utils {
         iranTime = prefs.getBoolean(Constants.PREF_IRAN_TIME, Constants.DEFAULT_IRAN_TIME);
     }
 
-    public boolean isPersianDigitSelected(){
+    public boolean isPersianDigitSelected() {
         return prefs.getBoolean(Constants.PREF_PERSIAN_DIGITS, Constants.DEFAULT_PERSIAN_DIGITS);
     }
 
@@ -709,7 +711,7 @@ public class Utils {
         String valAthanGap = prefs.getString(Constants.PREF_ATHAN_GAP, "0");
         long athanGap;
         try {
-            athanGap = (long)(Double.parseDouble(valAthanGap) * 60);
+            athanGap = (long) (Double.parseDouble(valAthanGap) * 60);
         } catch (NumberFormatException e) {
             athanGap = 0;
         }
@@ -827,8 +829,7 @@ public class Utils {
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
 
-        int dayOfWeek = DateConverter.persianToCivil(persianDate)
-                .getDayOfWeek() % 7;
+        int dayOfWeek = DateConverter.persianToCivil(persianDate).getDayOfWeek() % 7;
 
         try {
             PersianDate today = getToday();

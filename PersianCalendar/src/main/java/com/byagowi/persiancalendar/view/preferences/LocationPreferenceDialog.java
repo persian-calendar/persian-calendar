@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +35,11 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
     }
 
     @Override
-    public void onDialogClosed(boolean positiveResult) { }
+    public void onDialogClosed(boolean positiveResult) {
+    }
 
     public void selectItem(String city) {
-        ((LocationPreference)getPreference()).setSelected(city);
+        ((LocationPreference) getPreference()).setSelected(city);
         dismiss();
     }
 }

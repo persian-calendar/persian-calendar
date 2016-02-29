@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.view.preferences;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +24,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     protected View onCreateDialogView(Context context) {
         View view = super.onCreateDialogView(context);
 
-        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = new MediaPlayer();
         try {
@@ -72,7 +70,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        final AthanVolumePreference athanPref = (AthanVolumePreference)getPreference();
+        final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
         mediaPlayer.release();
         if (positiveResult) {
             athanPref.setVolume(volume);

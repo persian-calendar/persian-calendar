@@ -60,8 +60,8 @@ public class LocaleUtils {
         }
         // These are locales that have extra file named like CalendarBundle_*.properties
         String fileSuffix = (!TextUtils.isEmpty(localeCode) && localeCode.matches("ps|prs")) ?
-            ("_" + localeCode) :
-            "";
+                ("_" + localeCode) :
+                "";
 
         try {
             InputStream pis = context.getAssets().open("locale/" + CALENDAR_BUNDLE + fileSuffix + ".properties");

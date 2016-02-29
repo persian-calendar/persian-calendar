@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
 import com.byagowi.persiancalendar.R;
@@ -17,10 +15,11 @@ import java.util.Arrays;
 public class ShapedListDialog extends PreferenceDialogFragmentCompat {
 
     CharSequence selected;
+
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final ShapedListPreference listPref = (ShapedListPreference)getPreference();
+        final ShapedListPreference listPref = (ShapedListPreference) getPreference();
 
         final CharSequence[] entriesValues = listPref.getEntryValues();
 
@@ -42,5 +41,6 @@ public class ShapedListDialog extends PreferenceDialogFragmentCompat {
     }
 
     @Override
-    public void onDialogClosed(boolean b) { }
+    public void onDialogClosed(boolean b) {
+    }
 }

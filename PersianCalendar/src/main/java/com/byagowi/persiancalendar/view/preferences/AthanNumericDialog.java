@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.preference.EditTextPreferenceDialogFragmentCompat;
-import android.support.v7.preference.Preference;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;

@@ -46,7 +46,7 @@ public class ShapedListPreference extends ListPreference {
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.onSetInitialValue(restoreValue, defaultValue);
-        this.defaultValue = (String)defaultValue;
+        this.defaultValue = (String) defaultValue;
     }
 
     public String getSelected() {

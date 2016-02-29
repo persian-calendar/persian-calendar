@@ -16,6 +16,7 @@ import static com.github.praytimes.StaticUtils.rtd;
 public class PrayTimesCalculator {
     // default times
     private static Map<PrayTime, Double> _defaultTimes;
+
     static {
         _defaultTimes = new HashMap<>();
         _defaultTimes.put(PrayTime.IMSAK, 5d / 24);
@@ -28,6 +29,7 @@ public class PrayTimesCalculator {
         _defaultTimes.put(PrayTime.ISHA, 18d / 24);
         _defaultTimes = Collections.unmodifiableMap(_defaultTimes); // immutable
     }
+
     private final MinuteOrAngleDouble _imsak = min(10);
     private final MinuteOrAngleDouble _dhuhr = min(0);
     private final CalculationMethod.AsrJuristics _asr = CalculationMethod.AsrJuristics.Standard;

@@ -24,7 +24,7 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(ApplicationService.class.getName() , "start");
+        Log.d(ApplicationService.class.getName(), "start");
         UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         IntentFilter intentFilter = new IntentFilter();

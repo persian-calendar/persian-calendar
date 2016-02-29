@@ -79,6 +79,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     }
 
     private static ApplicationPreferenceFragment instance;
+
     public static void update() {
         // Total hack but better than using broadcast on wrong places
         if (instance != null) {
