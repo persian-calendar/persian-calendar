@@ -32,9 +32,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private TypedValue colorPrimary = new TypedValue();
     private TypedValue colorDayName = new TypedValue();
     private final int firstDayDayOfWeek;
+    private final int totalDays;
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days) {
         firstDayDayOfWeek = days.get(0).getDayOfWeek();
+        totalDays = days.size();
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
@@ -68,7 +70,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         public void onClick(View v) {
             int position = getAdapterPosition();
             position += 6 - (position % 7) * 2;
-            if (days.size() < position - 6 - firstDayDayOfWeek) { return; }
+            if (totalDays < position - 6 - firstDayDayOfWeek) { return; }
 
             if (position - 7 - firstDayDayOfWeek >= 0) {
                 monthFragment.onClickItem(days
@@ -84,7 +86,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
             position += 6 - (position % 7) * 2;
-            if (days.size() < position - 6 - firstDayDayOfWeek) { return false; }
+            if (totalDays < position - 6 - firstDayDayOfWeek) { return false; }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 try {
@@ -112,7 +114,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
         position += 6 - (position % 7) * 2;
-        if (days.size() < position - 6 - firstDayDayOfWeek) { return; }
+        if (totalDays < position - 6 - firstDayDayOfWeek) { return; }
         if (!isPositionHeader(position)) {
             if (position - 7 - firstDayDayOfWeek >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
@@ -175,7 +177,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 7 * 6; // days of week * month view rows
+        return 7 * 7; // days of week * month view rows
     }
 
     @Override
