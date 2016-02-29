@@ -65,20 +65,17 @@ public class UpdateUtils {
         PersianDate persian = utils.getToday();
 
         Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(
-                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets
         //
         //
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(),
-                R.layout.widget1x1);
-        RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(),
-                R.layout.widget4x1);
-        RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(),
-                R.layout.widget2x2);
+        RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
+        RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
+        RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
         String colorInt = utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
@@ -89,10 +86,8 @@ public class UpdateUtils {
                 utils.formatNumber(persian.getDayOfMonth()));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
                 utils.shape(utils.getMonthName(persian)));
-        remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1,
-                launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget1x1.class),
-                remoteViews1);
+        remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
+        manager.updateAppWidget(new ComponentName(context, Widget1x1.class), remoteViews1);
 
         // Widget 4x1
         remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
@@ -121,16 +116,11 @@ public class UpdateUtils {
             text2 = date;
         }
 
-        remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1,
-                utils.shape(text1));
-        remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1,
-                utils.shape(text2));
-        remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1,
-                utils.shape(text3));
-        remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1,
-                launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget4x1.class),
-                remoteViews4);
+        remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, utils.shape(text1));
+        remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, utils.shape(text2));
+        remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, utils.shape(text3));
+        remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
+        manager.updateAppWidget(new ComponentName(context, Widget4x1.class), remoteViews4);
 
 
         // Widget 2x2
@@ -147,9 +137,8 @@ public class UpdateUtils {
             text2 = persianDate;
         }
 
-        Clock currentClock = new Clock(
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE));
+        Clock currentClock =
+                new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
         String owghat;
 
@@ -164,8 +153,7 @@ public class UpdateUtils {
             String holidays = utils.getEventsTitle(persian, true);
 
             if (!TextUtils.isEmpty(holidays)) {
-                remoteViews2.setTextViewText(R.id.holiday_2x2,
-                        utils.shape(holidays));
+                remoteViews2.setTextViewText(R.id.holiday_2x2, utils.shape(holidays));
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
             } else {
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
@@ -174,8 +162,7 @@ public class UpdateUtils {
             String events = utils.getEventsTitle(persian, false);
 
             if (!TextUtils.isEmpty(events)) {
-                remoteViews2.setTextViewText(R.id.event_2x2,
-                        utils.shape(events));
+                remoteViews2.setTextViewText(R.id.event_2x2, utils.shape(events));
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
             } else {
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
@@ -185,22 +172,17 @@ public class UpdateUtils {
         }
 
         if (owghat != null) {
-            remoteViews2.setTextViewText(R.id.owghat_2x2,
-                    utils.shape(owghat));
+            remoteViews2.setTextViewText(R.id.owghat_2x2, utils.shape(owghat));
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
         }
 
-        remoteViews2.setTextViewText(R.id.time_2x2,
-                utils.shape(text1));
-        remoteViews2.setTextViewText(R.id.date_2x2,
-                utils.shape(text2));
+        remoteViews2.setTextViewText(R.id.time_2x2, utils.shape(text1));
+        remoteViews2.setTextViewText(R.id.date_2x2, utils.shape(text2));
 
-        remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2,
-                launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget2x2.class),
-                remoteViews2);
+        remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
+        manager.updateAppWidget(new ComponentName(context, Widget2x2.class), remoteViews2);
 
         //
         // Permanent Notification Bar and DashClock Data Extension Update
@@ -208,15 +190,10 @@ public class UpdateUtils {
         //
         String status = utils.getMonthName(persian);
 
-        String title = utils.getWeekDayName(civil) + " "
-                + utils.dateToString(persian);
+        String title = utils.getWeekDayName(civil) + " " + utils.dateToString(persian);
 
-        String body = utils.dateToString(civil)
-                + Constants.PERSIAN_COMMA
-                + " "
-                + utils.dateToString(
-                DateConverter.civilToIslamic(
-                        civil, utils.getIslamicOffset()));
+        String body = utils.dateToString(civil) + Constants.PERSIAN_COMMA + " "
+                + utils.dateToString(DateConverter.civilToIslamic(civil, utils.getIslamicOffset()));
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 
