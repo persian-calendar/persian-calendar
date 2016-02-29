@@ -31,8 +31,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private TypedValue colorTextHoliday = new TypedValue();
     private TypedValue colorPrimary = new TypedValue();
     private TypedValue colorDayName = new TypedValue();
+    private final int firstDayDayOfWeek;
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days) {
+        firstDayDayOfWeek = days.get(0).getDayOfWeek();
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
@@ -64,22 +66,30 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            if (getAdapterPosition() - 7 - days.get(0).getDayOfWeek() >= 0) {
+            int position = getAdapterPosition();
+            position += 6 - (position % 7) * 2;
+            if (days.size() < position - 6 - firstDayDayOfWeek) { return; }
+
+            if (position - 7 - firstDayDayOfWeek >= 0) {
                 monthFragment.onClickItem(days
-                        .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
+                        .get(position - 7 - firstDayDayOfWeek)
                         .getPersianDate());
 
-                select_Day = getAdapterPosition();
+                select_Day = position;
                 notifyDataSetChanged();
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
+            int position = getAdapterPosition();
+            position += 6 - (position % 7) * 2;
+            if (days.size() < position - 6 - firstDayDayOfWeek) { return false; }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 try {
                     monthFragment.onLongClickItem(days
-                            .get(getAdapterPosition() - 7 - days.get(0).getDayOfWeek())
+                            .get(position - 7 - firstDayDayOfWeek)
                             .getPersianDate());
                 } catch (Exception e) {
                     // Ignore it for now
@@ -101,8 +111,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
+        position += 6 - (position % 7) * 2;
+        if (days.size() < position - 6 - firstDayDayOfWeek) { return; }
         if (!isPositionHeader(position)) {
-            if (position - 7 - days.get(0).getDayOfWeek() >= 0) {
+            if (position - 7 - firstDayDayOfWeek >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
                 holder.num.setVisibility(View.VISIBLE);
 
@@ -112,19 +124,19 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.num.setTextSize(20);
                 }
 
-                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
+                if (days.get(position - 7 - firstDayDayOfWeek).isHoliday()) {
                     holder.num.setTextColor(ContextCompat.getColor(context, colorHoliday.resourceId));
                 } else {
                     holder.num.setTextColor(ContextCompat.getColor(context, R.color.dark_text_day));
                 }
 
-                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isEvent()) {
+                if (days.get(position - 7 - firstDayDayOfWeek).isEvent()) {
                     holder.event.setVisibility(View.VISIBLE);
                 } else {
                     holder.event.setVisibility(View.GONE);
                 }
 
-                if (days.get(position - 7 - days.get(0).getDayOfWeek()).isToday()) {
+                if (days.get(position - 7 - firstDayDayOfWeek).isToday()) {
                     holder.today.setVisibility(View.VISIBLE);
                 } else {
                     holder.today.setVisibility(View.GONE);
@@ -133,7 +145,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 if (position == select_Day) {
                     holder.selectDay.setVisibility(View.VISIBLE);
 
-                    if (days.get(position - 7 - days.get(0).getDayOfWeek()).isHoliday()) {
+                    if (days.get(position - 7 - firstDayDayOfWeek).isHoliday()) {
                         holder.num.setTextColor(ContextCompat.getColor(context, colorTextHoliday.resourceId));
                     } else {
                         holder.num.setTextColor(ContextCompat.getColor(context, colorPrimary.resourceId));
@@ -163,7 +175,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return days.size() + days.get(0).getDayOfWeek() + 7;
+        return 7 * 6; // days of week * month view rows
     }
 
     @Override
