@@ -55,8 +55,8 @@ public class UpdateUtils {
     public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
+        utils.changeAppLanguage(context);
         if (firstTime) {
-            utils.changeAppLanguage(context);
             utils.loadLanguageResource();
             firstTime = false;
         }
