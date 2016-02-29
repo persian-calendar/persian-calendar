@@ -52,7 +52,7 @@
                         android:id="@+id/today_icon"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        app:srcCompat="@drawable/ic_undo"
+                        android:src="@drawable/ic_undo"
                         android:tint="?attr/colorTextPrimary"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/today"
@@ -81,7 +81,7 @@
                         android:layout_marginLeft="@dimen/icon_margin"
                         android:layout_toRightOf="@+id/dayInfoContainer"
                         android:gravity="center"
-                        app:srcCompat="@drawable/ic_event"
+                        android:src="@drawable/ic_event"
                         android:tint="?attr/colorIcon" />
 
                     <android.support.v7.widget.LinearLayoutCompat
@@ -168,7 +168,7 @@
                         android:layout_marginLeft="@dimen/icon_margin"
                         android:layout_toRightOf="@+id/eventContainer"
                         android:gravity="center"
-                        app:srcCompat="@drawable/ic_event_note"
+                        android:src="@drawable/ic_event_note"
                         android:tint="?attr/colorIcon" />
 
                     <android.support.v7.widget.LinearLayoutCompat
@@ -240,7 +240,7 @@
                         android:layout_height="@dimen/icon_size"
                         android:layout_toLeftOf="@+id/owghat_text"
                         android:gravity="center"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_down"
+                        android:src="@drawable/ic_keyboard_arrow_down"
                         android:tint="?attr/colorIcon" />
 
                 </RelativeLayout>
@@ -276,7 +276,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat1TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_4"
+                            android:src="@drawable/ic_brightness_4"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -321,7 +321,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/aftab1TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_7"
+                            android:src="@drawable/ic_brightness_7"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -367,7 +367,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat3TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_5"
+                            android:src="@drawable/ic_brightness_5"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -413,7 +413,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat4TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_5"
+                            android:src="@drawable/ic_brightness_5"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -459,7 +459,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat5TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_6"
+                            android:src="@drawable/ic_brightness_6"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -505,7 +505,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat6TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_3"
+                            android:src="@drawable/ic_brightness_3"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -551,7 +551,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat7TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_3"
+                            android:src="@drawable/ic_brightness_3"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat
@@ -597,7 +597,7 @@
                             android:layout_marginLeft="@dimen/icon_margin"
                             android:layout_toRightOf="@+id/owghat8TextContainer"
                             android:gravity="center"
-                            app:srcCompat="@drawable/ic_brightness_2"
+                            android:src="@drawable/ic_brightness_2"
                             android:tint="?attr/colorIcon" />
 
                         <android.support.v7.widget.LinearLayoutCompat

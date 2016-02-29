@@ -16,7 +16,7 @@
         android:gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_keyboard_arrow_left"
+        android:src="@drawable/ic_keyboard_arrow_left"
         android:tint="?attr/colorMonthSwitch"/>
 
     <android.support.v7.widget.AppCompatImageView
@@ -24,7 +24,7 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_alignParentRight="true"
-        app:srcCompat="@drawable/ic_keyboard_arrow_right"
+        android:src="@drawable/ic_keyboard_arrow_right"
         android:gravity="center"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
