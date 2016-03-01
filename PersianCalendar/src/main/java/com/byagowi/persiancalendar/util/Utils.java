@@ -754,11 +754,14 @@ public class Utils {
     // Context preferably should be activity context not application
     public void changeAppLanguage(Context context) {
         String localeCode = getAppLanguage().replaceAll("-(IR|AF)", "");
-        Locale locale = TextUtils.isEmpty(localeCode) ? Locale.getDefault() : new Locale(localeCode);
+        Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
         Resources resources = context.getResources();
+        Configuration config = resources.getConfiguration();
+        config.locale = locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLayoutDirection(config.locale);
+        }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
