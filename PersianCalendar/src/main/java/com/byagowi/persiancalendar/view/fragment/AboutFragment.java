@@ -24,7 +24,8 @@ public class AboutFragment extends Fragment {
     private Utils utils;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
@@ -33,51 +34,11 @@ public class AboutFragment extends Fragment {
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.setFont(versionTextView);
-        versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
-                utils.formatNumber(version));
+        versionTextView.setText(utils.shape(getString(R.string.version)) + " " + utils.formatNumber(version));
 
-        StringBuilder sb = new StringBuilder();
-
-        BufferedReader input = new BufferedReader(
-                new InputStreamReader(getResources().openRawResource(R.raw.credits)));
-        try {
-            String line;
-            while ((line = input.readLine()) != null) {
-                sb.append(line);
-                sb.append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        TextView licenseTextView = (TextView) view.findViewById(R.id.license);
-        licenseTextView.setText("Android Persian Calendar Version "
-                + version
-                + "\n"
-                + "Copyright (C) 2012-2016  ebrahim@gnu.org "
-                + utils.shape("ابراهیم بیاگوی")
-                + "\n\n"
-                + "This program is free software: you can redistribute it and/or modify "
-                + "it under the terms of the GNU General Public License as published by "
-                + "the Free Software Foundation, either version 3 of the License, or "
-                + "(at your option) any later version.\n"
-                + "\n"
-                + "This program is distributed in the hope that it will be useful, "
-                + "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-                + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-                + "GNU General Public License for more details.\n"
-                + "\n"
-                + "You should have received a copy of the GNU General Public License "
-                + "along with this program.  If not, see http://www.gnu.org/licenses/.\n"
-                + "\n"
-                + "For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar"
-                + "\n\n----\n\n" + sb.toString());
+        ((TextView) view.findViewById(R.id.license)).setText(
+                "Android Persian Calendar Version " + version + "\n" +
+                utils.convertStreamToString(getResources().openRawResource(R.raw.credits)));
 
         return view;
     }

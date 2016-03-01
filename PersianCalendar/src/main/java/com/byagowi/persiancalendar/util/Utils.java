@@ -485,7 +485,7 @@ public class Utils {
         }
     }
 
-    private String convertStreamToString(InputStream is) {
+    public String convertStreamToString(InputStream is) {
         // http://stackoverflow.com/a/5445161
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";

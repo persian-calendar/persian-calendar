@@ -1,10 +1,40 @@
-* Author: Ebrahim Byagowi
-* Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222)
-* Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
-* Icon design: Mehrara Abedi
-* Athan time backgrounds (imsak.png, dhuhr.png, asr.png, maghrib.png, isha.png): Mehrara Abedi
-* Previous art designs: Behdad Pournader, Iman Soltanian
+Copyright (C) 2012-2016  ebrahim@gnu.org  ابراهیم بیاگوی
 
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+
+For bug report and credits: http://github.com/ebraminio/DroidPersianCalendar
+
+
+Author: Ebrahim Byagowi
+Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222)
+Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
+Icon design and Athan backgrounds: Mehrara Abedi
+Previous designers: Behdad Pournader, Iman Soltanian
+
+
+Assets:
+* {imsak,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
+* {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
+* Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
+* kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
+  https://www.behance.net/gallery/21015893/Google-Calendar
+* abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due to being so
+  old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
+* Noto Naskh Arabic from Noto fonts project https://github.com/googlei18n/noto-fonts (OFL 1.1)
+
+
+Libraries:
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
 
   Copyright (C) 2006  Amir Khosroshahi (amir.khosroshahi)
@@ -39,12 +69,6 @@
   This program is distributed in the hope that it will
   be useful, but WITHOUT ANY WARRANTY.
 
-* spring.png, summer.png, fall.png, winter.png by Lotta Nieminen (CC BY NC 4.0)
-  https://www.behance.net/gallery/21015893/Google-Calendar
-
-* abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due being old
-  and Egypt laws, anyway just a portion of it used in hope to be fair use at least.
-
 * ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache 2.0)
 
   Copyright (C) 2010 Aziz Huss (azizAnroid)
@@ -78,22 +102,6 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-* Noto Naskh Arabic from Noto fonts project http://code.google.com/p/noto (Apache 2.0)
-
-  Copyright 2015 Google Inc. All rights reserved.
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
 * DashClock API https://github.com/romannurik/dashclock (Apache 2.0)
 
   Copyright 2015 Google Inc.
@@ -126,26 +134,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-* Android Support Library http://developer.android.com/tools/support-library (Apache 2.0)
-
-  Copyright (C) 2015 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
-* Google Material design (OFL 1.1)
-
-      http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=OFL_plaintext&filename=OFL.txt
-
 * TypefaceSpan from https://gist.github.com/twaddington/b91341ea5615698b53b8 (Apache 2.0)
 
   Copyright 2013 Simple Finance Corporation. All rights reserved.
@@ -161,8 +149,3 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-
-* kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
-
-  Human Readable License: http://creativecommons.org/licenses/by/4.0/
-  Complete Legal Terms: http://creativecommons.org/licenses/by/4.0/legalcode
