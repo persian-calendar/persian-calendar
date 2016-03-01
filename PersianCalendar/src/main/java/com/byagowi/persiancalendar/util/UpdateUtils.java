@@ -213,6 +213,7 @@ public class UpdateUtils {
                             .setContentIntent(launchAppPendingIntent)
                             .setContentText(utils.shape(body))
                             .setContentTitle(utils.shape(title))
+                            .setColor(0xFF607D8B)
                             .build());
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
