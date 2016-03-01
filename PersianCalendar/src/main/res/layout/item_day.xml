@@ -32,11 +32,11 @@
         android:id="@+id/num"/>
 
     <View
-        android:layout_width="8dp"
-        android:layout_height="1dp"
+        android:layout_width="8sp"
+        android:layout_height="1sp"
         android:gravity="center"
         android:visibility="gone"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="8sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="?attr/colorSelectDay"

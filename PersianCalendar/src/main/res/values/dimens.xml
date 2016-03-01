@@ -12,11 +12,11 @@
     <dimen name="status_padding_top">23dp</dimen>
     <dimen name="drawer_width">280dp</dimen>
     <dimen name="drawer_header_height">190dp</dimen>
-    <dimen name="drawer_item_height">48dp</dimen>
+    <dimen name="drawer_item_height">48sp</dimen>
 
-    <dimen name="grid_calendar_height">290dp</dimen>
-    <dimen name="grid_calendar_padding">20dp</dimen>
-    <dimen name="grid_calendar_padding_bottom">4dp</dimen>
+    <dimen name="grid_calendar_height">290sp</dimen>
+    <dimen name="grid_calendar_padding">20sp</dimen>
+    <dimen name="grid_calendar_padding_bottom">4sp</dimen>
 
     <dimen name="item_calendar_margin_top">4dp</dimen>
 
@@ -27,8 +27,8 @@
     <dimen name="text_size_drawer">16sp</dimen>
     <dimen name="icon_text_size">26sp</dimen>
 
-    <dimen name="day_item_size">40dp</dimen>
-    <dimen name="day_item_select_size">38dp</dimen>
-    <dimen name="day_item_event_size">2dp</dimen>
+    <dimen name="day_item_size">40sp</dimen>
+    <dimen name="day_item_select_size">38sp</dimen>
+    <dimen name="day_item_event_size">2sp</dimen>
 
 </resources>
