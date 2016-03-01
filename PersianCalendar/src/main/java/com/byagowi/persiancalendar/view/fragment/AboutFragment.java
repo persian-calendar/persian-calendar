@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,11 @@ public class AboutFragment extends Fragment {
         utils.setFont(versionTextView);
         versionTextView.setText(utils.shape(getString(R.string.version)) + " " + utils.formatNumber(version));
 
-        ((TextView) view.findViewById(R.id.license)).setText(
-                "Android Persian Calendar Version " + version + "\n" +
+        TextView licenseTextView = (TextView) view.findViewById(R.id.license);
+        licenseTextView.setText("Android Persian Calendar Version " + version + "\n" +
                 utils.convertStreamToString(getResources().openRawResource(R.raw.credits)));
+
+        Linkify.addLinks(licenseTextView, Linkify.ALL);
 
         return view;
     }
