@@ -218,32 +218,31 @@
                 app:showDividers="middle">
 
                 <!-- title: prayer times -->
-                <RelativeLayout
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layoutDirection="ltr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/owghat_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:text="@string/owghat"
-                        android:textColor="?attr/colorTextPrimary"
-                        android:textSize="@dimen/text_size_title" />
-
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/more_owghat"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
-                        android:layout_toLeftOf="@+id/owghat_text"
-                        android:gravity="center"
                         android:src="@drawable/ic_keyboard_arrow_down"
                         android:tint="?attr/colorIcon" />
 
-                </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/owghat_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/owghat"
+                        android:textColor="?attr/colorTextPrimary"
+                        android:textSize="@dimen/text_size_title" />
+
+
+                </android.support.v7.widget.LinearLayoutCompat>
 
                 <!-- actual content -->
                 <android.support.v7.widget.LinearLayoutCompat
