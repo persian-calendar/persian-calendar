@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/day_item_size"
-    android:layout_gravity="center"
-    android:gravity="center">
+    android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="@dimen/day_item_select_size"
-        android:layout_height="@dimen/day_item_select_size"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:background="?attr/circleSelect"
-        android:id="@+id/select_day"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/day_item_size"
+        android:layout_gravity="center"
+        android:gravity="center">
 
-    <View
-        android:layout_width="@dimen/day_item_select_size"
-        android:layout_height="@dimen/day_item_select_size"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:background="?attr/circleCurrentDay"
-        android:id="@+id/today"/>
+        <View
+            android:layout_width="@dimen/day_item_select_size"
+            android:layout_height="@dimen/day_item_select_size"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:background="?attr/circleSelect"
+            android:id="@+id/select_day"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="@dimen/day_item_select_size"
-        android:layout_height="@dimen/day_item_select_size"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:id="@+id/num"/>
+        <View
+            android:layout_width="@dimen/day_item_select_size"
+            android:layout_height="@dimen/day_item_select_size"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:background="?attr/circleCurrentDay"
+            android:id="@+id/today"/>
 
-    <View
-        android:layout_width="8sp"
-        android:layout_height="1sp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_marginBottom="8sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="?attr/colorSelectDay"
-        android:id="@+id/event"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="@dimen/day_item_select_size"
+            android:layout_height="@dimen/day_item_select_size"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:id="@+id/num"/>
 
-</RelativeLayout>
+        <View
+            android:layout_width="8sp"
+            android:layout_height="1sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="8sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="?attr/colorSelectDay"
+            android:id="@+id/event"/>
+
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
