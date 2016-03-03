@@ -25,7 +25,7 @@
     <dimen name="text_size_note">14sp</dimen>
     <dimen name="text_size_drawer_subtitle">10sp</dimen>
     <dimen name="text_size_drawer">16sp</dimen>
-    <dimen name="icon_text_size">26sp</dimen>
+    <dimen name="icon_text_size">28sp</dimen>
 
     <dimen name="day_item_size">40sp</dimen>
     <dimen name="day_item_select_size">38sp</dimen>

@@ -179,8 +179,8 @@
                     android:padding="@dimen/card_padding">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
+                    android:layout_width="@dimen/icon_text_size"
+                    android:layout_height="@dimen/icon_text_size"
                     android:layout_marginLeft="@dimen/icon_margin"
                     android:layout_toRightOf="@+id/dateContainer"
                     android:tint="?attr/colorIcon"

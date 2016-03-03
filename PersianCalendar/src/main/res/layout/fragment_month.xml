@@ -10,8 +10,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/prev"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/icon_text_size"
+        android:layout_height="@dimen/icon_text_size"
         android:layout_alignParentLeft="true"
         android:gravity="center"
         android:layout_marginLeft="10dp"
@@ -21,8 +21,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/next"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/icon_text_size"
+        android:layout_height="@dimen/icon_text_size"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_keyboard_arrow_right"
         android:gravity="center"

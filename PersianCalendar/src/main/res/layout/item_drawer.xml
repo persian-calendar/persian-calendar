@@ -19,8 +19,8 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/ItemIcon"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="@dimen/icon_text_size"
+            android:layout_height="@dimen/icon_text_size"
             android:layout_gravity="center_vertical"
             android:tint="?attr/colorDrawerIcon"
             android:layout_marginLeft="@dimen/icon_margin"
