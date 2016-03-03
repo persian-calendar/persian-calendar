@@ -99,4 +99,5 @@
 
     <string name="date_copied_clipboard">به حافظه رونوشت شد</string>
     <string name="stop">توقف</string>
+    <string name="please_restart">لطفاً از برنامه خارج شده و دوباره آن را باز کنید.</string>
 </resources>

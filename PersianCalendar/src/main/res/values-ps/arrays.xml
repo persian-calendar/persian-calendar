@@ -39,7 +39,7 @@
     </string-array>
 
     <string-array name="fontScaleLabels">
-        <item>پیش‌فرض</item>
+        <item>پیش‌فرض دستگاه</item>
         <item>ریز</item>
         <item>معمولی</item>
         <item>بزرگ</item>

@@ -470,6 +470,10 @@ public class Utils {
         Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
     }
 
+    public void longToast(String message) {
+        Toast.makeText(context, shape(message), Toast.LENGTH_LONG).show();
+    }
+
     public int getDayIconResource(int day) {
         try {
             return DAYS_ICONS[day];

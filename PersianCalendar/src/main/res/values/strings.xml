@@ -99,4 +99,5 @@
 
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="stop">Stop</string>
+    <string name="please_restart">Please restart the application.</string>
 </resources>

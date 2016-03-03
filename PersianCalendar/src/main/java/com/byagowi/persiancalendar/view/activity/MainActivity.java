@@ -201,7 +201,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!lastFontScale.equals(utils.getFontScale())) {
-            needsActivityRestart = true;
+            if (!lastFontScale.equals(Constants.DEFAULT_FONT_SCALE) &&
+                    utils.getFontScale().equals(Constants.DEFAULT_FONT_SCALE)) {
+                // user wants to get back to device default font scale setting but find and setting
+                // that is hard, lets request from user to restart the app by his/her own.
+                utils.longToast(getString(R.string.please_restart));
+            } else {
+                needsActivityRestart = true;
+                utils.changeAppLanguageAndFontScale(this);
+            }
             lastFontScale = utils.getFontScale();
         }
 
