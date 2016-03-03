@@ -420,13 +420,13 @@ public class Utils {
         // zero based
         int month = date.getMonth() - 1;
 
-        if (date.getClass().equals(PersianDate.class)) {
+        if (date instanceof PersianDate) {
             LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
             monthName = getString(String.valueOf(monthNameCode));
-        } else if (date.getClass().equals(CivilDate.class)) {
+        } else if (date instanceof CivilDate) {
             LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
             monthName = getString(String.valueOf(monthNameCode));
-        } else if (date.getClass().equals(IslamicDate.class)) {
+        } else if (date instanceof IslamicDate) {
             LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
             monthName = getString(String.valueOf(monthNameCode));
         }
@@ -447,9 +447,9 @@ public class Utils {
 
     public String getWeekDayName(AbstractDate date) {
         CivilDate civilDate;
-        if (date.getClass().equals(PersianDate.class)) {
+        if (date instanceof PersianDate) {
             civilDate = DateConverter.persianToCivil((PersianDate) date);
-        } else if (date.getClass().equals(IslamicDate.class)) {
+        } else if (date instanceof IslamicDate) {
             civilDate = DateConverter.islamicToCivil((IslamicDate) date);
         } else {
             civilDate = (CivilDate) date;
