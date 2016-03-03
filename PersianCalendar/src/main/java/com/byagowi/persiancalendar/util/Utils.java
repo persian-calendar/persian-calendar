@@ -54,11 +54,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -678,6 +680,16 @@ public class Utils {
         return false;
     }
 
+    public String setToCommaSeparated(Set<String> set) {
+        return TextUtils.join(",", set);
+    }
+
+    public Set<String> commaSeparatedToSet(String commaSeparated) {
+        Set<String> result = new HashSet<>();
+        result.addAll(Arrays.asList(TextUtils.split(commaSeparated, ",")));
+        return result;
+    }
+
     public void loadAlarms() {
         String prefString = prefs.getString(Constants.PREF_ATHAN_ALARM, "");
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
@@ -688,13 +700,15 @@ public class Utils {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
 
-            String[] alarmTimesNames = TextUtils.split(prefString, ",");
+            Set<String> alarmTimesSet = commaSeparatedToSet(prefString);
+            // in the past IMSAK was used but now we figured out FAJR was what we wanted
+            if (alarmTimesSet.remove("IMSAK")) {
+                alarmTimesSet.add("FAJR");
+            }
+
+            String[] alarmTimesNames = alarmTimesSet.toArray(new String[alarmTimesSet.size()]);
             for (int i = 0; i < alarmTimesNames.length; i++) {
                 PrayTime prayTime = PrayTime.valueOf(alarmTimesNames[i]);
-                // in the past IMSAK was used but now we figured out FAJR was what we wanted
-                if (prayTime == PrayTime.IMSAK) {
-                    prayTime = PrayTime.FAJR;
-                }
 
                 Clock alarmTime = prayTimes.get(prayTime);
 
