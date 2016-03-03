@@ -20,6 +20,7 @@ public class Constants {
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
 
+    public static final String DEFAULT_CITY = "CUSTOM";
     public static final String DEFAULT_PRAY_TIME_METHOD = "Jafari";
     public static final String DEFAULT_ISLAMIC_OFFSET = "0";
     public static final String DEFAULT_LATITUDE = "0";
