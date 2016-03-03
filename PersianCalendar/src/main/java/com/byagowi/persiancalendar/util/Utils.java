@@ -803,14 +803,14 @@ public class Utils {
         // nvm about backup solution for older Androids
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             CharSequence text = ((TextView) view).getText();
-            CopyToClipboard.copyToCliboard(text, context);
+            CopyToClipboard.copyToClipboard(text, context);
             quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
         }
     }
 
     private static class CopyToClipboard {
         @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        public static void copyToCliboard(CharSequence text, Context context) {
+        public static void copyToClipboard(CharSequence text, Context context) {
             ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
                     .setPrimaryClip(ClipData.newPlainText("converted date", text));
         }
