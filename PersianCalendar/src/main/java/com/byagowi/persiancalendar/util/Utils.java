@@ -277,6 +277,10 @@ public class Utils {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
 
+    public String getFontScale() {
+        return prefs.getString(PREF_FONT_SCALE, DEFAULT_FONT_SCALE);
+    }
+
     public String getTheme() {
         return prefs.getString(PREF_THEME, LIGHT_THEME);
     }
@@ -718,7 +722,7 @@ public class Utils {
     }
 
     public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
-        String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
+        String valAthanGap = prefs.getString(PREF_ATHAN_GAP, DEFAULT_ATHAN_GAP);
         long athanGap;
         try {
             athanGap = (long) (Double.parseDouble(valAthanGap) * 60);
@@ -762,7 +766,7 @@ public class Utils {
     }
 
     // Context preferably should be activity context not application
-    public void changeAppLanguage(Context context) {
+    public void changeAppLanguageAndFontScale(Context context) {
         String localeCode = getAppLanguage().replaceAll("-(IR|AF)", "");
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
@@ -771,6 +775,14 @@ public class Utils {
         config.locale = locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             config.setLayoutDirection(config.locale);
+        }
+        String fontScale = getFontScale();
+        if (!fontScale.equals(DEFAULT_FONT_SCALE) && !TextUtils.isEmpty(fontScale)) {
+            try {
+                config.fontScale = Float.parseFloat(fontScale);
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "", e);
+            }
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }

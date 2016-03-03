@@ -88,6 +88,8 @@
     <string name="in_city_time">in</string>
     <string name="islamic_offset">Islamic offset</string>
     <string name="islamic_offset_summary"></string>
+    <string name="font_scale">Font size</string>
+    <string name="font_scale_summary">Change font size of the app</string>
 
     <string-array name="calendar_type">
         <item>Perian Calendar</item>

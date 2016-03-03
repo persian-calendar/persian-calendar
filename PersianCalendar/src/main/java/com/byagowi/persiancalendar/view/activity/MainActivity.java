@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String lastLocale;
     private String lastTheme;
+    private String lastFontScale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
         utils.setTheme(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        utils.changeAppLanguage(this);
+        utils.changeAppLanguageAndFontScale(this);
         utils.loadLanguageResource();
         lastLocale = utils.getAppLanguage();
         lastTheme = utils.getTheme();
+        lastFontScale = utils.getFontScale();
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
@@ -188,13 +190,19 @@ public class MainActivity extends AppCompatActivity {
         String locale = utils.getAppLanguage();
         if (!locale.equals(lastLocale)) {
             lastLocale = locale;
-            utils.changeAppLanguage(this);
+            utils.changeAppLanguageAndFontScale(this);
             utils.loadLanguageResource();
             needsActivityRestart = true;
         }
 
         if (!lastTheme.equals(utils.getTheme())) {
             needsActivityRestart = true;
+            lastTheme = utils.getTheme();
+        }
+
+        if (!lastFontScale.equals(utils.getFontScale())) {
+            needsActivityRestart = true;
+            lastFontScale = utils.getFontScale();
         }
 
         if (needsActivityRestart) {

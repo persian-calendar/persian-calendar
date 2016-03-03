@@ -38,6 +38,14 @@
         <item>+۲</item>
     </string-array>
 
+    <string-array name="fontScaleLabels">
+        <item>پیش‌فرض</item>
+        <item>ریز</item>
+        <item>معمولی</item>
+        <item>بزرگ</item>
+        <item>خیلی بزرگ</item>
+    </string-array>
+
     <string-array name="drawerTitles">
         <item>تقویم</item>
         <item>مبدل تاریخ</item>

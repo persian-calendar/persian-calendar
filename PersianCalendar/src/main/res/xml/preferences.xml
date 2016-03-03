@@ -33,6 +33,14 @@
             android:summary="@string/islamic_offset_summary"
             android:title="@string/islamic_offset" />
 
+        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+            android:defaultValue="0"
+            android:entries="@array/fontScaleLabels"
+            android:entryValues="@array/fontScaleKeys"
+            android:key="FontScale"
+            android:summary="@string/font_scale_summary"
+            android:title="@string/font_scale" />
+
     </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
 
     <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory

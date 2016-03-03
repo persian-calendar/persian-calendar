@@ -15,6 +15,7 @@ public class Constants {
     public static final String PREF_NOTIFY_DATE = "NotifyDate";
     public static final String PREF_ATHAN_VOLUME = "AthanVolume";
     public static final String PREF_APP_LANGUAGE = "AppLanguage";
+    public static final String PREF_FONT_SCALE = "FontScale";
     public static final String PREF_SELECTED_WIDGET_TEXT_COLOR = "SelectedWidgetTextColor";
     public static final String PREF_ATHAN_ALARM = "AthanAlarm";
     public static final String PREF_ATHAN_GAP = "AthanGap";
@@ -26,6 +27,8 @@ public class Constants {
     public static final String DEFAULT_LATITUDE = "0";
     public static final String DEFAULT_LONGITUDE = "0";
     public static final String DEFAULT_ALTITUDE = "0";
+    public static final String DEFAULT_ATHAN_GAP = "0";
+    public static final String DEFAULT_FONT_SCALE = "0";
     public static final String DEFAULT_APP_LANGUAGE = "fa";
     public static final String DEFAULT_SELECTED_WIDGET_TEXT_COLOR = "#ffffffff";
     public static final boolean DEFAULT_WIDGET_IN_24 = true;
