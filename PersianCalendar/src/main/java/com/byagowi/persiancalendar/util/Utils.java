@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
@@ -72,6 +71,8 @@ import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.LocaleData;
 import calendar.PersianDate;
+
+import static com.byagowi.persiancalendar.Constants.*;
 
 /**
  * Common utilities that needed for this calendar
@@ -138,7 +139,7 @@ public class Utils {
 
     private void initTypeface() {
         if (typeface == null) {
-            typeface = Typeface.createFromAsset(context.getAssets(), Constants.FONT_PATH);
+            typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
         }
     }
 
@@ -191,14 +192,14 @@ public class Utils {
     public CalculationMethod getCalculationMethod() {
         // It seems Iran is using Jafari method
         return CalculationMethod.valueOf(prefs.getString(
-                Constants.PREF_PRAY_TIME_METHOD,
-                Constants.DEFAULT_PRAY_TIME_METHOD));
+                PREF_PRAY_TIME_METHOD,
+                DEFAULT_PRAY_TIME_METHOD));
     }
 
     public int getIslamicOffset() {
         return Integer.parseInt(prefs.getString(
-                Constants.PREF_ISLAMIC_OFFSET,
-                Constants.DEFAULT_ISLAMIC_OFFSET).replace("+", ""));
+                PREF_ISLAMIC_OFFSET,
+                DEFAULT_ISLAMIC_OFFSET).replace("+", ""));
     }
 
     public Coordinate getCoordinate() {
@@ -209,17 +210,11 @@ public class Utils {
 
         try {
             Coordinate coord = new Coordinate(
-                    Double.parseDouble(prefs.getString(
-                            Constants.PREF_LATITUDE,
-                            Constants.DEFAULT_LATITUDE)),
+                    Double.parseDouble(prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)),
 
-                    Double.parseDouble(prefs.getString(
-                            Constants.PREF_LONGITUDE,
-                            Constants.DEFAULT_LONGITUDE)),
+                    Double.parseDouble(prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)),
 
-                    Double.parseDouble(prefs.getString(
-                            Constants.PREF_ALTITUDE,
-                            Constants.DEFAULT_ALTITUDE))
+                    Double.parseDouble(prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE))
             );
 
             // If latitude or longitude is zero probably preference is not set yet
@@ -239,26 +234,26 @@ public class Utils {
 
     public void updateStoredPreference() {
         preferredDigits = isPersianDigitSelected()
-                ? Constants.PERSIAN_DIGITS
-                : Constants.ARABIC_DIGITS;
+                ? PERSIAN_DIGITS
+                : ARABIC_DIGITS;
 
-        clockIn24 = prefs.getBoolean(Constants.PREF_WIDGET_IN_24, Constants.DEFAULT_WIDGET_IN_24);
-        iranTime = prefs.getBoolean(Constants.PREF_IRAN_TIME, Constants.DEFAULT_IRAN_TIME);
+        clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
+        iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
     }
 
     public boolean isPersianDigitSelected() {
-        return prefs.getBoolean(Constants.PREF_PERSIAN_DIGITS, Constants.DEFAULT_PERSIAN_DIGITS);
+        return prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS);
     }
 
 
     public void setTheme(Context context) {
-        String key = prefs.getString(Constants.PREF_THEME, "");
+        String key = prefs.getString(PREF_THEME, "");
 
         int theme = R.style.LightTheme; // default theme
 
-        if (key.equals(Constants.LIGHT_THEME)) {
+        if (key.equals(LIGHT_THEME)) {
             theme = R.style.LightTheme;
-        } else if (key.equals(Constants.DARK_THEME)) {
+        } else if (key.equals(DARK_THEME)) {
             theme = R.style.DarkTheme;
         }
 
@@ -267,33 +262,29 @@ public class Utils {
 
 
     public boolean isWidgetClock() {
-        return prefs.getBoolean(Constants.PREF_WIDGET_CLOCK, Constants.DEFAULT_WIDGET_CLOCK);
+        return prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
     }
 
     public boolean isNotifyDate() {
-        return prefs.getBoolean(Constants.PREF_NOTIFY_DATE, Constants.DEFAULT_NOTIFY_DATE);
+        return prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
     }
 
     public int getAthanVolume() {
-        return prefs.getInt(Constants.PREF_ATHAN_VOLUME, Constants.DEFAULT_ATHAN_VOLUME);
+        return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
     }
 
     public String getAppLanguage() {
-        String language = prefs.getString(
-                Constants.PREF_APP_LANGUAGE,
-                Constants.DEFAULT_APP_LANGUAGE);
+        String language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
-        return TextUtils.isEmpty(language) ? Constants.DEFAULT_APP_LANGUAGE : language;
+        return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
 
     public String getTheme() {
-        return prefs.getString(Constants.PREF_THEME, Constants.LIGHT_THEME);
+        return prefs.getString(PREF_THEME, LIGHT_THEME);
     }
 
     public String getSelectedWidgetTextColor() {
-        return prefs.getString(
-                Constants.PREF_SELECTED_WIDGET_TEXT_COLOR,
-                Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
+        return prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
     }
 
     public PersianDate getToday() {
@@ -364,10 +355,10 @@ public class Utils {
         int hour = clock.getHour();
         if (!clockIn24) {
             if (hour >= 12) {
-                timeText = Constants.PM_IN_PERSIAN;
+                timeText = PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = Constants.AM_IN_PERSIAN;
+                timeText = AM_IN_PERSIAN;
             }
         }
 
@@ -384,10 +375,10 @@ public class Utils {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (!clockIn24) {
             if (calendar.get(Calendar.HOUR_OF_DAY) >= 12) {
-                timeText = Constants.PM_IN_PERSIAN;
+                timeText = PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = Constants.AM_IN_PERSIAN;
+                timeText = AM_IN_PERSIAN;
             }
         }
 
@@ -403,7 +394,7 @@ public class Utils {
     }
 
     public String formatNumber(String number) {
-        if (preferredDigits == Constants.ARABIC_DIGITS)
+        if (preferredDigits == ARABIC_DIGITS)
             return number;
 
         StringBuilder sb = new StringBuilder();
@@ -418,14 +409,12 @@ public class Utils {
     }
 
     public String dateToString(AbstractDate date) {
-        return formatNumber(date.getDayOfMonth()) + ' '
-                + getMonthName(date) + ' '
-                + formatNumber(date.getYear());
+        return formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
+                formatNumber(date.getYear());
     }
 
     public String dayTitleSummary(PersianDate persianDate) {
-        return getWeekDayName(persianDate) + Constants.PERSIAN_COMMA + " "
-                + dateToString(persianDate);
+        return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(persianDate);
     }
 
     public String getMonthName(AbstractDate date) {
@@ -481,9 +470,9 @@ public class Utils {
 
     public int getDayIconResource(int day) {
         try {
-            return Constants.DAYS_ICONS[day];
+            return DAYS_ICONS[day];
         } catch (IndexOutOfBoundsException e) {
-            Log.e("com.byagowi.calendar", "No such field is available");
+            Log.e(TAG, "No such field is available");
             return 0;
         }
     }
@@ -561,7 +550,7 @@ public class Utils {
         Arrays.sort(cities, new Comparator<CityEntity>() {
             @Override
             public int compare(CityEntity l, CityEntity r) {
-                if (l.getKey().equals("CUSTOM")) {
+                if (l.getKey().equals("")) {
                     return -1;
                 }
                 if (r.getKey().equals("CUSTOM")) {
@@ -669,7 +658,7 @@ public class Utils {
         startTime.set(Calendar.HOUR_OF_DAY, 0);
         startTime.set(Calendar.MINUTE, 1);
         Intent intent = new Intent(context, BroadcastReceivers.class);
-        intent.setAction(Constants.BROADCAST_RESTART_APP);
+        intent.setAction(BROADCAST_RESTART_APP);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
     }
@@ -695,7 +684,7 @@ public class Utils {
     }
 
     public void loadAlarms() {
-        String prefString = prefs.getString(Constants.PREF_ATHAN_ALARM, "");
+        String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
         Coordinate coordinate = getCoordinate();
@@ -731,7 +720,7 @@ public class Utils {
     }
 
     public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
-        String valAthanGap = prefs.getString(Constants.PREF_ATHAN_GAP, "0");
+        String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
         long athanGap;
         try {
             athanGap = (long) (Double.parseDouble(valAthanGap) * 60);
@@ -748,8 +737,8 @@ public class Utils {
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
             Intent intent = new Intent(context, BroadcastReceivers.class);
-            intent.setAction(Constants.BROADCAST_ALARM);
-            intent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTime.name());
+            intent.setAction(BROADCAST_ALARM);
+            intent.putExtra(KEY_EXTRA_PRAYER_KEY, prayTime.name());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
