@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!lastTheme.equals(utils.getTheme())) {
             needsActivityRestart = true;
+            lastTheme = utils.getTheme();
         }
 
         if (needsActivityRestart) {
