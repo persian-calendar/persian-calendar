@@ -12,10 +12,6 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  * About Calendar Activity
  *
@@ -39,7 +35,7 @@ public class AboutFragment extends Fragment {
 
         TextView licenseTextView = (TextView) view.findViewById(R.id.license);
         licenseTextView.setText("Android Persian Calendar Version " + version + "\n" +
-                utils.convertStreamToString(getResources().openRawResource(R.raw.credits)));
+                utils.readRawResource(R.raw.credits));
 
         Linkify.addLinks(licenseTextView, Linkify.ALL);
 

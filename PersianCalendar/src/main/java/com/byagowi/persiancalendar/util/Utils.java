@@ -17,6 +17,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceViewHolder;
@@ -487,10 +488,14 @@ public class Utils {
         }
     }
 
-    public String convertStreamToString(InputStream is) {
+    private String readStream(InputStream is) {
         // http://stackoverflow.com/a/5445161
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+    public String readRawResource(@RawRes int res) {
+        return readStream(context.getResources().openRawResource(res));
     }
 
     private String persianStringToArabic(String text) {
@@ -516,8 +521,7 @@ public class Utils {
     public List<CityEntity> getAllCities(boolean needsSort) {
         List<CityEntity> result = new ArrayList<>();
         try {
-            JSONObject countries = new JSONObject(convertStreamToString(
-                    context.getResources().openRawResource(R.raw.cities)));
+            JSONObject countries = new JSONObject(readRawResource(R.raw.cities));
 
             for (String countryCode : iteratorToIterable(countries.keys())) {
                 JSONObject country = countries.getJSONObject(countryCode);
@@ -602,10 +606,10 @@ public class Utils {
         return null;
     }
 
-    private List<EventEntity> readEventsFromJSON(InputStream is) {
+    private List<EventEntity> readEventsFromJSON() {
         List<EventEntity> result = new ArrayList<>();
         try {
-            JSONArray days = new JSONObject(convertStreamToString(is)).getJSONArray("events");
+            JSONArray days = new JSONObject(readRawResource(R.raw.events)).getJSONArray("events");
 
             int length = days.length();
             for (int i = 0; i < length; ++i) {
@@ -628,7 +632,7 @@ public class Utils {
 
     public List<EventEntity> getEvents(PersianDate day) {
         if (events == null) {
-            events = readEventsFromJSON(context.getResources().openRawResource(R.raw.events));
+            events = readEventsFromJSON();
         }
 
         List<EventEntity> result = new ArrayList<>();
