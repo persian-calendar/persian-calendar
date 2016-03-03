@@ -690,11 +690,16 @@ public class Utils {
 
             String[] alarmTimesNames = TextUtils.split(prefString, ",");
             for (int i = 0; i < alarmTimesNames.length; i++) {
+                PrayTime prayTime = PrayTime.valueOf(alarmTimesNames[i]);
+                // in the past IMSAK was used but now we figured out FAJR was what we wanted
+                if (prayTime == PrayTime.IMSAK) {
+                    prayTime = PrayTime.FAJR;
+                }
 
-                Clock alarmTime = prayTimes.get(PrayTime.valueOf(alarmTimesNames[i]));
+                Clock alarmTime = prayTimes.get(prayTime);
 
                 if (alarmTime != null) {
-                    setAlarm(PrayTime.valueOf(alarmTimesNames[i]), alarmTime, i);
+                    setAlarm(prayTime, alarmTime, i);
                 }
             }
         }
