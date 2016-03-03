@@ -1,12 +1,15 @@
 package com.byagowi.persiancalendar.view.activity;
 
-import android.content.Intent;
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -14,23 +17,26 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
-import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
+public class AthanActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
+    private static final String TAG = AthanActivity.class.getName();
     private TextView textAlarmName;
     private AppCompatImageView athanIconView;
+    private MediaPlayer mediaPlayer;
+    private Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        Utils utils = Utils.getInstance(getApplicationContext());
+        utils = Utils.getInstance(getApplicationContext());
 
         utils.changeAppLanguage(this);
         utils.loadLanguageResource();
@@ -61,6 +67,8 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             textCityName.setText(getString(R.string.in_city_time) + " "
                     + coordinate.getLatitude() + ", " + coordinate.getLongitude());
         }
+
+        play();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -105,25 +113,44 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        sendBroadcastStop();
+        stop();
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sendBroadcastStop();
     }
 
     @Override
     public void onBackPressed() {
-        sendBroadcastStop();
-    }
-
-    private void sendBroadcastStop() {
-        Intent intent = new Intent(getBaseContext(), BroadcastReceivers.class);
-        intent.setAction(Constants.ACTION_STOP_ALARM);
-        AthanActivity.this.sendBroadcast(intent);
+        stop();
         finish();
     }
 
+    private void play() {
+        try {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setOnCompletionListener(this);
+            mediaPlayer.setDataSource(this, utils.getAthanUri());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, utils.getAthanVolume(), 0);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void stop() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        mp.release();
+    }
 }
