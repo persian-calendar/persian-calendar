@@ -9,7 +9,7 @@
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/imsak"
+        android:src="@drawable/fajr"
         android:scaleType="centerCrop"/>
 
     <android.support.v7.widget.AppCompatTextView

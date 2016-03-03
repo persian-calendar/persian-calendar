@@ -24,7 +24,7 @@ Previous designers: Behdad Pournader, Iman Soltanian
 
 
 Assets:
-* {imsak,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
+* {fajr,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
 * {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
 * kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)

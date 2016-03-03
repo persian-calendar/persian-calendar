@@ -75,9 +75,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             PrayTime prayTime = PrayTime.valueOf(key);
 
             switch (prayTime) {
-                case IMSAK:
+                case FAJR:
                     textAlarmName.setText(getString(R.string.azan1));
-                    athanIconView.setImageResource(R.drawable.imsak);
+                    athanIconView.setImageResource(R.drawable.fajr);
                     break;
 
                 case DHUHR:

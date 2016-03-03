@@ -21,7 +21,7 @@ import static com.byagowi.persiancalendar.Constants.EQUALS_WITH;
 import static com.byagowi.persiancalendar.Constants.GEORGIAN;
 import static com.byagowi.persiancalendar.Constants.HIJRI_QAMARI;
 import static com.byagowi.persiancalendar.Constants.HIJRI_SHAMSI;
-import static com.byagowi.persiancalendar.Constants.IMSAK;
+import static com.byagowi.persiancalendar.Constants.FAJR;
 import static com.byagowi.persiancalendar.Constants.ISHA;
 import static com.byagowi.persiancalendar.Constants.MAGHRIB;
 import static com.byagowi.persiancalendar.Constants.MIDNIGHT;
@@ -88,7 +88,7 @@ public class LocaleUtils {
                 cache.put(stringName, getUTF8(bundle.getString(stringName)));
             }
 
-            cache.put(IMSAK, getUTF8(bundle.getString(IMSAK)));
+            cache.put(FAJR, getUTF8(bundle.getString(FAJR)));
             cache.put(SUNRISE, getUTF8(bundle.getString(SUNRISE)));
             cache.put(DHUHR, getUTF8(bundle.getString(DHUHR)));
             cache.put(ASR, getUTF8(bundle.getString(ASR)));

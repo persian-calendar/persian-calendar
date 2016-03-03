@@ -324,8 +324,8 @@ public class Utils {
                 prayTimes = prayTimesCalculator.calculate(new Date(), coordinate);
             }
 
-            if (prayTimes.get(PrayTime.IMSAK).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK));
+            if (prayTimes.get(PrayTime.FAJR).getInt() > clock.getInt()) {
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR));
 
             } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
                 return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE));
@@ -349,7 +349,7 @@ public class Utils {
                 return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
 
             } else {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)); //this is today & not tomorrow
+                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
             }
 
         } else return null;
@@ -679,8 +679,8 @@ public class Utils {
     }
 
     public void loadAlarms() {
-        Log.d(TAG, "reading and loading all alarms from prefs");
         String prefString = prefs.getString(Constants.PREF_ATHAN_ALARM, "");
+        Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
         Coordinate coordinate = getCoordinate();
 

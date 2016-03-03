@@ -37,7 +37,7 @@ public class Constants {
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
 
-    public static final String IMSAK = "imsak";
+    public static final String FAJR = "fajr";
     public static final String SUNRISE = "sunrise";
     public static final String DHUHR = "dhuhr";
     public static final String ASR = "asr";
