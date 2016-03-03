@@ -211,9 +211,7 @@ public class Utils {
         try {
             Coordinate coord = new Coordinate(
                     Double.parseDouble(prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)),
-
                     Double.parseDouble(prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)),
-
                     Double.parseDouble(prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE))
             );
 
@@ -553,7 +551,7 @@ public class Utils {
                 if (l.getKey().equals("")) {
                     return -1;
                 }
-                if (r.getKey().equals("CUSTOM")) {
+                if (r.getKey().equals(DEFAULT_CITY)) {
                     return 1;
                 }
                 int compare = r.getCountryCode().compareTo(l.getCountryCode());
@@ -573,7 +571,7 @@ public class Utils {
     public CityEntity getCityFromPreference() {
         String key = prefs.getString("Location", "");
 
-        if (TextUtils.isEmpty(key) || key.equals("CUSTOM")) {
+        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY)) {
             return null;
         }
 
