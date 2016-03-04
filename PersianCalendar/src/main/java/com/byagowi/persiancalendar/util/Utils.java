@@ -571,26 +571,21 @@ public class Utils {
     public CityEntity getCityFromPreference() {
         String key = prefs.getString("Location", "");
 
-        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY)) {
+        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
-        }
 
-        if (key.equals(cachedCityKey)) {
+        if (key.equals(cachedCityKey))
             return cachedCity;
-        }
 
-        // cache last query even if no city avialable under the key, useful in case invalid
+        // cache last query even if no city available under the key, useful in case invalid
         // value is somehow inserted on the preference
         cachedCityKey = key;
 
         for (CityEntity cityEntity : getAllCities(false))
-            if (cityEntity.getKey().equals(key)) {
-                cachedCity = cityEntity;
-                return cityEntity;
-            }
+            if (cityEntity.getKey().equals(key))
+                return cachedCity = cityEntity;
 
-        cachedCity = null;
-        return null;
+        return cachedCity = null;
     }
 
     private List<EventEntity> readEventsFromJSON() {
