@@ -105,7 +105,7 @@ public class Utils {
 
     public static Utils getInstance(Context context) {
         if (myWeakInstance == null || myWeakInstance.get() == null) {
-            myWeakInstance = new WeakReference<Utils>(new Utils(context.getApplicationContext()));
+            myWeakInstance = new WeakReference<>(new Utils(context.getApplicationContext()));
         }
         return myWeakInstance.get();
     }
