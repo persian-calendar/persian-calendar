@@ -75,7 +75,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             bundle.putString("key", preference.getKey());
             fragment.setArguments(bundle);
             fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
+            fragment.show(getChildFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
         }
     }
