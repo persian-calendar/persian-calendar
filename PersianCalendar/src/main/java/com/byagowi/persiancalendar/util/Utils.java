@@ -49,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -82,7 +83,6 @@ import static com.byagowi.persiancalendar.Constants.*;
 
 public class Utils {
     private final String TAG = Utils.class.getName();
-    private static Utils myInstance;
     private LocaleUtils localeUtils;
     private Context context;
     private Typeface typeface;
@@ -101,11 +101,13 @@ public class Utils {
         updateStoredPreference();
     }
 
+    private static WeakReference<Utils> myWeakInstance;
+
     public static Utils getInstance(Context context) {
-        if (myInstance == null) {
-            myInstance = new Utils(context.getApplicationContext());
+        if (myWeakInstance == null || myWeakInstance.get() == null) {
+            myWeakInstance = new WeakReference<Utils>(new Utils(context.getApplicationContext()));
         }
-        return myInstance;
+        return myWeakInstance.get();
     }
 
     /**
