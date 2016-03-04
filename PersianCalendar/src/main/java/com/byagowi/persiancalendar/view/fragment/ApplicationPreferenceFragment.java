@@ -19,6 +19,8 @@ import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 import com.byagowi.persiancalendar.view.preferences.ShapedListDialog;
 import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Preference activity
  *
@@ -38,7 +40,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
         updateAthanPreferencesState();
 
-        instance = this;
+        weakInstance = new WeakReference<>(this);
     }
 
     public void updateAthanPreferencesState() {
@@ -78,12 +80,12 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private static ApplicationPreferenceFragment instance;
+    private static WeakReference<ApplicationPreferenceFragment> weakInstance;
 
     public static void update() {
         // Total hack but better than using broadcast on wrong places
-        if (instance != null) {
-            instance.updateAthanPreferencesState();
+        if (weakInstance != null && weakInstance.get() != null) {
+            weakInstance.get().updateAthanPreferencesState();
         }
     }
 }
