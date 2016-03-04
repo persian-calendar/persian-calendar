@@ -49,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -82,7 +83,6 @@ import static com.byagowi.persiancalendar.Constants.*;
 
 public class Utils {
     private final String TAG = Utils.class.getName();
-    private static Utils myInstance;
     private LocaleUtils localeUtils;
     private Context context;
     private Typeface typeface;
@@ -101,11 +101,13 @@ public class Utils {
         updateStoredPreference();
     }
 
+    private static WeakReference<Utils> myWeakInstance;
+
     public static Utils getInstance(Context context) {
-        if (myInstance == null) {
-            myInstance = new Utils(context.getApplicationContext());
+        if (myWeakInstance == null || myWeakInstance.get() == null) {
+            myWeakInstance = new WeakReference<Utils>(new Utils(context.getApplicationContext()));
         }
-        return myInstance;
+        return myWeakInstance.get();
     }
 
     /**
@@ -571,26 +573,21 @@ public class Utils {
     public CityEntity getCityFromPreference() {
         String key = prefs.getString("Location", "");
 
-        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY)) {
+        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
-        }
 
-        if (key.equals(cachedCityKey)) {
+        if (key.equals(cachedCityKey))
             return cachedCity;
-        }
 
-        // cache last query even if no city avialable under the key, useful in case invalid
+        // cache last query even if no city available under the key, useful in case invalid
         // value is somehow inserted on the preference
         cachedCityKey = key;
 
         for (CityEntity cityEntity : getAllCities(false))
-            if (cityEntity.getKey().equals(key)) {
-                cachedCity = cityEntity;
-                return cityEntity;
-            }
+            if (cityEntity.getKey().equals(key))
+                return cachedCity = cityEntity;
 
-        cachedCity = null;
-        return null;
+        return cachedCity = null;
     }
 
     private List<EventEntity> readEventsFromJSON() {
