@@ -26,6 +26,7 @@
         <activity
             android:name=".view.activity.AthanActivity"
             android:theme="@style/FullscreenTheme"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
 
         <receiver
