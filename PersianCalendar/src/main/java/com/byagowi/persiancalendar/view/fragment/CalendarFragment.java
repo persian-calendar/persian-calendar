@@ -156,7 +156,7 @@ public class CalendarFragment extends Fragment
         coordinate = utils.getCoordinate();
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
 
-        monthViewPager.setAdapter(new CalendarAdapter(getActivity().getSupportFragmentManager()));
+        monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager()));
         monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
 
         monthViewPager.addOnPageChangeListener(this);
