@@ -175,7 +175,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void menuChange() {
+    private void beforeMenuChange(int position) {
+        if (position != menuPosition) {
+            // reset app lang on menu changes, ugly hack but it seems is needed
+            utils.changeAppLanguage(this);
+        }
+
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
@@ -206,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectItem(int position) {
-        menuChange();
+        beforeMenuChange(position);
         switch (position) {
             case CALENDAR:
                 if (menuPosition != CALENDAR) {
