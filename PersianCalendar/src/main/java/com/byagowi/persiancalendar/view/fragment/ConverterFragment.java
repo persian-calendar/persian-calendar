@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.CalendarTypesSpinnerAdapter;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
@@ -84,8 +84,9 @@ public class ConverterFragment extends Fragment implements
         //
 
         // fill views
-        calendarTypeSpinner.setAdapter(new CalendarTypesSpinnerAdapter(context,
-                android.R.layout.select_dialog_item));
+        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(
+                context, R.layout.select_dialog_item_material,
+                getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
@@ -99,12 +100,22 @@ public class ConverterFragment extends Fragment implements
         return view;
     }
 
-    void fillCalendarInfo() {
-        int year = startingYearOnYearSpinner
-                + yearSpinner.getSelectedItemPosition();
+    private CalendarTypeEnum calendarTypeFromPosition(int position) {
+        if (position == 0)
+            return CalendarTypeEnum.SHAMSI;
+        else if (position == 1)
+            return CalendarTypeEnum.ISLAMIC;
+        else
+            return CalendarTypeEnum.GEORGIAN;
+    }
+
+    private void fillCalendarInfo() {
+        int year = startingYearOnYearSpinner + yearSpinner.getSelectedItemPosition();
         int month = monthSpinner.getSelectedItemPosition() + 1;
         int day = daySpinner.getSelectedItemPosition() + 1;
-        CalendarTypeEnum calendarType = (CalendarTypeEnum) calendarTypeSpinner.getSelectedItem();
+
+        CalendarTypeEnum calendarType = calendarTypeFromPosition(
+            calendarTypeSpinner.getSelectedItemPosition());
 
         CivilDate civilDate = null;
         PersianDate persianDate;
@@ -167,7 +178,9 @@ public class ConverterFragment extends Fragment implements
         CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
         IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
 
-        CalendarTypeEnum selectedCalendarType = (CalendarTypeEnum) calendarTypeSpinner.getSelectedItem();
+        date = newDateCivil;
+        CalendarTypeEnum selectedCalendarType = calendarTypeFromPosition(
+                calendarTypeSpinner.getSelectedItemPosition());
         switch (selectedCalendarType) {
             case GEORGIAN:
                 date = newDateCivil;

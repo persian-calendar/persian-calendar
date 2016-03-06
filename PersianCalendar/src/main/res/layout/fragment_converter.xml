@@ -130,7 +130,6 @@
                     android:layout_gravity="right"
                     android:foregroundGravity="right"
                     android:textColor="?attr/colorTextNormal"
-                    android:entries="@array/calendar_type"
                     android:prompt="@string/select_day"
                     android:spinnerMode="dialog"/>
 

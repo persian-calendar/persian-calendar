@@ -70,7 +70,6 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
-import calendar.LocaleData;
 import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.*;
@@ -411,22 +410,21 @@ public class Utils {
     }
 
     public String getMonthName(AbstractDate date) {
-        String monthName = "";
+        if (persianMonths == null || gregorianMonths == null || islamicMonths == null)
+            loadLanguageResource();
+
         // zero based
         int month = date.getMonth() - 1;
 
         if (date instanceof PersianDate) {
-            LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
-            monthName = getMessage(String.valueOf(monthNameCode));
+            return persianMonths.get(month);
         } else if (date instanceof CivilDate) {
-            LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
-            monthName = getMessage(String.valueOf(monthNameCode));
+            return gregorianMonths.get(month);
         } else if (date instanceof IslamicDate) {
-            LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
-            monthName = getMessage(String.valueOf(monthNameCode));
+            return islamicMonths.get(month);
         }
 
-        return monthName;
+        return "";
     }
 
     public List<String> getMonthsNamesListWithOrdinal(AbstractDate date) {
@@ -441,20 +439,14 @@ public class Utils {
     }
 
     public String getWeekDayName(AbstractDate date) {
-        CivilDate civilDate;
-        if (date instanceof PersianDate) {
-            civilDate = DateConverter.persianToCivil((PersianDate) date);
-        } else if (date instanceof IslamicDate) {
-            civilDate = DateConverter.islamicToCivil((IslamicDate) date);
-        } else {
-            civilDate = (CivilDate) date;
-        }
+        // Islamic date currently doesn't have implementation of getDayOfWeek so it should be converted
+        if (date instanceof IslamicDate)
+            date = DateConverter.islamicToCivil((IslamicDate) date);
 
-        // zero based
-        int dayOfWeek = civilDate.getDayOfWeek() - 1;
-        LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[dayOfWeek];
+        if (weekDays == null)
+            loadLanguageResource();
 
-        return getMessage(weekDayNameCode.toString());
+        return weekDays.get(date.getDayOfWeek() - 1);
     }
 
     public void quickToast(String message) {
@@ -765,38 +757,50 @@ public class Utils {
     }
 
     private Map<String, String> calendarMessages;
+    private List<String> persianMonths;
+    private List<String> islamicMonths;
+    private List<String> gregorianMonths;
+    private List<String> weekDays;
 
     public void loadLanguageResource() {
         @RawRes int messagesFile;
-        switch (getAppLanguage()) {
-            case "fa-AF":
-                messagesFile = R.raw.messages_fa_af;
-                break;
-            case "ps":
-                messagesFile = R.raw.messages_ps;
-                break;
-            default:
-                messagesFile = R.raw.messages_fa;
-        }
+        String lang = getAppLanguage();
+
+        if (lang.equals("fa-AF"))
+            messagesFile = R.raw.messages_fa_af;
+        else if (lang.equals("ps"))
+            messagesFile = R.raw.messages_ps;
+        else
+            messagesFile = R.raw.messages_fa;
 
         calendarMessages = new Hashtable<>();
+        persianMonths = new ArrayList<>();
+        islamicMonths = new ArrayList<>();
+        gregorianMonths = new ArrayList<>();
+        weekDays = new ArrayList<>();
 
         try {
             JSONObject messages = new JSONObject(readRawResource(messagesFile));
 
-            for (String key : iteratorToIterable(messages.keys()))
-                calendarMessages.put(key, messages.getString(key));
+            JSONObject persianMonthsJSON = messages.getJSONObject("PersianCalendarMonths");
+            for (String key : iteratorToIterable(persianMonthsJSON.keys()))
+                persianMonths.add(persianMonthsJSON.getString(key));
+
+            JSONObject islamicMonthsJSON = messages.getJSONObject("IslamicCalendarMonths");
+            for (String key : iteratorToIterable(islamicMonthsJSON.keys()))
+                islamicMonths.add(islamicMonthsJSON.getString(key));
+
+            JSONObject gregorianMonthsJSON = messages.getJSONObject("IslamicCalendarMonths");
+            for (String key : iteratorToIterable(gregorianMonthsJSON.keys()))
+                gregorianMonths.add(gregorianMonthsJSON.getString(key));
+
+            JSONObject weekDaysJSON = messages.getJSONObject("WeekDays");
+            for (String key : iteratorToIterable(weekDaysJSON.keys()))
+                weekDays.add(weekDaysJSON.getString(key));
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-    }
-
-    public String getMessage(String key) {
-        if (calendarMessages == null) {
-            loadLanguageResource();
-        }
-        return calendarMessages.get(key);
     }
 
     public void copyToClipboard(View view) {
