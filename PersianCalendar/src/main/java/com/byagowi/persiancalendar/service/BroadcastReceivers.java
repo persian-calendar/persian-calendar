@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 /**
  * Startup broadcast receiver

@@ -8,7 +8,6 @@ import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
 /**
  * persian_calendar
