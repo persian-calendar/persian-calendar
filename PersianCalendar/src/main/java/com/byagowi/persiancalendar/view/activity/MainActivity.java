@@ -1,9 +1,13 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -144,10 +148,18 @@ public class MainActivity extends AppCompatActivity {
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
 
-        dayIsPassed = false;
+        LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
+                new IntentFilter("day-passed"));
     }
 
-    public static boolean dayIsPassed = false;
+    public boolean dayIsPassed = false;
+
+    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dayIsPassed = true;
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -156,6 +168,12 @@ public class MainActivity extends AppCompatActivity {
             dayIsPassed = false;
             restartActivity();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(dayPassedReceiver);
+        super.onDestroy();
     }
 
     public void onClickItem(int position) {
