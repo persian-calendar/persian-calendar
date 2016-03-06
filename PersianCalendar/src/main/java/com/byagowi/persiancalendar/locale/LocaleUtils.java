@@ -43,7 +43,7 @@ public class LocaleUtils {
 
     private LocaleUtils(Context context, String localeCode) {
         this.context = context;
-        changeLocale(Utils.getInstance(context).getAppLanguage());
+        changeLocale(localeCode);
     }
 
     public static LocaleUtils getInstance(Context context, String code) {
