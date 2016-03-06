@@ -31,9 +31,9 @@ public class CalendarTypesSpinnerAdapter extends ArrayAdapter {
         utils = Utils.getInstance(context);
 
         spinnerResource = resource;
-        calendarTypes.put(CalendarTypeEnum.SHAMSI, utils.getString(Constants.HIJRI_SHAMSI));
-        calendarTypes.put(CalendarTypeEnum.ISLAMIC, utils.getString(Constants.HIJRI_QAMARI));
-        calendarTypes.put(CalendarTypeEnum.GEORGIAN, utils.getString(Constants.GEORGIAN));
+        calendarTypes.put(CalendarTypeEnum.SHAMSI, utils.getMessage(Constants.HIJRI_SHAMSI));
+        calendarTypes.put(CalendarTypeEnum.ISLAMIC, utils.getMessage(Constants.HIJRI_QAMARI));
+        calendarTypes.put(CalendarTypeEnum.GEORGIAN, utils.getMessage(Constants.GEORGIAN));
     }
 
     @Override

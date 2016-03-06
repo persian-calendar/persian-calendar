@@ -35,7 +35,6 @@ import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
-import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
@@ -56,6 +55,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +83,6 @@ import static com.byagowi.persiancalendar.Constants.*;
 
 public class Utils {
     private final String TAG = Utils.class.getName();
-    private LocaleUtils localeUtils;
     private Context context;
     private Typeface typeface;
     private SharedPreferences prefs;
@@ -122,13 +121,6 @@ public class Utils {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
                 ? ArabicShaping.shape(text)
                 : text;
-    }
-
-    public String getString(String key) {
-        if (localeUtils == null) {
-            localeUtils = LocaleUtils.getInstance(context, getAppLanguage());
-        }
-        return localeUtils.getString(key);
     }
 
     public String programVersion() {
@@ -425,13 +417,13 @@ public class Utils {
 
         if (date instanceof PersianDate) {
             LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
+            monthName = getMessage(String.valueOf(monthNameCode));
         } else if (date instanceof CivilDate) {
             LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
+            monthName = getMessage(String.valueOf(monthNameCode));
         } else if (date instanceof IslamicDate) {
             LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
+            monthName = getMessage(String.valueOf(monthNameCode));
         }
 
         return monthName;
@@ -462,7 +454,7 @@ public class Utils {
         int dayOfWeek = civilDate.getDayOfWeek() - 1;
         LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[dayOfWeek];
 
-        return getString(weekDayNameCode.toString());
+        return getMessage(weekDayNameCode.toString());
     }
 
     public void quickToast(String message) {
@@ -506,7 +498,6 @@ public class Utils {
             }
         };
     }
-
 
     public List<CityEntity> getAllCities(boolean needsSort) {
         List<CityEntity> result = new ArrayList<>();
@@ -773,14 +764,39 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    public void loadLanguageResource() {
-        String localeCode = getAppLanguage();
+    private Map<String, String> calendarMessages;
 
-        if (localeUtils == null) {
-            localeUtils = LocaleUtils.getInstance(context, localeCode);
+    public void loadLanguageResource() {
+        @RawRes int messagesFile;
+        switch (getAppLanguage()) {
+            case "fa-AF":
+                messagesFile = R.raw.messages_fa_af;
+                break;
+            case "ps":
+                messagesFile = R.raw.messages_ps;
+                break;
+            default:
+                messagesFile = R.raw.messages_fa;
         }
 
-        localeUtils.changeLocale(localeCode);
+        calendarMessages = new Hashtable<>();
+
+        try {
+            JSONObject messages = new JSONObject(readRawResource(messagesFile));
+
+            for (String key : iteratorToIterable(messages.keys()))
+                calendarMessages.put(key, messages.getString(key));
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    public String getMessage(String key) {
+        if (calendarMessages == null) {
+            loadLanguageResource();
+        }
+        return calendarMessages.get(key);
     }
 
     public void copyToClipboard(View view) {
