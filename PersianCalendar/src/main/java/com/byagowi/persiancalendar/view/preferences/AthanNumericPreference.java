@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -45,7 +47,8 @@ public class AthanNumericPreference extends EditTextPreference {
         persistString(mDouble != null ? mDouble.toString() : null);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
-        ApplicationPreferenceFragment.update();
+        LocalBroadcastManager.getInstance(getContext())
+                .sendBroadcast(new Intent("update-preference"));
     }
 
     @Override

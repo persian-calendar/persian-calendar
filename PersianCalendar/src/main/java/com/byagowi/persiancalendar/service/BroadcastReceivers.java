@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -48,7 +49,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
 
                 updateUtils.update(true);
                 utils.loadApp();
-                MainActivity.dayIsPassed();
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("day-passed"));
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));

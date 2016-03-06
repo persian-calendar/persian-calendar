@@ -1,7 +1,12 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
@@ -18,8 +23,6 @@ import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 import com.byagowi.persiancalendar.view.preferences.ShapedListDialog;
 import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Preference activity
@@ -40,7 +43,21 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
         updateAthanPreferencesState();
 
-        weakInstance = new WeakReference<>(this);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
+                new IntentFilter("update-preference"));
+    }
+
+    private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateAthanPreferencesState();
+        }
+    };
+
+    @Override
+    public void onDestroyView() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(preferenceUpdateReceiver);
+        super.onDestroyView();
     }
 
     public void updateAthanPreferencesState() {
@@ -77,15 +94,6 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             fragment.setTargetFragment(this, 0);
             fragment.show(getChildFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
-        }
-    }
-
-    private static WeakReference<ApplicationPreferenceFragment> weakInstance;
-
-    public static void update() {
-        // Total hack but better than using broadcast on wrong places
-        if (weakInstance != null && weakInstance.get() != null) {
-            weakInstance.get().updateAthanPreferencesState();
         }
     }
 }

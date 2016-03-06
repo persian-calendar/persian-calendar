@@ -1,9 +1,13 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,8 +31,6 @@ import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Program activity for android
@@ -146,7 +148,21 @@ public class MainActivity extends AppCompatActivity {
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
 
-        myInstance = new WeakReference<>(this);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(dayPassedReceiver, new IntentFilter("day-passed"));
+    }
+
+    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            restartActivity();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(dayPassedReceiver);
+        super.onDestroy();
     }
 
     public void onClickItem(int position) {
@@ -288,14 +304,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         drawerLayout.closeDrawers();
-    }
-
-    private static WeakReference<MainActivity> myInstance;
-
-    // needed update when day is passed but probably local broadcast could be used here
-    public static void dayIsPassed() {
-        if (myInstance != null && myInstance.get() != null) {
-            myInstance.get().restartActivity();
-        }
     }
 }
