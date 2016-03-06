@@ -28,6 +28,8 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Program activity for android
  *
@@ -143,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                         new CalendarFragment(),
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
+
+        myInstance = new WeakReference<>(this);
     }
 
     public void onClickItem(int position) {
@@ -203,11 +207,14 @@ public class MainActivity extends AppCompatActivity {
             lastTheme = utils.getTheme();
         }
 
-        if (needsActivityRestart) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
+        if (needsActivityRestart)
+            restartActivity();
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     public void selectItem(int position) {
@@ -281,5 +288,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         drawerLayout.closeDrawers();
+    }
+
+    private static WeakReference<MainActivity> myInstance;
+
+    // needed update when day is passed but probably local broadcast could be used here
+    public static void dayIsPassed() {
+        if (myInstance != null && myInstance.get() != null) {
+            myInstance.get().restartActivity();
+        }
     }
 }

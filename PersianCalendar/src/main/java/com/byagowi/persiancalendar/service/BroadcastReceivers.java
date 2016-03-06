@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 /**
  * Startup broadcast receiver
@@ -47,6 +48,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
 
                 updateUtils.update(true);
                 utils.loadApp();
+                MainActivity.dayIsPassed();
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
