@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                         new CalendarFragment(),
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
+
+        dayIsPassed = false;
     }
 
     public static boolean dayIsPassed = false;
