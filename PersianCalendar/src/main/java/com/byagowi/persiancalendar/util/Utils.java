@@ -756,7 +756,6 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    private Map<String, String> calendarMessages;
     private List<String> persianMonths;
     private List<String> islamicMonths;
     private List<String> gregorianMonths;
@@ -772,8 +771,7 @@ public class Utils {
             messagesFile = R.raw.messages_ps;
         else
             messagesFile = R.raw.messages_fa;
-
-        calendarMessages = new Hashtable<>();
+        
         persianMonths = new ArrayList<>();
         islamicMonths = new ArrayList<>();
         gregorianMonths = new ArrayList<>();
