@@ -125,9 +125,10 @@ public class Utils {
     }
 
     public String getString(String key) {
-        return localeUtils == null
-                ? ""
-                : localeUtils.getString(key);
+        if (localeUtils == null) {
+            localeUtils = LocaleUtils.getInstance(context, getAppLanguage());
+        }
+        return localeUtils.getString(key);
     }
 
     public String programVersion() {
