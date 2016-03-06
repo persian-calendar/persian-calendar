@@ -192,9 +192,9 @@ public class Utils {
     }
 
     public CalculationMethod getCalculationMethod() {
-        // It seems Iran is using Jafari method
-        return CalculationMethod.valueOf(prefs.getString(
-                PREF_PRAY_TIME_METHOD,
+        // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
+        // so switched to "Tehran" method as default calculation algorithm
+        return CalculationMethod.valueOf(prefs.getString(PREF_PRAY_TIME_METHOD,
                 DEFAULT_PRAY_TIME_METHOD));
     }
 

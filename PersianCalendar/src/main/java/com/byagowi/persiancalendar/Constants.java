@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar;
 public class Constants {
 
     public static final String PREF_KEY_ATHAN = "Athan";
-    public static final String PREF_PRAY_TIME_METHOD = "PrayTimeMethod";
+    public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
     public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";
     public static final String PREF_LATITUDE = "Latitude";
     public static final String PREF_LONGITUDE = "Longitude";
@@ -21,7 +21,7 @@ public class Constants {
     public static final String PREF_THEME = "Theme";
 
     public static final String DEFAULT_CITY = "CUSTOM";
-    public static final String DEFAULT_PRAY_TIME_METHOD = "Jafari";
+    public static final String DEFAULT_PRAY_TIME_METHOD = "Tehran";
     public static final String DEFAULT_ISLAMIC_OFFSET = "0";
     public static final String DEFAULT_LATITUDE = "0";
     public static final String DEFAULT_LONGITUDE = "0";
