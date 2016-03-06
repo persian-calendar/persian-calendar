@@ -44,7 +44,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         updateAthanPreferencesState();
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
-                new IntentFilter("update-preference"));
+                new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 
     private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {

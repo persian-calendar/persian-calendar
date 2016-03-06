@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
-                new IntentFilter("day-passed"));
+                new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
     }
 
     public boolean dayIsPassed = false;

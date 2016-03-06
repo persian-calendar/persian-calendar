@@ -2,6 +2,9 @@ package com.byagowi.persiancalendar;
 
 public class Constants {
 
+    public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
+    public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
+
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
     public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";

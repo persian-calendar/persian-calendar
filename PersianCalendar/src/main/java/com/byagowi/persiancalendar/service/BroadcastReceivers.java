@@ -48,7 +48,8 @@ public class BroadcastReceivers extends BroadcastReceiver {
 
                 updateUtils.update(true);
                 utils.loadApp();
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("day-passed"));
+                LocalBroadcastManager.getInstance(context)
+                        .sendBroadcast(new Intent(Constants.LOCAL_INTENT_DAY_PASSED));
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
