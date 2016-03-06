@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.byagowi.persiancalendar.util.Utils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -39,11 +41,9 @@ public class LocaleUtils {
     private Context context;
     private Map<String, String> cache = new HashMap<>();
 
-    private LocaleUtils() {
-    }
-
     private LocaleUtils(Context context, String localeCode) {
         this.context = context;
+        changeLocale(Utils.getInstance(context).getAppLanguage());
     }
 
     public static LocaleUtils getInstance(Context context, String code) {
