@@ -79,7 +79,7 @@
             android:defaultValue="Tehran"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
-            android:key="PrayTimeMethod"
+            android:key="SelectedPrayTimeMethod"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
 
