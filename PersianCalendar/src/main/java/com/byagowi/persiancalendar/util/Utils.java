@@ -482,14 +482,15 @@ public class Utils {
     }
 
     public String getWeekDayName(AbstractDate date) {
-        // Islamic date currently doesn't have implementation of getDayOfWeek so it should be converted
         if (date instanceof IslamicDate)
             date = DateConverter.islamicToCivil((IslamicDate) date);
+        else if (date instanceof PersianDate)
+            date = DateConverter.persianToCivil((PersianDate) date);
 
         if (weekDays == null)
             loadLanguageResource();
 
-        return weekDays[date.getDayOfWeek() - 1];
+        return weekDays[date.getDayOfWeek() % 7];
     }
 
     public void quickToast(String message) {
