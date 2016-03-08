@@ -55,7 +55,7 @@ public class CalendarFragment extends Fragment
     private TextView midnightTextView;
 
     private TextView weekDayName;
-    private TextView georgianDate;
+    private TextView gregorianDate;
     private TextView islamicDate;
     private TextView shamsiDate;
     private TextView eventTitle;
@@ -97,8 +97,8 @@ public class CalendarFragment extends Fragment
         ishaLayout = (RelativeLayout) view.findViewById(R.id.ishaLayout);
         midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
 
-        georgianDate = (TextView) view.findViewById(R.id.georgian_date);
-        utils.setFont(georgianDate);
+        gregorianDate = (TextView) view.findViewById(R.id.gregorian_date);
+        utils.setFont(gregorianDate);
         islamicDate = (TextView) view.findViewById(R.id.islamic_date);
         utils.setFont(islamicDate);
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
@@ -164,7 +164,7 @@ public class CalendarFragment extends Fragment
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
-        georgianDate.setOnClickListener(this);
+        gregorianDate.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
 
@@ -189,7 +189,7 @@ public class CalendarFragment extends Fragment
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
         shamsiDate.setText(utils.shape(utils.dateToString(persianDate)));
-        georgianDate.setText(utils.shape(utils.dateToString(civilDate)));
+        gregorianDate.setText(utils.shape(utils.dateToString(civilDate)));
         islamicDate.setText(utils.shape(utils.dateToString(
                 DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset()))));
 
@@ -294,7 +294,7 @@ public class CalendarFragment extends Fragment
 
             case R.id.islamic_date:
             case R.id.shamsi_date:
-            case R.id.georgian_date:
+            case R.id.gregorian_date:
                 utils.copyToClipboard(v);
                 break;
         }
