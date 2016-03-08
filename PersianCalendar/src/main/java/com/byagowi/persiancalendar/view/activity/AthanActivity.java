@@ -143,9 +143,12 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void stop() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
+        try {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+        } catch (IllegalStateException ignored) {
         }
     }
 
