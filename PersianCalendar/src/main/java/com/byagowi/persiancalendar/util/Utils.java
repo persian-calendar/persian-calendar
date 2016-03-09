@@ -35,7 +35,6 @@ import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
-import com.byagowi.persiancalendar.locale.LocaleUtils;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
@@ -70,10 +69,50 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
-import calendar.LocaleData;
 import calendar.PersianDate;
 
-import static com.byagowi.persiancalendar.Constants.*;
+import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
+import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
+import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
+import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.FONT_PATH;
+import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
+import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
+import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
+import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
+import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
+import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
+import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
+import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
+import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.PREF_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
+import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
 
 /**
  * Common utilities that needed for this calendar
@@ -82,8 +121,8 @@ import static com.byagowi.persiancalendar.Constants.*;
  */
 
 public class Utils {
+
     private final String TAG = Utils.class.getName();
-    private LocaleUtils localeUtils;
     private Context context;
     private Typeface typeface;
     private SharedPreferences prefs;
@@ -91,6 +130,11 @@ public class Utils {
     private List<EventEntity> events;
     private PrayTimesCalculator prayTimesCalculator;
     private Map<PrayTime, Clock> prayTimes;
+
+    private String[] persianMonths;
+    private String[] islamicMonths;
+    private String[] gregorianMonths;
+    private String[] weekDays;
 
     private String cachedCityKey = "";
     private CityEntity cachedCity;
@@ -105,7 +149,7 @@ public class Utils {
 
     public static Utils getInstance(Context context) {
         if (myWeakInstance == null || myWeakInstance.get() == null) {
-            myWeakInstance = new WeakReference<Utils>(new Utils(context.getApplicationContext()));
+            myWeakInstance = new WeakReference<>(new Utils(context.getApplicationContext()));
         }
         return myWeakInstance.get();
     }
@@ -122,12 +166,6 @@ public class Utils {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
                 ? ArabicShaping.shape(text)
                 : text;
-    }
-
-    public String getString(String key) {
-        return localeUtils == null
-                ? ""
-                : localeUtils.getString(key);
     }
 
     public String programVersion() {
@@ -192,9 +230,9 @@ public class Utils {
     }
 
     public CalculationMethod getCalculationMethod() {
-        // It seems Iran is using Jafari method
-        return CalculationMethod.valueOf(prefs.getString(
-                PREF_PRAY_TIME_METHOD,
+        // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
+        // so switched to "Tehran" method as default calculation algorithm
+        return CalculationMethod.valueOf(prefs.getString(PREF_PRAY_TIME_METHOD,
                 DEFAULT_PRAY_TIME_METHOD));
     }
 
@@ -417,51 +455,42 @@ public class Utils {
         return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(persianDate);
     }
 
+    public String[] monthsNamesOfCalendar(AbstractDate date) {
+        // the next step would be using them so lets check if they have initialized already
+        if (persianMonths == null || gregorianMonths == null || islamicMonths == null)
+            loadLanguageResource();
+
+        if (date instanceof PersianDate)
+            return persianMonths;
+        else if (date instanceof IslamicDate)
+            return islamicMonths;
+        else
+            return gregorianMonths;
+    }
+
     public String getMonthName(AbstractDate date) {
-        String monthName = "";
-        // zero based
-        int month = date.getMonth() - 1;
-
-        if (date instanceof PersianDate) {
-            LocaleData.PersianMonthNames monthNameCode = LocaleData.PersianMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
-        } else if (date instanceof CivilDate) {
-            LocaleData.CivilMonthNames monthNameCode = LocaleData.CivilMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
-        } else if (date instanceof IslamicDate) {
-            LocaleData.IslamicMonthNames monthNameCode = LocaleData.IslamicMonthNames.values()[month];
-            monthName = getString(String.valueOf(monthNameCode));
-        }
-
-        return monthName;
+        return monthsNamesOfCalendar(date)[date.getMonth() - 1];
     }
 
     public List<String> getMonthsNamesListWithOrdinal(AbstractDate date) {
-        AbstractDate dateClone = date.clone();
-        List<String> monthNameList = new ArrayList<>();
-        dateClone.setDayOfMonth(1);
-        for (int month = 1; month <= 12; ++month) {
-            dateClone.setMonth(month);
-            monthNameList.add(getMonthName(dateClone) + " / " + formatNumber(month));
+        List<String> result = new ArrayList<>();
+        String[] monthNames = monthsNamesOfCalendar(date);
+        for (int i = 0; i < 12; ++i) {
+            result.add(monthNames[i] + " / " + formatNumber(i + 1));
         }
-        return monthNameList;
+        return result;
     }
 
     public String getWeekDayName(AbstractDate date) {
-        CivilDate civilDate;
-        if (date instanceof PersianDate) {
-            civilDate = DateConverter.persianToCivil((PersianDate) date);
-        } else if (date instanceof IslamicDate) {
-            civilDate = DateConverter.islamicToCivil((IslamicDate) date);
-        } else {
-            civilDate = (CivilDate) date;
-        }
+        if (date instanceof IslamicDate)
+            date = DateConverter.islamicToCivil((IslamicDate) date);
+        else if (date instanceof PersianDate)
+            date = DateConverter.persianToCivil((PersianDate) date);
 
-        // zero based
-        int dayOfWeek = civilDate.getDayOfWeek() - 1;
-        LocaleData.WeekDayNames weekDayNameCode = LocaleData.WeekDayNames.values()[dayOfWeek];
+        if (weekDays == null)
+            loadLanguageResource();
 
-        return getString(weekDayNameCode.toString());
+        return weekDays[date.getDayOfWeek() % 7];
     }
 
     public void quickToast(String message) {
@@ -505,7 +534,6 @@ public class Utils {
             }
         };
     }
-
 
     public List<CityEntity> getAllCities(boolean needsSort) {
         List<CityEntity> result = new ArrayList<>();
@@ -773,13 +801,43 @@ public class Utils {
     }
 
     public void loadLanguageResource() {
-        String localeCode = getAppLanguage();
+        @RawRes int messagesFile;
+        String lang = getAppLanguage();
 
-        if (localeUtils == null) {
-            localeUtils = LocaleUtils.getInstance(context, localeCode);
+        if (lang.equals("fa-AF"))
+            messagesFile = R.raw.messages_fa_af;
+        else if (lang.equals("ps"))
+            messagesFile = R.raw.messages_ps;
+        else
+            messagesFile = R.raw.messages_fa;
+
+        persianMonths = new String[12];
+        islamicMonths = new String[12];
+        gregorianMonths = new String[12];
+        weekDays = new String[7];
+
+        try {
+            JSONObject messages = new JSONObject(readRawResource(messagesFile));
+
+            JSONArray persianMonthsArray = messages.getJSONArray("PersianCalendarMonths");
+            for (int i = 0; i < 12; ++i)
+                persianMonths[i] = persianMonthsArray.getString(i);
+
+            JSONArray islamicMonthsArray = messages.getJSONArray("IslamicCalendarMonths");
+            for (int i = 0; i < 12; ++i)
+                islamicMonths[i] = islamicMonthsArray.getString(i);
+
+            JSONArray gregorianMonthsArray = messages.getJSONArray("GregorianCalendarMonths");
+            for (int i = 0; i < 12; ++i)
+                gregorianMonths[i] = gregorianMonthsArray.getString(i);
+
+            JSONArray weekDaysArray = messages.getJSONArray("WeekDays");
+            for (int i = 0; i < 7; ++i)
+                weekDays[i] = weekDaysArray.getString(i);
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
         }
-
-        localeUtils.changeLocale(localeCode);
     }
 
     public void copyToClipboard(View view) {

@@ -1,9 +1,13 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -143,6 +147,33 @@ public class MainActivity extends AppCompatActivity {
                         new CalendarFragment(),
                         Constants.CALENDAR_MAIN_FRAGMENT_TAG)
                 .commit();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
+                new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
+    }
+
+    public boolean dayIsPassed = false;
+
+    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dayIsPassed = true;
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (dayIsPassed) {
+            dayIsPassed = false;
+            restartActivity();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(dayPassedReceiver);
+        super.onDestroy();
     }
 
     public void onClickItem(int position) {
@@ -175,7 +206,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void menuChange() {
+    private void beforeMenuChange(int position) {
+        if (position != menuPosition) {
+            // reset app lang on menu changes, ugly hack but it seems is needed
+            utils.changeAppLanguage(this);
+        }
+
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
@@ -198,15 +234,18 @@ public class MainActivity extends AppCompatActivity {
             lastTheme = utils.getTheme();
         }
 
-        if (needsActivityRestart) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
+        if (needsActivityRestart)
+            restartActivity();
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     public void selectItem(int position) {
-        menuChange();
+        beforeMenuChange(position);
         switch (position) {
             case CALENDAR:
                 if (menuPosition != CALENDAR) {

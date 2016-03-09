@@ -1,12 +1,13 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 
 /**
  * persian_calendar
@@ -30,6 +31,7 @@ public class LocationPreference extends DialogPreference {
         persistString(selected);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
-        ApplicationPreferenceFragment.update();
+        LocalBroadcastManager.getInstance(getContext())
+                .sendBroadcast(new Intent("update-preference"));
     }
 }
