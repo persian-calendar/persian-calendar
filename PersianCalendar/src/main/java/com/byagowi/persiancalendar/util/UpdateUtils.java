@@ -7,13 +7,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.NotificationItem;
+import com.alirezaafkar.persiancalendar.shared.SeasonEnum;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
@@ -21,6 +24,10 @@ import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,8 +36,12 @@ import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
-public class UpdateUtils {
-    private static final int NOTIFICATION_ID = 1001;
+import static com.alirezaafkar.persiancalendar.shared.Constants.NOTIFICATION_ID;
+import static com.alirezaafkar.persiancalendar.shared.Constants.PATH_DISMISS;
+import static com.alirezaafkar.persiancalendar.shared.Constants.PATH_NOTIFICATION;
+import static com.alirezaafkar.persiancalendar.shared.Constants.PERSIAN_COMMA;
+
+public class UpdateUtils implements GoogleApiClient.ConnectionCallbacks {
     private static UpdateUtils myInstance;
     private Context context;
     private PersianDate pastDate;
@@ -38,6 +49,7 @@ public class UpdateUtils {
     //
     private NotificationManager mNotificationManager;
     private ExtensionData mExtensionData;
+    private GoogleApiClient mGoogleApiClient;
 
     private UpdateUtils(Context context) {
         this.context = context;
@@ -100,7 +112,7 @@ public class UpdateUtils {
         String weekDayName = utils.getWeekDayName(civil);
         String persianDate = utils.dateToString(persian);
         String civilDate = utils.dateToString(civil);
-        String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
+        String date = persianDate + PERSIAN_COMMA + " " + civilDate;
 
         String time = utils.getPersianFormattedClock(calendar);
         boolean enableClock = utils.isWidgetClock();
@@ -192,7 +204,7 @@ public class UpdateUtils {
 
         String title = utils.getWeekDayName(civil) + " " + utils.dateToString(persian);
 
-        String body = utils.dateToString(civil) + Constants.PERSIAN_COMMA + " "
+        String body = utils.dateToString(civil) + PERSIAN_COMMA + " "
                 + utils.dateToString(DateConverter.civilToIslamic(civil, utils.getIslamicOffset()));
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
@@ -219,6 +231,14 @@ public class UpdateUtils {
             mNotificationManager.cancel(NOTIFICATION_ID);
         }
 
+        initGoogleApiClient(context);
+
+        if (utils.isWearNotifyDate()) {
+            showWearNotification(title, body, icon, utils.getSeason());
+        } else {
+            dismissWearNotification();
+        }
+
         mExtensionData = new ExtensionData().visible(true).icon(icon)
                 .status(utils.shape(status))
                 .expandedTitle(utils.shape(title))
@@ -229,4 +249,67 @@ public class UpdateUtils {
         return mExtensionData;
     }
 
+    private void initGoogleApiClient(Context context) {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(Wearable.API)
+                    .addConnectionCallbacks(this)
+                    .build();
+        }
+        if (!mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    private void showWearNotification(String title, String text, int icon, SeasonEnum season) {
+        new wearNotification(new NotificationItem(title, text, icon, season)).show();
+    }
+
+    private void dismissWearNotification() {
+        if (!mGoogleApiClient.isConnected()) return;
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                NodeApi.GetConnectedNodesResult nodes =
+                        Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+                for (Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage(
+                            mGoogleApiClient, node.getId(), PATH_DISMISS, null).await();
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        update(false);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    class wearNotification extends Thread {
+        byte[] message;
+
+        public wearNotification(NotificationItem notificationIem) {
+            message = notificationIem.toJson().getBytes();
+        }
+
+        public void show() {
+            this.start();
+        }
+
+        public void run() {
+            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi
+                    .getConnectedNodes(mGoogleApiClient).await();
+            for (Node node : nodes.getNodes()) {
+                Wearable.MessageApi.sendMessage(mGoogleApiClient,
+                        node.getId(), PATH_NOTIFICATION, message).await();
+            }
+        }
+    }
 }
