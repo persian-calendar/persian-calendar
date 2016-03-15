@@ -105,7 +105,7 @@ public class ConverterFragment extends Fragment implements
         else if (position == 1)
             return CalendarTypeEnum.ISLAMIC;
         else
-            return CalendarTypeEnum.GEORGIAN;
+            return CalendarTypeEnum.GREGORIAN;
     }
 
     private void fillCalendarInfo() {
@@ -125,7 +125,7 @@ public class ConverterFragment extends Fragment implements
         try {
             List<String> calendarsTextList = new ArrayList<>();
             switch (calendarType) {
-                case GEORGIAN:
+                case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
@@ -181,7 +181,7 @@ public class ConverterFragment extends Fragment implements
         CalendarTypeEnum selectedCalendarType = calendarTypeFromPosition(
                 calendarTypeSpinner.getSelectedItemPosition());
         switch (selectedCalendarType) {
-            case GEORGIAN:
+            case GREGORIAN:
                 date = newDateCivil;
                 break;
 

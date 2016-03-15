@@ -57,7 +57,7 @@ public class Constants {
     public static final String YEAR = "year";
     public static final String HIJRI_SHAMSI = "hijri_shamsi";
     public static final String HIJRI_QAMARI = "hijri_qamari";
-    public static final String GEORGIAN = "georgian";
+    public static final String GREGORIAN = "gregorian";
 
     public static final int MONTHS_LIMIT = 1200;
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
