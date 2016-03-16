@@ -7,7 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.alirezaafkar.persiancalendar.shared.Constants;
+import com.byagowi.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
@@ -33,6 +33,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
+                updateUtils.wearableDailyUpdate();
                 if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
                     context.startService(new Intent(context, ApplicationService.class));
                 }
@@ -46,6 +47,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
             } else if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED) ||
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
+                updateUtils.wearableDailyUpdate();
                 updateUtils.update(true);
                 utils.loadApp();
                 LocalBroadcastManager.getInstance(context)

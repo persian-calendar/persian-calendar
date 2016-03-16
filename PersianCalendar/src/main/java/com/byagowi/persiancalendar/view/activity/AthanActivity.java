@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.alirezaafkar.persiancalendar.shared.Constants;
+import com.byagowi.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;

@@ -1,6 +1,7 @@
-package com.alirezaafkar.persiancalendar.shared;
+package com.byagowi.persiancalendar.shared;
 
-import com.google.gson.Gson;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Alireza Afkar on 3/15/16 AD.
@@ -51,10 +52,26 @@ public class NotificationItem {
     }
 
     public String toJson() {
-        return new Gson().toJson(this);
+        try {
+            JSONObject result = new JSONObject();
+            result.put("title", title);
+            result.put("text", text);
+            result.put("icon", icon);
+            result.put("season", season.name());
+            return result.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "{}";
+        }
     }
 
     public static NotificationItem newInstance(String object) {
-        return new Gson().fromJson(object, NotificationItem.class);
+        try {
+            JSONObject json = new JSONObject(object);
+            return new NotificationItem(json.getString("title"), json.getString("text"),
+                    json.getInt("icon"), SeasonEnum.valueOf(json.getString("season")));
+        } catch (JSONException e) {
+            return null;
+        }
     }
 }

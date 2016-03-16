@@ -1,4 +1,4 @@
-package com.alirezaafkar.persiancalendar.shared;
+package com.byagowi.persiancalendar.shared;
 
 public enum SeasonEnum {
     SPRING,

@@ -1,4 +1,6 @@
-package com.alirezaafkar.persiancalendar.shared;
+package com.byagowi.persiancalendar.shared;
+
+import com.byagowi.persiancalendar.shared.R;
 
 public class Constants {
 

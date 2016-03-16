@@ -16,9 +16,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 For bugs report: http://github.com/ebraminio/DroidPersianCalendar
 
 
-Author: Ebrahim Byagowi
-Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222)
-Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi)
+Authors: Ebrahim Byagowi (ebraminio), Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222), Alireza Afkar (alirezaafkar)
+Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi), Carlo Dapor (catull)
 Icon design and Athan backgrounds: Mehrara Abedi
 Previous designers: Behdad Pournader, Iman Soltanian
 

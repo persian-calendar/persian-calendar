@@ -7,7 +7,7 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
-import com.alirezaafkar.persiancalendar.shared.Constants;
+import com.byagowi.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.util.Utils;
 
 /**
