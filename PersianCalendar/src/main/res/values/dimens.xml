@@ -31,4 +31,7 @@
     <dimen name="day_item_select_size">38sp</dimen>
     <dimen name="day_item_event_size">2sp</dimen>
 
+    <!-- analogous to compat's listPreferredItemPaddingLeft/Right but much less for our need -->
+    <dimen name="listPreferredItemPadding">8dip</dimen>
+
 </resources>
