@@ -30,6 +30,8 @@
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
     <string name="notify_date">فعال کردن آگاهی</string>
     <string name="enable_notify">آگاهی همیشگی از تاریخ‌ها</string>
+    <string name="wear_notify_date">فعال کردن آگاهی در ساعت</string>
+    <string name="wear_enable_notify">آگاهی همیشگی از تاریخ‌ها در ساعت</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>

@@ -44,6 +44,12 @@
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
+        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+            android:defaultValue="true"
+            android:key="WearNotifyDate"
+            android:summary="@string/wear_enable_notify"
+            android:title="@string/wear_notify_date" />
+
         <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"

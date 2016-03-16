@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.util.Utils;

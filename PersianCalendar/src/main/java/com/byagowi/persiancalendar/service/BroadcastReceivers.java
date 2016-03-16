@@ -7,7 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;

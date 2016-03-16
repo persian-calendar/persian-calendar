@@ -1,0 +1,32 @@
+<manifest package="com.alirezaafkar.persiancalendar"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.watch"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Wearable">
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="false"/>
+
+        <activity
+            android:name=".NotificationActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"/>
+
+        <service android:name=".NotificationReceiver">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

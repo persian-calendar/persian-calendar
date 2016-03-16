@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.service.ApplicationService;

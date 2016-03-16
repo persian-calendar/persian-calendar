@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;

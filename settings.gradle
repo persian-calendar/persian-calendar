@@ -1,1 +1,1 @@
-include ':PersianCalendar'
+include ':PersianCalendar', ':wear', ':shared'

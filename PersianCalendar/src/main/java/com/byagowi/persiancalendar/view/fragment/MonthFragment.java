@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.byagowi.persiancalendar.Constants;
+import com.alirezaafkar.persiancalendar.shared.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
