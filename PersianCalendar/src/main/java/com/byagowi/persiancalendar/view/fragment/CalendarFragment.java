@@ -186,16 +186,20 @@ public class CalendarFragment extends Fragment
     }
 
     public void selectDay(PersianDate persianDate) {
-        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
         shamsiDate.setText(utils.shape(utils.dateToString(persianDate)));
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         gregorianDate.setText(utils.shape(utils.dateToString(civilDate)));
         islamicDate.setText(utils.shape(utils.dateToString(
                 DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset()))));
 
-        if (isToday(civilDate)) {
+        if (utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
+            if (utils.iranTime) {
+                weekDayName.setText(weekDayName.getText() +
+                        utils.shape(" (" + getString(R.string.iran_time) + ")"));
+            }
         } else {
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -312,13 +316,6 @@ public class CalendarFragment extends Fragment
         }
 
         selectDay(utils.getToday());
-    }
-
-    private boolean isToday(CivilDate civilDate) {
-        CivilDate today = new CivilDate();
-        return today.getYear() == civilDate.getYear()
-                && today.getMonth() == civilDate.getMonth()
-                && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
 
     @Override
