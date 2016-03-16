@@ -14,21 +14,18 @@ import java.util.Arrays;
  */
 public class ShapedListDialog extends PreferenceDialogFragmentCompat {
 
-    CharSequence selected;
-
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final ShapedListPreference listPref = (ShapedListPreference) getPreference();
 
+        final ShapedListPreference listPref = (ShapedListPreference) getPreference();
         final CharSequence[] entriesValues = listPref.getEntryValues();
 
         ShapedArrayAdapter entriesAdapter = new ShapedArrayAdapter(getContext(),
                 R.layout.select_dialog_singlechoice_material,
                 Arrays.asList(listPref.getEntries()));
 
-        selected = listPref.getSelected();
-        int index = Arrays.asList(entriesValues).indexOf(selected);
+        int index = Arrays.asList(entriesValues).indexOf(listPref.getSelected());
         builder.setSingleChoiceItems(entriesAdapter, index, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
