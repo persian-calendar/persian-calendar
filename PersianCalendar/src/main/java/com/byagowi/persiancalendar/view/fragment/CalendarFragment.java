@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
@@ -305,11 +306,11 @@ public class CalendarFragment extends Fragment
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
 
-        getContext().sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
         if (monthViewPager.getCurrentItem() != Constants.MONTHS_LIMIT / 2) {
             monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
@@ -325,9 +326,11 @@ public class CalendarFragment extends Fragment
     @Override
     public void onPageSelected(int position) {
         viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
+
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
-        getContext().sendBroadcast(intent);
+
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);
         todayIcon.setVisibility(View.VISIBLE);
