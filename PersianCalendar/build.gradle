@@ -9,7 +9,7 @@ android {
         minSdkVersion 7
         targetSdkVersion 23
         versionCode 506
-        versionName "5.0.6"
+        versionName "5.0.6-${"git rev-parse --short HEAD".execute().text.trim()}"
         vectorDrawables.useSupportLibrary = true
     }
 
