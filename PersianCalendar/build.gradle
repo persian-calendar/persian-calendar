@@ -9,11 +9,14 @@ android {
         minSdkVersion 7
         targetSdkVersion 23
         versionCode 506
-        versionName "5.0.6-${"git rev-parse --short HEAD".execute().text.trim()}"
+        versionName "5.0.6"
         vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
+        debug {
+            versionNameSuffix "-" + "git rev-parse --short HEAD".execute().text.trim()
+        }
         release {
             minifyEnabled true
             proguardFile getDefaultProguardFile('proguard-android.txt')
