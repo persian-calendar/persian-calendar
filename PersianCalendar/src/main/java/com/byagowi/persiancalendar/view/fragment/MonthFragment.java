@@ -99,8 +99,13 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             int value = intent.getExtras().getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
                 updateTitle();
+
+                int day = intent.getExtras().getInt(Constants.BROADCAST_FIELD_SELECT_DAY);
+                if (day != -1) {
+                    adapter.selectDay(day);
+                }
             } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
-                resetSelectDay();
+                adapter.clearSelectedDay();
             }
         }
     };
@@ -138,13 +143,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 getActivity(),
                 utils.getMonthName(persianDate),
                 utils.formatNumber(persianDate.getYear()));
-    }
-
-    private void resetSelectDay() {
-        if (adapter.select_Day != -1) {
-            adapter.select_Day = -1;
-            adapter.notifyDataSetChanged();
-        }
     }
 
 }

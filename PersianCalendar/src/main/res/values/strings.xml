@@ -97,4 +97,6 @@
 
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="stop">Stop</string>
+    <string name="goto_date">Go to date</string>
+    <string name="select">Select</string>
 </resources>

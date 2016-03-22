@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -179,6 +180,10 @@ public class CalendarFragment extends Fragment
         utils.setActivityTitleAndSubtitle(getActivity(), utils.getMonthName(today),
                 utils.formatNumber(today.getYear()));
 
+        SelectDayDialog dialog = new SelectDayDialog();
+        dialog.show(getChildFragmentManager(),
+                "com.byagowi.persiancalendar.view.dialog.SelectDayDialog.DIALOG");
+
         return view;
     }
 
@@ -309,6 +314,7 @@ public class CalendarFragment extends Fragment
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
+        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
@@ -317,6 +323,22 @@ public class CalendarFragment extends Fragment
         }
 
         selectDay(utils.getToday());
+    }
+
+    public void bringDate(PersianDate date) {
+        PersianDate today = utils.getToday();
+        viewPagerPosition =
+                (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
+
+        monthViewPager.setCurrentItem(viewPagerPosition + Constants.MONTHS_LIMIT / 2);
+
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition);
+        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, date.getDayOfMonth());
+
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+
+        selectDay(date);
     }
 
     @Override
@@ -328,7 +350,8 @@ public class CalendarFragment extends Fragment
         viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
 
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition);
+        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 

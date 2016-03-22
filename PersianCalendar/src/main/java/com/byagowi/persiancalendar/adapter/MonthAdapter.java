@@ -24,7 +24,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private final int TYPE_HEADER = 0;
     private final int TYPE_DAY = 1;
     private List<DayEntity> days;
-    public int select_Day = -1;
+    private int selectedDay = -1;
     private boolean persianDigit;
     private Utils utils;
     private TypedValue colorHoliday = new TypedValue();
@@ -46,6 +46,16 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         context.getTheme().resolveAttribute(R.attr.colorTextHoliday, colorTextHoliday, true);
         context.getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
         context.getTheme().resolveAttribute(R.attr.colorTextDayName, colorDayName, true);
+    }
+
+    public void clearSelectedDay() {
+        selectedDay = -1;
+        notifyDataSetChanged();
+    }
+
+    public void selectDay(int dayOfMonth) {
+        selectedDay = dayOfMonth + 6 + firstDayDayOfWeek;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -79,7 +89,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                         .get(position - 7 - firstDayDayOfWeek)
                         .getPersianDate());
 
-                select_Day = position;
+                selectedDay = position;
                 notifyDataSetChanged();
             }
         }
@@ -149,7 +159,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.today.setVisibility(View.GONE);
                 }
 
-                if (position == select_Day) {
+                if (position == selectedDay) {
                     holder.selectDay.setVisibility(View.VISIBLE);
 
                     if (days.get(position - 7 - firstDayDayOfWeek).isHoliday()) {
