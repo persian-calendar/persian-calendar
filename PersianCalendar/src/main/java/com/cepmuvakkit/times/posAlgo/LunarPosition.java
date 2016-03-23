@@ -199,7 +199,6 @@ public class LunarPosition {
         jde = AstroLib.getJulianEphemerisDay(jd, ΔT);
         jce = AstroLib.getJulianEphemerisCentury(jde);
         jme = AstroLib.getJulianEphemerisMillennium(jce);
-        jme = AstroLib.getJulianEphemerisMillennium(jce);
         ε0 = SolarPosition.eclipticMeanObliquity(jme);//
         Δε = SolarPosition.nutationObliquity(jce, x);//
         // Δψ=SolarPosition.nutationLongitude(jce,x);//
@@ -216,7 +215,6 @@ public class LunarPosition {
         double[] x = SolarPosition.calculateXArray(jd, ΔT);
         jde = AstroLib.getJulianEphemerisDay(jd, ΔT);
         jce = AstroLib.getJulianEphemerisCentury(jde);
-        jme = AstroLib.getJulianEphemerisMillennium(jce);
         jme = AstroLib.getJulianEphemerisMillennium(jce);
         ε0 = SolarPosition.eclipticMeanObliquity(jme);//
         Δε = SolarPosition.nutationObliquity(jce, x);//
