@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -185,10 +184,6 @@ public class CalendarFragment extends Fragment
         PersianDate today = utils.getToday();
         utils.setActivityTitleAndSubtitle(getActivity(), utils.getMonthName(today),
                 utils.formatNumber(today.getYear()));
-
-        SelectDayDialog dialog = new SelectDayDialog();
-        dialog.show(getChildFragmentManager(),
-                "com.byagowi.persiancalendar.view.dialog.SelectDayDialog.DIALOG");
 
         return view;
     }
@@ -380,8 +375,9 @@ public class CalendarFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                Toast.makeText(getActivity(), "goto",
-                        Toast.LENGTH_LONG).show();
+                SelectDayDialog dialog = new SelectDayDialog();
+                dialog.show(getChildFragmentManager(),
+                        "com.byagowi.persiancalendar.view.dialog.SelectDayDialog.DIALOG");
                 break;
             default:
                 break;
