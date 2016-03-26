@@ -6,6 +6,6 @@
         android:icon="@drawable/ic_event"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:title="@string/go_to"/>
+        android:title="@string/goto_date"/>
 
 </menu>
