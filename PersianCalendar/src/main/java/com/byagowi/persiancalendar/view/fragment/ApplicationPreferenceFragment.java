@@ -17,6 +17,8 @@ import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumePreference;
+import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
+import com.byagowi.persiancalendar.view.preferences.GPSLocationPreference;
 import com.byagowi.persiancalendar.view.preferences.LocationPreference;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
@@ -81,6 +83,8 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             fragment = new LocationPreferenceDialog();
         } else if (preference instanceof AthanNumericPreference) {
             fragment = new AthanNumericDialog();
+        } else if (preference instanceof GPSLocationPreference) {
+            fragment = new GPSLocationDialog();
         } else if (preference instanceof ShapedListPreference) {
             fragment = new ShapedListDialog();
         } else {

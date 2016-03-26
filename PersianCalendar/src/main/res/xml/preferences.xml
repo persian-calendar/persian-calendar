@@ -4,6 +4,10 @@
     <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:title="@string/general">
 
+        <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
+            android:key="dummy"
+            android:title="LOCATION" />
+
         <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"

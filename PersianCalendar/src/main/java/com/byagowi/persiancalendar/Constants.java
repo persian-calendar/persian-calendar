@@ -5,11 +5,15 @@ public class Constants {
     public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
+    public static final String LOCATION_PERMISSION_RESULT = "location-permission-result";
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
+
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
     public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";
     public static final String PREF_LATITUDE = "Latitude";
     public static final String PREF_LONGITUDE = "Longitude";
+    public static final String PREF_GEOCODED_CITYNAME = "cityname";
     public static final String PREF_ALTITUDE = "Altitude";
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
     public static final String PREF_IRAN_TIME = "IranTime";
