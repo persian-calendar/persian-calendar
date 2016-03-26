@@ -97,4 +97,6 @@
 
     <string name="date_copied_clipboard">به حافظه رونوشت شد</string>
     <string name="stop">توقف</string>
+    <string name="goto_date">برو به تاریخ</string>
+    <string name="select">انتخاب</string>
 </resources>

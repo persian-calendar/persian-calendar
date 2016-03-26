@@ -74,7 +74,6 @@ public class ConverterFragment extends Fragment implements
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
         // Shape and set font
-        Context context = getContext();
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
@@ -86,8 +85,8 @@ public class ConverterFragment extends Fragment implements
         //
 
         // fill views
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(
-                context, DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
+        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(getContext(),
+                DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
@@ -115,9 +114,6 @@ public class ConverterFragment extends Fragment implements
         int month = monthSpinner.getSelectedItemPosition() + 1;
         int day = daySpinner.getSelectedItemPosition() + 1;
 
-        CalendarTypeEnum calendarType = calendarTypeFromPosition(
-                calendarTypeSpinner.getSelectedItemPosition());
-
         CivilDate civilDate = null;
         PersianDate persianDate;
         IslamicDate islamicDate;
@@ -126,7 +122,7 @@ public class ConverterFragment extends Fragment implements
 
         try {
             List<String> calendarsTextList = new ArrayList<>();
-            switch (calendarType) {
+            switch (calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);

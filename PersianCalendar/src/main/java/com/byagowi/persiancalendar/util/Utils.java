@@ -25,6 +25,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -191,6 +192,11 @@ public class Utils {
     public void setFontAndShape(TextView textView) {
         setFont(textView);
         textView.setText(shape(textView.getText().toString()));
+    }
+
+    public void setFontShapeAndGravity(TextView textView) {
+        setFontAndShape(textView);
+        textView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
     }
 
     public void setFontAndShape(PreferenceViewHolder holder) {

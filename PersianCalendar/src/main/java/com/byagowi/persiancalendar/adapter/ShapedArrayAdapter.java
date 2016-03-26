@@ -49,14 +49,14 @@ public class ShapedArrayAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        if (view instanceof TextView) utils.setFontAndShape((TextView) view);
+        if (view instanceof TextView) utils.setFontShapeAndGravity((TextView) view);
         return view;
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View view = super.getDropDownView(position, convertView, parent);
-        if (view instanceof TextView) utils.setFontAndShape((TextView) view);
+        if (view instanceof TextView) utils.setFontShapeAndGravity((TextView) view);
         return view;
     }
 }
