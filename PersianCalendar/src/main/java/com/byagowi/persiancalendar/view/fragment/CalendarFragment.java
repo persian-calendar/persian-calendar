@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
@@ -55,7 +56,7 @@ public class CalendarFragment extends Fragment
     private TextView midnightTextView;
 
     private TextView weekDayName;
-    private TextView georgianDate;
+    private TextView gregorianDate;
     private TextView islamicDate;
     private TextView shamsiDate;
     private TextView eventTitle;
@@ -97,8 +98,8 @@ public class CalendarFragment extends Fragment
         ishaLayout = (RelativeLayout) view.findViewById(R.id.ishaLayout);
         midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
 
-        georgianDate = (TextView) view.findViewById(R.id.georgian_date);
-        utils.setFont(georgianDate);
+        gregorianDate = (TextView) view.findViewById(R.id.gregorian_date);
+        utils.setFont(gregorianDate);
         islamicDate = (TextView) view.findViewById(R.id.islamic_date);
         utils.setFont(islamicDate);
         shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
@@ -164,7 +165,7 @@ public class CalendarFragment extends Fragment
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
-        georgianDate.setOnClickListener(this);
+        gregorianDate.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
 
@@ -186,16 +187,20 @@ public class CalendarFragment extends Fragment
     }
 
     public void selectDay(PersianDate persianDate) {
-        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
         shamsiDate.setText(utils.shape(utils.dateToString(persianDate)));
-        georgianDate.setText(utils.shape(utils.dateToString(civilDate)));
+        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
+        gregorianDate.setText(utils.shape(utils.dateToString(civilDate)));
         islamicDate.setText(utils.shape(utils.dateToString(
                 DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset()))));
 
-        if (isToday(civilDate)) {
+        if (utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
+            if (utils.iranTime) {
+                weekDayName.setText(weekDayName.getText() +
+                        utils.shape(" (" + getString(R.string.iran_time) + ")"));
+            }
         } else {
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -294,31 +299,24 @@ public class CalendarFragment extends Fragment
 
             case R.id.islamic_date:
             case R.id.shamsi_date:
-            case R.id.georgian_date:
+            case R.id.gregorian_date:
                 utils.copyToClipboard(v);
                 break;
         }
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT); //todo use fragment tag
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
 
-        getContext().sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
         if (monthViewPager.getCurrentItem() != Constants.MONTHS_LIMIT / 2) {
             monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
         }
 
         selectDay(utils.getToday());
-    }
-
-    private boolean isToday(CivilDate civilDate) {
-        CivilDate today = new CivilDate();
-        return today.getYear() == civilDate.getYear()
-                && today.getMonth() == civilDate.getMonth()
-                && today.getDayOfMonth() == civilDate.getDayOfMonth();
     }
 
     @Override
@@ -328,9 +326,11 @@ public class CalendarFragment extends Fragment
     @Override
     public void onPageSelected(int position) {
         viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);//todo use fragment tag
+
+        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, position - Constants.MONTHS_LIMIT / 2);
-        getContext().sendBroadcast(intent);
+
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
         today.setVisibility(View.VISIBLE);
         todayIcon.setVisibility(View.VISIBLE);

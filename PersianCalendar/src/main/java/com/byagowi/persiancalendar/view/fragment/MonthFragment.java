@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,8 +29,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
     private PersianDate persianDate;
     private int offset;
-    private IntentFilter filter;
-    private BroadcastReceiver receiver;
     private MonthAdapter adapter;
 
     @Override
@@ -88,20 +87,28 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             updateTitle();
         }
 
-        filter = new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int value = intent.getExtras().getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
-                if (value == offset) {
-                    updateTitle();
-                } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
-                    resetSelectDay();
-                }
-            }
-        };
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(setCurrentMonthReceiver,
+                new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
         return view;
+    }
+
+    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int value = intent.getExtras().getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
+            if (value == offset) {
+                updateTitle();
+            } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
+                resetSelectDay();
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(setCurrentMonthReceiver);
+        super.onDestroy();
     }
 
     public void onClickItem(PersianDate day) {
@@ -124,18 +131,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 calendarFragment.changeMonth(-1);
                 break;
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getContext().registerReceiver(receiver, filter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getContext().unregisterReceiver(receiver);
     }
 
     private void updateTitle() {

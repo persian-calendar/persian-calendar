@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -45,6 +46,8 @@ public class ConverterFragment extends Fragment implements
     private TextView date2;
     private RelativeLayout moreDate;
 
+    @IdRes private final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
@@ -84,8 +87,7 @@ public class ConverterFragment extends Fragment implements
 
         // fill views
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(
-                context, R.layout.select_dialog_item_material,
-                getResources().getStringArray(R.array.calendar_type)));
+                context, DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         fillYearMonthDaySpinners();
@@ -105,7 +107,7 @@ public class ConverterFragment extends Fragment implements
         else if (position == 1)
             return CalendarTypeEnum.ISLAMIC;
         else
-            return CalendarTypeEnum.GEORGIAN;
+            return CalendarTypeEnum.GREGORIAN;
     }
 
     private void fillCalendarInfo() {
@@ -125,7 +127,7 @@ public class ConverterFragment extends Fragment implements
         try {
             List<String> calendarsTextList = new ArrayList<>();
             switch (calendarType) {
-                case GEORGIAN:
+                case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
@@ -181,7 +183,7 @@ public class ConverterFragment extends Fragment implements
         CalendarTypeEnum selectedCalendarType = calendarTypeFromPosition(
                 calendarTypeSpinner.getSelectedItemPosition());
         switch (selectedCalendarType) {
-            case GEORGIAN:
+            case GREGORIAN:
                 date = newDateCivil;
                 break;
 
@@ -194,7 +196,6 @@ public class ConverterFragment extends Fragment implements
                 break;
         }
 
-        int dropdownLayout = R.layout.select_dialog_item_material;
         // years spinner init.
         List<String> yearsList = new ArrayList<>();
         int yearDiffRange = 200;
@@ -202,13 +203,13 @@ public class ConverterFragment extends Fragment implements
         for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
             yearsList.add(utils.formatNumber(i));
         }
-        yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, yearsList));
+        yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, yearsList));
         yearSpinner.setSelection(yearDiffRange / 2);
         //
 
         // month spinner init.
         List<String> monthsList = utils.getMonthsNamesListWithOrdinal(date);
-        monthSpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, monthsList));
+        monthSpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, monthsList));
         monthSpinner.setSelection(date.getMonth() - 1);
         //
 
@@ -217,7 +218,7 @@ public class ConverterFragment extends Fragment implements
         for (int i = 1; i <= 31; ++i) {
             daysList.add(utils.formatNumber(i));
         }
-        daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), dropdownLayout, daysList));
+        daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, daysList));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 

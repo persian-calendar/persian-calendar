@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
@@ -14,21 +15,24 @@ import java.util.Arrays;
  */
 public class ShapedListDialog extends PreferenceDialogFragmentCompat {
 
-    CharSequence selected;
-
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final ShapedListPreference listPref = (ShapedListPreference) getPreference();
 
+        final ShapedListPreference listPref = (ShapedListPreference) getPreference();
         final CharSequence[] entriesValues = listPref.getEntryValues();
 
-        ShapedArrayAdapter entriesAdapter = new ShapedArrayAdapter(getContext(),
-                R.layout.select_dialog_singlechoice_material,
-                Arrays.asList(listPref.getEntries()));
+        int selectDialogLayout = R.layout.select_dialog_singlechoice_material;
 
-        selected = listPref.getSelected();
-        int index = Arrays.asList(entriesValues).indexOf(selected);
+        // It is better to avoid compat's single choice layout on Android 4.2.2 as its special issue
+        // with RTL on making two radio button on left and right of each select item
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1)
+            selectDialogLayout = android.R.layout.select_dialog_singlechoice;
+
+        ShapedArrayAdapter entriesAdapter = new ShapedArrayAdapter(getContext(),
+                selectDialogLayout, Arrays.asList(listPref.getEntries()));
+
+        int index = Arrays.asList(entriesValues).indexOf(listPref.getSelected());
         builder.setSingleChoiceItems(entriesAdapter, index, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

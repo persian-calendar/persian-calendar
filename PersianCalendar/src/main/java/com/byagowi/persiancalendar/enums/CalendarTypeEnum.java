@@ -6,5 +6,5 @@ package com.byagowi.persiancalendar.enums;
  * @author ebraminio
  */
 public enum CalendarTypeEnum {
-    SHAMSI, ISLAMIC, GEORGIAN
+    SHAMSI, ISLAMIC, GREGORIAN
 }

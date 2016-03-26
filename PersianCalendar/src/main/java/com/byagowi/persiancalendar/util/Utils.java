@@ -326,8 +326,7 @@ public class Utils {
     }
 
     public PersianDate getToday() {
-        CivilDate civilDate = new CivilDate();
-        return DateConverter.civilToPersian(civilDate);
+        return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
     public Calendar makeCalendarFromDate(Date date) {
