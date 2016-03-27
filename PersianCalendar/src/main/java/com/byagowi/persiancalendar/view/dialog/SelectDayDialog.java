@@ -1,18 +1,14 @@
 package com.byagowi.persiancalendar.view.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,7 +64,7 @@ public class SelectDayDialog extends AppCompatDialogFragment
 
         fillYearMonthDaySpinners();
 
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(getContext(),
+        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<String>(getContext(),
                 DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
