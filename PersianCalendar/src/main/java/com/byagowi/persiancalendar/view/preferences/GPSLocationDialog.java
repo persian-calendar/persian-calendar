@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,16 +36,20 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     LocationManager locationManager;
     Context context;
     TextView textView;
+    Utils utils;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
         context = getContext();
+        utils = Utils.getInstance(context);
+
         textView = new TextView(context);
         textView.setPadding(32, 32, 32, 32);
         textView.setTextSize(20);
         textView.setText(R.string.pleasewait);
+        utils.setFontAndShape(textView);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
@@ -151,7 +156,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
         result += getString(R.string.latitude) + ": " + latitude + "\n" +
                 getString(R.string.longitude) + ": " + longitude;
-        textView.setText(result);
+        textView.setText(utils.shape(result));
     }
 
     @Override
