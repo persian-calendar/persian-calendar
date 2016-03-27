@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ public class CompassFragment extends Fragment {
                 subtitle = utils.getAppLanguage().equals("en")
                         ? cityEntity.getEn()
                         : cityEntity.getFa();
+            } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
+                subtitle = utils.getGeoCodedCityName();
             } else {
                 subtitle = coordinate.getLatitude() + ", " + coordinate.getLongitude();
             }

@@ -47,46 +47,54 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
         context = getContext();
         textView = new TextView(context);
-        textView.setPadding(16, 16, 16, 16);
-        textView.setText("لطفاً صبر کنید. . .");
+        textView.setPadding(32, 32, 32, 32);
+        textView.setTextSize(20);
+        textView.setText(R.string.pleasewait);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         tryRetrieveLocation();
-        LocalBroadcastManager.getInstance(context).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                tryRetrieveLocation();
-            }
-        }, new IntentFilter(Constants.LOCATION_PERMISSION_RESULT));
+        LocalBroadcastManager.getInstance(context).registerReceiver(permissionGrantReceiver,
+                new IntentFilter(Constants.LOCATION_PERMISSION_RESULT));
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
         builder.setView(textView);
     }
 
+    BroadcastReceiver permissionGrantReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            tryRetrieveLocation();
+        }
+    };
+
     // http://stackoverflow.com/a/12963889
     private Location getLastBestLocation(Location locationGPS, Location locationNet) {
-        long GPSLocationTime = 0;
-        if (null != locationGPS) { GPSLocationTime = locationGPS.getTime(); }
+        long gpsLocationTime = 0;
+        if (null != locationGPS) {
+            gpsLocationTime = locationGPS.getTime();
+        }
 
-        long NetLocationTime = 0;
+        long netLocationTime = 0;
 
         if (null != locationNet) {
-            NetLocationTime = locationNet.getTime();
+            netLocationTime = locationNet.getTime();
         }
 
-        if ( 0 < GPSLocationTime - NetLocationTime ) {
+        if (0 < gpsLocationTime - netLocationTime) {
             return locationGPS;
-        }
-        else {
+        } else {
             return locationNet;
         }
     }
 
+    // Just ask for permission once, if we couldn't get it, nvm
+    public boolean first = true;
+
     public void tryRetrieveLocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             Location location = getLastBestLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER),
                     locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
@@ -94,34 +102,43 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 showLocation(location);
             }
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    showLocation(location);
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) { }
-
-                @Override
-                public void onProviderEnabled(String s) { }
-
-                @Override
-                public void onProviderDisabled(String s) { }
-            });
-        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        } else if (first) {
+            first = false;
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     Constants.LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            dismiss();
         }
     }
+
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            showLocation(location);
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+        }
+    };
 
     String latitude;
     String longitude;
     String cityName;
+
     public void showLocation(Location location) {
-        latitude = String.format(Locale.ENGLISH, "%s", location.getLatitude());
-        longitude = String.format(Locale.ENGLISH, "%s", location.getLongitude());
+        latitude = String.format(Locale.ENGLISH, "%.4f", location.getLatitude());
+        longitude = String.format(Locale.ENGLISH, "%.4f", location.getLongitude());
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         List<Address> addresses;
         try {
@@ -133,25 +150,33 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             e.printStackTrace();
         }
 
-        String result = getString(R.string.latitude) + ": " + latitude + "\n" +
-                getString(R.string.longitude) + ": " + longitude;
+        String result = "";
         if (cityName != null) {
-            result += "\n" + cityName;
+            result = cityName + "\n\n";
         }
+        result += getString(R.string.latitude) + ": " + latitude + "\n" +
+                getString(R.string.longitude) + ": " + longitude;
         textView.setText(result);
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(permissionGrantReceiver);
+
         if (latitude != null && longitude != null) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Constants.PREF_LATITUDE, latitude);
             editor.putString(Constants.PREF_LONGITUDE, longitude);
             if (cityName != null) {
-                editor.putString(Constants.PREF_GEOCODED_CITYNAME, longitude);
+                editor.putString(Constants.PREF_GEOCODED_CITYNAME, cityName);
             }
             editor.commit();
+        }
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.removeUpdates(locationListener);
         }
     }
 }

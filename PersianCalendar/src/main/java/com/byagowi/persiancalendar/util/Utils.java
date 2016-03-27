@@ -72,48 +72,7 @@ import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
-import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
-import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
-import static com.byagowi.persiancalendar.Constants.DARK_THEME;
-import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.FONT_PATH;
-import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
-import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
-import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
-import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
-import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
-import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
-import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
-import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
-import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
-import static com.byagowi.persiancalendar.Constants.PREF_THEME;
-import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
-import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.*;
 
 /**
  * Common utilities that needed for this calendar
@@ -621,6 +580,10 @@ public class Utils {
                 return cachedCity = cityEntity;
 
         return cachedCity = null;
+    }
+
+    public String getGeoCodedCityName() {
+        return prefs.getString(PREF_GEOCODED_CITYNAME, "");
     }
 
     private List<EventEntity> readEventsFromJSON() {

@@ -4,10 +4,6 @@
     <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
         android:title="@string/general">
 
-        <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
-            android:key="dummy"
-            android:title="LOCATION" />
-
         <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
@@ -86,6 +82,11 @@
             android:key="SelectedPrayTimeMethod"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
+
+        <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
+            android:key="dummy"
+            android:summary="@string/gps_location_help"
+            android:title="@string/gps_location" />
 
         <com.byagowi.persiancalendar.view.preferences.LocationPreference
             android:key="Location"
