@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -108,11 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-            private boolean isRTL() {
-                return getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-            }
-
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -151,6 +147,21 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private boolean isRTL() {
+        return getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        utils.changeAppLanguage(this);
+        View v = findViewById(R.id.drawer);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        }
     }
 
     public boolean dayIsPassed = false;
