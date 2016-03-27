@@ -50,7 +50,8 @@ public class CompassFragment extends Fragment {
             } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
                 subtitle = utils.getGeoCodedCityName();
             } else {
-                subtitle = coordinate.getLatitude() + ", " + coordinate.getLongitude();
+                subtitle = getString(R.string.latitude) + ": " + coordinate.getLatitude() + "، " +
+                        getString(R.string.longitude) + ": " + coordinate.getLongitude();
             }
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), subtitle);
         }

@@ -165,6 +165,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             editor.putString(Constants.PREF_LONGITUDE, longitude);
             if (cityName != null) {
                 editor.putString(Constants.PREF_GEOCODED_CITYNAME, cityName);
+            } else {
+                editor.putString(Constants.PREF_GEOCODED_CITYNAME, "");
             }
             editor.commit();
         }
