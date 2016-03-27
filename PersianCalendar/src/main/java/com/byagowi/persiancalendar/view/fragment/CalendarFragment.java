@@ -179,6 +179,12 @@ public class CalendarFragment extends Fragment
         utils.setFontAndShape((TextView) view.findViewById(R.id.today));
         utils.setFontAndShape((TextView) view.findViewById(R.id.owghat_text));
 
+        String cityName = utils.getGeoCodedCityName();
+        if (!TextUtils.isEmpty(cityName)) {
+            ((TextView) view.findViewById(R.id.owghat_text))
+                    .append(" (" + utils.shape(cityName) + ")");
+        }
+
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
         PersianDate today = utils.getToday();
