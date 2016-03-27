@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -154,8 +155,10 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         if (cityName != null) {
             result = cityName + "\n\n";
         }
-        result += getString(R.string.latitude) + ": " + latitude + "\n" +
-                getString(R.string.longitude) + ": " + longitude;
+        // this time, with native digits
+        result += String.format(Locale.getDefault(), "%s: %.4f\n%s: %.4f",
+                getString(R.string.latitude), location.getLatitude(),
+                getString(R.string.longitude), location.getLongitude());
         textView.setText(utils.shape(result));
     }
 
