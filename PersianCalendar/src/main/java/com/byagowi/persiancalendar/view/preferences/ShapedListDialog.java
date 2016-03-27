@@ -29,7 +29,7 @@ public class ShapedListDialog extends PreferenceDialogFragmentCompat {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1)
             selectDialogLayout = android.R.layout.select_dialog_singlechoice;
 
-        ShapedArrayAdapter entriesAdapter = new ShapedArrayAdapter(getContext(),
+        ShapedArrayAdapter<CharSequence> entriesAdapter = new ShapedArrayAdapter<>(getContext(),
                 selectDialogLayout, Arrays.asList(listPref.getEntries()));
 
         int index = Arrays.asList(entriesValues).indexOf(listPref.getSelected());

@@ -84,7 +84,7 @@ public class ConverterFragment extends Fragment implements
         //
 
         // fill views
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter(getContext(),
+        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
                 DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
@@ -198,13 +198,13 @@ public class ConverterFragment extends Fragment implements
         for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
             yearsList.add(utils.formatNumber(i));
         }
-        yearSpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, yearsList));
+        yearSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, yearsList));
         yearSpinner.setSelection(yearDiffRange / 2);
         //
 
         // month spinner init.
         List<String> monthsList = utils.getMonthsNamesListWithOrdinal(date);
-        monthSpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, monthsList));
+        monthSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, monthsList));
         monthSpinner.setSelection(date.getMonth() - 1);
         //
 
@@ -213,7 +213,7 @@ public class ConverterFragment extends Fragment implements
         for (int i = 1; i <= 31; ++i) {
             daysList.add(utils.formatNumber(i));
         }
-        daySpinner.setAdapter(new ShapedArrayAdapter(getContext(), DROPDOWN_LAYOUT, daysList));
+        daySpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, daysList));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 

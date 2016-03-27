@@ -13,10 +13,10 @@ import java.util.List;
 /**
  * Created by ebraminio on 2/17/16.
  */
-public class ShapedArrayAdapter<T> extends ArrayAdapter {
+public class ShapedArrayAdapter<T> extends ArrayAdapter<T> {
     private Utils utils;
 
-    public ShapedArrayAdapter(Context context, int resource, List objects) {
+    public ShapedArrayAdapter(Context context, int resource, List<T> objects) {
         super(context, resource, objects);
         utils = Utils.getInstance(context);
     }
