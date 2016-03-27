@@ -104,10 +104,14 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             }
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
         } else if (first) {
             first = false;
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[] {
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    },
                     Constants.LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             dismiss();
