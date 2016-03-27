@@ -37,7 +37,7 @@
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (اختیاری)</string>
     <string name="gps_location">دریافت مختصات از جی‌پی‌اس</string>
-    <string name="gps_location_help">اگر از این طریق ممکن بود، به سایر تنظیمات این بخش نیاز نیست</string>
+    <string name="gps_location_help">اگر از این طریق ممکن باشد، به سایر تنظیمات این بخش نیاز نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
     <string name="showing_iran_time">نمایش ابزارک‌ها، نوار آگاهی و برنامه به وقت ایران در همه‌جا</string>
