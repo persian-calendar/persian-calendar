@@ -13,6 +13,7 @@ public class Constants {
     public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";
     public static final String PREF_LATITUDE = "Latitude";
     public static final String PREF_LONGITUDE = "Longitude";
+    public static final String PREF_SELECTED_LOCATION = "Location";
     public static final String PREF_GEOCODED_CITYNAME = "cityname";
     public static final String PREF_ALTITUDE = "Altitude";
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";

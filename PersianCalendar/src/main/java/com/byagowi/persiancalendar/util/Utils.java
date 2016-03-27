@@ -107,6 +107,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
 import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
+import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
@@ -605,7 +606,7 @@ public class Utils {
     }
 
     public CityEntity getCityFromPreference() {
-        String key = prefs.getString("Location", "");
+        String key = prefs.getString(PREF_SELECTED_LOCATION, "");
 
         if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
