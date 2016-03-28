@@ -211,11 +211,12 @@ public class UpdateUtils {
             mNotificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
         }
+
         if (utils.isNotifyDate()) {
-            // Android N hides PRIORITY_MIN priority notification so lets use default there
-            int priority = Build.VERSION.SDK_INT > Build.VERSION_CODES.M ?
-                    NotificationCompat.PRIORITY_DEFAULT :
-                    NotificationCompat.PRIORITY_LOW;
+            // Android N hides PRIORITY_LOW priority notifications so lets use default there
+            int priority = Build.VERSION.SDK_INT > Build.VERSION_CODES.M
+                    ? NotificationCompat.PRIORITY_DEFAULT
+                    : NotificationCompat.PRIORITY_LOW;
 
             mNotificationManager.notify(
                     NOTIFICATION_ID,
