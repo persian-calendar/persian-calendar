@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -190,10 +191,19 @@ public class UpdateUtils {
         //
         String status = utils.getMonthName(persian);
 
-        String title = utils.getWeekDayName(civil) + " " + utils.dateToString(persian);
+        String title = utils.getWeekDayName(civil) + Constants.PERSIAN_COMMA + " " +
+                utils.dateToString(persian);
 
         String body = utils.dateToString(civil) + Constants.PERSIAN_COMMA + " "
                 + utils.dateToString(DateConverter.civilToIslamic(civil, utils.getIslamicOffset()));
+
+        // Prepend a right-to-left mark character to Android with sane text rendering stack
+        // to resolve a bug seems some Samsung devices have with characters with weak direction,
+        // digits being at the first of string on
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            title = Constants.RLM + title;
+            body = Constants.RLM + body;
+        }
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 
@@ -213,7 +223,7 @@ public class UpdateUtils {
                             .setContentIntent(launchAppPendingIntent)
                             .setContentText(utils.shape(body))
                             .setContentTitle(utils.shape(title))
-                            .setColor(0xFF607D8B)
+                            .setColor(0xFF607D8B) // permanent services color
                             .build());
         } else {
             mNotificationManager.cancel(NOTIFICATION_ID);
