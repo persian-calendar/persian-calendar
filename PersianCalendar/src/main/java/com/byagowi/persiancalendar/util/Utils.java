@@ -17,6 +17,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.IdRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +28,13 @@ import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
@@ -108,11 +111,11 @@ import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
 import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
+import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
@@ -951,5 +954,60 @@ public class Utils {
             return CalendarTypeEnum.ISLAMIC;
         else
             return CalendarTypeEnum.GREGORIAN;
+    }
+
+    @IdRes
+    public final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
+
+    public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
+                                        Spinner yearSpinner, Spinner monthSpinner,
+                                        Spinner daySpinner) {
+        AbstractDate date;
+        PersianDate newDatePersian = getToday();
+        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
+        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
+
+        date = newDateCivil;
+        switch (calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+            case GREGORIAN:
+                date = newDateCivil;
+                break;
+
+            case ISLAMIC:
+                date = newDateIslamic;
+                break;
+
+            case SHAMSI:
+                date = newDatePersian;
+                break;
+        }
+
+        // years spinner init.
+        List<String> yearsList = new ArrayList<>();
+        int yearDiffRange = 200;
+        int startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
+        for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
+            yearsList.add(formatNumber(i));
+        }
+        yearSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, yearsList));
+        yearSpinner.setSelection(yearDiffRange / 2);
+        //
+
+        // month spinner init.
+        List<String> monthsList = getMonthsNamesListWithOrdinal(date);
+        monthSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, monthsList));
+        monthSpinner.setSelection(date.getMonth() - 1);
+        //
+
+        // days spinner init.
+        List<String> daysList = new ArrayList<>();
+        for (int i = 1; i <= 31; ++i) {
+            daysList.add(formatNumber(i));
+        }
+        daySpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, daysList));
+        daySpinner.setSelection(date.getDayOfMonth() - 1);
+        //
+
+        return startingYearOnYearSpinner;
     }
 }

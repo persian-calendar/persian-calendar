@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
@@ -16,14 +15,9 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -40,8 +34,6 @@ public class SelectDayDialog extends AppCompatDialogFragment
     private Spinner monthSpinner;
     private Spinner daySpinner;
     private int startingYearOnYearSpinner = 0;
-
-    @IdRes private final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -62,10 +54,11 @@ public class SelectDayDialog extends AppCompatDialogFragment
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
         utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
 
-        fillYearMonthDaySpinners();
+        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<String>(getContext(),
-                DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
+                Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         calendarTypeSpinner.setOnItemSelectedListener(this);
@@ -114,58 +107,10 @@ public class SelectDayDialog extends AppCompatDialogFragment
         return builder.create();
     }
 
-    private void fillYearMonthDaySpinners() {
-        AbstractDate date = null;
-        PersianDate newDatePersian = utils.getToday();
-        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
-        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
-
-        date = newDateCivil;
-        switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
-            case GREGORIAN:
-                date = newDateCivil;
-                break;
-
-            case ISLAMIC:
-                date = newDateIslamic;
-                break;
-
-            case SHAMSI:
-                date = newDatePersian;
-                break;
-        }
-
-        // years spinner init.
-        List<String> yearsList = new ArrayList<>();
-        int yearDiffRange = 200;
-        startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
-        for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
-            yearsList.add(utils.formatNumber(i));
-        }
-        yearSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, yearsList));
-        yearSpinner.setSelection(yearDiffRange / 2);
-        //
-
-        // month spinner init.
-        List<String> monthsList = utils.getMonthsNamesListWithOrdinal(date);
-        monthSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, monthsList));
-        monthSpinner.setSelection(date.getMonth() - 1);
-        //
-
-        // days spinner init.
-        List<String> daysList = new ArrayList<>();
-        for (int i = 1; i <= 31; ++i) {
-            daysList.add(utils.formatNumber(i));
-        }
-        daySpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, daysList));
-        daySpinner.setSelection(date.getDayOfMonth() - 1);
-        //
-
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        fillYearMonthDaySpinners();
+        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
     }
 
     @Override

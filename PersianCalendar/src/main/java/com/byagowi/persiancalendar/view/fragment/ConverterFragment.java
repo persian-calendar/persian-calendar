@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,13 +14,11 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -44,8 +41,6 @@ public class ConverterFragment extends Fragment implements
     private TextView date1;
     private TextView date2;
     private RelativeLayout moreDate;
-
-    @IdRes private final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -85,10 +80,11 @@ public class ConverterFragment extends Fragment implements
 
         // fill views
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
-                DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
+                Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
-        fillYearMonthDaySpinners();
+        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
         calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -159,55 +155,6 @@ public class ConverterFragment extends Fragment implements
         }
     }
 
-    private void fillYearMonthDaySpinners() {
-        AbstractDate date = null;
-        PersianDate newDatePersian = utils.getToday();
-        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
-        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
-
-        date = newDateCivil;
-        switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
-            case GREGORIAN:
-                date = newDateCivil;
-                break;
-
-            case ISLAMIC:
-                date = newDateIslamic;
-                break;
-
-            case SHAMSI:
-                date = newDatePersian;
-                break;
-        }
-
-        // years spinner init.
-        List<String> yearsList = new ArrayList<>();
-        int yearDiffRange = 200;
-        startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
-        for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
-            yearsList.add(utils.formatNumber(i));
-        }
-        yearSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, yearsList));
-        yearSpinner.setSelection(yearDiffRange / 2);
-        //
-
-        // month spinner init.
-        List<String> monthsList = utils.getMonthsNamesListWithOrdinal(date);
-        monthSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, monthsList));
-        monthSpinner.setSelection(date.getMonth() - 1);
-        //
-
-        // days spinner init.
-        List<String> daysList = new ArrayList<>();
-        for (int i = 1; i <= 31; ++i) {
-            daysList.add(utils.formatNumber(i));
-        }
-        daySpinner.setAdapter(new ShapedArrayAdapter<>(getContext(), DROPDOWN_LAYOUT, daysList));
-        daySpinner.setSelection(date.getDayOfMonth() - 1);
-        //
-
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
@@ -218,7 +165,8 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                fillYearMonthDaySpinners();
+                startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                        calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
                 break;
         }
     }
