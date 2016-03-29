@@ -18,13 +18,11 @@ import com.byagowi.persiancalendar.util.Utils;
  * @author ebraminio
  */
 public class AboutFragment extends Fragment {
-    private Utils utils;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-        utils = Utils.getInstance(getContext());
+        Utils utils = Utils.getInstance(getContext());
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
         String version = utils.programVersion();
