@@ -99,15 +99,6 @@ public class ConverterFragment extends Fragment implements
         return view;
     }
 
-    private CalendarTypeEnum calendarTypeFromPosition(int position) {
-        if (position == 0)
-            return CalendarTypeEnum.SHAMSI;
-        else if (position == 1)
-            return CalendarTypeEnum.ISLAMIC;
-        else
-            return CalendarTypeEnum.GREGORIAN;
-    }
-
     private void fillCalendarInfo() {
         int year = startingYearOnYearSpinner + yearSpinner.getSelectedItemPosition();
         int month = monthSpinner.getSelectedItemPosition() + 1;
@@ -121,7 +112,7 @@ public class ConverterFragment extends Fragment implements
 
         try {
             List<String> calendarsTextList = new ArrayList<>();
-            switch (calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+            switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);
@@ -164,7 +155,7 @@ public class ConverterFragment extends Fragment implements
 
         } catch (RuntimeException e) {
             moreDate.setVisibility(View.GONE);
-            date0.setText(getString(R.string.date_exception));
+            date0.setText(utils.shape(getString(R.string.date_exception)));
         }
     }
 
@@ -175,9 +166,7 @@ public class ConverterFragment extends Fragment implements
         IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
 
         date = newDateCivil;
-        CalendarTypeEnum selectedCalendarType = calendarTypeFromPosition(
-                calendarTypeSpinner.getSelectedItemPosition());
-        switch (selectedCalendarType) {
+        switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
             case GREGORIAN:
                 date = newDateCivil;
                 break;

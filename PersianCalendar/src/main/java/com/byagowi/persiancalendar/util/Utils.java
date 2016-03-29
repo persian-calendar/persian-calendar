@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.github.praytimes.CalculationMethod;
@@ -940,5 +941,15 @@ public class Utils {
         }
 
         return days;
+    }
+
+    // based on R.array.calendar_type order
+    public CalendarTypeEnum calendarTypeFromPosition(int position) {
+        if (position == 0)
+            return CalendarTypeEnum.SHAMSI;
+        else if (position == 1)
+            return CalendarTypeEnum.ISLAMIC;
+        else
+            return CalendarTypeEnum.GREGORIAN;
     }
 }

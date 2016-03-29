@@ -86,8 +86,7 @@ public class SelectDayDialog extends AppCompatDialogFragment
                         .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
 
                 try {
-                    switch (calendarTypeFromPosition(
-                            calendarTypeSpinner.getSelectedItemPosition())) {
+                    switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                         case GREGORIAN:
                             calendarFragment.bringDate(DateConverter.civilToPersian(
                                     new CivilDate(year, month, day)));
@@ -106,22 +105,13 @@ public class SelectDayDialog extends AppCompatDialogFragment
                             return;
                     }
                 } catch (RuntimeException e) {
-                    // conversion exception, nvm
+                    utils.quickToast(getString(R.string.date_exception));
                     Log.e("SelectDayDialog", "", e);
                 }
             }
         });
 
         return builder.create();
-    }
-
-    private CalendarTypeEnum calendarTypeFromPosition(int position) {
-        if (position == 0)
-            return CalendarTypeEnum.SHAMSI;
-        else if (position == 1)
-            return CalendarTypeEnum.ISLAMIC;
-        else
-            return CalendarTypeEnum.GREGORIAN;
     }
 
     private void fillYearMonthDaySpinners() {
@@ -131,9 +121,7 @@ public class SelectDayDialog extends AppCompatDialogFragment
         IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
 
         date = newDateCivil;
-        CalendarTypeEnum selectedCalendarType = calendarTypeFromPosition(
-                calendarTypeSpinner.getSelectedItemPosition());
-        switch (selectedCalendarType) {
+        switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
             case GREGORIAN:
                 date = newDateCivil;
                 break;
