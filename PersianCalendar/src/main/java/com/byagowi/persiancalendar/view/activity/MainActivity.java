@@ -40,20 +40,20 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
  * @author ebraminio
  */
 public class MainActivity extends AppCompatActivity {
-    public static final int CALENDAR = 1;
-    public static final int CONVERTER = 2;
-    public static final int COMPASS = 3;
-    public static final int PREFERENCE = 4;
-    public static final int ABOUT = 5;
-    public static final int EXIT = 6;
-
-    private UpdateUtils updateUtils;
-
-    private int menuPosition = 0;
     private Utils utils;
+    private UpdateUtils updateUtils;
 
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
+
+    private int menuPosition = 0;
+
+    private static final int CALENDAR = 1;
+    private static final int CONVERTER = 2;
+    private static final int COMPASS = 3;
+    private static final int PREFERENCE = 4;
+    private static final int ABOUT = 5;
+    private static final int EXIT = 6;
 
     private String lastLocale;
     private String lastTheme;
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
         adapter = new DrawerAdapter(this);
+        adapter.setSelectedItem(CALENDAR);
         navigation.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

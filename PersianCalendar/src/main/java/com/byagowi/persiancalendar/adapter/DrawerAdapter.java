@@ -16,7 +16,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private final MainActivity mainActivity;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
-    private int selectedItem = 1;
+    private int selectedItem;
     private String[] drawerTitles;
     private String[] drawerSubtitles;
     private TypedArray drawerIcon;
