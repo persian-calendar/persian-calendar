@@ -41,7 +41,6 @@ import calendar.PersianDate;
 
 public class CalendarFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    public static int viewPagerPosition;
     private ViewPager monthViewPager;
     private Utils utils;
 
@@ -81,6 +80,8 @@ public class CalendarFragment extends Fragment
     private RelativeLayout maghribLayout;
     private RelativeLayout ishaLayout;
     private RelativeLayout midnightLayout;
+
+    private int viewPagerPosition;
 
     @Nullable
     @Override
@@ -391,4 +392,7 @@ public class CalendarFragment extends Fragment
         return true;
     }
 
+    public int getViewPagerPosition() {
+        return viewPagerPosition;
+    }
 }
