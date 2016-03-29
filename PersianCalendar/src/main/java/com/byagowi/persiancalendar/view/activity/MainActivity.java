@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private UpdateUtils updateUtils;
 
-    public int menuPosition = 0;
+    private int menuPosition = 0;
     private Utils utils;
 
     private DrawerLayout drawerLayout;
@@ -196,8 +196,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (menuPosition != CALENDAR) {
             selectItem(CALENDAR);
-            adapter.selectedItem = 0;
-            adapter.notifyDataSetChanged();
+            adapter.setSelectedItem(CALENDAR);
         } else {
             finish();
         }
