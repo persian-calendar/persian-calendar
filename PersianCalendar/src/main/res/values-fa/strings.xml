@@ -56,7 +56,7 @@
     <string name="calendar_font_summary">تغییر قلم تقویم</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">برای این نمازها اذان گفته شود</string>
-    <string name="athan_alarm">هشدار اذان</string>
+    <string name="athan_alarm">اذان‌ها</string>
     <string name="athan_sound">صدای اذان</string>
     <string name="match_system">تطبیق با سامانه</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
@@ -64,7 +64,7 @@
     <string name="tap_to_stop_athan">برای توقف اذان ضربه بزنید</string>
     <string name="playing_athan">در حال پخش اذان</string>
     <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیتتان را وارد کنید</string>
-    <string name="athan_gap">فاصلهٔ بین اذان و هشدار</string>
+    <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
     <string name="closeDrawer">بستن</string>
     <string name="openDrawer">گشودن</string>
