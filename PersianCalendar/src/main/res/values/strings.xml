@@ -101,5 +101,5 @@
     <string name="stop">Stop</string>
     <string name="goto_date">Go to date</string>
     <string name="select">Select</string>
-    <string name="pleasewait">Please wait…</string>
+    <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
 </resources>

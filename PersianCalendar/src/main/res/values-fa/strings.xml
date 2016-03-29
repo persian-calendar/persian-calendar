@@ -101,5 +101,5 @@
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="select">انتخاب</string>
-    <string name="pleasewait">کمی درنگ کنید…</string>
+    <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>s
 </resources>
