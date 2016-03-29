@@ -70,26 +70,6 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
     };
 
-    // http://stackoverflow.com/a/12963889
-    private Location getLastBestLocation(Location locationGPS, Location locationNet) {
-        long gpsLocationTime = 0;
-        if (null != locationGPS) {
-            gpsLocationTime = locationGPS.getTime();
-        }
-
-        long netLocationTime = 0;
-
-        if (null != locationNet) {
-            netLocationTime = locationNet.getTime();
-        }
-
-        if (0 < gpsLocationTime - netLocationTime) {
-            return locationGPS;
-        } else {
-            return locationNet;
-        }
-    }
-
     // Just ask for permission once, if we couldn't get it, nvm
     public boolean first = true;
 
@@ -97,18 +77,12 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            Location location = getLastBestLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER),
-                    locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
-            if (location != null) {
-                showLocation(location);
-            }
-
             if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
 
             if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         } else if (first) {
             first = false;
