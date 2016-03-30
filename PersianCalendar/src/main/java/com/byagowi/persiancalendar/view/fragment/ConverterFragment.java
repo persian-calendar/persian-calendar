@@ -107,6 +107,8 @@ public class ConverterFragment extends Fragment implements
         StringBuilder sb = new StringBuilder();
 
         try {
+            moreDate.setVisibility(View.VISIBLE);
+
             List<String> calendarsTextList = new ArrayList<>();
             switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
