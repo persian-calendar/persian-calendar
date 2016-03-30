@@ -9,6 +9,8 @@ import android.util.Log;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
+import java.lang.ref.WeakReference;
+
 /**
  * The Calendar Service that updates widget time and clock and build/update
  * calendar notification.
@@ -17,6 +19,11 @@ import com.byagowi.persiancalendar.util.Utils;
  */
 public class ApplicationService extends Service {
 
+    public static WeakReference<ApplicationService> self;
+    public static ApplicationService getInstance() {
+        return self == null ? null : self.get();
+    }
+
     @Override
     public IBinder onBind(Intent paramIntent) {
         return null;
@@ -24,6 +31,7 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        self = new WeakReference<>(this);
         Log.d(ApplicationService.class.getName(), "start");
         UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
@@ -38,6 +46,7 @@ public class ApplicationService extends Service {
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
         updateUtils.update(true);
+
         return START_STICKY;
     }
 }

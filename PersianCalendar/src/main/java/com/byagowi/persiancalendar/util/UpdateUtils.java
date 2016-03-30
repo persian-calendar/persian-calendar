@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.util;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -19,6 +18,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -36,8 +36,6 @@ public class UpdateUtils {
     private Context context;
     private PersianDate pastDate;
 
-    //
-    private NotificationManager mNotificationManager;
     private ExtensionData mExtensionData;
 
     private UpdateUtils(Context context) {
@@ -207,13 +205,9 @@ public class UpdateUtils {
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 
-        if (mNotificationManager == null) {
-            mNotificationManager = (NotificationManager) context
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-
-        if (utils.isNotifyDate()) {
-            mNotificationManager.notify(
+        ApplicationService applicationService = ApplicationService.getInstance();
+        if (applicationService != null && utils.isNotifyDate()) {
+            applicationService.startForeground(
                     NOTIFICATION_ID,
                     new NotificationCompat.Builder(context)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -225,8 +219,6 @@ public class UpdateUtils {
                             .setContentTitle(utils.shape(title))
                             .setColor(0xFF607D8B) // permanent services color
                             .build());
-        } else {
-            mNotificationManager.cancel(NOTIFICATION_ID);
         }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
