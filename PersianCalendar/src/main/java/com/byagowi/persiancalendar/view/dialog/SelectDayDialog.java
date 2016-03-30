@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.util.Utils;
@@ -57,7 +56,7 @@ public class SelectDayDialog extends AppCompatDialogFragment
         startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<String>(getContext(),
+        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
                 Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
@@ -93,9 +92,6 @@ public class SelectDayDialog extends AppCompatDialogFragment
                         case SHAMSI:
                             calendarFragment.bringDate(new PersianDate(year, month, day));
                             break;
-
-                        default:
-                            return;
                     }
                 } catch (RuntimeException e) {
                     utils.quickToast(getString(R.string.date_exception));
