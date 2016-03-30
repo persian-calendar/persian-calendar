@@ -76,7 +76,7 @@ public class SelectDayDialog extends AppCompatDialogFragment
 
                 CalendarFragment calendarFragment = (CalendarFragment) getActivity()
                         .getSupportFragmentManager()
-                        .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
+                        .findFragmentByTag(CalendarFragment.class.getName());
 
                 try {
                     switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {

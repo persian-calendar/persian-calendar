@@ -53,7 +53,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             mainActivity.onClickItem(getAdapterPosition());
-            setSelectedItem(getAdapterPosition());
         }
     }
 

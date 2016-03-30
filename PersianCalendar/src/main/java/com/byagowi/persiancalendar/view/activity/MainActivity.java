@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -46,7 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
-    private int menuPosition = 0;
+    private Class[] fragments = new Class[] {
+            null,
+            CalendarFragment.class,
+            ConverterFragment.class,
+            CompassFragment.class,
+            ApplicationPreferenceFragment.class,
+            AboutFragment.class
+    };
 
     private static final int CALENDAR = 1;
     private static final int CONVERTER = 2;
@@ -54,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int PREFERENCE = 4;
     private static final int ABOUT = 5;
     private static final int EXIT = 6;
+
+    // Default selected fragment
+    private static final int DEFAULT = CALENDAR;
+
+    private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
 
     private String lastLocale;
     private String lastTheme;
@@ -92,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
         adapter = new DrawerAdapter(this);
-        adapter.setSelectedItem(CALENDAR);
         navigation.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -139,12 +151,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_holder,
-                        new CalendarFragment(),
-                        Constants.CALENDAR_MAIN_FRAGMENT_TAG)
-                .commit();
+        selectItem(DEFAULT);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
@@ -195,9 +202,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (menuPosition != CALENDAR) {
-            selectItem(CALENDAR);
-            adapter.setSelectedItem(CALENDAR);
+        if (menuPosition != DEFAULT) {
+            selectItem(DEFAULT);
         } else {
             finish();
         }
@@ -256,75 +262,29 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void selectItem(int position) {
-        beforeMenuChange(position);
-        switch (position) {
-            case CALENDAR:
-                if (menuPosition != CALENDAR) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder,
-                                    new CalendarFragment(),
-                                    Constants.CALENDAR_MAIN_FRAGMENT_TAG)
-                            .commit();
-
-                    menuPosition = CALENDAR;
-                }
-
-                break;
-
-            case CONVERTER:
-                if (menuPosition != CONVERTER) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder, new ConverterFragment())
-                            .commit();
-
-                    menuPosition = CONVERTER;
-                }
-
-                break;
-
-            case COMPASS:
-                if (menuPosition != COMPASS) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder, new CompassFragment())
-                            .commit();
-
-                    menuPosition = COMPASS;
-                }
-
-                break;
-
-            case PREFERENCE:
-                if (menuPosition != PREFERENCE) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder, new ApplicationPreferenceFragment())
-                            .commit();
-
-                    menuPosition = PREFERENCE;
-                }
-
-                break;
-
-            case ABOUT:
-                if (menuPosition != ABOUT) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_holder, new AboutFragment())
-                            .commit();
-
-                    menuPosition = ABOUT;
-                }
-
-                break;
-
-            case EXIT:
-                finish();
-                break;
+    public void selectItem(int item) {
+        if (item == EXIT) {
+            finish();
+            return;
         }
+
+        beforeMenuChange(item);
+        if (menuPosition != item) {
+            try {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.fragment_holder,
+                                (Fragment) fragments[item].newInstance(),
+                                fragments[item].getName()
+                        ).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            menuPosition = item;
+        }
+
+        adapter.setSelectedItem(item);
 
         drawerLayout.closeDrawers();
     }

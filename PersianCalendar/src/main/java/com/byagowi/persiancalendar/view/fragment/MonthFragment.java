@@ -74,7 +74,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         calendarFragment = (CalendarFragment) getActivity()
                 .getSupportFragmentManager()
-                .findFragmentByTag(Constants.CALENDAR_MAIN_FRAGMENT_TAG);
+                .findFragmentByTag(CalendarFragment.class.getName());
 
         if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.selectDay(utils.getToday());

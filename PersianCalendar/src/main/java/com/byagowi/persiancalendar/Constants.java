@@ -66,7 +66,6 @@ public class Constants {
 
     public static final int MONTHS_LIMIT = 5000; // this should be an even number
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
-    public static final String CALENDAR_MAIN_FRAGMENT_TAG = "CALENDAR_MAIN_FRAGMENT_TAG";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_SELECT_DAY = "BROADCAST_FIELD_SELECT_DAY";
