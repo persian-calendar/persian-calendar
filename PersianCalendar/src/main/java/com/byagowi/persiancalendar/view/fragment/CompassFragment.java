@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.byagowi.persiancalendar.CompassListener;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
@@ -57,7 +57,39 @@ public class CompassFragment extends Fragment {
         }
 
 
-        compassListener = new CompassListener(this);
+        compassListener = new SensorEventListener() {
+            /*
+             * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
+             * value basically means more smoothing See:
+             * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
+             */
+            static final float ALPHA = 0.15f;
+            float azimuth;
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            }
+
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                // angle between the magnetic north direction
+                // 0=North, 90=East, 180=South, 270=West
+                azimuth = lowPass(event.values[0], azimuth);
+                compassView.setBearing(azimuth);
+                compassView.invalidate();
+            }
+
+            /**
+             * @see https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
+             * @see http://developer.android.com/reference/android/hardware/SensorEvent.html#values
+             */
+            private float lowPass(float input, float output) {
+                if (Math.abs(180 - input) > 170) {
+                    return input;
+                }
+                return output + ALPHA * (input - output);
+            }
+        };
         compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
