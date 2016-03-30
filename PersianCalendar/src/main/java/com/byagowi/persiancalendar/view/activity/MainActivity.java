@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        drawerLayout.setDrawerListener(drawerToggle);
+        drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
         selectItem(DEFAULT);
