@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.util.UpdateUtils;
@@ -20,6 +21,7 @@ import java.lang.ref.WeakReference;
 public class ApplicationService extends Service {
 
     public static WeakReference<ApplicationService> self;
+    @Nullable
     public static ApplicationService getInstance() {
         return self == null ? null : self.get();
     }

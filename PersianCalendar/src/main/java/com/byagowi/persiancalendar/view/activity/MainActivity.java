@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
 
-    private Class[] fragments = new Class[] {
+    private Class<?>[] fragments = {
             null,
             CalendarFragment.class,
             ConverterFragment.class,
