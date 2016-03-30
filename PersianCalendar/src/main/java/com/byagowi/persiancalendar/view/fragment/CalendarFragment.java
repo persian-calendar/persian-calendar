@@ -383,8 +383,7 @@ public class CalendarFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.go_to:
                 SelectDayDialog dialog = new SelectDayDialog();
-                dialog.show(getChildFragmentManager(),
-                        "com.byagowi.persiancalendar.view.dialog.SelectDayDialog.DIALOG");
+                dialog.show(getChildFragmentManager(), SelectDayDialog.class.getName());
                 break;
             default:
                 break;
