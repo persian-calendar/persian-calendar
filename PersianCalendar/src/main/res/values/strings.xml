@@ -36,7 +36,7 @@
     <string name="pray_methods_calculation">Calculation methods for pray times and Qibla compass</string>
     <string name="altitude">Altitude</string>
     <string name="altitude_praytime">in meter (optional)</string>
-    <string name="gps_location">Get location from GPS</string>
+    <string name="gps_location">Get location from GPS or network</string>
     <string name="gps_location_help">Other options are not needed if this is possible</string>
     <string name="location">Location</string>
     <string name="location_help">If none of them, specify it below</string>
