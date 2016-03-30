@@ -25,13 +25,7 @@ import calendar.PersianDate;
 /**
  * Created by ebrahim on 3/20/16.
  */
-public class SelectDayDialog extends AppCompatDialogFragment
-        implements AdapterView.OnItemSelectedListener {
-    private Utils utils;
-    private Spinner calendarTypeSpinner;
-    private Spinner yearSpinner;
-    private Spinner monthSpinner;
-    private Spinner daySpinner;
+public class SelectDayDialog extends AppCompatDialogFragment {
     private int startingYearOnYearSpinner = 0;
 
     @Override
@@ -40,13 +34,13 @@ public class SelectDayDialog extends AppCompatDialogFragment
 
         View view = inflater.inflate(R.layout.selectday_fragment, null);
 
-        utils = Utils.getInstance(getContext());
+        final Utils utils = Utils.getInstance(getContext());
 
         // fill members
-        calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
-        yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
-        monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        final Spinner calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
+        final Spinner yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
+        final Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
+        final Spinner daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
 
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
         utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
@@ -60,7 +54,16 @@ public class SelectDayDialog extends AppCompatDialogFragment
                 Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
-        calendarTypeSpinner.setOnItemSelectedListener(this);
+        calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                        calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
@@ -102,13 +105,4 @@ public class SelectDayDialog extends AppCompatDialogFragment
 
         return builder.create();
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
-                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) { }
 }
