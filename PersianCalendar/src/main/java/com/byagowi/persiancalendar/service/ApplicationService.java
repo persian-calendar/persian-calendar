@@ -20,10 +20,11 @@ import java.lang.ref.WeakReference;
  */
 public class ApplicationService extends Service {
 
-    public static WeakReference<ApplicationService> self;
+    private static WeakReference<ApplicationService> instance;
+
     @Nullable
     public static ApplicationService getInstance() {
-        return self == null ? null : self.get();
+        return instance == null ? null : instance.get();
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ApplicationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        self = new WeakReference<>(this);
+        instance = new WeakReference<>(this);
         Log.d(ApplicationService.class.getName(), "start");
         UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
