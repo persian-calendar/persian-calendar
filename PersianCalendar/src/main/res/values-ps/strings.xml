@@ -36,7 +36,7 @@
     <string name="pray_methods_calculation">د شرعی اوقات د حساب کارونه</string>
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">په متر کی (اختیاری)</string>
-    <string name="gps_location">Get location from GPS</string>
+    <string name="gps_location">Get location from GPS or network</string>
     <string name="gps_location_help">Other options are not needed if this is possible</string>
     <string name="location">ځای</string>
     <string name="location_help">که هیڅ کوم نه دی د ځای مختصات لاندی وارد وکۍ</string>
