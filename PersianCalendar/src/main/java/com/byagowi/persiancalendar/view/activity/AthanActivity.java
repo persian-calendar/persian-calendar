@@ -43,7 +43,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_athan);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
 
@@ -59,14 +59,16 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         setPrayerView(prayerKey);
 
         CityEntity cityEntity = utils.getCityFromPreference();
+        String cityPlaceholder = "";
         if (cityEntity != null) {
-            String cityName = utils.getAppLanguage().equals("en") ? cityEntity.getEn() : cityEntity.getFa();
-            textCityName.setText(getString(R.string.in_city_time) + " " + cityName);
-        } else {
+            cityPlaceholder = utils.getAppLanguage().equals("en") ? cityEntity.getEn() : cityEntity.getFa();
+        } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
+            cityPlaceholder = utils.getGeoCodedCityName();
+        } else if (utils.getCoordinate() != null) {
             Coordinate coordinate = utils.getCoordinate();
-            textCityName.setText(getString(R.string.in_city_time) + " "
-                    + coordinate.getLatitude() + ", " + coordinate.getLongitude());
+            cityPlaceholder = coordinate.getLatitude() + ", " + coordinate.getLongitude();
         }
+        textCityName.setText(getString(R.string.in_city_time) + " " + cityPlaceholder);
 
         play();
 
