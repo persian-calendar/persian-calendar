@@ -180,7 +180,7 @@ public class CalendarFragment extends Fragment
         utils.setFontAndShape((TextView) view.findViewById(R.id.today));
         utils.setFontAndShape((TextView) view.findViewById(R.id.owghat_text));
 
-        String cityName = utils.getGeoCodedCityName();
+        String cityName = utils.getCityName(false);
         if (!TextUtils.isEmpty(cityName)) {
             ((TextView) view.findViewById(R.id.owghat_text))
                     .append(" (" + utils.shape(cityName) + ")");

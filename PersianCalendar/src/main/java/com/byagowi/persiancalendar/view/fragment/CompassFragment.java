@@ -44,21 +44,8 @@ public class CompassFragment extends Fragment {
         if (coordinate == null) {
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            CityEntity cityEntity = utils.getCityFromPreference();
-            String subtitle;
-            if (cityEntity != null) {
-                subtitle = utils.getAppLanguage().equals("en")
-                        ? cityEntity.getEn()
-                        : cityEntity.getFa();
-            } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
-                subtitle = utils.getGeoCodedCityName();
-            } else {
-                subtitle = String.format(Locale.getDefault(), "%s: %.4f%c %s: %.4f",
-                        getString(R.string.latitude), coordinate.getLatitude(),
-                        Constants.PERSIAN_COMMA,
-                        getString(R.string.longitude), coordinate.getLongitude());
-            }
-            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), subtitle);
+            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
+                    utils.getCityName(true));
         }
 
 

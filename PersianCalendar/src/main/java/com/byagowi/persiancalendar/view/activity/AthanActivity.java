@@ -58,17 +58,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         setPrayerView(prayerKey);
 
-        CityEntity cityEntity = utils.getCityFromPreference();
-        String cityPlaceholder = "";
-        if (cityEntity != null) {
-            cityPlaceholder = utils.getAppLanguage().equals("en") ? cityEntity.getEn() : cityEntity.getFa();
-        } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
-            cityPlaceholder = utils.getGeoCodedCityName();
-        } else if (utils.getCoordinate() != null) {
-            Coordinate coordinate = utils.getCoordinate();
-            cityPlaceholder = coordinate.getLatitude() + ", " + coordinate.getLongitude();
-        }
-        textCityName.setText(getString(R.string.in_city_time) + " " + cityPlaceholder);
+        textCityName.setText(getString(R.string.in_city_time) + " " + utils.getCityName(true));
 
         play();
 

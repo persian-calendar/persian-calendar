@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -620,8 +621,28 @@ public class Utils {
         return cachedCity = null;
     }
 
-    public String getGeoCodedCityName() {
-        return prefs.getString(PREF_GEOCODED_CITYNAME, "");
+    public String formatCoordinate(Coordinate coordinate, String separator) {
+        return String.format(Locale.getDefault(), "%s: %.4f%s%s: %.4f",
+                context.getString(R.string.latitude), coordinate.getLatitude(), separator,
+                context.getString(R.string.longitude), coordinate.getLongitude());
+    }
+
+    public String getCityName(boolean fallbackToCoord) {
+        CityEntity cityEntity = getCityFromPreference();
+        if (cityEntity != null)
+            return getAppLanguage().equals("en") ? cityEntity.getEn() : cityEntity.getFa();
+
+        String geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "");
+        if (!TextUtils.isEmpty(geocodedCityName))
+            return geocodedCityName;
+
+        if (fallbackToCoord) {
+            Coordinate coordinate = getCoordinate();
+            if (coordinate != null)
+                return formatCoordinate(coordinate, PERSIAN_COMMA + " ");
+        }
+
+        return "";
     }
 
     private List<EventEntity> readEventsFromJSON() {

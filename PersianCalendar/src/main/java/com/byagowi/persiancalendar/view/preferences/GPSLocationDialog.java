@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
+import com.github.praytimes.Coordinate;
 
 import java.io.IOException;
 import java.util.List;
@@ -138,9 +139,9 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += String.format(Locale.getDefault(), "%s: %.4f\n%s: %.4f",
-                getString(R.string.latitude), location.getLatitude(),
-                getString(R.string.longitude), location.getLongitude());
+        result += utils.formatCoordinate(
+                new Coordinate(location.getLatitude(), location.getLongitude()),
+                "\n");
         textView.setText(utils.shape(result));
     }
 
