@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
+
+import java.util.Locale;
 
 /**
  * Compass/Qibla activity
@@ -50,8 +53,10 @@ public class CompassFragment extends Fragment {
             } else if (!TextUtils.isEmpty(utils.getGeoCodedCityName())) {
                 subtitle = utils.getGeoCodedCityName();
             } else {
-                subtitle = getString(R.string.latitude) + ": " + coordinate.getLatitude() + "، " +
-                        getString(R.string.longitude) + ": " + coordinate.getLongitude();
+                subtitle = String.format(Locale.getDefault(), "%s: %.4f%c %s: %.4f",
+                        getString(R.string.latitude), coordinate.getLatitude(),
+                        Constants.PERSIAN_COMMA,
+                        getString(R.string.longitude), coordinate.getLongitude());
             }
             utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass), subtitle);
         }
@@ -80,8 +85,8 @@ public class CompassFragment extends Fragment {
             }
 
             /**
-             * @see https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
-             * @see http://developer.android.com/reference/android/hardware/SensorEvent.html#values
+             * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
+             * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
              */
             private float lowPass(float input, float output) {
                 if (Math.abs(180 - input) > 170) {

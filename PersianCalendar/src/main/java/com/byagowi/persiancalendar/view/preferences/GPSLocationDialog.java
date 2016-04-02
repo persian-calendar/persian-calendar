@@ -120,8 +120,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     String cityName;
 
     public void showLocation(Location location) {
-        latitude = String.format(Locale.ENGLISH, "%.4f", location.getLatitude());
-        longitude = String.format(Locale.ENGLISH, "%.4f", location.getLongitude());
+        latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());
+        longitude = String.format(Locale.ENGLISH, "%f", location.getLongitude());
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         List<Address> addresses;
         try {
