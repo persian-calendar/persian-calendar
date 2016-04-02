@@ -30,7 +30,7 @@ public class ShapedListDialog extends PreferenceDialogFragmentCompat {
             selectDialogLayout = android.R.layout.select_dialog_singlechoice;
 
         ShapedArrayAdapter<CharSequence> entriesAdapter = new ShapedArrayAdapter<>(getContext(),
-                selectDialogLayout, Arrays.asList(listPref.getEntries()));
+                selectDialogLayout, listPref.getEntries());
 
         int index = Arrays.asList(entriesValues).indexOf(listPref.getSelected());
         builder.setSingleChoiceItems(entriesAdapter, index, new DialogInterface.OnClickListener() {

@@ -7,6 +7,4 @@
     android:textAppearance="?attr/textAppearanceListItemSmall"
     android:textColor="?attr/textColorAlertDialogListItem"
     android:gravity="center_vertical"
-    android:paddingLeft="@dimen/listPreferredItemPadding"
-    android:paddingRight="@dimen/listPreferredItemPadding"
     android:ellipsize="marquee" />

@@ -472,24 +472,15 @@ public class Utils {
             loadLanguageResource();
 
         if (date instanceof PersianDate)
-            return persianMonths;
+            return persianMonths.clone();
         else if (date instanceof IslamicDate)
-            return islamicMonths;
+            return islamicMonths.clone();
         else
-            return gregorianMonths;
+            return gregorianMonths.clone();
     }
 
     public String getMonthName(AbstractDate date) {
         return monthsNamesOfCalendar(date)[date.getMonth() - 1];
-    }
-
-    public List<String> getMonthsNamesListWithOrdinal(AbstractDate date) {
-        List<String> result = new ArrayList<>();
-        String[] monthNames = monthsNamesOfCalendar(date);
-        for (int i = 0; i < 12; ++i) {
-            result.add(monthNames[i] + " / " + formatNumber(i + 1));
-        }
-        return result;
     }
 
     public String getWeekDayName(AbstractDate date) {
@@ -983,28 +974,30 @@ public class Utils {
         }
 
         // years spinner init.
-        List<String> yearsList = new ArrayList<>();
-        int yearDiffRange = 200;
-        int startingYearOnYearSpinner = date.getYear() - yearDiffRange / 2;
-        for (int i = startingYearOnYearSpinner; i < startingYearOnYearSpinner + yearDiffRange; ++i) {
-            yearsList.add(formatNumber(i));
+        String[] years = new String[200];
+        int startingYearOnYearSpinner = date.getYear() - years.length / 2;
+        for (int i = 0; i < years.length; ++i) {
+            years[i] = formatNumber(i + startingYearOnYearSpinner);
         }
-        yearSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, yearsList));
-        yearSpinner.setSelection(yearDiffRange / 2);
+        yearSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, years));
+        yearSpinner.setSelection(years.length / 2);
         //
 
         // month spinner init.
-        List<String> monthsList = getMonthsNamesListWithOrdinal(date);
-        monthSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, monthsList));
+        String[] months = monthsNamesOfCalendar(date);
+        for (int i = 0; i < months.length; ++i) {
+            months[i] = months[i] + " / " + formatNumber(i + 1);
+        }
+        monthSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, months));
         monthSpinner.setSelection(date.getMonth() - 1);
         //
 
         // days spinner init.
-        List<String> daysList = new ArrayList<>();
-        for (int i = 1; i <= 31; ++i) {
-            daysList.add(formatNumber(i));
+        String[] days = new String[31];
+        for (int i = 0; i < days.length; ++i) {
+            days[i] = formatNumber(i + 1);
         }
-        daySpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, daysList));
+        daySpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, days));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 
