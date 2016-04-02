@@ -601,7 +601,7 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    public CityEntity getCityFromPreference() {
+    private CityEntity getCityFromPreference() {
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
 
         if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
