@@ -33,6 +33,7 @@
 
         <activity
             android:name=".view.activity.AthanActivity"
+            android:excludeFromRecents="true"
             android:theme="@style/FullscreenTheme"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:launchMode="singleTop" />
