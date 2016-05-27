@@ -202,7 +202,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (menuPosition != DEFAULT) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else if (menuPosition != DEFAULT) {
             selectItem(DEFAULT);
         } else {
             finish();
