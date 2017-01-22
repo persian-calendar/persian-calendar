@@ -24,14 +24,14 @@ public class AthanVolumePreference extends DialogPreference {
         utils.setFontAndShape(holder);
     }
 
-    public void setVolume(int volume) {
+    void setVolume(int volume) {
         final boolean wasBlocking = shouldDisableDependents();
         persistInt(volume);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 
-    public int getVolume() {
+    int getVolume() {
         return getPersistedInt(1);
     }
 }

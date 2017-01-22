@@ -26,7 +26,7 @@ public class LocationPreference extends DialogPreference {
         Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 
-    public void setSelected(String selected) {
+    void setSelected(String selected) {
         final boolean wasBlocking = shouldDisableDependents();
         persistString(selected);
         final boolean isBlocking = shouldDisableDependents();
