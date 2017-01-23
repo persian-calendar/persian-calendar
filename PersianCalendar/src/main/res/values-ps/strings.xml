@@ -102,5 +102,6 @@
     <string name="goto_date">برو به تاریخ</string>
     <string name="select">انتخاب</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل وارد نشده است. احتمالاً نیاز به بروزرسانی برنامه، در صورت وجود، دارید.</string>
+    <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
+    <string name="shouldBeUpdated">مناسبت‌های امسال در تقویم به طور کامل وارد نشده‌است، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
 </resources>

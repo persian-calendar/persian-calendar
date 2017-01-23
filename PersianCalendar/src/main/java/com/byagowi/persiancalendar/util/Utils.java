@@ -671,22 +671,32 @@ public class Utils {
     }
 
     private int maxSupportedYear = -1;
+    private int minSupportedYear = -1;
     private boolean isYearWarnGivenOnce = false;
 
-    public void checkYearAndWarnIfNeeded(int currentYear) {
+    public void checkYearAndWarnIfNeeded(int selectedYear) {
         // once is enough, see #clearYearWarnFlag() also
         if (isYearWarnGivenOnce)
             return;
 
-        if (maxSupportedYear == -1)
-            maxSupportedYear = calculateMaxSupportedYear();
+        if (maxSupportedYear == -1 || minSupportedYear == -1)
+            loadMinMaxSupportedYear();
 
-        // defensively, if `maxSupportedYear` is not changes, something weird is happened, give up
-        if (maxSupportedYear == -1)
+        // defensively, if not changed, something weird is happened, give up
+        if (maxSupportedYear == -1 || minSupportedYear == -1)
             return;
 
-        if (currentYear > maxSupportedYear) {
+        if (selectedYear < minSupportedYear) {
             longToast(context.getString(R.string.holidaysIncompletenessWarning));
+
+            isYearWarnGivenOnce = true;
+        }
+
+        if (selectedYear > maxSupportedYear) {
+            longToast(context.getString(getToday().getYear() > maxSupportedYear
+                    ? R.string.shouldBeUpdated
+                    : R.string.holidaysIncompletenessWarning));
+
             isYearWarnGivenOnce = true;
         }
     }
@@ -696,18 +706,27 @@ public class Utils {
         isYearWarnGivenOnce = false;
     }
 
-    private int calculateMaxSupportedYear() {
+    private void loadMinMaxSupportedYear() {
         if (events == null) {
             loadEvents();
         }
 
-        int result = -1;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
         for (EventEntity eventEntity : events) {
             int year = eventEntity.getDate().getYear();
-            if (result < year)
-                result = year;
+
+            if (min > year && year != -1) {
+                min = year;
+            }
+
+            if (max < year) {
+                max = year;
+            }
         }
-        return result;
+
+        minSupportedYear = min;
+        maxSupportedYear = max;
     }
 
     private List<EventEntity> getEvents(PersianDate day) {

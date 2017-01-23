@@ -102,5 +102,6 @@
     <string name="goto_date">Go to date</string>
     <string name="select">Select</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="holidaysIncompletenessWarning">Holidays of the selected year may not be complete and reliable. Consider an update for this app, if exists.</string>
+    <string name="holidaysIncompletenessWarning">Holidays of the selected year may not be complete and reliable.</string>
+    <string name="shouldBeUpdated">Holidays of the selected year may not be complete and reliable. Consider an update for the app, if exists.</string>
 </resources>
