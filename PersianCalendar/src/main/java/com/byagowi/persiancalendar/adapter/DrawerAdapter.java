@@ -30,16 +30,16 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView itemTitle;
         private TextView itemSubtitle;
         private AppCompatImageView imageView;
         private View background;
 
-        public ViewHolder(View itemView, int ViewType) {
+        ViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            if (ViewType == TYPE_ITEM) {
+            if (viewType == TYPE_ITEM) {
                 itemView.setOnClickListener(this);
                 itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
@@ -52,7 +52,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-            mainActivity.onClickItem(getAdapterPosition());
+            mainActivity.selectItem(getAdapterPosition());
         }
     }
 

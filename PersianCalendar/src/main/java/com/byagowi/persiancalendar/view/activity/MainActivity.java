@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -41,6 +42,8 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
  * @author ebraminio
  */
 public class MainActivity extends AppCompatActivity {
+
+    private final String TAG = MainActivity.class.getName();
     private Utils utils;
     private UpdateUtils updateUtils;
 
@@ -196,10 +199,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void onClickItem(int position) {
-        selectItem(position);
-    }
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -280,13 +279,13 @@ public class MainActivity extends AppCompatActivity {
                                 (Fragment) fragments[item].newInstance(),
                                 fragments[item].getName()
                         ).commit();
+                menuPosition = item;
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, item + " is selected as an index", e);
             }
-            menuPosition = item;
         }
 
-        adapter.setSelectedItem(item);
+        adapter.setSelectedItem(menuPosition);
 
         drawerLayout.closeDrawers();
     }
