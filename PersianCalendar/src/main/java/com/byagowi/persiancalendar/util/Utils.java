@@ -446,15 +446,13 @@ public class Utils {
         if (preferredDigits == ARABIC_DIGITS)
             return number;
 
-        StringBuilder sb = new StringBuilder();
-        for (char i : number.toCharArray()) {
-            if (Character.isDigit(i)) {
-                sb.append(preferredDigits[Integer.parseInt(i + "")]);
-            } else {
-                sb.append(i);
-            }
+        char[] result = number.toCharArray();
+        for (int i = 0; i < result.length; ++i) {
+            char c = number.charAt(i);
+            if (Character.isDigit(c))
+                result[i] = preferredDigits[Character.getNumericValue(c)];
         }
-        return sb.toString();
+        return String.valueOf(result);
     }
 
     public String dateToString(AbstractDate date) {
