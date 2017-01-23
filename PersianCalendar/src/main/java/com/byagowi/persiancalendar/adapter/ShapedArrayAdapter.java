@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.util.List;
-
 /**
  * Created by ebraminio on 2/17/16.
  */

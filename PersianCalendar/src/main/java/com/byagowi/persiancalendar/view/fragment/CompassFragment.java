@@ -8,20 +8,15 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
-
-import java.util.Locale;
 
 /**
  * Compass/Qibla activity
