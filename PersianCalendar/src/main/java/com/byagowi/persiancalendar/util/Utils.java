@@ -646,8 +646,8 @@ public class Utils {
         return "";
     }
 
-    private List<EventEntity> readEventsFromJSON() {
-        List<EventEntity> result = new ArrayList<>();
+    private void loadEvents() {
+        List<EventEntity> events = new ArrayList<>();
         try {
             JSONArray days = new JSONObject(readRawResource(R.raw.events)).getJSONArray("events");
 
@@ -661,13 +661,13 @@ public class Utils {
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
-                result.add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+                events.add(new EventEntity(new PersianDate(year, month, day), title, holiday));
             }
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        return result;
+        this.events = events;
     }
 
     private int maxSupportedYear = -1;
@@ -698,7 +698,7 @@ public class Utils {
 
     private int calculateMaxSupportedYear() {
         if (events == null) {
-            events = readEventsFromJSON();
+            loadEvents();
         }
 
         int result = -1;
@@ -712,7 +712,7 @@ public class Utils {
 
     private List<EventEntity> getEvents(PersianDate day) {
         if (events == null) {
-            events = readEventsFromJSON();
+            loadEvents();
         }
 
         List<EventEntity> result = new ArrayList<>();
