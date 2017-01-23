@@ -678,8 +678,6 @@ public class Utils {
         if (isYearWarnGivenOnce)
             return;
 
-        isYearWarnGivenOnce = true;
-
         if (maxSupportedYear == -1)
             maxSupportedYear = calculateMaxSupportedYear();
 
@@ -687,8 +685,10 @@ public class Utils {
         if (maxSupportedYear == -1)
             return;
 
-        if (currentYear > maxSupportedYear)
+        if (currentYear > maxSupportedYear) {
             longToast(context.getString(R.string.holidaysIncompletenessWarning));
+            isYearWarnGivenOnce = true;
+        }
     }
 
     // called from CalendarFragment to make it once per calendar view
