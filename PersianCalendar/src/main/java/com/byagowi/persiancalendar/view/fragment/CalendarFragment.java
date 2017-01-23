@@ -94,6 +94,7 @@ public class CalendarFragment extends Fragment
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         utils = Utils.getInstance(getContext());
+        utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
         fajrLayout = (RelativeLayout) view.findViewById(R.id.fajrLayout);

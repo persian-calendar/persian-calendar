@@ -497,6 +497,10 @@ public class Utils {
         Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
     }
 
+    public void longToast(String message) {
+        Toast.makeText(context, shape(message), Toast.LENGTH_LONG).show();
+    }
+
     int getDayIconResource(int day) {
         try {
             return DAYS_ICONS[day];
@@ -662,6 +666,46 @@ public class Utils {
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
+
+    private int maxSupportedYear = -1;
+    private boolean isYearWarnGivenOnce = false;
+
+    public void checkYearAndWarnIfNeeded(int currentYear) {
+        // once is enough, see #clearYearWarnFlag() also
+        if (isYearWarnGivenOnce)
+            return;
+
+        isYearWarnGivenOnce = true;
+
+        if (maxSupportedYear == -1)
+            maxSupportedYear = calculateMaxSupportedYear();
+
+        // defensively, if `maxSupportedYear` is not changes, something weird is happened, give up
+        if (maxSupportedYear == -1)
+            return;
+
+        if (currentYear > maxSupportedYear)
+            longToast(context.getString(R.string.holidaysIncompletenessWarning));
+    }
+
+    // called from CalendarFragment to make it once per calendar view
+    public void clearYearWarnFlag() {
+        isYearWarnGivenOnce = false;
+    }
+
+    private int calculateMaxSupportedYear() {
+        if (events == null) {
+            events = readEventsFromJSON();
+        }
+
+        int result = -1;
+        for (EventEntity eventEntity : events) {
+            int year = eventEntity.getDate().getYear();
+            if (result < year)
+                result = year;
         }
         return result;
     }
