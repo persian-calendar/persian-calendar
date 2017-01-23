@@ -682,10 +682,6 @@ public class Utils {
         if (maxSupportedYear == -1 || minSupportedYear == -1)
             loadMinMaxSupportedYear();
 
-        // defensively, if not changed, something weird is happened, give up
-        if (maxSupportedYear == -1 || minSupportedYear == -1)
-            return;
-
         if (selectedYear < minSupportedYear) {
             longToast(context.getString(R.string.holidaysIncompletenessWarning));
 
