@@ -17,14 +17,14 @@ public class PrayerSelectPreference extends DialogPreference {
         utils = Utils.getInstance(context);
     }
 
-    void setPrayers(Set<String> prayers) {
+    public void setPrayers(Set<String> prayers) {
         final boolean wasBlocking = shouldDisableDependents();
         persistString(utils.setToCommaSeparated(prayers));
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 
-    Set<String> getPrayers() {
+    public Set<String> getPrayers() {
         return utils.commaSeparatedToSet(getPersistedString(""));
     }
 

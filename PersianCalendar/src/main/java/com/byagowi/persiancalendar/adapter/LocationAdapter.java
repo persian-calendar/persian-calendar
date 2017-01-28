@@ -18,8 +18,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private String locale;
     private List<CityEntity> cities;
     private Utils utils;
-    private LocationPreferenceDialog locationPreferenceDialog;
-    private LayoutInflater layoutInflater;
+    LocationPreferenceDialog locationPreferenceDialog;
+    LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
         Context context = locationPreferenceDialog.getContext();
@@ -30,11 +30,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         this.locale = utils.getAppLanguage();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView country;
         private TextView city;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             city = (TextView) itemView.findViewById(R.id.text1);

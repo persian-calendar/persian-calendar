@@ -19,12 +19,14 @@ import com.byagowi.persiancalendar.view.activity.AthanActivity;
  */
 public class BroadcastReceivers extends BroadcastReceiver {
     private Context context;
+    private UpdateUtils updateUtils;
+    private Utils utils;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        Utils utils = Utils.getInstance(context);
-        UpdateUtils updateUtils = UpdateUtils.getInstance(context);
+        utils = Utils.getInstance(context);
+        updateUtils = UpdateUtils.getInstance(context);
 
         if (intent != null && intent.getAction() != null && !TextUtils.isEmpty(intent.getAction())) {
             if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||

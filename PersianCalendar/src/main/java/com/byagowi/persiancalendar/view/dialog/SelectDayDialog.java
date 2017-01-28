@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
@@ -28,11 +27,11 @@ import calendar.PersianDate;
 public class SelectDayDialog extends AppCompatDialogFragment {
     private int startingYearOnYearSpinner = 0;
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater()
-                .inflate(R.layout.selectday_fragment, null);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.selectday_fragment, null);
 
         final Utils utils = Utils.getInstance(getContext());
 

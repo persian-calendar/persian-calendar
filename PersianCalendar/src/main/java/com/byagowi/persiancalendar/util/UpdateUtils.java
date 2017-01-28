@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,7 +32,7 @@ import calendar.PersianDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
-    private static WeakReference<UpdateUtils> myInstance;
+    private static UpdateUtils myInstance;
     private Context context;
     private PersianDate pastDate;
 
@@ -45,12 +44,12 @@ public class UpdateUtils {
 
     public static UpdateUtils getInstance(Context context) {
         if (myInstance == null) {
-            myInstance = new WeakReference<>(new UpdateUtils(context));
+            myInstance = new UpdateUtils(context);
         }
-        return myInstance.get();
+        return myInstance;
     }
 
-    private boolean firstTime = true;
+    boolean firstTime = true;
 
     public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");

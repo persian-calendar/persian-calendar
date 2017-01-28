@@ -33,14 +33,14 @@ public class ShapedListPreference extends ListPreference {
         Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 
-    void setSelected(String selected) {
+    public void setSelected(String selected) {
         final boolean wasBlocking = shouldDisableDependents();
         persistString(selected);
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 
-    private String defaultValue = "";
+    String defaultValue = "";
 
     // steal default value, well, not aware of a better way
     @Override

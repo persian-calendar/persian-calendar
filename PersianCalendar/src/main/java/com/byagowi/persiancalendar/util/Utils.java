@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -311,11 +312,11 @@ public class Utils {
     }
 
 
-    boolean isWidgetClock() {
+    public boolean isWidgetClock() {
         return prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
     }
 
-    boolean isNotifyDate() {
+    public boolean isNotifyDate() {
         return prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
     }
 
@@ -333,7 +334,7 @@ public class Utils {
         return prefs.getString(PREF_THEME, LIGHT_THEME);
     }
 
-    String getSelectedWidgetTextColor() {
+    public String getSelectedWidgetTextColor() {
         return prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
     }
 
@@ -341,7 +342,7 @@ public class Utils {
         return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
-    Calendar makeCalendarFromDate(Date date) {
+    public Calendar makeCalendarFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         if (iranTime) {
             calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
@@ -350,11 +351,11 @@ public class Utils {
         return calendar;
     }
 
-    private String clockToString(int hour, int minute) {
+    public String clockToString(int hour, int minute) {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
-    String getNextOghatTime(Clock clock, boolean changeDate) {
+    public String getNextOghatTime(Clock clock, boolean changeDate) {
         Coordinate coordinate = getCoordinate();
 
         if (coordinate != null) {
@@ -418,7 +419,7 @@ public class Utils {
         return result;
     }
 
-    String getPersianFormattedClock(Calendar calendar) {
+    public String getPersianFormattedClock(Calendar calendar) {
         String timeText = null;
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -464,7 +465,7 @@ public class Utils {
         return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(persianDate);
     }
 
-    private String[] monthsNamesOfCalendar(AbstractDate date) {
+    public String[] monthsNamesOfCalendar(AbstractDate date) {
         // the next step would be using them so lets check if they have initialized already
         if (persianMonths == null || gregorianMonths == null || islamicMonths == null)
             loadLanguageResource();
@@ -501,7 +502,7 @@ public class Utils {
         Toast.makeText(context, shape(message), Toast.LENGTH_LONG).show();
     }
 
-    int getDayIconResource(int day) {
+    public int getDayIconResource(int day) {
         try {
             return DAYS_ICONS[day];
         } catch (IndexOutOfBoundsException e) {
@@ -725,7 +726,7 @@ public class Utils {
         maxSupportedYear = max;
     }
 
-    private List<EventEntity> getEvents(PersianDate day) {
+    public List<EventEntity> getEvents(PersianDate day) {
         if (events == null) {
             loadEvents();
         }
@@ -789,7 +790,7 @@ public class Utils {
         return result;
     }
 
-    void loadAlarms() {
+    public void loadAlarms() {
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
@@ -818,14 +819,14 @@ public class Utils {
         }
     }
 
-    private void setAlarm(PrayTime prayTime, Clock clock, int id) {
+    public void setAlarm(PrayTime prayTime, Clock clock, int id) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
         setAlarm(prayTime, triggerTime.getTimeInMillis(), id);
     }
 
-    private void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
+    public void setAlarm(PrayTime prayTime, long timeInMillis, int id) {
         String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
         long athanGap;
         try {
@@ -858,7 +859,7 @@ public class Utils {
 
     private static class SetExactAlarm {
         @TargetApi(Build.VERSION_CODES.KITKAT)
-        static void setExactAlarm(AlarmManager alarmManager,
+        public static void setExactAlarm(AlarmManager alarmManager,
                                          int type, long triggerAtMillis, PendingIntent pendingIntent) {
             alarmManager.setExact(type, triggerAtMillis, pendingIntent);
         }
@@ -887,17 +888,12 @@ public class Utils {
         @RawRes int messagesFile;
         String lang = getAppLanguage();
 
-        switch (lang) {
-            case "fa-AF":
-                messagesFile = R.raw.messages_fa_af;
-                break;
-            case "ps":
-                messagesFile = R.raw.messages_ps;
-                break;
-            default:
-                messagesFile = R.raw.messages_fa;
-                break;
-        }
+        if (lang.equals("fa-AF"))
+            messagesFile = R.raw.messages_fa_af;
+        else if (lang.equals("ps"))
+            messagesFile = R.raw.messages_ps;
+        else
+            messagesFile = R.raw.messages_fa;
 
         persianMonths = new String[12];
         islamicMonths = new String[12];
@@ -940,7 +936,7 @@ public class Utils {
 
     private static class CopyToClipboard {
         @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        static void copyToClipboard(CharSequence text, Context context) {
+        public static void copyToClipboard(CharSequence text, Context context) {
             ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
                     .setPrimaryClip(ClipData.newPlainText("converted date", text));
         }
