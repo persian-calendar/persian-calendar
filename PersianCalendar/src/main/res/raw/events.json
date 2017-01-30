@@ -2,6 +2,7 @@
   "#source": [
     "http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1394.pdf",
     "http://pcci.ir/file/2015/11/1395.zip",
+    "https://calendar.ut.ac.ir/Fa/News/Data/Doc/calendar%201396-full.pdf",
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
     "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬(مناسبت‌ها از شورای فرهنگ عمومی)",
@@ -558,9 +559,6 @@
 
     { "holiday": false, "year": -1, "month": 5, "day": 31, "type": "Iran",
       "title": "روز صنعت دفاعی" },
-
-    { "holiday": false, "year": -1, "month": 6, "day": 3, "type": "Iran",
-      "title": "اشغال ایران توسط متفقین و فرار رضاخان (۱۳۲۰ ه‍.ش)" },
 
     { "holiday": false, "year": -1, "month": 6, "day": 10, "type": "Iran",
       "title": "تصویب قانون عملیات بانکی بدون ربا (۱۳۶۲ ه‍.ش)" },
