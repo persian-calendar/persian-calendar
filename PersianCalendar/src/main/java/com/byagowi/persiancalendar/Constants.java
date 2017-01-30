@@ -100,4 +100,17 @@ public class Constants {
             R.drawable.day25, R.drawable.day26, R.drawable.day27,
             R.drawable.day28, R.drawable.day29, R.drawable.day30,
             R.drawable.day31};
+
+    public static final int[] DAYS_ICONS_AR = {0,
+            R.drawable.day1_ar, R.drawable.day2_ar, R.drawable.day3_ar,
+            R.drawable.day4_ar, R.drawable.day5_ar, R.drawable.day6_ar,
+            R.drawable.day7_ar, R.drawable.day8_ar, R.drawable.day9_ar,
+            R.drawable.day10_ar, R.drawable.day11_ar, R.drawable.day12_ar,
+            R.drawable.day13_ar, R.drawable.day14_ar, R.drawable.day15_ar,
+            R.drawable.day16_ar, R.drawable.day17_ar, R.drawable.day18_ar,
+            R.drawable.day19_ar, R.drawable.day20_ar, R.drawable.day21_ar,
+            R.drawable.day22_ar, R.drawable.day23_ar, R.drawable.day24_ar,
+            R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar,
+            R.drawable.day28_ar, R.drawable.day29_ar, R.drawable.day30_ar,
+            R.drawable.day31_ar};
 }

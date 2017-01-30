@@ -83,6 +83,7 @@ import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
+import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
@@ -504,7 +505,7 @@ public class Utils {
 
     public int getDayIconResource(int day) {
         try {
-            return DAYS_ICONS[day];
+            return preferredDigits == ARABIC_DIGITS ? DAYS_ICONS_AR[day] : DAYS_ICONS[day];
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "No such field is available");
             return 0;
