@@ -156,45 +156,46 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:padding="@dimen/card_padding">
+                    android:padding="@dimen/card_padding"
+                    android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_marginLeft="@dimen/icon_margin"
-                        android:layout_toRightOf="@+id/eventContainer"
                         android:gravity="center"
                         app:srcCompat="@drawable/ic_event_note"
                         android:tint="?attr/colorIcon" />
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/eventContainer"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="right"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/holiday_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextHoliday"
                             android:textSize="@dimen/text_size_description" />
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/event_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextNormal"
                             android:textSize="@dimen/text_size_description" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
-                </RelativeLayout>
+                </LinearLayout>
 
             </android.support.v7.widget.LinearLayoutCompat>
 
