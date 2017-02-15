@@ -8,8 +8,8 @@ android {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 9
         targetSdkVersion 25
-        versionCode 521
-        versionName "5.2.1"
+        versionCode 522
+        versionName "5.2.2"
         vectorDrawables.useSupportLibrary = true
     }
 
