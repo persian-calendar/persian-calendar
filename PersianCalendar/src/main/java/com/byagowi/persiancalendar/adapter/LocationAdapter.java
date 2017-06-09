@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
@@ -18,8 +19,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private String locale;
     private List<CityEntity> cities;
     private Utils utils;
-    LocationPreferenceDialog locationPreferenceDialog;
-    LayoutInflater layoutInflater;
+    private LocationPreferenceDialog locationPreferenceDialog;
+    private LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
         Context context = locationPreferenceDialog.getContext();
@@ -30,15 +31,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         this.locale = utils.getAppLanguage();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView country;
-        private TextView city;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView tvCountry;
+        private TextView tvCity;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            city = (TextView) itemView.findViewById(R.id.text1);
-            country = (TextView) itemView.findViewById(R.id.text2);
+            tvCity = (TextView) itemView.findViewById(R.id.tvCity);
+            tvCountry = (TextView) itemView.findViewById(R.id.tvCountry);
+
+            utils.setFont(tvCity);
+            utils.setFont(tvCountry);
         }
 
         @Override
@@ -54,13 +58,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        utils.setFont(holder.city);
-        holder.city.setText(locale.equals("en")
+        holder.tvCity.setText(locale.equals(Constants.LANG_EN)
                 ? cities.get(position).getEn()
                 : utils.shape(cities.get(position).getFa()));
 
-        utils.setFont(holder.country);
-        holder.country.setText(locale.equals("en")
+        holder.tvCountry.setText(locale.equals(Constants.LANG_EN)
                 ? cities.get(position).getCountryEn()
                 : utils.shape(cities.get(position).getCountryFa()));
     }
