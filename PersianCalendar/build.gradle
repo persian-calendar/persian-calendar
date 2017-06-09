@@ -15,11 +15,14 @@ android {
 
     buildTypes {
         debug {
+            resValue "string", "app_label", "@string/app_name_debug"
+            applicationIdSuffix "." + "debug"
             versionNameSuffix "-" + "git rev-parse --short HEAD".execute().text.trim()
         }
         release {
             minifyEnabled true
             proguardFile getDefaultProguardFile('proguard-android.txt')
+            resValue "string", "app_label", "@string/app_name"
         }
     }
 
