@@ -5,7 +5,6 @@
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackground"
     android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat
@@ -27,7 +26,6 @@
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
                 app:divider="?attr/appDivider"
                 app:dividerPadding="@dimen/divider_margin"
@@ -133,7 +131,6 @@
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
                 app:dividerPadding="@dimen/divider_margin"
                 app:divider="?attr/appDivider"
