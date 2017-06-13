@@ -22,8 +22,6 @@ import java.util.List;
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private Context context;
     private MonthFragment monthFragment;
-    private final int TYPE_HEADER = 0;
-    private final int TYPE_DAY = 1;
     private List<DayEntity> days;
     private int selectedDay = -1;
     private boolean persianDigit;
@@ -54,13 +52,16 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     }
 
     public void clearSelectedDay() {
+        int prevDay = selectedDay;
         selectedDay = -1;
-        notifyDataSetChanged();
+        notifyItemChanged(fixRtlPosition(prevDay));
     }
 
     public void selectDay(int dayOfMonth) {
+        int prevDay = selectedDay;
         selectedDay = dayOfMonth + 6 + firstDayDayOfWeek;
-        notifyDataSetChanged();
+        notifyItemChanged(fixRtlPosition(prevDay));
+        notifyItemChanged(fixRtlPosition(selectedDay));
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -83,8 +84,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            position += 6 - (position % 7) * 2;
+            int position = fixRtlPosition(getAdapterPosition());
             if (totalDays < position - 6 - firstDayDayOfWeek) {
                 return;
             }
@@ -94,15 +94,16 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                         .get(position - 7 - firstDayDayOfWeek)
                         .getPersianDate());
 
+                int prevDay = selectedDay;
                 selectedDay = position;
-                notifyDataSetChanged();
+                notifyItemChanged(fixRtlPosition(prevDay));
+                notifyItemChanged(getAdapterPosition());
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            int position = getAdapterPosition();
-            position += 6 - (position % 7) * 2;
+            int position = fixRtlPosition(getAdapterPosition());
             if (totalDays < position - 6 - firstDayDayOfWeek) {
                 return false;
             }
@@ -131,7 +132,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
-        position += 6 - (position % 7) * 2;
+        position = fixRtlPosition(position);
         if (totalDays < position - 6 - firstDayDayOfWeek) {
             setEmpty(holder);
             return;
@@ -207,16 +208,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         return 7 * 7; // days of week * month view rows
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (isPositionHeader(position)) {
-            return TYPE_HEADER;
-        } else {
-            return TYPE_DAY;
-        }
-    }
-
     private boolean isPositionHeader(int position) {
         return position < 7;
+    }
+
+    private int fixRtlPosition(int position) {
+        position += 6 - (position % 7) * 2;
+        return position;
     }
 }
