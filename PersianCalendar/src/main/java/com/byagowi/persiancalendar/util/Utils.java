@@ -172,7 +172,7 @@ public class Utils {
      * @return Shaped text
      */
     public String shape(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
+        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB)
                 ? ArabicShaping.shape(text)
                 : text;
     }
