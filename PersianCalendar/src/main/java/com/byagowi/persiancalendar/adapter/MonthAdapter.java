@@ -213,7 +213,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     }
 
     private int fixRtlPosition(int position) {
-        position += 6 - (position % 7) * 2;
+        position += 6 - (position % 7) * 2;//equal:(6 - position % 7) + position - (position % 7)
         return position;
     }
 }
