@@ -5,7 +5,6 @@ public class Constants {
     public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
-    public static final String LOCATION_PERMISSION_RESULT = "location-permission-result";
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
 
     public static final String LANG_EN = "en";

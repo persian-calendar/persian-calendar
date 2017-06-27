@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -13,8 +10,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -29,9 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by ebrahim on 3/26/16.
- */
 public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
     LocationManager locationManager;
@@ -55,20 +49,11 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         tryRetrieveLocation();
-        LocalBroadcastManager.getInstance(context).registerReceiver(permissionGrantReceiver,
-                new IntentFilter(Constants.LOCATION_PERMISSION_RESULT));
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
         builder.setView(textView);
     }
-
-    BroadcastReceiver permissionGrantReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            tryRetrieveLocation();
-        }
-    };
 
     // Just ask for permission once, if we couldn't get it, nvm
     public boolean first = true;
@@ -86,8 +71,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             }
         } else if (first) {
             first = false;
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {
+            requestPermissions(new String[]{
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION
                     },
@@ -147,8 +131,6 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(permissionGrantReceiver);
-
         if (latitude != null && longitude != null) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             SharedPreferences.Editor editor = preferences.edit();
@@ -167,5 +149,12 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        tryRetrieveLocation();
     }
 }
