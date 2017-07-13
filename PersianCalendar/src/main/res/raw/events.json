@@ -501,6 +501,9 @@
     { "holiday": false, "year": -1, "month": 2, "day": 10, "type": "Iran",
       "title": "آغاز عملیات بیت المقدس (۱۳۶۱ ه‍ ش)" },
 
+    { "holiday": false, "year": -1, "month": 2, "day": 11, "type": "Iran",
+      "title": "روز جهانی کارگر" },
+
     { "holiday": false, "year": -1, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
 
@@ -535,7 +538,7 @@
       "title": "روز مالیات" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 21, "type": "Iran",
-      "title": "کشف توطعهٔ کودتای آمریکایی در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍ ش)" },
+      "title": "کشف توطئهٔ کودتای آمریکایی در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 21, "type": "Iran",
       "title": "حمله به مسجد گوهرشاد و کشتار مردم (۱۳۱۴ ه‍ ش)" },
