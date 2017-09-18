@@ -3,7 +3,6 @@
     android:id="@+id/about_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="?attr/colorBackground"
     android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat

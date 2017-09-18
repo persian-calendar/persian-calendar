@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground">
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text1"
+        android:id="@+id/tvCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/padding_item"
@@ -17,7 +17,7 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text2"
+        android:id="@+id/tvCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray" />

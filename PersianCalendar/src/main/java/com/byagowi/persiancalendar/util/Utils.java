@@ -33,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azizhuss.arabicreshaper.ArabicShaping;
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -172,7 +171,7 @@ public class Utils {
      * @return Shaped text
      */
     public String shape(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN)
+        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB)
                 ? ArabicShaping.shape(text)
                 : text;
     }

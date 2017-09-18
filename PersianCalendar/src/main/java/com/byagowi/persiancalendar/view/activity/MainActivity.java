@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -288,12 +287,5 @@ public class MainActivity extends AppCompatActivity {
         adapter.setSelectedItem(menuPosition);
 
         drawerLayout.closeDrawers();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(
-                    new Intent(Constants.LOCATION_PERMISSION_RESULT));
     }
 }

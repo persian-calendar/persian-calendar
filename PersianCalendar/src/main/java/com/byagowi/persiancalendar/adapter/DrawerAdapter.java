@@ -45,6 +45,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
                 imageView = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
                 background = itemView.findViewById(R.id.background);
+
+                utils.setFont(itemTitle);
+                utils.setFont(itemSubtitle);
             } else {
                 imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
             }
@@ -76,22 +79,23 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
-            utils.setFont(holder.itemTitle);
             holder.itemTitle.setText(utils.shape(drawerTitles[position - 1]));
+
             if (drawerSubtitles[position - 1].length() != 0) {
                 holder.itemSubtitle.setVisibility(View.VISIBLE);
-                utils.setFont(holder.itemSubtitle);
                 holder.itemSubtitle.setText(utils.shape(drawerSubtitles[position - 1]));
             } else {
                 holder.itemSubtitle.setVisibility(View.GONE);
             }
 
             holder.imageView.setImageResource(drawerIcon.getResourceId(position - 1, 0));
+
             if (selectedItem == position) {
                 holder.background.setVisibility(View.VISIBLE);
             } else {
                 holder.background.setVisibility(View.GONE);
             }
+
         } else {
 
             switch (utils.getSeason()) {
