@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">تقویم فارسی</string>
+    <string name="app_name_debug">تقویم دیباگ</string>
     <string name="widget_name">تقویم فارسی</string>
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
     <string name="latitude">عرض جغرافیایی</string>
