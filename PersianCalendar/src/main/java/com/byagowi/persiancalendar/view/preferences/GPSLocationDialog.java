@@ -55,30 +55,31 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         builder.setView(textView);
     }
 
-    // Just ask for permission once, if we couldn't get it, nvm
-    public boolean first = true;
 
     public void tryRetrieveLocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-
-            if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            }
-        } else if (first) {
-            first = false;
-            requestPermissions(new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },
-                    Constants.LOCATION_PERMISSION_REQUEST_CODE);
+        if (checkPermission()) {
+            getLocation();
         } else {
-            dismiss();
+            getPermission();
         }
+    }
+
+    private void getLocation() {
+        if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+
+        if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        }
+    }
+
+    private void getPermission() {
+        requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                },
+                Constants.LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     LocationListener locationListener = new LocationListener() {
@@ -145,8 +146,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             editor.commit();
         }
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (checkPermission()) {
             locationManager.removeUpdates(locationListener);
         }
     }
@@ -155,6 +155,16 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        tryRetrieveLocation();
+        if (checkPermission()) {
+            getLocation();
+        } else {
+            dismiss();
+        }
+    }
+
+
+    private boolean checkPermission() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }
