@@ -11,7 +11,7 @@
 * برای گزارش کاستی‌ها و خطاهای برنامه و درخواست ویژگی‌های جدید لطفاً از http://github.com/ebraminio/DroidPersianCalendar استفاده کنید.
 
 
-Copyright (C) 2012-2017  ebrahim@gnu.org  ابراهیم بیاگوی
+Copyright (C) 2012-2018  ebrahim@gnu.org  ابراهیم بیاگوی
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
