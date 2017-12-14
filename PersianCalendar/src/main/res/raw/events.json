@@ -407,7 +407,7 @@
       "title": "روز وحدت حوزه و دانشگاه" },
 
     { "holiday": false, "year": -1, "month": 9, "day": 30, "type": "Iran",
-      "title": "شب یلدا" },
+      "title": "شب یلدا (چله)" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 5, "type": "Iran",
       "title": "روز ایمنی در برابر زلزله و کاهش اثرات بلایای طبیعی" },
@@ -419,7 +419,7 @@
       "title": "قیام خونین مردم قم (۱۳۵۶ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 20, "type": "Iran",
-      "title": "شهادت میرزاتقی خان امیرکبیر (۱۲۳۰ ه‍ ش)" },
+      "title": "شهادت میرزاتقی‌خان امیرکبیر (۱۲۳۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 22, "type": "Iran",
       "title": "تشکیل شورای انقلاب (۱۳۵۷ ه‍ ش)" },
@@ -440,7 +440,7 @@
       "title": "بازگشت امام خمینی به ایران (۱۳۵۷ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 11, "day": 12, "type": "Iran",
-      "title": "آغاز دههٔ مبارک فجر انقلاب اسلامی" },
+      "title": "آغاز دههٔ فجر انقلاب اسلامی" },
 
     { "holiday": false, "year": -1, "month": 11, "day": 14, "type": "Iran",
       "title": "روز فناوری فضایی" },
@@ -471,6 +471,9 @@
 
     { "holiday": false, "year": -1, "month": 12, "day": 20, "type": "Iran",
       "title": "روز راهیان نور" },
+
+    { "holiday": false, "year": -1, "month": 12, "day": 21, "type": "Iran",
+      "title": "روز بزرگداشت نظامی گنجوی" },
 
     { "holiday": false, "year": -1, "month": 12, "day": 22, "type": "Iran",
       "title": "روز بزرگداشت شهدا" },
@@ -587,7 +590,7 @@
       "title": "روز پیوند اولیا و مربیان" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 24, "type": "Iran",
-      "title": "به آتش كشيدن مسجد جامع شهر كرمان (۱۳۵۷ ه‍ ش)" },
+      "title": "به آتش كشیدن مسجد جامع شهر كرمان (۱۳۵۷ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 29, "type": "Iran",
       "title": "روز صادرات" },
@@ -764,7 +767,7 @@
       "title": "آذرروز، جشن آذرگان" },
 
     { "holiday": false, "year": -1, "month": 9, "day": 30, "type": "Ancient Iran",
-      "title": "جشن شب یلدا (چله) / گاهنبار میدیارِم، جشن میانهٔ سال گاهنباری (از مبدأ آغاز تابستان) و پایان پاییز" },
+      "title": "گاهنبار میدیارِم، جشن میانهٔ سال گاهنباری (از مبدأ آغاز تابستان)" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 1, "type": "Ancient Iran",
       "title": "روز میلاد خورشید، جشن خرم‌روز / نخستین جشن دیگان / دیدار طلوع خورشید در تقویم آفتابی چارتاقی نیاسر" },
@@ -1009,6 +1012,15 @@
     { "holiday": true, "year": 1397, "month": 1, "day": 25, "type": "Islamic",
       "title": "مبعث حضرت رسول اکرم صلی اﷲ علیه و آله (۱۳ سال قبل از هجرت)" },
 
+    { "holiday": false, "year": 1397, "month": 1, "day": 31, "type": "Islamic",
+      "title": "ولادت حضرت امام حسین علیه‌السلام (۴ ه‍ ق) و روز پاسدار" },
+
+    { "holiday": false, "year": 1397, "month": 2, "day": 1, "type": "Islamic",
+      "title": "ولادت حضرت ابوالفضل العباس علیه السلام (۲۶ ه‍ ق) و روز جانباز" },
+
+    { "holiday": false, "year": 1397, "month": 2, "day": 8, "type": "Islamic",
+      "title": "ولادت حضرت علی اكبر علیه‌السلام (۳۳ ه‍ ق) و روز جوان" },
+
     { "holiday": true, "year": 1397, "month": 2, "day": 12, "type": "Islamic",
       "title": "ولادت حضرت قائم عجلاﷲ تعالی فرجه (۲۵۵ ه‍ ق)" },
 
@@ -1023,6 +1035,12 @@
 
     { "holiday": true, "year": 1397, "month": 4, "day": 18, "type": "Islamic",
       "title": "شهادت حضرت امام جعفر صادق علیه‌السلام (۱۴۸ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 4, "day": 24, "type": "Islamic",
+      "title": "ولادت حضرت معصومه سلام الله علیها (۱۳۷ ه‍ ق) و روز دختران" },
+
+    { "holiday": false, "year": 1397, "month": 5, "day": 3, "type": "Islamic",
+      "title": "ولادت حضرت امام رضا علیه السلام (۱۴۸ ه‍ ق)" },
 
     { "holiday": true, "year": 1397, "month": 5, "day": 31, "type": "Islamic",
       "title": "عید سعید قربان" },
@@ -1057,7 +1075,28 @@
     { "holiday": false, "year": 1397, "month": 9, "day": 4, "type": "Islamic",
       "title": "میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ ه‍ ق)" },
 
+    { "holiday": false, "year": 1397, "month": 10, "day": 22, "type": "Islamic",
+      "title": "ولادت حضرت زینب سلام الله علیها (۵ ه‍ ق) و روز پرستار" },
+
     { "holiday": true, "year": 1397, "month": 11, "day": 20, "type": "Islamic",
-      "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ ه‍ ق)" }
+      "title": "شهادت حضرت فاطمة زهرا سلام الله علیها (۱۱ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 11, "day": 30, "type": "Islamic",
+      "title": "سالروز وفات حضرت ام‌البنين سلام الله عليها" },
+
+    { "holiday": false, "year": 1397, "month": 12, "day": 8, "type": "Islamic",
+      "title": "ولادت حضرت فاطمة زهرا سلام الله علیها (هشتم قبل از هجرت) و روز زن" },
+
+    { "holiday": false, "year": 1397, "month": 12, "day": 17, "type": "Islamic",
+      "title": "ولادت حضرت امام محمد باقر علیه‌السلام (۵۷ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 12, "day": 19, "type": "Islamic",
+      "title": "شهادت حضرت امام علی النقی الهادی علیه‌السلام (۲۵۴ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 12, "day": 26, "type": "Islamic",
+      "title": "ولادت حضرت امام محمد تقی علیه‌السلام «جواد الائمه» (۱۹۵ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 12, "day": 29, "type": "Islamic",
+      "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)" }
   ]
 }
