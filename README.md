@@ -3,7 +3,6 @@ Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidP
 <div lang="fa" dir="rtl">تقویم فارسی اندروید<br />
 تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock<br />
 برای دریافت و نصب بر برگهٔ releases در بالای صفحه کلیک کنید.</div>
------------------------------
 
 Download
 -----------------------------
