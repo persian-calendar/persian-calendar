@@ -3,6 +3,7 @@
     "http://calendar.ut.ac.ir/Fa/Tyear/Data%5Choliday-1394.pdf",
     "http://pcci.ir/file/2015/11/1395.zip",
     "https://calendar.ut.ac.ir/Fa/News/Data/Doc/calendar%201396-full.pdf",
+    "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf",
     "https://www.tasnimnews.com/fa/news/1395/11/10/1310977/",
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
@@ -1000,6 +1001,63 @@
       "title": "میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ ه‍ ق)" },
 
     { "holiday": true, "year": 1396, "month": 12, "day": 1, "type": "Islamic",
+      "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 1, "day": 11, "type": "Islamic",
+      "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)" },
+
+    { "holiday": true, "year": 1397, "month": 1, "day": 25, "type": "Islamic",
+      "title": "مبعث حضرت رسول اکرم صلی اﷲ علیه و آله (۱۳ سال قبل از هجرت)" },
+
+    { "holiday": true, "year": 1397, "month": 2, "day": 12, "type": "Islamic",
+      "title": "ولادت حضرت قائم عجلاﷲ تعالی فرجه (۲۵۵ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 3, "day": 16, "type": "Islamic",
+      "title": "شهادت حضرت علی علیه‌السلام (۴۰ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 3, "day": 25, "type": "Islamic",
+      "title": "عید سعید فطر" },
+
+    { "holiday": true, "year": 1397, "month": 3, "day": 26, "type": "Islamic",
+      "title": "تعطیل به مناسبت عید سعید فطر" },
+
+    { "holiday": true, "year": 1397, "month": 4, "day": 18, "type": "Islamic",
+      "title": "شهادت حضرت امام جعفر صادق علیه‌السلام (۱۴۸ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 5, "day": 31, "type": "Islamic",
+      "title": "عید سعید قربان" },
+
+    { "holiday": true, "year": 1397, "month": 6, "day": 8, "type": "Islamic",
+      "title": "عید سعید غدیر خم (۱۰ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 6, "day": 28, "type": "Islamic",
+      "title": "تاسوعای حسینی" },
+
+    { "holiday": true, "year": 1397, "month": 6, "day": 29, "type": "Islamic",
+      "title": "عاشورای حسینی" },
+
+    { "holiday": true, "year": 1397, "month": 8, "day": 8, "type": "Islamic",
+      "title": "اربعین حسینی" },
+
+    { "holiday": true, "year": 1397, "month": 8, "day": 16, "type": "Islamic",
+      "title": "رحلت حضرت رسول اکرم صلی اﷲ علیه و آله (۱۱ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 8, "day": 16, "type": "Islamic",
+      "title": "شهادت حضرت امام حسن مجتبی علیه‌السلام (۵۰ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 8, "day": 17, "type": "Islamic",
+      "title": "شهادت حضرت امام رضا علیه‌السلام (۲۰۳ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 8, "day": 25, "type": "Islamic",
+      "title": "شهادت حضرت امام حسن عسکری علیه‌السلام (۲۳۰ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 9, "day": 4, "type": "Islamic",
+      "title": "میلاد حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت)" },
+
+    { "holiday": false, "year": 1397, "month": 9, "day": 4, "type": "Islamic",
+      "title": "میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ ه‍ ق)" },
+
+    { "holiday": true, "year": 1397, "month": 11, "day": 20, "type": "Islamic",
       "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ ه‍ ق)" }
   ]
 }
