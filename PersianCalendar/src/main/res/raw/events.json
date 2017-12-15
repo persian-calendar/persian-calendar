@@ -16,7 +16,44 @@
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "جشن‌های باستانی ایران",
-    "رضا مرادی قیاس آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>"
+    "رضا مرادی قیاس آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>",
+
+    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-data.txt",
+    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-2-data.txt",
+    "شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی",
+    "سعید رسولی <saeed.gnu@gmail.com> مولا پهنادایان <mola.mp@gmail.com>"
+
+  ],
+  "global_gregorian_events": [
+    { "month": 3, "day": 22, "title": "روز جهانی آب" },
+    { "month": 3, "day": 23, "title": "روز جهانی هواشناسی" },
+    { "month": 5, "day": 5, "title": "روز جهانی ماما" },
+    { "month": 5, "day": 8, "title": "روز جهانی صلیب سرخ و هلال احمر" },
+    { "month": 5, "day": 18, "title": "روز جهانی موزه و میراث فرهنگی" },
+    { "month": 5, "day": 31, "title": "روز جهانی بدون دخانیات" },
+    { "month": 6, "day": 10, "title": "روز جهانی صنایع دستی" },
+    { "month": 6, "day": 17, "title": "روز جهانی بیابان‌زدایی" },
+    { "month": 6, "day": 26, "title": "روز جهانی مبارزه با مواد مخدر" },
+    { "month": 8, "day": 1, "title": "روز جهانی شیر مادر" },
+    { "month": 8, "day": 6, "title": "انفجار بمب اتمی آمریکا در هیروشیما با بیش از ۱۶۰ هزار کشته و مجروح (۱۹۴۵ میلادی)" },
+    { "month": 9, "day": 27, "title": "روز جهانی جهانگردی" },
+    { "month": 9, "day": 30, "title": "روز جهانی ناشنوایان – روز جهانی دریانوردی" },
+    { "month": 10, "day": 1, "title": "روز جهانی سالمندان" },
+    { "month": 10, "day": 8, "title": "روز جهانی کودک" },
+    { "month": 10, "day": 9, "title": "روز جهانی پست" },
+    { "month": 10, "day": 14, "title": "روز جهانی استاندارد" },
+    { "month": 10, "day": 16, "title": "روز جهانی غذا" },
+    { "month": 12, "day": 1, "title": "روز جهانی مبارزه با ایدز" },
+    { "month": 12, "day": 7, "title": "روز جهانی هواپیمایی" },
+    { "month": 1, "day": 1, "title": "آغاز سال میلادی" },
+    { "month": 5, "day": 1, "title": "روز جهانی کار و کارگر" },
+    { "month": 6, "day": 5, "title": "روز جهانی محیط زیست" },
+    { "month": 8, "day": 21, "title": "روز جهانی مسجد" },
+    { "month": 10, "day": 15, "title": "روز جهانی نابینایان (عصای سفید)" },
+    { "month": 11, "day": 10, "title": "روز جهانی علم در خدمت صلح و توسعه" },
+    { "month": 12, "day": 3, "title": "روز جهانی معلولان" },
+    { "month": 12, "day": 18, "title": "روز جهان عاری از خشونت و افراطی‌گری" },
+    { "month": 12, "day": 25, "title": "‫ولادت حضرت عیسی مسیح (ع)" }
   ],
   "events": [
     { "holiday": true, "year": -1, "month": 1, "day": 1, "type": "Iran",
@@ -47,7 +84,7 @@
       "title": "روز طبیعت" },
 
     { "holiday": false, "year": -1, "month": 1, "day": 18, "type": "Iran",
-      "title": "روز سلامتی (روز جهانی بهداشت)" },
+      "title": "روز سلامتی" },
 
     { "holiday": false, "year": -1, "month": 1, "day": 20, "type": "Iran",
       "title": "روز ملی فناوری هسته‌ای" },
@@ -150,12 +187,6 @@
 
     { "holiday": true, "year": -1, "month": 3, "day": 15, "type": "Iran",
       "title": "قیام خونین ۱۵ خرداد (۱۳۴۲ ه‍ ش)" },
-
-    { "holiday": false, "year": -1, "month": 3, "day": 15, "type": "Iran",
-      "title": "روز جهانی محیط زیست" },
-
-    { "holiday": false, "year": -1, "month": 3, "day": 20, "type": "Iran",
-      "title": "روز صنایع دستی" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 26, "type": "Iran",
       "title": "شهادت سربازان دلیر اسلام: بخارایی، امانی، صفار هندی و نیک‌نژاد (۱۳۴۴ ه‍ ش)" },
@@ -355,9 +386,6 @@
     { "holiday": false, "year": -1, "month": 7, "day": 9, "type": "Iran",
       "title": "‫روز همبستگی و همدردی با کودکان و نوجوانان فلسطینی" },
 
-    { "holiday": false, "year": -1, "month": 7, "day": 9, "type": "Iran",
-      "title": "روز جهانی سالمندان" },
-
     { "holiday": false, "year": -1, "month": 7, "day": 13, "type": "Iran",
       "title": "هجرت امام خمینی از عراق به پاریس (۱۳۵۷ ه‍ ش)" },
 
@@ -373,14 +401,8 @@
     { "holiday": false, "year": -1, "month": 7, "day": 20, "type": "Iran",
       "title": "روز بزرگداشت حافظ" },
 
-    { "holiday": false, "year": -1, "month": 7, "day": 20, "type": "Iran",
-      "title": "روز جهانی استاندارد" },
-
     { "holiday": false, "year": -1, "month": 7, "day": 23, "type": "Iran",
       "title": "شهادت آیت‌الله اشرفی اصفهانی (۱۳۶۱ ه‍ ش)" },
-
-    { "holiday": false, "year": -1, "month": 7, "day": 23, "type": "Iran",
-      "title": "روز جهانی نابینایان (عصای سفید)" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 24, "type": "Iran",
       "title": "روز ملی پارالمپیک" },
@@ -418,9 +440,6 @@
     { "holiday": false, "year": -1, "month": 8, "day": 15, "type": "Iran",
       "title": "روز وقف" },
 
-    { "holiday": false, "year": -1, "month": 8, "day": 19, "type": "Iran",
-      "title": "روز جهانی علم در خدمت صلح و توسعه" },
-
     { "holiday": false, "year": -1, "month": 8, "day": 24, "type": "Iran",
       "title": "روز کتاب، کتابخوانی و کتابدار" },
 
@@ -445,9 +464,6 @@
     { "holiday": false, "year": -1, "month": 9, "day": 12, "type": "Iran",
       "title": "روز قانون اساسی جمهوری اسلامی ایران (تصویب قانون اساسی جمهوری اسلامی ایران - ۱۳۵۸ ه‍ ش)" },
 
-    { "holiday": false, "year": -1, "month": 9, "day": 12, "type": "Iran",
-      "title": "روز جهانی معلولان" },
-
     { "holiday": false, "year": -1, "month": 9, "day": 16, "type": "Iran",
       "title": "روز دانشجو" },
 
@@ -465,9 +481,6 @@
 
     { "holiday": false, "year": -1, "month": 9, "day": 27, "type": "Iran",
       "title": "روز وحدت حوزه و دانشگاه" },
-
-    { "holiday": false, "year": -1, "month": 9, "day": 27, "type": "Iran",
-      "title": "روز جهان عاری از خشونت و افراطی‌گری" },
 
     { "holiday": false, "year": -1, "month": 9, "day": 30, "type": "Iran",
       "title": "شب یلدا (چله)" },
@@ -570,9 +583,6 @@
 
     { "holiday": false, "year": -1, "month": 2, "day": 10, "type": "Iran",
       "title": "آغاز عملیات بیت المقدس (۱۳۶۱ ه‍ ش)" },
-
-    { "holiday": false, "year": -1, "month": 2, "day": 11, "type": "Iran",
-      "title": "روز جهانی کار و کارگر" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
