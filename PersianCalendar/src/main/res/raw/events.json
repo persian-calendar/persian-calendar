@@ -97,23 +97,32 @@
     { "holiday": false, "year": -1, "month": 2, "day": 12, "type": "Iran",
       "title": "روز معلم" },
 
+    { "holiday": false, "year": -1, "month": 2, "day": 12, "type": "Iran",
+      "title": "روز جهانی مستضعفان" },
+
     { "holiday": false, "year": -1, "month": 2, "day": 15, "type": "Iran",
       "title": "روز بزرگداشت شیخ صدوق" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 18, "type": "Iran",
-      "title": "روز بیماری‌های خاص و صعب‌العلاج" },
+      "title": "روز بیماری‌های خاص و صعب العلاج" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 19, "type": "Iran",
       "title": "روز بزرگداشت شیخ کلینی" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 24, "type": "Iran",
-      "title": "لغو امتیاز تنباکو (۱۲۷۰ ه‍ ش)" },
+      "title": "لغو امتیاز تنباکو به فتواي آيت‌الله ميرزا حسن شيرازي (۱۲۷۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 25, "type": "Iran",
-      "title": "روز بزرگداشت فردوسی" },
+      "title": "روز پاسداشت زبان فارسي و بزرگداشت حكيم ابوالقاسم فردوسي" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 28, "type": "Iran",
       "title": "روز بزرگداشت حکیم عمر خیام" },
+
+    { "holiday": false, "year": -1, "month": 2, "day": 30, "type": "Iran",
+      "title": "روز ملي جمعيت" },
+
+    { "holiday": false, "year": -1, "month": 2, "day": 31, "type": "Iran",
+      "title": "روز اهداي عضو، اهداي زندگي" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 1, "type": "Iran",
       "title": "روز بهره‌وری و بهینه‌سازی مصرف" },
@@ -122,13 +131,16 @@
       "title": "روز بزرگداشت ملاصدرا (صدرالمتألهین)" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 3, "type": "Iran",
-      "title": "فتح خرمشهر در عملیات بیت المقدس (۱۳۶۱ ه‍ ش)" },
+      "title": "فتح خرمشهر در عملیات بیت‌المقدس (۱۳۶۱ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 4, "type": "Iran",
-      "title": "روز مقاومت و پایداری" },
+      "title": " روز مقاومت، ايثار و پيروزي" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 4, "type": "Iran",
       "title": "روز دزفول" },
+
+    { "holiday": false, "year": -1, "month": 3, "day": 4, "type": "Iran",
+      "title": "روز مقاومت و پايداري" },
 
     { "holiday": true, "year": -1, "month": 3, "day": 14, "type": "Iran",
       "title": "رحلت امام خمینی رهبر انقلاب اسلامی (۱۳۶۸ ه‍ ش)" },
@@ -138,6 +150,9 @@
 
     { "holiday": true, "year": -1, "month": 3, "day": 15, "type": "Iran",
       "title": "قیام خونین ۱۵ خرداد (۱۳۴۲ ه‍ ش)" },
+
+    { "holiday": false, "year": -1, "month": 3, "day": 15, "type": "Iran",
+      "title": "روز جهاني محيط زيست" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 20, "type": "Iran",
       "title": "روز صنایع دستی" },
@@ -155,7 +170,7 @@
       "title": "شهادت دکتر مصطفی چمران (۱۳۶۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 3, "day": 31, "type": "Iran",
-      "title": "روز بسیج اساتید" },
+      "title": "روز بسیج استادان" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 1, "type": "Iran",
       "title": "‫روز تبلیغ و اطلاع‌رسانی دینی (تأسیس سازمان تبلیغات اسلامی ۱۳۶۰ ه‍ ش)" },
@@ -175,11 +190,17 @@
     { "holiday": false, "year": -1, "month": 4, "day": 10, "type": "Iran",
       "title": "روز صنعت و معدن" },
 
+    { "holiday": false, "year": -1, "month": 4, "day": 10, "type": "Iran",
+      "title": "روز فرهنگ پهلواني و ورزش زورخانه‌اي" },
+
     { "holiday": false, "year": -1, "month": 4, "day": 11, "type": "Iran",
       "title": "شهادت آیت‌الله صدوقی (۱۳۶۱ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 12, "type": "Iran",
       "title": "حملهٔ ناوگان آمریکای به هواپیمای مسافربری ایران (۱۳۶۷ ه‍ ش)" },
+
+    { "holiday": false, "year": -1, "month": 4, "day": 12, "type": "Iran",
+      "title": "روز افشاي حقوق بشر آمريكايي" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 14, "type": "Iran",
       "title": "روز قلم" },
@@ -190,14 +211,23 @@
     { "holiday": false, "year": -1, "month": 4, "day": 21, "type": "Iran",
       "title": "روز عفاف و حجاب" },
 
+    { "holiday": false, "year": -1, "month": 4, "day": 23, "type": "Iran",
+      "title": "روز گفت‌وگو و تعامل سازنده با جهان" },
+
     { "holiday": false, "year": -1, "month": 4, "day": 25, "type": "Iran",
       "title": "روز بهزیستی و تامین اجتماعی" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 26, "type": "Iran",
       "title": "سالروز تأسیس نهاد شورای نگهبان" },
 
+    { "holiday": false, "year": -1, "month": 4, "day": 28, "type": "Iran",
+      "title": "روز تجليل از امامزادگان و بقاع متبركه" },
+
+    { "holiday": false, "year": -1, "month": 4, "day": 29, "type": "Iran",
+      "title": "روز بزرگداشت حضرت احمد بن موسي شاهچراغ عليه‌السلام" },
+
     { "holiday": false, "year": -1, "month": 5, "day": 5, "type": "Iran",
-      "title": "عملیات افتخار آفرین مرصاد (۱۳۶۷ ه‍ ش)" },
+      "title": "سالروز عملیات مرصاد (۱۳۶۷ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 5, "day": 9, "type": "Iran",
       "title": "روز اهدای خون" },
@@ -216,6 +246,12 @@
 
     { "holiday": false, "year": -1, "month": 5, "day": 21, "type": "Iran",
       "title": "روز حمایت از صنایع کوچک" },
+
+    { "holiday": false, "year": -1, "month": 5, "day": 22, "type": "Iran",
+      "title": "روز تشكل‌ها و مشاركتهاي اجتماعي" },
+
+    { "holiday": false, "year": -1, "month": 5, "day": 22, "type": "Iran",
+      "title": "روز ازدواج" },
 
     { "holiday": false, "year": -1, "month": 5, "day": 23, "type": "Iran",
       "title": "روز مقاومت اسلامی" },
@@ -250,11 +286,11 @@
     { "holiday": false, "year": -1, "month": 6, "day": 5, "type": "Iran",
       "title": "روز داروسازی" },
 
-    { "holiday": false, "year": -1, "month": 6, "day": 8, "type": "Iran",
-      "title": "روز مبارزه با تروریسم" },
+    { "holiday": false, "year": -1, "month": 6, "day": 5, "type": "Iran",
+      "title": "روز کشتی" },
 
     { "holiday": false, "year": -1, "month": 6, "day": 8, "type": "Iran",
-      "title": "انفجار دفتر نخست وزیری و شهادت شهیدان رجایی و باهنر (۱۳۶۰ ه‍ ش)" },
+      "title": "روز مبارزه با تروریسم (انفجار دفتر نخست وزیری و شهادت شهیدان رجایی و باهنر - ۱۳۶۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 6, "day": 12, "type": "Iran",
       "title": "روز مبارزه با استعمار انگلیس (سالروز شهادت رئیسعلی دلواری)" },
@@ -268,11 +304,14 @@
     { "holiday": false, "year": -1, "month": 6, "day": 14, "type": "Iran",
       "title": "شهادت آیت‌الله قدوسی و سرتیپ وحید دستجردی (۱۳۶۰ ه‍ ش)" },
 
+    { "holiday": false, "year": -1, "month": 6, "day": 15, "type": "Iran",
+      "title": "روز خانواده و تكريم بازنشستگان" },
+
     { "holiday": false, "year": -1, "month": 6, "day": 17, "type": "Iran",
       "title": "قیام ۱۷ شهریور و کشتار جمعی از مردم به دست مأموران پهلوی (۱۳۵۷ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 6, "day": 19, "type": "Iran",
-      "title": "وفات آیت‌الله سید محمود طالقانی (۱۳۵۸ ه‍ ش)" },
+      "title": "وفات آیت‌الله سید محمود طالقانی اولین امام جمعهٔ تهران (۱۳۵۸ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 6, "day": 20, "type": "Iran",
       "title": "شهادت آیت‌الله مدنی (۱۳۶۰ ه‍ ش)" },
@@ -286,6 +325,9 @@
     { "holiday": false, "year": -1, "month": 6, "day": 27, "type": "Iran",
       "title": "روز بزرگداشت استاد سید محمد حسین شهریار" },
 
+    { "holiday": false, "year": -1, "month": 6, "day": 30, "type": "Iran",
+      "title": "روز تجليل از اسرا و مفقودان" },
+
     { "holiday": false, "year": -1, "month": 6, "day": 31, "type": "Iran",
       "title": "آغاز جنگ تحمیلی (۱۳۵۹ ه‍ ش)" },
 
@@ -296,22 +338,25 @@
       "title": "شکست حصر آبادان در عملیات ثامن‌الأئمه (ع) (۱۳۶۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 7, "type": "Iran",
-      "title": "روز آتش نشانی و ایمنی" },
+      "title": "روز بزرگداشت فرماندهان شهید دفاع مقدس" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 7, "type": "Iran",
       "title": "شهادت سرداران اسلام: فلاحی، فکوری، نامحو، کلاهدوز و جهان‌آرا (۱۳۶۰ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 7, "type": "Iran",
-      "title": "روز بزرگداشت شمس" },
+      "title": "روز آتش‌نشانی و ایمنی" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 7, "type": "Iran",
-      "title": "روز بزرگداشت فرماندهان شهید دفاع مقدس" },
+      "title": "روز بزرگداشت شمس" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 8, "type": "Iran",
       "title": "روز بزرگداشت مولوی" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 9, "type": "Iran",
       "title": "‫روز همبستگی و همدردی با کودکان و نوجوانان فلسطینی" },
+
+    { "holiday": false, "year": -1, "month": 7, "day": 9, "type": "Iran",
+      "title": "روز جهاني سالمندان" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 13, "type": "Iran",
       "title": "هجرت امام خمینی از عراق به پاریس (۱۳۵۷ ه‍ ش)" },
@@ -323,16 +368,25 @@
       "title": "روز دامپزشکی" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 15, "type": "Iran",
-      "title": "روز روستا" },
+      "title": "روز روستا و عشایر" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 20, "type": "Iran",
       "title": "روز بزرگداشت حافظ" },
 
+    { "holiday": false, "year": -1, "month": 7, "day": 20, "type": "Iran",
+      "title": "روز جهانی استاندارد" },
+
     { "holiday": false, "year": -1, "month": 7, "day": 23, "type": "Iran",
       "title": "شهادت آیت‌الله اشرفی اصفهانی (۱۳۶۱ ه‍ ش)" },
 
+    { "holiday": false, "year": -1, "month": 7, "day": 23, "type": "Iran",
+      "title": "روز جهاني نابينايان (عصاي سفيد)" },
+
     { "holiday": false, "year": -1, "month": 7, "day": 24, "type": "Iran",
       "title": "روز ملی پارالمپیک" },
+
+    { "holiday": false, "year": -1, "month": 7, "day": 25, "type": "Iran",
+      "title": "روز￼بزرگداشت سلمان فارسي" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 26, "type": "Iran",
       "title": "روز تربیت بدنی و ورزش" },
@@ -361,14 +415,17 @@
     { "holiday": false, "year": -1, "month": 8, "day": 14, "type": "Iran",
       "title": "روز فرهنگ عمومی" },
 
+    { "holiday": false, "year": -1, "month": 8, "day": 15, "type": "Iran",
+      "title": "روز وقف" },
+
+    { "holiday": false, "year": -1, "month": 8, "day": 19, "type": "Iran",
+      "title": "روز جهاني علم در خدمت صلح و توسعه" },
+
     { "holiday": false, "year": -1, "month": 8, "day": 24, "type": "Iran",
       "title": "روز کتاب، کتابخوانی و کتابدار" },
 
     { "holiday": false, "year": -1, "month": 8, "day": 24, "type": "Iran",
       "title": "روز بزرگداشت آیت‌الله علامه سید محمد حسین طباطبایی (۱۳۶۰ ه‍ ش)" },
-
-    { "holiday": false, "year": -1, "month": 9, "day": 5, "type": "Iran",
-      "title": "روز بسیج مستضعفان" },
 
     { "holiday": false, "year": -1, "month": 9, "day": 5, "type": "Iran",
       "title": "تشکیل بسیج مستضعفان (۱۳۵۸ ه‍ ش)" },
@@ -505,11 +562,14 @@
     { "holiday": false, "year": -1, "month": 2, "day": 2, "type": "Iran",
       "title": "روز زمین پاک" },
 
+    { "holiday": false, "year": -1, "month": 2, "day": 7, "type": "Iran",
+      "title": "روز ایمنی حمل و نقل" },
+
     { "holiday": false, "year": -1, "month": 2, "day": 10, "type": "Iran",
       "title": "آغاز عملیات بیت المقدس (۱۳۶۱ ه‍ ش)" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 11, "type": "Iran",
-      "title": "روز جهانی کارگر" },
+      "title": "روز جهانی کار و کارگر" },
 
     { "holiday": false, "year": -1, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
@@ -896,7 +956,7 @@
       "title": "شهادت حضرت فاطمه زهرا سلام الله علیها (۱۱ ه‍ ق)" },
 
     { "holiday": true, "year": 1395, "month": 1, "day": 4, "type": "Islamic",
-      "title": "سالروز وفات حضرت امالبنین سلام الله علیها" },
+      "title": "سالروز وفات حضرت ام‌البنین سلام الله علیها" },
 
     { "holiday": true, "year": 1395, "month": 2, "day": 2, "type": "Islamic",
       "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)" },
@@ -998,7 +1058,7 @@
       "title": "شهادت حضرت امام رضا علیه‌السلام (۲۰۳ ه‍ ق)" },
 
     { "holiday": true, "year": 1396, "month": 9, "day": 6, "type": "Islamic",
-      "title": "شهادت حضرت امام حسن عسکری علیه‌السلام (۲۳۰ ه‍ ق)" },
+      "title": "شهادت حضرت امام حسن عسکری علیه‌السلام (۲۶۰ ه‍ ق) و آغاز امامت حضرت￼وليعصر عجلاالله تعالي فرجه" },
 
     { "holiday": true, "year": 1396, "month": 9, "day": 15, "type": "Islamic",
       "title": "میلاد حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت)" },
@@ -1018,6 +1078,15 @@
     { "holiday": true, "year": 1397, "month": 1, "day": 11, "type": "Islamic",
       "title": "ولادت حضرت امام علی علیه‌السلام (۲۳ سال قبل از هجرت)" },
 
+    { "holiday": false, "year": 1397, "month": 1, "day": 13, "type": "Islamic",
+      "title": "وفات حضرت زينب سلام الله عليها (۶۲ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 1, "day": 13, "type": "Islamic",
+      "title": "تغيير قبلهٔ مسلمين از بيت المقدس به مكه معظمه (۲ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 1, "day": 23, "type": "Islamic",
+      "title": "شهادت حضرت امام موسی كاظم عليه السلام (۱۸۳ ه‍ ق)" },
+
     { "holiday": true, "year": 1397, "month": 1, "day": 25, "type": "Islamic",
       "title": "مبعث حضرت رسول اکرم صلی اﷲ علیه و آله (۱۳ سال قبل از هجرت)" },
 
@@ -1027,14 +1096,38 @@
     { "holiday": false, "year": 1397, "month": 2, "day": 1, "type": "Islamic",
       "title": "ولادت حضرت ابوالفضل العباس علیه السلام (۲۶ ه‍ ق) و روز جانباز" },
 
+    { "holiday": false, "year": 1397, "month": 2, "day": 2, "type": "Islamic",
+      "title": "ولادت حضرت امام زين‌العابدين عليه‌السلام (۳۸ ه‍ ق)" },
+
     { "holiday": false, "year": 1397, "month": 2, "day": 8, "type": "Islamic",
       "title": "ولادت حضرت علی اکبر علیه‌السلام (۳۳ ه‍ ق) و روز جوان" },
 
     { "holiday": true, "year": 1397, "month": 2, "day": 12, "type": "Islamic",
       "title": "ولادت حضرت قائم عجل اﷲ تعالی فرجه (۲۵۵ ه‍ ق)" },
 
+    { "holiday": false, "year": 1397, "month": 3, "day": 5, "type": "Islamic",
+      "title": "وفات حضرت خديجه سلام الله عليها (۳ سال قبل از هجرت)" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 10, "type": "Islamic",
+      "title": "ولادت حضرت امام حسن مجتبي عليه‌السلام (۳ ه‍ ق) و روز اكرام" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 13, "type": "Islamic",
+      "title": "شب قدر" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 14, "type": "Islamic",
+      "title": "ضربت خوردن حضرت امام علي عليه‌السلام (۴۰ ه‍ ق)" },
+
     { "holiday": true, "year": 1397, "month": 3, "day": 16, "type": "Islamic",
       "title": "شهادت حضرت علی علیه‌السلام (۴۰ ه‍ ق)" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 15, "type": "Islamic",
+      "title": "شب قدر" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 17, "type": "Islamic",
+      "title": "شب قدر" },
+
+    { "holiday": false, "year": 1397, "month": 3, "day": 18, "type": "Islamic",
+      "title": "روز جهاني قدس (آخرين جمعه ماه رمضان)" },
 
     { "holiday": true, "year": 1397, "month": 3, "day": 25, "type": "Islamic",
       "title": "عید سعید فطر" },
@@ -1063,6 +1156,9 @@
     { "holiday": true, "year": 1397, "month": 6, "day": 29, "type": "Islamic",
       "title": "عاشورای حسینی" },
 
+    { "holiday": false, "year": 1397, "month": 6, "day": 31, "type": "Islamic",
+      "title": "شهادت حضرت امام￼زين‌العابدين عليه السلام (۹۵ ه‍ ق) " },
+
     { "holiday": true, "year": 1397, "month": 8, "day": 8, "type": "Islamic",
       "title": "اربعین حسینی" },
 
@@ -1075,11 +1171,17 @@
     { "holiday": true, "year": 1397, "month": 8, "day": 17, "type": "Islamic",
       "title": "شهادت حضرت امام رضا علیه‌السلام (۲۰۳ ه‍ ق)" },
 
+    { "holiday": false, "year": 1397, "month": 8, "day": 18, "type": "Islamic",
+      "title": "هجرت حضرت رسول اكرم صلياالله عليه و آله از مكه به مدينه" },
+
     { "holiday": true, "year": 1397, "month": 8, "day": 25, "type": "Islamic",
-      "title": "شهادت حضرت امام حسن عسکری علیه‌السلام (۲۳۰ ه‍ ق)" },
+      "title": "شهادت حضرت امام حسن عسکری علیه‌السلام (۲۶۰ ه‍ ق) و آغاز امامت حضرت￼وليعصر عجلاالله تعالي فرجه" },
+
+    { "holiday": false, "year": 1397, "month": 8, "day": 29, "type": "Islamic",
+      "title": "ولادت حضرت رسول اكرم صلی‌الله عليه و آله به روايت اهل سنت (۵۳ سال قبل از هجرت) و آغاز هفته وحدت" },
 
     { "holiday": true, "year": 1397, "month": 9, "day": 4, "type": "Islamic",
-      "title": "میلاد حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت)" },
+      "title": "ولادت حضرت رسول اکرم صلی اﷲ علیه و آله (۵۳ سال قبل از هجرت) و روز اخلاق￼و مهرورزي" },
 
     { "holiday": false, "year": 1397, "month": 9, "day": 4, "type": "Islamic",
       "title": "میلاد حضرت امام جعفر صادق علیه‌السلام مؤسس مذهب جعفری (۸۳ ه‍ ق)" },
