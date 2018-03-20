@@ -204,21 +204,32 @@ public class UpdateUtils {
         }
 
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
-
+        
+//Biftor: you have pb in android 8 notification notworking without channel
+        
         ApplicationService applicationService = ApplicationService.getInstance();
         if (applicationService != null && utils.isNotifyDate()) {
-            applicationService.startForeground(
-                    NOTIFICATION_ID,
-                    new NotificationCompat.Builder(context)
-                            .setPriority(NotificationCompat.PRIORITY_LOW)
-                            .setOngoing(true)
-                            .setSmallIcon(icon)
-                            .setWhen(0)
-                            .setContentIntent(launchAppPendingIntent)
-                            .setContentText(utils.shape(body))
-                            .setContentTitle(utils.shape(title))
-                            .setColor(0xFF607D8B) // permanent services color
-                            .build());
+            //Notification Channel
+            NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel mChannel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), mContext.getString(R.string.app_name), importance);
+                mChannel.setShowBadge(false);
+                if(notificationManager !=null){
+                    notificationManager.createNotificationChannel(mChannel);
+                }
+            }
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, String.valueOf(NOTIFICATION_ID))
+                    .setSmallIcon(icon)
+                    .setOngoing(true)
+                    .setWhen(0)
+                    .setContentIntent(launchAppPendingIntent)
+                    .setContentText(utils.shape(body))
+                    .setContentTitle(utils.shape(title))
+                    .setColor(0xFF607D8B);
+            applicationService.startForeground(NOTIFICATION_ID, builder.build());
+
         }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
