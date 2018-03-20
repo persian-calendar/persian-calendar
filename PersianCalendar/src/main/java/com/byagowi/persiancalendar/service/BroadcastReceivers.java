@@ -29,14 +29,20 @@ public class BroadcastReceivers extends BroadcastReceiver {
         updateUtils = UpdateUtils.getInstance(context);
 
         if (intent != null && intent.getAction() != null && !TextUtils.isEmpty(intent.getAction())) {
-            if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
-                    intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
-                    intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
-
-                if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+            if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
+//Biftor android 8 ACTION_BOOT_COMPLETED pb fixed
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(new Intent(context, ApplicationService.class));
+                } else {
                     context.startService(new Intent(context, ApplicationService.class));
                 }
 
+            }else if (
+                    intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
+                            intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
+                
+                context.startService(new Intent(context, ApplicationService.class));
+                
             } else if (intent.getAction().equals(Intent.ACTION_TIME_TICK) ||
                     intent.getAction().equals(Intent.ACTION_TIME_CHANGED) ||
                     intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
