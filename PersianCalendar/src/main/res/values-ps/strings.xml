@@ -68,6 +68,7 @@
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
+    <string name="imsak">امساک</string>
     <string name="azan1">اذان صبح</string>
     <string name="azan2">اذان ظهر</string>
     <string name="azan3">عصر</string>

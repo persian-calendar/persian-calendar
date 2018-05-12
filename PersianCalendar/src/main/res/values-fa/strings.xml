@@ -68,6 +68,7 @@
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
     <string name="closeDrawer">بستن</string>
     <string name="openDrawer">گشودن</string>
+    <string name="imsak">امساک</string>
     <string name="azan1">اذان صبح</string>
     <string name="azan2">اذان ظهر</string>
     <string name="azan3">عصر</string>
