@@ -49,6 +49,7 @@ public class CalendarFragment extends Fragment
     private Coordinate coordinate;
 
     private PrayTimesCalculator prayTimesCalculator;
+    private TextView imsakTextView;
     private TextView fajrTextView;
     private TextView dhuhrTextView;
     private TextView asrTextView;
@@ -72,6 +73,7 @@ public class CalendarFragment extends Fragment
     private CardView owghat;
     private CardView event;
 
+    private RelativeLayout imsakLayout;
     private RelativeLayout fajrLayout;
     private RelativeLayout sunriseLayout;
     private RelativeLayout dhuhrLayout;
@@ -97,6 +99,7 @@ public class CalendarFragment extends Fragment
         utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
+        imsakLayout = (RelativeLayout) view.findViewById(R.id.imsakLayout);
         fajrLayout = (RelativeLayout) view.findViewById(R.id.fajrLayout);
         sunriseLayout = (RelativeLayout) view.findViewById(R.id.sunriseLayout);
         dhuhrLayout = (RelativeLayout) view.findViewById(R.id.dhuhrLayout);
@@ -116,6 +119,10 @@ public class CalendarFragment extends Fragment
         utils.setFont(weekDayName);
         today = (TextView) view.findViewById(R.id.today);
         todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
+
+        imsakTextView = (TextView) view.findViewById(R.id.imsak);
+        utils.setFont(imsakTextView);
+        utils.setFontAndShape((TextView) view.findViewById(R.id.imsakText));
 
         fajrTextView = (TextView) view.findViewById(R.id.fajr);
         utils.setFont(fajrTextView);
@@ -277,6 +284,7 @@ public class CalendarFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
+        imsakTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
         fajrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)));
         sunriseTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
         dhuhrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
@@ -294,16 +302,29 @@ public class CalendarFragment extends Fragment
         switch (v.getId()) {
 
             case R.id.owghat:
-                fajrLayout.setVisibility(View.VISIBLE);
-                sunriseLayout.setVisibility(View.VISIBLE);
-                dhuhrLayout.setVisibility(View.VISIBLE);
-                asrLayout.setVisibility(View.VISIBLE);
-                sunsetLayout.setVisibility(View.VISIBLE);
-                maghribLayout.setVisibility(View.VISIBLE);
-                ishaLayout.setVisibility(View.VISIBLE);
-                midnightLayout.setVisibility(View.VISIBLE);
 
-                moreOwghat.setVisibility(View.GONE);
+                if (sunriseLayout.getVisibility() == View.VISIBLE) {
+                    sunriseLayout.setVisibility(View.GONE);
+                    dhuhrLayout.setVisibility(View.GONE);
+                    asrLayout.setVisibility(View.GONE);
+                    sunsetLayout.setVisibility(View.GONE);
+                    maghribLayout.setVisibility(View.GONE);
+                    ishaLayout.setVisibility(View.GONE);
+                    midnightLayout.setVisibility(View.GONE);
+                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_down);
+                } else {
+                    imsakLayout.setVisibility(View.VISIBLE);
+                    fajrLayout.setVisibility(View.VISIBLE);
+                    sunriseLayout.setVisibility(View.VISIBLE);
+                    dhuhrLayout.setVisibility(View.VISIBLE);
+                    asrLayout.setVisibility(View.VISIBLE);
+                    sunsetLayout.setVisibility(View.VISIBLE);
+                    maghribLayout.setVisibility(View.VISIBLE);
+                    ishaLayout.setVisibility(View.VISIBLE);
+                    midnightLayout.setVisibility(View.VISIBLE);
+                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_up);
+                }
+
                 break;
 
             case R.id.today:

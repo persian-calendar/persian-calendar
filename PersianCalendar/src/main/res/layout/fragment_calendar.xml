@@ -255,6 +255,55 @@
                     app:dividerPadding="@dimen/divider_margin2"
                     app:showDividers="middle">
 
+
+                    <!--imsak-->
+                    <RelativeLayout
+                        android:id="@+id/imsakLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_item"
+                        android:paddingTop="@dimen/padding_item">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/iconImasak"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:layout_toRightOf="@+id/imsak1TextContainer"
+                            android:gravity="center"
+                            app:srcCompat="@drawable/ic_brightness_4"
+                            android:tint="?attr/colorIcon" />
+
+                        <android.support.v7.widget.LinearLayoutCompat
+                            android:id="@+id/imsak1TextContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/imsakText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/imsak"
+                                android:textColor="?attr/colorTextSecond"
+                                android:textSize="@dimen/text_size_note" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/imsak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/item_calendar_margin_top"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="@dimen/text_size_description" />
+
+                        </android.support.v7.widget.LinearLayoutCompat>
+
+                    </RelativeLayout>
+
+
                     <!--morning-->
                     <RelativeLayout
                         android:id="@+id/fajrLayout"
@@ -307,6 +356,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
                         android:paddingTop="@dimen/padding_item">
