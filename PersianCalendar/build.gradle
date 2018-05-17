@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 25
     buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 9
-        targetSdkVersion 27
+        targetSdkVersion 25
         versionCode 540
         versionName "5.4.0"
         vectorDrawables.useSupportLibrary = true
@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    def supportLibraryVersion = "27.1.1"
+    def supportLibraryVersion = "25.4.0"
 
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
