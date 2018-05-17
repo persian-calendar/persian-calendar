@@ -77,7 +77,7 @@ public class CompassFragment extends Fragment {
                 return output + ALPHA * (input - output);
             }
         };
-        compassView = (QiblaCompassView) view.findViewById(R.id.compass_view);
+        compassView = view.findViewById(R.id.compass_view);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

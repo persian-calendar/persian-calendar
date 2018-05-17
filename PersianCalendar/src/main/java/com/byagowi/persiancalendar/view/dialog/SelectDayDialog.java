@@ -37,15 +37,15 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         final Utils utils = Utils.getInstance(getContext());
 
         // fill members
-        final Spinner calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
-        final Spinner yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
-        final Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        final Spinner daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        final Spinner calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
+        final Spinner yearSpinner = view.findViewById(R.id.yearSpinner);
+        final Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
+        final Spinner daySpinner = view.findViewById(R.id.daySpinner);
 
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
+        utils.setFontAndShape(view.findViewById(R.id.converterLabelDay));
+        utils.setFontAndShape(view.findViewById(R.id.converterLabelMonth));
+        utils.setFontAndShape(view.findViewById(R.id.converterLabelYear));
+        utils.setFontAndShape(view.findViewById(R.id.calendarTypeTitle));
 
         startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
