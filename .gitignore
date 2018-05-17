@@ -32,7 +32,7 @@ proguard/
 
 
 ### Java ###
-*.class
+#*.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -77,7 +77,7 @@ hs_err_pid*
 
 ## File-based project format:
 *.ipr
-*.iws
+#*.iws
 
 ## Plugin-specific files:
 
@@ -98,7 +98,7 @@ crashlytics-build.properties
 
 ### Gradle ###
 .gradle
-build/
+#build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
