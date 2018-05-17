@@ -37,7 +37,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             Log.e(TAG, e.getMessage());
         }
 
-        SeekBar seekBar = (SeekBar) view.findViewById(R.id.sbVolumeSlider);
+        SeekBar seekBar = view.findViewById(R.id.sbVolumeSlider);
 
         volume = athanPref.getVolume();
         seekBar.setProgress(volume);

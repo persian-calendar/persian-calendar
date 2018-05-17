@@ -27,12 +27,12 @@ public class AboutFragment extends Fragment {
 
         String version = utils.programVersion();
 
-        TextView versionTextView = (TextView) view.findViewById(R.id.version2);
+        TextView versionTextView = view.findViewById(R.id.version2);
         utils.setFont(versionTextView);
         versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
                 utils.formatNumber(version.split("-")[0]));
 
-        TextView licenseTextView = (TextView) view.findViewById(R.id.license);
+        TextView licenseTextView = view.findViewById(R.id.license);
         licenseTextView.setText("Android Persian Calendar Version " + version + "\n" +
                 utils.readRawResource(R.raw.credits));
 

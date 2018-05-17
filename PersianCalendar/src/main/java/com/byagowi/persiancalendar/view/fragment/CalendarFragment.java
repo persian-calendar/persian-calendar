@@ -99,75 +99,75 @@ public class CalendarFragment extends Fragment
         utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
-        imsakLayout = (RelativeLayout) view.findViewById(R.id.imsakLayout);
-        fajrLayout = (RelativeLayout) view.findViewById(R.id.fajrLayout);
-        sunriseLayout = (RelativeLayout) view.findViewById(R.id.sunriseLayout);
-        dhuhrLayout = (RelativeLayout) view.findViewById(R.id.dhuhrLayout);
-        asrLayout = (RelativeLayout) view.findViewById(R.id.asrLayout);
-        sunsetLayout = (RelativeLayout) view.findViewById(R.id.sunsetLayout);
-        maghribLayout = (RelativeLayout) view.findViewById(R.id.maghribLayout);
-        ishaLayout = (RelativeLayout) view.findViewById(R.id.ishaLayout);
-        midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
+        imsakLayout = view.findViewById(R.id.imsakLayout);
+        fajrLayout = view.findViewById(R.id.fajrLayout);
+        sunriseLayout = view.findViewById(R.id.sunriseLayout);
+        dhuhrLayout = view.findViewById(R.id.dhuhrLayout);
+        asrLayout = view.findViewById(R.id.asrLayout);
+        sunsetLayout = view.findViewById(R.id.sunsetLayout);
+        maghribLayout = view.findViewById(R.id.maghribLayout);
+        ishaLayout = view.findViewById(R.id.ishaLayout);
+        midnightLayout = view.findViewById(R.id.midnightLayout);
 
-        gregorianDate = (TextView) view.findViewById(R.id.gregorian_date);
+        gregorianDate = view.findViewById(R.id.gregorian_date);
         utils.setFont(gregorianDate);
-        islamicDate = (TextView) view.findViewById(R.id.islamic_date);
+        islamicDate = view.findViewById(R.id.islamic_date);
         utils.setFont(islamicDate);
-        shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
+        shamsiDate = view.findViewById(R.id.shamsi_date);
         utils.setFont(shamsiDate);
-        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
+        weekDayName = view.findViewById(R.id.week_day_name);
         utils.setFont(weekDayName);
-        today = (TextView) view.findViewById(R.id.today);
-        todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
+        today = view.findViewById(R.id.today);
+        todayIcon = view.findViewById(R.id.today_icon);
 
-        imsakTextView = (TextView) view.findViewById(R.id.imsak);
+        imsakTextView = view.findViewById(R.id.imsak);
         utils.setFont(imsakTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.imsakText));
+        utils.setFontAndShape(view.findViewById(R.id.imsakText));
 
-        fajrTextView = (TextView) view.findViewById(R.id.fajr);
+        fajrTextView = view.findViewById(R.id.fajr);
         utils.setFont(fajrTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.fajrText));
+        utils.setFontAndShape(view.findViewById(R.id.fajrText));
 
-        dhuhrTextView = (TextView) view.findViewById(R.id.dhuhr);
+        dhuhrTextView = view.findViewById(R.id.dhuhr);
         utils.setFont(dhuhrTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.dhuhrText));
+        utils.setFontAndShape(view.findViewById(R.id.dhuhrText));
 
-        asrTextView = (TextView) view.findViewById(R.id.asr);
+        asrTextView = view.findViewById(R.id.asr);
         utils.setFont(asrTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.asrText));
+        utils.setFontAndShape(view.findViewById(R.id.asrText));
 
-        maghribTextView = (TextView) view.findViewById(R.id.maghrib);
+        maghribTextView = view.findViewById(R.id.maghrib);
         utils.setFont(maghribTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.maghribText));
+        utils.setFontAndShape(view.findViewById(R.id.maghribText));
 
-        ishaTextView = (TextView) view.findViewById(R.id.isgha);
+        ishaTextView = view.findViewById(R.id.isgha);
         utils.setFont(ishaTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.ishaText));
+        utils.setFontAndShape(view.findViewById(R.id.ishaText));
 
-        sunriseTextView = (TextView) view.findViewById(R.id.sunrise);
+        sunriseTextView = view.findViewById(R.id.sunrise);
         utils.setFont(sunriseTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.sunriseText));
+        utils.setFontAndShape(view.findViewById(R.id.sunriseText));
 
-        sunsetTextView = (TextView) view.findViewById(R.id.sunset);
+        sunsetTextView = view.findViewById(R.id.sunset);
         utils.setFont(sunsetTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.sunsetText));
+        utils.setFontAndShape(view.findViewById(R.id.sunsetText));
 
-        midnightTextView = (TextView) view.findViewById(R.id.midnight);
+        midnightTextView = view.findViewById(R.id.midnight);
         utils.setFont(midnightTextView);
-        utils.setFontAndShape((TextView) view.findViewById(R.id.midnightText));
+        utils.setFontAndShape(view.findViewById(R.id.midnightText));
 
 
-        moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
+        moreOwghat = view.findViewById(R.id.more_owghat);
 
-        eventTitle = (TextView) view.findViewById(R.id.event_title);
+        eventTitle = view.findViewById(R.id.event_title);
         utils.setFont(eventTitle);
-        holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
+        holidayTitle = view.findViewById(R.id.holiday_title);
         utils.setFont(holidayTitle);
 
-        owghat = (CardView) view.findViewById(R.id.owghat);
-        event = (CardView) view.findViewById(R.id.cardEvent);
+        owghat = view.findViewById(R.id.owghat);
+        event = view.findViewById(R.id.cardEvent);
 
-        monthViewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
+        monthViewPager = view.findViewById(R.id.calendar_pager);
 
         coordinate = utils.getCoordinate();
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
@@ -184,9 +184,9 @@ public class CalendarFragment extends Fragment
         islamicDate.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
 
-        utils.setFontAndShape((TextView) view.findViewById(R.id.event_card_title));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.today));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.owghat_text));
+        utils.setFontAndShape(view.findViewById(R.id.event_card_title));
+        utils.setFontAndShape(view.findViewById(R.id.today));
+        utils.setFontAndShape(view.findViewById(R.id.owghat_text));
 
         String cityName = utils.getCityName(false);
         if (!TextUtils.isEmpty(cityName)) {

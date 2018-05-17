@@ -49,9 +49,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        textAlarmName = (TextView) findViewById(R.id.athan_name);
-        TextView textCityName = (TextView) findViewById(R.id.place);
-        athanIconView = (AppCompatImageView) findViewById(R.id.background_image);
+        textAlarmName = findViewById(R.id.athan_name);
+        TextView textCityName = findViewById(R.id.place);
+        athanIconView = findViewById(R.id.background_image);
         athanIconView.setOnClickListener(this);
 
         setPrayerView(prayerKey);

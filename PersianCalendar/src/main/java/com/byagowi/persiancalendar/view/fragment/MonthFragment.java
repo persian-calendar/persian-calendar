@@ -42,8 +42,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
         List<DayEntity> days = utils.getDays(offset);
 
-        AppCompatImageView prev = (AppCompatImageView) view.findViewById(R.id.prev);
-        AppCompatImageView next = (AppCompatImageView) view.findViewById(R.id.next);
+        AppCompatImageView prev = view.findViewById(R.id.prev);
+        AppCompatImageView next = view.findViewById(R.id.next);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
@@ -64,7 +64,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         persianDate.setYear(year);
         persianDate.setDayOfMonth(1);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         updateUtils.update(true);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setPadding(0, 0, 0, 0);
         }
 
-        RecyclerView navigation = (RecyclerView) findViewById(R.id.navigation_view);
+        RecyclerView navigation = findViewById(R.id.navigation_view);
         navigation.setHasFixedSize(true);
         adapter = new DrawerAdapter(this);
         navigation.setAdapter(adapter);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         navigation.setLayoutManager(layoutManager);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout = findViewById(R.id.drawer);
         final View appMainView = findViewById(R.id.app_main_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = +1;

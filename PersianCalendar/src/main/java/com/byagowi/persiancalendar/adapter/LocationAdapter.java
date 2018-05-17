@@ -38,8 +38,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            tvCity = (TextView) itemView.findViewById(R.id.tvCity);
-            tvCountry = (TextView) itemView.findViewById(R.id.tvCountry);
+            tvCity = itemView.findViewById(R.id.tvCity);
+            tvCountry = itemView.findViewById(R.id.tvCountry);
 
             utils.setFont(tvCity);
             utils.setFont(tvCountry);

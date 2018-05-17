@@ -24,7 +24,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.preference_location, (ViewGroup) getView(), false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.RecyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new LocationAdapter(this));
