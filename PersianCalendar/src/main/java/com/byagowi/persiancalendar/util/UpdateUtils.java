@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.util;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -35,6 +37,7 @@ public class UpdateUtils {
     private static UpdateUtils myInstance;
     private Context context;
     private PersianDate pastDate;
+    private String channelId = "0";
 
     private ExtensionData mExtensionData;
 
@@ -206,10 +209,21 @@ public class UpdateUtils {
         int icon = utils.getDayIconResource(persian.getDayOfMonth());
 
         ApplicationService applicationService = ApplicationService.getInstance();
+
         if (applicationService != null && utils.isNotifyDate()) {
+            // Create the NotificationChannel, but only on API 26+ because
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                CharSequence name = "Persistent_Calendar_Notification";
+                NotificationChannel channel = new NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_LOW /* PRIORITY_LOW's equivalent */);
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = applicationService.getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+
             applicationService.startForeground(
                     NOTIFICATION_ID,
-                    new NotificationCompat.Builder(context)
+                    new NotificationCompat.Builder(context, channelId)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                             .setOngoing(true)
                             .setSmallIcon(icon)
