@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,14 +36,14 @@ import calendar.PersianDate;
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static UpdateUtils myInstance;
-    private Context context;
+    private WeakReference<Context> contextRef;
     private PersianDate pastDate;
     private String channelId = "0";
 
     private ExtensionData mExtensionData;
 
     private UpdateUtils(Context context) {
-        this.context = context;
+        contextRef = new WeakReference<>(context);
     }
 
     public static UpdateUtils getInstance(Context context) {
@@ -56,8 +57,8 @@ public class UpdateUtils {
 
     public void update(boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Utils utils = Utils.getInstance(context);
-        utils.changeAppLanguage(context);
+        Utils utils = Utils.getInstance(contextRef.get());
+        utils.changeAppLanguage(contextRef.get());
         if (firstTime) {
             utils.loadLanguageResource();
             firstTime = false;
@@ -66,18 +67,18 @@ public class UpdateUtils {
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = utils.getToday();
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
+        Intent intent = new Intent(contextRef.get(), MainActivity.class);
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(contextRef.get(), 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets
         //
         //
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
-        RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
-        RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
+        AppWidgetManager manager = AppWidgetManager.getInstance(contextRef.get());
+        RemoteViews remoteViews1 = new RemoteViews(contextRef.get().getPackageName(), R.layout.widget1x1);
+        RemoteViews remoteViews4 = new RemoteViews(contextRef.get().getPackageName(), R.layout.widget4x1);
+        RemoteViews remoteViews2 = new RemoteViews(contextRef.get().getPackageName(), R.layout.widget2x2);
         String colorInt = utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
@@ -89,7 +90,7 @@ public class UpdateUtils {
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
                 utils.shape(utils.getMonthName(persian)));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget1x1.class), remoteViews1);
+        manager.updateAppWidget(new ComponentName(contextRef.get(), Widget1x1.class), remoteViews1);
 
         // Widget 4x1
         remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
@@ -111,7 +112,7 @@ public class UpdateUtils {
             text2 = weekDayName + " " + date;
             text1 = time;
             if (utils.iranTime) {
-                text3 = "(" + context.getString(R.string.iran_time) + ")";
+                text3 = "(" + contextRef.get().getString(R.string.iran_time) + ")";
             }
         } else {
             text1 = weekDayName;
@@ -122,7 +123,7 @@ public class UpdateUtils {
         remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, utils.shape(text2));
         remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, utils.shape(text3));
         remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget4x1.class), remoteViews4);
+        manager.updateAppWidget(new ComponentName(contextRef.get(), Widget4x1.class), remoteViews4);
 
 
         // Widget 2x2
@@ -184,7 +185,7 @@ public class UpdateUtils {
         remoteViews2.setTextViewText(R.id.date_2x2, utils.shape(text2));
 
         remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget2x2.class), remoteViews2);
+        manager.updateAppWidget(new ComponentName(contextRef.get(), Widget2x2.class), remoteViews2);
 
         //
         // Permanent Notification Bar and DashClock Data Extension Update
@@ -223,7 +224,7 @@ public class UpdateUtils {
 
             applicationService.startForeground(
                     NOTIFICATION_ID,
-                    new NotificationCompat.Builder(context, channelId)
+                    new NotificationCompat.Builder(contextRef.get(), channelId)
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                             .setOngoing(true)
                             .setSmallIcon(icon)
