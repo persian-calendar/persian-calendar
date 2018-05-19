@@ -19,6 +19,7 @@ android {
         }
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
     }
@@ -26,6 +27,12 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
