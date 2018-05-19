@@ -32,7 +32,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -171,9 +170,7 @@ public class Utils {
      * @return Shaped text
      */
     public String shape(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB)
-                ? ArabicShaping.shape(text)
-                : text;
+        return text;
     }
 
     public String programVersion() {
@@ -925,11 +922,9 @@ public class Utils {
     public void copyToClipboard(View view) {
         // if it is older than this, the view is also shaped which is not good for copying, so just
         // nvm about backup solution for older Androids
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            CharSequence text = ((TextView) view).getText();
-            CopyToClipboard.copyToClipboard(text, context);
-            quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
-        }
+        CharSequence text = ((TextView) view).getText();
+        CopyToClipboard.copyToClipboard(text, context);
+        quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
     }
 
     private static class CopyToClipboard {
