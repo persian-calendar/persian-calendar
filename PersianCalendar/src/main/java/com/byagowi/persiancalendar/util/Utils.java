@@ -785,9 +785,7 @@ public class Utils {
     }
 
     public Set<String> commaSeparatedToSet(String commaSeparated) {
-        Set<String> result = new HashSet<>();
-        result.addAll(Arrays.asList(TextUtils.split(commaSeparated, ",")));
-        return result;
+        return new HashSet<>(Arrays.asList(TextUtils.split(commaSeparated, ",")));
     }
 
     public void loadAlarms() {
