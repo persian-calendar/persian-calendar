@@ -32,8 +32,10 @@ public class BroadcastReceivers extends BroadcastReceiver {
             if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
                     intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
-
-                if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+//Biftor: you have pb in android 8 service Not allowed to start
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(new Intent(context, ApplicationService.class));
+                } else {
                     context.startService(new Intent(context, ApplicationService.class));
                 }
 
