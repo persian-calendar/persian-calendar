@@ -191,7 +191,7 @@ public class CalendarFragment extends Fragment
         String cityName = utils.getCityName(false);
         if (!TextUtils.isEmpty(cityName)) {
             ((TextView) view.findViewById(R.id.owghat_text))
-                    .append(" (" + utils.shape(cityName) + ")");
+                    .append(" (" + cityName + ")");
         }
 
         // This will immediately be replaced by the same functionality on fragment but is here to
@@ -208,19 +208,19 @@ public class CalendarFragment extends Fragment
     }
 
     public void selectDay(PersianDate persianDate) {
-        weekDayName.setText(utils.shape(utils.getWeekDayName(persianDate)));
-        shamsiDate.setText(utils.shape(utils.dateToString(persianDate)));
+        weekDayName.setText(utils.getWeekDayName(persianDate));
+        shamsiDate.setText(utils.dateToString(persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        gregorianDate.setText(utils.shape(utils.dateToString(civilDate)));
-        islamicDate.setText(utils.shape(utils.dateToString(
-                DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset()))));
+        gregorianDate.setText(utils.dateToString(civilDate));
+        islamicDate.setText(utils.dateToString(
+                DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset())));
 
         if (utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
             if (utils.iranTime) {
                 weekDayName.setText(weekDayName.getText() +
-                        utils.shape(" (" + getString(R.string.iran_time) + ")"));
+                        " (" + getString(R.string.iran_time) + ")");
             }
         } else {
             today.setVisibility(View.VISIBLE);
@@ -262,13 +262,13 @@ public class CalendarFragment extends Fragment
         eventTitle.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
-            holidayTitle.setText(utils.shape(holidays));
+            holidayTitle.setText((holidays));
             holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(events)) {
-            eventTitle.setText(utils.shape(events));
+            eventTitle.setText((events));
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }

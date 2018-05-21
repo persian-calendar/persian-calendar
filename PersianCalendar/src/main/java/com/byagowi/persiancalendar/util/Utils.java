@@ -161,18 +161,6 @@ public class Utils {
         return myWeakInstance.get();
     }
 
-    /**
-     * Text shaping is a essential thing on supporting Arabic script text on older Android versions.
-     * It converts normal Arabic character to their presentation forms according to their position
-     * on the text.
-     *
-     * @param text Arabic string
-     * @return Shaped text
-     */
-    public String shape(String text) {
-        return text;
-    }
-
     public String programVersion() {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -195,7 +183,7 @@ public class Utils {
 
     public void setFontAndShape(TextView textView) {
         setFont(textView);
-        textView.setText(shape(textView.getText().toString()));
+        textView.setText(textView.getText().toString());
     }
 
     public void setFontShapeAndGravity(TextView textView) {
@@ -228,12 +216,12 @@ public class Utils {
             return;
         }
 
-        SpannableString titleSpan = new SpannableString(shape(title));
+        SpannableString titleSpan = new SpannableString(title);
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
         titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
         supportActionBar.setTitle(titleSpan);
 
-        SpannableString subtitleSpan = new SpannableString(shape(subtitle));
+        SpannableString subtitleSpan = new SpannableString(subtitle);
         subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
         subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
         supportActionBar.setSubtitle(subtitleSpan);
@@ -492,11 +480,11 @@ public class Utils {
     }
 
     public void quickToast(String message) {
-        Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     public void longToast(String message) {
-        Toast.makeText(context, shape(message), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public int getDayIconResource(int day) {

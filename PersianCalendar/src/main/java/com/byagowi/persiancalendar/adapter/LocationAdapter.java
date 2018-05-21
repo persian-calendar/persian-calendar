@@ -60,11 +60,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvCity.setText(locale.equals(Constants.LANG_EN)
                 ? cities.get(position).getEn()
-                : utils.shape(cities.get(position).getFa()));
+                : cities.get(position).getFa());
 
         holder.tvCountry.setText(locale.equals(Constants.LANG_EN)
                 ? cities.get(position).getCountryEn()
-                : utils.shape(cities.get(position).getCountryFa()));
+                : cities.get(position).getCountryFa());
     }
 
     @Override
