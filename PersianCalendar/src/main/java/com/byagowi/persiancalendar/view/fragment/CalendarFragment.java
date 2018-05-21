@@ -262,13 +262,13 @@ public class CalendarFragment extends Fragment
         eventTitle.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
-            holidayTitle.setText((holidays));
+            holidayTitle.setText(holidays);
             holidayTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(events)) {
-            eventTitle.setText((events));
+            eventTitle.setText(events);
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
