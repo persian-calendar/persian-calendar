@@ -84,7 +84,7 @@ public class UpdateUtils {
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                 utils.formatNumber(persian.getDayOfMonth()));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                utils.shape(utils.getMonthName(persian)));
+                utils.getMonthName(persian));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget1x1.class), remoteViews1);
 
@@ -115,9 +115,9 @@ public class UpdateUtils {
             text2 = date;
         }
 
-        remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, utils.shape(text1));
-        remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, utils.shape(text2));
-        remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, utils.shape(text3));
+        remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
+        remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
+        remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
         remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget4x1.class), remoteViews4);
 
@@ -152,7 +152,7 @@ public class UpdateUtils {
             String holidays = utils.getEventsTitle(persian, true);
 
             if (!TextUtils.isEmpty(holidays)) {
-                remoteViews2.setTextViewText(R.id.holiday_2x2, utils.shape(holidays));
+                remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
             } else {
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
@@ -161,7 +161,7 @@ public class UpdateUtils {
             String events = utils.getEventsTitle(persian, false);
 
             if (!TextUtils.isEmpty(events)) {
-                remoteViews2.setTextViewText(R.id.event_2x2, utils.shape(events));
+                remoteViews2.setTextViewText(R.id.event_2x2, events);
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
             } else {
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
@@ -171,14 +171,14 @@ public class UpdateUtils {
         }
 
         if (owghat != null) {
-            remoteViews2.setTextViewText(R.id.owghat_2x2, utils.shape(owghat));
+            remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
         } else {
             remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
         }
 
-        remoteViews2.setTextViewText(R.id.time_2x2, utils.shape(text1));
-        remoteViews2.setTextViewText(R.id.date_2x2, utils.shape(text2));
+        remoteViews2.setTextViewText(R.id.time_2x2, text1);
+        remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
         remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget2x2.class), remoteViews2);
@@ -215,16 +215,16 @@ public class UpdateUtils {
                             .setSmallIcon(icon)
                             .setWhen(0)
                             .setContentIntent(launchAppPendingIntent)
-                            .setContentText(utils.shape(body))
-                            .setContentTitle(utils.shape(title))
+                            .setContentText(body)
+                            .setContentTitle(title)
                             .setColor(0xFF607D8B) // permanent services color
                             .build());
         }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
-                .status(utils.shape(status))
-                .expandedTitle(utils.shape(title))
-                .expandedBody(utils.shape(body)).clickIntent(intent);
+                .status(status)
+                .expandedTitle(title)
+                .expandedBody(body).clickIntent(intent);
     }
 
     public ExtensionData getExtensionData() {

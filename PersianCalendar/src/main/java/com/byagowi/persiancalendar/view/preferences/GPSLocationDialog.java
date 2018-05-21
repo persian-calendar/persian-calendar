@@ -127,7 +127,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         result += utils.formatCoordinate(
                 new Coordinate(location.getLatitude(), location.getLongitude()),
                 "\n");
-        textView.setText(utils.shape(result));
+        textView.setText(result);
     }
 
     @Override

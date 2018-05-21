@@ -29,7 +29,7 @@ public class AboutFragment extends Fragment {
 
         TextView versionTextView = (TextView) view.findViewById(R.id.version2);
         utils.setFont(versionTextView);
-        versionTextView.setText(utils.shape(getString(R.string.version)) + " " +
+        versionTextView.setText(getString(R.string.version) + " " +
                 utils.formatNumber(version.split("-")[0]));
 
         TextView licenseTextView = (TextView) view.findViewById(R.id.license);

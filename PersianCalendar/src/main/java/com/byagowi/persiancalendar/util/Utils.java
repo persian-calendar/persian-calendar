@@ -32,7 +32,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.azizhuss.arabicreshaper.ArabicShaping;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -57,7 +56,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -162,20 +160,6 @@ public class Utils {
         return myWeakInstance.get();
     }
 
-    /**
-     * Text shaping is a essential thing on supporting Arabic script text on older Android versions.
-     * It converts normal Arabic character to their presentation forms according to their position
-     * on the text.
-     *
-     * @param text Arabic string
-     * @return Shaped text
-     */
-    public String shape(String text) {
-        return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB)
-                ? ArabicShaping.shape(text)
-                : text;
-    }
-
     public String programVersion() {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -198,7 +182,7 @@ public class Utils {
 
     public void setFontAndShape(TextView textView) {
         setFont(textView);
-        textView.setText(shape(textView.getText().toString()));
+        textView.setText(textView.getText().toString());
     }
 
     public void setFontShapeAndGravity(TextView textView) {
@@ -231,12 +215,12 @@ public class Utils {
             return;
         }
 
-        SpannableString titleSpan = new SpannableString(shape(title));
+        SpannableString titleSpan = new SpannableString(title);
         titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
         titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
         supportActionBar.setTitle(titleSpan);
 
-        SpannableString subtitleSpan = new SpannableString(shape(subtitle));
+        SpannableString subtitleSpan = new SpannableString(subtitle);
         subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
         subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
         supportActionBar.setSubtitle(subtitleSpan);
@@ -495,11 +479,11 @@ public class Utils {
     }
 
     public void quickToast(String message) {
-        Toast.makeText(context, shape(message), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     public void longToast(String message) {
-        Toast.makeText(context, shape(message), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public int getDayIconResource(int day) {
@@ -532,12 +516,7 @@ public class Utils {
     }
 
     private <T> Iterable<T> iteratorToIterable(final Iterator<T> iterator) {
-        return new Iterable<T>() {
-            @Override
-            public Iterator<T> iterator() {
-                return iterator;
-            }
-        };
+        return () -> iterator;
     }
 
     public List<CityEntity> getAllCities(boolean needsSort) {
@@ -576,27 +555,24 @@ public class Utils {
             return result;
         }
 
-        final String locale = getAppLanguage();
+        String locale = getAppLanguage();
 
         CityEntity[] cities = result.toArray(new CityEntity[result.size()]);
         // Sort first by country code then city
-        Arrays.sort(cities, new Comparator<CityEntity>() {
-            @Override
-            public int compare(CityEntity l, CityEntity r) {
-                if (l.getKey().equals("")) {
-                    return -1;
-                }
-                if (r.getKey().equals(DEFAULT_CITY)) {
-                    return 1;
-                }
-                int compare = r.getCountryCode().compareTo(l.getCountryCode());
-                if (compare != 0) return compare;
-                if (locale.equals("en")) {
-                    return l.getEn().compareTo(r.getEn());
-                } else {
-                    return persianStringToArabic(l.getFa())
-                            .compareTo(persianStringToArabic(r.getFa()));
-                }
+        Arrays.sort(cities, (l, r) -> {
+            if (l.getKey().equals("")) {
+                return -1;
+            }
+            if (r.getKey().equals(DEFAULT_CITY)) {
+                return 1;
+            }
+            int compare = r.getCountryCode().compareTo(l.getCountryCode());
+            if (compare != 0) return compare;
+            if (locale.equals("en")) {
+                return l.getEn().compareTo(r.getEn());
+            } else {
+                return persianStringToArabic(l.getFa())
+                        .compareTo(persianStringToArabic(r.getFa()));
             }
         });
 
@@ -785,9 +761,7 @@ public class Utils {
     }
 
     public Set<String> commaSeparatedToSet(String commaSeparated) {
-        Set<String> result = new HashSet<>();
-        result.addAll(Arrays.asList(TextUtils.split(commaSeparated, ",")));
-        return result;
+        return new HashSet<>(Arrays.asList(TextUtils.split(commaSeparated, ",")));
     }
 
     public void loadAlarms() {
@@ -927,11 +901,9 @@ public class Utils {
     public void copyToClipboard(View view) {
         // if it is older than this, the view is also shaped which is not good for copying, so just
         // nvm about backup solution for older Androids
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            CharSequence text = ((TextView) view).getText();
-            CopyToClipboard.copyToClipboard(text, context);
-            quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
-        }
+        CharSequence text = ((TextView) view).getText();
+        CopyToClipboard.copyToClipboard(text, context);
+        quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
     }
 
     private static class CopyToClipboard {

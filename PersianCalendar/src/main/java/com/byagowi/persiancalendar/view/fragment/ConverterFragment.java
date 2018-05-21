@@ -147,13 +147,13 @@ public class ConverterFragment extends Fragment implements
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
 
-            date0.setText(utils.shape(sb.toString()));
-            date1.setText(utils.shape(calendarsTextList.get(1)));
-            date2.setText(utils.shape(calendarsTextList.get(2)));
+            date0.setText(sb.toString());
+            date1.setText(calendarsTextList.get(1));
+            date2.setText(calendarsTextList.get(2));
 
         } catch (RuntimeException e) {
             moreDate.setVisibility(View.GONE);
-            date0.setText(utils.shape(getString(R.string.date_exception)));
+            date0.setText(getString(R.string.date_exception));
         }
     }
 
