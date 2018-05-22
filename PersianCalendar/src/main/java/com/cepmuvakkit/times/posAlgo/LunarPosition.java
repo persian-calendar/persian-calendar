@@ -243,8 +243,7 @@ public class LunarPosition {
                 R += coefSinCosΣlΣr[i][cCos] * Math.cos(arg);
             }
         }
-        double[] ΣlΣr = {L, R};
-        return ΣlΣr;
+        return new double[]{L, R};
     }
 
     double summationΣb(double L1, double D, double M, double M1, double F, double E) {
@@ -409,10 +408,9 @@ public class LunarPosition {
     double getLunarRiseSetAltitude(double Δ, int temperature, int pressure, int altitude) {
         //double Δinkm=149598000.0*Δ;
         double π = getHorizontalParallax(Δ);
-        double ho = 0.7275 * π
+        return 0.7275 * π
                 - AstroLib.getApparentAtmosphericRefraction(0) * AstroLib.getWeatherCorrectionCoefficent(temperature, pressure)
                 - AstroLib.getAltitudeCorrection(altitude);
-        return ho;
     }
 
 }

@@ -137,12 +137,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    slidingAnimation(drawerView, slideOffset);
-                }
+                slidingAnimation(drawerView, slideOffset);
             }
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
             private void slidingAnimation(View drawerView, float slideOffset) {
                 appMainView.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
                 drawerLayout.bringChildToFront(drawerView);
