@@ -96,7 +96,11 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             bundle.putString("key", preference.getKey());
             fragment.setArguments(bundle);
             fragment.setTargetFragment(this, 0);
-            fragment.show(getChildFragmentManager(), fragment.getClass().getName());
+            try {
+                fragment.show(getActivity().getSupportFragmentManager(), fragment.getClass().getName());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
