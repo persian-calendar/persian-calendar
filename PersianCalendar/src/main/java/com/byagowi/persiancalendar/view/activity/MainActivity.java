@@ -42,13 +42,20 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final int CALENDAR = 1;
+    private static final int CONVERTER = 2;
+    private static final int COMPASS = 3;
+    private static final int PREFERENCE = 4;
+    private static final int ABOUT = 5;
+    private static final int EXIT = 6;
+    // Default selected fragment
+    private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
+    public boolean dayIsPassed = false;
     private Utils utils;
     private UpdateUtils updateUtils;
-
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
-
     private Class<?>[] fragments = {
             null,
             CalendarFragment.class,
@@ -57,21 +64,15 @@ public class MainActivity extends AppCompatActivity {
             ApplicationPreferenceFragment.class,
             AboutFragment.class
     };
-
-    private static final int CALENDAR = 1;
-    private static final int CONVERTER = 2;
-    private static final int COMPASS = 3;
-    private static final int PREFERENCE = 4;
-    private static final int ABOUT = 5;
-    private static final int EXIT = 6;
-
-    // Default selected fragment
-    private static final int DEFAULT = CALENDAR;
-
     private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
-
     private String lastLocale;
     private String lastTheme;
+    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            dayIsPassed = true;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,24 +126,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    slidingAnimation(drawerView, slideOffset);
-                }
+                slidingAnimation(drawerView, slideOffset);
             }
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
             private void slidingAnimation(View drawerView, float slideOffset) {
                 appMainView.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
                 drawerLayout.bringChildToFront(drawerView);
@@ -152,8 +141,15 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+        String action = getIntent() != null ? getIntent().getAction() : null;
+        if ("COMPASS_SHORTCUT".equals(action)) {
+            selectItem(COMPASS);
+        } else if ("PREFERENCE_SHORTCUT".equals(action)) {
+            selectItem(PREFERENCE);
+        } else {
+            selectItem(DEFAULT);
+        }
 
-        selectItem(DEFAULT);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
@@ -173,15 +169,6 @@ public class MainActivity extends AppCompatActivity {
             v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
-
-    public boolean dayIsPassed = false;
-
-    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            dayIsPassed = true;
-        }
-    };
 
     @Override
     protected void onResume() {

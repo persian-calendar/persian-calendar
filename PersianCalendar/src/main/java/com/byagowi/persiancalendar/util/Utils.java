@@ -717,7 +717,7 @@ public class Utils {
     }
 
     public String getEventsTitle(PersianDate day, boolean holiday) {
-        String titles = "";
+        StringBuilder titles = new StringBuilder();
         boolean first = true;
         List<EventEntity> dayEvents = getEvents(day);
 
@@ -727,12 +727,12 @@ public class Utils {
                     first = false;
 
                 } else {
-                    titles = titles + "\n";
+                    titles.append("\n");
                 }
-                titles = titles + event.getTitle();
+                titles.append(event.getTitle());
             }
         }
-        return titles;
+        return titles.toString();
     }
 
     public void loadApp() {
@@ -862,12 +862,17 @@ public class Utils {
         @RawRes int messagesFile;
         String lang = getAppLanguage();
 
-        if (lang.equals("fa-AF"))
-            messagesFile = R.raw.messages_fa_af;
-        else if (lang.equals("ps"))
-            messagesFile = R.raw.messages_ps;
-        else
-            messagesFile = R.raw.messages_fa;
+        switch (lang) {
+            case "fa-AF":
+                messagesFile = R.raw.messages_fa_af;
+                break;
+            case "ps":
+                messagesFile = R.raw.messages_ps;
+                break;
+            default:
+                messagesFile = R.raw.messages_fa;
+                break;
+        }
 
         persianMonths = new String[12];
         islamicMonths = new String[12];
@@ -989,12 +994,14 @@ public class Utils {
 
     // based on R.array.calendar_type order
     public CalendarTypeEnum calendarTypeFromPosition(int position) {
-        if (position == 0)
-            return CalendarTypeEnum.SHAMSI;
-        else if (position == 1)
-            return CalendarTypeEnum.ISLAMIC;
-        else
-            return CalendarTypeEnum.GREGORIAN;
+        switch (position) {
+            case 0:
+                return CalendarTypeEnum.SHAMSI;
+            case 1:
+                return CalendarTypeEnum.ISLAMIC;
+            default:
+                return CalendarTypeEnum.GREGORIAN;
+        }
     }
 
     @IdRes
