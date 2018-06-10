@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,14 +28,14 @@ public class ShapedArrayAdapter<String> extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        if (view instanceof TextView) utils.setFontShapeAndGravity((TextView) view);
+        if (view instanceof TextView) ((TextView) view).setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         return view;
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View view = super.getDropDownView(position, convertView, parent);
-        if (view instanceof TextView) utils.setFontShapeAndGravity((TextView) view);
+        if (view instanceof TextView) ((TextView) view).setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         view.setPadding(padding, 0, padding, 0);
         return view;
     }

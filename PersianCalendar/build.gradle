@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.byagowi.persiancalendar"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 540
         versionName "5.4.0"
@@ -15,7 +15,7 @@ android {
 
     buildTypes {
         debug {
-            versionNameSuffix "-" + "git rev-parse --short HEAD".execute().text.trim()
+            versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" + "git rev-parse --short HEAD".execute().text.trim()
         }
         release {
             minifyEnabled true

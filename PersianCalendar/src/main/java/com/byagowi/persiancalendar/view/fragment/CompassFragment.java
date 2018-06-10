@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
@@ -98,7 +99,7 @@ public class CompassFragment extends Fragment {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            utils.quickToast(getString(R.string.compass_not_found));
+            Toast.makeText(context,getString(R.string.compass_not_found),Toast.LENGTH_SHORT).show();
         }
         return view;
     }

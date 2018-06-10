@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
@@ -40,11 +41,6 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Spinner yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
         Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
         Spinner daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
-
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
 
         startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
@@ -94,7 +90,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                         break;
                 }
             } catch (RuntimeException e) {
-                utils.quickToast(getString(R.string.date_exception));
+                Toast.makeText(getContext(),getString(R.string.date_exception),Toast.LENGTH_SHORT);
                 Log.e("SelectDayDialog", "", e);
             }
         });

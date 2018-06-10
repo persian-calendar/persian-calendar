@@ -21,12 +21,8 @@ import android.support.annotation.IdRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceViewHolder;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,7 +41,6 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
-import com.github.twaddington.TypefaceSpan;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -175,33 +170,6 @@ public class Utils {
         }
     }
 
-    public void setFont(TextView textView) {
-        initTypeface();
-        textView.setTypeface(typeface);
-    }
-
-    public void setFontAndShape(TextView textView) {
-        setFont(textView);
-        textView.setText(textView.getText().toString());
-    }
-
-    public void setFontShapeAndGravity(TextView textView) {
-        setFontAndShape(textView);
-        textView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-    }
-
-    public void setFontAndShape(PreferenceViewHolder holder) {
-        // See android.support.v7.preference.Preference#onBindViewHolder
-        TextView titleView = (TextView) holder.findViewById(android.R.id.title);
-        if (titleView != null) {
-            setFontAndShape(titleView);
-        }
-        TextView summaryView = (TextView) holder.findViewById(android.R.id.summary);
-        if (summaryView != null) {
-            setFontAndShape(summaryView);
-        }
-    }
-
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
         if (title == null || subtitle == null) {
             return;
@@ -215,15 +183,9 @@ public class Utils {
             return;
         }
 
-        SpannableString titleSpan = new SpannableString(title);
-        titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
-        titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
-        supportActionBar.setTitle(titleSpan);
+        supportActionBar.setTitle(title);
 
-        SpannableString subtitleSpan = new SpannableString(subtitle);
-        subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
-        subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
-        supportActionBar.setSubtitle(subtitleSpan);
+        supportActionBar.setSubtitle(subtitle);
     }
 
     public CalculationMethod getCalculationMethod() {
@@ -478,14 +440,6 @@ public class Utils {
         return weekDays[date.getDayOfWeek() % 7];
     }
 
-    public void quickToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void longToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-    }
-
     public int getDayIconResource(int day) {
         try {
             return preferredDigits == ARABIC_DIGITS ? DAYS_ICONS_AR[day] : DAYS_ICONS[day];
@@ -660,15 +614,14 @@ public class Utils {
             loadMinMaxSupportedYear();
 
         if (selectedYear < minSupportedYear) {
-            longToast(context.getString(R.string.holidaysIncompletenessWarning));
-
+            Toast.makeText(context, context.getString(R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
             isYearWarnGivenOnce = true;
         }
 
         if (selectedYear > maxSupportedYear) {
-            longToast(context.getString(getToday().getYear() > maxSupportedYear
+            Toast.makeText(context, context.getString(getToday().getYear() > maxSupportedYear
                     ? R.string.shouldBeUpdated
-                    : R.string.holidaysIncompletenessWarning));
+                    : R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
 
             isYearWarnGivenOnce = true;
         }
@@ -908,7 +861,7 @@ public class Utils {
         // nvm about backup solution for older Androids
         CharSequence text = ((TextView) view).getText();
         CopyToClipboard.copyToClipboard(text, context);
-        quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
+        Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
     }
 
     private static class CopyToClipboard {

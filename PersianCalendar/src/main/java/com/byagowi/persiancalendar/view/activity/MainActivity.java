@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         utils.loadLanguageResource();
         lastLocale = utils.getAppLanguage();
         lastTheme = utils.getTheme();
+        TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {

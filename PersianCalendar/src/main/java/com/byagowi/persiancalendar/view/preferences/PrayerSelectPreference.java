@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.util.Utils;
@@ -28,9 +27,4 @@ public class PrayerSelectPreference extends DialogPreference {
         return utils.commaSeparatedToSet(getPersistedString(""));
     }
 
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-        utils.setFontAndShape(holder);
-    }
 }
