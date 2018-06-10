@@ -478,14 +478,6 @@ public class Utils {
         return weekDays[date.getDayOfWeek() % 7];
     }
 
-    public void quickToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void longToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-    }
-
     public int getDayIconResource(int day) {
         try {
             return preferredDigits == ARABIC_DIGITS ? DAYS_ICONS_AR[day] : DAYS_ICONS[day];
@@ -660,15 +652,14 @@ public class Utils {
             loadMinMaxSupportedYear();
 
         if (selectedYear < minSupportedYear) {
-            longToast(context.getString(R.string.holidaysIncompletenessWarning));
-
+            Toast.makeText(context, context.getString(R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
             isYearWarnGivenOnce = true;
         }
 
         if (selectedYear > maxSupportedYear) {
-            longToast(context.getString(getToday().getYear() > maxSupportedYear
+            Toast.makeText(context, context.getString(getToday().getYear() > maxSupportedYear
                     ? R.string.shouldBeUpdated
-                    : R.string.holidaysIncompletenessWarning));
+                    : R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
 
             isYearWarnGivenOnce = true;
         }
@@ -908,7 +899,7 @@ public class Utils {
         // nvm about backup solution for older Androids
         CharSequence text = ((TextView) view).getText();
         CopyToClipboard.copyToClipboard(text, context);
-        quickToast("«" + text + "»\n" + context.getString(R.string.date_copied_clipboard));
+        Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
     }
 
     private static class CopyToClipboard {

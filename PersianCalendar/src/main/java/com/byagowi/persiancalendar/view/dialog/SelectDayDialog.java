@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
@@ -94,7 +95,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                         break;
                 }
             } catch (RuntimeException e) {
-                utils.quickToast(getString(R.string.date_exception));
+                Toast.makeText(getContext(),getString(R.string.date_exception),Toast.LENGTH_SHORT);
                 Log.e("SelectDayDialog", "", e);
             }
         });
