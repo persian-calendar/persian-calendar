@@ -21,10 +21,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceViewHolder;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -45,7 +42,6 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
-import com.github.twaddington.TypefaceSpan;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -192,15 +188,9 @@ public class Utils {
             return;
         }
 
-        SpannableString titleSpan = new SpannableString(title);
-        titleSpan.setSpan(new TypefaceSpan(typeface), 0, titleSpan.length(), 0);
-        titleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, titleSpan.length(), 0);
-        supportActionBar.setTitle(titleSpan);
+        supportActionBar.setTitle(title);
 
-        SpannableString subtitleSpan = new SpannableString(subtitle);
-        subtitleSpan.setSpan(new TypefaceSpan(typeface), 0, subtitleSpan.length(), 0);
-        subtitleSpan.setSpan(new RelativeSizeSpan(0.8f), 0, subtitleSpan.length(), 0);
-        supportActionBar.setSubtitle(subtitleSpan);
+        supportActionBar.setSubtitle(subtitle);
     }
 
     public CalculationMethod getCalculationMethod() {
