@@ -23,7 +23,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -169,10 +168,6 @@ public class Utils {
         if (typeface == null) {
             typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
         }
-    }
-
-    public void setFontShapeAndGravity(TextView textView) {
-        textView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
