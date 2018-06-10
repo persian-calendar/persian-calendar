@@ -175,31 +175,8 @@ public class Utils {
         }
     }
 
-    public void setFont(TextView textView) {
-        initTypeface();
-        textView.setTypeface(typeface);
-    }
-
-    public void setFontAndShape(TextView textView) {
-        setFont(textView);
-        textView.setText(textView.getText().toString());
-    }
-
     public void setFontShapeAndGravity(TextView textView) {
-        setFontAndShape(textView);
         textView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-    }
-
-    public void setFontAndShape(PreferenceViewHolder holder) {
-        // See android.support.v7.preference.Preference#onBindViewHolder
-        TextView titleView = (TextView) holder.findViewById(android.R.id.title);
-        if (titleView != null) {
-            setFontAndShape(titleView);
-        }
-        TextView summaryView = (TextView) holder.findViewById(android.R.id.summary);
-        if (summaryView != null) {
-            setFontAndShape(summaryView);
-        }
     }
 
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {

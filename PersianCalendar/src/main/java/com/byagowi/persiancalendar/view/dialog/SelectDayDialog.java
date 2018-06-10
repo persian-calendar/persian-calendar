@@ -42,11 +42,6 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
         Spinner daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
 
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
-
         startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 

@@ -67,17 +67,6 @@ public class ConverterFragment extends Fragment implements
 
         moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
 
-        // Shape and set font
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
-
-        utils.setFont(date0);
-        utils.setFont(date1);
-        utils.setFont(date2);
-        //
-
         // fill views
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
                 Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));

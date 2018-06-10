@@ -91,6 +91,7 @@
         <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
         <item name="circleSelect">@drawable/circle_select_light</item>
         <item name="appDivider">@drawable/app_divider_light</item>
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
@@ -106,6 +107,7 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
+        <item name="android:typeface">serif</item>
     </style>
 
 </resources>

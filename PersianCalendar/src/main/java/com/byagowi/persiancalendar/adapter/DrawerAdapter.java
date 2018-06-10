@@ -45,9 +45,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
                 imageView = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
                 background = itemView.findViewById(R.id.background);
-
-                utils.setFont(itemTitle);
-                utils.setFont(itemSubtitle);
             } else {
                 imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
             }

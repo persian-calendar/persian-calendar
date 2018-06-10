@@ -78,8 +78,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-
-            utils.setFontAndShape(num);
         }
 
         @Override
