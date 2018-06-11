@@ -17,7 +17,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -858,7 +858,6 @@ public class Utils {
     }
 
     private static class CopyToClipboard {
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public static void copyToClipboard(CharSequence text, Context context) {
             ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
                     .setPrimaryClip(ClipData.newPlainText("converted date", text));
@@ -950,7 +949,7 @@ public class Utils {
         }
     }
 
-    @IdRes
+    @LayoutRes
     public final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
 
     public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
