@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -34,6 +35,8 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
                 if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        context.startForegroundService(new Intent(context, ApplicationService.class));
                     context.startService(new Intent(context, ApplicationService.class));
                 }
 

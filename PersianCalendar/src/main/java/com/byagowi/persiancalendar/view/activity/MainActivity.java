@@ -89,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
         updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
-            startService(new Intent(getBaseContext(), ApplicationService.class));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startForegroundService(new Intent(this, ApplicationService.class));
+            startService(new Intent(this, ApplicationService.class));
         }
 
         updateUtils.update(true);
