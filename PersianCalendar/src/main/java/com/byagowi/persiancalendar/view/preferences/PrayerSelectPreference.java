@@ -2,29 +2,30 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import com.byagowi.persiancalendar.util.Utils;
-
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PrayerSelectPreference extends DialogPreference {
-    Utils utils;
 
     public PrayerSelectPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        utils = Utils.getInstance(context);
     }
 
     public void setPrayers(Set<String> prayers) {
         final boolean wasBlocking = shouldDisableDependents();
-        persistString(utils.setToCommaSeparated(prayers));
+        // convert set to a comma separated string
+        persistString(TextUtils.join(",", prayers));
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
 
     public Set<String> getPrayers() {
-        return utils.commaSeparatedToSet(getPersistedString(""));
+        // convert comma separated string to a set
+        return new HashSet<>(Arrays.asList(TextUtils.split(getPersistedString(""), ",")));
     }
 
 }
