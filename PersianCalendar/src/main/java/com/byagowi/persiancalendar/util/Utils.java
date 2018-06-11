@@ -17,7 +17,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -709,13 +709,6 @@ public class Utils {
         return false;
     }
 
-    public String setToCommaSeparated(Set<String> set) {
-        return TextUtils.join(",", set);
-    }
-
-    public Set<String> commaSeparatedToSet(String commaSeparated) {
-        return new HashSet<>(Arrays.asList(TextUtils.split(commaSeparated, ",")));
-    }
 
     public void loadAlarms() {
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
@@ -726,8 +719,8 @@ public class Utils {
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
-
-            Set<String> alarmTimesSet = commaSeparatedToSet(prefString);
+            // convert comma separated string to a set
+            Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
             // in the past IMSAK was used but now we figured out FAJR was what we wanted
             if (alarmTimesSet.remove("IMSAK")) {
                 alarmTimesSet.add("FAJR");
@@ -865,7 +858,6 @@ public class Utils {
     }
 
     private static class CopyToClipboard {
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public static void copyToClipboard(CharSequence text, Context context) {
             ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
                     .setPrimaryClip(ClipData.newPlainText("converted date", text));
@@ -957,7 +949,7 @@ public class Utils {
         }
     }
 
-    @IdRes
+    @LayoutRes
     public final static int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
 
     public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,

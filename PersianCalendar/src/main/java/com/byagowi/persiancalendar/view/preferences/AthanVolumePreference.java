@@ -5,14 +5,11 @@ import android.support.v7.preference.DialogPreference;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
 
 public class AthanVolumePreference extends DialogPreference {
-    private Utils utils;
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        utils = Utils.getInstance(context);
         setDialogLayoutResource(R.layout.preference_volume);
         setDialogIcon(null);
     }

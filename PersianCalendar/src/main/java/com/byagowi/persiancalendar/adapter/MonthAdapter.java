@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -106,17 +105,17 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 return false;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                try {
-                    monthFragment.onLongClickItem(days
-                            .get(position - 7 - firstDayDayOfWeek)
-                            .getPersianDate());
-                } catch (Exception e) {
-                    // Ignore it for now
-                    // I guess it will occur on CyanogenMod phones
-                    // where Google extra things is not installed
-                }
+
+            try {
+                monthFragment.onLongClickItem(days
+                        .get(position - 7 - firstDayDayOfWeek)
+                        .getPersianDate());
+            } catch (Exception e) {
+                // Ignore it for now
+                // I guess it will occur on CyanogenMod phones
+                // where Google extra things is not installed
             }
+
             return false;
         }
     }
