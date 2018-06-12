@@ -10,7 +10,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -844,15 +843,9 @@ public class Utils {
         // if it is older than this, the view is also shaped which is not good for copying, so just
         // nvm about backup solution for older Androids
         CharSequence text = ((TextView) view).getText();
-        CopyToClipboard.copyToClipboard(text, context);
+        ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
+                .setPrimaryClip(ClipData.newPlainText("converted date", text));
         Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
-    }
-
-    private static class CopyToClipboard {
-        public static void copyToClipboard(CharSequence text, Context context) {
-            ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
-                    .setPrimaryClip(ClipData.newPlainText("converted date", text));
-        }
     }
 
     public SeasonEnum getSeason() {
