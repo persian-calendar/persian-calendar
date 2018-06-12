@@ -37,10 +37,10 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         final Utils utils = Utils.getInstance(getContext());
 
         // fill members
-        Spinner calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
-        Spinner yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
-        Spinner monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        Spinner daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        Spinner calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
+        Spinner yearSpinner = view.findViewById(R.id.yearSpinner);
+        Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
+        Spinner daySpinner = view.findViewById(R.id.daySpinner);
 
         startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);

@@ -17,7 +17,7 @@ public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
 
         View dialogMessageView = view.findViewById(android.R.id.message);
 
-        EditText editText = (EditText) view.findViewById(android.R.id.edit);
+        EditText editText = view.findViewById(android.R.id.edit);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED |
                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
 

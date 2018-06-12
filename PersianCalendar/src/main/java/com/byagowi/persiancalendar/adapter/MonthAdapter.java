@@ -71,7 +71,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         ViewHolder(View itemView) {
             super(itemView);
 
-            num = (TextView) itemView.findViewById(R.id.num);
+            num = itemView.findViewById(R.id.num);
             today = itemView.findViewById(R.id.today);
             event = itemView.findViewById(R.id.event);
 

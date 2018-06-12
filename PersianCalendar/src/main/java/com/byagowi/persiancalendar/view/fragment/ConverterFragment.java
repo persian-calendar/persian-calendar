@@ -52,20 +52,20 @@ public class ConverterFragment extends Fragment implements
         utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         // fill members
-        calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
-        yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
-        monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
+        yearSpinner = view.findViewById(R.id.yearSpinner);
+        monthSpinner = view.findViewById(R.id.monthSpinner);
+        daySpinner = view.findViewById(R.id.daySpinner);
 
-        date0 = (TextView) view.findViewById(R.id.date0);
-        date1 = (TextView) view.findViewById(R.id.date1);
-        date2 = (TextView) view.findViewById(R.id.date2);
+        date0 = view.findViewById(R.id.date0);
+        date1 = view.findViewById(R.id.date1);
+        date2 = view.findViewById(R.id.date2);
 
         date0.setOnClickListener(this);
         date1.setOnClickListener(this);
         date2.setOnClickListener(this);
 
-        moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
+        moreDate = view.findViewById(R.id.more_date);
 
         // fill views
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),

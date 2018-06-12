@@ -7,4 +7,8 @@
     <string name="preference_disabled_message">Shortcuts are disabled!</string>
     <string name="preference_long_label">Preference</string>
     <string name="preference_short_label">Preference</string>
+
+    <string name="converter_disabled_message">Shortcuts are disabled!</string>
+    <string name="converter_long_label">Date Converter</string>
+    <string name="converter_short_label">Converter</string>
 </resources>
