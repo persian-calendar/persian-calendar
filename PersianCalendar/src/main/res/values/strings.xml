@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Persian Calendar</string>
+    <string name="cancel">Cancel</string>
     <string name="widget_name">Persian Calendar</string>
     <string name="widget_mini_name">Persian Calendar (mini)</string>
     <string name="latitude">Latitude</string>

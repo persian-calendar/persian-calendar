@@ -4,18 +4,20 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/general">
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <android.support.v7.preference.ListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
             android:key="AppLanguage"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/language" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <android.support.v7.preference.ListPreference
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
             android:key="Theme"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
             android:title="@string/skin" />
 
@@ -25,11 +27,12 @@
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <android.support.v7.preference.ListPreference
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
             android:key="islamicOffset"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/islamic_offset_summary"
             android:title="@string/islamic_offset" />
 
@@ -44,11 +47,12 @@
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <android.support.v7.preference.ListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
             android:key="SelectedWidgetTextColor"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
@@ -75,11 +79,12 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/pray_times_calculation_setting">
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <android.support.v7.preference.ListPreference
             android:defaultValue="Tehran"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
             android:key="SelectedPrayTimeMethod"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
 
