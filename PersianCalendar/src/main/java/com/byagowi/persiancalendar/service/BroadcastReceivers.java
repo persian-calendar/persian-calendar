@@ -20,14 +20,12 @@ import com.byagowi.persiancalendar.view.activity.AthanActivity;
  */
 public class BroadcastReceivers extends BroadcastReceiver {
     private Context context;
-    private UpdateUtils updateUtils;
     private Utils utils;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         utils = Utils.getInstance(context);
-        updateUtils = UpdateUtils.getInstance(context);
 
         if (intent != null && intent.getAction() != null && !TextUtils.isEmpty(intent.getAction())) {
             if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
@@ -44,12 +42,12 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(Intent.ACTION_TIME_CHANGED) ||
                     intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 
-                updateUtils.update(false);
+                UpdateUtils.update(context, false);
 
             } else if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED) ||
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
-                updateUtils.update(true);
+                UpdateUtils.update(context, true);
                 utils.loadApp();
                 LocalBroadcastManager.getInstance(context)
                         .sendBroadcast(new Intent(Constants.LOCAL_INTENT_DAY_PASSED));

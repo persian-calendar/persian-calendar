@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getName();
     public boolean dayIsPassed = false;
     private Utils utils;
-    private UpdateUtils updateUtils;
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
     private Class<?>[] fragments = {
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         lastLocale = utils.getAppLanguage();
         lastTheme = utils.getTheme();
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
-        updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             startService(new Intent(this, ApplicationService.class));
         }
 
-        updateUtils.update(true);
+        UpdateUtils.update(getApplicationContext(), true);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         utils.updateStoredPreference();
-        updateUtils.update(true);
+        UpdateUtils.update(getApplicationContext(), true);
 
         boolean needsActivityRestart = false;
 

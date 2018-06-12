@@ -22,6 +22,6 @@ public class Widget1x1 extends AppWidgetProvider {
                 context.startForegroundService(new Intent(context, ApplicationService.class));
             context.startService(new Intent(context, ApplicationService.class));
         }
-        UpdateUtils.getInstance(context).update(true);
+        UpdateUtils.update(context, true);
     }
 }
