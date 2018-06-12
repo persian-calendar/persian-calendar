@@ -220,6 +220,7 @@ public class UpdateUtils {
                 }
             }
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(icon)
                     .setOngoing(true)
                     .setWhen(0)
