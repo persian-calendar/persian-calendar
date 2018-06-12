@@ -155,15 +155,6 @@ public class Utils {
         return myWeakInstance.get();
     }
 
-    public String programVersion() {
-        try {
-            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (NameNotFoundException e) {
-            Log.e(TAG, "Name not found on PersianCalendarUtils.programVersion");
-            return "";
-        }
-    }
-
     private void initTypeface() {
         if (typeface == null) {
             typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
