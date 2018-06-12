@@ -41,12 +41,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
             if (viewType == TYPE_ITEM) {
                 itemView.setOnClickListener(this);
-                itemTitle = (TextView) itemView.findViewById(R.id.itemTitle);
-                itemSubtitle = (TextView) itemView.findViewById(R.id.itemSubtitle);
-                imageView = (AppCompatImageView) itemView.findViewById(R.id.ItemIcon);
+                itemTitle = itemView.findViewById(R.id.itemTitle);
+                itemSubtitle = itemView.findViewById(R.id.itemSubtitle);
+                imageView = itemView.findViewById(R.id.ItemIcon);
                 background = itemView.findViewById(R.id.background);
             } else {
-                imageView = (AppCompatImageView) itemView.findViewById(R.id.image);
+                imageView = itemView.findViewById(R.id.image);
             }
         }
 

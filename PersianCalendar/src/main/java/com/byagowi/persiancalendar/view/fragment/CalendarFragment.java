@@ -99,51 +99,43 @@ public class CalendarFragment extends Fragment
         utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
-        imsakLayout = (RelativeLayout) view.findViewById(R.id.imsakLayout);
-        fajrLayout = (RelativeLayout) view.findViewById(R.id.fajrLayout);
-        sunriseLayout = (RelativeLayout) view.findViewById(R.id.sunriseLayout);
-        dhuhrLayout = (RelativeLayout) view.findViewById(R.id.dhuhrLayout);
-        asrLayout = (RelativeLayout) view.findViewById(R.id.asrLayout);
-        sunsetLayout = (RelativeLayout) view.findViewById(R.id.sunsetLayout);
-        maghribLayout = (RelativeLayout) view.findViewById(R.id.maghribLayout);
-        ishaLayout = (RelativeLayout) view.findViewById(R.id.ishaLayout);
-        midnightLayout = (RelativeLayout) view.findViewById(R.id.midnightLayout);
+        imsakLayout = view.findViewById(R.id.imsakLayout);
+        fajrLayout = view.findViewById(R.id.fajrLayout);
+        sunriseLayout = view.findViewById(R.id.sunriseLayout);
+        dhuhrLayout = view.findViewById(R.id.dhuhrLayout);
+        asrLayout = view.findViewById(R.id.asrLayout);
+        sunsetLayout = view.findViewById(R.id.sunsetLayout);
+        maghribLayout = view.findViewById(R.id.maghribLayout);
+        ishaLayout = view.findViewById(R.id.ishaLayout);
+        midnightLayout = view.findViewById(R.id.midnightLayout);
 
-        gregorianDate = (TextView) view.findViewById(R.id.gregorian_date);
-        islamicDate = (TextView) view.findViewById(R.id.islamic_date);
-        shamsiDate = (TextView) view.findViewById(R.id.shamsi_date);
-        weekDayName = (TextView) view.findViewById(R.id.week_day_name);
-        today = (TextView) view.findViewById(R.id.today);
-        todayIcon = (AppCompatImageView) view.findViewById(R.id.today_icon);
+        gregorianDate = view.findViewById(R.id.gregorian_date);
+        islamicDate = view.findViewById(R.id.islamic_date);
+        shamsiDate = view.findViewById(R.id.shamsi_date);
+        weekDayName = view.findViewById(R.id.week_day_name);
+        today = view.findViewById(R.id.today);
+        todayIcon = view.findViewById(R.id.today_icon);
 
-        imsakTextView = (TextView) view.findViewById(R.id.imsak);
-
-        fajrTextView = (TextView) view.findViewById(R.id.fajr);
-
-        dhuhrTextView = (TextView) view.findViewById(R.id.dhuhr);
-
-        asrTextView = (TextView) view.findViewById(R.id.asr);
-
-        maghribTextView = (TextView) view.findViewById(R.id.maghrib);
-
-        ishaTextView = (TextView) view.findViewById(R.id.isgha);
-
-        sunriseTextView = (TextView) view.findViewById(R.id.sunrise);
-
-        sunsetTextView = (TextView) view.findViewById(R.id.sunset);
-
-        midnightTextView = (TextView) view.findViewById(R.id.midnight);
+        imsakTextView = view.findViewById(R.id.imsak);
+        fajrTextView = view.findViewById(R.id.fajr);
+        dhuhrTextView = view.findViewById(R.id.dhuhr);
+        asrTextView = view.findViewById(R.id.asr);
+        maghribTextView = view.findViewById(R.id.maghrib);
+        ishaTextView = view.findViewById(R.id.isgha);
+        sunriseTextView = view.findViewById(R.id.sunrise);
+        sunsetTextView = view.findViewById(R.id.sunset);
+        midnightTextView = view.findViewById(R.id.midnight);
 
 
-        moreOwghat = (AppCompatImageView) view.findViewById(R.id.more_owghat);
+        moreOwghat = view.findViewById(R.id.more_owghat);
 
-        eventTitle = (TextView) view.findViewById(R.id.event_title);
-        holidayTitle = (TextView) view.findViewById(R.id.holiday_title);
+        eventTitle = view.findViewById(R.id.event_title);
+        holidayTitle = view.findViewById(R.id.holiday_title);
 
-        owghat = (CardView) view.findViewById(R.id.owghat);
-        event = (CardView) view.findViewById(R.id.cardEvent);
+        owghat = view.findViewById(R.id.owghat);
+        event = view.findViewById(R.id.cardEvent);
 
-        monthViewPager = (ViewPager) view.findViewById(R.id.calendar_pager);
+        monthViewPager = view.findViewById(R.id.calendar_pager);
 
         coordinate = utils.getCoordinate();
         prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
