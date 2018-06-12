@@ -150,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
             selectItem(COMPASS);
         } else if ("PREFERENCE_SHORTCUT".equals(action)) {
             selectItem(PREFERENCE);
+        } else if ("CONVERTER_SHORTCUT".equals(action)) {
+            selectItem(CONVERTER);
         } else {
             selectItem(DEFAULT);
         }

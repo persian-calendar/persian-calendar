@@ -28,6 +28,20 @@
 
     <shortcut
         android:enabled="true"
+        android:icon="@drawable/sc_swap_vertical_circle"
+        android:shortcutDisabledMessage="@string/converter_disabled_message"
+        android:shortcutId="CONVERTER"
+        android:shortcutLongLabel="@string/converter_long_label"
+        android:shortcutShortLabel="@string/converter_short_label">
+        <intent
+            android:action="CONVERTER_SHORTCUT"
+            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
         android:icon="@drawable/sc_settings"
         android:shortcutDisabledMessage="@string/preference_disabled_message"
         android:shortcutId="PREFERENCE"
