@@ -182,7 +182,7 @@ public class CalendarFragment extends Fragment
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime(getContext())) {
+            if (Utils.isIranTime()) {
                 weekDayName.setText(weekDayName.getText() +
                         " (" + getString(R.string.iran_time) + ")");
             }

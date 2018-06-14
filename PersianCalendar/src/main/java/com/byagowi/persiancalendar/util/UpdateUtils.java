@@ -65,109 +65,117 @@ public class UpdateUtils {
         int color = Color.parseColor(colorInt);
 
         // Widget 1x1
-        remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
-        remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
-        remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                Utils.formatNumber(persian.getDayOfMonth()));
-        remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                Utils.getMonthName(context, persian));
-        remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget1x1.class), remoteViews1);
+        ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
+                widget4x1 = new ComponentName(context, Widget4x1.class),
+                widget2x2 = new ComponentName(context, Widget2x2.class);
 
-        // Widget 4x1
-        remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
-        remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
-        remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
-
-        String text1;
-        String text2;
-        String text3 = "";
-        String weekDayName = Utils.getWeekDayName(context, civil);
-        String persianDate = Utils.dateToString(context, persian);
-        String civilDate = Utils.dateToString(context, civil);
-        String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
-
-        String time = Utils.getPersianFormattedClock(calendar);
-        boolean enableClock = Utils.isWidgetClock(context);
-
-        if (enableClock) {
-            text2 = weekDayName + " " + date;
-            text1 = time;
-            if (Utils.isIranTime(context)) {
-                text3 = "(" + context.getString(R.string.iran_time) + ")";
-            }
-        } else {
-            text1 = weekDayName;
-            text2 = date;
+        if (manager.getAppWidgetIds(widget1x1).length != 0) {
+            remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
+            remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
+            remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
+                    Utils.formatNumber(persian.getDayOfMonth()));
+            remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
+                    Utils.getMonthName(context, persian));
+            remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
+            manager.updateAppWidget(widget1x1, remoteViews1);
         }
 
-        remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
-        remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
-        remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
-        remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget4x1.class), remoteViews4);
+        if (manager.getAppWidgetIds(widget2x2).length != 0 ||
+                manager.getAppWidgetIds(widget2x2).length != 0) {
+            // Widget 4x1
+            remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
+            remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
+            remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
 
+            String text1;
+            String text2;
+            String text3 = "";
+            String weekDayName = Utils.getWeekDayName(context, civil);
+            String persianDate = Utils.dateToString(context, persian);
+            String civilDate = Utils.dateToString(context, civil);
+            String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
-        // Widget 2x2
-        remoteViews2.setTextColor(R.id.time_2x2, color);
-        remoteViews2.setTextColor(R.id.date_2x2, color);
-        remoteViews2.setTextColor(R.id.event_2x2, color);
-        remoteViews2.setTextColor(R.id.owghat_2x2, color);
+            String time = Utils.getPersianFormattedClock(calendar);
+            boolean enableClock = Utils.isWidgetClock(context);
 
-        if (enableClock) {
-            text2 = weekDayName + " " + persianDate;
-            text1 = time;
-        } else {
-            text1 = weekDayName;
-            text2 = persianDate;
-        }
-
-        Clock currentClock =
-                new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-
-        String owghat;
-
-        if (pastDate == null || !pastDate.equals(persian) || updateDate) {
-            Log.d("UpdateUtils", "change date");
-            pastDate = persian;
-
-            Utils.loadAlarms(context);
-
-            owghat = Utils.getNextOghatTime(context, currentClock, true);
-
-            String holidays = Utils.getEventsTitle(context, persian, true);
-
-            if (!TextUtils.isEmpty(holidays)) {
-                remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
-                remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+            if (enableClock) {
+                text2 = weekDayName + " " + date;
+                text1 = time;
+                if (Utils.isIranTime()) {
+                    text3 = "(" + context.getString(R.string.iran_time) + ")";
+                }
             } else {
-                remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                text1 = weekDayName;
+                text2 = date;
             }
 
-            String events = Utils.getEventsTitle(context, persian, false);
+            remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
+            remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
+            remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
+            remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
+            manager.updateAppWidget(widget4x1, remoteViews4);
 
-            if (!TextUtils.isEmpty(events)) {
-                remoteViews2.setTextViewText(R.id.event_2x2, events);
-                remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+            // Widget 2x2
+            remoteViews2.setTextColor(R.id.time_2x2, color);
+            remoteViews2.setTextColor(R.id.date_2x2, color);
+            remoteViews2.setTextColor(R.id.event_2x2, color);
+            remoteViews2.setTextColor(R.id.owghat_2x2, color);
+
+            if (enableClock) {
+                text2 = weekDayName + " " + persianDate;
+                text1 = time;
             } else {
-                remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
+                text1 = weekDayName;
+                text2 = persianDate;
             }
-        } else {
-            owghat = Utils.getNextOghatTime(context, currentClock, false);
+
+            Clock currentClock =
+                    new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+
+            String owghat;
+
+            if (pastDate == null || !pastDate.equals(persian) || updateDate) {
+                Log.d("UpdateUtils", "change date");
+                pastDate = persian;
+
+                Utils.loadAlarms(context);
+
+                owghat = Utils.getNextOghatTime(context, currentClock, true);
+
+                String holidays = Utils.getEventsTitle(context, persian, true);
+
+                if (!TextUtils.isEmpty(holidays)) {
+                    remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                }
+
+                String events = Utils.getEventsTitle(context, persian, false);
+
+                if (!TextUtils.isEmpty(events)) {
+                    remoteViews2.setTextViewText(R.id.event_2x2, events);
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
+                }
+            } else {
+                owghat = Utils.getNextOghatTime(context, currentClock, false);
+            }
+
+            if (owghat != null) {
+                remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
+                remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
+            } else {
+                remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
+            }
+
+            remoteViews2.setTextViewText(R.id.time_2x2, text1);
+            remoteViews2.setTextViewText(R.id.date_2x2, text2);
+
+            remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
+            manager.updateAppWidget(widget2x2, remoteViews2);
         }
-
-        if (owghat != null) {
-            remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
-            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
-        } else {
-            remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
-        }
-
-        remoteViews2.setTextViewText(R.id.time_2x2, text1);
-        remoteViews2.setTextViewText(R.id.date_2x2, text2);
-
-        remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
-        manager.updateAppWidget(new ComponentName(context, Widget2x2.class), remoteViews2);
 
         //
         // Permanent Notification Bar and DashClock Data Extension Update

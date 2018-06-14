@@ -129,20 +129,12 @@ public class Utils {
     static private String[] weekDays;
 
     static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
-        if (title == null || subtitle == null) {
-            return;
-        }
-
         //noinspection ConstantConditions
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-
-        if (supportActionBar == null) {
-            return;
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(title);
+            supportActionBar.setSubtitle(subtitle);
         }
-
-        supportActionBar.setTitle(title);
-
-        supportActionBar.setSubtitle(subtitle);
     }
 
     static public CalculationMethod getCalculationMethod(Context context) {
@@ -194,24 +186,20 @@ public class Utils {
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        preferredDigits = isPersianDigitSelected(context)
+        preferredDigits = prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)
                 ? PERSIAN_DIGITS
                 : ARABIC_DIGITS;
 
         clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
-        iranTime = isIranTime(context);
+        iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
     }
 
-    static public boolean isIranTime(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
+    static public boolean isIranTime() {
+        return iranTime;
     }
 
-    static public boolean isPersianDigitSelected(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS);
+    static public boolean isPersianDigitSelected() {
+        return preferredDigits == PERSIAN_DIGITS;
     }
 
 
@@ -396,11 +384,11 @@ public class Utils {
             loadLanguageResource(context);
 
         if (date instanceof PersianDate)
-            return persianMonths.clone();
+            return persianMonths;
         else if (date instanceof IslamicDate)
-            return islamicMonths.clone();
+            return islamicMonths;
         else
-            return gregorianMonths.clone();
+            return gregorianMonths;
     }
 
     static public String getMonthName(Context context, AbstractDate date) {
