@@ -36,7 +36,6 @@ public class ApplicationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         instance = new WeakReference<>(this);
         Log.d(ApplicationService.class.getName(), "start");
-        UpdateUtils updateUtils = UpdateUtils.getInstance(getApplicationContext());
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
@@ -48,7 +47,7 @@ public class ApplicationService extends Service {
 
         Utils utils = Utils.getInstance(getBaseContext());
         utils.loadApp();
-        updateUtils.update(true);
+        UpdateUtils.update(getApplicationContext(), true);
 
         return START_STICKY;
     }

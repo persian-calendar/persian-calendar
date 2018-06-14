@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.util.Linkify;
@@ -31,7 +32,7 @@ public class AboutFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         Utils utils = Utils.getInstance(getContext());
@@ -47,7 +48,7 @@ public class AboutFragment extends Fragment {
         licenseTextView.setText("Android Persian Calendar Version " + version + "\n" +
                 utils.readRawResource(R.raw.credits));
 
-        Linkify.addLinks(licenseTextView, Linkify.ALL);
+        Linkify.addLinks(licenseTextView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
         return view;
     }

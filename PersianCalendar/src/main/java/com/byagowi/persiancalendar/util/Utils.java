@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -23,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,7 +89,6 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.FONT_PATH;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
@@ -124,7 +123,6 @@ public class Utils {
 
     private final String TAG = Utils.class.getName();
     private Context context;
-    private Typeface typeface;
     private SharedPreferences prefs;
 
     private List<EventEntity> events;
@@ -154,17 +152,10 @@ public class Utils {
         return myWeakInstance.get();
     }
 
-    private void initTypeface() {
-        if (typeface == null) {
-            typeface = Typeface.createFromAsset(context.getAssets(), FONT_PATH);
-        }
-    }
-
     public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
         if (title == null || subtitle == null) {
             return;
         }
-        initTypeface();
 
         //noinspection ConstantConditions
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();

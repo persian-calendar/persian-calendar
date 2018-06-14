@@ -34,26 +34,11 @@ import calendar.PersianDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
-    private static UpdateUtils myInstance;
-    private Context context;
-    private PersianDate pastDate;
+    static boolean firstTime = true;
+    private static PersianDate pastDate;
+    private static ExtensionData mExtensionData;
 
-    private ExtensionData mExtensionData;
-
-    private UpdateUtils(Context context) {
-        this.context = context;
-    }
-
-    public static UpdateUtils getInstance(Context context) {
-        if (myInstance == null) {
-            myInstance = new UpdateUtils(context);
-        }
-        return myInstance;
-    }
-
-    boolean firstTime = true;
-
-    public void update(boolean updateDate) {
+    public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils utils = Utils.getInstance(context);
         utils.changeAppLanguage(context);
@@ -237,7 +222,7 @@ public class UpdateUtils {
                 .expandedBody(body).clickIntent(intent);
     }
 
-    public ExtensionData getExtensionData() {
+    public static ExtensionData getExtensionData() {
         return mExtensionData;
     }
 
