@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.util.Utils;
 public class Widget2x2 extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+        if (!Utils.isServiceRunning(context, ApplicationService.class)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 context.startForegroundService(new Intent(context, ApplicationService.class));
             context.startService(new Intent(context, ApplicationService.class));

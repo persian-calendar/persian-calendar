@@ -20,19 +20,17 @@ import com.byagowi.persiancalendar.view.activity.AthanActivity;
  */
 public class BroadcastReceivers extends BroadcastReceiver {
     private Context context;
-    private Utils utils;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        utils = Utils.getInstance(context);
 
         if (intent != null && intent.getAction() != null && !TextUtils.isEmpty(intent.getAction())) {
             if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
                     intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
-                if (!Utils.getInstance(context).isServiceRunning(ApplicationService.class)) {
+                if (!Utils.isServiceRunning(context, ApplicationService.class)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                         context.startForegroundService(new Intent(context, ApplicationService.class));
                     context.startService(new Intent(context, ApplicationService.class));
@@ -48,7 +46,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
                 UpdateUtils.update(context, true);
-                utils.loadApp();
+                Utils.loadApp(context);
                 LocalBroadcastManager.getInstance(context)
                         .sendBroadcast(new Intent(Constants.LOCAL_INTENT_DAY_PASSED));
 

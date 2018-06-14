@@ -24,7 +24,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private List<DayEntity> days;
     private int selectedDay = -1;
     private boolean persianDigit;
-    private Utils utils;
     private TypedValue colorHoliday = new TypedValue();
     private TypedValue colorTextHoliday = new TypedValue();
     private TypedValue colorPrimary = new TypedValue();
@@ -39,8 +38,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
-        utils = Utils.getInstance(context);
-        persianDigit = utils.isPersianDigitSelected();
+        persianDigit = Utils.isPersianDigitSelected(context);
 
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorHoliday, colorHoliday, true);

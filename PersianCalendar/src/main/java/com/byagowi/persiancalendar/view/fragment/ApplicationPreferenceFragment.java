@@ -31,12 +31,10 @@ import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     private Preference categoryAthan;
-    private Utils utils;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        utils = Utils.getInstance(getContext());
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
+        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         addPreferencesFromResource(R.xml.preferences);
 
@@ -61,7 +59,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     }
 
     public void updateAthanPreferencesState() {
-        boolean locationEmpty = utils.getCoordinate() == null;
+        boolean locationEmpty = Utils.getCoordinate(getContext()) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
             categoryAthan.setSummary(R.string.athan_disabled_summary);

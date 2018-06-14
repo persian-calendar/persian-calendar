@@ -34,15 +34,13 @@ public class SelectDayDialog extends AppCompatDialogFragment {
 
         View view = inflater.inflate(R.layout.selectday_fragment, null);
 
-        final Utils utils = Utils.getInstance(getContext());
-
         // fill members
         Spinner calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
         Spinner yearSpinner = view.findViewById(R.id.yearSpinner);
         Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
         Spinner daySpinner = view.findViewById(R.id.daySpinner);
 
-        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
         calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
@@ -52,7 +50,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                         calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
             }
 
@@ -74,7 +72,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                     .findFragmentByTag(CalendarFragment.class.getName());
 
             try {
-                switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+                switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                     case GREGORIAN:
                         calendarFragment.bringDate(DateConverter.civilToPersian(
                                 new CivilDate(year, month, day)));

@@ -20,11 +20,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String[] drawerTitles;
     private String[] drawerSubtitles;
     private TypedArray drawerIcon;
-    private Utils utils;
 
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        utils = Utils.getInstance(mainActivity);
         drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
         drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
@@ -95,7 +93,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         } else {
 
-            switch (utils.getSeason()) {
+            switch (Utils.getSeason()) {
                 case SPRING:
                     holder.imageView.setImageResource(R.drawable.spring);
                     break;

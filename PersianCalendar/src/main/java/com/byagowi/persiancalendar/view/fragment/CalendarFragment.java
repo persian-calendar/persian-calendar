@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,7 +43,6 @@ import calendar.PersianDate;
 public class CalendarFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ViewPager monthViewPager;
-    private Utils utils;
 
     private Calendar calendar = Calendar.getInstance();
 
@@ -95,8 +95,7 @@ public class CalendarFragment extends Fragment
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        utils = Utils.getInstance(getContext());
-        utils.clearYearWarnFlag();
+        Utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
         imsakLayout = view.findViewById(R.id.imsakLayout);
@@ -137,8 +136,8 @@ public class CalendarFragment extends Fragment
 
         monthViewPager = view.findViewById(R.id.calendar_pager);
 
-        coordinate = utils.getCoordinate();
-        prayTimesCalculator = new PrayTimesCalculator(utils.getCalculationMethod());
+        coordinate = Utils.getCoordinate(getContext());
+        prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod(getContext()));
 
         monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager()));
         monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
@@ -152,7 +151,7 @@ public class CalendarFragment extends Fragment
         islamicDate.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
 
-        String cityName = utils.getCityName(false);
+        String cityName = Utils.getCityName(getContext(),false);
         if (!TextUtils.isEmpty(cityName)) {
             ((TextView) view.findViewById(R.id.owghat_text))
                     .append(" (" + cityName + ")");
@@ -160,9 +159,9 @@ public class CalendarFragment extends Fragment
 
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-        PersianDate today = utils.getToday();
-        utils.setActivityTitleAndSubtitle(getActivity(), utils.getMonthName(today),
-                utils.formatNumber(today.getYear()));
+        PersianDate today = Utils.getToday();
+        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(getContext(), today),
+                Utils.formatNumber(today.getYear()));
 
         return view;
     }
@@ -172,17 +171,18 @@ public class CalendarFragment extends Fragment
     }
 
     public void selectDay(PersianDate persianDate) {
-        weekDayName.setText(utils.getWeekDayName(persianDate));
-        shamsiDate.setText(utils.dateToString(persianDate));
+        weekDayName.setText(Utils.getWeekDayName(getContext(), persianDate));
+        Context context = getContext();
+        shamsiDate.setText(Utils.dateToString(context, persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        gregorianDate.setText(utils.dateToString(civilDate));
-        islamicDate.setText(utils.dateToString(
-                DateConverter.civilToIslamic(civilDate, utils.getIslamicOffset())));
+        gregorianDate.setText(Utils.dateToString(context, civilDate));
+        islamicDate.setText(Utils.dateToString(context,
+                DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset(context))));
 
-        if (utils.getToday().equals(persianDate)) {
+        if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
-            if (utils.iranTime) {
+            if (Utils.isIranTime(getContext())) {
                 weekDayName.setText(weekDayName.getText() +
                         " (" + getString(R.string.iran_time) + ")");
             }
@@ -203,7 +203,7 @@ public class CalendarFragment extends Fragment
         CivilDate civil = DateConverter.persianToCivil(persianDate);
 
         intent.putExtra(CalendarContract.Events.DESCRIPTION,
-                utils.dayTitleSummary(persianDate));
+                Utils.dayTitleSummary(getContext(), persianDate));
 
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -218,8 +218,9 @@ public class CalendarFragment extends Fragment
     }
 
     private void showEvent(PersianDate persianDate) {
-        String holidays = utils.getEventsTitle(persianDate, true);
-        String events = utils.getEventsTitle(persianDate, false);
+        Context context = getContext();
+        String holidays = Utils.getEventsTitle(context, persianDate, true);
+        String events = Utils.getEventsTitle(context, persianDate, false);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
@@ -248,15 +249,15 @@ public class CalendarFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        imsakTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        fajrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)));
-        sunriseTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        dhuhrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
-        asrTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
-        sunsetTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        maghribTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
-        ishaTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        midnightTextView.setText(utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        imsakTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        fajrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)));
+        sunriseTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        dhuhrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
+        asrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
+        sunsetTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        maghribTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
+        ishaTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        midnightTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
 
         owghat.setVisibility(View.VISIBLE);
     }
@@ -299,7 +300,7 @@ public class CalendarFragment extends Fragment
             case R.id.islamic_date:
             case R.id.shamsi_date:
             case R.id.gregorian_date:
-                utils.copyToClipboard(v);
+                Utils.copyToClipboard(getContext(), v);
                 break;
         }
     }
@@ -316,11 +317,11 @@ public class CalendarFragment extends Fragment
             monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
         }
 
-        selectDay(utils.getToday());
+        selectDay(Utils.getToday());
     }
 
     public void bringDate(PersianDate date) {
-        PersianDate today = utils.getToday();
+        PersianDate today = Utils.getToday();
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
 

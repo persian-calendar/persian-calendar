@@ -35,18 +35,17 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-        Utils utils = Utils.getInstance(getContext());
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
+        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
         String version = programVersion();
 
         TextView versionTextView = view.findViewById(R.id.version2);
         versionTextView.setText(getString(R.string.version) + " " +
-                utils.formatNumber(version.split("-")[0]));
+                Utils.formatNumber(version.split("-")[0]));
 
         TextView licenseTextView = view.findViewById(R.id.license);
         licenseTextView.setText("Android Persian Calendar Version " + version + "\n" +
-                utils.readRawResource(R.raw.credits));
+                Utils.readRawResource(getContext(), R.raw.credits));
 
         Linkify.addLinks(licenseTextView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 

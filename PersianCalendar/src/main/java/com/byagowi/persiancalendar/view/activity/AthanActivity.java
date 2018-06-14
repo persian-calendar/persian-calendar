@@ -26,17 +26,15 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     private TextView textAlarmName;
     private AppCompatImageView athanIconView;
     private MediaPlayer mediaPlayer;
-    private Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        utils = Utils.getInstance(getApplicationContext());
 
-        utils.changeAppLanguage(this);
-        utils.loadLanguageResource();
+        Utils.changeAppLanguage(this);
+        Utils.loadLanguageResource(this);
 
         setContentView(R.layout.activity_athan);
 
@@ -53,7 +51,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         setPrayerView(prayerKey);
 
-        textCityName.setText(getString(R.string.in_city_time) + " " + utils.getCityName(true));
+        textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
         play();
 
@@ -110,10 +108,10 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setDataSource(this, utils.getAthanUri());
+            mediaPlayer.setDataSource(this, Utils.getAthanUri(getApplicationContext()));
             mediaPlayer.prepare();
             mediaPlayer.start();
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, utils.getAthanVolume(), 0);
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }

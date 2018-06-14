@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
     public boolean dayIsPassed = false;
-    private Utils utils;
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
     private Class<?>[] fragments = {
@@ -76,17 +75,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        utils = Utils.getInstance(getApplicationContext());
-        utils.setTheme(this);
+        Utils.setTheme(getApplicationContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        utils.changeAppLanguage(this);
-        utils.loadLanguageResource();
-        lastLocale = utils.getAppLanguage();
-        lastTheme = utils.getTheme();
+        Utils.updateStoredPreference(this);
+        Utils.changeAppLanguage(this);
+        Utils.loadLanguageResource(this);
+        lastLocale = Utils.getAppLanguage(this);
+        lastTheme = Utils.getTheme(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
-        if (!Utils.getInstance(this).isServiceRunning(ApplicationService.class)) {
+        if (!Utils.isServiceRunning(this, ApplicationService.class)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(new Intent(this, ApplicationService.class));
             startService(new Intent(this, ApplicationService.class));
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        utils.changeAppLanguage(this);
+        Utils.changeAppLanguage(this);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
@@ -218,29 +217,29 @@ public class MainActivity extends AppCompatActivity {
     private void beforeMenuChange(int position) {
         if (position != menuPosition) {
             // reset app lang on menu changes, ugly hack but it seems is needed
-            utils.changeAppLanguage(this);
+            Utils.changeAppLanguage(this);
         }
 
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
 
-        utils.updateStoredPreference();
+        Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
 
         boolean needsActivityRestart = false;
 
-        String locale = utils.getAppLanguage();
+        String locale = Utils.getAppLanguage(this);
         if (!locale.equals(lastLocale)) {
             lastLocale = locale;
-            utils.changeAppLanguage(this);
-            utils.loadLanguageResource();
+            Utils.changeAppLanguage(this);
+            Utils.loadLanguageResource(this);
             needsActivityRestart = true;
         }
 
-        if (!lastTheme.equals(utils.getTheme())) {
+        if (!lastTheme.equals(Utils.getTheme(this))) {
             needsActivityRestart = true;
-            lastTheme = utils.getTheme();
+            lastTheme = Utils.getTheme(this);
         }
 
         if (needsActivityRestart)

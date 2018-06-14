@@ -45,8 +45,8 @@ public class ApplicationService extends Service {
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
         registerReceiver(new BroadcastReceivers(), intentFilter);
 
-        Utils utils = Utils.getInstance(getBaseContext());
-        utils.loadApp();
+        Utils.updateStoredPreference(getApplicationContext());
+        Utils.loadApp(this);
         UpdateUtils.update(getApplicationContext(), true);
 
         return START_STICKY;

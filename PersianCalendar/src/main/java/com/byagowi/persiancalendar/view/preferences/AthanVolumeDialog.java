@@ -31,7 +31,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.setDataSource(
                     getContext(),
-                    Utils.getInstance(getContext()).getAthanUri());
+                    Utils.getAthanUri(context.getApplicationContext()));
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());

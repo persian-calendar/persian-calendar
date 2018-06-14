@@ -40,15 +40,14 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Utils utils = Utils.getInstance(context);
-        utils.changeAppLanguage(context);
+        Utils.changeAppLanguage(context);
         if (firstTime) {
-            utils.loadLanguageResource();
+            Utils.loadLanguageResource(context);
             firstTime = false;
         }
-        Calendar calendar = utils.makeCalendarFromDate(new Date());
+        Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
-        PersianDate persian = utils.getToday();
+        PersianDate persian = Utils.getToday();
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
@@ -62,16 +61,16 @@ public class UpdateUtils {
         RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
         RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
         RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
-        String colorInt = utils.getSelectedWidgetTextColor();
+        String colorInt = Utils.getSelectedWidgetTextColor(context);
         int color = Color.parseColor(colorInt);
 
         // Widget 1x1
         remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
         remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
         remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                utils.formatNumber(persian.getDayOfMonth()));
+                Utils.formatNumber(persian.getDayOfMonth()));
         remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                utils.getMonthName(persian));
+                Utils.getMonthName(context, persian));
         remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
         manager.updateAppWidget(new ComponentName(context, Widget1x1.class), remoteViews1);
 
@@ -83,18 +82,18 @@ public class UpdateUtils {
         String text1;
         String text2;
         String text3 = "";
-        String weekDayName = utils.getWeekDayName(civil);
-        String persianDate = utils.dateToString(persian);
-        String civilDate = utils.dateToString(civil);
+        String weekDayName = Utils.getWeekDayName(context, civil);
+        String persianDate = Utils.dateToString(context, persian);
+        String civilDate = Utils.dateToString(context, civil);
         String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
-        String time = utils.getPersianFormattedClock(calendar);
-        boolean enableClock = utils.isWidgetClock();
+        String time = Utils.getPersianFormattedClock(calendar);
+        boolean enableClock = Utils.isWidgetClock(context);
 
         if (enableClock) {
             text2 = weekDayName + " " + date;
             text1 = time;
-            if (utils.iranTime) {
+            if (Utils.isIranTime(context)) {
                 text3 = "(" + context.getString(R.string.iran_time) + ")";
             }
         } else {
@@ -132,11 +131,11 @@ public class UpdateUtils {
             Log.d("UpdateUtils", "change date");
             pastDate = persian;
 
-            utils.loadAlarms();
+            Utils.loadAlarms(context);
 
-            owghat = utils.getNextOghatTime(currentClock, true);
+            owghat = Utils.getNextOghatTime(context, currentClock, true);
 
-            String holidays = utils.getEventsTitle(persian, true);
+            String holidays = Utils.getEventsTitle(context, persian, true);
 
             if (!TextUtils.isEmpty(holidays)) {
                 remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
@@ -145,7 +144,7 @@ public class UpdateUtils {
                 remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
             }
 
-            String events = utils.getEventsTitle(persian, false);
+            String events = Utils.getEventsTitle(context, persian, false);
 
             if (!TextUtils.isEmpty(events)) {
                 remoteViews2.setTextViewText(R.id.event_2x2, events);
@@ -154,7 +153,7 @@ public class UpdateUtils {
                 remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
             }
         } else {
-            owghat = utils.getNextOghatTime(currentClock, false);
+            owghat = Utils.getNextOghatTime(context, currentClock, false);
         }
 
         if (owghat != null) {
@@ -174,13 +173,13 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        String status = utils.getMonthName(persian);
+        String status = Utils.getMonthName(context, persian);
 
-        String title = utils.getWeekDayName(civil) + Constants.PERSIAN_COMMA + " " +
-                utils.dateToString(persian);
+        String title = Utils.getWeekDayName(context, civil) + Constants.PERSIAN_COMMA + " " +
+                Utils.dateToString(context, persian);
 
-        String body = utils.dateToString(civil) + Constants.PERSIAN_COMMA + " "
-                + utils.dateToString(DateConverter.civilToIslamic(civil, utils.getIslamicOffset()));
+        String body = Utils.dateToString(context, civil) + Constants.PERSIAN_COMMA + " "
+                + Utils.dateToString(context, DateConverter.civilToIslamic(civil, Utils.getIslamicOffset(context)));
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
@@ -190,10 +189,10 @@ public class UpdateUtils {
             body = Constants.RLM + body;
         }
 
-        int icon = utils.getDayIconResource(persian.getDayOfMonth());
+        int icon = Utils.getDayIconResource(persian.getDayOfMonth());
 
         ApplicationService applicationService = ApplicationService.getInstance();
-        if (applicationService != null && utils.isNotifyDate()) {
+        if (applicationService != null && Utils.isNotifyDate(context)) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

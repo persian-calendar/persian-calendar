@@ -31,14 +31,12 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     LocationManager locationManager;
     Context context;
     TextView textView;
-    Utils utils;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
         context = getContext();
-        utils = Utils.getInstance(context);
 
         textView = new TextView(context);
         textView.setPadding(32, 32, 32, 32);
@@ -123,7 +121,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += utils.formatCoordinate(
+        result += Utils.formatCoordinate(
+                getContext(),
                 new Coordinate(location.getLatitude(), location.getLongitude()),
                 "\n");
         textView.setText(result);
