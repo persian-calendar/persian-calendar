@@ -121,7 +121,7 @@ public class Utils {
 
     static private String TAG = Utils.class.getName();
 
-    static private List<EventEntity> events;
+    static private List<EventEntity>[] events;
 
     static private String[] persianMonths;
     static private String[] islamicMonths;
@@ -563,7 +563,9 @@ public class Utils {
     }
 
     static private void loadEvents(Context context) {
-        List<EventEntity> events = new ArrayList<>();
+        List<EventEntity>[] events = new ArrayList[32];
+        for (int i = 0; i < 32; ++i)
+            events[i] = new ArrayList<>();
         try {
             JSONArray days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("events");
 
@@ -577,7 +579,7 @@ public class Utils {
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
-                events.add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+                events[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
             }
 
         } catch (JSONException e) {
@@ -624,17 +626,18 @@ public class Utils {
 
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
-        for (EventEntity eventEntity : events) {
-            int year = eventEntity.getDate().getYear();
+        for (List<EventEntity> eventsList : events)
+            for (EventEntity eventEntity : eventsList) {
+                int year = eventEntity.getDate().getYear();
 
-            if (min > year && year != -1) {
-                min = year;
-            }
+                if (min > year && year != -1) {
+                    min = year;
+                }
 
-            if (max < year) {
-                max = year;
+                if (max < year) {
+                    max = year;
+                }
             }
-        }
 
         minSupportedYear = min;
         maxSupportedYear = max;
@@ -646,7 +649,7 @@ public class Utils {
         }
 
         List<EventEntity> result = new ArrayList<>();
-        for (EventEntity eventEntity : events) {
+        for (EventEntity eventEntity : events[day.getDayOfMonth()]) {
             if (eventEntity.getDate().equals(day)) {
                 result.add(eventEntity);
             }
