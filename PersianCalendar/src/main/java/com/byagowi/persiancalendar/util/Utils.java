@@ -960,7 +960,7 @@ public class Utils {
         //
 
         // month spinner init.
-        String[] months = monthsNamesOfCalendar(context, date);
+        String[] months = monthsNamesOfCalendar(context, date).clone();
         for (int i = 0; i < months.length; ++i) {
             months[i] = months[i] + " / " + formatNumber(i + 1);
         }

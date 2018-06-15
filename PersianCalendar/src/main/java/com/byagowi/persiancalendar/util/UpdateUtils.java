@@ -80,7 +80,7 @@ public class UpdateUtils {
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
 
-        if (manager.getAppWidgetIds(widget2x2).length != 0 ||
+        if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
             // Widget 4x1
             remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
