@@ -51,6 +51,7 @@
             android:defaultValue="true"
             android:dependency="NotifyDate"
             android:key="NotifyDateLockScreen"
+            android:summary="@string/notify_date_lock_screen_summary"
             android:title="@string/notify_date_lock_screen"/>
 
         <android.support.v7.preference.ListPreference

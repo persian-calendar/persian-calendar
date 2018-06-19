@@ -107,4 +107,5 @@
     <string name="holidaysIncompletenessWarning">Holidays of the selected year may not be complete and reliable.</string>
     <string name="shouldBeUpdated">Holidays of the selected year may not be complete and reliable. Consider an update for the app, if exists.</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
+    <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
 </resources>
