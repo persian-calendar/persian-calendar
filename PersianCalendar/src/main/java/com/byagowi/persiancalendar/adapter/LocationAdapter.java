@@ -18,17 +18,15 @@ import java.util.List;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
     private List<CityEntity> cities;
-    private Utils utils;
     private LocationPreferenceDialog locationPreferenceDialog;
     private LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
         Context context = locationPreferenceDialog.getContext();
-        utils = Utils.getInstance(locationPreferenceDialog.getContext());
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
-        this.cities = utils.getAllCities(true);
-        this.locale = utils.getAppLanguage();
+        this.cities = Utils.getAllCities(context, true);
+        this.locale = Utils.getAppLanguage(context);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

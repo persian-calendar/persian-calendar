@@ -35,13 +35,12 @@ public class CompassFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
         Context context = getContext();
-        Utils utils = Utils.getInstance(context);
-        Coordinate coordinate = utils.getCoordinate();
+        Coordinate coordinate = Utils.getCoordinate(getContext());
         if (coordinate == null) {
-            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
+            Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
-                    utils.getCityName(true));
+            Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
+                    Utils.getCityName(context,true));
         }
 
 

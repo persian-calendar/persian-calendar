@@ -25,7 +25,6 @@ import java.util.List;
 import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
-    private Utils utils;
     private CalendarFragment calendarFragment;
     private PersianDate persianDate;
     private int offset;
@@ -37,17 +36,16 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             ViewGroup container,
             Bundle savedInstanceState) {
 
-        utils = Utils.getInstance(getContext());
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<DayEntity> days = utils.getDays(offset);
+        List<DayEntity> days = Utils.getDays(getContext(), offset);
 
         AppCompatImageView prev = view.findViewById(R.id.prev);
         AppCompatImageView next = view.findViewById(R.id.next);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
-        persianDate = utils.getToday();
+        persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
         int year = persianDate.getYear();
@@ -78,7 +76,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 .findFragmentByTag(CalendarFragment.class.getName());
 
         if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.selectDay(utils.getToday());
+            calendarFragment.selectDay(Utils.getToday());
             updateTitle();
         }
 
@@ -100,7 +98,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                     adapter.selectDay(day);
                 }
 
-                utils.checkYearAndWarnIfNeeded(persianDate.getYear());
+                Utils.checkYearAndWarnIfNeeded(context, persianDate.getYear());
 
             } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
                 adapter.clearSelectedDay();
@@ -137,10 +135,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateTitle() {
-        utils.setActivityTitleAndSubtitle(
+        Utils.setActivityTitleAndSubtitle(
                 getActivity(),
-                utils.getMonthName(persianDate),
-                utils.formatNumber(persianDate.getYear()));
+                Utils.getMonthName(getContext(), persianDate),
+                Utils.formatNumber(persianDate.getYear()));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,7 +32,7 @@ import calendar.PersianDate;
  */
 public class ConverterFragment extends Fragment implements
         AdapterView.OnItemSelectedListener, View.OnClickListener {
-    private Utils utils;
+
     private Spinner calendarTypeSpinner;
     private Spinner yearSpinner;
     private Spinner monthSpinner;
@@ -47,9 +48,9 @@ public class ConverterFragment extends Fragment implements
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
+
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
-        utils = Utils.getInstance(getContext());
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         // fill members
         calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
@@ -72,7 +73,7 @@ public class ConverterFragment extends Fragment implements
                 Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
-        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
         calendarTypeSpinner.setOnItemSelectedListener(this);
@@ -99,15 +100,16 @@ public class ConverterFragment extends Fragment implements
             moreDate.setVisibility(View.VISIBLE);
 
             List<String> calendarsTextList = new ArrayList<>();
-            switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+            Context context = getContext();
+            switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     islamicDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
 
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(persianDate));
-                    calendarsTextList.add(utils.dateToString(islamicDate));
+                    calendarsTextList.add(Utils.dateToString(context, civilDate));
+                    calendarsTextList.add(Utils.dateToString(context, persianDate));
+                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
                     break;
 
                 case ISLAMIC:
@@ -115,9 +117,9 @@ public class ConverterFragment extends Fragment implements
                     civilDate = DateConverter.islamicToCivil(islamicDate);
                     persianDate = DateConverter.islamicToPersian(islamicDate);
 
-                    calendarsTextList.add(utils.dateToString(islamicDate));
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(persianDate));
+                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
+                    calendarsTextList.add(Utils.dateToString(context, civilDate));
+                    calendarsTextList.add(Utils.dateToString(context, persianDate));
                     break;
 
                 case SHAMSI:
@@ -125,13 +127,13 @@ public class ConverterFragment extends Fragment implements
                     civilDate = DateConverter.persianToCivil(persianDate);
                     islamicDate = DateConverter.persianToIslamic(persianDate);
 
-                    calendarsTextList.add(utils.dateToString(persianDate));
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(islamicDate));
+                    calendarsTextList.add(Utils.dateToString(context, persianDate));
+                    calendarsTextList.add(Utils.dateToString(context, civilDate));
+                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
                     break;
             }
 
-            sb.append(utils.getWeekDayName(civilDate));
+            sb.append(Utils.getWeekDayName(getContext(), civilDate));
             sb.append(Constants.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));
@@ -156,7 +158,7 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
+                startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                         calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
                 break;
         }
@@ -169,6 +171,6 @@ public class ConverterFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        utils.copyToClipboard(view);
+        Utils.copyToClipboard(getContext(), view);
     }
 }
