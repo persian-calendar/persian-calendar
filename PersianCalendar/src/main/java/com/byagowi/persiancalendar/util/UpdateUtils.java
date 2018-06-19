@@ -40,7 +40,7 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Utils.changeAppLanguage(context);
+        Utils.changeAppLanguage(context); // FIXME: Expensive, this shouldn't happen every time
         if (firstTime) {
             Utils.loadLanguageResource(context);
             firstTime = false;

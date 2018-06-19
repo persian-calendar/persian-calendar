@@ -208,22 +208,6 @@ public class Utils {
         return preferredDigits == PERSIAN_DIGITS;
     }
 
-    static public void setTheme(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String key = prefs.getString(PREF_THEME, "");
-
-        int theme = R.style.LightTheme; // default theme
-
-        if (key.equals(LIGHT_THEME)) {
-            theme = R.style.LightTheme;
-        } else if (key.equals(DARK_THEME)) {
-            theme = R.style.DarkTheme;
-        }
-
-        context.setTheme(theme);
-    }
-
     static public boolean isWidgetClock() {
         return widgetClock;
     }

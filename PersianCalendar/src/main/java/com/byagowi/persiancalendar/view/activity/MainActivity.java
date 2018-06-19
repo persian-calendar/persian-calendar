@@ -36,6 +36,9 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+
 /**
  * Program activity for android
  *
@@ -75,7 +78,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setTheme(getApplicationContext());
+        switch (Utils.getTheme(this)) {
+            case DARK_THEME:
+                setTheme(R.style.DarkTheme);
+            case LIGHT_THEME:
+            default:
+                setTheme(R.style.LightTheme);
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.updateStoredPreference(this);
@@ -166,7 +176,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Utils.updateStoredPreference(this);
         Utils.changeAppLanguage(this);
+        UpdateUtils.update(getApplicationContext(), true);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
