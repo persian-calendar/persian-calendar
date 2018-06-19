@@ -125,7 +125,7 @@
             android:label="Calendar Service"/>
 
         <service
-            android:name=".service.TileService"
+            android:name=".service.PersianCalendarTileService"
             android:icon="@drawable/day13"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
