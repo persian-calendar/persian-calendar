@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -147,6 +149,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         if (checkPermission()) {
             locationManager.removeUpdates(locationListener);
         }
+        LocalBroadcastManager.getInstance(getContext())
+                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 
     @Override
