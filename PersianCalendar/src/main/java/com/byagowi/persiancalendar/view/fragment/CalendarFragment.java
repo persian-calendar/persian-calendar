@@ -177,7 +177,7 @@ public class CalendarFragment extends Fragment
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         gregorianDate.setText(Utils.dateToString(context, civilDate));
         islamicDate.setText(Utils.dateToString(context,
-                DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset(context))));
+                DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset())));
 
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);

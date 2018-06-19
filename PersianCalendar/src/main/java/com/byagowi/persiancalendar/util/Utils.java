@@ -82,6 +82,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
@@ -103,6 +104,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
@@ -137,22 +139,6 @@ public class Utils {
         }
     }
 
-    static public CalculationMethod getCalculationMethod(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
-        // so switched to "Tehran" method as default calculation algorithm
-        return CalculationMethod.valueOf(prefs.getString(PREF_PRAY_TIME_METHOD,
-                DEFAULT_PRAY_TIME_METHOD));
-    }
-
-    static public int getIslamicOffset(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return Integer.parseInt(prefs.getString(PREF_ISLAMIC_OFFSET,
-                DEFAULT_ISLAMIC_OFFSET).replace("+", ""));
-    }
-
     static public Coordinate getCoordinate(Context context) {
         CityEntity cityEntity = getCityFromPreference(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -180,8 +166,15 @@ public class Utils {
     }
 
     static private char[] preferredDigits = PERSIAN_DIGITS;
-    static private boolean clockIn24;
-    static public boolean iranTime;
+    static private boolean clockIn24 = DEFAULT_WIDGET_IN_24;
+    static private boolean iranTime = DEFAULT_IRAN_TIME;
+    static private boolean notifyInLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
+    static private boolean widgetClock = DEFAULT_WIDGET_CLOCK;
+    static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
+    static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
+    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+    static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
+    static private String language = DEFAULT_APP_LANGUAGE;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -192,6 +185,17 @@ public class Utils {
 
         clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
         iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
+        notifyInLockScreen = prefs.getBoolean(PREF_NOTIFY_DATE_LOCK_SCREEN,
+                DEFAULT_NOTIFY_DATE_LOCK_SCREEN);
+        widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
+        notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
+        selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
+                DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
+        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
+        // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
+        // so switched to "Tehran" method as default calculation algorithm
+        calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
+        language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
     }
 
     static public boolean isIranTime() {
@@ -201,7 +205,6 @@ public class Utils {
     static public boolean isPersianDigitSelected() {
         return preferredDigits == PERSIAN_DIGITS;
     }
-
 
     static public void setTheme(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -219,16 +222,12 @@ public class Utils {
         context.setTheme(theme);
     }
 
-    static public boolean isWidgetClock(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
+    static public boolean isWidgetClock() {
+        return widgetClock;
     }
 
-    static public boolean isNotifyDate(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
+    static public boolean isNotifyDate() {
+        return notifyDate;
     }
 
     static public int getAthanVolume(Context context) {
@@ -237,10 +236,19 @@ public class Utils {
         return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
     }
 
-    static public String getAppLanguage(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    static public boolean isNotifyDateOnLockScreen() {
+        return notifyInLockScreen;
+    }
 
-        String language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
+    static public CalculationMethod getCalculationMethod(Context context) {
+        return CalculationMethod.valueOf(calculationMethod);
+    }
+
+    static public int getIslamicOffset() {
+        return Integer.parseInt(islamicOffset.replace("+", ""));
+    }
+
+    static public String getAppLanguage() {
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
@@ -251,10 +259,8 @@ public class Utils {
         return prefs.getString(PREF_THEME, LIGHT_THEME);
     }
 
-    static public String getSelectedWidgetTextColor(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
+    static public String getSelectedWidgetTextColor() {
+        return selectedWidgetTextColor;
     }
 
     static public PersianDate getToday() {
@@ -476,8 +482,6 @@ public class Utils {
             return result;
         }
 
-        String locale = getAppLanguage(context);
-
         CityEntity[] cities = result.toArray(new CityEntity[result.size()]);
         // Sort first by country code then city
         Arrays.sort(cities, (l, r) -> {
@@ -489,7 +493,7 @@ public class Utils {
             }
             int compare = r.getCountryCode().compareTo(l.getCountryCode());
             if (compare != 0) return compare;
-            if (locale.equals("en")) {
+            if (language.equals("en")) {
                 return l.getEn().compareTo(r.getEn());
             } else {
                 return persianStringToArabic(l.getFa())
@@ -535,7 +539,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityEntity cityEntity = getCityFromPreference(context);
         if (cityEntity != null)
-            return getAppLanguage(context).equals("en") ? cityEntity.getEn() : cityEntity.getFa();
+            return language.equals("en") ? cityEntity.getEn() : cityEntity.getFa();
 
         String geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "");
         if (!TextUtils.isEmpty(geocodedCityName))
@@ -772,7 +776,7 @@ public class Utils {
 
     // Context preferably should be activity context not application
     static public void changeAppLanguage(Context context) {
-        String localeCode = getAppLanguage(context).replaceAll("-(IR|AF)", "");
+        String localeCode = language.replaceAll("-(IR|AF)", "");
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
         Resources resources = context.getResources();
@@ -786,9 +790,7 @@ public class Utils {
 
     static public void loadLanguageResource(Context context) {
         @RawRes int messagesFile;
-        String lang = getAppLanguage(context);
-
-        switch (lang) {
+        switch (language) {
             case "fa-AF":
                 messagesFile = R.raw.messages_fa_af;
                 break;

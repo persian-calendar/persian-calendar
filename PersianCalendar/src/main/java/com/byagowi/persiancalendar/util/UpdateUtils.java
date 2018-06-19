@@ -61,7 +61,7 @@ public class UpdateUtils {
         RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
         RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
         RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
-        String colorInt = Utils.getSelectedWidgetTextColor(context);
+        String colorInt = Utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
         // Widget 1x1
@@ -96,7 +96,7 @@ public class UpdateUtils {
             String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
             String time = Utils.getPersianFormattedClock(calendar);
-            boolean enableClock = Utils.isWidgetClock(context);
+            boolean enableClock = Utils.isWidgetClock();
 
             if (enableClock) {
                 text2 = weekDayName + " " + date;
@@ -187,7 +187,7 @@ public class UpdateUtils {
                 Utils.dateToString(context, persian);
 
         String body = Utils.dateToString(context, civil) + Constants.PERSIAN_COMMA + " "
-                + Utils.dateToString(context, DateConverter.civilToIslamic(civil, Utils.getIslamicOffset(context)));
+                + Utils.dateToString(context, DateConverter.civilToIslamic(civil, Utils.getIslamicOffset()));
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
@@ -200,7 +200,7 @@ public class UpdateUtils {
         int icon = Utils.getDayIconResource(persian.getDayOfMonth());
 
         ApplicationService applicationService = ApplicationService.getInstance();
-        if (applicationService != null && Utils.isNotifyDate(context)) {
+        if (applicationService != null && Utils.isNotifyDate()) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -219,6 +219,9 @@ public class UpdateUtils {
                     .setContentIntent(launchAppPendingIntent)
                     .setContentText(body)
                     .setContentTitle(title)
+                    .setVisibility(Utils.isNotifyDateOnLockScreen()
+                            ? NotificationCompat.VISIBILITY_PUBLIC
+                            : NotificationCompat.VISIBILITY_SECRET)
                     .setColor(0xFF607D8B);
             applicationService.startForeground(NOTIFICATION_ID, builder.build());
         }

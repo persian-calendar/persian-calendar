@@ -26,7 +26,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
         this.cities = Utils.getAllCities(context, true);
-        this.locale = Utils.getAppLanguage(context);
+        this.locale = Utils.getAppLanguage();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
