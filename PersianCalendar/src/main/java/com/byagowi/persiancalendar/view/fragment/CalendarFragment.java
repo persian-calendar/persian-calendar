@@ -137,7 +137,7 @@ public class CalendarFragment extends Fragment
         monthViewPager = view.findViewById(R.id.calendar_pager);
 
         coordinate = Utils.getCoordinate(getContext());
-        prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod(getContext()));
+        prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
 
         monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager()));
         monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);

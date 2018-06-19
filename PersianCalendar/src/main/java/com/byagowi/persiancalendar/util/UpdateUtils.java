@@ -135,9 +135,10 @@ public class UpdateUtils {
             String owghat;
 
             if (pastDate == null || !pastDate.equals(persian) || updateDate) {
-                Log.d("UpdateUtils", "change date");
+                Log.d("UpdateUtils", "date has changed");
                 pastDate = persian;
 
+                Utils.updateStoredPreference(context);
                 Utils.loadAlarms(context);
 
                 owghat = Utils.getNextOghatTime(context, currentClock, true);

@@ -121,7 +121,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
 
 public class Utils {
 
-    static private String TAG = Utils.class.getName();
+    static private final String TAG = Utils.class.getName();
 
     static private List<EventEntity>[] events;
 
@@ -175,6 +175,7 @@ public class Utils {
     static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
+    static private Coordinate coordinate;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -196,6 +197,7 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
+        coordinate = getCoordinate(context);
     }
 
     static public boolean isIranTime() {
@@ -240,7 +242,7 @@ public class Utils {
         return notifyInLockScreen;
     }
 
-    static public CalculationMethod getCalculationMethod(Context context) {
+    static public CalculationMethod getCalculationMethod() {
         return CalculationMethod.valueOf(calculationMethod);
     }
 
@@ -276,46 +278,46 @@ public class Utils {
         return calendar;
     }
 
-    static public String clockToString(int hour, int minute) {
+    static private String clockToString(int hour, int minute) {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
-    static public String getNextOghatTime(Context context, Clock clock, boolean changeDate) {
-        Coordinate coordinate = getCoordinate(context);
+    static private Map<PrayTime, Clock> prayTimes;
+    static public String getNextOghatTime(Context context, Clock clock, boolean dateHasChanged) {
+        if (coordinate == null) return null;
 
-        if (coordinate != null) {
-            PrayTimesCalculator prayTimesCalculator = new PrayTimesCalculator(getCalculationMethod(context));
-            Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(new Date(), coordinate);
+        if (prayTimes == null || dateHasChanged) {
+            prayTimes = new PrayTimesCalculator(getCalculationMethod())
+                    .calculate(new Date(), coordinate);
+        }
 
-            if (prayTimes.get(PrayTime.FAJR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR));
+        if (prayTimes.get(PrayTime.FAJR).getInt() > clock.getInt()) {
+            return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR));
 
-            } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE));
+        } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
+            return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE));
 
-            } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR));
+        } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
+            return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR));
 
-            } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR));
+        } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
+            return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR));
 
-            } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET));
+        } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
+            return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET));
 
-            } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
+        } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
+            return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
 
-            } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
-                return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA));
+        } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
+            return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA));
 
-            } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
-                return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
+        } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
+            return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
 
-            } else {
-                return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
-            }
-
-        } else return null;
+        } else {
+            return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
+        }
     }
 
     static public String getPersianFormattedClock(Clock clock) {
@@ -384,7 +386,7 @@ public class Utils {
         return getWeekDayName(context, persianDate) + PERSIAN_COMMA + " " + dateToString(context, persianDate);
     }
 
-    static public String[] monthsNamesOfCalendar(Context context, AbstractDate date) {
+    static private String[] monthsNamesOfCalendar(Context context, AbstractDate date) {
         // the next step would be using them so lets check if they have initialized already
         if (persianMonths == null || gregorianMonths == null || islamicMonths == null)
             loadLanguageResource(context);
@@ -545,11 +547,9 @@ public class Utils {
         if (!TextUtils.isEmpty(geocodedCityName))
             return geocodedCityName;
 
-        if (fallbackToCoord) {
-            Coordinate coordinate = getCoordinate(context);
+        if (fallbackToCoord)
             if (coordinate != null)
                 return formatCoordinate(context, coordinate, PERSIAN_COMMA + " ");
-        }
 
         return "";
     }
@@ -635,7 +635,7 @@ public class Utils {
         maxSupportedYear = max;
     }
 
-    static public List<EventEntity> getEvents(Context context, PersianDate day) {
+    static private List<EventEntity> getEvents(Context context, PersianDate day) {
         if (events == null) {
             loadEvents(context);
         }
@@ -695,8 +695,7 @@ public class Utils {
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
-        CalculationMethod calculationMethod = getCalculationMethod(context);
-        Coordinate coordinate = getCoordinate(context);
+        CalculationMethod calculationMethod = getCalculationMethod();
 
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
@@ -704,9 +703,8 @@ public class Utils {
             // convert comma separated string to a set
             Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
             // in the past IMSAK was used but now we figured out FAJR was what we wanted
-            if (alarmTimesSet.remove("IMSAK")) {
+            if (alarmTimesSet.remove("IMSAK"))
                 alarmTimesSet.add("FAJR");
-            }
 
             String[] alarmTimesNames = alarmTimesSet.toArray(new String[alarmTimesSet.size()]);
             for (int i = 0; i < alarmTimesNames.length; i++) {
@@ -714,21 +712,20 @@ public class Utils {
 
                 Clock alarmTime = prayTimes.get(prayTime);
 
-                if (alarmTime != null) {
+                if (alarmTime != null)
                     setAlarm(context, prayTime, alarmTime, i);
-                }
             }
         }
     }
 
-    static public void setAlarm(Context context, PrayTime prayTime, Clock clock, int id) {
+    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
         setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id);
     }
 
-    static public void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id) {
+    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
