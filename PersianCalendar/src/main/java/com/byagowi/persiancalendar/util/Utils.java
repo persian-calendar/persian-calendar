@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,6 +83,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
@@ -105,6 +105,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
@@ -245,6 +246,10 @@ public class Utils {
 
     public boolean isNotifyDate() {
         return prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
+    }
+
+    public boolean isNotifyDateOnLockScreen() {
+        return prefs.getBoolean(PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN);
     }
 
     public int getAthanVolume() {

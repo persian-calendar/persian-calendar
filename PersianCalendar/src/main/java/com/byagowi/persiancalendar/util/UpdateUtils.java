@@ -204,6 +204,9 @@ public class UpdateUtils {
                     notificationManager.createNotificationChannel(mChannel);
                 }
             }
+            Integer visibility = utils.isNotifyDateOnLockScreen()
+                    ? NotificationCompat.VISIBILITY_PUBLIC
+                    : NotificationCompat.VISIBILITY_SECRET;
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(icon)
@@ -212,6 +215,7 @@ public class UpdateUtils {
                     .setContentIntent(launchAppPendingIntent)
                     .setContentText(body)
                     .setContentTitle(title)
+                    .setVisibility(visibility)
                     .setColor(0xFF607D8B);
             applicationService.startForeground(NOTIFICATION_ID, builder.build());
         }
