@@ -110,6 +110,7 @@
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Latitude"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/latitude"/>
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
@@ -117,6 +118,7 @@
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Longitude"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/longitude"/>
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
@@ -124,6 +126,7 @@
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="Altitude"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude"/>
 
@@ -136,16 +139,19 @@
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:inputType="numberSigned"
             android:key="AthanGap"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap"/>
 
         <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
             android:key="AthanAlarm"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm"/>
 
         <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
             android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume"/>
 
