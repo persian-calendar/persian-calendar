@@ -97,10 +97,11 @@
         <item>زایینی</item>
     </string-array>
 
-    <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>
+    <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>بڕۆ
     <string name="stop">ڕاگرتن</string>
     <string name="goto_date">بڕۆ بە ڕێککەوت</string>
     <string name="select">ھەڵبژاردن</string>
+    <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
     <string name="holidaysIncompletenessWarning">بۆنەکانی ڕۆژژمێری ئەمساڵ تەواو نییە.</string>
     <string name="shouldBeUpdated">بۆنەکانی ڕۆژژمێری ئەمساڵ تەواو نییە، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>

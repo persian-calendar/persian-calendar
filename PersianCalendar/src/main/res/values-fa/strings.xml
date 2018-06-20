@@ -101,6 +101,7 @@
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="select">انتخاب</string>
+    <string name="go">برو</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
     <string name="shouldBeUpdated">مناسبت‌های تقویم امسال کامل نیست، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
