@@ -66,6 +66,7 @@ import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
@@ -92,6 +93,7 @@ import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
@@ -320,10 +322,14 @@ public class Utils {
         int hour = clock.getHour();
         if (!clockIn24) {
             if (hour >= 12) {
-                timeText = PM_IN_PERSIAN;
+                timeText = language.equals("ckb")
+                        ? PM_IN_CKB
+                        : PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = AM_IN_PERSIAN;
+                timeText = language.equals("ckb")
+                        ? AM_IN_CKB
+                        : AM_IN_PERSIAN;
             }
         }
 
@@ -340,10 +346,14 @@ public class Utils {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (!clockIn24) {
             if (calendar.get(Calendar.HOUR_OF_DAY) >= 12) {
-                timeText = PM_IN_PERSIAN;
+                timeText = language.equals("ckb")
+                        ? PM_IN_CKB
+                        : PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = AM_IN_PERSIAN;
+                timeText = language.equals("ckb")
+                        ? AM_IN_CKB
+                        : AM_IN_PERSIAN;
             }
         }
 

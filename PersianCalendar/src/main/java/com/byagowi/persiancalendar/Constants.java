@@ -87,7 +87,9 @@ public class Constants {
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',
             '۷', '۸', '۹'};
     public static final String AM_IN_PERSIAN = "ق.ظ";
+    public static final String AM_IN_CKB = "ب.ن";
     public static final String PM_IN_PERSIAN = "ب.ظ";
+    public static final String PM_IN_CKB = "د.ن";
 
     public static final int[] DAYS_ICONS = {0,
             R.drawable.day1, R.drawable.day2, R.drawable.day3,
