@@ -778,6 +778,9 @@ public class Utils {
             case "ps":
                 messagesFile = R.raw.messages_ps;
                 break;
+            case "ckb":
+                messagesFile = R.raw.messages_ckb;
+                break;
             default:
                 messagesFile = R.raw.messages_fa;
                 break;
