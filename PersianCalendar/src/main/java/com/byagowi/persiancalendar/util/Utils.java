@@ -129,6 +129,7 @@ public class Utils {
     static private String[] islamicMonths;
     static private String[] gregorianMonths;
     static private String[] weekDays;
+    static private String[] weekDaysInitials;
 
     static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
         //noinspection ConstantConditions
@@ -362,19 +363,15 @@ public class Utils {
     }
 
     static public String dateToString(Context context, AbstractDate date) {
-        return formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(context, date) + ' ' +
+        return formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
                 formatNumber(date.getYear());
     }
 
     static public String dayTitleSummary(Context context, PersianDate persianDate) {
-        return getWeekDayName(context, persianDate) + PERSIAN_COMMA + " " + dateToString(context, persianDate);
+        return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(context, persianDate);
     }
 
-    static private String[] monthsNamesOfCalendar(Context context, AbstractDate date) {
-        // the next step would be using them so lets check if they have initialized already
-        if (persianMonths == null || gregorianMonths == null || islamicMonths == null)
-            loadLanguageResource(context);
-
+    static private String[] monthsNamesOfCalendar(AbstractDate date) {
         if (date instanceof PersianDate)
             return persianMonths;
         else if (date instanceof IslamicDate)
@@ -383,18 +380,15 @@ public class Utils {
             return gregorianMonths;
     }
 
-    static public String getMonthName(Context context, AbstractDate date) {
-        return monthsNamesOfCalendar(context, date)[date.getMonth() - 1];
+    static public String getMonthName(AbstractDate date) {
+        return monthsNamesOfCalendar(date)[date.getMonth() - 1];
     }
 
-    static public String getWeekDayName(Context context, AbstractDate date) {
+    static public String getWeekDayName(AbstractDate date) {
         if (date instanceof IslamicDate)
             date = DateConverter.islamicToCivil((IslamicDate) date);
         else if (date instanceof PersianDate)
             date = DateConverter.persianToCivil((PersianDate) date);
-
-        if (weekDays == null)
-            loadLanguageResource(context);
 
         return weekDays[date.getDayOfWeek() % 7];
     }
@@ -769,6 +763,7 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
+
     static public void loadLanguageResource(Context context) {
         @RawRes int messagesFile;
         switch (language) {
@@ -790,6 +785,7 @@ public class Utils {
         islamicMonths = new String[12];
         gregorianMonths = new String[12];
         weekDays = new String[7];
+        weekDaysInitials = new String[7];
 
         try {
             JSONObject messages = new JSONObject(readRawResource(context, messagesFile));
@@ -807,12 +803,18 @@ public class Utils {
                 gregorianMonths[i] = gregorianMonthsArray.getString(i);
 
             JSONArray weekDaysArray = messages.getJSONArray("WeekDays");
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 7; ++i) {
                 weekDays[i] = weekDaysArray.getString(i);
+                weekDaysInitials[i] = weekDays[i].substring(0, 1);
+            }
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    public static String getInitialOfWeekDay(int position) {
+        return weekDaysInitials[position];
     }
 
     static public void copyToClipboard(Context context, CharSequence text) {
@@ -943,7 +945,7 @@ public class Utils {
         //
 
         // month spinner init.
-        String[] months = monthsNamesOfCalendar(context, date).clone();
+        String[] months = monthsNamesOfCalendar(date).clone();
         for (int i = 0; i < months.length; ++i) {
             months[i] = months[i] + " / " + formatNumber(i + 1);
         }

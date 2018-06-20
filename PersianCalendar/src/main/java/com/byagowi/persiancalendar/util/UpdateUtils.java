@@ -75,7 +75,7 @@ public class UpdateUtils {
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                     Utils.formatNumber(persian.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(context, persian));
+                    Utils.getMonthName(persian));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
@@ -90,7 +90,7 @@ public class UpdateUtils {
             String text1;
             String text2;
             String text3 = "";
-            String weekDayName = Utils.getWeekDayName(context, civil);
+            String weekDayName = Utils.getWeekDayName(civil);
             String persianDate = Utils.dateToString(context, persian);
             String civilDate = Utils.dateToString(context, civil);
             String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
@@ -182,9 +182,9 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        String status = Utils.getMonthName(context, persian);
+        String status = Utils.getMonthName(persian);
 
-        String title = Utils.getWeekDayName(context, civil) + Constants.PERSIAN_COMMA + " " +
+        String title = Utils.getWeekDayName(civil) + Constants.PERSIAN_COMMA + " " +
                 Utils.dateToString(context, persian);
 
         String body = Utils.dateToString(context, civil) + Constants.PERSIAN_COMMA + " "

@@ -182,7 +182,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             }
 
         } else {
-            holder.num.setText(Constants.FIRST_CHAR_OF_DAYS_OF_WEEK_NAME[position]);
+            holder.num.setText(Utils.getInitialOfWeekDay(position));
             holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);

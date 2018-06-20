@@ -133,7 +133,7 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
-            sb.append(Utils.getWeekDayName(getContext(), civilDate));
+            sb.append(Utils.getWeekDayName(civilDate));
             sb.append(Constants.PERSIAN_COMMA);
             sb.append(" ");
             sb.append(calendarsTextList.get(0));

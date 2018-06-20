@@ -82,8 +82,6 @@ public class Constants {
     public static final char RLM = '\u200F';
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
-    public static final String[] FIRST_CHAR_OF_DAYS_OF_WEEK_NAME = {"ش", "ی", "د", "س",
-            "چ", "پ", "ج"};
     public static final char[] ARABIC_DIGITS = {'0', '1', '2', '3', '4', '5', '6',
             '7', '8', '9'};
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',

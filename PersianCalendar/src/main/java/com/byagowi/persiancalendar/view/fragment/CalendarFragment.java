@@ -170,7 +170,7 @@ public class CalendarFragment extends Fragment
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
         PersianDate today = Utils.getToday();
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(getContext(), today),
+        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         return view;
@@ -181,19 +181,19 @@ public class CalendarFragment extends Fragment
     }
 
     public void selectDay(PersianDate persianDate) {
-        weekDayName.setText(Utils.getWeekDayName(getContext(), persianDate));
+        weekDayName.setText(Utils.getWeekDayName(persianDate));
         Context context = getContext();
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
         shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
-        shamsiDate.setText(Utils.getMonthName(context, persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
+        shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
 
         gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
-        gregorianDate.setText(Utils.getMonthName(context, civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
+        gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
 
         islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
-        islamicDate.setText(Utils.getMonthName(context, hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
+        islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
