@@ -22,8 +22,6 @@
     <string name="date">تاریخ</string>
     <string name="date_converter">تبدیل تاریخ</string>
     <string name="logo">نشان</string>
-    <string name="dari_months">ماه‌های دری</string>
-    <string name="enable_dari">فعال کردن ماه‌های دری</string>
     <string name="widget_notification_dashclock">ابزارک، نوار آگاهسازی و دش‌کلاک</string>
     <string name="general">عمومی</string>
     <string name="widget_text_color">رنگ‌نوشته‌های ابزارک</string>

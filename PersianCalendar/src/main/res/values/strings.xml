@@ -22,8 +22,6 @@
     <string name="date">Date</string>
     <string name="date_converter">Date Converter</string>
     <string name="logo">Logo</string>
-    <string name="dari_months">Dari Months</string>
-    <string name="enable_dari">Enable Dari Months</string>
     <string name="widget_notification_dashclock">Widget, notification bar and DashClock</string>
     <string name="general">General</string>
     <string name="widget_text_color">Widget Text Color</string>

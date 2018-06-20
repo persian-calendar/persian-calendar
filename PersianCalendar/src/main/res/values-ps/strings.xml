@@ -22,8 +22,6 @@
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>
     <string name="logo">نښه</string>
-    <string name="dari_months">دری میاشتو</string>
-    <string name="enable_dari">دری میاشتو توانول</string>
     <string name="widget_notification_dashclock">ویجت، د مطلع سازی نوار او دش کلاک</string>
     <string name="general">ټولګړي غوراوي</string>
     <string name="widget_text_color">د ویجت د لیکل رنگ</string>
