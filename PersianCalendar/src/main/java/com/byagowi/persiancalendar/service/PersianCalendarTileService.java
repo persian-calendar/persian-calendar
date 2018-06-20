@@ -23,14 +23,9 @@ public class PersianCalendarTileService extends TileService {
         startActivityAndCollapse(intent);
     }
 
-    boolean firstTime = true;
 
     @Override
     public void onStartListening() {
-        if (firstTime) {
-            Utils.loadLanguageResource(this);
-            firstTime = false;
-        }
 
         Tile tile = getQsTile();
         PersianDate today = Utils.getToday();

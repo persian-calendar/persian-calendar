@@ -34,17 +34,11 @@ import calendar.PersianDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
-    static boolean firstTime = true;
     private static PersianDate pastDate;
     private static ExtensionData mExtensionData;
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        if (firstTime) {
-            Utils.changeAppLanguage(context);
-            Utils.loadLanguageResource(context);
-            firstTime = false;
-        }
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = Utils.getToday();
@@ -78,6 +72,14 @@ public class UpdateUtils {
                     Utils.getMonthName(persian));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
+        }
+
+        if (pastDate == null || !pastDate.equals(persian) || updateDate) {
+            Log.d("UpdateUtils", "date has changed");
+            pastDate = persian;
+
+            Utils.initUtils(context);
+            updateDate = true;
         }
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
@@ -134,13 +136,7 @@ public class UpdateUtils {
 
             String owghat;
 
-            if (pastDate == null || !pastDate.equals(persian) || updateDate) {
-                Log.d("UpdateUtils", "date has changed");
-                pastDate = persian;
-
-                Utils.updateStoredPreference(context);
-                Utils.loadAlarms(context);
-
+            if (updateDate) {
                 owghat = Utils.getNextOghatTime(context, currentClock, true);
 
                 String holidays = Utils.getEventsTitle(context, persian, true);

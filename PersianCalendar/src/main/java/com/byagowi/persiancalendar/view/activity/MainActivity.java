@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        Utils.updateStoredPreference(this);
-        Utils.changeAppLanguage(this);
-        Utils.loadLanguageResource(this);
         lastLocale = Utils.getAppLanguage();
         lastTheme = Utils.getTheme(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
@@ -172,9 +169,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Utils.updateStoredPreference(this);
-        Utils.changeAppLanguage(this);
-        UpdateUtils.update(getApplicationContext(), true);
+        Utils.initUtils(this);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
@@ -223,16 +218,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void beforeMenuChange(int position) {
-        if (position != menuPosition) {
-            // reset app lang on menu changes, ugly hack but it seems is needed
-            Utils.changeAppLanguage(this);
-        }
-
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
 
-        Utils.updateStoredPreference(this);
+        Utils.initUtils(this);
         UpdateUtils.update(getApplicationContext(), true);
 
         boolean needsActivityRestart = false;
@@ -240,8 +230,7 @@ public class MainActivity extends AppCompatActivity {
         String locale = Utils.getAppLanguage();
         if (!locale.equals(lastLocale)) {
             lastLocale = locale;
-            Utils.changeAppLanguage(this);
-            Utils.loadLanguageResource(this);
+            Utils.initUtils(this);
             needsActivityRestart = true;
         }
 

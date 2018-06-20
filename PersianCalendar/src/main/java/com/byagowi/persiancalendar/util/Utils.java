@@ -123,6 +123,15 @@ public class Utils {
 
     static private final String TAG = Utils.class.getName();
 
+    // This should be called before any use of Utils on the activity and services
+    static public void initUtils(Context context) {
+        updateStoredPreference(context);
+        changeAppLanguage(context);
+        loadLanguageResource(context);
+        loadAlarms(context);
+    }
+
+
     static private List<EventEntity>[] events;
 
     static private String[] persianMonths;
@@ -750,7 +759,7 @@ public class Utils {
     }
 
     // Context preferably should be activity context not application
-    static public void changeAppLanguage(Context context) {
+    static private void changeAppLanguage(Context context) {
         String localeCode = language.replaceAll("-(IR|AF)", "");
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
@@ -764,7 +773,7 @@ public class Utils {
     }
 
 
-    static public void loadLanguageResource(Context context) {
+    static private void loadLanguageResource(Context context) {
         @RawRes int messagesFile;
         switch (language) {
             case "fa-AF":
