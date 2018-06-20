@@ -92,48 +92,58 @@
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
                             android:layout_weight="1"
+                            android:gravity="top|right|fill_vertical"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/shamsi_date_day"
+                                android:layout_margin="4sp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="28sp" />
+                                android:textSize="32sp"
+                                tools:text="a" />
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/shamsi_date"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:lineSpacingExtra="0dp"
+                                android:lineSpacingMultiplier=".6"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="@dimen/text_size_description" />
+                                android:textSize="@dimen/text_size_description"
+                                tools:text="a\nb" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
 
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
+                            android:gravity="top|right|fill_vertical"
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/gregorian_date_day"
+                                android:layout_margin="4sp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="28sp" />
+                                android:textSize="32sp"
+                                tools:text="a" />
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/gregorian_date"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:lineSpacingExtra="0dp"
+                                android:lineSpacingMultiplier=".6"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="@dimen/text_size_description" />
+                                android:textSize="@dimen/text_size_description"
+                                tools:text="a\nb" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
 
@@ -141,24 +151,29 @@
                         <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
+                            android:gravity="top|right|fill_vertical"
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/islamic_date_day"
+                                android:layout_margin="4sp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:lineSpacingExtra="0dp"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="28sp" />
+                                android:textSize="32sp"
+                                tools:text="a" />
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/islamic_date"
+                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:lineSpacingMultiplier=".6"
                                 android:textColor="?attr/colorTextNormal"
-                                android:textSize="@dimen/text_size_description" />
+                                android:textSize="@dimen/text_size_description"
+                                tools:text="a\nb" />
 
                         </android.support.v7.widget.LinearLayoutCompat>
 

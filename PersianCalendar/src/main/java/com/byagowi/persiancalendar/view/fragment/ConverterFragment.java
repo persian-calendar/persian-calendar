@@ -171,6 +171,6 @@ public class ConverterFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        Utils.copyToClipboard(getContext(), view);
+        Utils.copyToClipboard(getContext(), ((TextView) view).getText());
     }
 }

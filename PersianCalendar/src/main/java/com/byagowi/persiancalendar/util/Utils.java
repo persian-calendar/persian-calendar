@@ -812,10 +812,7 @@ public class Utils {
         }
     }
 
-    static public void copyToClipboard(Context context, View view) {
-        // if it is older than this, the view is also shaped which is not good for copying, so just
-        // nvm about backup solution for older Androids
-        CharSequence text = ((TextView) view).getText();
+    static public void copyToClipboard(Context context, CharSequence text) {
         ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
                 .setPrimaryClip(ClipData.newPlainText("converted date", text));
         Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();

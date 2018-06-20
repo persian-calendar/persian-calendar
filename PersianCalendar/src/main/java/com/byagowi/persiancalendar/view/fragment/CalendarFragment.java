@@ -155,8 +155,11 @@ public class CalendarFragment extends Fragment
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
         gregorianDate.setOnClickListener(this);
+        gregorianDateDay.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
+        islamicDateDay.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
+        shamsiDateDay.setOnClickListener(this);
 
         String cityName = Utils.getCityName(getContext(),false);
         if (!TextUtils.isEmpty(cityName)) {
@@ -310,10 +313,22 @@ public class CalendarFragment extends Fragment
                 bringTodayYearMonth();
                 break;
 
-            case R.id.islamic_date:
             case R.id.shamsi_date:
+            case R.id.shamsi_date_day:
+                Utils.copyToClipboard(getContext(), shamsiDateDay.getText() + " " +
+                        shamsiDate.getText().toString().replace("\n", " "));
+                break;
+
             case R.id.gregorian_date:
-                Utils.copyToClipboard(getContext(), v);
+            case R.id.gregorian_date_day:
+                Utils.copyToClipboard(getContext(), gregorianDate.getText() + " " +
+                        gregorianDateDay.getText().toString().replace("\n", " "));
+                break;
+                
+            case R.id.islamic_date:
+            case R.id.islamic_date_day:
+                Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
+                        islamicDate.getText().toString().replace("\n", " "));
                 break;
         }
     }
