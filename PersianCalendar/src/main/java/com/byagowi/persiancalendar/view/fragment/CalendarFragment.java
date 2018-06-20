@@ -38,6 +38,7 @@ import java.util.Map;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.IslamicDate;
 import calendar.PersianDate;
 
 public class CalendarFragment extends Fragment
@@ -61,8 +62,11 @@ public class CalendarFragment extends Fragment
 
     private TextView weekDayName;
     private TextView gregorianDate;
+    private TextView gregorianDateDay;
     private TextView islamicDate;
+    private TextView islamicDateDay;
     private TextView shamsiDate;
+    private TextView shamsiDateDay;
     private TextView eventTitle;
     private TextView holidayTitle;
     private TextView today;
@@ -109,8 +113,11 @@ public class CalendarFragment extends Fragment
         midnightLayout = view.findViewById(R.id.midnightLayout);
 
         gregorianDate = view.findViewById(R.id.gregorian_date);
+        gregorianDateDay = view.findViewById(R.id.gregorian_date_day);
         islamicDate = view.findViewById(R.id.islamic_date);
+        islamicDateDay = view.findViewById(R.id.islamic_date_day);
         shamsiDate = view.findViewById(R.id.shamsi_date);
+        shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
         weekDayName = view.findViewById(R.id.week_day_name);
         today = view.findViewById(R.id.today);
         todayIcon = view.findViewById(R.id.today_icon);
@@ -173,11 +180,17 @@ public class CalendarFragment extends Fragment
     public void selectDay(PersianDate persianDate) {
         weekDayName.setText(Utils.getWeekDayName(getContext(), persianDate));
         Context context = getContext();
-        shamsiDate.setText(Utils.dateToString(context, persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        gregorianDate.setText(Utils.dateToString(context, civilDate));
-        islamicDate.setText(Utils.dateToString(context,
-                DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset())));
+        IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
+
+        shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
+        shamsiDate.setText(Utils.getMonthName(context, persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
+
+        gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
+        gregorianDate.setText(Utils.getMonthName(context, civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
+
+        islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
+        islamicDate.setText(Utils.getMonthName(context, hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);

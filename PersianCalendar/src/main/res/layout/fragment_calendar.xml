@@ -84,33 +84,83 @@
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/dayInfoContainer"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/shamsi_date"
+                        <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/colorTextNormal"
-                            android:textSize="@dimen/text_size_description" />
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/gregorian_date"
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/shamsi_date_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="28sp" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/shamsi_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="0dp"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="@dimen/text_size_description" />
+
+                        </android.support.v7.widget.LinearLayoutCompat>
+
+                        <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/item_calendar_margin_top"
-                            android:textColor="?attr/colorTextNormal"
-                            android:textSize="@dimen/text_size_description" />
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/islamic_date"
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/gregorian_date_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="28sp" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/gregorian_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="0dp"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="@dimen/text_size_description" />
+
+                        </android.support.v7.widget.LinearLayoutCompat>
+
+
+                        <android.support.v7.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/item_calendar_margin_top"
-                            android:textColor="?attr/colorTextNormal"
-                            android:textSize="@dimen/text_size_description" />
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/islamic_date_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="0dp"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="28sp" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/islamic_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorTextNormal"
+                                android:textSize="@dimen/text_size_description" />
+
+                        </android.support.v7.widget.LinearLayoutCompat>
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
