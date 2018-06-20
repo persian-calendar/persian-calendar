@@ -78,13 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        switch (Utils.getTheme(this)) {
-            case DARK_THEME:
-                setTheme(R.style.DarkTheme);
-            case LIGHT_THEME:
-            default:
-                setTheme(R.style.LightTheme);
-        }
+        setTheme(Utils.getTheme(this).equals(DARK_THEME)
+                ? R.style.DarkTheme
+                : R.style.LightTheme);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
