@@ -22,13 +22,13 @@
     <string name="date">تاریخ</string>
     <string name="date_converter">تبدیل تاریخ</string>
     <string name="logo">نشان</string>
-    <string name="widget_notification_dashclock">ابزارک، نوار آگاهسازی و دش‌کلاک</string>
+    <string name="widget_notification_dashclock">ابزارک، نوار آگاه‌سازی و دش‌کلاک</string>
     <string name="general">عمومی</string>
     <string name="widget_text_color">رنگ‌نوشته‌های ابزارک</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
-    <string name="notify_date">فعال کردن آگاهسازی</string>
-    <string name="enable_notify">آگاهسازی همیشگی از تاریخ‌ها؛ غیرفعال‌سازی آن نیاز به خاموش و روشن کردن دستگاه دارد</string>
+    <string name="notify_date">فعال کردن آگاه‌سازی</string>
+    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها؛ غیرفعال‌سازی آن نیاز به خاموش و روشن کردن دستگاه دارد</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
@@ -39,7 +39,7 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
-    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار آگاهسازی و برنامه به وقت ایران در همه جا</string>
+    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار آگاه‌سازی و برنامه به وقت ایران در همه جا</string>
     <string name="iran_time">وقت ایران</string>
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass">قطب‌نما</string>
