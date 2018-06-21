@@ -769,7 +769,7 @@ public class Utils {
     }
 
     // Context preferably should be activity context not application
-    static private void changeAppLanguage(Context context) {
+    static public void changeAppLanguage(Context context) {
         String localeCode = language.replaceAll("-(IR|AF)", "");
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);

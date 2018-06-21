@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        Utils.initUtils(this);
         lastLocale = Utils.getAppLanguage();
         lastTheme = Utils.getTheme(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
@@ -230,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
         String locale = Utils.getAppLanguage();
         if (!locale.equals(lastLocale)) {
             lastLocale = locale;
-            Utils.initUtils(this);
             needsActivityRestart = true;
         }
 

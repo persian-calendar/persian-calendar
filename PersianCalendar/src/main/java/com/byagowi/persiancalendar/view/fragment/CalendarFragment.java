@@ -321,8 +321,8 @@ public class CalendarFragment extends Fragment
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                Utils.copyToClipboard(getContext(), gregorianDate.getText() + " " +
-                        gregorianDateDay.getText().toString().replace("\n", " "));
+                Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
+                        gregorianDate.getText().toString().replace("\n", " "));
                 break;
                 
             case R.id.islamic_date:

@@ -39,6 +39,7 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
+        Utils.changeAppLanguage(context);
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = Utils.getToday();
@@ -189,7 +190,8 @@ public class UpdateUtils {
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
             body = Constants.RLM + body;
         }
