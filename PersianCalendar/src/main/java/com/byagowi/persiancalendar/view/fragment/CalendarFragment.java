@@ -284,27 +284,17 @@ public class CalendarFragment extends Fragment
 
             case R.id.owghat:
 
-                if (sunriseLayout.getVisibility() == View.VISIBLE) {
-                    sunriseLayout.setVisibility(View.GONE);
-                    dhuhrLayout.setVisibility(View.GONE);
-                    asrLayout.setVisibility(View.GONE);
-                    sunsetLayout.setVisibility(View.GONE);
-                    maghribLayout.setVisibility(View.GONE);
-                    ishaLayout.setVisibility(View.GONE);
-                    midnightLayout.setVisibility(View.GONE);
-                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_down);
-                } else {
-                    imsakLayout.setVisibility(View.VISIBLE);
-                    fajrLayout.setVisibility(View.VISIBLE);
-                    sunriseLayout.setVisibility(View.VISIBLE);
-                    dhuhrLayout.setVisibility(View.VISIBLE);
-                    asrLayout.setVisibility(View.VISIBLE);
-                    sunsetLayout.setVisibility(View.VISIBLE);
-                    maghribLayout.setVisibility(View.VISIBLE);
-                    ishaLayout.setVisibility(View.VISIBLE);
-                    midnightLayout.setVisibility(View.VISIBLE);
-                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_up);
-                }
+                boolean isOpenCommand = sunriseLayout.getVisibility() == View.GONE;
+
+                moreOwghat.setImageResource(isOpenCommand
+                        ? R.drawable.ic_keyboard_arrow_up
+                        : R.drawable.ic_keyboard_arrow_down);
+                imsakLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                sunriseLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                asrLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                sunsetLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                ishaLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                midnightLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
 
                 break;
 

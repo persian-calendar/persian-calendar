@@ -38,7 +38,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
-        persianDigit = Utils.isPersianDigitSelected();
+        persianDigit = !Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorHoliday, colorHoliday, true);

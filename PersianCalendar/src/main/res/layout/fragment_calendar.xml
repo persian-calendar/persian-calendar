@@ -361,7 +361,8 @@
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
-                        android:paddingTop="@dimen/padding_item">
+                        android:paddingTop="@dimen/padding_item"
+                        android:visibility="gone">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/iconImasak"
@@ -501,8 +502,7 @@
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
-                        android:paddingTop="@dimen/padding_item"
-                        android:visibility="gone">
+                        android:paddingTop="@dimen/padding_item">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
@@ -639,8 +639,7 @@
                         android:gravity="right"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_item"
-                        android:paddingTop="@dimen/padding_item"
-                        android:visibility="gone">
+                        android:paddingTop="@dimen/padding_item">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
