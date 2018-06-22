@@ -34,17 +34,12 @@ import calendar.PersianDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
-    static boolean firstTime = true;
     private static PersianDate pastDate;
     private static ExtensionData mExtensionData;
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils.changeAppLanguage(context);
-        if (firstTime) {
-            Utils.loadLanguageResource(context);
-            firstTime = false;
-        }
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = Utils.getToday();
@@ -75,9 +70,17 @@ public class UpdateUtils {
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                     Utils.formatNumber(persian.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(context, persian));
+                    Utils.getMonthName(persian));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
+        }
+
+        if (pastDate == null || !pastDate.equals(persian) || updateDate) {
+            Log.d("UpdateUtils", "date has changed");
+            pastDate = persian;
+
+            Utils.initUtils(context);
+            updateDate = true;
         }
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
@@ -90,7 +93,7 @@ public class UpdateUtils {
             String text1;
             String text2;
             String text3 = "";
-            String weekDayName = Utils.getWeekDayName(context, civil);
+            String weekDayName = Utils.getWeekDayName(civil);
             String persianDate = Utils.dateToString(context, persian);
             String civilDate = Utils.dateToString(context, civil);
             String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
@@ -134,12 +137,7 @@ public class UpdateUtils {
 
             String owghat;
 
-            if (pastDate == null || !pastDate.equals(persian) || updateDate) {
-                Log.d("UpdateUtils", "change date");
-                pastDate = persian;
-
-                Utils.loadAlarms(context);
-
+            if (updateDate) {
                 owghat = Utils.getNextOghatTime(context, currentClock, true);
 
                 String holidays = Utils.getEventsTitle(context, persian, true);
@@ -181,9 +179,9 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        String status = Utils.getMonthName(context, persian);
+        String status = Utils.getMonthName(persian);
 
-        String title = Utils.getWeekDayName(context, civil) + Constants.PERSIAN_COMMA + " " +
+        String title = Utils.getWeekDayName(civil) + Constants.PERSIAN_COMMA + " " +
                 Utils.dateToString(context, persian);
 
         String body = Utils.dateToString(context, civil) + Constants.PERSIAN_COMMA + " "
@@ -192,7 +190,8 @@ public class UpdateUtils {
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
             body = Constants.RLM + body;
         }

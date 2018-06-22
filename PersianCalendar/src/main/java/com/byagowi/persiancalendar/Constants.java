@@ -82,14 +82,14 @@ public class Constants {
     public static final char RLM = '\u200F';
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
-    public static final String[] FIRST_CHAR_OF_DAYS_OF_WEEK_NAME = {"ش", "ی", "د", "س",
-            "چ", "پ", "ج"};
     public static final char[] ARABIC_DIGITS = {'0', '1', '2', '3', '4', '5', '6',
             '7', '8', '9'};
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',
             '۷', '۸', '۹'};
     public static final String AM_IN_PERSIAN = "ق.ظ";
+    public static final String AM_IN_CKB = "ب.ن";
     public static final String PM_IN_PERSIAN = "ب.ظ";
+    public static final String PM_IN_CKB = "د.ن";
 
     public static final int[] DAYS_ICONS = {0,
             R.drawable.day1, R.drawable.day2, R.drawable.day3,

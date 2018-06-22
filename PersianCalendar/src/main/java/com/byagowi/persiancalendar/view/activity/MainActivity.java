@@ -36,6 +36,9 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+
 /**
  * Program activity for android
  *
@@ -75,12 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setTheme(getApplicationContext());
+        setTheme(Utils.getTheme(this).equals(DARK_THEME)
+                ? R.style.DarkTheme
+                : R.style.LightTheme);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        Utils.updateStoredPreference(this);
-        Utils.changeAppLanguage(this);
-        Utils.loadLanguageResource(this);
+        Utils.initUtils(this);
         lastLocale = Utils.getAppLanguage();
         lastTheme = Utils.getTheme(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
@@ -166,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Utils.changeAppLanguage(this);
+        Utils.initUtils(this);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
@@ -215,16 +219,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void beforeMenuChange(int position) {
-        if (position != menuPosition) {
-            // reset app lang on menu changes, ugly hack but it seems is needed
-            Utils.changeAppLanguage(this);
-        }
-
         // only if we are returning from preferences
         if (menuPosition != PREFERENCE)
             return;
 
-        Utils.updateStoredPreference(this);
+        Utils.initUtils(this);
         UpdateUtils.update(getApplicationContext(), true);
 
         boolean needsActivityRestart = false;
@@ -232,8 +231,6 @@ public class MainActivity extends AppCompatActivity {
         String locale = Utils.getAppLanguage();
         if (!locale.equals(lastLocale)) {
             lastLocale = locale;
-            Utils.changeAppLanguage(this);
-            Utils.loadLanguageResource(this);
             needsActivityRestart = true;
         }
 

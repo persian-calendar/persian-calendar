@@ -23,14 +23,17 @@ public class PersianCalendarTileService extends TileService {
         startActivityAndCollapse(intent);
     }
 
+
     @Override
     public void onStartListening() {
-        PersianDate today = Utils.getToday();
 
         Tile tile = getQsTile();
-        tile.setIcon(Icon.createWithResource(this, Utils.getDayIconResource(today.getDayOfMonth())));
-        tile.setLabel(Utils.getWeekDayName(this, today));
-        tile.setContentDescription(Utils.getMonthName(this, today));
+        PersianDate today = Utils.getToday();
+
+        tile.setIcon(Icon.createWithResource(this,
+                Utils.getDayIconResource(today.getDayOfMonth())));
+        tile.setLabel(Utils.getWeekDayName(today));
+        tile.setContentDescription(Utils.getMonthName(today));
         tile.updateTile();
     }
 }

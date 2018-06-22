@@ -10,7 +10,7 @@
         <item>اتّحادیهٔ جهانی اسلام، عربستان سعودی</item>
         <item>جامعهٔ اسلامی آمریکای شمالی</item>
         <item>مرجع عمومی تحقیقات مصر</item>
-        <item>دانشگاه امّ‌القری، مکه</item>
+        <item>دانشگاه امّ‌القریٰ، مکه</item>
         <item>دانشگاه علوم اسلامی، کراچی</item>
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
     </string-array>
@@ -50,7 +50,7 @@
     <string-array name="drawerSubtitles">
         <item></item>
         <item></item>
-        <item>و قبله‌نما، در صورت تنظیم مکان در تنظیمات</item>
+        <item>و قبله‌نما، در صورت تنظیم موقعیت در تنظیمات</item>
         <item></item>
         <item></item>
         <item></item>

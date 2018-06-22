@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ڕۆژژمێری فارسی</string>
+    <string name="cancel">ھەڵوەشاندنەوە</string>
+    <string name="widget_name">ڕۆژژمێری فارسی</string>
+    <string name="widget_mini_name">ڕۆژژمێری فارسی (بچووک)</string>
+    <string name="latitude">پاناییی جوگرافی</string>
+    <string name="longitude">درێژاییی جوگرافی</string>
+    <string name="settings">ڕێکخستن</string>
+    <string name="exit">دەرچوون</string>
+    <string name="enable_persian_digits">نیشاندانی ژمارەکان بە کوردی</string>
+    <string name="persian_digits">ژمارەی کوردی</string>
+    <string name="showing_clock_on_widget">نیشاندانی کاتژمێر لە ویجیتدا</string>
+    <string name="clock_on_widget">کاتژمێر لە ویجیتدا</string>
+    <string name="showing_clock_in_24"> نیشاندانی کاتژمێر بە ٢٤ کاتکۆ</string>
+    <string name="clock_in_24">کاتژمێر بە ٢٤ کاتکۆ</string>
+    <string name="about">لەبارە</string>
+    <string name="gpl_logo">لۆگۆی GPL</string>
+    <string name="widget_text_colors">ڕەنگی دەقی ویجیت</string>
+    <string name="clock">کاتژمێر</string>
+    <string name="date">ڕێککەوت</string>
+    <string name="date_converter">بگۆڕی ڕێککەوت</string>
+    <string name="logo">لۆگۆ</string>
+    <string name="widget_notification_dashclock">ویجیت، ئاگاداری و دەشکلۆک</string>
+    <string name="general">گشتی</string>
+    <string name="widget_text_color">ڕەنگی دەقی ویجیت</string>
+    <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
+    <string name="pray_times_calculation_setting">ڕێکخستنی حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
+    <string name="notify_date">چالاککردنی ئاگاداریی ڕێککەوت</string>
+    <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت؛ بۆ ناچالاککردن پێویست بە کوژاندنەوە و ھەڵکردنەوەی ئامرازە</string>
+    <string name="select_skin">ھەڵبژاردنی پێستە</string>
+    <string name="skin">پێستە</string>
+    <string name="pray_methods">شێوازەکانی حیسابکردن</string>
+    <string name="pray_methods_calculation">شێوازەکانی حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
+    <string name="altitude">بەرزاییی جوگرافی</string>
+    <string name="altitude_praytime">بە مەتر (دڵخواز)</string>
+    <string name="gps_location">وەرگرتنی شوێن لە جی‌پی‌ئێس یان تۆڕ</string>
+    <string name="gps_location_help">ئەگەر ئەمە بلوێ، ھچیی تر پێویست نییە</string>
+    <string name="location">شوێن</string>
+    <string name="location_help">ئەگەر تێیدا نەبوو، لە ژێرەوە دیاریی بکە</string>
+    <string name="showing_iran_time">نیشاندانی ویجیتەکان و ئاگادارییەکان بە کاتی ئێران</string>
+    <string name="iran_time">کاتی ئێران</string>
+    <string name="qibla_compass">جەمسەرنوێن/ڕووگەنوێن</string>
+    <string name="compass">جەمسەرنوێن</string>
+    <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
+
+    <string name="month_names">ناوی مانگەکان</string>
+    <string name="calendar_font">فۆنتی ڕۆژژمێر</string>
+    <string name="application_language">زمانی بەرنامە</string>
+    <string name="language">زمان</string>
+    <string name="calendar_language">زمانی ڕۆژژمێر</string>
+    <string name="calendar_language_summary">زمانی نیشاندانی مانگەکان و ڕۆژەکان</string>
+    <string name="version">وەشان</string>
+    <string name="calendar_font_summary">گۆڕینی فۆنتی ڕۆژژمێر</string>
+    <string name="athan">بانگ</string>
+    <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
+    <string name="athan_alarm">بانگەکان</string>
+    <string name="athan_sound">دەنگی بانگ</string>
+    <string name="match_system">بەرابەرکردن لەگەڵ سیستم</string>
+    <string name="athan_volume_summary">ڕێکخستنی قەبارەی دەنگی بانگ</string>
+    <string name="athan_volume">قەبارەی دەنگ</string>
+    <string name="tap_to_stop_athan">بۆ ڕاگرتی بانگ زەرەبەیەک لێ‌بدەن</string>
+    <string name="playing_athan">بڵاوکردنەوەی بانگ</string>
+    <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یا پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
+    <string name="athan_gap">مەودای نێوان بانگی مزگەوت و بانگی بەرنامە</string>
+    <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا</string>
+    <string name="closeDrawer">داخستن</string>
+    <string name="openDrawer">کردنەوە</string>
+    <string name="imsak">ئیمساک</string>
+    <string name="azan1">بانگی بەیانی</string>
+    <string name="azan2">بانگی نیوەڕۆ</string>
+    <string name="azan3">بانگی ئێوارە</string>
+    <string name="azan4">بانگی شێوان</string>
+    <string name="azan5">بانگی خەوتنان</string>
+    <string name="aftab1">ڕۆژھەڵات</string>
+    <string name="aftab2">ڕۆژاوا</string>
+    <string name="aftab3">نیوه‌شەوی شەرعی</string>
+    <string name="owghat">کاتە شەرعییەکان</string>
+    <string name="events">ڕووداوەکان</string>
+    <string name="today">ئەمڕۆ</string>
+    <string name="select_type_date">ھەڵبژاردنی جۆری ڕێککەوت</string>
+    <string name="year">ساڵ</string>
+    <string name="mount">مانگ</string>
+    <string name="day">ڕۆژ</string>
+    <string name="select_year">ھەڵبژاردنی ساڵ</string>
+    <string name="select_mount">ھەڵبژاردنی مانگ</string>
+    <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
+    <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
+    <string name="in_city_time">بە ئاسۆی</string>
+    <string name="islamic_offset">چاکسازیی ڕۆژژمێری ئیسلامی</string>
+    <string name="islamic_offset_summary">گەڕانەوە بۆ چاکسازیی ڕۆژژمێر</string>
+
+    <string-array name="calendar_type">
+        <item>کۆچی ھەتاوی</item>
+        <item>کۆچی مانگی</item>
+        <item>زایینی</item>
+    </string-array>
+
+    <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>بڕۆ
+    <string name="stop">ڕاگرتن</string>
+    <string name="goto_date">بڕۆ بە ڕێککەوت</string>
+    <string name="select">ھەڵبژاردن</string>
+    <string name="go">بڕۆ</string>
+    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
+    <string name="holidaysIncompletenessWarning">بۆنەکانی ڕۆژژمێری ئەمساڵ تەواو نییە.</string>
+    <string name="shouldBeUpdated">بۆنەکانی ڕۆژژمێری ئەمساڵ تەواو نییە، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
+    <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
+    <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
+</resources>

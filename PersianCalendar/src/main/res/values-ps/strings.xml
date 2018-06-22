@@ -22,8 +22,6 @@
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>
     <string name="logo">نښه</string>
-    <string name="dari_months">دری میاشتو</string>
-    <string name="enable_dari">دری میاشتو توانول</string>
     <string name="widget_notification_dashclock">ویجت، د مطلع سازی نوار او دش کلاک</string>
     <string name="general">ټولګړي غوراوي</string>
     <string name="widget_text_color">د ویجت د لیکل رنگ</string>
@@ -103,8 +101,10 @@
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="select">انتخاب</string>
+    <string name="go">برو</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
     <string name="shouldBeUpdated">مناسبت‌های امسال در تقویم به طور کامل وارد نشده‌است، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
+    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
 </resources>

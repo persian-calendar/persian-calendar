@@ -61,7 +61,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
         builder.setCustomTitle(null);
-        builder.setPositiveButton(R.string.select, (dialogInterface, i) -> {
+        builder.setPositiveButton(R.string.go, (dialogInterface, i) -> {
 
             int year = startingYearOnYearSpinner + yearSpinner.getSelectedItemPosition();
             int month = monthSpinner.getSelectedItemPosition() + 1;
