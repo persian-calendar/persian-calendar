@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -77,15 +78,15 @@ public class CalendarFragment extends Fragment
     private CardView owghat;
     private CardView event;
 
-    private RelativeLayout imsakLayout;
-    private RelativeLayout fajrLayout;
-    private RelativeLayout sunriseLayout;
-    private RelativeLayout dhuhrLayout;
-    private RelativeLayout asrLayout;
-    private RelativeLayout sunsetLayout;
-    private RelativeLayout maghribLayout;
-    private RelativeLayout ishaLayout;
-    private RelativeLayout midnightLayout;
+    private LinearLayoutCompat imsakLayout;
+    private LinearLayoutCompat fajrLayout;
+    private LinearLayoutCompat sunriseLayout;
+    private LinearLayoutCompat dhuhrLayout;
+    private LinearLayoutCompat asrLayout;
+    private LinearLayoutCompat sunsetLayout;
+    private LinearLayoutCompat maghribLayout;
+    private LinearLayoutCompat ishaLayout;
+    private LinearLayoutCompat midnightLayout;
 
     private int viewPagerPosition;
 
@@ -257,6 +258,7 @@ public class CalendarFragment extends Fragment
 
     private void setOwghat(CivilDate civilDate) {
         if (coordinate == null) {
+            owghat.setVisibility(View.GONE);
             return;
         }
 
@@ -274,8 +276,6 @@ public class CalendarFragment extends Fragment
         maghribTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
         ishaTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
         midnightTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-
-        owghat.setVisibility(View.VISIBLE);
     }
 
     @Override
