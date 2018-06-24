@@ -26,8 +26,8 @@
     <string name="general">گشتی</string>
     <string name="widget_text_color">ڕەنگی دەقی ویجیت</string>
     <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
-    <string name="pray_times_calculation_setting">ڕێکخستنی حیسابکردنی کاتە شەرعییەکان</string>
-    <string name="notify_date">چالاککردنی ئاگاداریی ڕێککەوت</string>
+    <string name="pray_times_calculation_setting">حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
+    <string name="notify_date">ئاگاداریی ڕێککەوت</string>
     <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت؛ بۆ ناچالاککردن پێویست بە کوژاندنەوە و ھەڵکردنەوەی ئامرازە</string>
     <string name="select_skin">ھەڵبژاردنی پێستە</string>
     <string name="skin">پێستە</string>
@@ -35,7 +35,7 @@
     <string name="pray_methods_calculation">شێوازەکانی حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
     <string name="altitude">بەرزاییی جوگرافی</string>
     <string name="altitude_praytime">بە مەتر (دڵخواز)</string>
-    <string name="gps_location">وەرگرتنی شوێن لە جی‌پی‌ئێس یان تۆڕ</string>
+    <string name="gps_location">وەرگرتنی شوێن لە GPS یان تۆڕ</string>
     <string name="gps_location_help">ئەگەر ئەمە بلوێ، ھیچی تر پێویست نییە</string>
     <string name="location">شوێن</string>
     <string name="location_help">ئەگەر تێیدا نەبوو، لە ژێرەوە دیاریی بکە</string>
@@ -63,7 +63,7 @@
     <string name="tap_to_stop_athan">بۆ ڕاگرتنی بانگ زەرەبەیەک لێ‌بدەن</string>
     <string name="playing_athan">بڵاوکردنەوەی بانگ</string>
     <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یا پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
-    <string name="athan_gap">مەودای نێوان بانگی بەرنامە و بانگی مزگەوت</string>
+    <string name="athan_gap">مەودای بانگ</string>
     <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا</string>
     <string name="closeDrawer">داخستن</string>
     <string name="openDrawer">کردنەوە</string>
@@ -77,7 +77,7 @@
     <string name="aftab2">ڕۆژاوا</string>
     <string name="aftab3">نیوه‌شەوی شەرعی</string>
     <string name="owghat">کاتە شەرعییەکان</string>
-    <string name="events">ڕووداوەکان</string>
+    <string name="events">بۆنەکان</string>
     <string name="today">ئەمڕۆ</string>
     <string name="select_type_date">ھەڵبژاردنی جۆری ڕێککەوت</string>
     <string name="year">ساڵ</string>
@@ -88,18 +88,18 @@
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
     <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
     <string name="in_city_time">بە ئاسۆی</string>
-    <string name="islamic_offset">چاکسازیی ڕۆژژمێری ئیسلامی</string>
-    <string name="islamic_offset_summary">گەڕانەوە بۆ چاکسازیی ڕۆژژمێر</string>
+    <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
+    <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
 
     <string-array name="calendar_type">
-        <item>کۆچی ھەتاوی</item>
-        <item>کۆچی مانگی</item>
+        <item>کۆچیی ھەتاوی</item>
+        <item>کۆچیی مانگی</item>
         <item>زایینی</item>
     </string-array>
 
     <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>
     <string name="stop">ڕاگرتن</string>
-    <string name="goto_date">بڕۆ بە ڕێککەوت</string>
+    <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>
     <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
