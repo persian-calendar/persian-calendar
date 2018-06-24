@@ -4,17 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.RelativeLayout;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ConverterFragment extends Fragment implements
     private TextView date0;
     private TextView date1;
     private TextView date2;
-    private RelativeLayout moreDate;
+    private LinearLayoutCompat moreDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -69,8 +69,9 @@ public class ConverterFragment extends Fragment implements
         moreDate = view.findViewById(R.id.more_date);
 
         // fill views
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
-                Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
+        calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),

@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
@@ -77,15 +77,15 @@ public class CalendarFragment extends Fragment
     private CardView owghat;
     private CardView event;
 
-    private RelativeLayout imsakLayout;
-    private RelativeLayout fajrLayout;
-    private RelativeLayout sunriseLayout;
-    private RelativeLayout dhuhrLayout;
-    private RelativeLayout asrLayout;
-    private RelativeLayout sunsetLayout;
-    private RelativeLayout maghribLayout;
-    private RelativeLayout ishaLayout;
-    private RelativeLayout midnightLayout;
+    private LinearLayoutCompat imsakLayout;
+    private LinearLayoutCompat fajrLayout;
+    private LinearLayoutCompat sunriseLayout;
+    private LinearLayoutCompat dhuhrLayout;
+    private LinearLayoutCompat asrLayout;
+    private LinearLayoutCompat sunsetLayout;
+    private LinearLayoutCompat maghribLayout;
+    private LinearLayoutCompat ishaLayout;
+    private LinearLayoutCompat midnightLayout;
 
     private int viewPagerPosition;
 
@@ -257,6 +257,7 @@ public class CalendarFragment extends Fragment
 
     private void setOwghat(CivilDate civilDate) {
         if (coordinate == null) {
+            owghat.setVisibility(View.GONE);
             return;
         }
 
@@ -274,8 +275,6 @@ public class CalendarFragment extends Fragment
         maghribTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
         ishaTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
         midnightTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-
-        owghat.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -284,27 +283,17 @@ public class CalendarFragment extends Fragment
 
             case R.id.owghat:
 
-                if (sunriseLayout.getVisibility() == View.VISIBLE) {
-                    sunriseLayout.setVisibility(View.GONE);
-                    dhuhrLayout.setVisibility(View.GONE);
-                    asrLayout.setVisibility(View.GONE);
-                    sunsetLayout.setVisibility(View.GONE);
-                    maghribLayout.setVisibility(View.GONE);
-                    ishaLayout.setVisibility(View.GONE);
-                    midnightLayout.setVisibility(View.GONE);
-                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_down);
-                } else {
-                    imsakLayout.setVisibility(View.VISIBLE);
-                    fajrLayout.setVisibility(View.VISIBLE);
-                    sunriseLayout.setVisibility(View.VISIBLE);
-                    dhuhrLayout.setVisibility(View.VISIBLE);
-                    asrLayout.setVisibility(View.VISIBLE);
-                    sunsetLayout.setVisibility(View.VISIBLE);
-                    maghribLayout.setVisibility(View.VISIBLE);
-                    ishaLayout.setVisibility(View.VISIBLE);
-                    midnightLayout.setVisibility(View.VISIBLE);
-                    moreOwghat.setImageResource(R.drawable.ic_keyboard_arrow_up);
-                }
+                boolean isOpenCommand = sunriseLayout.getVisibility() == View.GONE;
+
+                moreOwghat.setImageResource(isOpenCommand
+                        ? R.drawable.ic_keyboard_arrow_up
+                        : R.drawable.ic_keyboard_arrow_down);
+                imsakLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                sunriseLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                asrLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                sunsetLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                ishaLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                midnightLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
 
                 break;
 

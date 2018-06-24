@@ -8,6 +8,7 @@ public class Constants {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
 
     public static final String LANG_EN = "en";
+    public static final String LANG_CKB = "ckb";
 
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
@@ -116,4 +117,17 @@ public class Constants {
             R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar,
             R.drawable.day28_ar, R.drawable.day29_ar, R.drawable.day30_ar,
             R.drawable.day31_ar};
+
+    public static final int[] DAYS_ICONS_CKB = {0,
+            R.drawable.day1, R.drawable.day2, R.drawable.day3,
+            R.drawable.day4_ckb, R.drawable.day5_ckb, R.drawable.day6_ckb,
+            R.drawable.day7, R.drawable.day8, R.drawable.day9,
+            R.drawable.day10, R.drawable.day11, R.drawable.day12,
+            R.drawable.day13, R.drawable.day14_ckb, R.drawable.day15_ckb,
+            R.drawable.day16_ckb, R.drawable.day17, R.drawable.day18,
+            R.drawable.day19, R.drawable.day20, R.drawable.day21,
+            R.drawable.day22, R.drawable.day23, R.drawable.day24_ckb,
+            R.drawable.day25_ckb, R.drawable.day26_ckb, R.drawable.day27,
+            R.drawable.day28, R.drawable.day29, R.drawable.day30,
+            R.drawable.day31};
 }

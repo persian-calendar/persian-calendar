@@ -30,6 +30,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.changeAppLanguage(this);
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
 
         setContentView(R.layout.activity_athan);

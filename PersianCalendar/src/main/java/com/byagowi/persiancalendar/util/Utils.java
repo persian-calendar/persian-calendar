@@ -15,19 +15,16 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
@@ -69,11 +66,12 @@ import calendar.PersianDate;
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
+import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
-import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
+import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
@@ -90,6 +88,8 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
+import static com.byagowi.persiancalendar.Constants.LANG_CKB;
+import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
@@ -192,9 +192,12 @@ public class Utils {
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
         preferredDigits = prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)
                 ? PERSIAN_DIGITS
                 : ARABIC_DIGITS;
+        if (language.equals("ckb") && preferredDigits == PERSIAN_DIGITS)
+            preferredDigits = ARABIC_INDIC_DIGITS;
 
         clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
         iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
@@ -208,7 +211,6 @@ public class Utils {
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
-        language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
         coordinate = getCoordinate(context);
     }
 
@@ -216,8 +218,8 @@ public class Utils {
         return iranTime;
     }
 
-    static public boolean isPersianDigitSelected() {
-        return preferredDigits == PERSIAN_DIGITS;
+    static public boolean isArabicDigitSelected() {
+        return preferredDigits == ARABIC_DIGITS;
     }
 
     static public boolean isWidgetClock() {
@@ -414,7 +416,11 @@ public class Utils {
 
     static public int getDayIconResource(int day) {
         try {
-            return preferredDigits == ARABIC_DIGITS ? DAYS_ICONS_AR[day] : DAYS_ICONS[day];
+            if (preferredDigits == ARABIC_DIGITS)
+                return DAYS_ICONS_AR[day];
+            else if (preferredDigits == ARABIC_INDIC_DIGITS)
+                return DAYS_ICONS_CKB[day];
+            return DAYS_ICONS[day];
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "No such field is available");
             return 0;
@@ -431,14 +437,21 @@ public class Utils {
         return readStream(context.getResources().openRawResource(res));
     }
 
-    static private String persianStringToArabic(String text) {
+    static private String prepareForArabicSort(String text) {
         return text
                 .replaceAll("ی", "ي")
                 .replaceAll("ک", "ك")
                 .replaceAll("گ", "كی")
                 .replaceAll("ژ", "زی")
                 .replaceAll("چ", "جی")
-                .replaceAll("پ", "بی");
+                .replaceAll("پ", "بی")
+                .replaceAll("ڕ", "ری")
+                .replaceAll("ڵ", "لی")
+                .replaceAll("ڤ", "فی")
+                .replaceAll("ۆ", "وی")
+                .replaceAll("ێ", "یی")
+                .replaceAll("ھ", "نی")
+                .replaceAll("ە", "هی");
     }
 
     static private <T> Iterable<T> iteratorToIterable(final Iterator<T> iterator) {
@@ -455,6 +468,7 @@ public class Utils {
 
                 String countryEn = country.getString("en");
                 String countryFa = country.getString("fa");
+                String countryCkb = country.getString("ckb");
 
                 JSONObject cities = country.getJSONObject("cities");
 
@@ -463,6 +477,7 @@ public class Utils {
 
                     String en = city.getString("en");
                     String fa = city.getString("fa");
+                    String ckb = city.getString("ckb");
 
                     Coordinate coordinate = new Coordinate(
                             city.getDouble("latitude"),
@@ -470,7 +485,8 @@ public class Utils {
                             0 // city.getDouble("elevation")
                     );
 
-                    result.add(new CityEntity(key, en, fa, countryCode, countryEn, countryFa, coordinate));
+                    result.add(new CityEntity(key, en, fa, ckb, countryCode,
+                            countryEn, countryFa, countryCkb, coordinate));
                 }
             }
         } catch (JSONException e) {
@@ -492,12 +508,14 @@ public class Utils {
             }
             int compare = r.getCountryCode().compareTo(l.getCountryCode());
             if (compare != 0) return compare;
-            if (language.equals("en")) {
+            if (language.equals(LANG_EN))
                 return l.getEn().compareTo(r.getEn());
-            } else {
-                return persianStringToArabic(l.getFa())
-                        .compareTo(persianStringToArabic(r.getFa()));
-            }
+            else if (language.equals(LANG_CKB))
+                return prepareForArabicSort(l.getCkb())
+                        .compareTo(prepareForArabicSort(r.getCkb()));
+            else
+                return prepareForArabicSort(l.getFa())
+                        .compareTo(prepareForArabicSort(r.getFa()));
         });
 
         return Arrays.asList(cities);
@@ -537,8 +555,13 @@ public class Utils {
     static public String getCityName(Context context, boolean fallbackToCoord) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityEntity cityEntity = getCityFromPreference(context);
-        if (cityEntity != null)
-            return language.equals("en") ? cityEntity.getEn() : cityEntity.getFa();
+        if (cityEntity != null) {
+            if (language.equals(LANG_EN))
+                return cityEntity.getEn();
+            else if (language.equals(LANG_CKB))
+                return cityEntity.getCkb();
+            return cityEntity.getFa();
+        }
 
         String geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "");
         if (!TextUtils.isEmpty(geocodedCityName))
@@ -927,9 +950,6 @@ public class Utils {
         }
     }
 
-    @LayoutRes
-    static public final int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
-
     static public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
                                                Spinner yearSpinner, Spinner monthSpinner,
                                                Spinner daySpinner) {
@@ -959,7 +979,7 @@ public class Utils {
         for (int i = 0; i < years.length; ++i) {
             years[i] = formatNumber(i + startingYearOnYearSpinner);
         }
-        yearSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, years));
+        yearSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years));
         yearSpinner.setSelection(years.length / 2);
         //
 
@@ -968,7 +988,8 @@ public class Utils {
         for (int i = 0; i < months.length; ++i) {
             months[i] = months[i] + " / " + formatNumber(i + 1);
         }
-        monthSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, months));
+        monthSpinner.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item, months));
         monthSpinner.setSelection(date.getMonth() - 1);
         //
 
@@ -977,7 +998,8 @@ public class Utils {
         for (int i = 0; i < days.length; ++i) {
             days[i] = formatNumber(i + 1);
         }
-        daySpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, days));
+        daySpinner.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item, days));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 

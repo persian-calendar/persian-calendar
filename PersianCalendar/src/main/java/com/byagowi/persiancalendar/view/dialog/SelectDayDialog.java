@@ -8,12 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
@@ -43,8 +42,9 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
-                Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
+        calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.calendar_type)));
         calendarTypeSpinner.setSelection(0);
 
         calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

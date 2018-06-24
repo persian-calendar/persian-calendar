@@ -35,7 +35,7 @@
     <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (دلخواه)</string>
-    <string name="gps_location">دریافت مختصات از جی‌پی‌اس یا شبکه</string>
+    <string name="gps_location">دریافت مختصات از جی‌پی‌اس</string>
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
@@ -77,7 +77,7 @@
     <string name="aftab2">غروب آفتاب</string>
     <string name="aftab3">نیمه‌شب شرعی</string>
     <string name="owghat">اوقات شرعی</string>
-    <string name="events">رویداد‌ها</string>
+    <string name="events">مناسبت‌ها</string>
     <string name="today">امروز</string>
     <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
     <string name="year">سال</string>
@@ -105,6 +105,6 @@
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
     <string name="shouldBeUpdated">مناسبت‌های تقویم امسال کامل نیست، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
-    <string name="notify_date_lock_screen">نمایش آگاهسازی در قفل صفحه</string>
+    <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
 </resources>

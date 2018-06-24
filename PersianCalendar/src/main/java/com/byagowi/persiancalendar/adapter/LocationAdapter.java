@@ -53,13 +53,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvCity.setText(locale.equals(Constants.LANG_EN)
-                ? cities.get(position).getEn()
-                : cities.get(position).getFa());
-
-        holder.tvCountry.setText(locale.equals(Constants.LANG_EN)
-                ? cities.get(position).getCountryEn()
-                : cities.get(position).getCountryFa());
+        if (locale.equals(Constants.LANG_EN)) {
+            holder.tvCity.setText(cities.get(position).getEn());
+            holder.tvCountry.setText(cities.get(position).getCountryEn());
+        } else if (locale.equals(Constants.LANG_CKB)) {
+            holder.tvCity.setText(cities.get(position).getCkb());
+            holder.tvCountry.setText(cities.get(position).getCountryCkb());
+        } else {
+            holder.tvCity.setText(cities.get(position).getFa());
+            holder.tvCountry.setText(cities.get(position).getCountryFa());
+        }
     }
 
     @Override

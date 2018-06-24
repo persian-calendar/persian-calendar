@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.Utils;
@@ -23,7 +22,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private MonthFragment monthFragment;
     private List<DayEntity> days;
     private int selectedDay = -1;
-    private boolean persianDigit;
+    private boolean isArabicDigit;
     private TypedValue colorHoliday = new TypedValue();
     private TypedValue colorTextHoliday = new TypedValue();
     private TypedValue colorPrimary = new TypedValue();
@@ -38,7 +37,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
-        persianDigit = Utils.isPersianDigitSelected();
+        isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorHoliday, colorHoliday, true);
@@ -140,7 +139,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
                 DayEntity day = days.get(position - 7 - firstDayDayOfWeek);
 
-                if (persianDigit) {
+                if (!isArabicDigit) {
                     holder.num.setTextSize(25);
                 } else {
                     holder.num.setTextSize(20);
