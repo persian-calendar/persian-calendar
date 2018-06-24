@@ -39,7 +39,8 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/today"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_alignParentLeft="true"
                         android:text="@string/today"
                         android:textColor="?attr/colorTextPrimary"
@@ -74,7 +75,8 @@
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/week_day_name"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
                             android:layout_alignParentRight="true"
                             android:textColor="?attr/colorTextPrimary"
                             android:textSize="@dimen/text_size_title"
@@ -228,7 +230,8 @@
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/event_card_title"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
                             android:text="@string/events"
                             android:textColor="?attr/colorTextPrimary"
                             android:textSize="@dimen/text_size_title"
@@ -311,7 +314,8 @@
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/owghat_text"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
                             android:text="@string/owghat"
                             android:textColor="?attr/colorTextPrimary"
                             android:textSize="@dimen/text_size_title" />
