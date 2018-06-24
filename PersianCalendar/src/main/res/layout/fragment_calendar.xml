@@ -211,13 +211,11 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:padding="@dimen/card_padding">
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="right">
+                        android:layout_height="wrap_content">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
@@ -231,7 +229,6 @@
                             android:id="@+id/event_card_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
                             android:text="@string/events"
                             android:textColor="?attr/colorTextPrimary"
                             android:textSize="@dimen/text_size_title"
@@ -244,7 +241,6 @@
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 
@@ -253,7 +249,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
                         android:orientation="vertical">
 
                         <android.support.v7.widget.AppCompatTextView
@@ -298,7 +293,6 @@
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 

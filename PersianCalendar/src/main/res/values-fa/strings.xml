@@ -105,6 +105,6 @@
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
     <string name="shouldBeUpdated">مناسبت‌های تقویم امسال کامل نیست، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
-    <string name="notify_date_lock_screen">نمایش آگاهسازی در قفل صفحه</string>
+    <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
 </resources>
