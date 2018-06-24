@@ -15,19 +15,16 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.RawRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.EventEntity;
@@ -72,7 +69,6 @@ import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
-import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
@@ -954,9 +950,6 @@ public class Utils {
         }
     }
 
-    @LayoutRes
-    static public final int DROPDOWN_LAYOUT = R.layout.select_dialog_item;
-
     static public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
                                                Spinner yearSpinner, Spinner monthSpinner,
                                                Spinner daySpinner) {
@@ -986,7 +979,7 @@ public class Utils {
         for (int i = 0; i < years.length; ++i) {
             years[i] = formatNumber(i + startingYearOnYearSpinner);
         }
-        yearSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, years));
+        yearSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years));
         yearSpinner.setSelection(years.length / 2);
         //
 
@@ -995,7 +988,8 @@ public class Utils {
         for (int i = 0; i < months.length; ++i) {
             months[i] = months[i] + " / " + formatNumber(i + 1);
         }
-        monthSpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, months));
+        monthSpinner.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item, months));
         monthSpinner.setSelection(date.getMonth() - 1);
         //
 
@@ -1004,7 +998,8 @@ public class Utils {
         for (int i = 0; i < days.length; ++i) {
             days[i] = formatNumber(i + 1);
         }
-        daySpinner.setAdapter(new ShapedArrayAdapter<>(context, DROPDOWN_LAYOUT, days));
+        daySpinner.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item, days));
         daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 

@@ -37,7 +37,6 @@ import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
-import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 
 /**
  * Program activity for android
