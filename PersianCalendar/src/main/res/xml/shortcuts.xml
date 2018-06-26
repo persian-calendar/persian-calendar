@@ -40,7 +40,7 @@
 
     </shortcut>
 
-    <shortcut
+    <!--<shortcut
         android:enabled="true"
         android:icon="@drawable/sc_settings"
         android:shortcutDisabledMessage="@string/preference_disabled_message"
@@ -52,6 +52,6 @@
             android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
             android:targetPackage="com.byagowi.persiancalendar" />
 
-    </shortcut>
+    </shortcut>-->
 
 </shortcuts>
