@@ -210,18 +210,25 @@ public class UpdateUtils {
                     notificationManager.createNotificationChannel(mChannel);
                 }
             }
+
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+            rv.setTextViewText(R.id.title, title);
+            rv.setTextViewText(R.id.body, body);
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(icon)
                     .setOngoing(true)
                     .setWhen(0)
                     .setContentIntent(launchAppPendingIntent)
-                    .setContentText(body)
-                    .setContentTitle(title)
                     .setVisibility(Utils.isNotifyDateOnLockScreen()
                             ? NotificationCompat.VISIBILITY_PUBLIC
                             : NotificationCompat.VISIBILITY_SECRET)
-                    .setColor(0xFF607D8B);
+                    .setColor(0xFF607D8B)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setCustomContentView(rv)
+                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             applicationService.startForeground(NOTIFICATION_ID, builder.build());
         }
 
