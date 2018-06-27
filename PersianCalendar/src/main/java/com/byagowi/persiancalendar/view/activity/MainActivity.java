@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // https://stackoverflow.com/a/3410200
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(Utils.getTheme(this).equals(DARK_THEME)
@@ -101,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        } else {
-            toolbar.setPadding(0, 0, 0, 0);
+            toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+
         }
 
         RecyclerView navigation = findViewById(R.id.navigation_view);
