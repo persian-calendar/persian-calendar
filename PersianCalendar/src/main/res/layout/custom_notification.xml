@@ -4,22 +4,25 @@
     android:id="@+id/custom_notification"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:layoutDirection="rtl"
     android:orientation="vertical"
-    android:layoutDirection="rtl">
+    tools:context=".Widget1x1">
 
     <TextView
-        style="@style/TextAppearance.Compat.Notification.Title"
         android:id="@+id/title"
+        style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 
     <TextView
-        style="@style/TextAppearance.Compat.Notification"
         android:id="@+id/body"
+        style="@style/TextAppearance.Compat.Notification"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 
