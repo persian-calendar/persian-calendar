@@ -211,6 +211,10 @@ public class UpdateUtils {
                 }
             }
 
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+            rv.setTextViewText(R.id.title, title);
+            rv.setTextViewText(R.id.body, body);
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(icon)
@@ -222,18 +226,9 @@ public class UpdateUtils {
                             : NotificationCompat.VISIBILITY_SECRET)
                     .setColor(0xFF607D8B)
                     .setContentTitle(title)
-                    .setContentText(body);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
-                rv.setTextViewText(R.id.title, title);
-                rv.setTextViewText(R.id.body, body);
-
-                builder = builder
-                        .setCustomContentView(rv)
-                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-            }
-
+                    .setContentText(body)
+                    .setCustomContentView(rv)
+                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             applicationService.startForeground(NOTIFICATION_ID, builder.build());
         }
 
