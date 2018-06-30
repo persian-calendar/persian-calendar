@@ -78,6 +78,7 @@
     <string name="aftab3">Midnight</string>
     <string name="owghat">Pray times</string>
     <string name="events">Events</string>
+    <string name="events_summary">Events to show</string>
     <string name="today">Today</string>
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>

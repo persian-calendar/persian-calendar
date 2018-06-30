@@ -78,6 +78,7 @@
     <string name="aftab3">نیمه وقت شرعی</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">مناسبت‌ها</string>
+    <string name="events_summary">مناسبت‌ها برای نمایش</string>
     <string name="today">امروز</string>
     <string name="select_type_date">انتخاب نوع تاریخ</string>
     <string name="year">سال</string>

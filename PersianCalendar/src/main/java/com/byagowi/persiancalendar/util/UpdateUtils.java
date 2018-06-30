@@ -140,7 +140,7 @@ public class UpdateUtils {
             if (updateDate) {
                 owghat = Utils.getNextOghatTime(context, currentClock, true);
 
-                String holidays = Utils.getEventsTitle(context, persian, true);
+                String holidays = Utils.getEventsTitle(persian, true);
 
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
@@ -149,7 +149,7 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
                 }
 
-                String events = Utils.getEventsTitle(context, persian, false);
+                String events = Utils.getEventsTitle(persian, false);
 
                 if (!TextUtils.isEmpty(events)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, events);

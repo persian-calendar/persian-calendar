@@ -131,10 +131,13 @@ public class Utils {
         changeAppLanguage(context);
         loadLanguageResource(context);
         loadAlarms(context);
+        loadEvents(context);
     }
 
 
-    static private List<EventEntity>[] events;
+    static private List<EventEntity>[] persianCalendarEvents;
+    static private List<EventEntity>[] islamicCalendarEvents;
+    static private List<EventEntity>[] gregorianCalendarEvents;
 
     static private String[] persianMonths;
     static private String[] islamicMonths;
@@ -575,13 +578,37 @@ public class Utils {
     }
 
     static private void loadEvents(Context context) {
-        List<EventEntity>[] events = new ArrayList[32];
-        for (int i = 0; i < 32; ++i)
-            events[i] = new ArrayList<>();
-        try {
-            JSONArray days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("events");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-            int length = days.length();
+        Resources res = context.getResources();
+        Set<String> enabledTypes = prefs.getStringSet("holiday_types",
+                new HashSet<>(Arrays.asList(res.getStringArray(R.array.default_holidays))));
+        Log.e(TAG, TextUtils.join(",", enabledTypes));
+        boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
+        boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
+        boolean iranHolidays = enabledTypes.contains("iran_holidays");
+        if (!iranHolidays)
+            Utils.checkYearEnabled = false;
+        boolean iranIslamic = enabledTypes.contains("iran_islamic");
+        boolean iranAncient = enabledTypes.contains("iran_ancient");
+        boolean iranOthers = enabledTypes.contains("iran_others");
+        boolean international = enabledTypes.contains("international");
+
+        List<EventEntity>[] persianCalendarEvents = new ArrayList[32];
+        List<EventEntity>[] islamicCalendarEvents = new ArrayList[32];
+        List<EventEntity>[] gregorianCalendarEvents = new ArrayList[32];
+
+        for (int i = 0; i < 32; ++i) {
+            persianCalendarEvents[i] = new ArrayList<>();
+            islamicCalendarEvents[i] = new ArrayList<>();
+            gregorianCalendarEvents[i] = new ArrayList<>();
+        }
+        try {
+            JSONArray days;
+            int length;
+
+            days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("events");
+            length = days.length();
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);
 
@@ -591,26 +618,68 @@ public class Utils {
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
-                events[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+                boolean addOrNot = false;
+                String type = event.getString("type");
+                if (holiday && iranHolidays)
+                    addOrNot = true;
+
+                if (!iranHolidays)
+                    holiday = false;
+
+                if (type.equals("Islamic") && iranIslamic)
+                    addOrNot = true;
+
+                if (type.equals("Ancient Iran") && iranAncient)
+                    addOrNot = true;
+
+                if (type.equals("Iran") && iranOthers)
+                    addOrNot = true;
+
+                if (addOrNot)
+                    persianCalendarEvents[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
             }
+
+//            days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("global_gregorian_events");
+//            length = days.length();
+//            for (int i = 0; i < length; ++i) {
+//                if (!enabledTypes.contains("iran_holidays")) {
+//                    break;
+//                }
+//
+//                JSONObject event = days.getJSONObject(i);
+//
+//                int year = event.getInt("year");
+//                int month = event.getInt("month");
+//                int day = event.getInt("day");
+//                String title = event.getString("title");
+//                boolean holiday = event.getBoolean("holiday");
+//
+//                persianCalendarEvents[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+//            }
 
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
-        Utils.events = events;
+        Utils.persianCalendarEvents = persianCalendarEvents;
+        Utils.islamicCalendarEvents = islamicCalendarEvents;
+        Utils.gregorianCalendarEvents = gregorianCalendarEvents;
     }
 
     static private int maxSupportedYear = -1;
     static private int minSupportedYear = -1;
     static private boolean isYearWarnGivenOnce = false;
+    static private boolean checkYearEnabled = true;
 
     static public void checkYearAndWarnIfNeeded(Context context, int selectedYear) {
+        if (!checkYearEnabled)
+            return;
+
         // once is enough, see #clearYearWarnFlag() also
         if (isYearWarnGivenOnce)
             return;
 
         if (maxSupportedYear == -1 || minSupportedYear == -1)
-            loadMinMaxSupportedYear(context);
+            loadMinMaxSupportedYear();
 
         if (selectedYear < minSupportedYear) {
             Toast.makeText(context, context.getString(R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
@@ -631,14 +700,10 @@ public class Utils {
         isYearWarnGivenOnce = false;
     }
 
-    static private void loadMinMaxSupportedYear(Context context) {
-        if (events == null) {
-            loadEvents(context);
-        }
-
+    static private void loadMinMaxSupportedYear() {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
-        for (List<EventEntity> eventsList : events)
+        for (List<EventEntity> eventsList : persianCalendarEvents)
             for (EventEntity eventEntity : eventsList) {
                 int year = eventEntity.getDate().getYear();
 
@@ -655,13 +720,9 @@ public class Utils {
         maxSupportedYear = max;
     }
 
-    static private List<EventEntity> getEvents(Context context, PersianDate day) {
-        if (events == null) {
-            loadEvents(context);
-        }
-
+    static private List<EventEntity> getEvents(PersianDate day) {
         List<EventEntity> result = new ArrayList<>();
-        for (EventEntity eventEntity : events[day.getDayOfMonth()]) {
+        for (EventEntity eventEntity : persianCalendarEvents[day.getDayOfMonth()]) {
             if (eventEntity.getDate().equals(day)) {
                 result.add(eventEntity);
             }
@@ -669,10 +730,10 @@ public class Utils {
         return result;
     }
 
-    static public String getEventsTitle(Context context, PersianDate day, boolean holiday) {
+    static public String getEventsTitle(PersianDate day, boolean holiday) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
-        List<EventEntity> dayEvents = getEvents(context, day);
+        List<EventEntity> dayEvents = getEvents(day);
 
         for (EventEntity event : dayEvents) {
             if (event.isHoliday() == holiday) {
@@ -911,11 +972,11 @@ public class Utils {
                 dayEntity.setNum(formatNumber(i));
                 dayEntity.setDayOfWeek(dayOfWeek);
 
-                if (dayOfWeek == 6 || !TextUtils.isEmpty(getEventsTitle(context, persianDate, true))) {
+                if (dayOfWeek == 6 || !TextUtils.isEmpty(getEventsTitle(persianDate, true))) {
                     dayEntity.setHoliday(true);
                 }
 
-                if (getEvents(context, persianDate).size() > 0) {
+                if (getEvents(persianDate).size() > 0) {
                     dayEntity.setEvent(true);
                 }
 

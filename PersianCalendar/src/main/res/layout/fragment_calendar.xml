@@ -199,7 +199,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/card_margin"
-            android:visibility="gone"
+            android:visibility="visible"
             app:cardBackgroundColor="?attr/colorCard">
 
             <android.support.v7.widget.LinearLayoutCompat
@@ -234,8 +234,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/events"
                             android:textColor="?attr/colorTextPrimary"
-                            android:textSize="@dimen/text_size_title"
-                            tools:text="a" />
+                            android:textSize="@dimen/text_size_title" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
 

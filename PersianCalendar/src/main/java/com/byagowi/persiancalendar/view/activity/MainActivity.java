@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             AboutFragment.class
     };
     private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
-    private String lastLocale;
-    private String lastTheme;
     private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -95,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
-        lastLocale = Utils.getAppLanguage();
-        lastTheme = Utils.getTheme(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
         if (!Utils.isServiceRunning(this, ApplicationService.class)) {
@@ -228,31 +223,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void beforeMenuChange(int position) {
-        // only if we are returning from preferences
-        if (menuPosition != PREFERENCE)
-            return;
-
-        Utils.initUtils(this);
-        UpdateUtils.update(getApplicationContext(), true);
-
-        boolean needsActivityRestart = false;
-
-        String locale = Utils.getAppLanguage();
-        if (!locale.equals(lastLocale)) {
-            lastLocale = locale;
-            needsActivityRestart = true;
-        }
-
-        if (!lastTheme.equals(Utils.getTheme(this))) {
-            needsActivityRestart = true;
-            lastTheme = Utils.getTheme(this);
-        }
-
-        if (needsActivityRestart)
-            restartActivity();
-    }
-
     private void restartActivity() {
         Intent intent = getIntent();
         finish();
@@ -265,8 +235,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        beforeMenuChange(item);
         if (menuPosition != item) {
+            if (menuPosition == PREFERENCE) { // restart if we are returning from preferences
+                Utils.initUtils(this);
+                UpdateUtils.update(getApplicationContext(), true);
+                restartActivity();
+            }
+
             try {
                 getSupportFragmentManager()
                         .beginTransaction()

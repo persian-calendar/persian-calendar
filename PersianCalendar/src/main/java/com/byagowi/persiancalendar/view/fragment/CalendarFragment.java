@@ -198,10 +198,8 @@ public class CalendarFragment extends Fragment
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                weekDayName.setText(weekDayName.getText() +
-                        " (" + getString(R.string.iran_time) + ")");
-            }
+            if (Utils.isIranTime())
+                weekDayName.setText(weekDayName.getText() + " (" + getString(R.string.iran_time) + ")");
         } else {
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -235,8 +233,8 @@ public class CalendarFragment extends Fragment
 
     private void showEvent(PersianDate persianDate) {
         Context context = getContext();
-        String holidays = Utils.getEventsTitle(context, persianDate, true);
-        String events = Utils.getEventsTitle(context, persianDate, false);
+        String holidays = Utils.getEventsTitle(persianDate, true);
+        String events = Utils.getEventsTitle(persianDate, false);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
