@@ -3,16 +3,16 @@ package com.byagowi.persiancalendar.entity;
 import calendar.PersianDate;
 
 /**
- * EventEntity
+ * PersianCalendarEvent
  *
  * @author ebraminio
  */
-public class EventEntity {
+public class PersianCalendarEvent {
     private PersianDate date;
     private String title;
     private boolean holiday;
 
-    public EventEntity(PersianDate date, String title, boolean holiday) {
+    public PersianCalendarEvent(PersianDate date, String title, boolean holiday) {
         this.date = date;
         this.title = title;
         this.holiday = holiday;
@@ -22,23 +22,11 @@ public class EventEntity {
         return date;
     }
 
-    public void setDate(PersianDate date) {
-        this.date = date;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public boolean isHoliday() {
         return holiday;
-    }
-
-    public void setHoliday(boolean holiday) {
-        this.holiday = holiday;
     }
 }

@@ -38,7 +38,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<DayEntity> days = Utils.getDays(getContext(), offset);
+        List<DayEntity> days = Utils.getDays(offset);
 
         AppCompatImageView prev = view.findViewById(R.id.prev);
         AppCompatImageView next = view.findViewById(R.id.next);

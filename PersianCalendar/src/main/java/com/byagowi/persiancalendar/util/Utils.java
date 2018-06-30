@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DayEntity;
-import com.byagowi.persiancalendar.entity.EventEntity;
+import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
@@ -135,9 +135,9 @@ public class Utils {
     }
 
 
-    static private List<EventEntity>[] persianCalendarEvents;
-    static private List<EventEntity>[] islamicCalendarEvents;
-    static private List<EventEntity>[] gregorianCalendarEvents;
+    static private List<PersianCalendarEvent>[] persianCalendarEvents;
+    static private List<PersianCalendarEvent>[] islamicCalendarEvents;
+    static private List<PersianCalendarEvent>[] gregorianCalendarEvents;
 
     static private String[] persianMonths;
     static private String[] islamicMonths;
@@ -594,9 +594,9 @@ public class Utils {
         boolean iranOthers = enabledTypes.contains("iran_others");
         boolean international = enabledTypes.contains("international");
 
-        List<EventEntity>[] persianCalendarEvents = new ArrayList[32];
-        List<EventEntity>[] islamicCalendarEvents = new ArrayList[32];
-        List<EventEntity>[] gregorianCalendarEvents = new ArrayList[32];
+        List<PersianCalendarEvent>[] persianCalendarEvents = new ArrayList[32];
+        List<PersianCalendarEvent>[] islamicCalendarEvents = new ArrayList[32];
+        List<PersianCalendarEvent>[] gregorianCalendarEvents = new ArrayList[32];
 
         for (int i = 0; i < 32; ++i) {
             persianCalendarEvents[i] = new ArrayList<>();
@@ -636,7 +636,7 @@ public class Utils {
                     addOrNot = true;
 
                 if (addOrNot)
-                    persianCalendarEvents[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+                    persianCalendarEvents[day].add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
             }
 
 //            days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("global_gregorian_events");
@@ -654,7 +654,7 @@ public class Utils {
 //                String title = event.getString("title");
 //                boolean holiday = event.getBoolean("holiday");
 //
-//                persianCalendarEvents[day].add(new EventEntity(new PersianDate(year, month, day), title, holiday));
+//                persianCalendarEvents[day].add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
 //            }
 
         } catch (JSONException e) {
@@ -703,8 +703,8 @@ public class Utils {
     static private void loadMinMaxSupportedYear() {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
-        for (List<EventEntity> eventsList : persianCalendarEvents)
-            for (EventEntity eventEntity : eventsList) {
+        for (List<PersianCalendarEvent> eventsList : persianCalendarEvents)
+            for (PersianCalendarEvent eventEntity : eventsList) {
                 int year = eventEntity.getDate().getYear();
 
                 if (min > year && year != -1) {
@@ -720,11 +720,11 @@ public class Utils {
         maxSupportedYear = max;
     }
 
-    static private List<EventEntity> getEvents(PersianDate day) {
-        List<EventEntity> result = new ArrayList<>();
-        for (EventEntity eventEntity : persianCalendarEvents[day.getDayOfMonth()]) {
-            if (eventEntity.getDate().equals(day)) {
-                result.add(eventEntity);
+    static private List<PersianCalendarEvent> getEvents(PersianDate day) {
+        List<PersianCalendarEvent> result = new ArrayList<>();
+        for (PersianCalendarEvent persianCalendarEvent : persianCalendarEvents[day.getDayOfMonth()]) {
+            if (persianCalendarEvent.getDate().equals(day)) {
+                result.add(persianCalendarEvent);
             }
         }
         return result;
@@ -733,9 +733,9 @@ public class Utils {
     static public String getEventsTitle(PersianDate day, boolean holiday) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
-        List<EventEntity> dayEvents = getEvents(day);
+        List<PersianCalendarEvent> dayEvents = getEvents(day);
 
-        for (EventEntity event : dayEvents) {
+        for (PersianCalendarEvent event : dayEvents) {
             if (event.isHoliday() == holiday) {
                 if (first) {
                     first = false;
@@ -943,7 +943,7 @@ public class Utils {
         }
     }
 
-    static public List<DayEntity> getDays(Context context, int offset) {
+    static public List<DayEntity> getDays(int offset) {
         List<DayEntity> days = new ArrayList<>();
         PersianDate persianDate = getToday();
         int month = persianDate.getMonth() - offset;

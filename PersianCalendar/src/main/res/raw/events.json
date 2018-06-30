@@ -25,38 +25,81 @@
     "شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران، و شورای فرهنگ عمومی",
     "سعید رسولی <saeed.gnu@gmail.com> مولا پهنادایان <mola.mp@gmail.com>",
 
-    "Afghanistan events from Afghani app clones and https://en.wikipedia.org/wiki/Public_holidays_in_Afghanistan"
+    "Afghanistan events from Afghani clones, Afghanistan Calendar Date Converter and https://en.wikipedia.org/wiki/Public_holidays_in_Afghanistan",
+    "http://www.un.org/en/sections/observances/international-days/"
   ],
   "global_gregorian_events": [
+    { "month": 1, "day": 1, "title": "آغاز سال میلادی" },
+    { "month": 2, "day": 4, "title": "روز جهانی سرطان" },
+    { "month": 2, "day": 6, "title": "روز جهانی مبارزه با ناقص سازی زنان" },
+    { "month": 2, "day": 20, "title": "روز جهانی عدالت اجتماعی" },
+    { "month": 2, "day": 21, "title": "روز جهانی زبان مادری" },
+    { "month": 3, "day": 8, "title": "روز جهانی زنان" },
     { "month": 3, "day": 22, "title": "روز جهانی آب" },
     { "month": 3, "day": 23, "title": "روز جهانی هواشناسی" },
+    { "month": 3, "day": 24, "title": "روز جهانی سل" },
+    { "month": 4, "day": 7, "title": "روز جهانی سلامت" },
+    { "month": 4, "day": 22, "title": "روز جهانی زمین پاک" },
+    { "month": 4, "day": 23, "title": "روز جهانی کتاب و حق مولف" },
+    { "month": 4, "day": 25, "title": "روز جهانی مالاریا" },
+    { "month": 4, "day": 27, "title": "روز جهانی گرافیک" },
+    { "month": 5, "day": 1, "title": "روز جهانی کارگر" },
+    { "month": 5, "day": 3, "title": "روز جهانی آزادی مطبوعات" },
     { "month": 5, "day": 5, "title": "روز جهانی ماما" },
     { "month": 5, "day": 8, "title": "روز جهانی صلیب سرخ و هلال احمر" },
+    { "month": 5, "day": 15, "title": "روز جهانی خانواده" },
+    { "month": 5, "day": 17, "title": "روز جهانی ارتباطات" },
     { "month": 5, "day": 18, "title": "روز جهانی موزه و میراث فرهنگی" },
+    { "month": 5, "day": 29, "title": "روز جهانی حافظان صلح ملل متحد" },
     { "month": 5, "day": 31, "title": "روز جهانی بدون دخانیات" },
+    { "month": 6, "day": 1, "title": "روز جهانی والدین" },
+    { "month": 6, "day": 5, "title": "روز جهانی محیط زیست" },
     { "month": 6, "day": 10, "title": "روز جهانی صنایع دستی" },
+    { "month": 6, "day": 12, "title": "روز جهانی منع کار کودکان" },
+    { "month": 6, "day": 14, "title": "روز جهانی اهدا خون" },
+    { "month": 6, "day": 14, "title": "روز جهانی مادر" },
     { "month": 6, "day": 17, "title": "روز جهانی بیابان‌زدایی" },
+    { "month": 6, "day": 20, "title": "روز جهانی پناهندگان" },
     { "month": 6, "day": 26, "title": "روز جهانی مبارزه با مواد مخدر" },
+    { "month": 6, "day": 26, "title": "روز جهانی قربانیان خشونت" },
+    { "month": 6, "day": 26, "title": "روز جهانی جمعیت" },
     { "month": 8, "day": 1, "title": "روز جهانی شیر مادر" },
     { "month": 8, "day": 6, "title": "انفجار بمب اتمی آمریکا در هیروشیما با بیش از ۱۶۰ هزار کشته و مجروح (۱۹۴۵ میلادی)" },
+    { "month": 8, "day": 12, "title": "روز جهانی جوانان" },
+    { "month": 8, "day": 13, "title": "روز جهانی چپ دستان" },
+    { "month": 8, "day": 19, "title": "روز جهانی انسان دوستی" },
+    { "month": 8, "day": 21, "title": "روز جهانی مسجد" },
+    { "month": 9, "day": 1, "title": "روز جهانی صلح" },
+    { "month": 9, "day": 8, "title": "روز جهانی با سوادی" },
+    { "month": 9, "day": 10, "title": "روز جهانی جلوگیری از خودکشی" },
+    { "month": 9, "day": 21, "title": "روز جهانی با سوادی و روز جهانی آلزایمر" },
     { "month": 9, "day": 27, "title": "روز جهانی جهانگردی" },
-    { "month": 9, "day": 30, "title": "روز جهانی ناشنوایان – روز جهانی دریانوردی" },
+    { "month": 9, "day": 30, "title": "روز جهانی ناشنوایان و روز جهانی دریانوردی" },
     { "month": 10, "day": 1, "title": "روز جهانی سالمندان" },
+    { "month": 10, "day": 5, "title": "روز جهانی جلوگیری از خودکشی" },
     { "month": 10, "day": 8, "title": "روز جهانی کودک" },
     { "month": 10, "day": 9, "title": "روز جهانی پست" },
     { "month": 10, "day": 14, "title": "روز جهانی استاندارد" },
-    { "month": 10, "day": 16, "title": "روز جهانی غذا" },
-    { "month": 12, "day": 1, "title": "روز جهانی مبارزه با ایدز" },
-    { "month": 12, "day": 7, "title": "روز جهانی هواپیمایی" },
-    { "month": 1, "day": 1, "title": "آغاز سال میلادی" },
-    { "month": 5, "day": 1, "title": "روز جهانی کار و کارگر" },
-    { "month": 6, "day": 5, "title": "روز جهانی محیط زیست" },
-    { "month": 8, "day": 21, "title": "روز جهانی مسجد" },
     { "month": 10, "day": 15, "title": "روز جهانی نابینایان (عصای سفید)" },
+    { "month": 10, "day": 16, "title": "روز جهانی غذا" },
+    { "month": 10, "day": 24, "title": "روز ملل متحد و روز جهانی توسعه اطلاعات" },
+    { "month": 10, "day": 27, "title": "روز جهانی میراث سمعی و بصری" },
+    { "month": 10, "day": 31, "title": "روز جهانی شهرها" },
+    { "month": 11, "day": 6, "title": "روز بین المللی پیشگیری از سوء استفاده از محیط زیست در جنگ و مناقشات مسلحانه" },
     { "month": 11, "day": 10, "title": "روز جهانی علم در خدمت صلح و توسعه" },
-    { "month": 12, "day": 3, "title": "روز جهانی معلولان" },
+    { "month": 11, "day": 14, "title": "روز جهانی دیابت" },
+    { "month": 11, "day": 21, "title": "روز جهانی تلویزیون" },
+    { "month": 11, "day": 25, "title": "روز جهانی حذف خشونت علیه زنان" },
+    { "month": 11, "day": 29, "title": "روز جهانی همبستگی با مردم فلسطین" },
+    { "month": 12, "day": 1, "title": "روز جهانی مبارزه با ایدز" },
+    { "month": 12, "day": 2, "title": "روز جهانی لغو برده داری" },
+    { "month": 12, "day": 3, "title": "روز جهانی معلولین" },
+    { "month": 12, "day": 7, "title": "روز جهانی هواپیمایی" },
+    { "month": 12, "day": 10, "title": "روز جهانی حقوق بشر" },
+    { "month": 12, "day": 11, "title": "روز جهانی کوهستان" },
     { "month": 12, "day": 18, "title": "روز جهانی عاری از خشونت و افراطی‌گری" },
-    { "month": 12, "day": 25, "title": "ولادت حضرت عیسی مسیح (ع)" }
+    { "month": 12, "day": 18, "title": "روز جهانی مهاجران" },
+    { "month": 12, "day": 25, "title": "ولادت عیسی مسیح (ع)" }
   ],
   "afghanistan": [
     { "holiday": true, "year": -1, "month": 1, "day": 1, "type": "Afghanistan",
@@ -77,49 +120,49 @@
     { "holiday": false, "year": -1, "month": 2, "day": 16, "type": "Afghanistan",
       "title": "روز قلم" },
 
-    { "holiday": true, "year": -1, "month": 2, "day": 26, "type": "Afghanistan",
-      "title": "اول ماه مبارک رمضان(ان شاءالله)" },
+    { "holiday": true, "year": -1, "month": 2, "day": 26, "type": "AfghanIslamic",
+      "title": "اول ماه مبارک رمضان (ان‌شاءالله)" },
 
-    { "holiday": false, "year": -1, "month": 3, "day": 15, "type": "Afghanistan",
+    { "holiday": false, "year": -1, "month": 3, "day": 15, "type": "AfghanIslamic",
       "title": "مطابق با ۲۱ رمضان شهادت حضرت علی (رض)" },
 
-    { "holiday": false, "year": -1, "month": 3, "day": 21, "type": "Afghanistan",
-      "title": "روز بزرگداشت از نزول قرآن عظیم الشان" },
+    { "holiday": false, "year": -1, "month": 3, "day": 21, "type": "AfghanIslamic",
+      "title": "روز بزرگداشت از نزول قرآن عظیم‌الشأن" },
 
-    { "holiday": true, "year": -1, "month": 3, "day": 25, "type": "Afghanistan",
-      "title": "مطابق به ۱ شوال روز اول عید سعید فطر" },
+    { "holiday": true, "year": -1, "month": 3, "day": 25, "type": "AfghanIslamic",
+      "title": "مطابق با ۱ شوال روز اول عید سعید فطر" },
 
-    { "holiday": true, "year": -1, "month": 3, "day": 26, "type": "Afghanistan",
-      "title": "مطابق به ۲ شوال روز دوم عید سعید فطر" },
+    { "holiday": true, "year": -1, "month": 3, "day": 26, "type": "AfghanIslamic",
+      "title": "مطابق با ۲ شوال روز دوم عید سعید فطر" },
 
-    { "holiday": true, "year": -1, "month": 3, "day": 27, "type": "Afghanistan",
-      "title": "مطابق به ۳ شوال روز سوم عید سعید فطر" },
+    { "holiday": true, "year": -1, "month": 3, "day": 27, "type": "AfghanIslamic",
+      "title": "مطابق با ۳ شوال روز سوم عید سعید فطر" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 26, "type": "Afghanistan",
       "title": "۲۶ سرطان سال ۱۳۵۲ ه.ش کودتای سردار محمد داود خان" },
 
     { "holiday": true, "year": -1, "month": 5, "day": 28, "type": "Afghanistan",
-      "title": "روز استرداد و استقلال کشور" },
+      "title": "روز استرداد و استقلال افغانستان" },
 
-    { "holiday": true, "year": -1, "month": 5, "day": 29, "type": "Afghanistan",
+    { "holiday": true, "year": -1, "month": 5, "day": 29, "type": "AfghanIslamic",
       "title": "روز مبارکه عرفه" },
 
-    { "holiday": true, "year": -1, "month": 5, "day": 30, "type": "Afghanistan",
+    { "holiday": true, "year": -1, "month": 5, "day": 30, "type": "AfghanIslamic",
       "title": "مطابق با ۱۰ ذی الحجه عید سعید قربان" },
 
-    { "holiday": true, "year": -1, "month": 5, "day": 31, "type": "Afghanistan",
+    { "holiday": true, "year": -1, "month": 5, "day": 31, "type": "AfghanIslamic",
       "title": "مطابق با ۱۱ ذی الحجه عید سعید قربان" },
 
-    { "holiday": true, "year": -1, "month": 6, "day": 1, "type": "Afghanistan",
+    { "holiday": true, "year": -1, "month": 6, "day": 1, "type": "AfghanIslamic",
       "title": "مطابق با ۱۲ ذی الحجه عید سعید قربان" },
 
     { "holiday": true, "year": -1, "month": 6, "day": 18, "type": "Afghanistan",
-      "title": "روز شهادت قهرمان ملی کشور" },
+      "title": "روز شهادت قهرمان ملی افغانستان" },
 
-    { "holiday": false, "year": -1, "month": 6, "day": 20, "type": "Afghanistan",
+    { "holiday": false, "year": -1, "month": 6, "day": 20, "type": "AfghanIslamic",
       "title": "مطابق با اول محرم روز شهادت حضرت عمر فاروق (رض)" },
 
-    { "holiday": true, "year": -1, "month": 6, "day": 29, "type": "Afghanistan",
+    { "holiday": true, "year": -1, "month": 6, "day": 29, "type": "AfghanIslamic",
       "title": "مطابق با دهم محرم روز شهادت امام حسین (رض) و قیام عاشورا" },
 
     { "holiday": false, "year": -1, "month": 7, "day": 16, "type": "Afghanistan",
@@ -131,14 +174,14 @@
     { "holiday": false, "year": -1, "month": 8, "day": 25, "type": "Afghanistan",
       "title": "مطابق با (۱۶ نومبر) روز جهانی محصلان" },
 
-    { "holiday": true, "year": -1, "month": 8, "day": 28, "type": "Afghanistan",
-      "title": "مطابق با(۱۲ ربیع الاول) میلاد پیامبر گرامی اسلام حضرت محمد (ص)" },
+    { "holiday": true, "year": -1, "month": 8, "day": 28, "type": "AfghanIslamic",
+      "title": "مطابق با (۱۲ ربیع الاول) میلاد پیامبر گرامی اسلام حضرت محمد (ص)" },
 
     { "holiday": false, "year": -1, "month": 9, "day": 30, "type": "Afghanistan",
       "title": "شب یلدا" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 6, "type": "Afghanistan",
-      "title": "روز تجاوز قشون سرخ به حریم کشور(سال ۱۳۵۸)" },
+      "title": "روز تجاوز قشون سرخ به افغانستان (سال ۱۳۵۸)" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 14, "type": "Afghanistan",
       "title": "هفته تجلیل از قانون اساسی" },
@@ -162,7 +205,7 @@
       "title": "هفته تجلیل از قانون اساسی" },
 
     { "holiday": false, "year": -1, "month": 11, "day": 1, "type": "Afghanistan",
-      "title": "مطابق با (۲۱ جنوری) روز بین المللی مبارزه آلات انفجاری تعبیه شده" },
+      "title": "مطابق با (۲۱ جنوری) روز بین‌المللی مبارزه با آلات انفجاری تعبیه‌شده" },
 
     { "holiday": false, "year": -1, "month": 11, "day": 10, "type": "Afghanistan",
       "title": "روز متعاقدین" },
@@ -177,7 +220,7 @@
       "title": "روز سرباز" },
 
     { "holiday": false, "year": -1, "month": 12, "day": 20, "type": "Afghanistan",
-      "title": "روز حفاظت از میراث های فرهنگی کشور" },
+      "title": "روز حفاظت از میراث‌های فرهنگی کشور" },
 
     { "holiday": false, "year": -1, "month": 12, "day": 22, "type": "Afghanistan",
       "title": "روز شهید وحدت ملی (۱۳۷۳)" },
@@ -433,7 +476,7 @@
       "title": "روز مقاومت اسلامی" },
 
     { "holiday": false, "year": -1, "month": 5, "day": 26, "type": "Iran",
-      "title": "آغاز بازگشت آزادگان به میهن (۱۳۶۹ ه‍.ش)" },
+      "title": "آغاز بازگشت آزادگان به ایران (۱۳۶۹ ه‍.ش)" },
 
     { "holiday": false, "year": -1, "month": 5, "day": 28, "type": "Iran",
       "title": "کودتای آمریکا برای بازگرداندن شاه (۱۳۳۲ ه‍.ش)" },
@@ -760,7 +803,7 @@
       "title": "روز مالیات" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 21, "type": "Iran",
-      "title": "کشف توطئهٔ کودتای آمریکایی در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍.ش)" },
+      "title": "کشف توطئهٔ کودتا در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍.ش)" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 21, "type": "Iran",
       "title": "حمله به مسجد گوهرشاد و کشتار مردم (۱۳۱۴ ه‍.ش)" },
@@ -1189,7 +1232,7 @@
       "title": "ولادت امام محمد باقر (ع) (۵۷ ه‍.ق)" },
 
     { "holiday": false, "year": 1397, "month": 12, "day": 19, "type": "Islamic",
-      "title": "شهادت امام علي‌النقی الهادی (ع) (۲۵۴ ه.ق)" },
+      "title": "شهادت امام علی‌النقی الهادی (ع) (۲۵۴ ه.ق)" },
 
     { "holiday": false, "year": 1397, "month": 12, "day": 26, "type": "Islamic",
       "title": "ولادت امام محمد تقی (ع) «جواد الائمه» (۱۹۵ ه.ق)" },
