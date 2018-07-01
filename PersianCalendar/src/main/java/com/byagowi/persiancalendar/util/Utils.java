@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
-import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
@@ -44,9 +43,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +61,6 @@ import java.util.concurrent.TimeUnit;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -626,7 +621,8 @@ public class Utils {
                 boolean addOrNot = false;
                 String type = event.getString("type");
 
-                if (holiday && iranHolidays)
+                if (holiday && iranHolidays && (type.equals("Islamic Iran") ||
+                        type.equals("Iran") || type.equals("Ancient Iran")))
                     addOrNot = true;
 
                 if (!iranHolidays && type.equals("Islamic Iran"))

@@ -94,6 +94,12 @@ public class IslamicDate extends AbstractDate {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    public boolean equals(IslamicDate islamicDate) {
+        return getDayOfMonth() == islamicDate.getDayOfMonth()
+                && getMonth() == islamicDate.getMonth()
+                && (getYear() == islamicDate.getYear() || getYear() == -1);
+    }
+
     @Override
     public IslamicDate clone() {
         return new IslamicDate(getYear(), getMonth(), getDayOfMonth());
