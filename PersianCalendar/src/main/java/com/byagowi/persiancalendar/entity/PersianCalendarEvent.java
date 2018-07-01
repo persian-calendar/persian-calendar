@@ -7,10 +7,8 @@ import calendar.PersianDate;
  *
  * @author ebraminio
  */
-public class PersianCalendarEvent {
+public class PersianCalendarEvent extends AbstractEvent {
     private PersianDate date;
-    private String title;
-    private boolean holiday;
 
     public PersianCalendarEvent(PersianDate date, String title, boolean holiday) {
         this.date = date;
@@ -20,13 +18,5 @@ public class PersianCalendarEvent {
 
     public PersianDate getDate() {
         return date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isHoliday() {
-        return holiday;
     }
 }

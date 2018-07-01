@@ -7,10 +7,8 @@ import calendar.CivilDate;
  *
  * @author ebraminio
  */
-public class GregorianCalendarEvent {
+public class GregorianCalendarEvent extends AbstractEvent {
     private CivilDate date;
-    private String title;
-    private boolean holiday;
 
     public GregorianCalendarEvent(CivilDate date, String title, boolean holiday) {
         this.date = date;
@@ -20,13 +18,5 @@ public class GregorianCalendarEvent {
 
     public CivilDate getDate() {
         return date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isHoliday() {
-        return holiday;
     }
 }

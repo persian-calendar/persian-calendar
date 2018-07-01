@@ -20,6 +20,8 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
@@ -27,6 +29,7 @@ import com.google.android.apps.dashclock.api.ExtensionData;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -140,7 +143,8 @@ public class UpdateUtils {
             if (updateDate) {
                 owghat = Utils.getNextOghatTime(context, currentClock, true);
 
-                String holidays = Utils.getEventsTitle(persian, true);
+                List<AbstractEvent> events = Utils.getEvents(persian);
+                String holidays = Utils.getEventsTitle(events, true);
 
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
@@ -149,10 +153,10 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
                 }
 
-                String events = Utils.getEventsTitle(persian, false);
+                String nonHolidays = Utils.getEventsTitle(events, false);
 
-                if (!TextUtils.isEmpty(events)) {
-                    remoteViews2.setTextViewText(R.id.event_2x2, events);
+                if (!TextUtils.isEmpty(nonHolidays)) {
+                    remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);

@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
@@ -34,6 +36,7 @@ import com.github.praytimes.PrayTimesCalculator;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import calendar.CivilDate;
@@ -232,9 +235,9 @@ public class CalendarFragment extends Fragment
     }
 
     private void showEvent(PersianDate persianDate) {
-        Context context = getContext();
-        String holidays = Utils.getEventsTitle(persianDate, true);
-        String events = Utils.getEventsTitle(persianDate, false);
+        List<AbstractEvent> events = Utils.getEvents(persianDate);
+        String holidays = Utils.getEventsTitle(events, true);
+        String nonHolidays = Utils.getEventsTitle(events, false);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
@@ -246,8 +249,8 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
-        if (!TextUtils.isEmpty(events)) {
-            eventTitle.setText(events);
+        if (!TextUtils.isEmpty(nonHolidays)) {
+            eventTitle.setText(nonHolidays);
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }

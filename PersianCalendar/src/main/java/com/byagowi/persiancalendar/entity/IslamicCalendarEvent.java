@@ -7,10 +7,8 @@ import calendar.IslamicDate;
  *
  * @author ebraminio
  */
-public class IslamicCalendarEvent {
+public class IslamicCalendarEvent extends AbstractEvent {
     private IslamicDate date;
-    private String title;
-    private boolean holiday;
 
     public IslamicCalendarEvent(IslamicDate date, String title, boolean holiday) {
         this.date = date;
@@ -20,13 +18,5 @@ public class IslamicCalendarEvent {
 
     public IslamicDate getDate() {
         return date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isHoliday() {
-        return holiday;
     }
 }
