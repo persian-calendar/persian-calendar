@@ -185,7 +185,6 @@ public class CalendarFragment extends Fragment
 
     public void selectDay(PersianDate persianDate) {
         weekDayName.setText(Utils.getWeekDayName(persianDate));
-        Context context = getContext();
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 

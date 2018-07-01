@@ -133,7 +133,7 @@ public class CivilDate extends AbstractDate {
     public boolean equals(CivilDate civilDate) {
         return getDayOfMonth() == civilDate.getDayOfMonth()
                 && getMonth() == civilDate.getMonth()
-                && (getYear() == civilDate.getYear() || this.getYear() == -1);
+                && (getYear() == civilDate.getYear() || getYear() == -1);
     }
 
     @Override
