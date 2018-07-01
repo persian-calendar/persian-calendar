@@ -607,7 +607,7 @@ public class Utils {
             int length;
             JSONObject allTheEvents = new JSONObject(readRawResource(context, R.raw.events));
 
-            days = allTheEvents.getJSONArray("events");
+            days = allTheEvents.getJSONArray("Persian Calendar");
             length = days.length();
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);
@@ -650,7 +650,7 @@ public class Utils {
                     persianCalendarEvents[day].add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
             }
 
-            days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("afghanistan_hirji");
+            days = allTheEvents.getJSONArray("Hijri Calendar");
             length = days.length();
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);
@@ -661,20 +661,31 @@ public class Utils {
                 boolean holiday = event.getBoolean("holiday");
 
                 boolean addOrNot = false;
-                if (afghanistanHolidays && holiday)
+                String type = event.getString("type");
+
+                if (afghanistanHolidays && holiday && type.equals("Islamic Afghanistan"))
                     addOrNot = true;
 
-                if (!afghanistanHolidays)
+                if (!afghanistanHolidays && type.equals("Islamic Afghanistan"))
                     holiday = false;
 
-                if (afghanistanOthers)
+                if (afghanistanOthers && type.equals("Islamic Afghanistan"))
+                    addOrNot = true;
+
+                if (iranHolidays && holiday && type.equals("Islamic Iran"))
+                    addOrNot = true;
+
+                if (!iranHolidays && type.equals("Islamic Iran"))
+                    holiday = false;
+
+                if (iranOthers && type.equals("Islamic Iran"))
                     addOrNot = true;
 
                 if (addOrNot)
                     islamicCalendarEvents[day].add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
             }
 
-            days = new JSONObject(readRawResource(context, R.raw.events)).getJSONArray("global_gregorian_events");
+            days = allTheEvents.getJSONArray("Gregorian Calendar");
             length = days.length();
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);

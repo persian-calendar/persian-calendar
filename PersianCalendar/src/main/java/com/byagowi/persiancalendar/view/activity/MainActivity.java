@@ -158,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
             selectItem(PREFERENCE);
         } else if ("CONVERTER_SHORTCUT".equals(action)) {
             selectItem(CONVERTER);
-        } else {
+        } else if ("ABOUT_SHORTCUT".equals(action)) {
+            selectItem(ABOUT);
+        }  else {
             selectItem(DEFAULT);
         }
 
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (dayIsPassed) {
             dayIsPassed = false;
-            restartActivity();
+            restartActivity(menuPosition);
         }
     }
 
@@ -223,8 +225,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void restartActivity() {
+    private void restartActivity(int item) {
         Intent intent = getIntent();
+        if (item == CONVERTER)
+            intent.setAction("CONVERTER_SHORTCUT");
+        else if (item == COMPASS)
+            intent.setAction("COMPASS_SHORTCUT");
+        else if (item == PREFERENCE)
+            intent.setAction("PREFERENCE_SHORTCUT");
+        else if (item == ABOUT)
+            intent.setAction("ABOUT_SHORTCUT");
+        
         finish();
         startActivity(intent);
     }
@@ -239,7 +250,8 @@ public class MainActivity extends AppCompatActivity {
             if (menuPosition == PREFERENCE) { // restart if we are returning from preferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
-                restartActivity();
+                restartActivity(item);
+                return;
             }
 
             try {

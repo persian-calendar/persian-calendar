@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory
-        android:textSize="10px"
-        android:title="@string/general">
-
-        <android.support.v7.preference.ListPreference
-            android:defaultValue="fa"
-            android:entries="@array/languageNames"
-            android:entryValues="@array/languageKeys"
-            android:key="AppLanguage"
-            android:negativeButtonText="@string/cancel"
-            android:textSize="10px"
-            android:title="@string/language" />
+    <android.support.v7.preference.PreferenceCategory android:title="@string/general">
 
         <android.support.v14.preference.MultiSelectListPreference
             android:defaultValue="@array/default_holidays"
@@ -25,13 +14,25 @@
             android:title="@string/events" />
 
         <android.support.v7.preference.ListPreference
-            android:defaultValue="LightTheme"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeKeys"
-            android:key="Theme"
+            android:defaultValue="0"
+            android:entries="@array/islamicOffsetNames"
+            android:entryValues="@array/islamicOffsetKeys"
+            android:key="islamicOffset"
             android:negativeButtonText="@string/cancel"
-            android:summary="@string/select_skin"
-            android:title="@string/skin" />
+            android:summary="@string/islamic_offset_summary"
+            android:title="@string/islamic_offset" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/user_interface">
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="fa"
+            android:entries="@array/languageNames"
+            android:entryValues="@array/languageKeys"
+            android:key="AppLanguage"
+            android:negativeButtonText="@string/cancel"
+            android:title="@string/language" />
 
         <android.support.v7.preference.CheckBoxPreference
             android:defaultValue="true"
@@ -40,13 +41,13 @@
             android:title="@string/persian_digits" />
 
         <android.support.v7.preference.ListPreference
-            android:defaultValue="0"
-            android:entries="@array/islamicOffsetNames"
-            android:entryValues="@array/islamicOffsetKeys"
-            android:key="islamicOffset"
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
             android:negativeButtonText="@string/cancel"
-            android:summary="@string/islamic_offset_summary"
-            android:title="@string/islamic_offset" />
+            android:summary="@string/select_skin"
+            android:title="@string/skin" />
 
     </android.support.v7.preference.PreferenceCategory>
 
