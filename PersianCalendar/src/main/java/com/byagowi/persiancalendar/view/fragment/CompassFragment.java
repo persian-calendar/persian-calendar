@@ -126,6 +126,7 @@ public class CompassFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.stop:
                 stop = !stop;
+                item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
                 break;
             default:
                 break;

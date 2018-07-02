@@ -49,7 +49,7 @@
       "title": "روز قلم" },
 
     { "holiday": false, "year": -1, "month": 4, "day": 26, "type": "Afghanistan",
-      "title": "۲۶ سرطان سال ۱۳۵۲ ه.ش کودتای سردار محمد داود خان" },
+      "title": "کودتای سردار محمد داود خان" },
 
     { "holiday": true, "year": -1, "month": 5, "day": 28, "type": "Afghanistan",
       "title": "روز استرداد و استقلال افغانستان" },
@@ -241,9 +241,6 @@
     { "holiday": false, "year": -1, "month": 3, "day": 4, "type": "Iran",
       "title": "روز دزفول" },
 
-    { "holiday": false, "year": -1, "month": 3, "day": 4, "type": "Iran",
-      "title": "روز مقاومت و پایداری" },
-
     { "holiday": true, "year": -1, "month": 3, "day": 14, "type": "Iran",
       "title": "رحلت امام خمینی رهبر انقلاب اسلامی (۱۳۶۸ ه‍.ش)" },
 
@@ -286,9 +283,6 @@
     { "holiday": false, "year": -1, "month": 4, "day": 10, "type": "Iran",
       "title": "روز صنعت و معدن" },
 
-    { "holiday": false, "year": -1, "month": 4, "day": 10, "type": "Iran",
-      "title": "روز فرهنگ پهلوانی و ورزش زورخانه‌ای" },
-
     { "holiday": false, "year": -1, "month": 4, "day": 11, "type": "Iran",
       "title": "شهادت آیت‌الله صدوقی (۱۳۶۱ ه‍.ش)" },
 
@@ -315,12 +309,6 @@
 
     { "holiday": false, "year": -1, "month": 4, "day": 26, "type": "Iran",
       "title": "سالروز تأسیس نهاد شورای نگهبان" },
-
-    { "holiday": false, "year": -1, "month": 4, "day": 28, "type": "Iran",
-      "title": "روز تجلیل از امامزادگان و بقاع متبرکه" },
-
-    { "holiday": false, "year": -1, "month": 4, "day": 29, "type": "Iran",
-      "title": "روز بزرگداشت حضرت احمد بن موسی شاهچراغ (ع)" },
 
     { "holiday": false, "year": -1, "month": 5, "day": 5, "type": "Iran",
       "title": "سالروز عملیات مرصاد (۱۳۶۷ ه‍.ش)" },
@@ -415,9 +403,6 @@
     { "holiday": false, "year": -1, "month": 6, "day": 27, "type": "Iran",
       "title": "روز بزرگداشت استاد سید محمد حسین شهریار" },
 
-    { "holiday": false, "year": -1, "month": 6, "day": 30, "type": "Iran",
-      "title": "روز تجلیل از اسرا و مفقودان" },
-
     { "holiday": false, "year": -1, "month": 6, "day": 31, "type": "Iran",
       "title": "آغاز جنگ تحمیلی (۱۳۵۹ ه‍.ش)" },
 
@@ -495,9 +480,6 @@
 
     { "holiday": false, "year": -1, "month": 8, "day": 14, "type": "Iran",
       "title": "روز فرهنگ عمومی" },
-
-    { "holiday": false, "year": -1, "month": 8, "day": 15, "type": "Iran",
-      "title": "روز وقف" },
 
     { "holiday": false, "year": -1, "month": 8, "day": 24, "type": "Iran",
       "title": "روز کتاب، کتابخوانی و کتابدار" },
@@ -646,9 +628,6 @@
     { "holiday": false, "year": -1, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
 
-    { "holiday": false, "year": -1, "month": 2, "day": 27, "type": "Iran",
-      "title": "روز ارتباطات و روابط عمومی" },
-
     { "holiday": false, "year": -1, "month": 3, "day": 5, "type": "Iran",
       "title": "روز نسیم مهر (روز حمایت از خانوادهٔ زندانیان)" },
 
@@ -762,9 +741,6 @@
 
     { "holiday": false, "year": -1, "month": 10, "day": 3, "type": "Iran",
       "title": "روز ثبت احوال" },
-
-    { "holiday": false, "year": -1, "month": 10, "day": 5, "type": "Iran",
-      "title": "روز ملی ایمنی در برابر زلزله" },
 
     { "holiday": false, "year": -1, "month": 10, "day": 7, "type": "Iran",
       "title": "شهادت آیت‌الله حسین غفاری (۱۳۵۳ ه‍.ش)" },
@@ -1220,7 +1196,7 @@
     { "holiday": false, "month": 7, "day": 23, "type": "Islamic Iran",
       "title": "مسموم شدن امام موسی کاظم (ع) به دستور مأمون" },
     { "holiday": false, "month": 7, "day": 24, "type": "Islamic Iran",
-      "title": "فتح قلعهٔ خیبر توسط حضرت علی(ع)، بازگشت حعفر بن ابی‌طالب از حبشه" },
+      "title": "فتح قلعهٔ خیبر توسط حضرت علی(ع)، بازگشت جعفر بن ابی‌طالب از حبشه" },
     { "holiday": false, "month": 7, "day": 26, "type": "Islamic Iran",
       "title": "وفات حضرت ابوطالب (ع)" },
     { "holiday": false, "month": 7, "day": 28, "type": "Islamic Iran",
@@ -1299,7 +1275,7 @@
     { "month": 11, "day": 25, "title": "روز جهانی حذف خشونت علیه زنان" },
     { "month": 11, "day": 29, "title": "روز جهانی همبستگی با مردم فلسطین" },
     { "month": 12, "day": 1, "title": "روز جهانی مبارزه با ایدز" },
-    { "month": 12, "day": 2, "title": "روز جهانی لغو برده داری" },
+    { "month": 12, "day": 2, "title": "روز جهانی لغو برده‌داری" },
     { "month": 12, "day": 3, "title": "روز جهانی معلولین" },
     { "month": 12, "day": 7, "title": "روز جهانی هواپیمایی" },
     { "month": 12, "day": 10, "title": "روز جهانی حقوق بشر" },
