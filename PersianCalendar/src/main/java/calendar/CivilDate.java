@@ -131,9 +131,9 @@ public class CivilDate extends AbstractDate {
     }
 
     public boolean equals(CivilDate civilDate) {
-        return this.getDayOfMonth() == civilDate.getDayOfMonth()
-                && this.getMonth() == civilDate.getMonth()
-                && this.getYear() == civilDate.getYear();
+        return getDayOfMonth() == civilDate.getDayOfMonth()
+                && getMonth() == civilDate.getMonth()
+                && (getYear() == civilDate.getYear() || getYear() == -1);
     }
 
     @Override

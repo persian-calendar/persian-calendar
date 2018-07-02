@@ -13,72 +13,7 @@
 
         <include layout="@layout/selectday_fragment" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/info_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/card_margin"
-            app:cardBackgroundColor="?attr/colorCard">
-
-            <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:divider="?attr/appDivider"
-                app:dividerPadding="@dimen/divider_margin"
-                app:showDividers="middle">
-
-                <android.support.v7.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/card_padding">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_marginLeft="@dimen/icon_margin"
-                        android:gravity="center"
-                        android:tint="?attr/colorIcon"
-                        app:srcCompat="@drawable/ic_swap_vertical_circle" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/date0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textColor="?attr/colorTextPrimary"
-                        android:textSize="@dimen/text_size_title" />
-
-                </android.support.v7.widget.LinearLayoutCompat>
-
-                <android.support.v7.widget.LinearLayoutCompat
-                    android:id="@+id/more_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/card_padding">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/date1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="@dimen/text_size_description" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/date2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/item_calendar_margin_top"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="@dimen/text_size_description" />
-
-                </android.support.v7.widget.LinearLayoutCompat>
-
-            </android.support.v7.widget.LinearLayoutCompat>
-
-        </android.support.v7.widget.CardView>
+        <include layout="@layout/calendars_card" />
 
     </android.support.v7.widget.LinearLayoutCompat>
 

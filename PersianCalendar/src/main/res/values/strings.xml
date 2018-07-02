@@ -78,6 +78,7 @@
     <string name="aftab3">Midnight</string>
     <string name="owghat">Pray times</string>
     <string name="events">Events</string>
+    <string name="events_summary">Events to show</string>
     <string name="today">Today</string>
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>
@@ -107,4 +108,5 @@
     <string name="shouldBeUpdated">Holidays of the selected year may not be complete and reliable. Consider an update for the app, if exists.</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
+    <string name="user_interface">User interface</string>
 </resources>

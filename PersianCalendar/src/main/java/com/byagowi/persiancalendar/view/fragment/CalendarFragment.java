@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
@@ -34,6 +34,7 @@ import com.github.praytimes.PrayTimesCalculator;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import calendar.CivilDate;
@@ -182,7 +183,6 @@ public class CalendarFragment extends Fragment
 
     public void selectDay(PersianDate persianDate) {
         weekDayName.setText(Utils.getWeekDayName(persianDate));
-        Context context = getContext();
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
@@ -198,10 +198,8 @@ public class CalendarFragment extends Fragment
         if (Utils.getToday().equals(persianDate)) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                weekDayName.setText(weekDayName.getText() +
-                        " (" + getString(R.string.iran_time) + ")");
-            }
+            if (Utils.isIranTime())
+                weekDayName.setText(weekDayName.getText() + " (" + getString(R.string.iran_time) + ")");
         } else {
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -234,9 +232,9 @@ public class CalendarFragment extends Fragment
     }
 
     private void showEvent(PersianDate persianDate) {
-        Context context = getContext();
-        String holidays = Utils.getEventsTitle(context, persianDate, true);
-        String events = Utils.getEventsTitle(context, persianDate, false);
+        List<AbstractEvent> events = Utils.getEvents(persianDate);
+        String holidays = Utils.getEventsTitle(events, true);
+        String nonHolidays = Utils.getEventsTitle(events, false);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
@@ -248,8 +246,8 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
-        if (!TextUtils.isEmpty(events)) {
-            eventTitle.setText(events);
+        if (!TextUtils.isEmpty(nonHolidays)) {
+            eventTitle.setText(nonHolidays);
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
@@ -379,7 +377,7 @@ public class CalendarFragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.action_button, menu);
+        inflater.inflate(R.menu.calendar_menu_button, menu);
     }
 
     @Override

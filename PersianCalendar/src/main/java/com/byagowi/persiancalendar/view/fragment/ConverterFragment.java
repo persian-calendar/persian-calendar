@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -38,10 +41,14 @@ public class ConverterFragment extends Fragment implements
     private Spinner monthSpinner;
     private Spinner daySpinner;
     private int startingYearOnYearSpinner = 0;
-    private TextView date0;
-    private TextView date1;
-    private TextView date2;
-    private LinearLayoutCompat moreDate;
+    private TextView weekDayName;
+    private TextView shamsiDateDay;
+    private TextView shamsiDate;
+    private TextView gregorianDateDay;
+    private TextView gregorianDate;
+    private TextView islamicDateDay;
+    private TextView islamicDate;
+    private CardView calendars_card;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -52,21 +59,25 @@ public class ConverterFragment extends Fragment implements
 
         View view = inflater.inflate(R.layout.fragment_converter, container, false);
 
+        AppCompatImageView iv = view.findViewById(R.id.calendars_card_icon);
+        iv.setImageResource(R.drawable.ic_swap_vertical_circle);
+
         // fill members
         calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
         yearSpinner = view.findViewById(R.id.yearSpinner);
         monthSpinner = view.findViewById(R.id.monthSpinner);
         daySpinner = view.findViewById(R.id.daySpinner);
 
-        date0 = view.findViewById(R.id.date0);
-        date1 = view.findViewById(R.id.date1);
-        date2 = view.findViewById(R.id.date2);
+        weekDayName = view.findViewById(R.id.week_day_name);
 
-        date0.setOnClickListener(this);
-        date1.setOnClickListener(this);
-        date2.setOnClickListener(this);
+        shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
+        shamsiDate = view.findViewById(R.id.shamsi_date);
+        gregorianDateDay = view.findViewById(R.id.gregorian_date_day);
+        gregorianDate = view.findViewById(R.id.gregorian_date);
+        islamicDateDay = view.findViewById(R.id.islamic_date_day);
+        islamicDate = view.findViewById(R.id.islamic_date);
 
-        moreDate = view.findViewById(R.id.more_date);
+        calendars_card = view.findViewById(R.id.calendars_card);
 
         // fill views
         calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
@@ -93,59 +104,46 @@ public class ConverterFragment extends Fragment implements
 
         CivilDate civilDate = null;
         PersianDate persianDate;
-        IslamicDate islamicDate;
-
-        StringBuilder sb = new StringBuilder();
+        IslamicDate hijriDate;
 
         try {
-            moreDate.setVisibility(View.VISIBLE);
-
-            List<String> calendarsTextList = new ArrayList<>();
-            Context context = getContext();
             switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
-                    islamicDate = DateConverter.civilToIslamic(civilDate, 0);
+                    hijriDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
-
-                    calendarsTextList.add(Utils.dateToString(context, civilDate));
-                    calendarsTextList.add(Utils.dateToString(context, persianDate));
-                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
                     break;
 
                 case ISLAMIC:
-                    islamicDate = new IslamicDate(year, month, day);
-                    civilDate = DateConverter.islamicToCivil(islamicDate);
-                    persianDate = DateConverter.islamicToPersian(islamicDate);
-
-                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
-                    calendarsTextList.add(Utils.dateToString(context, civilDate));
-                    calendarsTextList.add(Utils.dateToString(context, persianDate));
+                    hijriDate = new IslamicDate(year, month, day);
+                    civilDate = DateConverter.islamicToCivil(hijriDate);
+                    persianDate = DateConverter.islamicToPersian(hijriDate);
                     break;
 
                 case SHAMSI:
+                default:
                     persianDate = new PersianDate(year, month, day);
                     civilDate = DateConverter.persianToCivil(persianDate);
-                    islamicDate = DateConverter.persianToIslamic(persianDate);
-
-                    calendarsTextList.add(Utils.dateToString(context, persianDate));
-                    calendarsTextList.add(Utils.dateToString(context, civilDate));
-                    calendarsTextList.add(Utils.dateToString(context, islamicDate));
+                    hijriDate = DateConverter.persianToIslamic(persianDate);
                     break;
             }
 
-            sb.append(Utils.getWeekDayName(civilDate));
-            sb.append(Constants.PERSIAN_COMMA);
-            sb.append(" ");
-            sb.append(calendarsTextList.get(0));
+            weekDayName.setText(Utils.getWeekDayName(persianDate));
 
-            date0.setText(sb.toString());
-            date1.setText(calendarsTextList.get(1));
-            date2.setText(calendarsTextList.get(2));
+            shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
+            shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
+
+            gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
+            gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
+
+            islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
+            islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
+
+            calendars_card.setVisibility(View.VISIBLE);
 
         } catch (RuntimeException e) {
-            moreDate.setVisibility(View.GONE);
-            date0.setText(getString(R.string.date_exception));
+            calendars_card.setVisibility(View.GONE);
+            Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -172,6 +170,25 @@ public class ConverterFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        Utils.copyToClipboard(getContext(), ((TextView) view).getText());
+        switch (view.getId()) {
+
+            case R.id.shamsi_date:
+            case R.id.shamsi_date_day:
+                Utils.copyToClipboard(getContext(), shamsiDateDay.getText() + " " +
+                        shamsiDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.gregorian_date:
+            case R.id.gregorian_date_day:
+                Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
+                        gregorianDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.islamic_date:
+            case R.id.islamic_date_day:
+                Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
+                        islamicDate.getText().toString().replace("\n", " "));
+                break;
+        }
     }
 }

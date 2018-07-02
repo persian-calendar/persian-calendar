@@ -78,6 +78,7 @@
     <string name="aftab3">نیمه‌شب شرعی</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">مناسبت‌ها</string>
+    <string name="events_summary">مناسبت‌ها برای نمایش</string>
     <string name="today">امروز</string>
     <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
     <string name="year">سال</string>
@@ -107,4 +108,5 @@
     <string name="shouldBeUpdated">مناسبت‌های تقویم امسال کامل نیست، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
     <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
+    <string name="user_interface">رابط کاربری</string>
 </resources>

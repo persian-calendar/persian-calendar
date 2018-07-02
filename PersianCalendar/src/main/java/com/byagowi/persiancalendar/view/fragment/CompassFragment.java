@@ -10,6 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
+import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Coordinate;
 
 /**
@@ -32,6 +36,9 @@ public class CompassFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
 
         Context context = getContext();
@@ -40,7 +47,7 @@ public class CompassFragment extends Fragment {
             Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
             Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
-                    Utils.getCityName(context,true));
+                    Utils.getCityName(context, true));
         }
 
 
@@ -61,7 +68,9 @@ public class CompassFragment extends Fragment {
             public void onSensorChanged(SensorEvent event) {
                 // angle between the magnetic north direction
                 // 0=North, 90=East, 180=South, 270=West
-                azimuth = lowPass(event.values[0], azimuth);
+                float angle = event.values[0];
+                if (stop) angle = 0;
+                azimuth = lowPass(angle, azimuth);
                 compassView.setBearing(azimuth);
                 compassView.invalidate();
             }
@@ -98,11 +107,32 @@ public class CompassFragment extends Fragment {
             sensorManager.registerListener(compassListener, sensor,
                     SensorManager.SENSOR_DELAY_FASTEST);
         } else {
-            Toast.makeText(context,getString(R.string.compass_not_found),Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
         }
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.compass_menu_button, menu);
+    }
+
+    public boolean stop = false;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.stop:
+                stop = !stop;
+                item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     @Override
     public void onDestroy() {

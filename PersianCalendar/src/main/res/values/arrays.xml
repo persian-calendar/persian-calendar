@@ -119,4 +119,32 @@
         <item></item>
     </string-array>
 
+    <string-array name="holidays_types" translatable="false">
+        <item>تعطیلات در افغانستان</item>
+        <item>سایر مناسبت‌های افغانستان</item>
+        <item>تعطیلات در ایران</item>
+        <item>مناسبت‌های اسلامی در ایران</item>
+        <item>مناسبت‌های ایران باستان</item>
+        <item>سایر مناسبت‌های ایران</item>
+        <item>مناسبت‌های بین‌المللی</item>
+    </string-array>
+
+    <string-array name="holidays_values" translatable="false">
+        <item>afghanistan_holidays</item>
+        <item>afghanistan_others</item>
+        <item>iran_holidays</item>
+        <item>iran_islamic</item>
+        <item>iran_ancient</item>
+        <item>iran_others</item>
+        <item>international</item>
+    </string-array>
+
+    <string-array name="default_holidays" translatable="false">
+        <item>iran_holidays</item>
+        <item>iran_islamic</item>
+        <item>iran_ancient</item>
+        <item>iran_others</item>
+        <item>international</item>
+    </string-array>
+
 </resources>
