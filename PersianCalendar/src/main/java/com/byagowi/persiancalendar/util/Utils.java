@@ -725,7 +725,6 @@ public class Utils {
     }
 
     static private int maxSupportedYear = -1;
-    static private int minSupportedYear = -1;
     static private boolean isYearWarnGivenOnce = false;
     static private boolean checkYearEnabled = true;
 
@@ -737,13 +736,8 @@ public class Utils {
         if (isYearWarnGivenOnce)
             return;
 
-        if (maxSupportedYear == -1 || minSupportedYear == -1)
+        if (maxSupportedYear == -1)
             loadMinMaxSupportedYear();
-
-        if (selectedYear < minSupportedYear) {
-            Toast.makeText(context, context.getString(R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
-            isYearWarnGivenOnce = true;
-        }
 
         if (selectedYear > maxSupportedYear) {
             Toast.makeText(context, context.getString(getToday().getYear() > maxSupportedYear
@@ -766,16 +760,11 @@ public class Utils {
             for (PersianCalendarEvent eventEntity : eventsList) {
                 int year = eventEntity.getDate().getYear();
 
-                if (min > year && year != -1) {
-                    min = year;
-                }
-
                 if (max < year) {
                     max = year;
                 }
             }
 
-        minSupportedYear = min;
         maxSupportedYear = max;
     }
 
