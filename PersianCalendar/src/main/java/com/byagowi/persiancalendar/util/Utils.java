@@ -61,6 +61,7 @@ import java.util.concurrent.TimeUnit;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.DayOutOfRangeException;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -612,9 +613,9 @@ public class Utils {
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);
 
-                int year = event.getInt("year");
                 int month = event.getInt("month");
                 int day = event.getInt("day");
+                int year = event.has("year") ? event.getInt("year") : -1;
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
@@ -724,7 +725,7 @@ public class Utils {
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
     }
 
-    static private int maxSupportedYear = -1;
+    static private int maxSupportedYear = 1397;
     static private boolean isYearWarnGivenOnce = false;
     static private boolean checkYearEnabled = true;
 
@@ -736,13 +737,8 @@ public class Utils {
         if (isYearWarnGivenOnce)
             return;
 
-        if (maxSupportedYear == -1)
-            loadMinMaxSupportedYear();
-
-        if (selectedYear > maxSupportedYear) {
-            Toast.makeText(context, context.getString(getToday().getYear() > maxSupportedYear
-                    ? R.string.shouldBeUpdated
-                    : R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
+        if (selectedYear > maxSupportedYear && getToday().getYear() > maxSupportedYear) {
+            Toast.makeText(context, context.getString(R.string.shouldBeUpdated), Toast.LENGTH_LONG).show();
 
             isYearWarnGivenOnce = true;
         }
@@ -751,21 +747,6 @@ public class Utils {
     // called from CalendarFragment to make it once per calendar view
     static public void clearYearWarnFlag() {
         isYearWarnGivenOnce = false;
-    }
-
-    static private void loadMinMaxSupportedYear() {
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        for (List<PersianCalendarEvent> eventsList : persianCalendarEvents)
-            for (PersianCalendarEvent eventEntity : eventsList) {
-                int year = eventEntity.getDate().getYear();
-
-                if (max < year) {
-                    max = year;
-                }
-            }
-
-        maxSupportedYear = max;
     }
 
     public static List<AbstractEvent> getEvents(PersianDate day) {

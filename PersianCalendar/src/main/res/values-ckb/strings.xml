@@ -104,8 +104,7 @@
     <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
-    <string name="holidaysIncompletenessWarning">بۆنەکانی ئەم ساڵەی ڕۆژژمێر تەواو نییە.</string>
-    <string name="shouldBeUpdated">بۆنەکانی ئەمساڵی ڕۆژژمێر تەواو نییە، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
+    <string name="shouldBeUpdated">ڕۆژژمێری کۆچیی مانگی ڕەنگە دروست نەبێ، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
