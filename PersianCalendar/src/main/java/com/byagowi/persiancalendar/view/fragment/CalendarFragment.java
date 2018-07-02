@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
-import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
@@ -379,7 +377,7 @@ public class CalendarFragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.action_button, menu);
+        inflater.inflate(R.menu.calendar_menu_button, menu);
     }
 
     @Override

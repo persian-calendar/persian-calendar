@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction("PREFERENCE_SHORTCUT");
         else if (item == ABOUT)
             intent.setAction("ABOUT_SHORTCUT");
-        
+
         finish();
         startActivity(intent);
     }
