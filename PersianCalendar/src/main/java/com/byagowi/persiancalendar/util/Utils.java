@@ -646,8 +646,15 @@ public class Utils {
                 if (afghanistanOthers && type.equals("Afghanistan"))
                     addOrNot = true;
 
-                if (addOrNot)
+                if (addOrNot) {
+                    if (holiday && afghanistanHolidays && iranHolidays) {
+                        if (type.equals("Islamic Iran") || type.equals("Iran"))
+                            title += " (ایران)";
+                        else if (type.equals ("Afghanistan"))
+                            title += " (افغانستان)";
+                    }
                     persianCalendarEvents[day].add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
+                }
             }
 
             days = allTheEvents.getJSONArray("Hijri Calendar");
@@ -681,8 +688,17 @@ public class Utils {
                 if (iranOthers && type.equals("Islamic Iran"))
                     addOrNot = true;
 
-                if (addOrNot)
+                if (addOrNot) {
+                    title += " (";
+                    if (holiday && afghanistanHolidays && iranHolidays) {
+                        if (type.equals("Islamic Iran") || type.equals("Iran"))
+                            title += "ایران، ";
+                        else if (type.equals ("Afghanistan"))
+                            title += "افغانستان، ";
+                    }
+                    title += formatNumber(day) + " " + islamicMonths[month - 1] + ")";
                     islamicCalendarEvents[day].add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
+                }
             }
 
             days = allTheEvents.getJSONArray("Gregorian Calendar");
@@ -694,8 +710,10 @@ public class Utils {
                 int day = event.getInt("day");
                 String title = event.getString("title");
 
-                if (international)
+                if (international) {
+                    title += " (" + formatNumber(day) + " " + gregorianMonths[month - 1] + ")";
                     gregorianCalendarEvents[day].add(new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false));
+                }
             }
 
         } catch (JSONException e) {

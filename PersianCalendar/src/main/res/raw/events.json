@@ -970,59 +970,17 @@
     { "holiday": false, "year": -1, "month": 12, "day": 29, "type": "Ancient Iran",
       "title": "گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان (در آخرین روز سال) / زادروز زرتشت / جشن اوشیدر (نجات‌بخش ایرانی) در دریاچهٔ هامون و کوه خواجه / آتش‌افروزی بر بام‌ها در استقبال از نوروز" },
 
-    { "holiday": false, "year": 1397, "month": 1, "day": 8, "type": "Islamic Iran",
-      "title": "ولادت امام محمد تقی (ع) «جواد الائمه» (۱۹۵ ه‍.ق)" },
-
     { "holiday": true, "year": 1397, "month": 1, "day": 11, "type": "Islamic Iran",
       "title": "ولادت امام علی (ع) (۲۳ سال قبل از هجرت)" },
-
-    { "holiday": false, "year": 1397, "month": 1, "day": 13, "type": "Islamic Iran",
-      "title": "وفات حضرت زینب (س) (۶۲ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 1, "day": 13, "type": "Islamic Iran",
-      "title": "تغییر قبلهٔ مسلمین از بیت المقدس به مکه معظمه (۲ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 1, "day": 23, "type": "Islamic Iran",
-      "title": "شهادت امام موسی کاظم (ع) (۱۸۳ ه‍.ق)" },
 
     { "holiday": true, "year": 1397, "month": 1, "day": 25, "type": "Islamic Iran",
       "title": "مبعث حضرت رسول اکرم (ص) (۱۳ سال قبل از هجرت)" },
 
-    { "holiday": false, "year": 1397, "month": 1, "day": 31, "type": "Islamic Iran",
-      "title": "ولادت امام حسین (ع) (۴ ه‍.ق) و روز پاسدار" },
-
-    { "holiday": false, "year": 1397, "month": 2, "day": 1, "type": "Islamic Iran",
-      "title": "ولادت حضرت ابوالفضل العباس (ع) (۲۶ ه‍.ق) و روز جانباز" },
-
-    { "holiday": false, "year": 1397, "month": 2, "day": 2, "type": "Islamic Iran",
-      "title": "ولادت امام زین‌العابدین (ع) (۳۸ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 2, "day": 8, "type": "Islamic Iran",
-      "title": "ولادت حضرت علی اکبر (ع) (۳۳ ه‍.ق) و روز جوان" },
-
     { "holiday": true, "year": 1397, "month": 2, "day": 12, "type": "Islamic Iran",
       "title": "ولادت حضرت قائم (عج) (۲۵۵ ه‍.ق" },
 
-    { "holiday": false, "year": 1397, "month": 3, "day": 5, "type": "Islamic Iran",
-      "title": "وفات حضرت خدیجه (س) (۳ سال قبل از هجرت)" },
-
-    { "holiday": false, "year": 1397, "month": 3, "day": 10, "type": "Islamic Iran",
-      "title": "ولادت امام حسن مجتبی (ع) (۳ ه‍.ق) و روز اکرام" },
-
-    { "holiday": false, "year": 1397, "month": 3, "day": 13, "type": "Islamic Iran",
-      "title": "شب قدر" },
-
-    { "holiday": false, "year": 1397, "month": 3, "day": 14, "type": "Islamic Iran",
-      "title": "ضربت خوردن امام علی (ع) (۴۰ ه‍.ق)" },
-
     { "holiday": true, "year": 1397, "month": 3, "day": 16, "type": "Islamic Iran",
       "title": "شهادت حضرت علی (ع) (۴۰ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 3, "day": 15, "type": "Islamic Iran",
-      "title": "شب قدر" },
-
-    { "holiday": false, "year": 1397, "month": 3, "day": 17, "type": "Islamic Iran",
-      "title": "شب قدر" },
 
     { "holiday": false, "year": 1397, "month": 3, "day": 18, "type": "Islamic Iran",
       "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
@@ -1036,15 +994,6 @@
     { "holiday": true, "year": 1397, "month": 4, "day": 18, "type": "Islamic Iran",
       "title": "شهادت امام جعفر صادق (ع) (۱۴۸ ه‍.ق)" },
 
-    { "holiday": false, "year": 1397, "month": 4, "day": 24, "type": "Islamic Iran",
-      "title": "ولادت حضرت معصومه (س) (۱۳۷ ه‍.ق) و روز دختران" },
-
-    { "holiday": false, "year": 1397, "month": 5, "day": 3, "type": "Islamic Iran",
-      "title": "ولادت امام رضا (ع) (۱۴۸ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 5, "day": 30, "type": "Islamic Iran",
-      "title": "روز عرفه (روز نیایش)" },
-
     { "holiday": true, "year": 1397, "month": 5, "day": 31, "type": "Islamic Iran",
       "title": "عید سعید قربان" },
 
@@ -1056,9 +1005,6 @@
 
     { "holiday": true, "year": 1397, "month": 6, "day": 29, "type": "Islamic Iran",
       "title": "عاشورای حسینی" },
-
-    { "holiday": false, "year": 1397, "month": 6, "day": 31, "type": "Islamic Iran",
-      "title": "شهادت امام زین‌العابدین (ع) (۹۵ ه‍.ق) " },
 
     { "holiday": true, "year": 1397, "month": 8, "day": 8, "type": "Islamic Iran",
       "title": "اربعین حسینی" },
@@ -1072,44 +1018,14 @@
     { "holiday": true, "year": 1397, "month": 8, "day": 17, "type": "Islamic Iran",
       "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق)" },
 
-    { "holiday": false, "year": 1397, "month": 8, "day": 18, "type": "Islamic Iran",
-      "title": "هجرت حضرت رسول اکرم (ص) از مکه به مدینه" },
-
     { "holiday": true, "year": 1397, "month": 8, "day": 25, "type": "Islamic Iran",
       "title": "شهادت امام حسن عسکری (ع) (۲۶۰ ه‍.ق) و آغاز امامت حضرت ولی عصر (عج)" },
-
-    { "holiday": false, "year": 1397, "month": 8, "day": 29, "type": "Islamic Iran",
-      "title": "ولادت حضرت رسول اکرم (ص) به روایت اهل سنت (۵۳ سال قبل از هجرت) و آغاز هفته وحدت" },
 
     { "holiday": true, "year": 1397, "month": 9, "day": 4, "type": "Islamic Iran",
       "title": "ولادت حضرت رسول اکرم (ص) (۵۳ سال قبل از هجرت) و روز اخلاق و مهرورزی" },
 
-    { "holiday": false, "year": 1397, "month": 9, "day": 4, "type": "Islamic Iran",
-      "title": "میلاد امام جعفر صادق (ع) مؤسس مذهب جعفری (۸۳ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 10, "day": 22, "type": "Islamic Iran",
-      "title": "ولادت حضرت زینب (س) (۵ ه‍.ق) و روز پرستار" },
-
-    { "holiday": false, "year": 1397, "month": 10, "day": 30, "type": "Islamic Iran",
-      "title": "شهادت حضرت فاطمة زهرا (س) (۱۱ ه‍.ق) به روایتی" },
-
     { "holiday": true, "year": 1397, "month": 11, "day": 20, "type": "Islamic Iran",
       "title": "شهادت حضرت فاطمة زهرا (س) (۱۱ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 11, "day": 30, "type": "Islamic Iran",
-      "title": "سالروز وفات حضرت ام‌البنین (س)" },
-
-    { "holiday": false, "year": 1397, "month": 12, "day": 7, "type": "Islamic Iran",
-      "title": "روز زن و ولادت حضرت فاطمة زهرا (س) (هشتم قبل از هجرت) - تولد امام خمینی (۱۳۲۰ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 12, "day": 17, "type": "Islamic Iran",
-      "title": "ولادت امام محمد باقر (ع) (۵۷ ه‍.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 12, "day": 19, "type": "Islamic Iran",
-      "title": "شهادت امام علی‌النقی الهادی (ع) (۲۵۴ ه.ق)" },
-
-    { "holiday": false, "year": 1397, "month": 12, "day": 26, "type": "Islamic Iran",
-      "title": "ولادت امام محمد تقی (ع) «جواد الائمه» (۱۹۵ ه.ق)" },
 
     { "holiday": true, "year": 1397, "month": 12, "day": 29, "type": "Islamic Iran",
       "title": "ولادت امام علی (ع) (۲۳ سال قبل از هجرت)" }
@@ -1144,9 +1060,9 @@
 
     { "holiday": false, "month": 1, "day": 1, "type": "Islamic Iran",
       "title": "آغاز سال هجری قمری" },
-    { "holiday": false, "month": 1, "day": 9, "type": "Islamic Iran",
+    { "holiday": true, "month": 1, "day": 9, "type": "Islamic Iran Holiday",
       "title": "تاسوعای حسینی" },
-    { "holiday": false, "month": 1, "day": 10, "type": "Islamic Iran",
+    { "holiday": true, "month": 1, "day": 10, "type": "Islamic Iran Holiday",
       "title": "عاشورای حسینی" },
     { "holiday": false, "month": 1, "day": 11, "type": "Islamic Iran",
       "title": "روز تجلیل از اسرا و مفقودان" },
@@ -1156,21 +1072,21 @@
       "title": "شهادت امام زین‌العابدین (ع) (۹۵ ه‍.ق) به روایتی" },
     { "holiday": false, "month": 2, "day": 7, "type": "Islamic Iran",
       "title": "شهادت امام حسن مجتبی (ع) (۵۰ ه‍.ق) (به روایتی) – روز بزرگداشت سلمان فارسی" },
-    { "holiday": false, "month": 2, "day": 20, "type": "Islamic Iran",
+    { "holiday": true, "month": 2, "day": 20, "type": "Islamic Iran Holiday",
       "title": "اربعین حسینی" },
     { "holiday": false, "month": 2, "day": 27, "type": "Islamic Iran",
       "title": "روز وقف" },
-    { "holiday": false, "month": 2, "day": 28, "type": "Islamic Iran",
+    { "holiday": true, "month": 2, "day": 28, "type": "Islamic Iran Holiday",
       "title": "رحلت حضرت رسول اکرم (ص) (۱۱ ه‍.ق) – شهادت امام حسن مجتبی (ع) (۵۰ ه‍.ق)" },
-    { "holiday": false, "month": 2, "day": 30, "type": "Islamic Iran",
+    { "holiday": true, "month": 2, "day": 30, "type": "Islamic Iran Holiday",
       "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق)" },
     { "holiday": false, "month": 3, "day": 1, "type": "Islamic Iran",
       "title": "هجرت رسول اکرم (ص) از مکه به مدینه" },
-    { "holiday": false, "month": 3, "day": 8, "type": "Islamic Iran",
-      "title": "شهادت امام حسن عسگری (ع) (۲۶۰ ه‍.ق)" },
+    { "holiday": true, "month": 3, "day": 8, "type": "Islamic Iran Holiday",
+      "title": "شهادت امام حسن عسکری (ع) (۲۶۰ ه‍.ق) و آغاز امامت حضرت ولی عصر (عج)" },
     { "holiday": false, "month": 3, "day": 12, "type": "Islamic Iran",
       "title": "ولادت حضرت رسول اکرم(ص) به روایت اهل سنت (۵۳ سال قبل از هجرت) - آغاز هفتهٔ وحدت" },
-    { "holiday": false, "month": 3, "day": 17, "type": "Islamic Iran",
+    { "holiday": true, "month": 3, "day": 17, "type": "Islamic Iran Holiday",
       "title": "ولادت حضرت رسول اکرم (ص) (۵۳ سال قبل از هجرت) و روز اخلاق و مهرورزی – ولادت امام جعفر صادق (ع) مؤسس مذهب جعفری (۸۳ ه‍.ق)" },
     { "holiday": false, "month": 4, "day": 8, "type": "Islamic Iran",
       "title": "ولادت امام حسن عسگری (ع) (۲۳۲ ه‍.ق)" },
@@ -1180,7 +1096,7 @@
       "title": "ولادت حضرت زینب (س) (۵ ه‍.ق) و روز پرستار" },
     { "holiday": false, "month": 5, "day": 13, "type": "Islamic Iran",
       "title": "شهادت حضرت فاطمهٔ زهرا (س) (۱۱ ه‍.ق) به روایتی" },
-    { "holiday": false, "month": 6, "day": 3, "type": "Islamic Iran",
+    { "holiday": true, "month": 6, "day": 3, "type": "Islamic Iran Holiday",
       "title": "شهادت حضرت فاطمهٔ زهرا (س) (۱۱ ه‍.ق)" },
     { "holiday": false, "month": 6, "day": 13, "type": "Islamic Iran",
       "title": "سالروز وفات حضرت ام‌البنین (س) - روز تکریم مادران و همسران شهدا" },
@@ -1192,13 +1108,13 @@
       "title": "شهادت امام علی النقی الهادی (ع) (۲۵۴ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 10, "type": "Islamic Iran",
       "title": "ولادت امام محمد تقی (ع) (۱۹۵ ه‍.ق)" },
-    { "holiday": false, "month": 7, "day": 13, "type": "Islamic Iran",
+    { "holiday": true, "month": 7, "day": 13, "type": "Islamic Iran Holiday",
       "title": "ولادت امام علی (ع) (۲۳ سال قبل از هجرت) – آغاز ایام‌البیض (اعتکاف)" },
     { "holiday": false, "month": 7, "day": 15, "type": "Islamic Iran",
       "title": "وفات حضرت زینب (س) (۶۲ ه‍.ق) – تغییر قبلهٔ مسلمین از بیت‌المقدس به مکهٔ معظمه (۲ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 25, "type": "Islamic Iran",
       "title": "شهادت امام موسی کاظم (ع) (۱۸۳ ه‍.ق)" },
-    { "holiday": false, "month": 7, "day": 27, "type": "Islamic Iran",
+    { "holiday": true, "month": 7, "day": 27, "type": "Islamic Iran Holiday",
       "title": "مبعث حضرت رسول اکرم (ص) (۱۳ سال قبل از هجرت)" },
     { "holiday": false, "month": 8, "day": 3, "type": "Islamic Iran",
       "title": "ولادت امام حسین (ع) (۴ ه‍.ق) و روز پاسدار" },
@@ -1208,7 +1124,7 @@
       "title": "ولادت امام زین‌العابدین (ع) (۳۸ ه‍.ق)" },
     { "holiday": false, "month": 8, "day": 11, "type": "Islamic Iran",
       "title": "ولادت حضرت علی اکبر (ع) (۳۳ ه‍.ق) و روز جوان" },
-    { "holiday": false, "month": 8, "day": 15, "type": "Islamic Iran",
+    { "holiday": true, "month": 8, "day": 15, "type": "Islamic Iran Holiday",
       "title": "ولادت حضرت قائم (عج) (۲۵۵ ه‍.ق) و روز جهانی مستضعفان" },
     { "holiday": false, "month": 9, "day": 10, "type": "Islamic Iran",
       "title": "وفات حضرت خدیجه (س) (۳ سال قبل از هجرت)" },
@@ -1220,15 +1136,17 @@
       "title": "ضربت خوردن حضرت علی (ع) (۵۴۰ ه‍.ق)" },
     { "holiday": false, "month": 9, "day": 20, "type": "Islamic Iran",
       "title": "شب قدر" },
-    { "holiday": false, "month": 9, "day": 21, "type": "Islamic Iran",
+    { "holiday": true, "month": 9, "day": 21, "type": "Islamic Iran Holiday",
       "title": "شهادت حضرت علی (ع) (۵۴۰ ه‍.ق)" },
     { "holiday": false, "month": 9, "day": 22, "type": "Islamic Iran",
       "title": "شب قدر" },
-    { "holiday": false, "month": 10, "day": 1, "type": "Islamic Iran",
+    { "holiday": true, "month": 10, "day": 1, "type": "Islamic Iran Holiday",
       "title": "عید سعید فطر" },
+	{ "holiday": true, "month": 10, "day": 2, "type": "Islamic Iran Holiday",
+      "title": "تعطیل به مناسبت عید سعید فطر" },
     { "holiday": false, "month": 10, "day": 17, "type": "Islamic Iran",
       "title": "روز فرهنگ پهلوانی و ورزش زورخانه‌ای" },
-    { "holiday": false, "month": 10, "day": 25, "type": "Islamic Iran",
+    { "holiday": true, "month": 10, "day": 25, "type": "Islamic Iran Holiday",
       "title": "شهادت امام جعفر صادق (ع) (۱۴۸ ه‍.ق)" },
     { "holiday": false, "month": 11, "day": 1, "type": "Islamic Iran",
       "title": "ولادت حضرت معصومه (س) (۱۷۳ ه‍.ق) و روز دختران" },
@@ -1248,11 +1166,11 @@
       "title": "شهادت امام محمد باقر (ع) (۱۱۴ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 9, "type": "Islamic Iran",
       "title": "روز عرفه (روز نیایش)" },
-    { "holiday": false, "month": 12, "day": 10, "type": "Islamic Iran",
+    { "holiday": true, "month": 12, "day": 10, "type": "Islamic Iran Holiday",
       "title": "عید سعید قربان (عید الاضحی)" },
     { "holiday": false, "month": 12, "day": 15, "type": "Islamic Iran",
       "title": "ولادت امام علی النقی الهادی (ع) (۲۱۲ ه‍.ق)" },
-    { "holiday": false, "month": 12, "day": 18, "type": "Islamic Iran",
+    { "holiday": true, "month": 12, "day": 18, "type": "Islamic Iran Holiday",
       "title": "عید سعید غدیر خم (۱۰ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 20, "type": "Islamic Iran",
       "title": "ولادت امام موسی کاظم (ع) (۱۲۸ ه‍.ق)" },
