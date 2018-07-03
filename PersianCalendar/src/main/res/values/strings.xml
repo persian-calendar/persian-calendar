@@ -108,4 +108,5 @@
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
+    <string name="warn_if_events_not_set">جهت نمایش مناسبت‌ها می‌توانید به قسمت تنظیمات بروید</string>
 </resources>

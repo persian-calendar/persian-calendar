@@ -100,7 +100,6 @@ public class CalendarFragment extends Fragment
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        Utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
         imsakLayout = view.findViewById(R.id.imsakLayout);

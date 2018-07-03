@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -36,7 +39,10 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import java.util.Set;
+
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 /**
  * Program activity for android
@@ -82,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
+
+    private int maxSupportedYear = 1397;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +175,15 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
+
+
+        if (Utils.getToday().getYear() > maxSupportedYear)
+            Toast.makeText(this, getString(R.string.shouldBeUpdated), Toast.LENGTH_LONG).show();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null);
+        if (enabledTypes == null)
+            Toast.makeText(this, R.string.warn_if_events_not_set, Toast.LENGTH_LONG).show();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)

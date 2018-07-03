@@ -103,6 +103,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
+import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
 import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
@@ -581,14 +582,11 @@ public class Utils {
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        Resources res = context.getResources();
-        Set<String> enabledTypes = prefs.getStringSet("holiday_types",
-                new HashSet<>(Arrays.asList(res.getStringArray(R.array.default_holidays))));
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
         boolean iranHolidays = enabledTypes.contains("iran_holidays");
-        if (!iranHolidays) Utils.checkYearEnabled = false;
         boolean iranIslamic = enabledTypes.contains("iran_islamic");
         boolean iranAncient = enabledTypes.contains("iran_ancient");
         boolean iranOthers = enabledTypes.contains("iran_others");
@@ -723,30 +721,6 @@ public class Utils {
         Utils.persianCalendarEvents = persianCalendarEvents;
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
-    }
-
-    static private int maxSupportedYear = 1397;
-    static private boolean isYearWarnGivenOnce = false;
-    static private boolean checkYearEnabled = true;
-
-    static public void checkYearAndWarnIfNeeded(Context context, int selectedYear) {
-        if (!checkYearEnabled)
-            return;
-
-        // once is enough, see #clearYearWarnFlag() also
-        if (isYearWarnGivenOnce)
-            return;
-
-        if (selectedYear > maxSupportedYear && getToday().getYear() > maxSupportedYear) {
-            Toast.makeText(context, context.getString(R.string.shouldBeUpdated), Toast.LENGTH_LONG).show();
-
-            isYearWarnGivenOnce = true;
-        }
-    }
-
-    // called from CalendarFragment to make it once per calendar view
-    static public void clearYearWarnFlag() {
-        isYearWarnGivenOnce = false;
     }
 
     public static List<AbstractEvent> getEvents(PersianDate day) {

@@ -30,6 +30,7 @@ public class Constants {
     public static final String PREF_ATHAN_ALARM = "AthanAlarm";
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
+    public static final String PREF_HOLIDAY_TYPES = "holiday_types";
 
     public static final String DEFAULT_CITY = "CUSTOM";
     public static final String DEFAULT_PRAY_TIME_METHOD = "Tehran";
