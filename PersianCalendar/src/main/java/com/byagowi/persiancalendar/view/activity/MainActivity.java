@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return result;
     }
 
-    private int maxSupportedYear = 1397;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(Utils.getTheme(this).equals(DARK_THEME)
@@ -176,15 +174,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
 
-
-        if (Utils.getToday().getYear() > maxSupportedYear)
-            Toast.makeText(this, getString(R.string.shouldBeUpdated), Toast.LENGTH_LONG).show();
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null);
-        if (enabledTypes == null)
-            Toast.makeText(this, R.string.warn_if_events_not_set, Toast.LENGTH_LONG).show();
-
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
