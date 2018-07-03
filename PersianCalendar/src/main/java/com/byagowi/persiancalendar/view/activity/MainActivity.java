@@ -188,10 +188,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
-    boolean setttingHasChanged = false;
+    boolean settingHasChanged = false;
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        setttingHasChanged = true;
+        settingHasChanged = true;
+        UpdateUtils.update(getApplicationContext(), true);
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -272,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         if (menuPosition != item) {
-            if (setttingHasChanged && menuPosition == PREFERENCE) { // restart if we are returning from preferences
+            if (settingHasChanged && menuPosition == PREFERENCE) { // restart if we are returning from preferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
                 restartActivity(item);
