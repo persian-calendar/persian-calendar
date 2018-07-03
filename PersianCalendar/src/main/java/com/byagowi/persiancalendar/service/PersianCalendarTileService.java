@@ -34,6 +34,8 @@ public class PersianCalendarTileService extends TileService {
                 Utils.getDayIconResource(today.getDayOfMonth())));
         tile.setLabel(Utils.getWeekDayName(today));
         tile.setContentDescription(Utils.getMonthName(today));
+        // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
+        tile.setState(Tile.STATE_ACTIVE);
         tile.updateTile();
     }
 }
