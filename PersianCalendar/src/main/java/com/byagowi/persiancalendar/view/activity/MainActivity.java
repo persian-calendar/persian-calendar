@@ -49,7 +49,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int CALENDAR = 1;
     private static final int CONVERTER = 2;
@@ -184,6 +184,14 @@ public class MainActivity extends AppCompatActivity {
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null);
         if (enabledTypes == null)
             Toast.makeText(this, R.string.warn_if_events_not_set, Toast.LENGTH_LONG).show();
+
+        prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    boolean setttingHasChanged = false;
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        setttingHasChanged = true;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -264,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (menuPosition != item) {
-            if (menuPosition == PREFERENCE) { // restart if we are returning from preferences
+            if (setttingHasChanged && menuPosition == PREFERENCE) { // restart if we are returning from preferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
                 restartActivity(item);
