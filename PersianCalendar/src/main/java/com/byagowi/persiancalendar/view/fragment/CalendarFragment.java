@@ -2,8 +2,10 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,11 +38,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
+
+import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends Fragment
         implements View.OnClickListener, ViewPager.OnPageChangeListener {
@@ -69,6 +74,7 @@ public class CalendarFragment extends Fragment
     private TextView shamsiDate;
     private TextView shamsiDateDay;
     private TextView eventTitle;
+    private TextView eventMessage;
     private TextView holidayTitle;
     private TextView today;
     private AppCompatImageView todayIcon;
@@ -100,7 +106,6 @@ public class CalendarFragment extends Fragment
         setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        Utils.clearYearWarnFlag();
         viewPagerPosition = 0;
 
         imsakLayout = view.findViewById(R.id.imsakLayout);
@@ -137,6 +142,7 @@ public class CalendarFragment extends Fragment
         moreOwghat = view.findViewById(R.id.more_owghat);
 
         eventTitle = view.findViewById(R.id.event_title);
+        eventMessage = view.findViewById(R.id.event_message);
         holidayTitle = view.findViewById(R.id.holiday_title);
 
         owghat = view.findViewById(R.id.owghat);
@@ -231,6 +237,8 @@ public class CalendarFragment extends Fragment
         startActivity(intent);
     }
 
+    private int maxSupportedYear = 1397;
+
     private void showEvent(PersianDate persianDate) {
         List<AbstractEvent> events = Utils.getEvents(persianDate);
         String holidays = Utils.getEventsTitle(events, true);
@@ -238,6 +246,7 @@ public class CalendarFragment extends Fragment
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
+        eventMessage.setVisibility(View.GONE);
         eventTitle.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
@@ -250,6 +259,24 @@ public class CalendarFragment extends Fragment
             eventTitle.setText(nonHolidays);
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
+        }
+
+        PersianDate today = Utils.getToday();
+        if (persianDate.equals(today)) {
+            String messageToShow = "";
+            if (today.getYear() > maxSupportedYear)
+                messageToShow = getString(R.string.shouldBeUpdated) + "\n";
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null);
+            if (enabledTypes == null)
+                messageToShow += getString(R.string.warn_if_events_not_set);
+
+            if (!TextUtils.isEmpty(messageToShow)) {
+                eventMessage.setText(messageToShow);
+                eventMessage.setVisibility(View.VISIBLE);
+                event.setVisibility(View.VISIBLE);
+            }
         }
     }
 

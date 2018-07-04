@@ -78,7 +78,7 @@
     <string name="aftab3">نیوه‌شەوی شەرعی</string>
     <string name="owghat">کاتە شەرعییەکان</string>
     <string name="events">بۆنەکان</string>
-    <string name="events_summary">مناسبت‌ها برای نمایش</string>
+    <string name="events_summary">تنظیم نوع مناسبت‌های نمایش داده شده در تقویم</string>
     <string name="today">ئەمڕۆ</string>
     <string name="select_type_date">ھەڵبژاردنی جۆری ڕێککەوت</string>
     <string name="year">ساڵ</string>
@@ -104,9 +104,10 @@
     <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
-    <string name="holidaysIncompletenessWarning">بۆنەکانی ئەم ساڵەی ڕۆژژمێر تەواو نییە.</string>
-    <string name="shouldBeUpdated">بۆنەکانی ئەمساڵی ڕۆژژمێر تەواو نییە، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
+    <string name="shouldBeUpdated">ڕۆژژمێری کۆچیی مانگی ڕەنگە دروست نەبێ، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
+    <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
 </resources>

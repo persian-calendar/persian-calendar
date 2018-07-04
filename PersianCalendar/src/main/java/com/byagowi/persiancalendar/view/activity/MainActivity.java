@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -43,7 +45,7 @@ import static com.byagowi.persiancalendar.Constants.DARK_THEME;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int CALENDAR = 1;
     private static final int CONVERTER = 2;
@@ -167,6 +169,17 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    boolean settingHasChanged = false;
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        settingHasChanged = true;
+        UpdateUtils.update(getApplicationContext(), true);
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -247,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (menuPosition != item) {
-            if (menuPosition == PREFERENCE) { // restart if we are returning from preferences
+            if (settingHasChanged && menuPosition == PREFERENCE) { // restart if we are returning from preferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
                 restartActivity(item);

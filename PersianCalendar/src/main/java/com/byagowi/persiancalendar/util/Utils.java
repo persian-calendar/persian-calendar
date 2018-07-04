@@ -102,6 +102,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
+import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
 import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
@@ -580,14 +581,11 @@ public class Utils {
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        Resources res = context.getResources();
-        Set<String> enabledTypes = prefs.getStringSet("holiday_types",
-                new HashSet<>(Arrays.asList(res.getStringArray(R.array.default_holidays))));
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
         boolean iranHolidays = enabledTypes.contains("iran_holidays");
-        if (!iranHolidays) Utils.checkYearEnabled = false;
         boolean iranIslamic = enabledTypes.contains("iran_islamic");
         boolean iranAncient = enabledTypes.contains("iran_ancient");
         boolean iranOthers = enabledTypes.contains("iran_others");
@@ -612,9 +610,9 @@ public class Utils {
             for (int i = 0; i < length; ++i) {
                 JSONObject event = days.getJSONObject(i);
 
-                int year = event.getInt("year");
                 int month = event.getInt("month");
                 int day = event.getInt("day");
+                int year = event.has("year") ? event.getInt("year") : -1;
                 String title = event.getString("title");
                 boolean holiday = event.getBoolean("holiday");
 
@@ -722,61 +720,6 @@ public class Utils {
         Utils.persianCalendarEvents = persianCalendarEvents;
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
-    }
-
-    static private int maxSupportedYear = -1;
-    static private int minSupportedYear = -1;
-    static private boolean isYearWarnGivenOnce = false;
-    static private boolean checkYearEnabled = true;
-
-    static public void checkYearAndWarnIfNeeded(Context context, int selectedYear) {
-        if (!checkYearEnabled)
-            return;
-
-        // once is enough, see #clearYearWarnFlag() also
-        if (isYearWarnGivenOnce)
-            return;
-
-        if (maxSupportedYear == -1 || minSupportedYear == -1)
-            loadMinMaxSupportedYear();
-
-        if (selectedYear < minSupportedYear) {
-            Toast.makeText(context, context.getString(R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
-            isYearWarnGivenOnce = true;
-        }
-
-        if (selectedYear > maxSupportedYear) {
-            Toast.makeText(context, context.getString(getToday().getYear() > maxSupportedYear
-                    ? R.string.shouldBeUpdated
-                    : R.string.holidaysIncompletenessWarning), Toast.LENGTH_LONG).show();
-
-            isYearWarnGivenOnce = true;
-        }
-    }
-
-    // called from CalendarFragment to make it once per calendar view
-    static public void clearYearWarnFlag() {
-        isYearWarnGivenOnce = false;
-    }
-
-    static private void loadMinMaxSupportedYear() {
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        for (List<PersianCalendarEvent> eventsList : persianCalendarEvents)
-            for (PersianCalendarEvent eventEntity : eventsList) {
-                int year = eventEntity.getDate().getYear();
-
-                if (min > year && year != -1) {
-                    min = year;
-                }
-
-                if (max < year) {
-                    max = year;
-                }
-            }
-
-        minSupportedYear = min;
-        maxSupportedYear = max;
     }
 
     public static List<AbstractEvent> getEvents(PersianDate day) {

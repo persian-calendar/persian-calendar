@@ -161,8 +161,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                     adapter.selectDay(day);
                 }
 
-                Utils.checkYearAndWarnIfNeeded(context, persianDate.getYear());
-
             } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
                 adapter.clearSelectedDay();
             }

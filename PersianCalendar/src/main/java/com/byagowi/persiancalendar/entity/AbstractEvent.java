@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.entity;
 
-import calendar.CivilDate;
-
 /**
  * PersianCalendarEvent
  *

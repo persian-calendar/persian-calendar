@@ -104,9 +104,10 @@
     <string name="select">Select</string>
     <string name="go">Go</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="holidaysIncompletenessWarning">Holidays of the selected year may not be complete and reliable.</string>
-    <string name="shouldBeUpdated">Holidays of the selected year may not be complete and reliable. Consider an update for the app, if exists.</string>
+    <string name="shouldBeUpdated">Hijri calendar is not tuned correctly. Consider an update for the app, if available.</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
+    <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
 </resources>
