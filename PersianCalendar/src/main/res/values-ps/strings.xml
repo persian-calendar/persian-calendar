@@ -108,5 +108,6 @@
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
-    <string name="warn_if_events_not_set">جهت نمایش مناسبت‌ها می‌توانید به قسمت تنظیمات بروید</string>
+    <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
 </resources>

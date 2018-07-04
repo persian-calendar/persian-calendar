@@ -1,12 +1,10 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -48,7 +42,8 @@ public class ConverterFragment extends Fragment implements
     private TextView gregorianDate;
     private TextView islamicDateDay;
     private TextView islamicDate;
-    private CardView calendars_card;
+    private TextView diffDate;
+    private CardView calendarsCard;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -77,7 +72,9 @@ public class ConverterFragment extends Fragment implements
         islamicDateDay = view.findViewById(R.id.islamic_date_day);
         islamicDate = view.findViewById(R.id.islamic_date);
 
-        calendars_card = view.findViewById(R.id.calendars_card);
+        calendarsCard = view.findViewById(R.id.calendars_card);
+
+        diffDate = view.findViewById(R.id.diff_date);
 
         // fill views
         calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
@@ -128,6 +125,7 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
+
             weekDayName.setText(Utils.getWeekDayName(persianDate));
 
             shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
@@ -139,10 +137,24 @@ public class ConverterFragment extends Fragment implements
             islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
             islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
-            calendars_card.setVisibility(View.VISIBLE);
+            calendarsCard.setVisibility(View.VISIBLE);
+
+            PersianDate today = Utils.getToday();
+            long diffDays = Math.abs(DateConverter.persianToJdn(today) - DateConverter.persianToJdn(persianDate));
+            CivilDate civilBase = new CivilDate(2000, 1, 1);
+            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
+            int yearDiff = civilOffset.getYear() - 2000;
+            int monthDiff = civilOffset.getMonth() - 1;
+            int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
+            diffDate.setText(String.format(getString(R.string.date_diff_text),
+                    Utils.formatNumber((int) diffDays),
+                    Utils.formatNumber(yearDiff),
+                    Utils.formatNumber(monthDiff),
+                    Utils.formatNumber(dayOfMonthDiff)));
+            diffDate.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
 
         } catch (RuntimeException e) {
-            calendars_card.setVisibility(View.GONE);
+            calendarsCard.setVisibility(View.GONE);
             Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
         }
     }

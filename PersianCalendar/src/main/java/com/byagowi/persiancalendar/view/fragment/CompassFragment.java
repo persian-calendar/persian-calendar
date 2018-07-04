@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
-import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Coordinate;
 
 /**

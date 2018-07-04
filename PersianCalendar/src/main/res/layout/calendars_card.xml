@@ -25,8 +25,8 @@
                 android:id="@+id/today"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
                 android:text="@string/today"
                 android:textColor="?attr/colorTextPrimary"
                 android:textSize="@dimen/text_size_title"
@@ -62,8 +62,8 @@
                     android:id="@+id/week_day_name"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
                     android:textColor="?attr/colorTextPrimary"
                     android:textSize="@dimen/text_size_title"
                     tools:text="Calendar" />
@@ -175,6 +175,20 @@
             </android.support.v7.widget.LinearLayoutCompat>
 
         </com.google.android.flexbox.FlexboxLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/diff_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_item"
+            android:paddingLeft="@dimen/card_padding"
+            android:paddingRight="@dimen/card_padding"
+            android:paddingTop="@dimen/padding_item"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description"
+            android:visibility="gone"
+            tools:text="Diff" />
 
     </android.support.v7.widget.LinearLayoutCompat>
 
