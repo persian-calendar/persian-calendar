@@ -127,6 +127,8 @@ public class CalendarFragment extends Fragment
         weekDayName = view.findViewById(R.id.week_day_name);
         today = view.findViewById(R.id.today);
         todayIcon = view.findViewById(R.id.today_icon);
+        today.setVisibility(View.GONE);
+        todayIcon.setVisibility(View.GONE);
 
         imsakTextView = view.findViewById(R.id.imsak);
         fajrTextView = view.findViewById(R.id.fajr);

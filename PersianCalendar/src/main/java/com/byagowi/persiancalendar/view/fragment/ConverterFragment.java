@@ -45,6 +45,9 @@ public class ConverterFragment extends Fragment implements
     private TextView diffDate;
     private CardView calendarsCard;
 
+    private TextView todayText;
+    private AppCompatImageView todayIcon;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
@@ -56,6 +59,13 @@ public class ConverterFragment extends Fragment implements
 
         AppCompatImageView iv = view.findViewById(R.id.calendars_card_icon);
         iv.setImageResource(R.drawable.ic_swap_vertical_circle);
+
+        todayText = view.findViewById(R.id.today);
+        todayIcon = view.findViewById(R.id.today_icon);
+        todayText.setVisibility(View.GONE);
+        todayIcon.setVisibility(View.GONE);
+        todayText.setOnClickListener(this);
+        todayIcon.setOnClickListener(this);
 
         // fill members
         calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
@@ -152,6 +162,8 @@ public class ConverterFragment extends Fragment implements
                     Utils.formatNumber(monthDiff),
                     Utils.formatNumber(dayOfMonthDiff)));
             diffDate.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
+            this.todayText.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
+            todayIcon.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
 
         } catch (RuntimeException e) {
             calendarsCard.setVisibility(View.GONE);
@@ -200,6 +212,12 @@ public class ConverterFragment extends Fragment implements
             case R.id.islamic_date_day:
                 Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
                         islamicDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.today:
+            case R.id.today_icon:
+                startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
+                        calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
                 break;
         }
     }

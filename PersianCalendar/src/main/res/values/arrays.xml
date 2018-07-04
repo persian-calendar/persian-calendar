@@ -119,7 +119,7 @@
         <item></item>
     </string-array>
 
-    <string-array name="holidays_types" translatable="false">
+    <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های اسلامی در ایران</item>
         <item>مناسبت‌های ایران باستان</item>

@@ -29,8 +29,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/today"
                 android:textColor="?attr/colorTextPrimary"
-                android:textSize="@dimen/text_size_title"
-                android:visibility="gone" />
+                android:textSize="@dimen/text_size_title" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/today_icon"
@@ -40,9 +39,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/today"
                 android:tint="?attr/colorTextPrimary"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_undo" />
-
+                app:srcCompat="@drawable/ic_restore_modified" />
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"

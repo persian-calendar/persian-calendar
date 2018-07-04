@@ -86,18 +86,19 @@
                             android:textSize="@dimen/text_size_description" />
 
                         <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/event_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorTextNormal"
+                            android:textSize="@dimen/text_size_description" />
+
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/event_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#FFA0A0A0"
                             android:textSize="@dimen/text_size_description" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/event_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/colorTextNormal"
-                            android:textSize="@dimen/text_size_description" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
 

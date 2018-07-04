@@ -55,4 +55,15 @@
         <item></item>
         <item></item>
     </string-array>
+
+    <string-array name="holidays_types">
+        <item>تعطیلات در ایران</item>
+        <item>مناسبت‌های اسلامی در ایران</item>
+        <item>مناسبت‌های ایران باستان</item>
+        <item>سایر مناسبت‌های ایران</item>
+        <item>مناسبت‌های بین‌المللی</item>
+        <item>رخصتی‌های افغانستان</item>
+        <item>سایر مناسبت‌های افغانستان</item>
+    </string-array>
+
 </resources>
