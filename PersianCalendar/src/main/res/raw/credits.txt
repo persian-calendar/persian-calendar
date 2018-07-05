@@ -83,7 +83,7 @@ Libraries:
   * Saeed Rasooli <saeed.gnu@gmail.com>
   * Mola Pahnadayan <mola.mp@gmail.com>
   * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی
-  * رضا مرادی قیاس آبادی
+  * رضا مرادی غیاث‌آبادی
 
   Copyright (C) 2017  Saeed Rasooli
 
