@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
-import com.byagowi.persiancalendar.service.ApplicationService;
+//import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -202,8 +202,8 @@ public class UpdateUtils {
 
         int icon = Utils.getDayIconResource(persian.getDayOfMonth());
 
-        ApplicationService applicationService = ApplicationService.getInstance();
-        if (applicationService != null && Utils.isNotifyDate()) {
+//        ApplicationService applicationService = ApplicationService.getInstance();
+//        if (applicationService != null && Utils.isNotifyDate()) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -238,8 +238,9 @@ public class UpdateUtils {
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             }
 
-            applicationService.startForeground(NOTIFICATION_ID, builder.build());
-        }
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+//            context.startForeground(NOTIFICATION_ID, builder.build());
+//        }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
                 .status(status)

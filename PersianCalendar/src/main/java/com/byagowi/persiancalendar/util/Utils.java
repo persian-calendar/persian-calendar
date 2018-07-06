@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
+import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -60,6 +61,8 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -151,6 +154,13 @@ public class Utils {
             supportActionBar.setTitle(title);
             supportActionBar.setSubtitle(subtitle);
         }
+    }
+
+    static public void startUpdateWorker() {
+        PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+                .Builder(UpdateWorker.class, 1, TimeUnit.DAYS);
+        PeriodicWorkRequest photoCheckWork = updateBuilder.build();
+        WorkManager.getInstance().enqueue(photoCheckWork);
     }
 
     static public Coordinate getCoordinate(Context context) {
@@ -785,16 +795,16 @@ public class Utils {
         return titles.toString();
     }
 
-    static public void loadApp(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 1);
-        Intent intent = new Intent(context, BroadcastReceivers.class);
-        intent.setAction(BROADCAST_RESTART_APP);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
-    }
+//    static public void loadApp(Context context) {
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 0);
+//        startTime.set(Calendar.MINUTE, 1);
+//        Intent intent = new Intent(context, BroadcastReceivers.class);
+//        intent.setAction(BROADCAST_RESTART_APP);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+//    }
 
     static public boolean isServiceRunning(Context context, Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

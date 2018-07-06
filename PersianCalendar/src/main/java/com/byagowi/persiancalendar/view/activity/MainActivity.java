@@ -28,7 +28,7 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
-import com.byagowi.persiancalendar.service.ApplicationService;
+//import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -96,11 +96,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utils.initUtils(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
-        if (!Utils.isServiceRunning(this, ApplicationService.class)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(new Intent(this, ApplicationService.class));
-            startService(new Intent(this, ApplicationService.class));
-        }
+        Utils.startUpdateWorker();
+//        if (!Utils.isServiceRunning(this, ApplicationService.class)) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//                startForegroundService(new Intent(this, ApplicationService.class));
+//            startService(new Intent(this, ApplicationService.class));
+//        }
 
         UpdateUtils.update(getApplicationContext(), true);
 
