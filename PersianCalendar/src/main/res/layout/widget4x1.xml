@@ -12,9 +12,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:gravity="right"
-        android:layoutDirection="ltr"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textPlaceholder1_4x1"
+            style="@style/ShadowTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@android:color/white"
+            android:textSize="36dp" />
 
         <TextView
             android:id="@+id/textPlaceholder3_4x1"
@@ -25,15 +32,6 @@
             android:gravity="right"
             android:textColor="@android:color/white"
             android:textSize="12dp" />
-
-        <TextView
-            android:id="@+id/textPlaceholder1_4x1"
-            style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textColor="@android:color/white"
-            android:textSize="36dp" />
     </LinearLayout>
 
     <TextView
