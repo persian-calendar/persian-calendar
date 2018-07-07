@@ -166,7 +166,7 @@ public class QiblaCompassView extends View {
         mPath.close();
         canvas.drawPath(mPath, trueNorthArrowPaint);
         dashedPaint.setColor(Color.RED);
-        canvas.drawLine(px, py - px, px, py + Radius, dashedPaint);
+        canvas.drawLine(px, py - Radius, px, py + Radius, dashedPaint);
         canvas.drawCircle(px, py, 5, dashedPaint);
         canvas.restore();
     }
