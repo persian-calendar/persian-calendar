@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,10 @@ public class ConverterFragment extends Fragment implements
     private TextView diffDate;
     private CardView calendarsCard;
 
+    LinearLayoutCompat shamsiContainer;
+    LinearLayoutCompat gregorianContainer;
+    LinearLayoutCompat islamicContainer;
+
     private TextView todayText;
     private AppCompatImageView todayIcon;
 
@@ -74,6 +79,10 @@ public class ConverterFragment extends Fragment implements
         daySpinner = view.findViewById(R.id.daySpinner);
 
         weekDayName = view.findViewById(R.id.week_day_name);
+
+        shamsiContainer = view.findViewById(R.id.shamsi_container);
+        gregorianContainer = view.findViewById(R.id.gregorian_container);
+        islamicContainer = view.findViewById(R.id.islamic_container);
 
         shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
         shamsiDate = view.findViewById(R.id.shamsi_date);
@@ -121,17 +130,23 @@ public class ConverterFragment extends Fragment implements
         IslamicDate hijriDate;
 
         try {
+            shamsiContainer.setVisibility(View.VISIBLE);
+            gregorianContainer.setVisibility(View.VISIBLE);
+            islamicContainer.setVisibility(View.VISIBLE);
+
             switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     civilDate = new CivilDate(year, month, day);
                     hijriDate = DateConverter.civilToIslamic(civilDate, 0);
                     persianDate = DateConverter.civilToPersian(civilDate);
+                    gregorianContainer.setVisibility(View.GONE);
                     break;
 
                 case ISLAMIC:
                     hijriDate = new IslamicDate(year, month, day);
                     civilDate = DateConverter.islamicToCivil(hijriDate);
                     persianDate = DateConverter.islamicToPersian(hijriDate);
+                    islamicContainer.setVisibility(View.GONE);
                     break;
 
                 case SHAMSI:
@@ -139,6 +154,7 @@ public class ConverterFragment extends Fragment implements
                     persianDate = new PersianDate(year, month, day);
                     civilDate = DateConverter.persianToCivil(persianDate);
                     hijriDate = DateConverter.persianToIslamic(persianDate);
+                    shamsiContainer.setVisibility(View.GONE);
                     break;
             }
 

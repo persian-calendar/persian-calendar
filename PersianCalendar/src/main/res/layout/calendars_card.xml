@@ -85,6 +85,7 @@
             app:showDividers="middle">
 
             <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/shamsi_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -114,6 +115,7 @@
             </android.support.v7.widget.LinearLayoutCompat>
 
             <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/gregorian_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -143,6 +145,7 @@
             </android.support.v7.widget.LinearLayoutCompat>
 
             <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/islamic_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
