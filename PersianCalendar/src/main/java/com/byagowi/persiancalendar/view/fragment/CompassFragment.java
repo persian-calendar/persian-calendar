@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
@@ -68,7 +70,7 @@ public class CompassFragment extends Fragment {
             public void onSensorChanged(SensorEvent event) {
                 // angle between the magnetic north direction
                 // 0=North, 90=East, 180=South, 270=West
-                float angle = event.values[0];
+                float angle = event.values[0] + orientation;
                 if (stop) angle = 0;
                 azimuth = lowPass(angle, azimuth);
                 compassView.setBearing(azimuth);
@@ -107,6 +109,8 @@ public class CompassFragment extends Fragment {
         return view;
     }
 
+    int orientation = 0;
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -119,6 +123,22 @@ public class CompassFragment extends Fragment {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         compassView.setScreenResolution(width, height - 2 * height / 8);
+
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        switch (wm.getDefaultDisplay().getOrientation()) {
+            case Surface.ROTATION_0:
+                orientation = 0;
+                break;
+            case Surface.ROTATION_90:
+                orientation = 90;
+                break;
+            case Surface.ROTATION_180:
+                orientation = 180;
+                break;
+            case Surface.ROTATION_270:
+                orientation = 270;
+                break;
+        }
     }
 
     @Override
