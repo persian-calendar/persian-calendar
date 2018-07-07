@@ -35,6 +35,7 @@ public class CompassFragment extends Fragment {
     private SensorManager sensorManager;
     private Sensor sensor;
     private SensorEventListener compassListener;
+    private float orientation = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,8 +109,6 @@ public class CompassFragment extends Fragment {
         }
         return view;
     }
-
-    int orientation = 0;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

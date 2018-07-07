@@ -36,6 +36,7 @@ import com.github.praytimes.PrayTimesCalculator;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -263,22 +264,19 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
-        PersianDate today = Utils.getToday();
-        if (persianDate.equals(today)) {
-            String messageToShow = "";
-            if (today.getYear() > maxSupportedYear)
-                messageToShow = getString(R.string.shouldBeUpdated) + "\n";
+        String messageToShow = "";
+        if (Utils.getToday().getYear() > maxSupportedYear)
+            messageToShow = getString(R.string.shouldBeUpdated) + "\n";
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null);
-            if (enabledTypes == null)
-                messageToShow += getString(R.string.warn_if_events_not_set);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+        if (enabledTypes.size() == 0)
+            messageToShow += getString(R.string.warn_if_events_not_set);
 
-            if (!TextUtils.isEmpty(messageToShow)) {
-                eventMessage.setText(messageToShow);
-                eventMessage.setVisibility(View.VISIBLE);
-                event.setVisibility(View.VISIBLE);
-            }
+        if (!TextUtils.isEmpty(messageToShow)) {
+            eventMessage.setText(messageToShow);
+            eventMessage.setVisibility(View.VISIBLE);
+            event.setVisibility(View.VISIBLE);
         }
     }
 
