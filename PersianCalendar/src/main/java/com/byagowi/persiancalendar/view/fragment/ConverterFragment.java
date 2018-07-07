@@ -82,6 +82,13 @@ public class ConverterFragment extends Fragment implements
         islamicDateDay = view.findViewById(R.id.islamic_date_day);
         islamicDate = view.findViewById(R.id.islamic_date);
 
+        shamsiDateDay.setOnClickListener(this);
+        shamsiDate.setOnClickListener(this);
+        gregorianDateDay.setOnClickListener(this);
+        gregorianDate.setOnClickListener(this);
+        islamicDateDay.setOnClickListener(this);
+        islamicDate.setOnClickListener(this);
+
         calendarsCard = view.findViewById(R.id.calendars_card);
 
         diffDate = view.findViewById(R.id.diff_date);
