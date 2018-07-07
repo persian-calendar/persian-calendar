@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -86,12 +87,7 @@ public class CompassFragment extends Fragment {
             }
         };
         compassView = view.findViewById(R.id.compass_view);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
-        int height = displayMetrics.heightPixels;
-        compassView.setScreenResolution(width, height - 2 * height / 8);
+        setCompassMetrics();
 
         if (coordinate != null) {
             compassView.setLongitude(coordinate.getLongitude());
@@ -109,6 +105,20 @@ public class CompassFragment extends Fragment {
             Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
         }
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setCompassMetrics();
+    }
+
+    private void setCompassMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+        compassView.setScreenResolution(width, height - 2 * height / 8);
     }
 
     @Override

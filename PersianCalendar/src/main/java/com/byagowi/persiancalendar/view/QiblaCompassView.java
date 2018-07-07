@@ -158,7 +158,7 @@ public class QiblaCompassView extends View {
         int r = Radius / 12;
         // Construct a wedge-shaped path
         mPath.reset();
-        mPath.moveTo(px, py - px);
+        mPath.moveTo(px, py - Radius);
         mPath.lineTo(px - r, py);
         mPath.lineTo(px, py + r);
         mPath.lineTo(px + r, py);
@@ -204,17 +204,16 @@ public class QiblaCompassView extends View {
             if (i % 6 == 0) {
                 String dirString = "";
                 switch (i) {
-                    case (0): {
+                    case 0:
                         dirString = northString;
                         break;
-                    }
-                    case (6):
+                    case 6:
                         dirString = eastString;
                         break;
-                    case (12):
+                    case 12:
                         dirString = southString;
                         break;
-                    case (18):
+                    case 18:
                         dirString = westString;
                         break;
                 }
