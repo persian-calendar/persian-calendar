@@ -17,15 +17,15 @@
         app:showDividers="middle">
 
         <android.support.v7.widget.LinearLayoutCompat
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/calendars_card_icon"
-                android:layout_margin="@dimen/icon_margin"
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
+                android:layout_margin="@dimen/icon_margin"
                 android:gravity="center"
                 android:tint="?attr/colorIcon"
                 app:srcCompat="@drawable/ic_event" />
@@ -42,10 +42,10 @@
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/icon_margin"
+                android:layout_gravity="right|end"
                 android:layout_marginEnd="@dimen/icon_margin"
-                android:gravity="end|right|center_vertical"
-                android:layout_gravity="right|end">
+                android:layout_marginRight="@dimen/icon_margin"
+                android:gravity="end|right|center_vertical">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/today_icon"
