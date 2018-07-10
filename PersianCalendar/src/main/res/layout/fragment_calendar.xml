@@ -35,11 +35,6 @@
                 app:dividerPadding="@dimen/divider_margin"
                 app:showDividers="middle">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/card_padding">
-
                     <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
@@ -47,7 +42,7 @@
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
-                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:layout_margin="@dimen/icon_margin"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_event_note" />
@@ -62,8 +57,6 @@
                             android:textSize="@dimen/text_size_title" />
 
                     </android.support.v7.widget.LinearLayoutCompat>
-
-                </RelativeLayout>
 
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -128,8 +121,7 @@
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/card_padding">
+                    android:orientation="horizontal">
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
@@ -138,7 +130,7 @@
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
-                            android:layout_marginLeft="@dimen/icon_margin"
+                            android:layout_margin="@dimen/icon_margin"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_access_time" />
@@ -156,6 +148,7 @@
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/more_owghat"
+                        android:layout_gravity="center_vertical"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:tint="?attr/colorIcon"

@@ -16,58 +16,57 @@
         app:dividerPadding="@dimen/divider_margin"
         app:showDividers="middle">
 
-        <RelativeLayout
+        <android.support.v7.widget.LinearLayoutCompat
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/card_padding">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/today"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="@string/today"
-                android:textColor="?attr/colorTextPrimary"
-                android:textSize="@dimen/text_size_title" />
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/today_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/today"
-                android:tint="?attr/colorTextPrimary"
-                app:srcCompat="@drawable/ic_restore_modified" />
+                android:id="@+id/calendars_card_icon"
+                android:layout_margin="@dimen/icon_margin"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:gravity="center"
+                android:tint="?attr/colorIcon"
+                app:srcCompat="@drawable/ic_event" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/week_day_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="?attr/colorTextPrimary"
+                android:textSize="@dimen/text_size_title"
+                tools:text="Calendar" />
 
             <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/icon_margin"
+                android:layout_marginEnd="@dimen/icon_margin"
+                android:gravity="end|right|center_vertical"
+                android:layout_gravity="right|end">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/calendars_card_icon"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:layout_marginLeft="@dimen/icon_margin"
-                    android:layout_toRightOf="@+id/dayInfoContainer"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_event" />
+                    android:id="@+id/today_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:tint="?attr/colorTextPrimary"
+                    app:srcCompat="@drawable/ic_restore_modified" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/week_day_name"
+                    android:id="@+id/today"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
+                    android:text="@string/today"
                     android:textColor="?attr/colorTextPrimary"
-                    android:textSize="@dimen/text_size_title"
-                    tools:text="Calendar" />
+                    android:textSize="@dimen/text_size_title" />
 
             </android.support.v7.widget.LinearLayoutCompat>
 
-        </RelativeLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
 
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
