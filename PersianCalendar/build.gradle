@@ -20,7 +20,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -47,5 +47,4 @@ dependencies {
     implementation "com.android.support:cardview-v7:$supportLibVersion"
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     implementation 'com.google.android:flexbox:1.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }
