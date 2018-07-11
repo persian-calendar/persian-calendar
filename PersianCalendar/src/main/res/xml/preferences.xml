@@ -34,7 +34,7 @@
             android:negativeButtonText="@string/cancel"
             android:title="@string/language" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
@@ -53,13 +53,13 @@
 
     <android.support.v7.preference.PreferenceCategory android:title="@string/widget_notification_dashclock">
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:dependency="NotifyDate"
             android:key="NotifyDateLockScreen"
@@ -75,19 +75,19 @@
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <android.support.v7.preference.CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
