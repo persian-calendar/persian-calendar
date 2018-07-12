@@ -13,12 +13,13 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:timeZone="Iran"
+        android:fontFamily="sans-serif-thin"
         android:format12Hour="H:mm"
         android:format24Hour="H:mm"
         android:gravity="right"
         android:textColor="@android:color/white"
-        android:textSize="34sp" />
+        android:textSize="34sp"
+        android:timeZone="Iran" />
 
     <TextView
         android:id="@+id/date_2x2"
