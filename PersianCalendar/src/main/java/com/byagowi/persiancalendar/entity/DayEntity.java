@@ -7,7 +7,7 @@ public class DayEntity {
     private boolean holiday;
     private boolean today;
     private int dayOfWeek;
-    private PersianDate persianDate;
+    private long jdn;
     private boolean event;
 
     public boolean isEvent() {
@@ -50,11 +50,11 @@ public class DayEntity {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public PersianDate getPersianDate() {
-        return persianDate;
+    public long getJdn() {
+        return jdn;
     }
 
-    public void setPersianDate(PersianDate persianDate) {
-        this.persianDate = persianDate;
+    public void setJdn(long jdn) {
+        this.jdn = jdn;
     }
 }

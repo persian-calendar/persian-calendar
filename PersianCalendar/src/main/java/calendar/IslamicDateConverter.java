@@ -18,7 +18,7 @@ class IslamicDateConverter {
     private static long[] yearsStartJd;
     private static long jdSupportEnd;
     private static long jdSupportStart = 2453766;
-    private static void init() {
+    static {
         // https://github.com/ilius/starcal/blob/master/scal3/cal_types/hijri-monthes.json
         int[] hirjiMonths = {
                 1427, 30, 29, 29, 30, 29, 30, 30, 30, 30, 29, 29, 30,
@@ -54,14 +54,8 @@ class IslamicDateConverter {
         }
         jdSupportEnd = jd;
     }
-    {
-        init();
-    }
 
     static long hijriToJd(int year, int month, int day) {
-        if (jdSupportEnd == 0)
-            init();
-
         if (!yearsMonthsInJd.containsKey(year))
             return -1;
 
@@ -80,9 +74,6 @@ class IslamicDateConverter {
     }
 
     static int[] jdToHirji(long jd) {
-        if (jdSupportEnd == 0)
-            init();
-
         if (jd < jdSupportStart || jd >= jdSupportEnd)
             return null;
 

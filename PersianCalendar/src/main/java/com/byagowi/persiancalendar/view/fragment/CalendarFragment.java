@@ -190,7 +190,8 @@ public class CalendarFragment extends Fragment
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
-    public void selectDay(PersianDate persianDate) {
+    public void selectDay(long jdn) {
+        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         weekDayName.setText(Utils.getWeekDayName(persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
@@ -215,11 +216,12 @@ public class CalendarFragment extends Fragment
         }
 
         setOwghat(civilDate);
-        showEvent(persianDate);
+        showEvent(jdn);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public void addEventOnCalendar(PersianDate persianDate) {
+    public void addEventOnCalendar(long jdn) {
+        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setData(CalendarContract.Events.CONTENT_URI);
 
@@ -242,8 +244,8 @@ public class CalendarFragment extends Fragment
 
     private int maxSupportedYear = 1397;
 
-    private void showEvent(PersianDate persianDate) {
-        List<AbstractEvent> events = Utils.getEvents(persianDate);
+    private void showEvent(long jdn) {
+        List<AbstractEvent> events = Utils.getEvents(jdn);
         String holidays = Utils.getEventsTitle(events, true);
         String nonHolidays = Utils.getEventsTitle(events, false);
 
@@ -359,7 +361,7 @@ public class CalendarFragment extends Fragment
             monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
         }
 
-        selectDay(Utils.getToday());
+        selectDay(DateConverter.persianToJdn(Utils.getToday()));
     }
 
     public void bringDate(PersianDate date) {
@@ -375,7 +377,7 @@ public class CalendarFragment extends Fragment
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
-        selectDay(date);
+        selectDay(DateConverter.persianToJdn(date));
     }
 
     @Override

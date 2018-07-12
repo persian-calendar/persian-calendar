@@ -722,9 +722,10 @@ public class Utils {
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
     }
 
-    public static List<AbstractEvent> getEvents(PersianDate day) {
-        CivilDate civil = DateConverter.persianToCivil(day);
-        IslamicDate islamic = DateConverter.persianToIslamic(day);
+    public static List<AbstractEvent> getEvents(long jdn) {
+        PersianDate day = DateConverter.jdnToPersian(jdn);
+        CivilDate civil = DateConverter.jdnToCivil(jdn);
+        IslamicDate islamic = DateConverter.jdnToIslamic(jdn);
 
         List<AbstractEvent> result = new ArrayList<>();
         for (PersianCalendarEvent persianCalendarEvent : persianCalendarEvents[day.getDayOfMonth()])

@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -25,89 +26,22 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.DayOutOfRangeException;
 import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
     private PersianDate persianDate;
     private int offset;
+
     private MonthAdapter adapter;
+    private List<DayEntity> days;
+    private int weekOfYearStart;
+    private int weeksCount;
 
-    static List<DayEntity> getDays(int offset) {
+    private void fillTheField() {
         List<DayEntity> days = new ArrayList<>();
-        PersianDate persianDate = Utils.getToday();
-        int month = persianDate.getMonth() - offset;
-        month -= 1;
-        int year = persianDate.getYear();
-
-        year = year + (month / 12);
-        month = month % 12;
-        if (month < 0) {
-            year -= 1;
-            month += 12;
-        }
-        month += 1;
-        persianDate.setMonth(month);
-        persianDate.setYear(year);
-        persianDate.setDayOfMonth(1);
-
-        int dayOfWeek = DateConverter.persianToCivil(persianDate).getDayOfWeek() % 7;
-
-        try {
-            PersianDate today = Utils.getToday();
-            for (int i = 1; i <= 31; i++) {
-                persianDate.setDayOfMonth(i);
-
-                DayEntity dayEntity = new DayEntity();
-                dayEntity.setNum(Utils.formatNumber(i));
-                dayEntity.setDayOfWeek(dayOfWeek);
-
-                List<AbstractEvent> events = Utils.getEvents(persianDate);
-
-                if (dayOfWeek == 6 || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
-                    dayEntity.setHoliday(true);
-                }
-
-                if (events.size() > 0) {
-                    dayEntity.setEvent(true);
-                }
-
-                dayEntity.setPersianDate(persianDate.clone());
-
-                if (persianDate.equals(today)) {
-                    dayEntity.setToday(true);
-                }
-
-                days.add(dayEntity);
-                dayOfWeek++;
-                if (dayOfWeek == 7) {
-                    dayOfWeek = 0;
-                }
-            }
-        } catch (DayOutOfRangeException e) {
-            // okay, it was expected
-        }
-
-        return days;
-    }
-
-    @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
-        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-        List<DayEntity> days = getDays(offset);
-
-        AppCompatImageView prev = view.findViewById(R.id.prev);
-        AppCompatImageView next = view.findViewById(R.id.next);
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
-
         persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
         month -= 1;
@@ -119,18 +53,76 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             year -= 1;
             month += 12;
         }
-
         month += 1;
-        persianDate.setMonth(month);
-        persianDate.setYear(year);
-        persianDate.setDayOfMonth(1);
+        persianDate = new PersianDate(year, month, 1);
+
+        long baseJdn = DateConverter.persianToJdn(persianDate);
+        int monthLength = (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year,
+                month == 12 ? 1 : month + 1, 1) - baseJdn);
+
+        int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
+
+        long todayJdn = DateConverter.persianToJdn(Utils.getToday());
+        for (int i = 0; i < monthLength; i++) {
+            DayEntity dayEntity = new DayEntity();
+            dayEntity.setNum(Utils.formatNumber(i + 1));
+            dayEntity.setDayOfWeek(dayOfWeek);
+
+            List<AbstractEvent> events = Utils.getEvents(baseJdn + i);
+
+            if (dayOfWeek == 6 || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
+                dayEntity.setHoliday(true);
+            }
+
+            if (events.size() > 0) {
+                dayEntity.setEvent(true);
+            }
+
+            dayEntity.setJdn(baseJdn + i);
+
+            if (baseJdn + i == todayJdn) {
+                dayEntity.setToday(true);
+            }
+
+            days.add(dayEntity);
+            dayOfWeek++;
+            if (dayOfWeek == 7) {
+                dayOfWeek = 0;
+            }
+        }
+        this.days = days;
+
+        //FIXME: This is wrooong
+        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
+        long firstFridayJdn = startOfYearJdn - DateConverter.jdnToCivil(startOfYearJdn).getDayOfWeek() % 7;
+        weekOfYearStart = 1 + (int) ((baseJdn - firstFridayJdn) / 7);
+        weeksCount = (int) (1 + (baseJdn + monthLength - firstFridayJdn) / 7) - weekOfYearStart;
+        Toast.makeText(getContext(),
+                "WROONG: " + weekOfYearStart + "-" + weeksCount + "-" + (weekOfYearStart + weeksCount),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
+
+        AppCompatImageView prev = view.findViewById(R.id.prev);
+        AppCompatImageView next = view.findViewById(R.id.next);
+        prev.setOnClickListener(this);
+        next.setOnClickListener(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MonthAdapter(getContext(), this, days);
+        fillTheField();
+        adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
@@ -139,7 +131,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 .findFragmentByTag(CalendarFragment.class.getName());
 
         if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.selectDay(Utils.getToday());
+            calendarFragment.selectDay(DateConverter.persianToJdn(Utils.getToday()));
             updateTitle();
         }
 
@@ -173,17 +165,16 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         super.onDestroy();
     }
 
-    public void onClickItem(PersianDate day) {
-        calendarFragment.selectDay(day);
+    public void onClickItem(long jdn) {
+        calendarFragment.selectDay(jdn);
     }
 
-    public void onLongClickItem(PersianDate day) {
-        calendarFragment.addEventOnCalendar(day);
+    public void onLongClickItem(long jdn) {
+        calendarFragment.addEventOnCalendar(jdn);
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.next:
                 calendarFragment.changeMonth(1);

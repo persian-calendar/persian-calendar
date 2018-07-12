@@ -45,6 +45,7 @@ public class UpdateUtils {
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = Utils.getToday();
+        long jdn = DateConverter.persianToJdn(persian);
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
@@ -142,7 +143,7 @@ public class UpdateUtils {
             if (updateDate) {
                 owghat = Utils.getNextOghatTime(context, currentClock, true);
 
-                List<AbstractEvent> events = Utils.getEvents(persian);
+                List<AbstractEvent> events = Utils.getEvents(jdn);
                 String holidays = Utils.getEventsTitle(events, true);
 
                 if (!TextUtils.isEmpty(holidays)) {

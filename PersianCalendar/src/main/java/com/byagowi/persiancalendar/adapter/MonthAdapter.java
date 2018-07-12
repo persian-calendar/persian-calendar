@@ -30,13 +30,17 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private TypedValue shapeSelectDay = new TypedValue();
     private final int firstDayDayOfWeek;
     private final int totalDays;
+    private int weekOfYearStart;
+    private int weeksCount;
 
-    public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days) {
+    public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days, int weekOfYearStart, int weeksCount) {
         firstDayDayOfWeek = days.get(0).getDayOfWeek();
         totalDays = days.size();
         this.monthFragment = monthFragment;
         this.context = context;
         this.days = days;
+        this.weekOfYearStart = weekOfYearStart;
+        this.weeksCount = weeksCount;
         isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
@@ -86,7 +90,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             if (position - 7 - firstDayDayOfWeek >= 0) {
                 monthFragment.onClickItem(days
                         .get(position - 7 - firstDayDayOfWeek)
-                        .getPersianDate());
+                        .getJdn());
 
                 int prevDay = selectedDay;
                 selectedDay = position;
@@ -106,7 +110,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             try {
                 monthFragment.onLongClickItem(days
                         .get(position - 7 - firstDayDayOfWeek)
-                        .getPersianDate());
+                        .getJdn());
             } catch (Exception e) {
                 // Ignore it for now
                 // I guess it will occur on CyanogenMod phones
