@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -26,7 +25,6 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;
 
@@ -40,7 +38,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private int weekOfYearStart;
     private int weeksCount;
 
-    private void fillTheField() {
+    private void fillTheFields() {
         List<DayEntity> days = new ArrayList<>();
         persianDate = Utils.getToday();
         int month = persianDate.getMonth() - offset;
@@ -93,13 +91,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         this.days = days;
 
         //FIXME: This is wrooong
-        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
-        long firstFridayJdn = startOfYearJdn - DateConverter.jdnToCivil(startOfYearJdn).getDayOfWeek() % 7;
-        weekOfYearStart = 1 + (int) ((baseJdn - firstFridayJdn) / 7);
-        weeksCount = (int) (1 + (baseJdn + monthLength - firstFridayJdn) / 7) - weekOfYearStart;
-        Toast.makeText(getContext(),
-                "WROONG: " + weekOfYearStart + "-" + weeksCount + "-" + (weekOfYearStart + weeksCount),
-                Toast.LENGTH_LONG).show();
+//        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
+//        long firstFridayJdn = startOfYearJdn - DateConverter.jdnToCivil(startOfYearJdn).getDayOfWeek() - 2;
+//        weekOfYearStart = (int) (1 + Math.ceil((double) (baseJdn - firstFridayJdn) / 7));
+//        weeksCount = (int) (1 + Math.ceil((double) (baseJdn + monthLength - firstFridayJdn) / 7)) - weekOfYearStart;
     }
 
     @Override
@@ -121,7 +116,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
         recyclerView.setLayoutManager(layoutManager);
-        fillTheField();
+        fillTheFields();
         adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
@@ -187,6 +182,9 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateTitle() {
+//        Toast.makeText(getContext(),
+//                weekOfYearStart + "-" + weeksCount + "-" + (weekOfYearStart + weeksCount),
+//                Toast.LENGTH_LONG).show();
         Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(persianDate),
                 Utils.formatNumber(persianDate.getYear()));
     }
