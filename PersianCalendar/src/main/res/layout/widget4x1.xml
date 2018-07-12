@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:textDirection="rtl"
+    android:layoutDirection="rtl"
     tools:context=".Widget4x1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:gravity="right"
         android:orientation="horizontal">
 
         <TextView

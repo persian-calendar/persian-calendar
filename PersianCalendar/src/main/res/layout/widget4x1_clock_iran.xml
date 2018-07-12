@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:textDirection="rtl"
+    android:layoutDirection="rtl"
     tools:context=".Widget4x1"
     tools:targetApi="JELLY_BEAN_MR1">
 
@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:gravity="right"
         android:orientation="horizontal">
 
         <TextClock
@@ -23,7 +24,6 @@
             android:fontFamily="sans-serif-thin"
             android:format12Hour="H:mm"
             android:format24Hour="H:mm"
-            android:gravity="right"
             android:textColor="@android:color/white"
             android:textSize="36dp"
             android:timeZone="Asia/Tehran" />
@@ -34,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:gravity="right"
             android:textColor="@android:color/white"
             android:textSize="12dp" />
     </LinearLayout>

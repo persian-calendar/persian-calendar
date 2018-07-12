@@ -40,7 +40,6 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Utils.changeAppLanguage(context);
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CivilDate civil = new CivilDate(calendar);
         PersianDate persian = Utils.getToday();

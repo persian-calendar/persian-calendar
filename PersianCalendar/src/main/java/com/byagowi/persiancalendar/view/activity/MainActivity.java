@@ -90,18 +90,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 ? R.style.DarkTheme
                 : R.style.LightTheme);
 
+        Utils.changeAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
         Utils.startUpdateWorker();
-//        if (!Utils.isServiceRunning(this, ApplicationService.class)) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//                startForegroundService(new Intent(this, ApplicationService.class));
-//            startService(new Intent(this, ApplicationService.class));
-//        }
-
         UpdateUtils.update(getApplicationContext(), true);
 
         setContentView(R.layout.activity_main);
