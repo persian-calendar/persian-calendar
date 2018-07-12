@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -81,6 +82,7 @@ public class CalendarFragment extends Fragment
     private AppCompatImageView todayIcon;
 
     private AppCompatImageView moreOwghat;
+    private AppCompatImageView owghatIcon;
 
     private CardView owghat;
     private CardView event;
@@ -149,6 +151,7 @@ public class CalendarFragment extends Fragment
         holidayTitle = view.findViewById(R.id.holiday_title);
 
         owghat = view.findViewById(R.id.owghat);
+        owghatIcon = view.findViewById(R.id.owghat_icon);
         event = view.findViewById(R.id.cardEvent);
 
         monthViewPager = view.findViewById(R.id.calendar_pager);
@@ -182,6 +185,12 @@ public class CalendarFragment extends Fragment
         PersianDate today = Utils.getToday();
         Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
+
+        // Easter egg to test AthanActivity
+        owghatIcon.setOnLongClickListener(v -> {
+            startActivity(new Intent(getContext(), AthanActivity.class));
+            return true;
+        });
 
         return view;
     }
