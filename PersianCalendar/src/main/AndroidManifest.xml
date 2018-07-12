@@ -121,10 +121,6 @@
                 android:value="Persian Calendar"/>
         </service>
 
-        <!--<service-->
-            <!--android:name=".service.ApplicationService"-->
-            <!--android:label="Calendar Service"/>-->
-
         <service
             android:name=".service.PersianCalendarTileService"
             android:icon="@drawable/day13"

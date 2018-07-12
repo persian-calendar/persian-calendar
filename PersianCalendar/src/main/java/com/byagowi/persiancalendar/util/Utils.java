@@ -355,30 +355,6 @@ public class Utils {
         return result;
     }
 
-    static public String getPersianFormattedClock(Calendar calendar) {
-        String timeText = null;
-
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (!clockIn24) {
-            if (calendar.get(Calendar.HOUR_OF_DAY) >= 12) {
-                timeText = language.equals("ckb")
-                        ? PM_IN_CKB
-                        : PM_IN_PERSIAN;
-                hour -= 12;
-            } else {
-                timeText = language.equals("ckb")
-                        ? AM_IN_CKB
-                        : AM_IN_PERSIAN;
-            }
-        }
-
-        String result = clockToString(hour, calendar.get(Calendar.MINUTE));
-        if (!clockIn24) {
-            result = result + " " + timeText;
-        }
-        return result;
-    }
-
     static public String formatNumber(int number) {
         return formatNumber(Integer.toString(number));
     }
@@ -794,28 +770,6 @@ public class Utils {
 
         return titles.toString();
     }
-
-//    static public void loadApp(Context context) {
-//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        Calendar startTime = Calendar.getInstance();
-//        startTime.set(Calendar.HOUR_OF_DAY, 0);
-//        startTime.set(Calendar.MINUTE, 1);
-//        Intent intent = new Intent(context, BroadcastReceivers.class);
-//        intent.setAction(BROADCAST_RESTART_APP);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
-//    }
-
-    static public boolean isServiceRunning(Context context, Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     static public void loadAlarms(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

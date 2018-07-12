@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
-//import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -56,9 +55,6 @@ public class UpdateUtils {
         //
         //
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
-        RemoteViews remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
-        RemoteViews remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
         String colorInt = Utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
@@ -68,6 +64,7 @@ public class UpdateUtils {
                 widget2x2 = new ComponentName(context, Widget2x2.class);
 
         if (manager.getAppWidgetIds(widget1x1).length != 0) {
+            RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
             remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
             remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
@@ -88,12 +85,25 @@ public class UpdateUtils {
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
+            RemoteViews remoteViews4, remoteViews2;
+            boolean enableClock = Utils.isWidgetClock();
+            if (enableClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (!Utils.isIranTime()) {
+                    remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock);
+                    remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock);
+                } else {
+                    remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock_iran);
+                    remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock_iran);
+                }
+            } else {
+                remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
+                remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
+            }
             // Widget 4x1
             remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
             remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
             remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
 
-            String text1;
             String text2;
             String text3 = "";
             String weekDayName = Utils.getWeekDayName(civil);
@@ -101,21 +111,16 @@ public class UpdateUtils {
             String civilDate = Utils.dateToString(context, civil);
             String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
 
-            String time = Utils.getPersianFormattedClock(calendar);
-            boolean enableClock = Utils.isWidgetClock();
-
             if (enableClock) {
                 text2 = weekDayName + " " + date;
-                text1 = time;
                 if (Utils.isIranTime()) {
                     text3 = "(" + context.getString(R.string.iran_time) + ")";
                 }
             } else {
-                text1 = weekDayName;
+                remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
                 text2 = date;
             }
 
-            remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, text1);
             remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
             remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
             remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
@@ -129,9 +134,8 @@ public class UpdateUtils {
 
             if (enableClock) {
                 text2 = weekDayName + " " + persianDate;
-                text1 = time;
             } else {
-                text1 = weekDayName;
+                remoteViews2.setTextViewText(R.id.time_2x2, weekDayName);
                 text2 = persianDate;
             }
 
@@ -172,7 +176,6 @@ public class UpdateUtils {
                 remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
             }
 
-            remoteViews2.setTextViewText(R.id.time_2x2, text1);
             remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
             remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);

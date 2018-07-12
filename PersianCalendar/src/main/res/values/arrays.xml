@@ -34,6 +34,7 @@
         <item>White</item>
         <item>Red</item>
         <item>Green</item>
+        <item>Yellow</item>
         <item>Black</item>
     </string-array>
 
@@ -41,6 +42,7 @@
         <item>#ffffffff</item>
         <item>#ffe65100</item>
         <item>#ff00796b</item>
+        <item>#fffef200</item>
         <item>#ff202020</item>
     </string-array>
 
