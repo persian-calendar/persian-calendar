@@ -85,12 +85,9 @@ public class UpdateUtils {
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
             RemoteViews remoteViews4, remoteViews2;
-            boolean enableClock = Utils.isWidgetClock();
+            boolean enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1;
             if (enableClock) {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock_17);
-                    remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock_17);
-                } else if (!Utils.isIranTime()) {
+                if (!Utils.isIranTime()) {
                     remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock);
                     remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock);
                 } else {
