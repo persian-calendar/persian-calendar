@@ -204,8 +204,7 @@ public class UpdateUtils {
 
         int icon = Utils.getDayIconResource(persian.getDayOfMonth());
 
-//        ApplicationService applicationService = ApplicationService.getInstance();
-//        if (applicationService != null && Utils.isNotifyDate()) {
+        if (Utils.isNotifyDate()) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -241,8 +240,7 @@ public class UpdateUtils {
             }
 
             notificationManager.notify(NOTIFICATION_ID, builder.build());
-//            context.startForeground(NOTIFICATION_ID, builder.build());
-//        }
+        }
 
         mExtensionData = new ExtensionData().visible(true).icon(icon)
                 .status(status)
