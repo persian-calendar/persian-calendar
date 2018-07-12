@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -135,11 +137,6 @@ public class Utils {
         loadAlarms(context);
         loadEvents(context);
     }
-
-
-    static private List<PersianCalendarEvent>[] persianCalendarEvents;
-    static private List<IslamicCalendarEvent>[] islamicCalendarEvents;
-    static private List<GregorianCalendarEvent>[] gregorianCalendarEvents;
 
     static private String[] persianMonths;
     static private String[] islamicMonths;
@@ -579,9 +576,15 @@ public class Utils {
         return "";
     }
 
+    static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
+    static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
+    static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+        if (enabledTypes.isEmpty())
+            enabledTypes = new HashSet<>(Arrays.asList("iran_holidays"));
 
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
@@ -591,15 +594,10 @@ public class Utils {
         boolean iranOthers = enabledTypes.contains("iran_others");
         boolean international = enabledTypes.contains("international");
 
-        List<PersianCalendarEvent>[] persianCalendarEvents = new ArrayList[32];
-        List<IslamicCalendarEvent>[] islamicCalendarEvents = new ArrayList[32];
-        List<GregorianCalendarEvent>[] gregorianCalendarEvents = new ArrayList[32];
+        SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
+        SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
+        SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
 
-        for (int i = 0; i < 32; ++i) {
-            persianCalendarEvents[i] = new ArrayList<>();
-            islamicCalendarEvents[i] = new ArrayList<>();
-            gregorianCalendarEvents[i] = new ArrayList<>();
-        }
         try {
             JSONArray days;
             int length;
@@ -651,7 +649,12 @@ public class Utils {
                         else if (type.equals ("Afghanistan"))
                             title += " (افغانستان)";
                     }
-                    persianCalendarEvents[day].add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
+                    List<PersianCalendarEvent> list = persianCalendarEvents.get(month * 100 + day);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                        persianCalendarEvents.put(month * 100 + day, list);
+                    }
+                    list.add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
                 }
             }
 
@@ -695,7 +698,12 @@ public class Utils {
                             title += "افغانستان، ";
                     }
                     title += formatNumber(day) + " " + islamicMonths[month - 1] + ")";
-                    islamicCalendarEvents[day].add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
+                    List<IslamicCalendarEvent> list = islamicCalendarEvents.get(month * 100 + day);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                        islamicCalendarEvents.put(month * 100 + day, list);
+                    }
+                    list.add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
                 }
             }
 
@@ -710,7 +718,12 @@ public class Utils {
 
                 if (international) {
                     title += " (" + formatNumber(day) + " " + gregorianMonths[month - 1] + ")";
-                    gregorianCalendarEvents[day].add(new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false));
+                    List<GregorianCalendarEvent> list = gregorianCalendarEvents.get(month * 100 + day);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                        gregorianCalendarEvents.put(month * 100 + day, list);
+                    }
+                    list.add(new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false));
                 }
             }
 
@@ -722,21 +735,24 @@ public class Utils {
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
     }
 
-    public static List<AbstractEvent> getEvents(long jdn) {
+    static final List<PersianCalendarEvent> emptyPersianCalendarEventList = Collections.emptyList();
+    static final List<IslamicCalendarEvent> emptyIslamicCalendarEventList = Collections.emptyList();
+    static final List<GregorianCalendarEvent> emptyGregorianCalendarEventList = Collections.emptyList();
+    static public List<AbstractEvent> getEvents(long jdn) {
         PersianDate day = DateConverter.jdnToPersian(jdn);
         CivilDate civil = DateConverter.jdnToCivil(jdn);
         IslamicDate islamic = DateConverter.jdnToIslamic(jdn);
 
         List<AbstractEvent> result = new ArrayList<>();
-        for (PersianCalendarEvent persianCalendarEvent : persianCalendarEvents[day.getDayOfMonth()])
+        for (PersianCalendarEvent persianCalendarEvent : persianCalendarEvents.get(day.getMonth() * 100 + day.getDayOfMonth(), emptyPersianCalendarEventList))
             if (persianCalendarEvent.getDate().equals(day))
                 result.add(persianCalendarEvent);
 
-        for (IslamicCalendarEvent islamicCalendarEvent : islamicCalendarEvents[islamic.getDayOfMonth()])
+        for (IslamicCalendarEvent islamicCalendarEvent : islamicCalendarEvents.get(islamic.getMonth() * 100 + islamic.getDayOfMonth(), emptyIslamicCalendarEventList))
             if (islamicCalendarEvent.getDate().equals(islamic))
                 result.add(islamicCalendarEvent);
 
-        for (GregorianCalendarEvent gregorianCalendarEvent : gregorianCalendarEvents[civil.getDayOfMonth()])
+        for (GregorianCalendarEvent gregorianCalendarEvent : gregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth(), emptyGregorianCalendarEventList))
             if (gregorianCalendarEvent.getDate().equals(civil))
                 result.add(gregorianCalendarEvent);
 

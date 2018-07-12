@@ -2,17 +2,13 @@ package calendar;
 
 import android.util.SparseArray;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Credits of this work goes to Saeed Rasooli and his
  * Kudos to his creative work!
  * I've tried to optimize its runtime perforamance so it is different to the way used on starcal.
  */
 class IslamicDateConverter {
-    private static HashMap<Integer, long[]> yearsMonthsInJd = new HashMap<>();
+    private static SparseArray<long[]> yearsMonthsInJd = new SparseArray<>();
 
     private static int supportedYearsStart;
     private static long[] yearsStartJd;
@@ -56,7 +52,7 @@ class IslamicDateConverter {
     }
 
     static long hijriToJd(int year, int month, int day) {
-        if (!yearsMonthsInJd.containsKey(year))
+        if (yearsMonthsInJd.get(year) == null)
             return -1;
 
         long calculatedDay = yearsMonthsInJd.get(year)[month - 1];
