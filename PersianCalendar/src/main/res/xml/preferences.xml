@@ -39,8 +39,8 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="PersianDigits"
             android:icon="@drawable/ic_looks_4_setting"
+            android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
@@ -48,7 +48,7 @@
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
-            android:icon="@drawable/ic_brush_setting"
+            android:icon="@drawable/ic_theme_setting"
             android:key="Theme"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
@@ -60,8 +60,8 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="NotifyDate"
             android:icon="@drawable/ic_notification_setting"
+            android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
@@ -77,7 +77,7 @@
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
-            android:icon="@drawable/ic_theme_setting"
+            android:icon="@drawable/ic_brush_setting"
             android:key="SelectedWidgetTextColor"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
