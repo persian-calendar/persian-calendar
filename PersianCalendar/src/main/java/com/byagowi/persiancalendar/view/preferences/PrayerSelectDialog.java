@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 import com.byagowi.persiancalendar.R;
 

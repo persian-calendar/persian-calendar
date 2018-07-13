@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.view.preferences;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceDialogFragmentCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;

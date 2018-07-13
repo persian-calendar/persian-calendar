@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.preference.EditTextPreference;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.EditTextPreference;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.Constants;

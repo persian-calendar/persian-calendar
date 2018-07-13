@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/calendars_card"
@@ -8,7 +8,7 @@
     android:layout_margin="@dimen/card_margin"
     app:cardBackgroundColor="?attr/colorCard">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -16,12 +16,12 @@
         app:dividerPadding="@dimen/divider_margin"
         app:showDividers="middle">
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/calendars_card_icon"
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
@@ -30,7 +30,7 @@
                 android:tint="?attr/colorIcon"
                 app:srcCompat="@drawable/ic_event" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/week_day_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -39,7 +39,7 @@
                 android:textSize="@dimen/text_size_title"
                 tools:text="Calendar" />
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="right|end"
@@ -47,7 +47,7 @@
                 android:layout_marginRight="@dimen/icon_margin"
                 android:gravity="end|right|center_vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/today_icon"
                     android:layout_width="18dp"
                     android:layout_height="match_parent"
@@ -55,7 +55,7 @@
                     android:tint="?attr/colorTextPrimary"
                     app:srcCompat="@drawable/ic_restore_modified" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/today"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -64,9 +64,9 @@
                     android:textColor="?attr/colorTextPrimary"
                     android:textSize="@dimen/text_size_title" />
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </android.support.v7.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
             app:justifyContent="center"
             app:showDividers="middle">
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/shamsi_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                 android:gravity="top|center_horizontal|fill_vertical"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/shamsi_date_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                     android:textSize="32sp"
                     tools:text="a" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/shamsi_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,9 +111,9 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="a\nb" />
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/gregorian_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                 android:gravity="top|center_horizontal|fill_vertical"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gregorian_date_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                     android:textSize="32sp"
                     tools:text="a" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gregorian_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,9 +141,9 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="a\nb" />
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/islamic_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                 android:gravity="top|center_horizontal|fill_vertical"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/islamic_date_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                     android:textSize="32sp"
                     tools:text="a" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/islamic_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -171,11 +171,11 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="a\nb" />
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </com.google.android.flexbox.FlexboxLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/diff_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -189,6 +189,6 @@
             android:visibility="gone"
             tools:text="Diff" />
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:background="?attr/colorBackground">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/fajr"
         android:scaleType="centerCrop"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/athan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:background="@null"
         android:layout_marginRight="30dp"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

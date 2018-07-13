@@ -7,19 +7,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/calendar_pager"
             android:layout_width="match_parent"
             android:layout_height="@dimen/grid_calendar_height" />
 
         <include layout="@layout/calendars_card" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:visibility="visible"
             app:cardBackgroundColor="?attr/colorCard">
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -35,11 +35,11 @@
                 app:dividerPadding="@dimen/divider_margin"
                 app:showDividers="middle">
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_margin="@dimen/icon_margin"
@@ -47,7 +47,7 @@
                         android:tint="?attr/colorIcon"
                         app:srcCompat="@drawable/ic_event_note" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/event_card_title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -56,36 +56,36 @@
                         android:textColor="?attr/colorTextPrimary"
                         android:textSize="@dimen/text_size_title" />
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <android.support.v7.widget.LinearLayoutCompat
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/card_padding">
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/eventContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/holiday_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextHoliday"
                             android:textSize="@dimen/text_size_description" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextNormal"
                             android:textSize="@dimen/text_size_description" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/event_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -93,22 +93,22 @@
                             android:textSize="@dimen/text_size_description" />
 
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/owghat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/card_margin"
             app:cardBackgroundColor="?attr/colorCard">
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
@@ -118,16 +118,16 @@
                 app:showDividers="middle">
 
                 <!-- title: prayer times -->
-                <android.support.v7.widget.LinearLayoutCompat
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/owghat_icon"
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
@@ -136,7 +136,7 @@
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_access_time" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/owghat_text"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -145,9 +145,9 @@
                             android:textColor="?attr/colorTextPrimary"
                             android:textSize="@dimen/text_size_title" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/more_owghat"
                         android:layout_gravity="center_vertical"
                         android:layout_width="@dimen/icon_size"
@@ -155,7 +155,7 @@
                         android:tint="?attr/colorIcon"
                         app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <!-- actual content -->
                 <com.google.android.flexbox.FlexboxLayout
@@ -173,7 +173,7 @@
                     app:justifyContent="center"
                     app:showDividers="middle">
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/imsakLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/iconImasak"
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
@@ -190,7 +190,7 @@
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_4" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/imsakText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/imsak"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -207,10 +207,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/fajrLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -218,7 +218,7 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/iconMorning"
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
@@ -226,7 +226,7 @@
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_4" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/fajrText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -235,7 +235,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/fajr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -243,10 +243,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/sunriseLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -255,14 +255,14 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_7" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/sunriseText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/sunrise"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -279,9 +279,9 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/dhuhrLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -289,14 +289,14 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_5" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/dhuhrText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -305,7 +305,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/dhuhr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -313,10 +313,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/asrLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -325,14 +325,14 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_5" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/asrText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/asr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -349,10 +349,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/sunsetLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -361,14 +361,14 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_6" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/sunsetText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/sunset"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -385,9 +385,9 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/maghribLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -395,14 +395,14 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_3" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/maghribText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -411,7 +411,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/maghrib"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -419,10 +419,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/ishaLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -431,14 +431,14 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_3" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/ishaText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -447,7 +447,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/isgha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -455,10 +455,10 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-                    <android.support.v7.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/midnightLayout"
                         android:layout_width="@dimen/owghatSize"
                         android:layout_height="wrap_content"
@@ -467,14 +467,14 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="@dimen/icon_size"
                             android:layout_height="@dimen/icon_size"
                             android:gravity="center"
                             android:tint="?attr/colorIcon"
                             app:srcCompat="@drawable/ic_brightness_2" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/midnightText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -483,7 +483,7 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_note" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/midnight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -491,14 +491,14 @@
                             android:textSize="@dimen/text_size_description"
                             tools:text="12:34" />
 
-                    </android.support.v7.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
