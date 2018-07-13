@@ -26,7 +26,7 @@
 
     <androidx.preference.PreferenceCategory android:title="@string/user_interface">
 
-        <androidx.preference..ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
