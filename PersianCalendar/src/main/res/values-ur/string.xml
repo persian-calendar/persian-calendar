@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="compass_disabled_message">شارٹ کٹ غیر فعال ہیں!</string>
+    <string name="compass_long_label">قبلہ نما/قطب نما</string>
+    <string name="compass_short_label">قطب نما</string>
+
+    <string name="preference_disabled_message">شارٹ کٹ غیر فعال ہیں!</string>
+    <string name="preference_long_label">ترتیبات</string>
+    <string name="preference_short_label">ترتیبات</string>
+
+    <string name="converter_disabled_message">شارٹ کٹ غیر فعال ہیں!</string>
+    <string name="converter_long_label">تاریخ کنورٹر</string>
+    <string name="converter_short_label">کنورٹر</string>
+</resources>

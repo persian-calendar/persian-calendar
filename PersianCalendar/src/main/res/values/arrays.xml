@@ -51,6 +51,7 @@
         <item>دری</item>
         <item>پښتو</item>
         <item>کوردی</item>
+        <item>اردو</item>
         <item>English</item>
     </string-array>
 
@@ -59,6 +60,7 @@
         <item>fa-AF</item>
         <item>ps</item>
         <item>ckb</item>
+        <item>ur</item>
         <item>en</item>
     </string-array>
 
