@@ -1,19 +1,26 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.MatrixCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.cardview.widget.CardView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,11 +28,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.adapter.LocationAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
@@ -35,6 +46,8 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -174,7 +187,7 @@ public class CalendarFragment extends Fragment
         shamsiDate.setOnClickListener(this);
         shamsiDateDay.setOnClickListener(this);
 
-        String cityName = Utils.getCityName(getContext(),false);
+        String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
             ((TextView) view.findViewById(R.id.owghat_text))
                     .append(" (" + cityName + ")");
@@ -349,7 +362,7 @@ public class CalendarFragment extends Fragment
                 Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
                         gregorianDate.getText().toString().replace("\n", " "));
                 break;
-                
+
             case R.id.islamic_date:
             case R.id.islamic_date_day:
                 Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
@@ -416,6 +429,18 @@ public class CalendarFragment extends Fragment
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
+
+        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView.SearchAutoComplete searchAutoComplete = search.findViewById(androidx.appcompat.R.id.search_src_text);
+        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, Arrays.asList("A", "B")));
+        searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+            // Your code for onitemclick
+            Toast.makeText(getContext(), "Fish", Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     @Override

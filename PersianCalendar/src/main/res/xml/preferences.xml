@@ -86,16 +86,19 @@
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="IranTime"
+            android:icon="@drawable/ic_timezone_setting"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
+            android:icon="@drawable/ic_watch_setting"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
         <androidx.preference.SwitchPreferenceCompat
+            android:icon="@drawable/ic_ampm_setting"
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"

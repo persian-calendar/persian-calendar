@@ -110,4 +110,5 @@
     <string name="user_interface">ڕووکار</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
+    <string name="search">گەڕان لە بۆنەکاندا</string>
 </resources>

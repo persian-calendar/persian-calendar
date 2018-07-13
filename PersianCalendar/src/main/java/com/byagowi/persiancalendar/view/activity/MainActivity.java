@@ -171,10 +171,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     boolean settingHasChanged = false;
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
+        if (key.equals("AppLanguage") || key.equals("Theme"))
+            restartActivity(PREFERENCE);
         UpdateUtils.update(getApplicationContext(), true);
-
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
