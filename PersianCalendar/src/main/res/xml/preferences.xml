@@ -47,7 +47,7 @@
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
-            android:icon="@drawable/ic_theme_setting"
+            android:icon="@drawable/ic_brush_setting"
             android:key="Theme"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
