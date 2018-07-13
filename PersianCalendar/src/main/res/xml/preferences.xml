@@ -3,7 +3,7 @@
 
     <androidx.preference.PreferenceCategory android:title="@string/general">
 
-        <android.support.v14.preference.MultiSelectListPreference
+        <androidx.preference.MultiSelectListPreference
             android:defaultValue="@array/default_holidays"
             android:dialogTitle="@string/events"
             android:entries="@array/holidays_types"
@@ -13,7 +13,7 @@
             android:summary="@string/events_summary"
             android:title="@string/events" />
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
@@ -26,7 +26,7 @@
 
     <androidx.preference.PreferenceCategory android:title="@string/user_interface">
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference..ListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
@@ -34,13 +34,13 @@
             android:negativeButtonText="@string/cancel"
             android:title="@string/language" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
@@ -53,20 +53,20 @@
 
     <androidx.preference.PreferenceCategory android:title="@string/widget_notification_dashclock">
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:dependency="NotifyDate"
             android:key="NotifyDateLockScreen"
             android:summary="@string/notify_date_lock_screen_summary"
             android:title="@string/notify_date_lock_screen" />
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
@@ -75,19 +75,19 @@
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <aandroidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
@@ -97,7 +97,7 @@
 
     <androidx.preference.PreferenceCategory android:title="@string/pray_times_calculation_setting">
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="Tehran"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
