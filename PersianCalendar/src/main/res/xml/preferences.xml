@@ -8,6 +8,7 @@
             android:dialogTitle="@string/events"
             android:entries="@array/holidays_types"
             android:entryValues="@array/holidays_values"
+            android:icon="@drawable/ic_event_setting"
             android:key="holiday_types"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/events_summary"
@@ -17,6 +18,7 @@
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
+            android:icon="@drawable/ic_plus_1_setting"
             android:key="islamicOffset"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/islamic_offset_summary"
@@ -30,6 +32,7 @@
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
+            android:icon="@drawable/ic_translate_setting"
             android:key="AppLanguage"
             android:negativeButtonText="@string/cancel"
             android:title="@string/language" />
@@ -44,6 +47,7 @@
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
+            android:icon="@drawable/ic_theme_setting"
             android:key="Theme"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
@@ -62,6 +66,7 @@
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:dependency="NotifyDate"
+            android:icon="@drawable/ic_lock_outline_setting"
             android:key="NotifyDateLockScreen"
             android:summary="@string/notify_date_lock_screen_summary"
             android:title="@string/notify_date_lock_screen" />
@@ -70,6 +75,7 @@
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
+            android:icon="@drawable/ic_theme_setting"
             android:key="SelectedWidgetTextColor"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
@@ -107,11 +113,13 @@
             android:title="@string/pray_methods" />
 
         <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
+            android:icon="@drawable/ic_gps_setting"
             android:key="dummy"
             android:summary="@string/gps_location_help"
             android:title="@string/gps_location" />
 
         <com.byagowi.persiancalendar.view.preferences.LocationPreference
+            android:icon="@drawable/ic_location_city_setting"
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location" />
@@ -119,6 +127,7 @@
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_coord_setting"
             android:inputType="numberDecimal"
             android:key="Latitude"
             android:negativeButtonText="@string/cancel"
@@ -127,6 +136,7 @@
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_coord_setting"
             android:inputType="numberDecimal"
             android:key="Longitude"
             android:negativeButtonText="@string/cancel"
@@ -135,6 +145,7 @@
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_waves_setting"
             android:inputType="numberDecimal"
             android:key="Altitude"
             android:negativeButtonText="@string/cancel"
@@ -148,6 +159,7 @@
         android:title="@string/athan">
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
+            android:icon="@drawable/ic_gap_setting"
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:negativeButtonText="@string/cancel"
@@ -155,12 +167,14 @@
             android:title="@string/athan_gap" />
 
         <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
+            android:icon="@drawable/ic_speaker_phone_setting"
             android:key="AthanAlarm"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
         <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:icon="@drawable/ic_volume_setting"
             android:key="AthanVolume"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_volume_summary"
