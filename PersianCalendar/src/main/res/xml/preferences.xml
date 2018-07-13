@@ -109,6 +109,7 @@
             android:defaultValue="Tehran"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
+            android:icon="@drawable/ic_method_setting"
             android:key="SelectedPrayTimeMethod"
             android:negativeButtonText="@string/cancel"
             android:summary="@string/pray_methods_calculation"
