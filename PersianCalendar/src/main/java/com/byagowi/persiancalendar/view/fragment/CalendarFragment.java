@@ -21,6 +21,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.cardview.widget.CardView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -434,10 +435,10 @@ public class CalendarFragment extends Fragment
         SearchView.SearchAutoComplete searchAutoComplete = search.findViewById(androidx.appcompat.R.id.search_src_text);
         SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
         search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        search.setInputType(search.getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, Arrays.asList("A", "B")));
+                R.layout.suggestion, android.R.id.text1, Arrays.asList("ایران۱", "ایران۲", "ایران۳", "افغانستان")));
         searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            // Your code for onitemclick
             Toast.makeText(getContext(), "Fish", Toast.LENGTH_SHORT).show();
         });
 
