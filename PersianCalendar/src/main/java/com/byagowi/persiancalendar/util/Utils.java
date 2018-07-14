@@ -59,8 +59,10 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -155,9 +157,13 @@ public class Utils {
 
     static public void startUpdateWorker() {
         PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-                .Builder(UpdateWorker.class, 1, TimeUnit.DAYS);
-        PeriodicWorkRequest photoCheckWork = updateBuilder.build();
-        WorkManager.getInstance().enqueue(photoCheckWork);
+                .Builder(UpdateWorker.class, 2, TimeUnit.HOURS);
+
+        PeriodicWorkRequest updateWork = updateBuilder.build();
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+                "update",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                updateWork);
     }
 
     static public Coordinate getCoordinate(Context context) {
