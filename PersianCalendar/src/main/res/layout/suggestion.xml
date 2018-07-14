@@ -4,6 +4,6 @@
     style="?android:attr/dropDownItemStyle"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@android:color/white"
+    android:background="?attr/colorPrimary"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:textColor="@android:color/black" />
+    android:textColor="@android:color/white" />
