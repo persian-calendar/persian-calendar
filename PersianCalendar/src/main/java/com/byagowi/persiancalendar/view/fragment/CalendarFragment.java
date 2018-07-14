@@ -434,7 +434,8 @@ public class CalendarFragment extends Fragment
         searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
                 R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
         searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            Object ev = Utils.allEnabledEvents.get((int) parent.getItemIdAtPosition(position));
+            Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
+                    (String) parent.getItemAtPosition(position)));
             PersianDate todayPersian = Utils.getToday();
             long todayJdn = DateConverter.persianToJdn(todayPersian);
             IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
