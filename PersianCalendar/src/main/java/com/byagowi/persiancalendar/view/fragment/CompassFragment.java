@@ -7,8 +7,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +22,9 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 /**
  * Compass/Qibla activity

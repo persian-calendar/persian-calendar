@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.view.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +14,9 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
-import calendar.CivilDate;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 /**
  * Created by ebrahim on 3/20/16.
@@ -74,17 +71,15 @@ public class SelectDayDialog extends AppCompatDialogFragment {
             try {
                 switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                     case GREGORIAN:
-                        calendarFragment.bringDate(DateConverter.civilToPersian(
-                                new CivilDate(year, month, day)));
+                        calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
                         break;
 
                     case ISLAMIC:
-                        calendarFragment.bringDate(DateConverter.islamicToPersian(
-                                new IslamicDate(year, month, day)));
+                        calendarFragment.bringDate(DateConverter.islamicToJdn(year, month, day));
                         break;
 
                     case SHAMSI:
-                        calendarFragment.bringDate(new PersianDate(year, month, day));
+                        calendarFragment.bringDate(DateConverter.persianToJdn(year, month, day));
                         break;
                 }
             } catch (RuntimeException e) {

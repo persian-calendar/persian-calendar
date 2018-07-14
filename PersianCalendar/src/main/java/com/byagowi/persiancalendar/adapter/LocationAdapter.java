@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,8 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;

@@ -1,15 +1,16 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.preference.PreferenceDialogFragmentCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.LocationAdapter;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * persian_calendar

@@ -5,11 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +20,11 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import calendar.DateConverter;
 import calendar.PersianDate;
 

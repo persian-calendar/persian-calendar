@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.res.TypedArray;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +9,9 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
     private final MainActivity mainActivity;

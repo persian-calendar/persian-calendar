@@ -1,8 +1,9 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
-import androidx.preference.DialogPreference;
 import android.util.AttributeSet;
+
+import androidx.preference.DialogPreference;
 
 /**
  * Created by ebrahim on 3/26/16.

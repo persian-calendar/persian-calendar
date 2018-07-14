@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.core.app.NotificationCompat;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.PersianDate;

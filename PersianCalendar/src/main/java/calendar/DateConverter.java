@@ -21,10 +21,10 @@ public final class DateConverter {
     }
 
     public static long civilToJdn(CivilDate civil) {
-        long lYear = civil.getYear();
-        long lMonth = civil.getMonth();
-        long lDay = civil.getDayOfMonth();
+        return civilToJdn(civil.getYear(), civil.getMonth(), civil.getDayOfMonth());
+    }
 
+    public static long civilToJdn(long lYear, long lMonth, long lDay) {
         if ((lYear > 1582)
                 || ((lYear == 1582) && (lMonth > 10))
                 || ((lYear == 1582) && (lMonth == 10) && (lDay > 14))) {
@@ -53,14 +53,14 @@ public final class DateConverter {
     private static int NMONTHS = (1405 * 12 + 1);
 
     public static long islamicToJdn(IslamicDate islamic) {
+        return islamicToJdn(islamic.getYear(), islamic.getMonth(), islamic.getDayOfMonth());
+    }
+
+    public static long islamicToJdn(int year, int month, int day) {
         // NMONTH is the number of months between julian day number 1 and
         // the year 1405 A.H. which started immediatly after lunar
         // conjunction number 1048 which occured on September 1984 25d
         // 3h 10m UT.
-        int year = islamic.getYear();
-        int month = islamic.getMonth();
-        int day = islamic.getDayOfMonth();
-
         long tableResult = IslamicDateConverter.hijriToJd(year, month, day);
         if (tableResult != -1)
             return tableResult;
@@ -182,7 +182,7 @@ public final class DateConverter {
         return new PersianDate(year, month, day);
     }
 
-    public static long julianToJdn(long lYear, long lMonth, long lDay) {
+    private static long julianToJdn(long lYear, long lMonth, long lDay) {
 
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
                 + ((275 * lMonth) / 9) + lDay + 1729777;

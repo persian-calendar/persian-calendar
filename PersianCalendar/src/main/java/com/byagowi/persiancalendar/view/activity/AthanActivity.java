@@ -5,8 +5,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +18,9 @@ import com.github.praytimes.PrayTime;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 
 public class AthanActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
     private static final String TAG = AthanActivity.class.getName();

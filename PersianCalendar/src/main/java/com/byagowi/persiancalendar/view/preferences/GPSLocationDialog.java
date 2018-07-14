@@ -11,12 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.preference.PreferenceDialogFragmentCompat;
-import androidx.preference.PreferenceManager;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
@@ -27,6 +21,13 @@ import com.github.praytimes.Coordinate;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 

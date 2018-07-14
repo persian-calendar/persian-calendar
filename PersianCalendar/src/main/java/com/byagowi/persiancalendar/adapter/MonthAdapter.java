@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,9 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private Context context;

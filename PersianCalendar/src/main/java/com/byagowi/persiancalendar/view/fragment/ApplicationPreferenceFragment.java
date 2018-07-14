@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -23,6 +19,11 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreference;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Preference activity

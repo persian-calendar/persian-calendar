@@ -1,11 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +13,11 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;

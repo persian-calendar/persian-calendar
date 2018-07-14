@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -15,9 +14,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import androidx.annotation.RawRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -49,7 +45,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,6 +56,9 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.RawRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import calendar.AbstractDate;
@@ -74,7 +72,6 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
@@ -566,6 +563,8 @@ public class Utils {
     static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
+    static public List<Object> allEnabledEvents;
+    static public List<String> allEnabledEventsTitles;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -585,6 +584,8 @@ public class Utils {
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
         SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
+        ArrayList<Object> allEnabledEvents = new ArrayList<>();
+        ArrayList<String> allEnabledEventsTitles = new ArrayList<>();
 
         try {
             JSONArray days;
@@ -642,7 +643,10 @@ public class Utils {
                         list = new ArrayList<>();
                         persianCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
+                    PersianCalendarEvent ev = new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -691,7 +695,10 @@ public class Utils {
                         list = new ArrayList<>();
                         islamicCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
+                    IslamicCalendarEvent ev = new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -711,7 +718,10 @@ public class Utils {
                         list = new ArrayList<>();
                         gregorianCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false));
+                    GregorianCalendarEvent ev = new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -721,6 +731,8 @@ public class Utils {
         Utils.persianCalendarEvents = persianCalendarEvents;
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
+        Utils.allEnabledEvents = allEnabledEvents;
+        Utils.allEnabledEventsTitles = allEnabledEventsTitles;
     }
 
     static public List<AbstractEvent> getEvents(long jdn) {

@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -12,6 +10,8 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Startup broadcast receiver

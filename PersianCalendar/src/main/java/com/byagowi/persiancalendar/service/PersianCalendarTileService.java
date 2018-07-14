@@ -5,11 +5,11 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import androidx.annotation.RequiresApi;
 
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
+import androidx.annotation.RequiresApi;
 import calendar.PersianDate;
 
 /**

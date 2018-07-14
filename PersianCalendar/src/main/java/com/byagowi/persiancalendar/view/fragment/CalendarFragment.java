@@ -5,22 +5,10 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.MatrixCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.LinearLayoutCompat;
-
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,16 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
-import com.byagowi.persiancalendar.adapter.LocationAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
+import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
+import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -47,8 +35,6 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -56,6 +42,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -387,8 +381,9 @@ public class CalendarFragment extends Fragment
         selectDay(DateConverter.persianToJdn(Utils.getToday()));
     }
 
-    public void bringDate(PersianDate date) {
+    public void bringDate(long jdn) {
         PersianDate today = Utils.getToday();
+        PersianDate date = DateConverter.jdnToPersian(jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
 
@@ -400,7 +395,7 @@ public class CalendarFragment extends Fragment
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
-        selectDay(DateConverter.persianToJdn(date));
+        selectDay(jdn);
     }
 
     @Override
@@ -437,9 +432,30 @@ public class CalendarFragment extends Fragment
         search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         search.setInputType(search.getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
-                R.layout.suggestion, android.R.id.text1, Arrays.asList("ایران۱", "ایران۲", "ایران۳", "افغانستان")));
+                R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
         searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            Toast.makeText(getContext(), "Fish", Toast.LENGTH_SHORT).show();
+            Object ev = Utils.allEnabledEvents.get((int) parent.getItemIdAtPosition(position));
+            PersianDate todayPersian = Utils.getToday();
+            long todayJdn = DateConverter.persianToJdn(todayPersian);
+            IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
+            CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
+
+            if (ev instanceof PersianCalendarEvent) {
+                PersianDate date = ((PersianCalendarEvent) ev).getDate();
+                bringDate(DateConverter.persianToJdn(todayPersian.getYear() +
+                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0),
+                        date.getMonth(), date.getDayOfMonth()));
+            } else if (ev instanceof IslamicCalendarEvent) {
+                IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
+                bringDate(DateConverter.islamicToJdn(todayIslamic.getYear() +
+                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0),
+                        date.getMonth(), date.getDayOfMonth()));
+            } else if (ev instanceof GregorianCalendarEvent) {
+                CivilDate date = ((GregorianCalendarEvent) ev).getDate();
+                bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
+                        date.getMonth(), date.getDayOfMonth()));
+            }
         });
 
     }
