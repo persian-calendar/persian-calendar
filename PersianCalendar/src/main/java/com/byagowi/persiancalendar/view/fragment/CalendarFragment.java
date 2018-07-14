@@ -426,11 +426,10 @@ public class CalendarFragment extends Fragment
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
-        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
-        SearchView.SearchAutoComplete searchAutoComplete = search.findViewById(androidx.appcompat.R.id.search_src_text);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
-        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        search.setInputType(search.getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
                 R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
         searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
@@ -457,6 +456,7 @@ public class CalendarFragment extends Fragment
                                 (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
                         date.getMonth(), date.getDayOfMonth()));
             }
+            searchView.onActionViewCollapsed();
         });
 
     }
