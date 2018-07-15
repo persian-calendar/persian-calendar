@@ -69,7 +69,6 @@ public class Constants {
     public static final String HIJRI_QAMARI = "hijri_qamari";
     public static final String GREGORIAN = "gregorian";
 
-    public static final int MONTHS_LIMIT = 5000; // this should be an even number
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";

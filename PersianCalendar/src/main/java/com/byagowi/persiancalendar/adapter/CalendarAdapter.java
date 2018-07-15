@@ -8,8 +8,10 @@ import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class CalendarAdapter extends FragmentStatePagerAdapter {
+    private static final int MONTHS_LIMIT = 5000; // this should be an even number
 
     public CalendarAdapter(FragmentManager fm) {
         super(fm);
@@ -19,13 +21,23 @@ public class CalendarAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         MonthFragment fragment = new MonthFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.OFFSET_ARGUMENT, position - Constants.MONTHS_LIMIT / 2);
+        bundle.putInt(Constants.OFFSET_ARGUMENT, position - MONTHS_LIMIT / 2);
         fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return Constants.MONTHS_LIMIT;
+        return MONTHS_LIMIT;
+    }
+
+    public static void gotoOffset(ViewPager monthViewPager, int offset) {
+        if (monthViewPager.getCurrentItem() != MONTHS_LIMIT / 2 + offset) {
+            monthViewPager.setCurrentItem(MONTHS_LIMIT / 2 + offset);
+        }
+    }
+
+    public static int calculateOffsetFromPosition(int position) {
+        return position - MONTHS_LIMIT / 2;
     }
 }

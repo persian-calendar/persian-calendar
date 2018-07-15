@@ -168,7 +168,7 @@ public class CalendarFragment extends Fragment
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
 
         monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager()));
-        monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
+        CalendarAdapter.gotoOffset(monthViewPager, 0);
 
         monthViewPager.addOnPageChangeListener(this);
 
@@ -374,9 +374,7 @@ public class CalendarFragment extends Fragment
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 
-        if (monthViewPager.getCurrentItem() != Constants.MONTHS_LIMIT / 2) {
-            monthViewPager.setCurrentItem(Constants.MONTHS_LIMIT / 2);
-        }
+        CalendarAdapter.gotoOffset(monthViewPager, 0);
 
         selectDay(DateConverter.persianToJdn(Utils.getToday()));
     }
@@ -386,8 +384,7 @@ public class CalendarFragment extends Fragment
         PersianDate date = DateConverter.jdnToPersian(jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
-
-        monthViewPager.setCurrentItem(viewPagerPosition + Constants.MONTHS_LIMIT / 2);
+        CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);
 
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition);
@@ -404,10 +401,9 @@ public class CalendarFragment extends Fragment
 
     @Override
     public void onPageSelected(int position) {
-        viewPagerPosition = position - Constants.MONTHS_LIMIT / 2;
-
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition);
+        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                CalendarAdapter.calculateOffsetFromPosition(position));
         intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
