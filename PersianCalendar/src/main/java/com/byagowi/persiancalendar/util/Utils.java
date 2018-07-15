@@ -736,12 +736,15 @@ public class Utils {
                     addOrNot = true;
 
                 if (addOrNot) {
+                    title += " (";
                     if (holiday && afghanistanHolidays && iranHolidays) {
                         if (type.equals("Islamic Iran") || type.equals("Iran"))
-                            title += " (ایران)";
+                            title += "ایران، ";
                         else if (type.equals("Afghanistan"))
-                            title += " (افغانستان)";
+                            title += "افغانستان، ";
                     }
+                    title += formatNumber(day) + " " + persianMonths[month - 1] + ")";
+
                     List<PersianCalendarEvent> list = persianCalendarEvents.get(month * 100 + day);
                     if (list == null) {
                         list = new ArrayList<>();

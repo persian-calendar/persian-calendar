@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+        Utils.changeAppLanguage(this);
     }
 
     boolean settingHasChanged = false;

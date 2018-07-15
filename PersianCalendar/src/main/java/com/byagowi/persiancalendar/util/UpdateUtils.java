@@ -102,84 +102,92 @@ public class UpdateUtils {
                 remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
                 remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
             }
-            // Widget 4x1
-            remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
-            remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
-            remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
 
-            String text2;
-            String text3 = "";
             String mainDateString = Utils.dateToString(date);
 
-            if (enableClock) {
-                text2 = title + Constants.PERSIAN_COMMA + " " + subtitle;;
-                if (Utils.isIranTime()) {
-                    text3 = "(" + context.getString(R.string.iran_time) + ")";
-                }
-            } else {
-                remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
-                text2 = mainDateString + Constants.PERSIAN_COMMA + " " + subtitle;
-            }
+            {
+                // Widget 4x1
+                remoteViews4.setTextColor(R.id.textPlaceholder1_4x1, color);
+                remoteViews4.setTextColor(R.id.textPlaceholder2_4x1, color);
+                remoteViews4.setTextColor(R.id.textPlaceholder3_4x1, color);
 
-            remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
-            remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
-            remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
-            manager.updateAppWidget(widget4x1, remoteViews4);
+                String text2;
+                String text3 = "";
 
-            // Widget 2x2
-            remoteViews2.setTextColor(R.id.time_2x2, color);
-            remoteViews2.setTextColor(R.id.date_2x2, color);
-            remoteViews2.setTextColor(R.id.event_2x2, color);
-            remoteViews2.setTextColor(R.id.owghat_2x2, color);
-
-            if (enableClock) {
-                text2 = title;
-            } else {
-                remoteViews2.setTextViewText(R.id.time_2x2, weekDayName);
-                text2 = mainDateString;
-            }
-
-            Clock currentClock =
-                    new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-
-            String owghat;
-
-            if (updateDate) {
-                owghat = Utils.getNextOghatTime(context, currentClock, true);
-
-                List<AbstractEvent> events = Utils.getEvents(jdn);
-                String holidays = Utils.getEventsTitle(events, true);
-
-                if (!TextUtils.isEmpty(holidays)) {
-                    remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
-                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+                if (enableClock) {
+                    text2 = title;
+                    if (Utils.isIranTime()) {
+                        text3 = "(" + context.getString(R.string.iran_time) + ")";
+                    }
                 } else {
-                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                    remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
+                    text2 = mainDateString;
                 }
+                text2 += Constants.PERSIAN_COMMA + " " + subtitle;
 
-                String nonHolidays = Utils.getEventsTitle(events, false);
+                remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
+                remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
+                remoteViews4.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent);
+                manager.updateAppWidget(widget4x1, remoteViews4);
+            }
 
-                if (!TextUtils.isEmpty(nonHolidays)) {
-                    remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
-                    remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+            {
+                String text2;
+                // Widget 2x2
+                remoteViews2.setTextColor(R.id.time_2x2, color);
+                remoteViews2.setTextColor(R.id.date_2x2, color);
+                remoteViews2.setTextColor(R.id.event_2x2, color);
+                remoteViews2.setTextColor(R.id.owghat_2x2, color);
+
+                if (enableClock) {
+                    text2 = title;
                 } else {
-                    remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
+                    remoteViews2.setTextViewText(R.id.time_2x2, weekDayName);
+                    text2 = mainDateString;
                 }
-            } else {
-                owghat = Utils.getNextOghatTime(context, currentClock, false);
+
+                Clock currentClock =
+                        new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+
+                String owghat;
+
+                if (updateDate) {
+                    owghat = Utils.getNextOghatTime(context, currentClock, true);
+
+                    List<AbstractEvent> events = Utils.getEvents(jdn);
+                    String holidays = Utils.getEventsTitle(events, true);
+
+                    if (!TextUtils.isEmpty(holidays)) {
+                        remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+                    } else {
+                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                    }
+
+                    String nonHolidays = Utils.getEventsTitle(events, false);
+
+                    if (!TextUtils.isEmpty(nonHolidays)) {
+                        remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
+                        remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+                    } else {
+                        remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
+                    }
+                } else {
+                    owghat = Utils.getNextOghatTime(context, currentClock, false);
+                }
+
+                if (owghat != null) {
+                    remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
+                    remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
+                }
+
+                remoteViews2.setTextViewText(R.id.date_2x2, text2);
+
+                remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
+                manager.updateAppWidget(widget2x2, remoteViews2);
             }
-
-            if (owghat != null) {
-                remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
-                remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
-            } else {
-                remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
-            }
-
-            remoteViews2.setTextViewText(R.id.date_2x2, text2);
-
-            remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
-            manager.updateAppWidget(widget2x2, remoteViews2);
         }
 
         //

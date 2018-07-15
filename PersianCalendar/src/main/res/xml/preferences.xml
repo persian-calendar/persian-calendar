@@ -18,7 +18,7 @@
             android:defaultValue="SHAMSI"
             android:entries="@array/calendar_type"
             android:entryValues="@array/calendar_values"
-            android:icon="@drawable/ic_event_setting"
+            android:icon="@drawable/ic_calendar_setting"
             android:key="mainCalendarType"
             android:negativeButtonText="@string/cancel"
             android:title="@string/main_calendar"
