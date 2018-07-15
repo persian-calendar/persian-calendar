@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
@@ -231,12 +232,12 @@ public class UpdateUtils {
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
                 cv.setTextViewText(R.id.title, title);
                 cv.setTextViewText(R.id.body, subtitle);
 
-                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification_big);
                 bcv.setTextViewText(R.id.title, title);
                 bcv.setTextViewText(R.id.body, subtitle);
 
@@ -244,18 +245,29 @@ public class UpdateUtils {
                 String holidays = Utils.getEventsTitle(events, true);
                 if (!TextUtils.isEmpty(holidays))
                     bcv.setTextViewText(R.id.holidays, holidays);
+                else
+                    bcv.setViewVisibility(R.id.holidays, View.GONE);
                 String nonHolidays = Utils.getEventsTitle(events, false);
                 if (!TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
+                else
+                    bcv.setViewVisibility(R.id.nonholidays, View.GONE);
+
                 Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
                 String owghat = Utils.getNextOghatTime(context, currentClock, true);
                 if (!TextUtils.isEmpty(owghat))
-                    bcv.setTextViewText(R.id.nonholidays, nonHolidays);
+                    bcv.setTextViewText(R.id.owghat, owghat);
+                else
+                    bcv.setViewVisibility(R.id.owghat, View.GONE);
 
                 builder = builder
                         .setCustomContentView(cv)
                         .setCustomBigContentView(bcv)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+            }
+
+            if (BuildConfig.DEBUG) {
+                builder = builder.setShowWhen(true);
             }
 
             notificationManager.notify(NOTIFICATION_ID, builder.build());
