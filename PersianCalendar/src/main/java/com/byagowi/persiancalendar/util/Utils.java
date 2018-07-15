@@ -96,7 +96,6 @@ import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
-import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
@@ -204,6 +203,7 @@ public class Utils {
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
     static private CalendarTypeEnum mainCalendar;
+    static private String comma;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -229,6 +229,7 @@ public class Utils {
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
         mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
+        comma = language.equals("en") ? "," : "،";
     }
 
     static public boolean isIranTime() {
@@ -462,24 +463,28 @@ public class Utils {
         switch (calendar) {
             case ISLAMIC:
                 return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-                        Constants.PERSIAN_COMMA + " " +
+                        comma + " " +
                         Utils.dateToString(DateConverter.jdnToCivil(jdn));
             case GREGORIAN:
                 return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-                        Constants.PERSIAN_COMMA + " " +
+                        comma + " " +
                         Utils.dateToString(DateConverter.civilToIslamic(
                                 DateConverter.jdnToCivil(jdn), getIslamicOffset()));
             case SHAMSI:
             default:
                 return Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
-                        Constants.PERSIAN_COMMA + " " +
+                        comma + " " +
                         Utils.dateToString(DateConverter.civilToIslamic(
                                 DateConverter.jdnToCivil(jdn), getIslamicOffset()));
         }
     }
 
     static public String dayTitleSummary(AbstractDate date) {
-        return getWeekDayName(date) + PERSIAN_COMMA + " " + dateToString(date);
+        return getWeekDayName(date) + comma + " " + dateToString(date);
+    }
+
+    static public String getComma() {
+        return comma;
     }
 
     static private String[] monthsNamesOfCalendar(AbstractDate date) {
@@ -659,7 +664,7 @@ public class Utils {
 
         if (fallbackToCoord)
             if (coordinate != null)
-                return formatCoordinate(context, coordinate, PERSIAN_COMMA + " ");
+                return formatCoordinate(context, coordinate, comma + " ");
 
         return "";
     }
@@ -1000,6 +1005,11 @@ public class Utils {
             case "ur":
                 messagesFile = R.raw.messages_ur;
                 break;
+            case "en-US":
+                messagesFile = R.raw.messages_en;
+                break;
+            case "en":
+            case "fa":
             default:
                 messagesFile = R.raw.messages_fa;
                 break;

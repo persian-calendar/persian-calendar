@@ -79,7 +79,6 @@ public class Constants {
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
-    public static final char PERSIAN_COMMA = '،';
     public static final char RLM = '\u200F';
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};

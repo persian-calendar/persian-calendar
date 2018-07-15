@@ -52,6 +52,7 @@
         <item>پښتو</item>
         <item>کوردی</item>
         <item>اردو</item>
+        <item>English (Iran)</item>
         <item>English</item>
     </string-array>
 
@@ -62,6 +63,7 @@
         <item>ckb</item>
         <item>ur</item>
         <item>en</item>
+        <item>en-US</item>
     </string-array>
 
     <string-array name="prayerTimeNames">

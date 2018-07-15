@@ -123,7 +123,7 @@ public class UpdateUtils {
                     remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
                     text2 = mainDateString;
                 }
-                text2 += Constants.PERSIAN_COMMA + " " + subtitle;
+                text2 += Utils.getComma() + " " + subtitle;
 
                 remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
                 remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
