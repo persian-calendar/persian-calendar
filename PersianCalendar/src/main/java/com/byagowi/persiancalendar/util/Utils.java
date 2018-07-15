@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -62,7 +63,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -296,20 +296,12 @@ public class Utils {
         return new CivilDate(makeCalendarFromDate(new Date()));
     }
 
-    static public Class<? extends AbstractDate> getMainCalendarClass() {
-        switch (mainCalendar) {
-            case ISLAMIC:
-                return IslamicDate.class;
-            case GREGORIAN:
-                return CivilDate.class;
-            case SHAMSI:
-            default:
-                return PersianDate.class;
-        }
+    static public CalendarTypeEnum getMainCalendar() {
+        return mainCalendar;
     }
 
-    static public AbstractDate getTodayOfMethod(CalculationMethod method) {
-        switch (mainCalendar) {
+    static public AbstractDate getTodayOfCalendar(CalendarTypeEnum calendar) {
+        switch (calendar) {
             case ISLAMIC:
                 return getIslamicToday();
             case GREGORIAN:
@@ -320,8 +312,8 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateOfMethod(CalculationMethod method, int year, int month, int day) {
-        switch (mainCalendar) {
+    static public AbstractDate getDateOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
+        switch (calendar) {
             case ISLAMIC:
                 return new IslamicDate(year, month, day);
             case GREGORIAN:
@@ -332,8 +324,8 @@ public class Utils {
         }
     }
 
-    static public long getJdnOfMethod(CalculationMethod method, int year, int month, int day) {
-        switch (mainCalendar) {
+    static public long getJdnOfMethod(CalendarTypeEnum calendar, int year, int month, int day) {
+        switch (calendar) {
             case ISLAMIC:
                 return DateConverter.islamicToJdn(year, month, day);
             case GREGORIAN:
@@ -344,13 +336,15 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateFromJdnOfMethod(Class<? extends AbstractDate> type, long jdn) {
-        if (type == PersianDate.class) {
-            return DateConverter.jdnToPersian(jdn);
-        } else if (type == IslamicDate.class) {
-            return DateConverter.jdnToIslamic(jdn);
-        } else {
-            return DateConverter.jdnToCivil(jdn);
+    static public AbstractDate getDateFromJdnOfMethod(CalendarTypeEnum calendar, long jdn) {
+        switch (calendar) {
+            case ISLAMIC:
+                return DateConverter.jdnToIslamic(jdn);
+            case GREGORIAN:
+                return DateConverter.jdnToCivil(jdn);
+            case SHAMSI:
+            default:
+                return DateConverter.jdnToPersian(jdn);
         }
     }
 
@@ -459,13 +453,33 @@ public class Utils {
         return String.valueOf(result);
     }
 
-    static public String dateToString(Context context, AbstractDate date) {
+    static public String dateToString(AbstractDate date) {
         return formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
                 formatNumber(date.getYear());
     }
 
-    static public String dayTitleSummary(Context context, PersianDate persianDate) {
-        return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(context, persianDate);
+    static public String dateStringOfOtherCalendar(CalendarTypeEnum calendar, long jdn) {
+        switch (calendar) {
+            case ISLAMIC:
+                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+                        Constants.PERSIAN_COMMA + " " +
+                        Utils.dateToString(DateConverter.jdnToCivil(jdn));
+            case GREGORIAN:
+                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+                        Constants.PERSIAN_COMMA + " " +
+                        Utils.dateToString(DateConverter.civilToIslamic(
+                                DateConverter.jdnToCivil(jdn), getIslamicOffset()));
+            case SHAMSI:
+            default:
+                return Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
+                        Constants.PERSIAN_COMMA + " " +
+                        Utils.dateToString(DateConverter.civilToIslamic(
+                                DateConverter.jdnToCivil(jdn), getIslamicOffset()));
+        }
+    }
+
+    static public String dayTitleSummary(AbstractDate date) {
+        return getWeekDayName(date) + PERSIAN_COMMA + " " + dateToString(date);
     }
 
     static private String[] monthsNamesOfCalendar(AbstractDate date) {
@@ -1059,28 +1073,22 @@ public class Utils {
         }
     }
 
+    static public int positionFromCalendarType(CalendarTypeEnum calendar) {
+        switch (calendar) {
+            case SHAMSI:
+                return 0;
+            case ISLAMIC:
+                return 1;
+            default:
+                return 2;
+        }
+    }
+
     static public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
                                                Spinner yearSpinner, Spinner monthSpinner,
                                                Spinner daySpinner) {
-        AbstractDate date;
-        PersianDate newDatePersian = getToday();
-        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
-        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
-
-        date = newDateCivil;
-        switch (calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
-            case GREGORIAN:
-                date = newDateCivil;
-                break;
-
-            case ISLAMIC:
-                date = newDateIslamic;
-                break;
-
-            case SHAMSI:
-                date = newDatePersian;
-                break;
-        }
+        AbstractDate date = getTodayOfCalendar(calendarTypeFromPosition(
+                calendarTypeSpinner.getSelectedItemPosition()));
 
         // years spinner init.
         String[] years = new String[200];

@@ -135,7 +135,7 @@ public final class DateConverter {
     }
 
     // TODO Is it correct to return a CivilDate as a JulianDate?
-    public static CivilDate jdnToJulian(long jdn) {
+    private static CivilDate jdnToJulian(long jdn) {
         long j = jdn + 1402;
         long k = ((j - 1) / 1461);
         long l = j - 1461 * k;

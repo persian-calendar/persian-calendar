@@ -21,8 +21,8 @@
             android:icon="@drawable/ic_event_setting"
             android:key="mainCalendarType"
             android:negativeButtonText="@string/cancel"
-            android:summary="@string/islamic_offset_summary"
-            android:title="تقویم اصلی" />
+            android:title="تقویم اصلی"
+            android:summary="تنظیم تقویم اصلی برنامه در قسمت‌های مختلف" />
 
         <androidx.preference.ListPreference
             android:defaultValue="0"

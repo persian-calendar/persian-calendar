@@ -106,8 +106,8 @@ public class ConverterFragment extends Fragment implements
         calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.calendar_type)));
-        calendarTypeSpinner.setSelection(0);
 
+        calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
         startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
                 calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
 

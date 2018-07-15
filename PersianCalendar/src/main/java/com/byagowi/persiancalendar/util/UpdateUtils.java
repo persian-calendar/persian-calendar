@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -29,21 +30,19 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
-import calendar.CivilDate;
-import calendar.DateConverter;
-import calendar.PersianDate;
+import calendar.AbstractDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
-    private static PersianDate pastDate;
+    private static AbstractDate pastDate;
     private static ExtensionData mExtensionData;
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
-        CivilDate civil = new CivilDate(calendar);
-        PersianDate persian = Utils.getToday();
-        long jdn = DateConverter.persianToJdn(persian);
+        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
+        long jdn = Utils.getJdnDate(date);
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
@@ -67,20 +66,25 @@ public class UpdateUtils {
             remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
             remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                    Utils.formatNumber(persian.getDayOfMonth()));
+                    Utils.formatNumber(date.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(persian));
+                    Utils.getMonthName(date));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
 
-        if (pastDate == null || !pastDate.equals(persian) || updateDate) {
+        if (pastDate == null || !pastDate.equals(date) || updateDate) {
             Log.d("UpdateUtils", "date has changed");
-            pastDate = persian;
+            pastDate = date;
 
             Utils.initUtils(context);
             updateDate = true;
         }
+
+        String weekDayName = Utils.getWeekDayName(date);
+        String status = Utils.getMonthName(date);
+        String title = Utils.dayTitleSummary(date);
+        String subtitle = Utils.dateStringOfOtherCalendar(mainCalendar, jdn);
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
@@ -105,19 +109,16 @@ public class UpdateUtils {
 
             String text2;
             String text3 = "";
-            String weekDayName = Utils.getWeekDayName(civil);
-            String persianDate = Utils.dateToString(context, persian);
-            String civilDate = Utils.dateToString(context, civil);
-            String date = persianDate + Constants.PERSIAN_COMMA + " " + civilDate;
+            String mainDateString = Utils.dateToString(date);
 
             if (enableClock) {
-                text2 = weekDayName + " " + date;
+                text2 = title + Constants.PERSIAN_COMMA + " " + subtitle;;
                 if (Utils.isIranTime()) {
                     text3 = "(" + context.getString(R.string.iran_time) + ")";
                 }
             } else {
                 remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
-                text2 = date;
+                text2 = mainDateString + Constants.PERSIAN_COMMA + " " + subtitle;
             }
 
             remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
@@ -132,10 +133,10 @@ public class UpdateUtils {
             remoteViews2.setTextColor(R.id.owghat_2x2, color);
 
             if (enableClock) {
-                text2 = weekDayName + " " + persianDate;
+                text2 = title;
             } else {
                 remoteViews2.setTextViewText(R.id.time_2x2, weekDayName);
-                text2 = persianDate;
+                text2 = mainDateString;
             }
 
             Clock currentClock =
@@ -185,13 +186,6 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        String status = Utils.getMonthName(persian);
-
-        String title = Utils.getWeekDayName(civil) + Constants.PERSIAN_COMMA + " " +
-                Utils.dateToString(context, persian);
-
-        String body = Utils.dateToString(context, civil) + Constants.PERSIAN_COMMA + " "
-                + Utils.dateToString(context, DateConverter.civilToIslamic(civil, Utils.getIslamicOffset()));
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
@@ -199,20 +193,20 @@ public class UpdateUtils {
         if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
                 (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
-            body = Constants.RLM + body;
+            subtitle = Constants.RLM + subtitle;
         }
 
-        int icon = Utils.getDayIconResource(persian.getDayOfMonth());
+        int icon = Utils.getDayIconResource(date.getDayOfMonth());
 
         if (Utils.isNotifyDate()) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel mChannel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
-                mChannel.setShowBadge(false);
+                NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
+                channel.setShowBadge(false);
                 if (notificationManager != null) {
-                    notificationManager.createNotificationChannel(mChannel);
+                    notificationManager.createNotificationChannel(channel);
                 }
             }
 
@@ -227,29 +221,28 @@ public class UpdateUtils {
                             : NotificationCompat.VISIBILITY_SECRET)
                     .setColor(0xFF607D8B)
                     .setContentTitle(title)
-                    .setContentText(body);
+                    .setContentText(subtitle);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
                 cv.setTextViewText(R.id.title, title);
-                cv.setTextViewText(R.id.body, body);
-
-                String bigBody = body;
-                List<AbstractEvent> events = Utils.getEvents(jdn);
-                String holidays = Utils.getEventsTitle(events, true);
-                if (!TextUtils.isEmpty(holidays))
-                    bigBody = bigBody + "\nتعطیل: " + holidays;
-                String nonHolidays = Utils.getEventsTitle(events, false);
-                if (!TextUtils.isEmpty(nonHolidays))
-                    bigBody = bigBody + "\n" + nonHolidays;
-                Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-                String owghat = Utils.getNextOghatTime(context, currentClock, true);
-                if (!TextUtils.isEmpty(owghat))
-                    bigBody = bigBody + "\n" + owghat;
+                cv.setTextViewText(R.id.body, subtitle);
 
                 RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
                 bcv.setTextViewText(R.id.title, title);
-                bcv.setTextViewText(R.id.body, bigBody);
+                bcv.setTextViewText(R.id.body, subtitle);
+
+                List<AbstractEvent> events = Utils.getEvents(jdn);
+                String holidays = Utils.getEventsTitle(events, true);
+                if (!TextUtils.isEmpty(holidays))
+                    bcv.setTextViewText(R.id.holidays, holidays);
+                String nonHolidays = Utils.getEventsTitle(events, false);
+                if (!TextUtils.isEmpty(nonHolidays))
+                    bcv.setTextViewText(R.id.nonholidays, nonHolidays);
+                Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                String owghat = Utils.getNextOghatTime(context, currentClock, true);
+                if (!TextUtils.isEmpty(owghat))
+                    bcv.setTextViewText(R.id.nonholidays, nonHolidays);
 
                 builder = builder
                         .setCustomContentView(cv)
@@ -263,7 +256,7 @@ public class UpdateUtils {
         mExtensionData = new ExtensionData().visible(true).icon(icon)
                 .status(status)
                 .expandedTitle(title)
-                .expandedBody(body).clickIntent(intent);
+                .expandedBody(subtitle).clickIntent(intent);
     }
 
     public static ExtensionData getExtensionData() {

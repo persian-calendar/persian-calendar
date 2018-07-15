@@ -36,13 +36,14 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
         Spinner daySpinner = view.findViewById(R.id.daySpinner);
 
-        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
-
         calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.calendar_type)));
-        calendarTypeSpinner.setSelection(0);
+
+        calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
+        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
+                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+
 
         calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

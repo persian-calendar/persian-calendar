@@ -15,8 +15,8 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.CalculationMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
-import calendar.CivilDate;
 import calendar.DateConverter;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
@@ -41,9 +40,9 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private int weeksCount;
 
     private void fillTheFields() {
-        CalculationMethod method = Utils.getCalculationMethod();
+        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
-        typedDate = Utils.getTodayOfMethod(method);
+        typedDate = Utils.getTodayOfCalendar(mainCalendar);
         int month = typedDate.getMonth() - offset;
         month -= 1;
         int year = typedDate.getYear();
@@ -55,10 +54,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             month += 12;
         }
         month += 1;
-        typedDate = Utils.getDateOfMethod(method, year, month, 1);
+        typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
         long baseJdn = Utils.getJdnDate(typedDate);
-        int monthLength = (int) (Utils.getJdnOfMethod(method, month == 12 ? year + 1 : year,
+        int monthLength = (int) (Utils.getJdnOfMethod(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
         int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +26,7 @@ import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -191,7 +191,7 @@ public class CalendarFragment extends Fragment
 
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-        AbstractDate today = Utils.getTodayOfMethod(Utils.getCalculationMethod());
+        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
         Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
@@ -204,11 +204,11 @@ public class CalendarFragment extends Fragment
         return view;
     }
 
-    public void changeMonth(int position) {
+    void changeMonth(int position) {
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
-    public void selectDay(long jdn) {
+    void selectDay(long jdn) {
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         weekDayName.setText(Utils.getWeekDayName(persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
@@ -223,7 +223,7 @@ public class CalendarFragment extends Fragment
         islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
         islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
-        if (Utils.getToday().equals(persianDate)) {
+        if (Utils.getTodayJdn() == jdn) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
             if (Utils.isIranTime())
@@ -239,14 +239,13 @@ public class CalendarFragment extends Fragment
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void addEventOnCalendar(long jdn) {
-        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setData(CalendarContract.Events.CONTENT_URI);
 
-        CivilDate civil = DateConverter.persianToCivil(persianDate);
+        CivilDate civil = DateConverter.jdnToCivil(jdn);
 
-        intent.putExtra(CalendarContract.Events.DESCRIPTION,
-                Utils.dayTitleSummary(getContext(), persianDate));
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                Utils.getDateFromJdnOfMethod(Utils.getMainCalendar(), jdn)));
 
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -381,8 +380,9 @@ public class CalendarFragment extends Fragment
     }
 
     public void bringDate(long jdn) {
-        PersianDate today = Utils.getToday();
-        PersianDate date = DateConverter.jdnToPersian(jdn);
+        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = Utils.getDateFromJdnOfMethod(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);
