@@ -67,4 +67,10 @@
         <item>بۆنەکانی تری ئەفغانستان</item>
     </string-array>
 
+    <string-array name="calendar_type">
+        <item>کۆچیی ھەتاوی</item>
+        <item>کۆچیی مانگی</item>
+        <item>زایینی</item>
+    </string-array>
+
 </resources>

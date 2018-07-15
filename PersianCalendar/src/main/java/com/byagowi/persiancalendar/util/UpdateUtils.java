@@ -234,26 +234,26 @@ public class UpdateUtils {
                 cv.setTextViewText(R.id.title, title);
                 cv.setTextViewText(R.id.body, body);
 
-//                String bigBody = body;
-//                List<AbstractEvent> events = Utils.getEvents(jdn);
-//                String holidays = Utils.getEventsTitle(events, true);
-//                if (!TextUtils.isEmpty(holidays))
-//                    bigBody = bigBody + "\nتعطیل: " + holidays;
-//                String nonHolidays = Utils.getEventsTitle(events, false);
-//                if (!TextUtils.isEmpty(nonHolidays))
-//                    bigBody = bigBody + "\n" + nonHolidays;
-//                Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-//                String owghat = Utils.getNextOghatTime(context, currentClock, true);
-//                if (!TextUtils.isEmpty(owghat))
-//                    bigBody = bigBody + "\n" + owghat;
-//
-//                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
-//                bcv.setTextViewText(R.id.title, title);
-//                bcv.setTextViewText(R.id.body, bigBody);
+                String bigBody = body;
+                List<AbstractEvent> events = Utils.getEvents(jdn);
+                String holidays = Utils.getEventsTitle(events, true);
+                if (!TextUtils.isEmpty(holidays))
+                    bigBody = bigBody + "\nتعطیل: " + holidays;
+                String nonHolidays = Utils.getEventsTitle(events, false);
+                if (!TextUtils.isEmpty(nonHolidays))
+                    bigBody = bigBody + "\n" + nonHolidays;
+                Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                String owghat = Utils.getNextOghatTime(context, currentClock, true);
+                if (!TextUtils.isEmpty(owghat))
+                    bigBody = bigBody + "\n" + owghat;
+
+                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+                bcv.setTextViewText(R.id.title, title);
+                bcv.setTextViewText(R.id.body, bigBody);
 
                 builder = builder
                         .setCustomContentView(cv)
-//                        .setCustomBigContentView(bcv)
+                        .setCustomBigContentView(bcv)
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             }
 

@@ -91,13 +91,6 @@
     <string name="in_city_time">به افق</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
-
-    <string-array name="calendar_type">
-        <item>ہجری شمسی</item>
-        <item>ہجری قمری</item>
-        <item>عیسوی</item>
-    </string-array>
-
     <string name="date_copied_clipboard">کلپ بورڈ پر نقل کر دیا گیا</string>
     <string name="stop">توقف کریں</string>
     <string name="goto_date">اس تاریخ پر جائیں</string>

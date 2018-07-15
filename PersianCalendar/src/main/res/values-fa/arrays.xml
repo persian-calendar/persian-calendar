@@ -67,4 +67,10 @@
         <item>سایر مناسبت‌های افغانستان</item>
     </string-array>
 
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
 </resources>

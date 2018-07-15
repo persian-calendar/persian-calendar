@@ -91,13 +91,6 @@
     <string name="in_city_time">بە ئاسۆی</string>
     <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
     <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
-
-    <string-array name="calendar_type">
-        <item>کۆچیی ھەتاوی</item>
-        <item>کۆچیی مانگی</item>
-        <item>زایینی</item>
-    </string-array>
-
     <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>
     <string name="stop">ڕاگرتن</string>
     <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>

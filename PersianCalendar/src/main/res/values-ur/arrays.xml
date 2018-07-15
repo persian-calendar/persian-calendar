@@ -66,4 +66,10 @@
         <item>افغانستان کی تمام تقریبات</item>
     </string-array>
 
+    <string-array name="calendar_type">
+        <item>ہجری شمسی</item>
+        <item>ہجری قمری</item>
+        <item>عیسوی</item>
+    </string-array>
+
 </resources>

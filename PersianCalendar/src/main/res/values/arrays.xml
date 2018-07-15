@@ -144,6 +144,20 @@
     </string-array>
 
     <string-array name="default_holidays" translatable="false">
+        <item>iran_holidays</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>Persian Calendar</item>
+        <item>Islamic Calendar</item>
+        <item>Gregorian</item>
+    </string-array>
+
+    <!-- Should be matched with CalendarTypeEnum -->
+    <string-array name="calendar_values" translatable="false">
+        <item>SHAMSI</item>
+        <item>ISLAMIC</item>
+        <item>GREGORIAN</item>
     </string-array>
 
 </resources>

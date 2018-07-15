@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.Utils;
+import com.github.praytimes.CalculationMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,13 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import calendar.AbstractDate;
+import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.PersianDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
-    private PersianDate persianDate;
+    private AbstractDate typedDate;
     private int offset;
 
     private MonthAdapter adapter;
@@ -39,11 +41,12 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private int weeksCount;
 
     private void fillTheFields() {
+        CalculationMethod method = Utils.getCalculationMethod();
         List<DayEntity> days = new ArrayList<>();
-        persianDate = Utils.getToday();
-        int month = persianDate.getMonth() - offset;
+        typedDate = Utils.getTodayOfMethod(method);
+        int month = typedDate.getMonth() - offset;
         month -= 1;
-        int year = persianDate.getYear();
+        int year = typedDate.getYear();
 
         year = year + (month / 12);
         month = month % 12;
@@ -52,15 +55,15 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             month += 12;
         }
         month += 1;
-        persianDate = new PersianDate(year, month, 1);
+        typedDate = Utils.getDateOfMethod(method, year, month, 1);
 
-        long baseJdn = DateConverter.persianToJdn(persianDate);
-        int monthLength = (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year,
+        long baseJdn = Utils.getJdnDate(typedDate);
+        int monthLength = (int) (Utils.getJdnOfMethod(method, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
         int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
 
-        long todayJdn = DateConverter.persianToJdn(Utils.getToday());
+        long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             DayEntity dayEntity = new DayEntity();
             dayEntity.setNum(Utils.formatNumber(i + 1));
@@ -126,7 +129,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 .findFragmentByTag(CalendarFragment.class.getName());
 
         if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.selectDay(DateConverter.persianToJdn(Utils.getToday()));
+            calendarFragment.selectDay(Utils.getTodayJdn());
             updateTitle();
         }
 
@@ -182,11 +185,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateTitle() {
-//        Toast.makeText(getContext(),
-//                weekOfYearStart + "-" + weeksCount + "-" + (weekOfYearStart + weeksCount),
-//                Toast.LENGTH_LONG).show();
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(persianDate),
-                Utils.formatNumber(persianDate.getYear()));
+        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(typedDate),
+                Utils.formatNumber(typedDate.getYear()));
     }
 
 }

@@ -50,6 +50,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
+import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -190,7 +191,7 @@ public class CalendarFragment extends Fragment
 
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-        PersianDate today = Utils.getToday();
+        AbstractDate today = Utils.getTodayOfMethod(Utils.getCalculationMethod());
         Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 

@@ -29,10 +29,14 @@ android {
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 
+    defaultConfig {
+        //FIXME: To be reomved from release
+        multiDexEnabled true
+    }
 }
 
 dependencies {

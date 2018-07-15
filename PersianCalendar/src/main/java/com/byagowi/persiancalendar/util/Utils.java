@@ -203,6 +203,7 @@ public class Utils {
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
+    static private CalendarTypeEnum mainCalendar;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -227,6 +228,7 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
+        mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
     }
 
     static public boolean isIranTime() {
@@ -280,6 +282,88 @@ public class Utils {
 
     static public PersianDate getToday() {
         return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
+    }
+
+    static public long getTodayJdn() {
+        return DateConverter.civilToJdn(new CivilDate(makeCalendarFromDate(new Date())));
+    }
+
+    static public IslamicDate getIslamicToday() {
+        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())), getIslamicOffset());
+    }
+
+    static public CivilDate getGregorianToday() {
+        return new CivilDate(makeCalendarFromDate(new Date()));
+    }
+
+    static public Class<? extends AbstractDate> getMainCalendarClass() {
+        switch (mainCalendar) {
+            case ISLAMIC:
+                return IslamicDate.class;
+            case GREGORIAN:
+                return CivilDate.class;
+            case SHAMSI:
+            default:
+                return PersianDate.class;
+        }
+    }
+
+    static public AbstractDate getTodayOfMethod(CalculationMethod method) {
+        switch (mainCalendar) {
+            case ISLAMIC:
+                return getIslamicToday();
+            case GREGORIAN:
+                return getGregorianToday();
+            case SHAMSI:
+            default:
+                return getToday();
+        }
+    }
+
+    static public AbstractDate getDateOfMethod(CalculationMethod method, int year, int month, int day) {
+        switch (mainCalendar) {
+            case ISLAMIC:
+                return new IslamicDate(year, month, day);
+            case GREGORIAN:
+                return new CivilDate(year, month, day);
+            case SHAMSI:
+            default:
+                return new PersianDate(year, month, day);
+        }
+    }
+
+    static public long getJdnOfMethod(CalculationMethod method, int year, int month, int day) {
+        switch (mainCalendar) {
+            case ISLAMIC:
+                return DateConverter.islamicToJdn(year, month, day);
+            case GREGORIAN:
+                return DateConverter.civilToJdn(year, month, day);
+            case SHAMSI:
+            default:
+                return DateConverter.persianToJdn(year, month, day);
+        }
+    }
+
+    static public AbstractDate getDateFromJdnOfMethod(Class<? extends AbstractDate> type, long jdn) {
+        if (type == PersianDate.class) {
+            return DateConverter.jdnToPersian(jdn);
+        } else if (type == IslamicDate.class) {
+            return DateConverter.jdnToIslamic(jdn);
+        } else {
+            return DateConverter.jdnToCivil(jdn);
+        }
+    }
+
+    static public long getJdnDate(AbstractDate date) {
+        if (date instanceof PersianDate) {
+            return DateConverter.persianToJdn((PersianDate) date);
+        } else if (date instanceof IslamicDate) {
+            return DateConverter.islamicToJdn((IslamicDate) date);
+        } else if (date instanceof CivilDate) {
+            return DateConverter.civilToJdn((CivilDate) date);
+        } else {
+            return 0;
+        }
     }
 
     static public Calendar makeCalendarFromDate(Date date) {
