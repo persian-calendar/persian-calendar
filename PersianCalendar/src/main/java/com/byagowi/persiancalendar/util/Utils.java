@@ -229,7 +229,7 @@ public class Utils {
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
         mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
-        comma = language.equals("en") ? "," : "،";
+        comma = language.equals("en-US") ? "," : "،";
     }
 
     static public boolean isIranTime() {
