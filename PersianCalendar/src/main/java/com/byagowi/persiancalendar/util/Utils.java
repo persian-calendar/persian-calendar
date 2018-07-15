@@ -788,9 +788,9 @@ public class Utils {
                 if (addOrNot) {
                     title += " (";
                     if (holiday && afghanistanHolidays && iranHolidays) {
-                        if (type.equals("Islamic Iran") || type.equals("Iran"))
+                        if (type.equals("Islamic Iran"))
                             title += "ایران، ";
-                        else if (type.equals("Afghanistan"))
+                        else if (type.equals("Islamic Afghanistan"))
                             title += "افغانستان، ";
                     }
                     title += formatNumber(day) + " " + islamicMonths[month - 1] + ")";

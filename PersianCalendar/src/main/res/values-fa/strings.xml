@@ -104,4 +104,6 @@
     <string name="warn_if_events_not_set">جهت فعال کردن و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
+    <string name="main_calendar">تقویم اصلی</string>
+    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
 </resources>

@@ -104,4 +104,6 @@
     <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">Search in events</string>
+    <string name="main_calendar">Main Calendar</string>
+    <string name="main_calendar_summary">Change main calendar of the app</string>
 </resources>

@@ -104,4 +104,6 @@
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
+    <string name="main_calendar">تقویم اصلی</string>
+    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
 </resources>
