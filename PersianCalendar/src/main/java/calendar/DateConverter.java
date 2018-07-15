@@ -183,10 +183,8 @@ public final class DateConverter {
     }
 
     private static long julianToJdn(long lYear, long lMonth, long lDay) {
-
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
                 + ((275 * lMonth) / 9) + lDay + 1729777;
-
     }
 
     public static CivilDate persianToCivil(PersianDate persian) {
@@ -197,32 +195,11 @@ public final class DateConverter {
         return jdnToIslamic(persianToJdn(persian));
     }
 
-    public static long persianToJdn(int year, int month, int day) {
-        final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
-
-        long epbase;
-        if (year >= 0)
-            epbase = year - 474;
-        else
-            epbase = year - 473;
-
-        long epyear = 474 + (epbase % 2820);
-
-        long mdays;
-        if (month <= 7)
-            mdays = (month - 1) * 31;
-        else
-            mdays = (month - 1) * 30 + 6;
-
-        return day + mdays + ((epyear * 682) - 110) / 2816 + (epyear - 1) * 365
-                + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
+    public static long persianToJdn(PersianDate persian) {
+        return persianToJdn(persian.getYear(), persian.getMonth(), persian.getDayOfMonth());
     }
 
-    public static long persianToJdn(PersianDate persian) {
-        int year = persian.getYear();
-        int month = persian.getMonth();
-        int day = persian.getDayOfMonth();
-
+    public static long persianToJdn(int year, int month, int day) {
         final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
 
         long epbase;
