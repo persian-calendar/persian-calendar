@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+        UpdateUtils.update(getApplicationContext(), false);
         if (dayIsPassed) {
             dayIsPassed = false;
             restartActivity(menuPosition);
