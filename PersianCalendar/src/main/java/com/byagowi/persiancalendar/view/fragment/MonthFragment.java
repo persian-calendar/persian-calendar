@@ -103,7 +103,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private int caclculateIranianDayOfWeek(long jdn) {
-        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7 + 1;
+        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
     }
 
     @Override
