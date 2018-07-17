@@ -267,7 +267,7 @@ public class UpdateUtils {
             }
 
             if (BuildConfig.DEBUG) {
-                builder = builder.setShowWhen(true);
+                builder = builder.setWhen(Calendar.getInstance().getTimeInMillis());
             }
 
             notificationManager.notify(NOTIFICATION_ID, builder.build());
