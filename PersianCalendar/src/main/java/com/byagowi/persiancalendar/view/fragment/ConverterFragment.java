@@ -37,10 +37,13 @@ public class ConverterFragment extends Fragment implements
     private Spinner daySpinner;
     private int startingYearOnYearSpinner = 0;
     private TextView weekDayName;
+    private TextView shamsiDateLinear;
     private TextView shamsiDateDay;
     private TextView shamsiDate;
+    private TextView gregorianDateLinear;
     private TextView gregorianDateDay;
     private TextView gregorianDate;
+    private TextView islamicDateLinear;
     private TextView islamicDateDay;
     private TextView islamicDate;
     private TextView diffDate;
@@ -84,17 +87,23 @@ public class ConverterFragment extends Fragment implements
         gregorianContainer = view.findViewById(R.id.gregorian_container);
         islamicContainer = view.findViewById(R.id.islamic_container);
 
+        shamsiDateLinear = view.findViewById(R.id.shamsi_date_linear);
         shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
         shamsiDate = view.findViewById(R.id.shamsi_date);
+        gregorianDateLinear = view.findViewById(R.id.gregorian_date_linear);
         gregorianDateDay = view.findViewById(R.id.gregorian_date_day);
         gregorianDate = view.findViewById(R.id.gregorian_date);
+        islamicDateLinear = view.findViewById(R.id.islamic_date_linear);
         islamicDateDay = view.findViewById(R.id.islamic_date_day);
         islamicDate = view.findViewById(R.id.islamic_date);
 
+        shamsiDateLinear.setOnClickListener(this);
         shamsiDateDay.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
+        gregorianDateLinear.setOnClickListener(this);
         gregorianDateDay.setOnClickListener(this);
         gregorianDate.setOnClickListener(this);
+        islamicDateLinear.setOnClickListener(this);
         islamicDateDay.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
 
@@ -161,12 +170,15 @@ public class ConverterFragment extends Fragment implements
 
             weekDayName.setText(Utils.getWeekDayName(persianDate));
 
+            shamsiDateLinear.setText(Utils.toLinearDate(persianDate));
             shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
             shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
 
+            gregorianDateLinear.setText(Utils.toLinearDate(civilDate));
             gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
             gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
 
+            islamicDateLinear.setText(Utils.toLinearDate(hijriDate));
             islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
             islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
@@ -225,16 +237,28 @@ public class ConverterFragment extends Fragment implements
                         shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
+            case R.id.shamsi_date_linear:
+                Utils.copyToClipboard(getContext(), shamsiDateLinear.getText());
+                break;
+
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
                 Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
                         gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
+            case R.id.gregorian_date_linear:
+                Utils.copyToClipboard(getContext(), gregorianDateLinear.getText());
+                break;
+
             case R.id.islamic_date:
             case R.id.islamic_date_day:
                 Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
                         islamicDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.islamic_date_linear:
+                Utils.copyToClipboard(getContext(), islamicDateLinear.getText());
                 break;
 
             case R.id.today:

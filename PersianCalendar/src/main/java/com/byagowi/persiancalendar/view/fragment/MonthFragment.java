@@ -57,7 +57,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
         long baseJdn = Utils.getJdnDate(typedDate);
-        int monthLength = (int) (Utils.getJdnOfMethod(mainCalendar, month == 12 ? year + 1 : year,
+        int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
         int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
@@ -92,11 +92,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
         this.days = days;
 
-        //FIXME: This is wrooong
-//        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
-//        long firstFridayJdn = startOfYearJdn - DateConverter.jdnToCivil(startOfYearJdn).getDayOfWeek() - 2;
-//        weekOfYearStart = (int) (1 + Math.ceil((double) (baseJdn - firstFridayJdn) / 7));
-//        weeksCount = (int) (1 + Math.ceil((double) (baseJdn + monthLength - firstFridayJdn) / 7)) - weekOfYearStart;
+        long startOfYearJdn = Utils.getJdnOfCalendar(mainCalendar, year, 1, 1);
+        weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
+        weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+    }
+
+    private int calculateWeekOfYear(long jdn, long startOfYear) {
+        long dayOfYear = jdn - startOfYear;
+        return (int) Math.ceil(1 + (dayOfYear - caclculateIranianDayOfWeek(jdn)) / 7.);
+    }
+
+    private int caclculateIranianDayOfWeek(long jdn) {
+        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7 + 1;
     }
 
     @Override
@@ -116,7 +123,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 8);
         recyclerView.setLayoutManager(layoutManager);
         fillTheFields();
         adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);

@@ -80,10 +80,13 @@ public class CalendarFragment extends Fragment
     private TextView weekDayName;
     private TextView gregorianDate;
     private TextView gregorianDateDay;
+    private TextView gregorianDateLinear;
     private TextView islamicDate;
     private TextView islamicDateDay;
+    private TextView islamicDateLinear;
     private TextView shamsiDate;
     private TextView shamsiDateDay;
+    private TextView shamsiDateLinear;
     private TextView eventTitle;
     private TextView eventMessage;
     private TextView holidayTitle;
@@ -132,10 +135,13 @@ public class CalendarFragment extends Fragment
 
         gregorianDate = view.findViewById(R.id.gregorian_date);
         gregorianDateDay = view.findViewById(R.id.gregorian_date_day);
+        gregorianDateLinear = view.findViewById(R.id.gregorian_date_linear);
         islamicDate = view.findViewById(R.id.islamic_date);
         islamicDateDay = view.findViewById(R.id.islamic_date_day);
+        islamicDateLinear = view.findViewById(R.id.islamic_date_linear);
         shamsiDate = view.findViewById(R.id.shamsi_date);
         shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
+        shamsiDateLinear = view.findViewById(R.id.shamsi_date_linear);
         weekDayName = view.findViewById(R.id.week_day_name);
         today = view.findViewById(R.id.today);
         todayIcon = view.findViewById(R.id.today_icon);
@@ -177,11 +183,13 @@ public class CalendarFragment extends Fragment
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
         gregorianDate.setOnClickListener(this);
-        gregorianDateDay.setOnClickListener(this);
+        gregorianDateLinear.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
         islamicDateDay.setOnClickListener(this);
+        islamicDateLinear.setOnClickListener(this);
         shamsiDate.setOnClickListener(this);
         shamsiDateDay.setOnClickListener(this);
+        shamsiDateLinear.setOnClickListener(this);
 
         String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
@@ -214,12 +222,15 @@ public class CalendarFragment extends Fragment
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
+        shamsiDateLinear.setText(Utils.toLinearDate(persianDate));
         shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
         shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
 
+        gregorianDateLinear.setText(Utils.toLinearDate(civilDate));
         gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
         gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
 
+        islamicDateLinear.setText(Utils.toLinearDate(hijriDate));
         islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
         islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
@@ -245,7 +256,7 @@ public class CalendarFragment extends Fragment
         CivilDate civil = DateConverter.jdnToCivil(jdn);
 
         intent.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                Utils.getDateFromJdnOfMethod(Utils.getMainCalendar(), jdn)));
+                Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
 
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -352,16 +363,28 @@ public class CalendarFragment extends Fragment
                         shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
+            case R.id.shamsi_date_linear:
+                Utils.copyToClipboard(getContext(), shamsiDateLinear.getText());
+                break;
+
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
                 Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
                         gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
+            case R.id.gregorian_date_linear:
+                Utils.copyToClipboard(getContext(), gregorianDateLinear.getText());
+                break;
+
             case R.id.islamic_date:
             case R.id.islamic_date_day:
                 Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
                         islamicDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.islamic_date_linear:
+                Utils.copyToClipboard(getContext(), islamicDateLinear.getText());
                 break;
         }
     }
@@ -382,7 +405,7 @@ public class CalendarFragment extends Fragment
     public void bringDate(long jdn) {
         CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
         AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = Utils.getDateFromJdnOfMethod(mainCalendar, jdn);
+        AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);

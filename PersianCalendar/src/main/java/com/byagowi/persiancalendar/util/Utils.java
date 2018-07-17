@@ -324,7 +324,7 @@ public class Utils {
         }
     }
 
-    static public long getJdnOfMethod(CalendarTypeEnum calendar, int year, int month, int day) {
+    static public long getJdnOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.islamicToJdn(year, month, day);
@@ -336,7 +336,7 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateFromJdnOfMethod(CalendarTypeEnum calendar, long jdn) {
+    static public AbstractDate getDateFromJdnOfCalendar(CalendarTypeEnum calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.jdnToIslamic(jdn);
@@ -367,6 +367,11 @@ public class Utils {
         }
         calendar.setTime(date);
         return calendar;
+    }
+
+    static public String toLinearDate(AbstractDate date) {
+        return String.format("%s/%s/%s", formatNumber(date.getYear()),
+                formatNumber(date.getMonth()), formatNumber(date.getDayOfMonth()));
     }
 
     static private String clockToString(int hour, int minute) {
@@ -878,6 +883,10 @@ public class Utils {
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday) {
+        return getEventsTitle(dayEvents, holiday, false);
+    }
+
+    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday, boolean removeBrackets) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
 
@@ -888,7 +897,11 @@ public class Utils {
                 else
                     titles.append("\n");
 
-                titles.append(event.getTitle());
+                String title = event.getTitle();
+                if (removeBrackets)
+                    title = title.replaceAll(" \\(.*$", "");
+
+                titles.append(title);
             }
 
         return titles.toString();
