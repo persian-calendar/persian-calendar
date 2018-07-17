@@ -73,10 +73,10 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/padding_item"
             android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
             android:paddingTop="@dimen/padding_item"
+            android:paddingRight="@dimen/card_padding"
+            android:paddingBottom="@dimen/padding_item"
             app:divider="?attr/appDivider"
             app:dividerPadding="@dimen/divider_margin2"
             app:flexWrap="wrap"
@@ -88,28 +88,44 @@
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="top|center_horizontal|fill_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="@dimen/owghatSize"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal|fill_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/shamsi_date_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4sp"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="32sp"
+                        tools:text="a" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/shamsi_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:lineSpacingMultiplier=".6"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="@dimen/text_size_description"
+                        tools:text="a\nb" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/shamsi_date_day"
+                    android:id="@+id/shamsi_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="4sp"
-                    android:textColor="?attr/colorTextNormal"
-                    android:textSize="32sp"
-                    tools:text="a" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/shamsi_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:lineSpacingMultiplier=".6"
-                    android:textColor="?attr/colorTextNormal"
+                    android:layout_gravity="center"
+                    android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description"
-                    tools:text="a\nb" />
+                    tools:text="1/1/1990" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -118,28 +134,44 @@
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="top|center_horizontal|fill_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="@dimen/owghatSize"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal|fill_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/gregorian_date_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4sp"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="32sp"
+                        tools:text="a" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/gregorian_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:lineSpacingMultiplier=".6"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="@dimen/text_size_description"
+                        tools:text="a\nb" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/gregorian_date_day"
+                    android:id="@+id/gregorian_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="4sp"
-                    android:textColor="?attr/colorTextNormal"
-                    android:textSize="32sp"
-                    tools:text="a" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/gregorian_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:lineSpacingMultiplier=".6"
-                    android:textColor="?attr/colorTextNormal"
+                    android:layout_gravity="center"
+                    android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description"
-                    tools:text="a\nb" />
+                    tools:text="1/1/1990" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -148,28 +180,44 @@
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="top|center_horizontal|fill_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="@dimen/owghatSize"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal|fill_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/islamic_date_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4sp"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="32sp"
+                        tools:text="a" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/islamic_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:lineSpacingMultiplier=".6"
+                        android:textColor="?attr/colorTextNormal"
+                        android:textSize="@dimen/text_size_description"
+                        tools:text="a\nb" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/islamic_date_day"
+                    android:id="@+id/islamic_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="4sp"
-                    android:textColor="?attr/colorTextNormal"
-                    android:textSize="32sp"
-                    tools:text="a" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/islamic_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:lineSpacingMultiplier=".6"
-                    android:textColor="?attr/colorTextNormal"
+                    android:layout_gravity="center"
+                    android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description"
-                    tools:text="a\nb" />
+                    tools:text="1/1/1990" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -180,10 +228,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="@dimen/padding_item"
             android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
             android:paddingTop="@dimen/padding_item"
+            android:paddingRight="@dimen/card_padding"
+            android:paddingBottom="@dimen/padding_item"
             android:textColor="?attr/colorTextNormal"
             android:textSize="@dimen/text_size_description"
             android:visibility="gone"

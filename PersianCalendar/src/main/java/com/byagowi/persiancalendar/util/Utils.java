@@ -369,6 +369,11 @@ public class Utils {
         return calendar;
     }
 
+    static public String toLinearDate(AbstractDate date) {
+        return String.format("%s/%s/%s", formatNumber(date.getYear()),
+                formatNumber(date.getMonth()), formatNumber(date.getDayOfMonth()));
+    }
+
     static private String clockToString(int hour, int minute) {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
@@ -878,6 +883,10 @@ public class Utils {
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday) {
+        return getEventsTitle(dayEvents, holiday, false);
+    }
+
+    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday, boolean removeBrackets) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
 
@@ -888,7 +897,11 @@ public class Utils {
                 else
                     titles.append("\n");
 
-                titles.append(event.getTitle());
+                String title = event.getTitle();
+                if (removeBrackets)
+                    title = title.replaceAll(" \\(.*$", "");
+
+                titles.append(title);
             }
 
         return titles.toString();
