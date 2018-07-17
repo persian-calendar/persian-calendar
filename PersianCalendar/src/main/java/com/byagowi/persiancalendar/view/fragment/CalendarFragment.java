@@ -256,7 +256,7 @@ public class CalendarFragment extends Fragment
         CivilDate civil = DateConverter.jdnToCivil(jdn);
 
         intent.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                Utils.getDateFromJdnOfMethod(Utils.getMainCalendar(), jdn)));
+                Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
 
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -405,7 +405,7 @@ public class CalendarFragment extends Fragment
     public void bringDate(long jdn) {
         CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
         AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = Utils.getDateFromJdnOfMethod(mainCalendar, jdn);
+        AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);

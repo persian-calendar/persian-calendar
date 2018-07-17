@@ -324,7 +324,7 @@ public class Utils {
         }
     }
 
-    static public long getJdnOfMethod(CalendarTypeEnum calendar, int year, int month, int day) {
+    static public long getJdnOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.islamicToJdn(year, month, day);
@@ -336,7 +336,7 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateFromJdnOfMethod(CalendarTypeEnum calendar, long jdn) {
+    static public AbstractDate getDateFromJdnOfCalendar(CalendarTypeEnum calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.jdnToIslamic(jdn);

@@ -57,7 +57,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
         long baseJdn = Utils.getJdnDate(typedDate);
-        int monthLength = (int) (Utils.getJdnOfMethod(mainCalendar, month == 12 ? year + 1 : year,
+        int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
         int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
@@ -92,7 +92,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
         this.days = days;
 
-        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
+        long startOfYearJdn = Utils.getJdnOfCalendar(mainCalendar, year, 1, 1);
         weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
         weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
     }
