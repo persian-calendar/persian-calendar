@@ -132,6 +132,18 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
         position = fixRtlPosition(position);
+
+        if (position % 8 == 0) {
+            int row = position / 8;
+            if (row > 0 && row <= weeksCount) {
+                holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
+                holder.num.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+        position -= position / 8;
+        position--;
+
         if (totalDays < position - 6 - firstDayDayOfWeek) {
             setEmpty(holder);
 
@@ -182,7 +194,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 7 * 7; // days of week * month view rows
+        return 7 * 8; // days of week * month view rows
     }
 
     private boolean isPositionHeader(int position) {
