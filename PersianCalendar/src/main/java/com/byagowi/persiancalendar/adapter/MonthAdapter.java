@@ -23,6 +23,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private MonthFragment monthFragment;
     private List<DayEntity> days;
     private int selectedDay = -1;
+    private int prevDay;
     private boolean isArabicDigit;
     private TypedValue colorHoliday = new TypedValue();
     private TypedValue colorTextHoliday = new TypedValue();
@@ -93,10 +94,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                         .get(position - 7 - firstDayDayOfWeek)
                         .getJdn());
 
-                int prevDay = selectedDay;
                 selectedDay = position;
-                notifyItemChanged(fixForWeekOfYearNumber(fixRtlPosition(prevDay)));
+                notifyItemChanged(prevDay);
                 notifyItemChanged(getAdapterPosition());
+                prevDay = getAdapterPosition();
             }
         }
 
