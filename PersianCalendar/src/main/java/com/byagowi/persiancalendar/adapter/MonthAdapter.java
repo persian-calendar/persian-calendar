@@ -97,6 +97,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             int position = fixRtlPosition(getAdapterPosition());
             if (Utils.isWeekOfYearEnabled()) {
                 position = fixForWeekOfYearNumber(position);
+
+                if (position % 8 == 0) {
+                    return;
+                }
             }
 
             if (totalDays < position - 6 - firstDayDayOfWeek) {
@@ -120,6 +124,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             int position = fixRtlPosition(getAdapterPosition());
             if (Utils.isWeekOfYearEnabled()) {
                 position = fixForWeekOfYearNumber(position);
+
+                if (position % 8 == 0) {
+                    return false;
+                }
             }
 
             if (totalDays < position - 6 - firstDayDayOfWeek) {
