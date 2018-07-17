@@ -137,17 +137,26 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             int row = position / 8;
             if (row > 0 && row <= weeksCount) {
                 holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
+                holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
+                holder.num.setTextSize(12);
+                holder.num.setBackgroundResource(0);
                 holder.num.setVisibility(View.VISIBLE);
-            }
+            } else setEmpty(holder);
             return;
         }
         position -= position / 8;
         position--;
 
         if (totalDays < position - 6 - firstDayDayOfWeek) {
-            setEmpty(holder);
-
-        } else if (!isPositionHeader(position)) {
+        } else if (isPositionHeader(position)) {
+            holder.num.setText(Utils.getInitialOfWeekDay(position));
+            holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
+            holder.num.setTextSize(20);
+            holder.today.setVisibility(View.GONE);
+            holder.num.setBackgroundResource(0);
+            holder.event.setVisibility(View.GONE);
+            holder.num.setVisibility(View.VISIBLE);
+        } else {
             if (position - 7 - firstDayDayOfWeek >= 0) {
                 holder.num.setText(days.get(position - 7 - days.get(0).getDayOfWeek()).getNum());
                 holder.num.setVisibility(View.VISIBLE);
@@ -175,14 +184,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 setEmpty(holder);
             }
 
-        } else {
-            holder.num.setText(Utils.getInitialOfWeekDay(position));
-            holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
-            holder.num.setTextSize(20);
-            holder.today.setVisibility(View.GONE);
-            holder.num.setBackgroundResource(0);
-            holder.event.setVisibility(View.GONE);
-            holder.num.setVisibility(View.VISIBLE);
         }
     }
 
