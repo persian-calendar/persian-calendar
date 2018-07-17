@@ -203,6 +203,7 @@ public class Utils {
     static private Coordinate coordinate;
     static private CalendarTypeEnum mainCalendar;
     static private String comma;
+    static private boolean showWeekOfYear;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -229,6 +230,7 @@ public class Utils {
         coordinate = getCoordinate(context);
         mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
         comma = language.equals("en-US") ? "," : "،";
+        showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
     }
 
     static public boolean isIranTime() {
@@ -245,6 +247,10 @@ public class Utils {
 
     static public boolean isNotifyDate() {
         return notifyDate;
+    }
+
+    static public boolean isWeekOfYearEnabled() {
+        return showWeekOfYear;
     }
 
     static public int getAthanVolume(Context context) {

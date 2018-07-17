@@ -64,6 +64,13 @@
             android:summary="@string/select_skin"
             android:title="@string/skin" />
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_week_of_year_setting"
+            android:key="showWeekOfYearNumber"
+            android:summary="@string/week_of_year_summary"
+            android:title="@string/week_of_year" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/widget_notification_dashclock">

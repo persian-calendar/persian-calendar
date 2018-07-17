@@ -123,7 +123,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 8);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
         recyclerView.setLayoutManager(layoutManager);
         fillTheFields();
         adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);

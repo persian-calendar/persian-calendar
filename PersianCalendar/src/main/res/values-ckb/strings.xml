@@ -104,6 +104,8 @@
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
-    <string name="main_calendar">تقویم اصلی</string>
-    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
+    <string name="main_calendar">ڕۆژژمێری سەرەکی</string>
+    <string name="main_calendar_summary">گۆڕینی ڕۆژژمێری سەرەکی لە بەشە جۆربەجۆرەکانی بەرنامەدا</string>
+    <string name="week_of_year">ژمارەی حەفتە</string>
+    <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ لە ڕۆژژمێردا</string>
 </resources>

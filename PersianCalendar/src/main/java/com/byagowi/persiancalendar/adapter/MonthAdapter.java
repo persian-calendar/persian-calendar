@@ -56,14 +56,24 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     public void clearSelectedDay() {
         int prevDay = selectedDay;
         selectedDay = -1;
-        notifyItemChanged(fixForWeekOfYearNumber(fixRtlPosition(prevDay)));
+        int prevDayPosition = fixRtlPosition(prevDay);
+        if (Utils.isWeekOfYearEnabled()) {
+            prevDayPosition = fixForWeekOfYearNumber(prevDayPosition);
+        }
+        notifyItemChanged(prevDayPosition);
     }
 
     public void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;
         selectedDay = dayOfMonth + 6 + firstDayDayOfWeek;
-        notifyItemChanged(fixForWeekOfYearNumber(fixRtlPosition(prevDay)));
-        notifyItemChanged(fixForWeekOfYearNumber(fixRtlPosition(selectedDay)));
+        int prevDayPosition = fixRtlPosition(prevDay);
+        int selectedDayPosition = fixRtlPosition(selectedDay);
+        if (Utils.isWeekOfYearEnabled()) {
+            prevDayPosition = fixForWeekOfYearNumber(prevDayPosition);
+            selectedDayPosition = fixForWeekOfYearNumber(selectedDayPosition);
+        }
+        notifyItemChanged(prevDayPosition);
+        notifyItemChanged(selectedDayPosition);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -84,7 +94,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            int position = fixForWeekOfYearNumber(fixRtlPosition(getAdapterPosition()));
+            int position = fixRtlPosition(getAdapterPosition());
+            if (Utils.isWeekOfYearEnabled()) {
+                position = fixForWeekOfYearNumber(position);
+            }
+
             if (totalDays < position - 6 - firstDayDayOfWeek) {
                 return;
             }
@@ -103,7 +117,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public boolean onLongClick(View v) {
-            int position = fixForWeekOfYearNumber(fixRtlPosition(getAdapterPosition()));
+            int position = fixRtlPosition(getAdapterPosition());
+            if (Utils.isWeekOfYearEnabled()) {
+                position = fixForWeekOfYearNumber(position);
+            }
+
             if (totalDays < position - 6 - firstDayDayOfWeek) {
                 return false;
             }
@@ -134,19 +152,21 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
         position = fixRtlPosition(position);
 
-        if (position % 8 == 0) {
-            int row = position / 8;
-            if (row > 0 && row <= weeksCount) {
-                holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
-                holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
-                holder.num.setTextSize(12);
-                holder.num.setBackgroundResource(0);
-                holder.num.setVisibility(View.VISIBLE);
-            } else setEmpty(holder);
-            return;
-        }
+        if (Utils.isWeekOfYearEnabled()) {
+            if (position % 8 == 0) {
+                int row = position / 8;
+                if (row > 0 && row <= weeksCount) {
+                    holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
+                    holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
+                    holder.num.setTextSize(12);
+                    holder.num.setBackgroundResource(0);
+                    holder.num.setVisibility(View.VISIBLE);
+                } else setEmpty(holder);
+                return;
+            }
 
-        position = fixForWeekOfYearNumber(position);
+            position = fixForWeekOfYearNumber(position);
+        }
 
         if (totalDays < position - 6 - firstDayDayOfWeek) {
             setEmpty(holder);
@@ -197,7 +217,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 7 * 8; // days of week * month view rows
+        return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
     }
 
     private boolean isPositionHeader(int position) {

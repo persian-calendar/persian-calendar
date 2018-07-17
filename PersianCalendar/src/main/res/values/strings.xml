@@ -106,4 +106,6 @@
     <string name="search_holidays">Search in events</string>
     <string name="main_calendar">Main Calendar</string>
     <string name="main_calendar_summary">Change main calendar of the app</string>
+    <string name="week_of_year">Week of Year</string>
+    <string name="week_of_year_summary">Show week of year on calendar</string>
 </resources>

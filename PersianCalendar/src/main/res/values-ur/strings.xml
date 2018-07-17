@@ -106,4 +106,6 @@
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
     <string name="main_calendar">تقویم اصلی</string>
     <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
+    <string name="week_of_year">هفتهٔ سال</string>
+    <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
 </resources>
