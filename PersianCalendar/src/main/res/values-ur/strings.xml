@@ -44,7 +44,6 @@
     <string name="qibla_compass">قطب نما/قبلہ نما</string>
     <string name="compass">قطب نما</string>
     <string name="compass_not_found">کمپاس نہیں ملا</string>
-
     <string name="month_names">مہینوں کے نام</string>
     <string name="calendar_font">تقویم کا فانٹ</string>
     <string name="application_language">اطلاقیہ کی زبان</string>
@@ -109,4 +108,5 @@
     <string name="week_of_year">هفتهٔ سال</string>
     <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
+
 </resources>

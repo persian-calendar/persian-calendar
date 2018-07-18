@@ -44,7 +44,6 @@
     <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass">Compass</string>
     <string name="compass_not_found">Compass sensor not found</string>
-
     <string name="month_names">Month Names</string>
     <string name="calendar_font">Calendar Font</string>
     <string name="application_language">Application Language</string>
@@ -90,7 +89,7 @@
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
     <string name="islamic_offset">Islamic offset</string>
-    <string name="islamic_offset_summary"></string>
+    <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="stop">Stop</string>
     <string name="goto_date">Go to date</string>
@@ -109,4 +108,5 @@
     <string name="week_of_year">Week of Year</string>
     <string name="week_of_year_summary">Show week of year on calendar</string>
     <string name="accept">OK</string>
+
 </resources>

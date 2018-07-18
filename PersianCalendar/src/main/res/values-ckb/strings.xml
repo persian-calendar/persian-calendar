@@ -44,7 +44,6 @@
     <string name="qibla_compass">جەمسەرنوێن/ڕووگەنوێن</string>
     <string name="compass">جەمسەرنوێن</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
-
     <string name="month_names">ناوی مانگەکان</string>
     <string name="calendar_font">فۆنتی ڕۆژژمێر</string>
     <string name="application_language">زمانی بەرنامە</string>
@@ -109,4 +108,5 @@
     <string name="week_of_year">ژمارەی حەفتە</string>
     <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ لە ڕۆژژمێردا</string>
     <string name="accept">باشە</string>
+
 </resources>

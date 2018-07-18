@@ -44,7 +44,6 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">د قطب نما سنسور پیدا نشو</string>
-
     <string name="month_names">مياشت نومونه</string>
     <string name="calendar_font">د کلیز فانت</string>
     <string name="application_language">د پروگرام ژبه</string>
@@ -91,13 +90,6 @@
     <string name="in_city_time">در</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">تنظیم روز جهت جلو عقب کردن جهت اصلاح تقویم</string>
-
-    <string-array name="calendar_type">
-        <item>هجری شمسی</item>
-        <item>هجری قمری</item>
-        <item>میلادی</item>
-    </string-array>
-
     <string name="date_copied_clipboard">به کلیپ بودر کپی شد</string>
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
@@ -116,4 +108,5 @@
     <string name="week_of_year">هفتهٔ سال</string>
     <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
+
 </resources>
