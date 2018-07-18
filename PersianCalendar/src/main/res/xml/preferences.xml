@@ -11,6 +11,7 @@
             android:icon="@drawable/ic_event_setting"
             android:key="holiday_types"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/events_summary"
             android:title="@string/events" />
 
@@ -21,8 +22,8 @@
             android:icon="@drawable/ic_calendar_setting"
             android:key="mainCalendarType"
             android:negativeButtonText="@string/cancel"
-            android:title="@string/main_calendar"
-            android:summary="@string/main_calendar_summary" />
+            android:summary="@string/main_calendar_summary"
+            android:title="@string/main_calendar" />
 
         <androidx.preference.ListPreference
             android:defaultValue="0"
@@ -102,8 +103,8 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="IranTime"
             android:icon="@drawable/ic_timezone_setting"
+            android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
@@ -115,8 +116,8 @@
             android:title="@string/clock_on_widget" />
 
         <androidx.preference.SwitchPreferenceCompat
-            android:icon="@drawable/ic_ampm_setting"
             android:defaultValue="true"
+            android:icon="@drawable/ic_ampm_setting"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
@@ -193,6 +194,7 @@
             android:icon="@drawable/ic_speaker_phone_setting"
             android:key="AthanAlarm"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
