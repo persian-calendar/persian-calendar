@@ -27,6 +27,27 @@
 
         <androidx.preference.ListPreference
             android:defaultValue="0"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:icon="@drawable/ic_plus_1_setting"
+            android:key="WeekStart"
+            android:negativeButtonText="@string/cancel"
+            android:summary="انتخاب شروع هفته"
+            android:title="شروع هفته" />
+
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/default_weekends"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:icon="@drawable/ic_plus_1_setting"
+            android:key="WeekEnds"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="انتخاب تعطیلی‌های هفته"
+            android:title="تعطیلی‌های هفته" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
             android:icon="@drawable/ic_plus_1_setting"

@@ -40,7 +40,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 /**
  * Program activity for android
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (isRTL())
+                    if (Utils.isRTL(getApplicationContext()))
                         slidingDirection = -1;
                 }
             }
@@ -187,14 +192,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
-        if (key.equals("AppLanguage") || key.equals("Theme"))
+        if (key.equals(PREF_APP_LANGUAGE)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(PREF_PERSIAN_DIGITS, !LANG_EN.equals(Utils.getOnlyLanguage(
+                    sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE))));
+            editor.apply();
+        }
+        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))
             restartActivity(PREFERENCE);
         UpdateUtils.update(getApplicationContext(), true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private boolean isRTL() {
-        return getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 
     @Override
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utils.initUtils(this);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            v.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 

@@ -154,7 +154,7 @@
     <string-array name="calendar_type">
         <item>Persian Calendar</item>
         <item>Islamic Calendar</item>
-        <item>Gregorian</item>
+        <item>Gregorian Calendar</item>
     </string-array>
 
     <!-- Should be matched with CalendarTypeEnum -->
@@ -162,6 +162,31 @@
         <item>SHAMSI</item>
         <item>ISLAMIC</item>
         <item>GREGORIAN</item>
+    </string-array>
+
+    <string-array name="week_days" translatable="false">
+        <item>شنبه</item>
+        <item>یک‌شنبه</item>
+        <item>دوشنبه</item>
+        <item>سه‌شنبه</item>
+        <item>چهارشنبه</item>
+        <item>پنج‌شنبه</item>
+        <item>جمعه</item>
+    </string-array>
+
+    <string-array name="week_days_value" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <!-- Which means Friday -->
+    <string-array name="default_weekends" translatable="false">
+        <item>6</item>
     </string-array>
 
 </resources>

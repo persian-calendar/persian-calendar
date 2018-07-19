@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
@@ -173,8 +174,8 @@ public class CalendarFragment extends Fragment
 
         coordinate = Utils.getCoordinate(getContext());
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
-
-        monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager()));
+        monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
+                Utils.isRTL(getContext())));
         CalendarAdapter.gotoOffset(monthViewPager, 0);
 
         monthViewPager.addOnPageChangeListener(this);
@@ -427,7 +428,7 @@ public class CalendarFragment extends Fragment
     public void onPageSelected(int position) {
         Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
         intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                CalendarAdapter.calculateOffsetFromPosition(position));
+                CalendarAdapter.positionToOffset(position));
         intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
 
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);

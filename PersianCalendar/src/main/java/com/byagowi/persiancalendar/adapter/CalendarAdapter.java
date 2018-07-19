@@ -12,16 +12,18 @@ import androidx.viewpager.widget.ViewPager;
 
 public class CalendarAdapter extends FragmentStatePagerAdapter {
     private static final int MONTHS_LIMIT = 5000; // this should be an even number
+    private static boolean isRTL;
 
-    public CalendarAdapter(FragmentManager fm) {
+    public CalendarAdapter(FragmentManager fm, boolean isRTL) {
         super(fm);
+        CalendarAdapter.isRTL = isRTL;
     }
 
     @Override
     public Fragment getItem(int position) {
         MonthFragment fragment = new MonthFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.OFFSET_ARGUMENT, position - MONTHS_LIMIT / 2);
+        bundle.putInt(Constants.OFFSET_ARGUMENT, positionToOffset(position));
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -32,12 +34,16 @@ public class CalendarAdapter extends FragmentStatePagerAdapter {
     }
 
     public static void gotoOffset(ViewPager monthViewPager, int offset) {
-        if (monthViewPager.getCurrentItem() != MONTHS_LIMIT / 2 + offset) {
-            monthViewPager.setCurrentItem(MONTHS_LIMIT / 2 + offset);
+        if (monthViewPager.getCurrentItem() != offsetToPosition(offset)) {
+            monthViewPager.setCurrentItem(offsetToPosition(offset));
         }
     }
 
-    public static int calculateOffsetFromPosition(int position) {
-        return position - MONTHS_LIMIT / 2;
+    public static int positionToOffset(int position) {
+        return isRTL ? position - MONTHS_LIMIT / 2 : MONTHS_LIMIT / 2 - position;
+    }
+
+    private static int offsetToPosition(int position) {
+        return (isRTL ? position : -position) + MONTHS_LIMIT / 2;
     }
 }

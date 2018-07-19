@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -204,6 +205,8 @@ public class Utils {
     static private CalendarTypeEnum mainCalendar;
     static private String comma;
     static private boolean showWeekOfYear;
+    static private int weekStartOffset;
+    static private int[] weekEnds;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -231,6 +234,34 @@ public class Utils {
         mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
         comma = language.equals("en-US") ? "," : "،";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
+        weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"));
+
+        // WeekEnds, 6 means Friday
+        Set<String> weekEndsString = prefs.getStringSet("WeekEnds", new HashSet<>(Arrays.asList("6")));
+        weekEnds = new int[weekEndsString.size()];
+        {
+            int i = 0;
+            for (String s : weekEndsString) {
+                weekEnds[i] = (Integer.parseInt(s) + weekStartOffset) % 7;
+                ++i;
+            }
+        }
+        //
+    }
+
+    public static boolean isWeekEnd(int dayOfWeek) {
+        for (int i = 0; i < weekEnds.length; ++i)
+            if (weekEnds[i] == dayOfWeek)
+                return true;
+
+        return false;
+    }
+
+    public static boolean isRTL(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        }
+        return false;
     }
 
     static public boolean isIranTime() {
@@ -516,7 +547,7 @@ public class Utils {
         else if (date instanceof PersianDate)
             date = DateConverter.persianToCivil((PersianDate) date);
 
-        return weekDays[date.getDayOfWeek() % 7];
+        return weekDays[(date.getDayOfWeek() + weekStartOffset) % 7];
     }
 
     static public int getDayIconResource(int day) {
@@ -994,9 +1025,17 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
+    static public String getOnlyLanguage(String string) {
+        return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    static public int caclculateIranianDayOfWeek(long jdn) {
+        return (DateConverter.jdnToCivil(jdn).getDayOfWeek() + weekStartOffset) % 7;
+    }
+
     // Context preferably should be activity context not application
     static public void changeAppLanguage(Context context) {
-        String localeCode = language.replaceAll("-(IR|AF)", "");
+        String localeCode = getOnlyLanguage(language);
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
         Resources resources = context.getResources();
@@ -1066,7 +1105,7 @@ public class Utils {
     }
 
     public static String getInitialOfWeekDay(int position) {
-        return weekDaysInitials[position];
+        return weekDaysInitials[(position + weekStartOffset) % 7];
     }
 
     static public void copyToClipboard(Context context, CharSequence text) {

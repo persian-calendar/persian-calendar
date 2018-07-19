@@ -60,7 +60,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
-        int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
+        int dayOfWeek = Utils.caclculateIranianDayOfWeek(baseJdn);
 
         long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
@@ -70,7 +70,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
             List<AbstractEvent> events = Utils.getEvents(baseJdn + i);
 
-            if (dayOfWeek == 6 || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
+            if (Utils.isWeekEnd(dayOfWeek) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
                 dayEntity.setHoliday(true);
             }
 
@@ -99,11 +99,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     private int calculateWeekOfYear(long jdn, long startOfYear) {
         long dayOfYear = jdn - startOfYear;
-        return (int) Math.ceil(1 + (dayOfYear - caclculateIranianDayOfWeek(jdn)) / 7.);
-    }
-
-    private int caclculateIranianDayOfWeek(long jdn) {
-        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
+        return (int) Math.ceil(1 + (dayOfYear - Utils.caclculateIranianDayOfWeek(jdn)) / 7.);
     }
 
     @Override
