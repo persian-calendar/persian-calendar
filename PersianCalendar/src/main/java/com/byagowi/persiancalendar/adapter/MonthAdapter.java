@@ -27,6 +27,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private boolean isArabicDigit;
     private TypedValue colorHoliday = new TypedValue();
     private TypedValue colorTextHoliday = new TypedValue();
+    private TypedValue colorTextDay = new TypedValue();
     private TypedValue colorPrimary = new TypedValue();
     private TypedValue colorDayName = new TypedValue();
     private TypedValue shapeSelectDay = new TypedValue();
@@ -48,6 +49,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorHoliday, colorHoliday, true);
         theme.resolveAttribute(R.attr.colorTextHoliday, colorTextHoliday, true);
+        theme.resolveAttribute(R.attr.colorTextDay, colorTextDay, true);
         theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
         theme.resolveAttribute(R.attr.colorTextDayName, colorDayName, true);
         theme.resolveAttribute(R.attr.circleSelect, shapeSelectDay, true);
@@ -207,7 +209,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.num.setBackgroundResource(0);
                     holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
                             ? colorHoliday.resourceId
-                            : R.color.dark_text_day));
+                            : colorTextDay.resourceId));
                 }
 
             } else {

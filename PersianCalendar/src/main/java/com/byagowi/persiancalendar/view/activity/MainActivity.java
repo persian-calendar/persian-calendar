@@ -38,7 +38,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 
 /**
  * Program activity for android
@@ -87,9 +89,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Utils.getTheme(this).equals(DARK_THEME)
-                ? R.style.DarkTheme
-                : R.style.LightTheme);
+        switch (Utils.getTheme(this)) {
+            case DARK_THEME:
+                setTheme(R.style.DarkTheme);
+                break;
+            case CLASSIC_THEME:
+                setTheme(R.style.ClassicTheme);
+                break;
+            default:
+            case LIGHT_THEME:
+                setTheme(R.style.LightTheme);
+                break;
+        }
 
         Utils.changeAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

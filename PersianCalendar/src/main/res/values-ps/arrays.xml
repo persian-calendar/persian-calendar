@@ -3,6 +3,7 @@
     <string-array name="themeNames">
         <item>روښان</item>
         <item>تور</item>
+        <item>کلاسیک</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
