@@ -242,7 +242,7 @@ public class Utils {
         {
             int i = 0;
             for (String s : weekEndsString) {
-                weekEnds[i] = (Integer.parseInt(s) + weekStartOffset) % 7;
+                weekEnds[i] = (Integer.parseInt(s) - weekStartOffset) % 7;
                 ++i;
             }
         }
