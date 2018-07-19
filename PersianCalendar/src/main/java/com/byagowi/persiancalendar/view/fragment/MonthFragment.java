@@ -27,7 +27,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
-import calendar.DateConverter;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
@@ -38,6 +37,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private List<DayEntity> days;
     private int weekOfYearStart;
     private int weeksCount;
+    private int startingDayOfWeek;
 
     private void fillTheFields() {
         CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
@@ -60,14 +60,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
-        int dayOfWeek = Utils.caclculateIranianDayOfWeek(baseJdn);
+        int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
 
         long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             DayEntity dayEntity = new DayEntity();
-            dayEntity.setNum(Utils.formatNumber(i + 1));
-            dayEntity.setDayOfWeek(dayOfWeek);
-
             List<AbstractEvent> events = Utils.getEvents(baseJdn + i);
 
             if (Utils.isWeekEnd(dayOfWeek) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
@@ -95,11 +92,13 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         long startOfYearJdn = Utils.getJdnOfCalendar(mainCalendar, year, 1, 1);
         weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
         weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+
+        startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
     }
 
     private int calculateWeekOfYear(long jdn, long startOfYear) {
         long dayOfYear = jdn - startOfYear;
-        return (int) Math.ceil(1 + (dayOfYear - Utils.caclculateIranianDayOfWeek(jdn)) / 7.);
+        return (int) Math.ceil(1 + (dayOfYear - Utils.getDayOfWeekFromJdn(jdn)) / 7.);
     }
 
     @Override
@@ -122,7 +121,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
         recyclerView.setLayoutManager(layoutManager);
         fillTheFields();
-        adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);
+        adapter = new MonthAdapter(getContext(), this, days, startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
