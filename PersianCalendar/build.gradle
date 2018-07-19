@@ -32,22 +32,19 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
-
-    defaultConfig {
-        //FIXME: To be reomved from release
-        multiDexEnabled true
-    }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'com.google.android.material:material:1.0.0-beta01'
-    implementation 'androidx.preference:preference:1.0.0-beta01'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
-    implementation 'androidx.annotation:annotation:1.0.0-beta01'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
-    implementation 'androidx.cardview:cardview:1.0.0-beta01'
+    def androidXVersion = '1.0.0-beta01'
+
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "com.google.android.material:material:$androidXVersion"
+    implementation "androidx.preference:preference:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "androidx.annotation:annotation:$androidXVersion"
+    implementation "androidx.legacy:legacy-support-v4:$androidXVersion"
+    implementation "androidx.cardview:cardview:$androidXVersion"
+    implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'com.google.android:flexbox:1.0.0'
     implementation 'android.arch.work:work-runtime:1.0.0-alpha04'
 }
