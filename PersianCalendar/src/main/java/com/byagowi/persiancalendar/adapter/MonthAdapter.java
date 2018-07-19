@@ -31,14 +31,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private TypedValue colorPrimary = new TypedValue();
     private TypedValue colorDayName = new TypedValue();
     private TypedValue shapeSelectDay = new TypedValue();
-    private final int firstDayDayOfWeek;
+    private final int startingDayOfWeek;
     private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
-        firstDayDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
+        this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
         totalDays = days.size();
         this.monthFragment = monthFragment;
         this.context = context;
@@ -67,7 +67,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     public void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;
-        selectedDay = dayOfMonth + 6 + firstDayDayOfWeek;
+        selectedDay = dayOfMonth + 6 + startingDayOfWeek;
         int selectedDayPosition = selectedDay;
         if (Utils.isWeekOfYearEnabled()) {
             prevDay = fixForWeekOfYearNumber(prevDay);
@@ -104,13 +104,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 }
             }
 
-            if (totalDays < position - 6 - firstDayDayOfWeek) {
+            if (totalDays < position - 6 - startingDayOfWeek) {
                 return;
             }
 
-            if (position - 7 - firstDayDayOfWeek >= 0) {
+            if (position - 7 - startingDayOfWeek >= 0) {
                 monthFragment.onClickItem(days
-                        .get(position - 7 - firstDayDayOfWeek)
+                        .get(position - 7 - startingDayOfWeek)
                         .getJdn());
 
                 selectedDay = position;
@@ -131,14 +131,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 }
             }
 
-            if (totalDays < position - 6 - firstDayDayOfWeek) {
+            if (totalDays < position - 6 - startingDayOfWeek) {
                 return false;
             }
 
 
             try {
                 monthFragment.onLongClickItem(days
-                        .get(position - 7 - firstDayDayOfWeek)
+                        .get(position - 7 - startingDayOfWeek)
                         .getJdn());
             } catch (Exception e) {
                 // Ignore it for now
@@ -175,7 +175,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             position = fixForWeekOfYearNumber(position);
         }
 
-        if (totalDays < position - 6 - firstDayDayOfWeek) {
+        if (totalDays < position - 6 - startingDayOfWeek) {
             setEmpty(holder);
         } else if (isPositionHeader(position)) {
             holder.num.setText(Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)));
@@ -186,11 +186,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.event.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         } else {
-            if (position - 7 - firstDayDayOfWeek >= 0) {
-                holder.num.setText(Utils.formatNumber(1 + position - 7 - firstDayDayOfWeek));
+            if (position - 7 - startingDayOfWeek >= 0) {
+                holder.num.setText(Utils.formatNumber(1 + position - 7 - startingDayOfWeek));
                 holder.num.setVisibility(View.VISIBLE);
 
-                DayEntity day = days.get(position - 7 - firstDayDayOfWeek);
+                DayEntity day = days.get(position - 7 - startingDayOfWeek);
 
                 holder.num.setTextSize(isArabicDigit ? 20 : 25);
                 holder.event.setVisibility(day.isEvent() ? View.VISIBLE : View.GONE);

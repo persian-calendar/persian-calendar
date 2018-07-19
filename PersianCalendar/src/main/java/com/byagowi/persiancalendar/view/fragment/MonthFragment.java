@@ -98,7 +98,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     private int calculateWeekOfYear(long jdn, long startOfYear) {
         long dayOfYear = jdn - startOfYear;
-        return (int) Math.ceil(1 + (dayOfYear - Utils.getDayOfWeekFromJdn(jdn)) / 7.);
+        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(Utils.getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
     @Override
