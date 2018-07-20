@@ -22,7 +22,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private Context context;
     private MonthFragment monthFragment;
     private List<DayEntity> days;
-    private int selectedDay = -1;
     private boolean isArabicDigit;
     private TypedValue colorHoliday = new TypedValue();
     private TypedValue colorTextHoliday = new TypedValue();
@@ -55,25 +54,23 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         theme.resolveAttribute(R.attr.circleSelect, shapeSelectDay, true);
     }
 
+    private int selectedDay = -1;
+
     public void clearSelectedDay() {
         int prevDay = selectedDay;
         selectedDay = -1;
-        if (Utils.isWeekOfYearEnabled()) {
-            prevDay = fixForWeekOfYearNumberReverse(prevDay);
-        }
         notifyItemChanged(prevDay);
     }
 
     public void selectDay(int dayOfMonth) {
-        int prevDay = selectedDay;
+        clearSelectedDay();
+
         selectedDay = dayOfMonth + 6 + startingDayOfWeek;
-        int selectedDayPosition = selectedDay;
         if (Utils.isWeekOfYearEnabled()) {
-            prevDay = fixForWeekOfYearNumber(prevDay);
-            selectedDayPosition = fixForWeekOfYearNumber(selectedDayPosition);
+            selectedDay = selectedDay + selectedDay / 7 + 1;
         }
-        notifyItemChanged(prevDay);
-        notifyItemChanged(selectedDayPosition);
+
+        notifyItemChanged(selectedDay);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -108,17 +105,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             }
 
             if (position - 7 - startingDayOfWeek >= 0) {
-                monthFragment.onClickItem(days
-                        .get(position - 7 - startingDayOfWeek)
-                        .getJdn());
+                monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
 
-                int prevDay = selectedDay;
-                selectedDay = position;
-                if (Utils.isWeekOfYearEnabled()) {
-                    prevDay = fixForWeekOfYearNumberReverse(prevDay);
-                }
-                notifyItemChanged(prevDay);
-                notifyItemChanged(getAdapterPosition());
+                MonthAdapter.this.selectDay(1 + position - 7 - startingDayOfWeek);
             }
         }
 
@@ -139,14 +128,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
 
             try {
-                monthFragment.onLongClickItem(days
-                        .get(position - 7 - startingDayOfWeek)
-                        .getJdn());
+                monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
             } catch (Exception e) {
                 // Ignore it for now
                 // I guess it will occur on CyanogenMod phones
                 // where Google extra things is not installed
             }
+            onClick(v);
 
             return false;
         }
@@ -161,6 +149,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
+        int originalPosition = position;
         if (Utils.isWeekOfYearEnabled()) {
             if (position % 8 == 0) {
                 int row = position / 8;
@@ -198,7 +187,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.event.setVisibility(day.isEvent() ? View.VISIBLE : View.GONE);
                 holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
 
-                if (position == selectedDay) {
+                if (originalPosition == selectedDay) {
                     holder.num.setBackgroundResource(shapeSelectDay.resourceId);
                     holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
                             ? colorTextHoliday.resourceId
@@ -235,9 +224,5 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     private int fixForWeekOfYearNumber(int position) {
         return position - position / 8 - 1;
-    }
-
-    private int fixForWeekOfYearNumberReverse(int position) {
-        return (position + 1) * 8 / 7;
     }
 }
