@@ -109,6 +109,9 @@
     <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ لە ڕۆژژمێردا</string>
     <string name="accept">باشە</string>
     <string name="calendar">تقویم</string>
+    <string name="week_start">شروع هفته</string>
     <string name="week_start_summary">انتخاب شروع هفته</string>
+    <string name="week_ends">روزهای تعطیل هفته</string>
+    <string name="week_ends_summary">چه روزهایی در هفته تعطیل نمایش داده شوند</string>
 
 </resources>
