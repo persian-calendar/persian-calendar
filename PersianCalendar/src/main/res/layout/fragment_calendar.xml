@@ -105,7 +105,8 @@
                             android:id="@+id/event_message"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/colorTextNormal"
+                            android:textAlignment="center"
+                            android:textColor="?attr/colorTextSecond"
                             android:textSize="@dimen/text_size_description" />
 
 
