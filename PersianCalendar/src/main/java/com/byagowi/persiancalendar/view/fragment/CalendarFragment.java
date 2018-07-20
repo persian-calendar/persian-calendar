@@ -95,8 +95,10 @@ public class CalendarFragment extends Fragment
     private AppCompatImageView todayIcon;
     private AppCompatImageView warnUserIcon;
 
+    private AppCompatImageView moreCalendar;
     private AppCompatImageView moreOwghat;
     private AppCompatImageView owghatIcon;
+
 
     private CardView owghat;
     private CardView event;
@@ -163,6 +165,7 @@ public class CalendarFragment extends Fragment
         sunsetTextView = view.findViewById(R.id.sunset);
         midnightTextView = view.findViewById(R.id.midnight);
 
+        moreCalendar = view.findViewById(R.id.more_calendar);
 
         moreOwghat = view.findViewById(R.id.more_owghat);
 
@@ -354,30 +357,30 @@ public class CalendarFragment extends Fragment
         switch (v.getId()) {
 
             case R.id.calendars_card:
-                if (gregorianDateLinear.getVisibility() == View.VISIBLE) {
-                    gregorianDateLinear.setVisibility(View.GONE);
-                    islamicDateLinear.setVisibility(View.GONE);
-                    shamsiDateLinear.setVisibility(View.GONE);
-                } else {
-                    gregorianDateLinear.setVisibility(View.VISIBLE);
-                    islamicDateLinear.setVisibility(View.VISIBLE);
-                    shamsiDateLinear.setVisibility(View.VISIBLE);
-                }
+                boolean isOpenCalendarCommand = gregorianDateLinear.getVisibility() != View.VISIBLE;
+
+                moreCalendar.setImageResource(isOpenCalendarCommand
+                        ? R.drawable.ic_keyboard_arrow_up
+                        : R.drawable.ic_keyboard_arrow_down);
+                gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+
                 break;
 
             case R.id.owghat:
 
-                boolean isOpenCommand = sunriseLayout.getVisibility() == View.GONE;
+                boolean isOpenOwghatCommand = sunriseLayout.getVisibility() == View.GONE;
 
-                moreOwghat.setImageResource(isOpenCommand
+                moreOwghat.setImageResource(isOpenOwghatCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                imsakLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
-                sunriseLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
-                asrLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
-                sunsetLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
-                ishaLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
-                midnightLayout.setVisibility(isOpenCommand ? View.VISIBLE : View.GONE);
+                imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
 
                 break;
 

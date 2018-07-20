@@ -96,6 +96,8 @@ public class ConverterFragment extends Fragment implements
         islamicDateLinear = view.findViewById(R.id.islamic_date_linear);
         islamicDateDay = view.findViewById(R.id.islamic_date_day);
         islamicDate = view.findViewById(R.id.islamic_date);
+        // Hide the button, we don't need it here
+        view.findViewById(R.id.more_calendar).setVisibility(View.GONE);
 
         shamsiDateLinear.setOnClickListener(this);
         shamsiDateDay.setOnClickListener(this);

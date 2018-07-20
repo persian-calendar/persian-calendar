@@ -40,6 +40,14 @@
                 android:textSize="@dimen/text_size_title"
                 tools:text="Calendar" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/more_calendar"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="center_vertical"
+                android:tint="?attr/colorIcon"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
