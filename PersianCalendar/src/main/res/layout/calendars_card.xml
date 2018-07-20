@@ -11,6 +11,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         android:orientation="vertical"
         app:divider="?attr/appDivider"
         app:dividerPadding="@dimen/divider_margin"
