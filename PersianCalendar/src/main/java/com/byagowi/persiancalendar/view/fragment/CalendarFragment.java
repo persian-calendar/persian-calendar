@@ -110,6 +110,8 @@ public class CalendarFragment extends Fragment
     private LinearLayoutCompat ishaLayout;
     private LinearLayoutCompat midnightLayout;
 
+    private CardView calendarsCard;
+
     private int viewPagerPosition;
 
     @Nullable
@@ -191,6 +193,13 @@ public class CalendarFragment extends Fragment
         shamsiDate.setOnClickListener(this);
         shamsiDateDay.setOnClickListener(this);
         shamsiDateLinear.setOnClickListener(this);
+
+        calendarsCard = view.findViewById(R.id.calendars_card);
+        calendarsCard.setOnClickListener(this);
+
+        gregorianDateLinear.setVisibility(View.GONE);
+        islamicDateLinear.setVisibility(View.GONE);
+        shamsiDateLinear.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
@@ -336,6 +345,18 @@ public class CalendarFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.calendars_card:
+                if (gregorianDateLinear.getVisibility() == View.VISIBLE) {
+                    gregorianDateLinear.setVisibility(View.GONE);
+                    islamicDateLinear.setVisibility(View.GONE);
+                    shamsiDateLinear.setVisibility(View.GONE);
+                } else {
+                    gregorianDateLinear.setVisibility(View.VISIBLE);
+                    islamicDateLinear.setVisibility(View.VISIBLE);
+                    shamsiDateLinear.setVisibility(View.VISIBLE);
+                }
+                break;
 
             case R.id.owghat:
 
