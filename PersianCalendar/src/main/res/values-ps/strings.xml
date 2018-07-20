@@ -108,5 +108,7 @@
     <string name="week_of_year">هفتهٔ سال</string>
     <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
+    <string name="calendar">تقویم</string>
+    <string name="week_start_summary">انتخاب شروع هفته</string>
 
 </resources>
