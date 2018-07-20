@@ -98,9 +98,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case DARK_THEME:
                 setTheme(R.style.DarkTheme);
                 break;
-            case CLASSIC_THEME:
-                setTheme(R.style.ClassicTheme);
-                break;
+//            case CLASSIC_THEME:
+//                setTheme(R.style.ClassicTheme);
+//                break;
             default:
             case LIGHT_THEME:
                 setTheme(R.style.LightTheme);
