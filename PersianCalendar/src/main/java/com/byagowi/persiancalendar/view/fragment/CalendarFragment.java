@@ -93,6 +93,7 @@ public class CalendarFragment extends Fragment
     private TextView holidayTitle;
     private TextView today;
     private AppCompatImageView todayIcon;
+    private AppCompatImageView warnUserIcon;
 
     private AppCompatImageView moreOwghat;
     private AppCompatImageView owghatIcon;
@@ -148,6 +149,7 @@ public class CalendarFragment extends Fragment
         weekDayName = view.findViewById(R.id.week_day_name);
         today = view.findViewById(R.id.today);
         todayIcon = view.findViewById(R.id.today_icon);
+        warnUserIcon = view.findViewById(R.id.warn_user_icon);
         today.setVisibility(View.GONE);
         todayIcon.setVisibility(View.GONE);
 
@@ -197,6 +199,7 @@ public class CalendarFragment extends Fragment
         calendarsCard = view.findViewById(R.id.calendars_card);
         calendarsCard.setOnClickListener(this);
 
+        warnUserIcon.setVisibility(View.GONE);
         gregorianDateLinear.setVisibility(View.GONE);
         islamicDateLinear.setVisibility(View.GONE);
         shamsiDateLinear.setVisibility(View.GONE);
@@ -306,14 +309,18 @@ public class CalendarFragment extends Fragment
 
         String messageToShow = "";
         if (Utils.getToday().getYear() > maxSupportedYear)
-            messageToShow = getString(R.string.shouldBeUpdated) + "\n";
+            messageToShow = getString(R.string.shouldBeUpdated);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
-        if (enabledTypes.size() == 0)
+        if (enabledTypes.size() == 0) {
+            if (!TextUtils.isEmpty(messageToShow))
+                messageToShow += "\n";
             messageToShow += getString(R.string.warn_if_events_not_set);
+        }
 
         if (!TextUtils.isEmpty(messageToShow)) {
+            warnUserIcon.setVisibility(View.VISIBLE);
             eventMessage.setText(messageToShow);
             eventMessage.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
