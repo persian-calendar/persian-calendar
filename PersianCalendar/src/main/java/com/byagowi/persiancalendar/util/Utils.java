@@ -61,6 +61,8 @@ import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import calendar.AbstractDate;
@@ -152,6 +154,34 @@ public class Utils {
             supportActionBar.setTitle(title);
             supportActionBar.setSubtitle(subtitle);
         }
+    }
+
+    private static final long DAY_IN_SECOND = 86400;
+
+    public static long calculateDiffToChangeDate() {
+        Date currentTime = Calendar.getInstance().getTime();
+        long current = currentTime.getTime() / 1000;
+
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.SECOND, 1);
+
+        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
+
+        return start - current;
+    }
+
+    static public void setChangeDateWorker(long second) {
+        OneTimeWorkRequest changeDateWorker =
+                new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                        .setInitialDelay(second, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+                        .build();
+
+        WorkManager.getInstance().beginUniqueWork(
+                "changeDate",
+                ExistingWorkPolicy.REPLACE,
+                changeDateWorker).enqueue();
     }
 
     static public void startUpdateWorker() {
