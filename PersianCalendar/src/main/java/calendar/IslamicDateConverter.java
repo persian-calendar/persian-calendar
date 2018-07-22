@@ -16,7 +16,7 @@ class IslamicDateConverter {
     private static long jdSupportStart = 2453766;
     static {
         // https://github.com/ilius/starcal/blob/master/scal3/cal_types/hijri-monthes.json
-        int[] hirjiMonths = {
+        int[] hijriMonths = {
                 1427, 30, 29, 29, 30, 29, 30, 30, 30, 30, 29, 29, 30,
                 1428, 29, 30, 29, 29, 29, 30, 30, 29, 30, 30, 30, 29,
                 1429, 30, 29, 30, 29, 29, 29, 30, 30, 29, 30, 30, 29,
@@ -33,18 +33,18 @@ class IslamicDateConverter {
                 1440, 30, 29, 30, 30, 30, 29, 29
         };
 
-        int years = (int) Math.ceil(((float) hirjiMonths.length) / 13);
+        int years = (int) Math.ceil(((float) hijriMonths.length) / 13);
         yearsStartJd = new long[years];
-        supportedYearsStart = hirjiMonths[0];
+        supportedYearsStart = hijriMonths[0];
         long jd = jdSupportStart;
         for (int y = 0; y < years; ++y) {
-            int year = hirjiMonths[y * 13];
+            int year = hijriMonths[y * 13];
 
             yearsStartJd[y] = jd;
             long[] months = new long[12];
-            for (int m = 1; m < 13 && y * 13 + m < hirjiMonths.length; ++m) {
+            for (int m = 1; m < 13 && y * 13 + m < hijriMonths.length; ++m) {
                 months[m - 1] = jd;
-                jd += hirjiMonths[y * 13 + m];
+                jd += hijriMonths[y * 13 + m];
             }
             yearsMonthsInJd.put(year, months);
         }
@@ -69,7 +69,7 @@ class IslamicDateConverter {
         return i;
     }
 
-    static int[] jdToHirji(long jd) {
+    static int[] jdToHijri(long jd) {
         if (jd < jdSupportStart || jd >= jdSupportEnd)
             return null;
 

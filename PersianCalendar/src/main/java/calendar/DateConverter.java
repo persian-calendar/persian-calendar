@@ -96,7 +96,7 @@ public final class DateConverter {
     }
 
     public static IslamicDate jdnToIslamic(long jd) {
-        int[] tableResult = IslamicDateConverter.jdToHirji(jd);
+        int[] tableResult = IslamicDateConverter.jdToHijri(jd);
         if (tableResult != null) {
             return new IslamicDate(tableResult[0], tableResult[1], tableResult[2]);
         }
