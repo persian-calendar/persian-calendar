@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -15,12 +14,10 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.RawRes;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,6 +31,7 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
+import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -48,7 +46,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -60,6 +57,14 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.RawRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -71,7 +76,6 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
@@ -94,7 +98,6 @@ import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
-import static com.byagowi.persiancalendar.Constants.PERSIAN_COMMA;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
@@ -153,6 +156,45 @@ public class Utils {
         }
     }
 
+    private static final long DAY_IN_SECOND = 86400;
+
+    public static long calculateDiffToChangeDate() {
+        Date currentTime = Calendar.getInstance().getTime();
+        long current = currentTime.getTime() / 1000;
+
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.SECOND, 1);
+
+        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
+
+        return start - current;
+    }
+
+    static public void setChangeDateWorker(long second) {
+        OneTimeWorkRequest changeDateWorker =
+                new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                        .setInitialDelay(second, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+                        .build();
+
+        WorkManager.getInstance().beginUniqueWork(
+                "changeDate",
+                ExistingWorkPolicy.REPLACE,
+                changeDateWorker).enqueue();
+    }
+
+    static public void startUpdateWorker() {
+        PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+                .Builder(UpdateWorker.class, 1, TimeUnit.MINUTES); //15 min
+
+        PeriodicWorkRequest updateWork = updateBuilder.build();
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+                "update",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                updateWork);
+    }
+
     static public Coordinate getCoordinate(Context context) {
         CityEntity cityEntity = getCityFromPreference(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -190,6 +232,11 @@ public class Utils {
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
+    static private CalendarTypeEnum mainCalendar;
+    static private String comma;
+    static private boolean showWeekOfYear;
+    static private int weekStartOffset;
+    static private boolean[] weekEnds;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -214,6 +261,26 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
+        mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
+        comma = language.equals("en-US") ? "," : "،";
+        showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
+
+        weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"));
+        // WeekEnds, 6 means Friday
+        weekEnds = new boolean[7];
+        for (String s : prefs.getStringSet("WeekEnds", new HashSet<>(Arrays.asList("6"))))
+            weekEnds[Integer.parseInt(s)] = true;
+    }
+
+    public static boolean isWeekEnd(int dayOfWeek) {
+        return weekEnds[dayOfWeek];
+    }
+
+    public static boolean isRTL(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        }
+        return false;
     }
 
     static public boolean isIranTime() {
@@ -230,6 +297,10 @@ public class Utils {
 
     static public boolean isNotifyDate() {
         return notifyDate;
+    }
+
+    static public boolean isWeekOfYearEnabled() {
+        return showWeekOfYear;
     }
 
     static public int getAthanVolume(Context context) {
@@ -269,6 +340,82 @@ public class Utils {
         return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
+    static public long getTodayJdn() {
+        return DateConverter.civilToJdn(new CivilDate(makeCalendarFromDate(new Date())));
+    }
+
+    static public IslamicDate getIslamicToday() {
+        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())), getIslamicOffset());
+    }
+
+    static public CivilDate getGregorianToday() {
+        return new CivilDate(makeCalendarFromDate(new Date()));
+    }
+
+    static public CalendarTypeEnum getMainCalendar() {
+        return mainCalendar;
+    }
+
+    static public AbstractDate getTodayOfCalendar(CalendarTypeEnum calendar) {
+        switch (calendar) {
+            case ISLAMIC:
+                return getIslamicToday();
+            case GREGORIAN:
+                return getGregorianToday();
+            case SHAMSI:
+            default:
+                return getToday();
+        }
+    }
+
+    static public AbstractDate getDateOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
+        switch (calendar) {
+            case ISLAMIC:
+                return new IslamicDate(year, month, day);
+            case GREGORIAN:
+                return new CivilDate(year, month, day);
+            case SHAMSI:
+            default:
+                return new PersianDate(year, month, day);
+        }
+    }
+
+    static public long getJdnOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
+        switch (calendar) {
+            case ISLAMIC:
+                return DateConverter.islamicToJdn(year, month, day);
+            case GREGORIAN:
+                return DateConverter.civilToJdn(year, month, day);
+            case SHAMSI:
+            default:
+                return DateConverter.persianToJdn(year, month, day);
+        }
+    }
+
+    static public AbstractDate getDateFromJdnOfCalendar(CalendarTypeEnum calendar, long jdn) {
+        switch (calendar) {
+            case ISLAMIC:
+                return DateConverter.jdnToIslamic(jdn);
+            case GREGORIAN:
+                return DateConverter.jdnToCivil(jdn);
+            case SHAMSI:
+            default:
+                return DateConverter.jdnToPersian(jdn);
+        }
+    }
+
+    static public long getJdnDate(AbstractDate date) {
+        if (date instanceof PersianDate) {
+            return DateConverter.persianToJdn((PersianDate) date);
+        } else if (date instanceof IslamicDate) {
+            return DateConverter.islamicToJdn((IslamicDate) date);
+        } else if (date instanceof CivilDate) {
+            return DateConverter.civilToJdn((CivilDate) date);
+        } else {
+            return 0;
+        }
+    }
+
     static public Calendar makeCalendarFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         if (iranTime) {
@@ -276,6 +423,11 @@ public class Utils {
         }
         calendar.setTime(date);
         return calendar;
+    }
+
+    static public String toLinearDate(AbstractDate date) {
+        return String.format("%s/%s/%s", formatNumber(date.getYear()),
+                formatNumber(date.getMonth()), formatNumber(date.getDayOfMonth()));
     }
 
     static private String clockToString(int hour, int minute) {
@@ -345,30 +497,6 @@ public class Utils {
         return result;
     }
 
-    static public String getPersianFormattedClock(Calendar calendar) {
-        String timeText = null;
-
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (!clockIn24) {
-            if (calendar.get(Calendar.HOUR_OF_DAY) >= 12) {
-                timeText = language.equals("ckb")
-                        ? PM_IN_CKB
-                        : PM_IN_PERSIAN;
-                hour -= 12;
-            } else {
-                timeText = language.equals("ckb")
-                        ? AM_IN_CKB
-                        : AM_IN_PERSIAN;
-            }
-        }
-
-        String result = clockToString(hour, calendar.get(Calendar.MINUTE));
-        if (!clockIn24) {
-            result = result + " " + timeText;
-        }
-        return result;
-    }
-
     static public String formatNumber(int number) {
         return formatNumber(Integer.toString(number));
     }
@@ -386,13 +514,37 @@ public class Utils {
         return String.valueOf(result);
     }
 
-    static public String dateToString(Context context, AbstractDate date) {
+    static public String dateToString(AbstractDate date) {
         return formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
                 formatNumber(date.getYear());
     }
 
-    static public String dayTitleSummary(Context context, PersianDate persianDate) {
-        return getWeekDayName(persianDate) + PERSIAN_COMMA + " " + dateToString(context, persianDate);
+    static public String dateStringOfOtherCalendar(CalendarTypeEnum calendar, long jdn) {
+        switch (calendar) {
+            case ISLAMIC:
+                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+                        comma + " " +
+                        Utils.dateToString(DateConverter.jdnToCivil(jdn));
+            case GREGORIAN:
+                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+                        comma + " " +
+                        Utils.dateToString(DateConverter.civilToIslamic(
+                                DateConverter.jdnToCivil(jdn), getIslamicOffset()));
+            case SHAMSI:
+            default:
+                return Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
+                        comma + " " +
+                        Utils.dateToString(DateConverter.civilToIslamic(
+                                DateConverter.jdnToCivil(jdn), getIslamicOffset()));
+        }
+    }
+
+    static public String dayTitleSummary(AbstractDate date) {
+        return getWeekDayName(date) + comma + " " + dateToString(date);
+    }
+
+    static public String getComma() {
+        return comma;
     }
 
     static private String[] monthsNamesOfCalendar(AbstractDate date) {
@@ -572,7 +724,7 @@ public class Utils {
 
         if (fallbackToCoord)
             if (coordinate != null)
-                return formatCoordinate(context, coordinate, PERSIAN_COMMA + " ");
+                return formatCoordinate(context, coordinate, comma + " ");
 
         return "";
     }
@@ -580,6 +732,8 @@ public class Utils {
     static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
+    static public List<Object> allEnabledEvents;
+    static public List<String> allEnabledEventsTitles;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -599,6 +753,8 @@ public class Utils {
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
         SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
+        ArrayList<Object> allEnabledEvents = new ArrayList<>();
+        ArrayList<String> allEnabledEventsTitles = new ArrayList<>();
 
         try {
             JSONArray days;
@@ -645,18 +801,24 @@ public class Utils {
                     addOrNot = true;
 
                 if (addOrNot) {
+                    title += " (";
                     if (holiday && afghanistanHolidays && iranHolidays) {
                         if (type.equals("Islamic Iran") || type.equals("Iran"))
-                            title += " (ایران)";
+                            title += "ایران، ";
                         else if (type.equals("Afghanistan"))
-                            title += " (افغانستان)";
+                            title += "افغانستان، ";
                     }
+                    title += formatNumber(day) + " " + persianMonths[month - 1] + ")";
+
                     List<PersianCalendarEvent> list = persianCalendarEvents.get(month * 100 + day);
                     if (list == null) {
                         list = new ArrayList<>();
                         persianCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday));
+                    PersianCalendarEvent ev = new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -694,9 +856,9 @@ public class Utils {
                 if (addOrNot) {
                     title += " (";
                     if (holiday && afghanistanHolidays && iranHolidays) {
-                        if (type.equals("Islamic Iran") || type.equals("Iran"))
+                        if (type.equals("Islamic Iran"))
                             title += "ایران، ";
-                        else if (type.equals("Afghanistan"))
+                        else if (type.equals("Islamic Afghanistan"))
                             title += "افغانستان، ";
                     }
                     title += formatNumber(day) + " " + islamicMonths[month - 1] + ")";
@@ -705,7 +867,10 @@ public class Utils {
                         list = new ArrayList<>();
                         islamicCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday));
+                    IslamicCalendarEvent ev = new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -725,7 +890,10 @@ public class Utils {
                         list = new ArrayList<>();
                         gregorianCalendarEvents.put(month * 100 + day, list);
                     }
-                    list.add(new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false));
+                    GregorianCalendarEvent ev = new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false);
+                    list.add(ev);
+                    allEnabledEvents.add(ev);
+                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -735,6 +903,8 @@ public class Utils {
         Utils.persianCalendarEvents = persianCalendarEvents;
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
+        Utils.allEnabledEvents = allEnabledEvents;
+        Utils.allEnabledEventsTitles = allEnabledEventsTitles;
     }
 
     static public List<AbstractEvent> getEvents(long jdn) {
@@ -769,6 +939,10 @@ public class Utils {
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday) {
+        return getEventsTitle(dayEvents, holiday, false);
+    }
+
+    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday, boolean removeBrackets) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
 
@@ -779,33 +953,15 @@ public class Utils {
                 else
                     titles.append("\n");
 
-                titles.append(event.getTitle());
+                String title = event.getTitle();
+                if (removeBrackets)
+                    title = title.replaceAll(" \\(.*$", "");
+
+                titles.append(title);
             }
 
         return titles.toString();
     }
-
-    static public void loadApp(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 1);
-        Intent intent = new Intent(context, BroadcastReceivers.class);
-        intent.setAction(BROADCAST_RESTART_APP);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
-    }
-
-    static public boolean isServiceRunning(Context context, Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     static public void loadAlarms(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -888,9 +1044,25 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
+    static public String getOnlyLanguage(String string) {
+        return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    static public int getDayOfWeekFromJdn(long jdn) {
+        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
+    }
+
+    static public int fixDayOfWeek(int dayOfWeek) {
+        return (dayOfWeek + weekStartOffset) % 7;
+    }
+
+    static public int fixDayOfWeekReverse(int dayOfWeek) {
+        return (dayOfWeek + 7 - weekStartOffset) % 7;
+    }
+
     // Context preferably should be activity context not application
     static public void changeAppLanguage(Context context) {
-        String localeCode = language.replaceAll("-(IR|AF)", "");
+        String localeCode = getOnlyLanguage(language);
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
         Resources resources = context.getResources();
@@ -914,6 +1086,14 @@ public class Utils {
             case "ckb":
                 messagesFile = R.raw.messages_ckb;
                 break;
+            case "ur":
+                messagesFile = R.raw.messages_ur;
+                break;
+            case "en-US":
+                messagesFile = R.raw.messages_en;
+                break;
+            case "en":
+            case "fa":
             default:
                 messagesFile = R.raw.messages_fa;
                 break;
@@ -952,7 +1132,7 @@ public class Utils {
     }
 
     public static String getInitialOfWeekDay(int position) {
-        return weekDaysInitials[position];
+        return weekDaysInitials[position % 7];
     }
 
     static public void copyToClipboard(Context context, CharSequence text) {
@@ -990,28 +1170,22 @@ public class Utils {
         }
     }
 
+    static public int positionFromCalendarType(CalendarTypeEnum calendar) {
+        switch (calendar) {
+            case SHAMSI:
+                return 0;
+            case ISLAMIC:
+                return 1;
+            default:
+                return 2;
+        }
+    }
+
     static public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
                                                Spinner yearSpinner, Spinner monthSpinner,
                                                Spinner daySpinner) {
-        AbstractDate date;
-        PersianDate newDatePersian = getToday();
-        CivilDate newDateCivil = DateConverter.persianToCivil(newDatePersian);
-        IslamicDate newDateIslamic = DateConverter.persianToIslamic(newDatePersian);
-
-        date = newDateCivil;
-        switch (calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
-            case GREGORIAN:
-                date = newDateCivil;
-                break;
-
-            case ISLAMIC:
-                date = newDateIslamic;
-                break;
-
-            case SHAMSI:
-                date = newDatePersian;
-                break;
-        }
+        AbstractDate date = getTodayOfCalendar(calendarTypeFromPosition(
+                calendarTypeSpinner.getSelectedItemPosition()));
 
         // years spinner init.
         String[] years = new String[200];

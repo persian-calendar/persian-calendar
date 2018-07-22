@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view.preferences;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
@@ -12,6 +11,8 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
+
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     private final String TAG = AthanVolumeDialog.class.getName();

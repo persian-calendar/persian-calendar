@@ -44,7 +44,6 @@
     <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass">Compass</string>
     <string name="compass_not_found">Compass sensor not found</string>
-
     <string name="month_names">Month Names</string>
     <string name="calendar_font">Calendar Font</string>
     <string name="application_language">Application Language</string>
@@ -90,14 +89,7 @@
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
     <string name="islamic_offset">Islamic offset</string>
-    <string name="islamic_offset_summary"></string>
-
-    <string-array name="calendar_type">
-        <item>Persian Calendar</item>
-        <item>Islamic Calendar</item>
-        <item>Gregorian</item>
-    </string-array>
-
+    <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="stop">Stop</string>
     <string name="goto_date">Go to date</string>
@@ -108,6 +100,18 @@
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
-    <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
-    <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
+    <string name="warn_if_events_not_set">To select and show holidays and events you like go to the preferences</string>
+    <string name="date_diff_text">%s day (~%s year and %s month and %s day)</string>
+    <string name="search_holidays">Search in events</string>
+    <string name="main_calendar">Main Calendar</string>
+    <string name="main_calendar_summary">Change main calendar of the app</string>
+    <string name="week_of_year">Week of Year</string>
+    <string name="week_of_year_summary">Show week of year on calendar</string>
+    <string name="accept">OK</string>
+    <string name="calendar">Calendar</string>
+    <string name="week_start">Week Start</string>
+    <string name="week_start_summary">Select week start day</string>
+    <string name="week_ends">Weekends</string>
+    <string name="week_ends_summary">Select weekends days</string>
+
 </resources>

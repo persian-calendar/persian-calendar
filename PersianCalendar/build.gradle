@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "28.0.0"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.1"
 
     defaultConfig {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 560
         versionName "5.6.0"
         vectorDrawables.useSupportLibrary = true
@@ -29,22 +29,22 @@ android {
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
-
 }
 
 dependencies {
-    def supportLibVersion = "27.1.1"
+    def androidXVersion = '1.0.0-beta01'
 
-    implementation "com.android.support:appcompat-v7:$supportLibVersion"
-    implementation "com.android.support:design:$supportLibVersion"
-    implementation "com.android.support:preference-v7:$supportLibVersion"
-    implementation "com.android.support:recyclerview-v7:$supportLibVersion"
-    implementation "com.android.support:support-annotations:$supportLibVersion"
-    implementation "com.android.support:support-v4:$supportLibVersion"
-    implementation "com.android.support:cardview-v7:$supportLibVersion"
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "com.google.android.material:material:$androidXVersion"
+    implementation "androidx.preference:preference:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "androidx.annotation:annotation:$androidXVersion"
+    implementation "androidx.legacy:legacy-support-v4:$androidXVersion"
+    implementation "androidx.cardview:cardview:$androidXVersion"
+    implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'com.google.android:flexbox:1.0.0'
+    implementation 'android.arch.work:work-runtime:1.0.0-alpha04'
 }

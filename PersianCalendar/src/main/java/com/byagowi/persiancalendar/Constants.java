@@ -50,6 +50,7 @@ public class Constants {
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
+    public static final String CLASSIC_THEME = "ClassicTheme";
 
     public static final String FAJR = "fajr";
     public static final String SUNRISE = "sunrise";
@@ -69,7 +70,6 @@ public class Constants {
     public static final String HIJRI_QAMARI = "hijri_qamari";
     public static final String GREGORIAN = "gregorian";
 
-    public static final int MONTHS_LIMIT = 5000; // this should be an even number
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
@@ -80,7 +80,6 @@ public class Constants {
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
-    public static final char PERSIAN_COMMA = '،';
     public static final char RLM = '\u200F';
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};

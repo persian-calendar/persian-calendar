@@ -5,11 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,30 +15,37 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import calendar.DateConverter;
-import calendar.PersianDate;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import calendar.AbstractDate;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
-    private PersianDate persianDate;
+    private AbstractDate typedDate;
     private int offset;
 
     private MonthAdapter adapter;
     private List<DayEntity> days;
     private int weekOfYearStart;
     private int weeksCount;
+    private int startingDayOfWeek;
 
     private void fillTheFields() {
+        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
-        persianDate = Utils.getToday();
-        int month = persianDate.getMonth() - offset;
+        typedDate = Utils.getTodayOfCalendar(mainCalendar);
+        int month = typedDate.getMonth() - offset;
         month -= 1;
-        int year = persianDate.getYear();
+        int year = typedDate.getYear();
 
         year = year + (month / 12);
         month = month % 12;
@@ -52,23 +54,20 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             month += 12;
         }
         month += 1;
-        persianDate = new PersianDate(year, month, 1);
+        typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
-        long baseJdn = DateConverter.persianToJdn(persianDate);
-        int monthLength = (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year,
+        long baseJdn = Utils.getJdnDate(typedDate);
+        int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
-        int dayOfWeek = DateConverter.jdnToCivil(baseJdn).getDayOfWeek() % 7;
+        int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
 
-        long todayJdn = DateConverter.persianToJdn(Utils.getToday());
+        long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             DayEntity dayEntity = new DayEntity();
-            dayEntity.setNum(Utils.formatNumber(i + 1));
-            dayEntity.setDayOfWeek(dayOfWeek);
-
             List<AbstractEvent> events = Utils.getEvents(baseJdn + i);
 
-            if (dayOfWeek == 6 || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
+            if (Utils.isWeekEnd(dayOfWeek) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
                 dayEntity.setHoliday(true);
             }
 
@@ -90,11 +89,16 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
         this.days = days;
 
-        //FIXME: This is wrooong
-//        long startOfYearJdn = DateConverter.persianToJdn(year, 1, 1);
-//        long firstFridayJdn = startOfYearJdn - DateConverter.jdnToCivil(startOfYearJdn).getDayOfWeek() - 2;
-//        weekOfYearStart = (int) (1 + Math.ceil((double) (baseJdn - firstFridayJdn) / 7));
-//        weeksCount = (int) (1 + Math.ceil((double) (baseJdn + monthLength - firstFridayJdn) / 7)) - weekOfYearStart;
+        long startOfYearJdn = Utils.getJdnOfCalendar(mainCalendar, year, 1, 1);
+        weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
+        weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+
+        startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
+    }
+
+    private int calculateWeekOfYear(long jdn, long startOfYear) {
+        long dayOfYear = jdn - startOfYear;
+        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(Utils.getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
     @Override
@@ -114,10 +118,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 7);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
         recyclerView.setLayoutManager(layoutManager);
         fillTheFields();
-        adapter = new MonthAdapter(getContext(), this, days, weekOfYearStart, weeksCount);
+        adapter = new MonthAdapter(getContext(), this, days, startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
@@ -126,7 +130,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 .findFragmentByTag(CalendarFragment.class.getName());
 
         if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.selectDay(DateConverter.persianToJdn(Utils.getToday()));
+            calendarFragment.selectDay(Utils.getTodayJdn());
             updateTitle();
         }
 
@@ -182,11 +186,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateTitle() {
-//        Toast.makeText(getContext(),
-//                weekOfYearStart + "-" + weeksCount + "-" + (weekOfYearStart + weeksCount),
-//                Toast.LENGTH_LONG).show();
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(persianDate),
-                Utils.formatNumber(persianDate.getYear()));
+        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(typedDate),
+                Utils.formatNumber(typedDate.getYear()));
     }
 
 }

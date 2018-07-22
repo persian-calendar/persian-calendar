@@ -10,15 +10,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,7 +19,6 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
-import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -38,7 +28,24 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.LANG_EN;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 /**
  * Program activity for android
@@ -87,22 +94,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Utils.getTheme(this).equals(DARK_THEME)
-                ? R.style.DarkTheme
-                : R.style.LightTheme);
+        switch (Utils.getTheme(this)) {
+            case DARK_THEME:
+                setTheme(R.style.DarkTheme);
+                break;
+//            case CLASSIC_THEME:
+//                setTheme(R.style.ClassicTheme);
+//                break;
+            default:
+            case LIGHT_THEME:
+                setTheme(R.style.LightTheme);
+                break;
+        }
 
+        Utils.changeAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
-        if (!Utils.isServiceRunning(this, ApplicationService.class)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(new Intent(this, ApplicationService.class));
-            startService(new Intent(this, ApplicationService.class));
-        }
-
-        UpdateUtils.update(getApplicationContext(), true);
+        Utils.startUpdateWorker();
+        UpdateUtils.update(getApplicationContext(), false);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -132,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (isRTL())
+                    if (Utils.isRTL(getApplicationContext()))
                         slidingDirection = -1;
                 }
             }
@@ -172,19 +184,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+        Utils.changeAppLanguage(this);
     }
 
     boolean settingHasChanged = false;
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
+        if (key.equals(PREF_APP_LANGUAGE)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(PREF_PERSIAN_DIGITS, !LANG_EN.equals(Utils.getOnlyLanguage(
+                    sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE))));
+            editor.apply();
+        }
+        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))
+            restartActivity(PREFERENCE);
         UpdateUtils.update(getApplicationContext(), true);
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private boolean isRTL() {
-        return getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 
     @Override
@@ -193,13 +209,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utils.initUtils(this);
         View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            v.setLayoutDirection(isRTL() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            v.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        UpdateUtils.update(getApplicationContext(), false);
         if (dayIsPassed) {
             dayIsPassed = false;
             restartActivity(menuPosition);

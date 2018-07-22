@@ -8,6 +8,7 @@
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
+        <item>ClassicTheme</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -34,6 +35,7 @@
         <item>White</item>
         <item>Red</item>
         <item>Green</item>
+        <item>Yellow</item>
         <item>Black</item>
     </string-array>
 
@@ -41,6 +43,7 @@
         <item>#ffffffff</item>
         <item>#ffe65100</item>
         <item>#ff00796b</item>
+        <item>#fffef200</item>
         <item>#ff202020</item>
     </string-array>
 
@@ -49,6 +52,8 @@
         <item>دری</item>
         <item>پښتو</item>
         <item>کوردی</item>
+        <item>اردو</item>
+        <item>English (Iran)</item>
         <item>English</item>
     </string-array>
 
@@ -57,7 +62,9 @@
         <item>fa-AF</item>
         <item>ps</item>
         <item>ckb</item>
+        <item>ur</item>
         <item>en</item>
+        <item>en-US</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
@@ -124,7 +131,7 @@
         <item>مناسبت‌های اسلامی در ایران</item>
         <item>مناسبت‌های ایران باستان</item>
         <item>سایر مناسبت‌های ایران</item>
-        <item>مناسبت‌های بین‌المللی</item>
+        <item>مناسبت‌های بین‌المللی و جهانی</item>
         <item>رخصتی‌های افغانستان</item>
         <item>سایر مناسبت‌های افغانستان</item>
     </string-array>
@@ -140,6 +147,45 @@
     </string-array>
 
     <string-array name="default_holidays" translatable="false">
+        <item>iran_holidays</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>Persian Calendar</item>
+        <item>Islamic Calendar</item>
+        <item>Gregorian Calendar</item>
+    </string-array>
+
+    <!-- Should be matched with CalendarTypeEnum -->
+    <string-array name="calendar_values" translatable="false">
+        <item>SHAMSI</item>
+        <item>ISLAMIC</item>
+        <item>GREGORIAN</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
+
+    <string-array name="week_days_value" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <!-- Which means Friday -->
+    <string-array name="default_weekends" translatable="false">
+        <item>6</item>
     </string-array>
 
 </resources>

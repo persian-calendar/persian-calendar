@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/num"
         android:layout_width="@dimen/day_item_select_size"
         android:layout_height="@dimen/day_item_select_size"

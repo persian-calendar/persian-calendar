@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.view.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +14,9 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
-import calendar.CivilDate;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 /**
  * Created by ebrahim on 3/20/16.
@@ -39,13 +36,14 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
         Spinner daySpinner = view.findViewById(R.id.daySpinner);
 
-        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
-
         calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.calendar_type)));
-        calendarTypeSpinner.setSelection(0);
+
+        calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
+        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
+                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+
 
         calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -74,17 +72,15 @@ public class SelectDayDialog extends AppCompatDialogFragment {
             try {
                 switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
                     case GREGORIAN:
-                        calendarFragment.bringDate(DateConverter.civilToPersian(
-                                new CivilDate(year, month, day)));
+                        calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
                         break;
 
                     case ISLAMIC:
-                        calendarFragment.bringDate(DateConverter.islamicToPersian(
-                                new IslamicDate(year, month, day)));
+                        calendarFragment.bringDate(DateConverter.islamicToJdn(year, month, day));
                         break;
 
                     case SHAMSI:
-                        calendarFragment.bringDate(new PersianDate(year, month, day));
+                        calendarFragment.bringDate(DateConverter.persianToJdn(year, month, day));
                         break;
                 }
             } catch (RuntimeException e) {

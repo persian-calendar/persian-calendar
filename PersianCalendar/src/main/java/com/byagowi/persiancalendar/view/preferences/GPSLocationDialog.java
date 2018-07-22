@@ -11,12 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
@@ -27,6 +21,13 @@ import com.github.praytimes.Coordinate;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
@@ -143,7 +144,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 editor.putString(Constants.PREF_GEOCODED_CITYNAME, "");
             }
             editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY);
-            editor.commit();
+            editor.apply();
         }
 
         if (checkPermission()) {

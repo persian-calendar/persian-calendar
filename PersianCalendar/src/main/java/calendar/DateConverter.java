@@ -21,10 +21,10 @@ public final class DateConverter {
     }
 
     public static long civilToJdn(CivilDate civil) {
-        long lYear = civil.getYear();
-        long lMonth = civil.getMonth();
-        long lDay = civil.getDayOfMonth();
+        return civilToJdn(civil.getYear(), civil.getMonth(), civil.getDayOfMonth());
+    }
 
+    public static long civilToJdn(long lYear, long lMonth, long lDay) {
         if ((lYear > 1582)
                 || ((lYear == 1582) && (lMonth > 10))
                 || ((lYear == 1582) && (lMonth == 10) && (lDay > 14))) {
@@ -53,14 +53,14 @@ public final class DateConverter {
     private static int NMONTHS = (1405 * 12 + 1);
 
     public static long islamicToJdn(IslamicDate islamic) {
+        return islamicToJdn(islamic.getYear(), islamic.getMonth(), islamic.getDayOfMonth());
+    }
+
+    public static long islamicToJdn(int year, int month, int day) {
         // NMONTH is the number of months between julian day number 1 and
         // the year 1405 A.H. which started immediatly after lunar
         // conjunction number 1048 which occured on September 1984 25d
         // 3h 10m UT.
-        int year = islamic.getYear();
-        int month = islamic.getMonth();
-        int day = islamic.getDayOfMonth();
-
         long tableResult = IslamicDateConverter.hijriToJd(year, month, day);
         if (tableResult != -1)
             return tableResult;
@@ -135,7 +135,7 @@ public final class DateConverter {
     }
 
     // TODO Is it correct to return a CivilDate as a JulianDate?
-    public static CivilDate jdnToJulian(long jdn) {
+    private static CivilDate jdnToJulian(long jdn) {
         long j = jdn + 1402;
         long k = ((j - 1) / 1461);
         long l = j - 1461 * k;
@@ -182,11 +182,9 @@ public final class DateConverter {
         return new PersianDate(year, month, day);
     }
 
-    public static long julianToJdn(long lYear, long lMonth, long lDay) {
-
+    private static long julianToJdn(long lYear, long lMonth, long lDay) {
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
                 + ((275 * lMonth) / 9) + lDay + 1729777;
-
     }
 
     public static CivilDate persianToCivil(PersianDate persian) {
@@ -197,32 +195,11 @@ public final class DateConverter {
         return jdnToIslamic(persianToJdn(persian));
     }
 
-    public static long persianToJdn(int year, int month, int day) {
-        final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
-
-        long epbase;
-        if (year >= 0)
-            epbase = year - 474;
-        else
-            epbase = year - 473;
-
-        long epyear = 474 + (epbase % 2820);
-
-        long mdays;
-        if (month <= 7)
-            mdays = (month - 1) * 31;
-        else
-            mdays = (month - 1) * 30 + 6;
-
-        return day + mdays + ((epyear * 682) - 110) / 2816 + (epyear - 1) * 365
-                + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
+    public static long persianToJdn(PersianDate persian) {
+        return persianToJdn(persian.getYear(), persian.getMonth(), persian.getDayOfMonth());
     }
 
-    public static long persianToJdn(PersianDate persian) {
-        int year = persian.getYear();
-        int month = persian.getMonth();
-        int day = persian.getDayOfMonth();
-
+    public static long persianToJdn(int year, int month, int day) {
         final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
 
         long epbase;

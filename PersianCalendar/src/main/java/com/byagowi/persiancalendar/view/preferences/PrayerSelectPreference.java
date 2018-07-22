@@ -1,13 +1,14 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
-import android.support.v7.preference.DialogPreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.preference.DialogPreference;
 
 public class PrayerSelectPreference extends DialogPreference {
 

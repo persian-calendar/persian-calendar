@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-
 import com.byagowi.persiancalendar.R;
 
 import java.util.Set;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 

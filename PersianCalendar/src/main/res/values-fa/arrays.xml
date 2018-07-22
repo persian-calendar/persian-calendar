@@ -19,6 +19,7 @@
         <item>سفید</item>
         <item>سرخ</item>
         <item>سبز</item>
+        <item>زرد</item>
         <item>سیاه</item>
     </string-array>
 
@@ -61,9 +62,25 @@
         <item>مناسبت‌های اسلامی در ایران</item>
         <item>مناسبت‌های ایران باستان</item>
         <item>سایر مناسبت‌های ایران</item>
-        <item>مناسبت‌های بین‌المللی</item>
+        <item>مناسبت‌های بین‌المللی و جهانی</item>
         <item>رخصتی‌های افغانستان</item>
         <item>سایر مناسبت‌های افغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>شنبه</item>
+        <item>یک‌شنبه</item>
+        <item>دوشنبه</item>
+        <item>سه‌شنبه</item>
+        <item>چهارشنبه</item>
+        <item>پنج‌شنبه</item>
+        <item>جمعه</item>
     </string-array>
 
 </resources>

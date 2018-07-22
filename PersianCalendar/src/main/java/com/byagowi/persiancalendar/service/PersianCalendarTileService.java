@@ -5,12 +5,12 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import android.support.annotation.RequiresApi;
 
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
-import calendar.PersianDate;
+import androidx.annotation.RequiresApi;
+import calendar.AbstractDate;
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
@@ -26,9 +26,8 @@ public class PersianCalendarTileService extends TileService {
 
     @Override
     public void onStartListening() {
-
         Tile tile = getQsTile();
-        PersianDate today = Utils.getToday();
+        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
 
         tile.setIcon(Icon.createWithResource(this,
                 Utils.getDayIconResource(today.getDayOfMonth())));

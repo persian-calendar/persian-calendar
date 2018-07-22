@@ -44,7 +44,6 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">حسگر قطب‌نما پیدا نشد</string>
-
     <string name="month_names">نام ماه‌ها</string>
     <string name="calendar_font">قلم تقویم</string>
     <string name="application_language">زبان برنامه</string>
@@ -91,13 +90,6 @@
     <string name="in_city_time">به افق</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
-
-    <string-array name="calendar_type">
-        <item>هجری شمسی</item>
-        <item>هجری قمری</item>
-        <item>میلادی</item>
-    </string-array>
-
     <string name="date_copied_clipboard">به حافظه رونوشت شد</string>
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
@@ -110,4 +102,16 @@
     <string name="user_interface">رابط کاربری</string>
     <string name="warn_if_events_not_set">جهت فعال کردن و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
+    <string name="search_holidays">جستجو در مناسبت‌ها</string>
+    <string name="main_calendar">تقویم اصلی</string>
+    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
+    <string name="week_of_year">هفتهٔ سال</string>
+    <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
+    <string name="accept">تأیید</string>
+    <string name="calendar">تقویم</string>
+    <string name="week_start">شروع هفته</string>
+    <string name="week_start_summary">انتخاب شروع هفته</string>
+    <string name="week_ends">روزهای تعطیل هفته</string>
+    <string name="week_ends_summary">چه روزهایی در هفته تعطیل نمایش داده شوند</string>
+
 </resources>

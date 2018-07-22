@@ -19,6 +19,7 @@
         <item>White</item>
         <item>Red</item>
         <item>Green</item>
+        <item>Yellow</item>
         <item>Black</item>
     </string-array>
 
@@ -64,6 +65,22 @@
         <item>مناسبت‌های بین‌المللی</item>
         <item>رخصتی‌های افغانستان</item>
         <item>سایر مناسبت‌های افغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>شنبه</item>
+        <item>یک‌شنبه</item>
+        <item>دوشنبه</item>
+        <item>سه‌شنبه</item>
+        <item>چهارشنبه</item>
+        <item>پنج‌شنبه</item>
+        <item>جمعه</item>
     </string-array>
 
 </resources>

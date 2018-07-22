@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -14,7 +14,7 @@
         android:paddingRight="20sp"
         android:paddingTop="20sp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/version2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,18 +24,18 @@
             android:paddingBottom="40sp"
             android:textSize="30sp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/gpl_logo"
             android:src="@drawable/gpl3_logo" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/license"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10sp" />
 
-    </android.support.v7.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>

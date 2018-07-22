@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -12,6 +10,8 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Startup broadcast receiver
@@ -30,11 +30,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
-                if (!Utils.isServiceRunning(context, ApplicationService.class)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        context.startForegroundService(new Intent(context, ApplicationService.class));
-                    context.startService(new Intent(context, ApplicationService.class));
-                }
+                Utils.startUpdateWorker();
 
             } else if (intent.getAction().equals(Intent.ACTION_TIME_TICK) ||
                     intent.getAction().equals(Intent.ACTION_TIME_CHANGED) ||
@@ -46,7 +42,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 
                 UpdateUtils.update(context, true);
-                Utils.loadApp(context);
+//                Utils.loadApp(context);
                 LocalBroadcastManager.getInstance(context)
                         .sendBroadcast(new Intent(Constants.LOCAL_INTENT_DAY_PASSED));
 

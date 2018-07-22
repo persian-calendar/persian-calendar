@@ -19,6 +19,7 @@
         <item>سپی</item>
         <item>سوور</item>
         <item>کەسک</item>
+        <item>زەرد</item>
         <item>ڕەش</item>
     </string-array>
 
@@ -64,6 +65,22 @@
         <item>بۆنە نێونەتەوەیییەکان</item>
         <item>پشوودانەکانی ئەفغانستان</item>
         <item>بۆنەکانی تری ئەفغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>کۆچیی ھەتاوی</item>
+        <item>کۆچیی مانگی</item>
+        <item>زایینی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>شەممە</item>
+        <item>یەکشەممە</item>
+        <item>دووشەممە</item>
+        <item>سێشەممە</item>
+        <item>چوارشەممە</item>
+        <item>پێنجشەممە</item>
+        <item>ھەینی</item>
     </string-array>
 
 </resources>
