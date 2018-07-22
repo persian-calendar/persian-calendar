@@ -9,6 +9,7 @@ public class UpdateWorker extends Worker {
 
     @Override
     public Worker.Result doWork() {
+        Utils.setChangeDateWorker(Utils.calculateDiffToChangeDate());
         Utils.updateStoredPreference(getApplicationContext());
         UpdateUtils.update(getApplicationContext(), true);
         return Result.SUCCESS;
