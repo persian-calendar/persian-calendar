@@ -20,6 +20,7 @@
         <item>سرخ</item>
         <item>سبز</item>
         <item>سیاه</item>
+        <item>زرد</item>
     </string-array>
 
     <string-array name="prayerTimeNames">

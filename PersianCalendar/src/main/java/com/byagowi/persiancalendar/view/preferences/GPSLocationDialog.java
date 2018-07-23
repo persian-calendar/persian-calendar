@@ -31,15 +31,15 @@ import androidx.preference.PreferenceManager;
 
 public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
-    LocationManager locationManager;
-    Context context;
-    TextView textView;
+    private LocationManager locationManager;
+    private Context context;
+    private TextView textView;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
-        context = getContext();
+        context = builder.getContext();
 
         textView = new TextView(context);
         textView.setPadding(32, 32, 32, 32);
@@ -56,7 +56,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     }
 
 
-    public void tryRetrieveLocation() {
+    private void tryRetrieveLocation() {
         if (checkPermission()) {
             getLocation();
         } else {
@@ -65,6 +65,10 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     }
 
     private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            return;
+
         if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
@@ -101,11 +105,11 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
     };
 
-    String latitude;
-    String longitude;
-    String cityName;
+    private String latitude;
+    private String longitude;
+    private String cityName;
 
-    public void showLocation(Location location) {
+    private void showLocation(Location location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());
         longitude = String.format(Locale.ENGLISH, "%f", location.getLongitude());
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
@@ -124,8 +128,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += Utils.formatCoordinate(
-                getContext(),
+        result += Utils.formatCoordinate(getActivity(),
                 new Coordinate(location.getLatitude(), location.getLongitude()),
                 "\n");
         textView.setText(result);
@@ -134,7 +137,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (latitude != null && longitude != null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Constants.PREF_LATITUDE, latitude);
             editor.putString(Constants.PREF_LONGITUDE, longitude);
@@ -150,7 +153,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         if (checkPermission()) {
             locationManager.removeUpdates(locationListener);
         }
-        LocalBroadcastManager.getInstance(getContext())
+        LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 

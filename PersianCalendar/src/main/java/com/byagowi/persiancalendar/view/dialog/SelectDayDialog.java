@@ -84,7 +84,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                         break;
                 }
             } catch (RuntimeException e) {
-                Toast.makeText(getContext(),getString(R.string.date_exception),Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
                 Log.e("SelectDayDialog", "", e);
             }
         });
