@@ -8,8 +8,8 @@ android {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 570
-        versionName "5.7.0"
+        versionCode 571
+        versionName "5.7.1"
     }
 
     buildTypes {
