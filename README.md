@@ -1,4 +1,4 @@
-Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidPersianCalendar.svg?branch=master)](https://travis-ci.org/ebraminio/DroidPersianCalendar)
+Android Persian Calendar [![CircleCI](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master.svg?style=svg)](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master)
 =============================
 <div lang="fa" dir="rtl">تقویم فارسی اندروید<br />
 تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock<br />
