@@ -280,8 +280,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (settingHasChanged && menuPosition == PREFERENCE) { // restart if we are returning from preferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
-                restartActivity(item);
-                return;
             }
 
             try {
