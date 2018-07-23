@@ -436,7 +436,7 @@ public class Utils {
 
     static private Map<PrayTime, Clock> prayTimes;
 
-    static public String getNextOghatTime(Context context, Clock clock, boolean dateHasChanged) {
+    static public String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
         if (coordinate == null) return null;
 
         if (prayTimes == null || dateHasChanged) {

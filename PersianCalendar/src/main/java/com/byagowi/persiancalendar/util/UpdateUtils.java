@@ -87,6 +87,16 @@ public class UpdateUtils {
         String title = Utils.dayTitleSummary(date);
         String subtitle = Utils.dateStringOfOtherCalendar(mainCalendar, jdn);
 
+        Clock currentClock =
+                new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
+        if (!TextUtils.isEmpty(owghat)) {
+            String cityName = Utils.getCityName(context, false);
+            if (!TextUtils.isEmpty(cityName)) {
+                owghat = owghat + " (" + cityName + ")";
+            }
+        }
+
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
             RemoteViews remoteViews4, remoteViews2;
@@ -147,14 +157,7 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
 
-                Clock currentClock =
-                        new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-
-                String owghat;
-
                 if (updateDate) {
-                    owghat = Utils.getNextOghatTime(context, currentClock, true);
-
                     List<AbstractEvent> events = Utils.getEvents(jdn);
                     String holidays = Utils.getEventsTitle(events, true);
 
@@ -173,11 +176,9 @@ public class UpdateUtils {
                     } else {
                         remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
                     }
-                } else {
-                    owghat = Utils.getNextOghatTime(context, currentClock, false);
                 }
 
-                if (owghat != null) {
+                if (!TextUtils.isEmpty(owghat)) {
                     remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
                 } else {
@@ -253,8 +254,6 @@ public class UpdateUtils {
                 else
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
 
-                Clock currentClock = new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-                String owghat = Utils.getNextOghatTime(context, currentClock, true);
                 if (!TextUtils.isEmpty(owghat))
                     bcv.setTextViewText(R.id.owghat, owghat);
                 else
