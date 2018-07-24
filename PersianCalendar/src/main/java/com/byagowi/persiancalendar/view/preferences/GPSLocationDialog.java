@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
@@ -48,37 +49,37 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        tryRetrieveLocation();
+        getLocation();
+        if (lacksPermission) {
+            askForPermission();
+        }
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
         builder.setView(textView);
     }
 
-
-    private void tryRetrieveLocation() {
-        if (checkPermission()) {
-            getLocation();
-        } else {
-            getPermission();
-        }
-    }
-
+    private boolean lacksPermission = false;
+    private boolean everRegisteredCallback = false;
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            lacksPermission = true;
             return;
+        }
 
         if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            everRegisteredCallback = true;
         }
 
         if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            everRegisteredCallback = true;
         }
     }
 
-    private void getPermission() {
+    private void askForPermission() {
         requestPermissions(new String[]{
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -86,10 +87,11 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 Constants.LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    LocationListener locationListener = new LocationListener() {
+    private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            showLocation(location);
+            if (location != null)
+                showLocation(location);
         }
 
         @Override
@@ -124,13 +126,12 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
 
         String result = "";
-        if (cityName != null) {
+        if (!TextUtils.isEmpty(cityName)) {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += Utils.formatCoordinate(getActivity(),
-                new Coordinate(location.getLatitude(), location.getLongitude()),
-                "\n");
+        result += Utils.formatCoordinate(context,
+                new Coordinate(location.getLatitude(), location.getLongitude()), "\n");
         textView.setText(result);
     }
 
@@ -150,9 +151,9 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             editor.apply();
         }
 
-        if (checkPermission()) {
+        if (everRegisteredCallback)
             locationManager.removeUpdates(locationListener);
-        }
+
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
@@ -161,16 +162,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (checkPermission()) {
-            getLocation();
-        } else {
+        getLocation();
+        if (lacksPermission) // request for permission is rejected
             dismiss();
-        }
-    }
-
-
-    private boolean checkPermission() {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }
