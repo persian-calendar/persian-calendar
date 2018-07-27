@@ -1,11 +1,7 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -38,15 +34,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Update;
+import calendar.CivilDate;
 
-import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
@@ -71,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     // Default selected fragment
     private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
-    public boolean dayIsPassed = false;
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
     private Class<?>[] fragments = {
@@ -83,12 +75,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             AboutFragment.class
     };
     private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
-    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            dayIsPassed = true;
-        }
-    };
 
     // https://stackoverflow.com/a/3410200
     public int getStatusBarHeight() {
@@ -99,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         return result;
     }
+
+    private static CivilDate creationDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,10 +174,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             selectItem(DEFAULT);
         }
 
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
-                new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -199,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+        creationDate = Utils.getGregorianToday();
         Utils.changeAppLanguage(this);
     }
 
@@ -266,16 +251,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onResume() {
         super.onResume();
         UpdateUtils.update(getApplicationContext(), false);
-        if (dayIsPassed) {
-            dayIsPassed = false;
+        if (!creationDate.equals(Utils.getGregorianToday())) {
             restartActivity(menuPosition);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(dayPassedReceiver);
-        super.onDestroy();
     }
 
     @Override
