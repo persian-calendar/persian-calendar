@@ -47,6 +47,7 @@ import com.github.praytimes.PrayTimesCalculator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -1057,8 +1058,10 @@ public class Utils {
                 String title = event.getTitle();
                 if (event instanceof DeviceCalendarEvent) {
                     if (!keepItShort) {
-                        title += " (" + ((DeviceCalendarEvent) event).getDescription()
-                                .replaceAll("\\n", "").trim() + ")";
+                        String desc = ((DeviceCalendarEvent) event).getDescription();
+                        if (!TextUtils.isEmpty(desc))
+                            title += " (" + ((DeviceCalendarEvent) event).getDescription()
+                                    .replaceAll("\\n", "").trim() + ")";
                     }
                 } else {
                     if (keepItShort)

@@ -2,11 +2,12 @@ package com.byagowi.persiancalendar;
 
 public class Constants {
 
-    public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
+    public static final int CALENDAR_EVENT_ADD_REQUEST_CODE = 63;
+
 
     public static final String LANG_EN = "en";
     public static final String LANG_EN_US = "en-US";
@@ -82,6 +83,7 @@ public class Constants {
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String KEY_EXTRA_PRAYER_KEY = "prayer_name";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
+    public static final int BROADCAST_TO_MONTH_FRAGMENT_NOTIFY_DAY = Integer.MIN_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
     public static final char RLM = '\u200F';

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -58,6 +59,7 @@ import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends Fragment
@@ -265,7 +267,6 @@ public class CalendarFragment extends Fragment
         showEvent(jdn);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void addEventOnCalendar(long jdn) {
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setData(CalendarContract.Events.CONTENT_URI);
@@ -284,7 +285,19 @@ public class CalendarFragment extends Fragment
                 time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
-        startActivity(intent);
+        startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CALENDAR_EVENT_ADD_REQUEST_CODE) {
+            Utils.initUtils(getContext());
+
+            Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
+            intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                    Constants.BROADCAST_TO_MONTH_FRAGMENT_NOTIFY_DAY);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+        }
     }
 
     private int maxSupportedYear = 1397;

@@ -2,13 +2,16 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
@@ -60,6 +63,26 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         int prevDay = selectedDay;
         selectedDay = -1;
         notifyItemChanged(prevDay);
+    }
+
+    public void reselectDay() {
+        notifyItemChanged(selectedDay);
+
+        int position = selectedDay;
+
+        if (position == -1) {
+            return;
+        }
+        
+        if (Utils.isWeekOfYearEnabled()) {
+            if (position % 8 == 0) {
+                return;
+            }
+
+            position = fixForWeekOfYearNumber(position);
+        }
+
+        monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
     }
 
     public void selectDay(int dayOfMonth) {
@@ -184,18 +207,29 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 DayEntity day = days.get(position - 7 - startingDayOfWeek);
 
                 holder.num.setTextSize(isArabicDigit ? 20 : 25);
-                holder.event.setVisibility(day.isEvent() ? View.VISIBLE : View.GONE);
+
+                List<AbstractEvent> events = Utils.getEvents(day.getJdn());
+                boolean isEvent = false,
+                        isHoliday = false;
+                if (Utils.isWeekEnd(day.getDayOfWeek()) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
+                    isHoliday = false;
+                }
+                if (events.size() > 0) {
+                    isEvent = true;
+                }
+
+                holder.event.setVisibility(isEvent ? View.VISIBLE : View.GONE);
                 holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
 
                 if (originalPosition == selectedDay) {
                     holder.num.setBackgroundResource(shapeSelectDay.resourceId);
-                    holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
+                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
                             ? colorTextHoliday.resourceId
                             : colorPrimary.resourceId));
 
                 } else {
                     holder.num.setBackgroundResource(0);
-                    holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
+                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
                             ? colorHoliday.resourceId
                             : colorTextDay.resourceId));
                 }
