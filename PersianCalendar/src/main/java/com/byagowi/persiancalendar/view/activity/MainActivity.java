@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar.view.activity;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,15 +30,18 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Update;
 
 import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
@@ -210,9 +215,34 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
             editor.apply();
         }
+        if (key.equals("showDeviceCalendarEvents")) {
+            askForCalendarPermission();
+        }
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))
             restartActivity(PREFERENCE);
         UpdateUtils.update(getApplicationContext(), true);
+    }
+
+    private void askForCalendarPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{
+                            Manifest.permission.READ_CALENDAR
+                    },
+                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                Utils.initUtils(this);
+                if (menuPosition == CALENDAR) {
+                    restartActivity(menuPosition);
+                }
+            }
+        }
     }
 
     @Override

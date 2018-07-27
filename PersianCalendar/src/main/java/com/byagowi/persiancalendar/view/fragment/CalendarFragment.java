@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
@@ -505,6 +506,11 @@ public class CalendarFragment extends Fragment
                         date.getMonth(), date.getDayOfMonth()));
             } else if (ev instanceof GregorianCalendarEvent) {
                 CivilDate date = ((GregorianCalendarEvent) ev).getDate();
+                bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
+                        date.getMonth(), date.getDayOfMonth()));
+            } else if (ev instanceof DeviceCalendarEvent) {
+                CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
                 bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
                                 (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
                         date.getMonth(), date.getDayOfMonth()));

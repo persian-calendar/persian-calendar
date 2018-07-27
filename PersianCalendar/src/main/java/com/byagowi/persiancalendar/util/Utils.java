@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.util;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -9,11 +10,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
@@ -60,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
@@ -238,6 +244,7 @@ public class Utils {
     static private boolean showWeekOfYear;
     static private int weekStartOffset;
     static private boolean[] weekEnds;
+    static private boolean showDeviceCalendarEvents;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -271,6 +278,8 @@ public class Utils {
         weekEnds = new boolean[7];
         for (String s : prefs.getStringSet("WeekEnds", new HashSet<>(Arrays.asList("6"))))
             weekEnds[Integer.parseInt(s)] = true;
+
+        showDeviceCalendarEvents = prefs.getBoolean("showDeviceCalendarEvents", false);
     }
 
     public static boolean isWeekEnd(int dayOfWeek) {
@@ -733,6 +742,7 @@ public class Utils {
     static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
+    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
     static public List<Object> allEnabledEvents;
     static public List<String> allEnabledEventsTitles;
 
@@ -901,11 +911,64 @@ public class Utils {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+
         Utils.persianCalendarEvents = persianCalendarEvents;
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
         Utils.allEnabledEvents = allEnabledEvents;
         Utils.allEnabledEventsTitles = allEnabledEventsTitles;
+
+        readDeviceCalendarEvents(context);
+    }
+
+    private static void readDeviceCalendarEvents(Context context) {
+        SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
+        Utils.deviceCalendarEvents = deviceCalendarEvents;
+
+        if (!showDeviceCalendarEvents ||
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        Cursor cursor = context.getContentResolver().query(Uri.parse("content://com.android.calendar/events"),
+                new String[] {
+                        CalendarContract.Events._ID, CalendarContract.Events.TITLE,
+                        CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART,
+                        CalendarContract.Events.DTEND, CalendarContract.Events.EVENT_LOCATION,
+                }, null, null, null);
+
+        if (cursor == null) {
+            return;
+        }
+
+        while (cursor.moveToNext()) {
+            Date startDate = new Date(cursor.getLong(3));
+            CivilDate civilDate = new CivilDate(makeCalendarFromDate(startDate));
+            int month = civilDate.getMonth();
+            int day = civilDate.getDayOfMonth();
+
+            List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
+            if (list == null) {
+                list = new ArrayList<>();
+                deviceCalendarEvents.put(month * 100 + day, list);
+            }
+
+            String title = cursor.getString(1);
+            DeviceCalendarEvent event = new DeviceCalendarEvent(
+                    cursor.getInt(0),
+                    title,
+                    cursor.getString(2),
+                    startDate,
+                    new Date(cursor.getLong(4)),
+                    cursor.getString(5),
+                    civilDate
+            );
+            list.add(event);
+            allEnabledEvents.add(event);
+            allEnabledEventsTitles.add(title);
+        }
+        cursor.close();
     }
 
     static public List<AbstractEvent> getEvents(long jdn) {
@@ -936,6 +999,13 @@ public class Utils {
                 if (gregorianCalendarEvent.getDate().equals(civil))
                     result.add(gregorianCalendarEvent);
 
+        List<DeviceCalendarEvent> deviceEventList =
+                deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
+        if (deviceEventList != null)
+            for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
+                if (deviceCalendarEvent.getCivilDate().equals(civil))
+                    result.add(deviceCalendarEvent);
+
         return result;
     }
 
@@ -943,7 +1013,7 @@ public class Utils {
         return getEventsTitle(dayEvents, holiday, false);
     }
 
-    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday, boolean removeBrackets) {
+    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday, boolean keepItShort) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
 
@@ -955,8 +1025,14 @@ public class Utils {
                     titles.append("\n");
 
                 String title = event.getTitle();
-                if (removeBrackets)
-                    title = title.replaceAll(" \\(.*$", "");
+                if (event instanceof DeviceCalendarEvent) {
+                    if (!keepItShort) {
+                        title += " (" + ((DeviceCalendarEvent) event).getDescription() + ")";
+                    }
+                } else {
+                    if (keepItShort)
+                        title = title.replaceAll(" \\(.*$", "");
+                }
 
                 titles.append(title);
             }
@@ -964,7 +1040,7 @@ public class Utils {
         return titles.toString();
     }
 
-    static public void loadAlarms(Context context) {
+    private static void loadAlarms(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
