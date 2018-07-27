@@ -186,7 +186,7 @@ public class Utils {
 
     static public void startUpdateWorker() {
         PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-                .Builder(UpdateWorker.class, 1, TimeUnit.MINUTES); //15 min
+                .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
 
         PeriodicWorkRequest updateWork = updateBuilder.build();
         WorkManager.getInstance().enqueueUniquePeriodicWork(
