@@ -45,5 +45,5 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'android.arch.work:work-runtime:1.0.0-alpha04'
+    implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
 }
