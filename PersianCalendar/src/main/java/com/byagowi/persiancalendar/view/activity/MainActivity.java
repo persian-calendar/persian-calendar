@@ -42,6 +42,8 @@ import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
+import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
+import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
@@ -193,9 +195,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
         if (key.equals(PREF_APP_LANGUAGE)) {
+            boolean persianDigits;
+            switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
+                case LANG_EN_US:
+                    persianDigits = false;
+                    break;
+                case LANG_UR:
+                    persianDigits = false;
+                    break;
+                default:
+                    persianDigits = true;
+            }
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(PREF_PERSIAN_DIGITS, !LANG_EN.equals(Utils.getOnlyLanguage(
-                    sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE))));
+            editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
             editor.apply();
         }
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))

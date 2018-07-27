@@ -8,7 +8,9 @@ public class Constants {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
 
     public static final String LANG_EN = "en";
+    public static final String LANG_EN_US = "en-US";
     public static final String LANG_CKB = "ckb";
+    public static final String LANG_UR = "ur";
 
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";

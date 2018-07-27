@@ -97,6 +97,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
+import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
@@ -262,7 +263,7 @@ public class Utils {
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
         mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
-        comma = language.equals("en-US") ? "," : "،";
+        comma = language.equals(LANG_EN_US) ? "," : "،";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
         weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"));
