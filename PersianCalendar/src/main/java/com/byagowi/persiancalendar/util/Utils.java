@@ -284,6 +284,10 @@ public class Utils {
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
     }
 
+    public static boolean isShowDeviceCalendarEvents() {
+        return showDeviceCalendarEvents;
+    }
+
     public static boolean isWeekEnd(int dayOfWeek) {
         return weekEnds[dayOfWeek];
     }
@@ -950,9 +954,13 @@ public class Utils {
 
         Cursor cursor = context.getContentResolver().query(Uri.parse("content://com.android.calendar/events"),
                 new String[] {
-                        CalendarContract.Events._ID, CalendarContract.Events.TITLE,
-                        CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART,
-                        CalendarContract.Events.DTEND, CalendarContract.Events.EVENT_LOCATION,
+                        CalendarContract.Events._ID,            // 0
+                        CalendarContract.Events.TITLE,          // 1
+                        CalendarContract.Events.DESCRIPTION,    // 2
+                        CalendarContract.Events.DTSTART,        // 3
+                        CalendarContract.Events.DTEND,          // 4
+                        CalendarContract.Events.EVENT_LOCATION, // 5
+                        CalendarContract.Events.RRULE           // 6
                 }, null, null, null);
 
         if (cursor == null) {
@@ -962,8 +970,13 @@ public class Utils {
         while (cursor.moveToNext()) {
             Date startDate = new Date(cursor.getLong(3));
             CivilDate civilDate = new CivilDate(makeCalendarFromDate(startDate));
+
             int month = civilDate.getMonth();
             int day = civilDate.getDayOfMonth();
+
+            String repeatRule = cursor.getString(6);
+            if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
+                civilDate.setYear(-1);
 
             List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
             if (list == null) {
@@ -1044,7 +1057,8 @@ public class Utils {
                 String title = event.getTitle();
                 if (event instanceof DeviceCalendarEvent) {
                     if (!keepItShort) {
-                        title += " (" + ((DeviceCalendarEvent) event).getDescription() + ")";
+                        title += " (" + ((DeviceCalendarEvent) event).getDescription()
+                                .replaceAll("\\n", "").trim() + ")";
                     }
                 } else {
                     if (keepItShort)

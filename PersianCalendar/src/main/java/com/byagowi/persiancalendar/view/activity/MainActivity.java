@@ -193,6 +193,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
+        if (Utils.isShowDeviceCalendarEvents()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                Utils.askForCalendarPermission(this);
+            }
+        }
+
         Utils.changeAppLanguage(this);
     }
 
@@ -219,7 +225,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         if (key.equals(PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
-            Utils.askForCalendarPermission(this);
+            if (sharedPreferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true)) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.askForCalendarPermission(this);
+                }
+            }
         }
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
