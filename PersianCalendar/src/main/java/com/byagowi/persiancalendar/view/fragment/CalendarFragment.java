@@ -493,56 +493,57 @@ public class CalendarFragment extends Fragment
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHint(R.string.search_in_events);
-        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
-                R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
-        searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
-                    (String) parent.getItemAtPosition(position)));
-            PersianDate todayPersian = Utils.getToday();
-            long todayJdn = DateConverter.persianToJdn(todayPersian);
-            IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
-            CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
+        searchView.setOnSearchClickListener(v -> {
+            SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHint(R.string.search_in_events);
+            SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
+                    R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
+                        (String) parent.getItemAtPosition(position)));
+                PersianDate todayPersian = Utils.getToday();
+                long todayJdn = DateConverter.persianToJdn(todayPersian);
+                IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
+                CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
 
-            if (ev instanceof PersianCalendarEvent) {
-                PersianDate date = ((PersianCalendarEvent) ev).getDate();
-                int year = date.getYear();
-                if (year == -1) {
-                    year = todayPersian.getYear() +
-                            (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
+                if (ev instanceof PersianCalendarEvent) {
+                    PersianDate date = ((PersianCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayPersian.getYear() +
+                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof IslamicCalendarEvent) {
+                    IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayIslamic.getYear() +
+                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof GregorianCalendarEvent) {
+                    CivilDate date = ((GregorianCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof DeviceCalendarEvent) {
+                    CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 }
-                bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
-            } else if (ev instanceof IslamicCalendarEvent) {
-                IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
-                int year = date.getYear();
-                if (year == -1) {
-                    year = todayIslamic.getYear() +
-                            (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
-                }
-                bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
-            } else if (ev instanceof GregorianCalendarEvent) {
-                CivilDate date = ((GregorianCalendarEvent) ev).getDate();
-                int year = date.getYear();
-                if (year == -1) {
-                    year = todayCivil.getYear() +
-                            (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
-                }
-                bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
-            } else if (ev instanceof DeviceCalendarEvent) {
-                CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
-                int year = date.getYear();
-                if (year == -1) {
-                    year = todayCivil.getYear() +
-                            (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
-                }
-                bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
-            }
-            searchView.onActionViewCollapsed();
+                searchView.onActionViewCollapsed();
+            });
         });
-
     }
 
     @Override
