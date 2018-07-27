@@ -113,5 +113,6 @@
     <string name="week_start_summary">ھەڵبژاردنی ڕۆژی دەستپێکردنی حەفتە</string>
     <string name="week_ends">پشوودانی حەفتە</string>
     <string name="week_ends_summary">دیارکردنی ڕۆژانی پشوودانی حەفتە</string>
+    <string name="search_in_events">گەڕان لە بۆنەکاندا</string>
 
 </resources>
