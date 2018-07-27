@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -125,6 +126,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
@@ -279,7 +281,7 @@ public class Utils {
         for (String s : prefs.getStringSet("WeekEnds", new HashSet<>(Arrays.asList("6"))))
             weekEnds[Integer.parseInt(s)] = true;
 
-        showDeviceCalendarEvents = prefs.getBoolean("showDeviceCalendarEvents", false);
+        showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
     }
 
     public static boolean isWeekEnd(int dayOfWeek) {
@@ -921,13 +923,28 @@ public class Utils {
         readDeviceCalendarEvents(context);
     }
 
+    public static void askForCalendarPermission(AppCompatActivity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            activity.requestPermissions(new String[]{
+                            Manifest.permission.READ_CALENDAR
+                    },
+                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
+        }
+    }
+
     private static void readDeviceCalendarEvents(Context context) {
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
         Utils.deviceCalendarEvents = deviceCalendarEvents;
 
-        if (!showDeviceCalendarEvents ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
+        if (!showDeviceCalendarEvents) {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED) {
+            if (context instanceof AppCompatActivity) {
+                askForCalendarPermission((AppCompatActivity) context);
+            }
             return;
         }
 

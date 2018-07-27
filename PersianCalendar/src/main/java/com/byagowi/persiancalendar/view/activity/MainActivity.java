@@ -52,6 +52,7 @@ import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 /**
@@ -211,25 +212,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 default:
                     persianDigits = true;
             }
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
             editor.apply();
         }
-        if (key.equals("showDeviceCalendarEvents")) {
-            askForCalendarPermission();
-        }
-        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))
-            restartActivity(PREFERENCE);
-        UpdateUtils.update(getApplicationContext(), true);
-    }
 
-    private void askForCalendarPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{
-                            Manifest.permission.READ_CALENDAR
-                    },
-                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
+        if (key.equals(PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
+            Utils.askForCalendarPermission(this);
         }
+
+        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
+            restartActivity(PREFERENCE);
+        }
+
+        UpdateUtils.update(getApplicationContext(), true);
     }
 
     @Override

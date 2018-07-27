@@ -24,6 +24,7 @@ public class Constants {
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
     public static final String PREF_IRAN_TIME = "IranTime";
     public static final String PREF_PERSIAN_DIGITS = "PersianDigits";
+    public static final String PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents";
     public static final String PREF_WIDGET_CLOCK = "WidgetClock";
     public static final String PREF_NOTIFY_DATE = "NotifyDate";
     public static final String PREF_NOTIFY_DATE_LOCK_SCREEN = "NotifyDateLockScreen";
