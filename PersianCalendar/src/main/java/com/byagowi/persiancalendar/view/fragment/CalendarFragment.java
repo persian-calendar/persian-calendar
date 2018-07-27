@@ -509,24 +509,36 @@ public class CalendarFragment extends Fragment
 
             if (ev instanceof PersianCalendarEvent) {
                 PersianDate date = ((PersianCalendarEvent) ev).getDate();
-                bringDate(DateConverter.persianToJdn(todayPersian.getYear() +
-                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
+                int year = date.getYear();
+                if (year == -1) {
+                    year = todayPersian.getYear() +
+                            (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
+                }
+                bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
             } else if (ev instanceof IslamicCalendarEvent) {
                 IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
-                bringDate(DateConverter.islamicToJdn(todayIslamic.getYear() +
-                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
+                int year = date.getYear();
+                if (year == -1) {
+                    year = todayIslamic.getYear() +
+                            (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
+                }
+                bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
             } else if (ev instanceof GregorianCalendarEvent) {
                 CivilDate date = ((GregorianCalendarEvent) ev).getDate();
-                bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
-                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
+                int year = date.getYear();
+                if (year == -1) {
+                    year = todayCivil.getYear() +
+                            (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                }
+                bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
             } else if (ev instanceof DeviceCalendarEvent) {
                 CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
-                bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
-                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
+                int year = date.getYear();
+                if (year == -1) {
+                    year = todayCivil.getYear() +
+                            (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                }
+                bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
             }
             searchView.onActionViewCollapsed();
         });

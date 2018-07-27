@@ -47,7 +47,6 @@ import com.github.praytimes.PrayTimesCalculator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -961,7 +960,8 @@ public class Utils {
                         CalendarContract.Events.DTSTART,        // 3
                         CalendarContract.Events.DTEND,          // 4
                         CalendarContract.Events.EVENT_LOCATION, // 5
-                        CalendarContract.Events.RRULE           // 6
+                        CalendarContract.Events.RRULE,          // 6
+                        CalendarContract.Events.VISIBLE         // 7
                 }, null, null, null);
 
         if (cursor == null) {
@@ -969,6 +969,9 @@ public class Utils {
         }
 
         while (cursor.moveToNext()) {
+            if (!cursor.getString(7).equals("1"))
+                continue;
+
             Date startDate = new Date(cursor.getLong(3));
             CivilDate civilDate = new CivilDate(makeCalendarFromDate(startDate));
 
