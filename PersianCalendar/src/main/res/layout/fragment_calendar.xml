@@ -95,6 +95,13 @@
                             android:textSize="@dimen/text_size_description" />
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/device_event_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorTextNormal"
+                            android:textSize="@dimen/text_size_description" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

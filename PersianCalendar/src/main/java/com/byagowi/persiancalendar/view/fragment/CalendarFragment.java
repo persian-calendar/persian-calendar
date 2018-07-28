@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -87,6 +89,7 @@ public class CalendarFragment extends Fragment
     private TextView shamsiDate;
     private TextView shamsiDateDay;
     private TextView shamsiDateLinear;
+    private TextView deviceEventTitle;
     private TextView eventTitle;
     private TextView eventMessage;
     private TextView holidayTitle;
@@ -168,6 +171,7 @@ public class CalendarFragment extends Fragment
 
         moreOwghat = view.findViewById(R.id.more_owghat);
 
+        deviceEventTitle = view.findViewById(R.id.device_event_title);
         eventTitle = view.findViewById(R.id.event_title);
         eventMessage = view.findViewById(R.id.event_message);
         holidayTitle = view.findViewById(R.id.holiday_title);
@@ -300,13 +304,15 @@ public class CalendarFragment extends Fragment
 
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn);
-        String holidays = Utils.getEventsTitle(events, true);
-        String nonHolidays = Utils.getEventsTitle(events, false);
+        String holidays = Utils.getEventsTitle(events, true, false, false);
+        String nonHolidays = Utils.getEventsTitle(events, false, false, false);
+        SpannableStringBuilder deviceEvents = Utils.getDeviceEventsTitle(getActivity(), events);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
-        eventMessage.setVisibility(View.GONE);
+        deviceEventTitle.setVisibility(View.GONE);
         eventTitle.setVisibility(View.GONE);
+        eventMessage.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
             holidayTitle.setText(holidays);
@@ -314,8 +320,17 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
+        if (deviceEvents.length() != 0) {
+            deviceEventTitle.setText(deviceEvents);
+            deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
+
+            deviceEventTitle.setVisibility(View.VISIBLE);
+            event.setVisibility(View.VISIBLE);
+        }
+
         if (!TextUtils.isEmpty(nonHolidays)) {
             eventTitle.setText(nonHolidays);
+
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }

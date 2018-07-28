@@ -243,12 +243,12 @@ public class UpdateUtils {
                 bcv.setTextViewText(R.id.body, subtitle);
 
                 List<AbstractEvent> events = Utils.getEvents(jdn);
-                String holidays = Utils.getEventsTitle(events, true, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true);
                 if (!TextUtils.isEmpty(holidays))
                     bcv.setTextViewText(R.id.holidays, holidays);
                 else
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
-                String nonHolidays = Utils.getEventsTitle(events, false, true);
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
                 if (!TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
                 else
