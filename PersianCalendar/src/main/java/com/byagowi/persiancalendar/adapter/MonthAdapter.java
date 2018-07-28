@@ -211,7 +211,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 boolean isEvent = false,
                         isHoliday = false;
                 if (Utils.isWeekEnd(day.getDayOfWeek()) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
-                    isHoliday = false;
+                    isHoliday = true;
                 }
                 if (events.size() > 0) {
                     isEvent = true;
