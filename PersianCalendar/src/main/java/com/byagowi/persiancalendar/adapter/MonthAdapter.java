@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,26 +62,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         int prevDay = selectedDay;
         selectedDay = -1;
         notifyItemChanged(prevDay);
-    }
-
-    public void reselectDay() {
-        notifyItemChanged(selectedDay);
-
-        int position = selectedDay;
-
-        if (position == -1) {
-            return;
-        }
-
-        if (Utils.isWeekOfYearEnabled()) {
-            if (position % 8 == 0) {
-                return;
-            }
-
-            position = fixForWeekOfYearNumber(position);
-        }
-
-        monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
     }
 
     public void selectDay(int dayOfMonth) {
@@ -172,14 +151,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    static public boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
+    private boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
         for (AbstractEvent event : dayEvents)
             if (event.isHoliday())
                 return true;
         return false;
     }
 
-    static public boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
+    private boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
         for (AbstractEvent event : dayEvents)
             if (event instanceof DeviceCalendarEvent)
                 return true;

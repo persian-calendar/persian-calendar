@@ -144,8 +144,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
             } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
                 adapter.clearSelectedDay();
-            } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_NOTIFY_DAY) {
-                adapter.reselectDay();
             }
         }
     };

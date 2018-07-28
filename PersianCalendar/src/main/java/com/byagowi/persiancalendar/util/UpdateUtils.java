@@ -96,6 +96,7 @@ public class UpdateUtils {
                 owghat = owghat + " (" + cityName + ")";
             }
         }
+        List<AbstractEvent> events = Utils.getEvents(jdn);
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
@@ -157,25 +158,20 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
 
-                if (updateDate) {
-                    List<AbstractEvent> events = Utils.getEvents(jdn);
-                    String holidays = Utils.getEventsTitle(events, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true);
+                if (!TextUtils.isEmpty(holidays)) {
+                    remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                }
 
-                    if (!TextUtils.isEmpty(holidays)) {
-                        remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
-                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
-                    } else {
-                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
-                    }
-
-                    String nonHolidays = Utils.getEventsTitle(events, false);
-
-                    if (!TextUtils.isEmpty(nonHolidays)) {
-                        remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
-                        remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
-                    } else {
-                        remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
-                    }
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
+                if (!TextUtils.isEmpty(nonHolidays)) {
+                    remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
                 }
 
                 if (!TextUtils.isEmpty(owghat)) {
@@ -248,7 +244,6 @@ public class UpdateUtils {
                 bcv.setTextViewText(R.id.title, title);
                 bcv.setTextViewText(R.id.body, subtitle);
 
-                List<AbstractEvent> events = Utils.getEvents(jdn);
                 String holidays = Utils.getEventsTitle(events, true, true, true);
                 if (!TextUtils.isEmpty(holidays))
                     bcv.setTextViewText(R.id.holidays, holidays);

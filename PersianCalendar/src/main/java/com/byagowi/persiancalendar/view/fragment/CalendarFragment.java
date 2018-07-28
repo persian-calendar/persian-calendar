@@ -242,7 +242,9 @@ public class CalendarFragment extends Fragment
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
+    long lastSelectedJdn = -1;
     void selectDay(long jdn) {
+        lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         weekDayName.setText(Utils.getWeekDayName(persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
@@ -300,11 +302,42 @@ public class CalendarFragment extends Fragment
         if (requestCode == CALENDAR_EVENT_ADD_REQUEST_CODE) {
             Utils.initUtils(getContext());
 
-            Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-            intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                    Constants.BROADCAST_TO_MONTH_FRAGMENT_NOTIFY_DAY);
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+            if (lastSelectedJdn == -1)
+                lastSelectedJdn = Utils.getTodayJdn();
+            selectDay(lastSelectedJdn);
         }
+    }
+
+    private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
+        String title = Utils.formatDeviceCalendarEventTitle(event);
+        SpannableString ss = new SpannableString(title);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
+                startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+            }
+        };
+        ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ss;
+    }
+
+    private SpannableStringBuilder getDeviceEventsTitle(List<AbstractEvent> dayEvents) {
+        SpannableStringBuilder titles = new SpannableStringBuilder();
+        boolean first = true;
+
+        for (AbstractEvent event : dayEvents)
+            if (event instanceof DeviceCalendarEvent) {
+                if (first)
+                    first = false;
+                else
+                    titles.append("\n");
+
+                titles.append(formatClickableEventTitle((DeviceCalendarEvent) event));
+            }
+
+        return titles;
     }
 
     private int maxSupportedYear = 1397;
@@ -313,7 +346,7 @@ public class CalendarFragment extends Fragment
         List<AbstractEvent> events = Utils.getEvents(jdn);
         String holidays = Utils.getEventsTitle(events, true, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false);
-        SpannableStringBuilder deviceEvents = Utils.getDeviceEventsTitle(getActivity(), events);
+        SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
@@ -489,7 +522,7 @@ public class CalendarFragment extends Fragment
 
         CalendarAdapter.gotoOffset(monthViewPager, 0);
 
-        selectDay(DateConverter.persianToJdn(Utils.getToday()));
+        selectDay(Utils.getTodayJdn());
     }
 
     public void bringDate(long jdn) {
@@ -594,8 +627,14 @@ public class CalendarFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                SelectDayDialog dialog = new SelectDayDialog();
-                dialog.show(getChildFragmentManager(), SelectDayDialog.class.getName());
+                new SelectDayDialog().show(getChildFragmentManager(),
+                        SelectDayDialog.class.getName());
+                break;
+            case R.id.add_event:
+                if (lastSelectedJdn == -1)
+                    lastSelectedJdn = Utils.getTodayJdn();
+
+                addEventOnCalendar(lastSelectedJdn);
                 break;
             default:
                 break;

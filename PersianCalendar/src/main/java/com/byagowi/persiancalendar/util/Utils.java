@@ -7,7 +7,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,11 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -88,7 +83,6 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
-import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
@@ -1081,11 +1075,7 @@ public class Utils {
         return result;
     }
 
-    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday) {
-        return getEventsTitle(dayEvents, holiday, false, true);
-    }
-
-    static private String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
+    static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
@@ -1123,40 +1113,6 @@ public class Utils {
             }
 
         return titles.toString();
-    }
-
-    static private SpannableString formatClickableEventTitle(Activity activity,
-                                                             DeviceCalendarEvent event) {
-        String title = formatDeviceCalendarEventTitle(event);
-        SpannableString ss = new SpannableString(title);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
-                activity.startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
-            }
-        };
-        ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return ss;
-    }
-
-    static public SpannableStringBuilder getDeviceEventsTitle(Activity activity,
-                                                              List<AbstractEvent> dayEvents) {
-        SpannableStringBuilder titles = new SpannableStringBuilder();
-        boolean first = true;
-
-        for (AbstractEvent event : dayEvents)
-            if (event instanceof DeviceCalendarEvent) {
-                if (first)
-                    first = false;
-                else
-                    titles.append("\n");
-
-                titles.append(formatClickableEventTitle(activity, (DeviceCalendarEvent) event));
-            }
-
-        return titles;
     }
 
     private static void loadAlarms(Context context) {

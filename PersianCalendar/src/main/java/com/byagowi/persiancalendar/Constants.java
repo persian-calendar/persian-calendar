@@ -71,9 +71,6 @@ public class Constants {
     public static final String DAY = "day";
     public static final String MONTH = "month";
     public static final String YEAR = "year";
-    public static final String HIJRI_SHAMSI = "hijri_shamsi";
-    public static final String HIJRI_QAMARI = "hijri_qamari";
-    public static final String GREGORIAN = "gregorian";
 
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
@@ -83,7 +80,6 @@ public class Constants {
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String KEY_EXTRA_PRAYER_KEY = "prayer_name";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
-    public static final int BROADCAST_TO_MONTH_FRAGMENT_NOTIFY_DAY = Integer.MIN_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
     public static final char RLM = '\u200F';
