@@ -49,8 +49,8 @@
             android:defaultValue="false"
             android:icon="@drawable/ic_event_setting"
             android:key="showDeviceCalendarEvents"
-            android:summary="نمایش مناسبت‌های تقویم دستگاه"
-            android:title="مناسبت‌های تقویم دستگاه" />
+            android:summary="@string/show_device_calendar_events_summary"
+            android:title="@string/show_device_calendar_events" />
 
         <androidx.preference.ListPreference
             android:defaultValue="SHAMSI"

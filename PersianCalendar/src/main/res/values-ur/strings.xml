@@ -114,5 +114,7 @@
     <string name="week_ends">روزهای تعطیل هفته</string>
     <string name="week_ends_summary">چه روزهایی در هفته تعطیل نمایش داده شوند</string>
     <string name="search_in_events">جستجو در مناسبت‌ها</string>
+    <string name="show_device_calendar_events_summary">نمایش مناسبت‌های تقویم دستگاه</string>
+    <string name="show_device_calendar_events">مناسبت‌های تقویم دستگاه</string>
 
 </resources>

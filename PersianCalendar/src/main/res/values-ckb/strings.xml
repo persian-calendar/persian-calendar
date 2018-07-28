@@ -114,5 +114,7 @@
     <string name="week_ends">پشوودانی حەفتە</string>
     <string name="week_ends_summary">دیارکردنی ڕۆژانی پشوودانی حەفتە</string>
     <string name="search_in_events">گەڕان لە بۆنەکاندا</string>
+    <string name="show_device_calendar_events_summary">نمایش مناسبت‌های تقویم دستگاه</string>
+    <string name="show_device_calendar_events">مناسبت‌های تقویم دستگاه</string>
 
 </resources>
