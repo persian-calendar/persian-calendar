@@ -196,11 +196,13 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
+        // en-US is our only real LTR language for now
+        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
-        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
+        if (isRTL && (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
                 (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
             subtitle = Constants.RLM + subtitle;
@@ -234,11 +236,15 @@ public class UpdateUtils {
                     .setContentText(subtitle);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
-                RemoteViews cv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+                RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
+                        ? R.layout.custom_notification
+                        : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
                 cv.setTextViewText(R.id.body, subtitle);
 
-                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification_big);
+                RemoteViews bcv = new RemoteViews(context.getPackageName(), isRTL
+                        ? R.layout.custom_notification_big
+                        : R.layout.custom_notification_big_ltr);
                 bcv.setTextViewText(R.id.title, title);
                 bcv.setTextViewText(R.id.body, subtitle);
 
