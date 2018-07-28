@@ -52,7 +52,7 @@ class IslamicDateConverter {
     }
 
     static long hijriToJd(int year, int month, int day) {
-        if (yearsMonthsInJd.get(year) == null)
+        if (yearsMonthsInJd == null || yearsMonthsInJd.get(year) == null)
             return -1;
 
         long calculatedDay = yearsMonthsInJd.get(year)[month - 1];
@@ -70,12 +70,15 @@ class IslamicDateConverter {
     }
 
     static int[] jdToHijri(long jd) {
-        if (jd < jdSupportStart || jd >= jdSupportEnd)
+        if (jd < jdSupportStart || jd >= jdSupportEnd || yearsStartJd == null)
             return null;
 
         int yearIndex = search(yearsStartJd, jd);
         int year = yearIndex + supportedYearsStart - 1;
         long[] yearMonths = yearsMonthsInJd.get(year);
+        if (yearMonths == null) {
+            return null;
+        }
         int month = search(yearMonths, jd);
         if (yearMonths[month - 1] == 0)
             return null;
