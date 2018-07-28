@@ -294,7 +294,13 @@ public class CalendarFragment extends Fragment
                 time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
-        startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+        try {
+            startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            // We can do something here
+        } catch (Exception e) {
+            // But nvm really
+        }
     }
 
     @Override

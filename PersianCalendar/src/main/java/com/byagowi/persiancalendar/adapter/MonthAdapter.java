@@ -130,14 +130,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 return false;
             }
 
-
-            try {
-                monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
-            } catch (Exception e) {
-                // Ignore it for now
-                // I guess it will occur on CyanogenMod phones
-                // where Google extra things is not installed
-            }
+            monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
             onClick(v);
 
             return false;
