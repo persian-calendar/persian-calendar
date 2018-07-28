@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -22,6 +21,11 @@
         android:required="false"/>
     <uses-feature
         android:name="android.hardware.location.gps"
+        android:required="false"/>
+
+    <!-- Are you sure???????????????? -->
+    <uses-feature
+        android:name="android.content.calendar"
         android:required="false"/>
 
     <application

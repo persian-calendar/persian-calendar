@@ -11,8 +11,6 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 /**
  * Startup broadcast receiver
  *

@@ -80,8 +80,9 @@ class IslamicDateConverter {
             return null;
         }
         int month = search(yearMonths, jd);
-        if (yearMonths[month - 1] == 0)
+        if (yearMonths[month - 1] == 0) {
             return null;
+        }
         int day = (int)(jd - yearMonths[month - 1]);
         return new int[] { year, month, day };
     }

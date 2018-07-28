@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -45,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
@@ -355,15 +351,15 @@ public class CalendarFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        imsakTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        fajrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)));
-        sunriseTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        dhuhrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
-        asrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
-        sunsetTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        maghribTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
-        ishaTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        midnightTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        imsakTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        fajrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.FAJR)));
+        sunriseTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        dhuhrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.DHUHR)));
+        asrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
+        sunsetTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        maghribTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
+        ishaTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        midnightTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
     }
 
     @Override

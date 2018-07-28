@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
@@ -73,7 +72,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         if (position == -1) {
             return;
         }
-        
+
         if (Utils.isWeekOfYearEnabled()) {
             if (position % 8 == 0) {
                 return;

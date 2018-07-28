@@ -461,35 +461,35 @@ public class Utils {
         }
 
         if (prayTimes.get(PrayTime.FAJR).getInt() > clock.getInt()) {
-            return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR));
+            return context.getString(R.string.azan1) + ": " + getFormattedClock(prayTimes.get(PrayTime.FAJR));
 
         } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
-            return context.getString(R.string.aftab1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE));
+            return context.getString(R.string.aftab1) + ": " + getFormattedClock(prayTimes.get(PrayTime.SUNRISE));
 
         } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
-            return context.getString(R.string.azan2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR));
+            return context.getString(R.string.azan2) + ": " + getFormattedClock(prayTimes.get(PrayTime.DHUHR));
 
         } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
-            return context.getString(R.string.azan3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ASR));
+            return context.getString(R.string.azan3) + ": " + getFormattedClock(prayTimes.get(PrayTime.ASR));
 
         } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
-            return context.getString(R.string.aftab2) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET));
+            return context.getString(R.string.aftab2) + ": " + getFormattedClock(prayTimes.get(PrayTime.SUNSET));
 
         } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
-            return context.getString(R.string.azan4) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
+            return context.getString(R.string.azan4) + ": " + getFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
 
         } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
-            return context.getString(R.string.azan5) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.ISHA));
+            return context.getString(R.string.azan5) + ": " + getFormattedClock(prayTimes.get(PrayTime.ISHA));
 
         } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
-            return context.getString(R.string.aftab3) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
+            return context.getString(R.string.aftab3) + ": " + getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
 
         } else {
-            return context.getString(R.string.azan1) + ": " + getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
+            return context.getString(R.string.azan1) + ": " + getFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
         }
     }
 
-    static public String getPersianFormattedClock(Clock clock) {
+    static public String getFormattedClock(Clock clock) {
         String timeText = null;
 
         int hour = clock.getHour();
@@ -952,57 +952,82 @@ public class Utils {
             return;
         }
 
-        Cursor cursor = context.getContentResolver().query(Uri.parse("content://com.android.calendar/events"),
-                new String[] {
-                        CalendarContract.Events._ID,            // 0
-                        CalendarContract.Events.TITLE,          // 1
-                        CalendarContract.Events.DESCRIPTION,    // 2
-                        CalendarContract.Events.DTSTART,        // 3
-                        CalendarContract.Events.DTEND,          // 4
-                        CalendarContract.Events.EVENT_LOCATION, // 5
-                        CalendarContract.Events.RRULE,          // 6
-                        CalendarContract.Events.VISIBLE         // 7
-                }, null, null, null);
+        try {
+            Cursor cursor = context.getContentResolver().query(Uri.parse("content://com.android.calendar/events"),
+                    new String[]{
+                            CalendarContract.Events._ID,            // 0
+                            CalendarContract.Events.TITLE,          // 1
+                            CalendarContract.Events.DESCRIPTION,    // 2
+                            CalendarContract.Events.DTSTART,        // 3
+                            CalendarContract.Events.DTEND,          // 4
+                            CalendarContract.Events.EVENT_LOCATION, // 5
+                            CalendarContract.Events.RRULE,          // 6
+                            CalendarContract.Events.VISIBLE,        // 7
+                            CalendarContract.Events.ALL_DAY         // 8
+                    }, null, null, null);
 
-        if (cursor == null) {
-            return;
-        }
-
-        while (cursor.moveToNext()) {
-            if (!cursor.getString(7).equals("1"))
-                continue;
-
-            Date startDate = new Date(cursor.getLong(3));
-            CivilDate civilDate = new CivilDate(makeCalendarFromDate(startDate));
-
-            int month = civilDate.getMonth();
-            int day = civilDate.getDayOfMonth();
-
-            String repeatRule = cursor.getString(6);
-            if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
-                civilDate.setYear(-1);
-
-            List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
-            if (list == null) {
-                list = new ArrayList<>();
-                deviceCalendarEvents.put(month * 100 + day, list);
+            if (cursor == null) {
+                return;
             }
 
-            String title = cursor.getString(1);
-            DeviceCalendarEvent event = new DeviceCalendarEvent(
-                    cursor.getInt(0),
-                    title,
-                    cursor.getString(2),
-                    startDate,
-                    new Date(cursor.getLong(4)),
-                    cursor.getString(5),
-                    civilDate
-            );
-            list.add(event);
-            allEnabledEvents.add(event);
-            allEnabledEventsTitles.add(title);
+            while (cursor.moveToNext()) {
+                if (!cursor.getString(7).equals("1"))
+                    continue;
+
+                boolean allDay = false;
+                if (cursor.getString(8).equals("1"))
+                    allDay = true;
+
+                Date startDate = new Date(cursor.getLong(3));
+                Date endDate = new Date(cursor.getLong(4));
+                Calendar startCalendar = makeCalendarFromDate(startDate);
+                Calendar endCalendar = makeCalendarFromDate(endDate);
+
+                CivilDate civilDate = new CivilDate(startCalendar);
+
+                int month = civilDate.getMonth();
+                int day = civilDate.getDayOfMonth();
+
+                String repeatRule = cursor.getString(6);
+                if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
+                    civilDate.setYear(-1);
+
+                List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    deviceCalendarEvents.put(month * 100 + day, list);
+                }
+
+                String title = cursor.getString(1);
+                if (!allDay) {
+                    title += " (" + clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
+                            startCalendar.get(Calendar.MINUTE));
+
+                    if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
+                        title += "-" + clockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
+                                endCalendar.get(Calendar.MINUTE));
+                    }
+
+                    title += ")";
+                }
+                DeviceCalendarEvent event = new DeviceCalendarEvent(
+                        cursor.getInt(0),
+                        title,
+                        cursor.getString(2),
+                        startDate,
+                        endDate,
+                        cursor.getString(5),
+                        civilDate
+                );
+                list.add(event);
+                allEnabledEvents.add(event);
+                allEnabledEventsTitles.add(title);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            // We don't like crash addition from here, just catch all of exceptions
+            Log.e(TAG, "Error on device calendar events read", e);
         }
-        cursor.close();
     }
 
     static public List<AbstractEvent> getEvents(long jdn) {
