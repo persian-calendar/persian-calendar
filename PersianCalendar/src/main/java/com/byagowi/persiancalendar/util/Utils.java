@@ -999,7 +999,14 @@ public class Utils {
                 }
 
                 String title = cursor.getString(1);
-                if (!allDay) {
+                if (allDay) {
+                    if (civilDate.getYear() == -1) {
+                        title = "\uD83C\uDF89 " + title;
+                    } else {
+                        title = "\uD83D\uDCC5 " + title;
+                    }
+                } else {
+                    title = "\uD83D\uDD53 " + title;
                     title += " (" + clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
                             startCalendar.get(Calendar.MINUTE));
 
