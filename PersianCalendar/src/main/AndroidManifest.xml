@@ -23,11 +23,6 @@
         android:name="android.hardware.location.gps"
         android:required="false"/>
 
-    <!-- Are you sure???????????????? -->
-    <uses-feature
-        android:name="android.content.calendar"
-        android:required="false"/>
-
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
