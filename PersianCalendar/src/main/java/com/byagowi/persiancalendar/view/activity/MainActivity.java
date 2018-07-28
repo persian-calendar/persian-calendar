@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final int CALENDAR = 1;
     private static final int CONVERTER = 2;
     private static final int COMPASS = 3;
-    private static final int PREFERENCE = 4;
+    public static final int PREFERENCE = 4;
     private static final int ABOUT = 5;
     private static final int EXIT = 6;
     // Default selected fragment

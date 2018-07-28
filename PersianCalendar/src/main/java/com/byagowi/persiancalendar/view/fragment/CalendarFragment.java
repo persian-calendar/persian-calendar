@@ -1,15 +1,21 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +36,7 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -335,21 +342,47 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
-        String messageToShow = "";
-        if (Utils.getToday().getYear() > maxSupportedYear)
-            messageToShow = getString(R.string.shouldBeUpdated);
+        SpannableStringBuilder messageToShow = new SpannableStringBuilder();
+        if (Utils.getToday().getYear() > maxSupportedYear) {
+            String title = getString(R.string.shouldBeUpdated);
+            SpannableString ss = new SpannableString(title);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.byagowi.persiancalendar")));
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar")));
+                    }
+                }
+            };
+            ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            messageToShow.append(ss);
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
             if (!TextUtils.isEmpty(messageToShow))
-                messageToShow += "\n";
-            messageToShow += getString(R.string.warn_if_events_not_set);
+                messageToShow.append("\n");
+
+            String title = getString(R.string.warn_if_events_not_set);
+            SpannableString ss = new SpannableString(title);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    ((MainActivity) getActivity()).selectItem(MainActivity.PREFERENCE);
+                }
+            };
+            ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            messageToShow.append(ss);
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
             warnUserIcon.setVisibility(View.VISIBLE);
             eventMessage.setText(messageToShow);
+            eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
+
             eventMessage.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
