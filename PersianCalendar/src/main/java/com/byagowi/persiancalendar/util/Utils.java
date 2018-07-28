@@ -1085,12 +1085,11 @@ public class Utils {
         return getEventsTitle(dayEvents, holiday, false, true);
     }
 
-    static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
+    static private String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
-            title += " (" + ((DeviceCalendarEvent) event).getDescription()
-                    .replaceAll("\\n", "").trim() + ")";
+            title += " (" + event.getDescription().replaceAll("\\n", "").trim() + ")";
 
         return title;
     }
