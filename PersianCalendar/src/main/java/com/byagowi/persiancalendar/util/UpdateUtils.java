@@ -96,6 +96,7 @@ public class UpdateUtils {
                 owghat = owghat + " (" + cityName + ")";
             }
         }
+        List<AbstractEvent> events = Utils.getEvents(jdn);
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
@@ -157,25 +158,20 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
 
-                if (updateDate) {
-                    List<AbstractEvent> events = Utils.getEvents(jdn);
-                    String holidays = Utils.getEventsTitle(events, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true);
+                if (!TextUtils.isEmpty(holidays)) {
+                    remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
+                }
 
-                    if (!TextUtils.isEmpty(holidays)) {
-                        remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
-                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
-                    } else {
-                        remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
-                    }
-
-                    String nonHolidays = Utils.getEventsTitle(events, false);
-
-                    if (!TextUtils.isEmpty(nonHolidays)) {
-                        remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
-                        remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
-                    } else {
-                        remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
-                    }
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
+                if (!TextUtils.isEmpty(nonHolidays)) {
+                    remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
+                } else {
+                    remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
                 }
 
                 if (!TextUtils.isEmpty(owghat)) {
@@ -196,11 +192,13 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
+        // en-US is our only real LTR language for now
+        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
-        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
+        if (isRTL && (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
                 (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
             subtitle = Constants.RLM + subtitle;
@@ -234,21 +232,24 @@ public class UpdateUtils {
                     .setContentText(subtitle);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
-                RemoteViews cv = new RemoteViews(context.getPackageName(), R.layout.custom_notification);
+                RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
+                        ? R.layout.custom_notification
+                        : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
                 cv.setTextViewText(R.id.body, subtitle);
 
-                RemoteViews bcv = new RemoteViews(context.getPackageName(), R.layout.custom_notification_big);
+                RemoteViews bcv = new RemoteViews(context.getPackageName(), isRTL
+                        ? R.layout.custom_notification_big
+                        : R.layout.custom_notification_big_ltr);
                 bcv.setTextViewText(R.id.title, title);
                 bcv.setTextViewText(R.id.body, subtitle);
 
-                List<AbstractEvent> events = Utils.getEvents(jdn);
-                String holidays = Utils.getEventsTitle(events, true, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true);
                 if (!TextUtils.isEmpty(holidays))
                     bcv.setTextViewText(R.id.holidays, holidays);
                 else
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
-                String nonHolidays = Utils.getEventsTitle(events, false, true);
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
                 if (!TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
                 else

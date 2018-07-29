@@ -1,15 +1,21 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,12 +29,14 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -43,7 +51,6 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
@@ -57,6 +64,7 @@ import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends Fragment
@@ -88,6 +96,7 @@ public class CalendarFragment extends Fragment
     private TextView shamsiDate;
     private TextView shamsiDateDay;
     private TextView shamsiDateLinear;
+    private TextView deviceEventTitle;
     private TextView eventTitle;
     private TextView eventMessage;
     private TextView holidayTitle;
@@ -169,6 +178,7 @@ public class CalendarFragment extends Fragment
 
         moreOwghat = view.findViewById(R.id.more_owghat);
 
+        deviceEventTitle = view.findViewById(R.id.device_event_title);
         eventTitle = view.findViewById(R.id.event_title);
         eventMessage = view.findViewById(R.id.event_message);
         holidayTitle = view.findViewById(R.id.holiday_title);
@@ -232,7 +242,9 @@ public class CalendarFragment extends Fragment
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
+    long lastSelectedJdn = -1;
     void selectDay(long jdn) {
+        lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         weekDayName.setText(Utils.getWeekDayName(persianDate));
         CivilDate civilDate = DateConverter.persianToCivil(persianDate);
@@ -264,7 +276,6 @@ public class CalendarFragment extends Fragment
         showEvent(jdn);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void addEventOnCalendar(long jdn) {
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setData(CalendarContract.Events.CONTENT_URI);
@@ -283,20 +294,71 @@ public class CalendarFragment extends Fragment
                 time.getTimeInMillis());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
-        startActivity(intent);
+        try {
+            startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            // We can do something here
+        } catch (Exception e) {
+            // But nvm really
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CALENDAR_EVENT_ADD_REQUEST_CODE) {
+            Utils.initUtils(getContext());
+
+            if (lastSelectedJdn == -1)
+                lastSelectedJdn = Utils.getTodayJdn();
+            selectDay(lastSelectedJdn);
+        }
+    }
+
+    private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
+        String title = Utils.formatDeviceCalendarEventTitle(event);
+        SpannableString ss = new SpannableString(title);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
+                startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+            }
+        };
+        ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return ss;
+    }
+
+    private SpannableStringBuilder getDeviceEventsTitle(List<AbstractEvent> dayEvents) {
+        SpannableStringBuilder titles = new SpannableStringBuilder();
+        boolean first = true;
+
+        for (AbstractEvent event : dayEvents)
+            if (event instanceof DeviceCalendarEvent) {
+                if (first)
+                    first = false;
+                else
+                    titles.append("\n");
+
+                titles.append(formatClickableEventTitle((DeviceCalendarEvent) event));
+            }
+
+        return titles;
     }
 
     private int maxSupportedYear = 1397;
 
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn);
-        String holidays = Utils.getEventsTitle(events, true);
-        String nonHolidays = Utils.getEventsTitle(events, false);
+        String holidays = Utils.getEventsTitle(events, true, false, false);
+        String nonHolidays = Utils.getEventsTitle(events, false, false, false);
+        SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
         event.setVisibility(View.GONE);
         holidayTitle.setVisibility(View.GONE);
-        eventMessage.setVisibility(View.GONE);
+        deviceEventTitle.setVisibility(View.GONE);
         eventTitle.setVisibility(View.GONE);
+        eventMessage.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
             holidayTitle.setText(holidays);
@@ -304,27 +366,62 @@ public class CalendarFragment extends Fragment
             event.setVisibility(View.VISIBLE);
         }
 
+        if (deviceEvents.length() != 0) {
+            deviceEventTitle.setText(deviceEvents);
+            deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
+
+            deviceEventTitle.setVisibility(View.VISIBLE);
+            event.setVisibility(View.VISIBLE);
+        }
+
         if (!TextUtils.isEmpty(nonHolidays)) {
             eventTitle.setText(nonHolidays);
+
             eventTitle.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
 
-        String messageToShow = "";
-        if (Utils.getToday().getYear() > maxSupportedYear)
-            messageToShow = getString(R.string.shouldBeUpdated);
+        SpannableStringBuilder messageToShow = new SpannableStringBuilder();
+        if (Utils.getToday().getYear() > maxSupportedYear) {
+            String title = getString(R.string.shouldBeUpdated);
+            SpannableString ss = new SpannableString(title);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.byagowi.persiancalendar")));
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar")));
+                    }
+                }
+            };
+            ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            messageToShow.append(ss);
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
             if (!TextUtils.isEmpty(messageToShow))
-                messageToShow += "\n";
-            messageToShow += getString(R.string.warn_if_events_not_set);
+                messageToShow.append("\n");
+
+            String title = getString(R.string.warn_if_events_not_set);
+            SpannableString ss = new SpannableString(title);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    ((MainActivity) getActivity()).selectItem(MainActivity.PREFERENCE);
+                }
+            };
+            ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            messageToShow.append(ss);
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
             warnUserIcon.setVisibility(View.VISIBLE);
             eventMessage.setText(messageToShow);
+            eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
+
             eventMessage.setVisibility(View.VISIBLE);
             event.setVisibility(View.VISIBLE);
         }
@@ -341,15 +438,15 @@ public class CalendarFragment extends Fragment
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        imsakTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        fajrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.FAJR)));
-        sunriseTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        dhuhrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.DHUHR)));
-        asrTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ASR)));
-        sunsetTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        maghribTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
-        ishaTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        midnightTextView.setText(Utils.getPersianFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        imsakTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        fajrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.FAJR)));
+        sunriseTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        dhuhrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.DHUHR)));
+        asrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
+        sunsetTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        maghribTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
+        ishaTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        midnightTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
     }
 
     @Override
@@ -431,7 +528,7 @@ public class CalendarFragment extends Fragment
 
         CalendarAdapter.gotoOffset(monthViewPager, 0);
 
-        selectDay(DateConverter.persianToJdn(Utils.getToday()));
+        selectDay(Utils.getTodayJdn());
     }
 
     public void bringDate(long jdn) {
@@ -479,47 +576,71 @@ public class CalendarFragment extends Fragment
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHint(R.string.search_in_events);
-        SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
-                R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
-        searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
-                    (String) parent.getItemAtPosition(position)));
-            PersianDate todayPersian = Utils.getToday();
-            long todayJdn = DateConverter.persianToJdn(todayPersian);
-            IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
-            CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
+        searchView.setOnSearchClickListener(v -> {
+            SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            searchAutoComplete.setHint(R.string.search_in_events);
+            SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
+                    R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
+                        (String) parent.getItemAtPosition(position)));
+                PersianDate todayPersian = Utils.getToday();
+                long todayJdn = DateConverter.persianToJdn(todayPersian);
+                IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
+                CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
 
-            if (ev instanceof PersianCalendarEvent) {
-                PersianDate date = ((PersianCalendarEvent) ev).getDate();
-                bringDate(DateConverter.persianToJdn(todayPersian.getYear() +
-                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
-            } else if (ev instanceof IslamicCalendarEvent) {
-                IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
-                bringDate(DateConverter.islamicToJdn(todayIslamic.getYear() +
-                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
-            } else if (ev instanceof GregorianCalendarEvent) {
-                CivilDate date = ((GregorianCalendarEvent) ev).getDate();
-                bringDate(DateConverter.civilToJdn(todayCivil.getYear() +
-                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0),
-                        date.getMonth(), date.getDayOfMonth()));
-            }
-            searchView.onActionViewCollapsed();
+                if (ev instanceof PersianCalendarEvent) {
+                    PersianDate date = ((PersianCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayPersian.getYear() +
+                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof IslamicCalendarEvent) {
+                    IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayIslamic.getYear() +
+                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof GregorianCalendarEvent) {
+                    CivilDate date = ((GregorianCalendarEvent) ev).getDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                } else if (ev instanceof DeviceCalendarEvent) {
+                    CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
+                    int year = date.getYear();
+                    if (year == -1) {
+                        year = todayCivil.getYear() +
+                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
+                    }
+                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                }
+                searchView.onActionViewCollapsed();
+            });
         });
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                SelectDayDialog dialog = new SelectDayDialog();
-                dialog.show(getChildFragmentManager(), SelectDayDialog.class.getName());
+                new SelectDayDialog().show(getChildFragmentManager(),
+                        SelectDayDialog.class.getName());
+                break;
+            case R.id.add_event:
+                if (lastSelectedJdn == -1)
+                    lastSelectedJdn = Utils.getTodayJdn();
+
+                addEventOnCalendar(lastSelectedJdn);
                 break;
             default:
                 break;

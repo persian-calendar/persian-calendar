@@ -11,6 +11,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/add_event"
+        android:icon="@drawable/ic_add"
+        android:orderInCategory="100"
+        android:title="@string/add_event"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/go_to"
         android:icon="@drawable/ic_goto"
         android:orderInCategory="100"

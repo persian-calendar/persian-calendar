@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
-import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
@@ -65,21 +63,13 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             DayEntity dayEntity = new DayEntity();
-            List<AbstractEvent> events = Utils.getEvents(baseJdn + i);
-
-            if (Utils.isWeekEnd(dayOfWeek) || !TextUtils.isEmpty(Utils.getEventsTitle(events, true))) {
-                dayEntity.setHoliday(true);
-            }
-
-            if (events.size() > 0) {
-                dayEntity.setEvent(true);
-            }
-
             dayEntity.setJdn(baseJdn + i);
 
             if (baseJdn + i == todayJdn) {
                 dayEntity.setToday(true);
             }
+
+            dayEntity.setDayOfWeek(dayOfWeek);
 
             days.add(dayEntity);
             dayOfWeek++;

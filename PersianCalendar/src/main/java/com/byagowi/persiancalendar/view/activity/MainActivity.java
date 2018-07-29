@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.view.activity;
 
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,25 +26,26 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import calendar.CivilDate;
 
-import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 /**
@@ -59,13 +58,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final int CALENDAR = 1;
     private static final int CONVERTER = 2;
     private static final int COMPASS = 3;
-    private static final int PREFERENCE = 4;
+    public static final int PREFERENCE = 4;
     private static final int ABOUT = 5;
     private static final int EXIT = 6;
     // Default selected fragment
     private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
-    public boolean dayIsPassed = false;
     private DrawerLayout drawerLayout;
     private DrawerAdapter adapter;
     private Class<?>[] fragments = {
@@ -77,12 +75,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             AboutFragment.class
     };
     private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
-    private BroadcastReceiver dayPassedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            dayIsPassed = true;
-        }
-    };
 
     // https://stackoverflow.com/a/3410200
     public int getStatusBarHeight() {
@@ -93,6 +85,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         return result;
     }
+
+    private void oneTimeClockDisablingForAndroid5LE() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            String key = "oneTimeClockDisablingForAndroid5LE";
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            if (!prefs.getBoolean(key, false)) {
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putBoolean(Constants.PREF_WIDGET_CLOCK, false);
+                edit.putBoolean(key, true);
+                edit.apply();
+            }
+        }
+    }
+
+    private static CivilDate creationDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
         Utils.startUpdateWorker();
+        oneTimeClockDisablingForAndroid5LE();
         UpdateUtils.update(getApplicationContext(), false);
 
         setContentView(R.layout.activity_main);
@@ -180,13 +188,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             selectItem(DEFAULT);
         }
 
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(dayPassedReceiver,
-                new IntentFilter(Constants.LOCAL_INTENT_DAY_PASSED));
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
+        if (Utils.isShowDeviceCalendarEvents()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                Utils.askForCalendarPermission(this);
+            }
+        }
+
+        creationDate = Utils.getGregorianToday();
         Utils.changeAppLanguage(this);
     }
 
@@ -206,13 +217,38 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 default:
                     persianDigits = true;
             }
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
             editor.apply();
         }
-        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME))
+
+        if (key.equals(PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
+            if (sharedPreferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true)) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.askForCalendarPermission(this);
+                }
+            }
+        }
+
+        if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
             restartActivity(PREFERENCE);
+        }
+
         UpdateUtils.update(getApplicationContext(), true);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                Utils.initUtils(this);
+                if (menuPosition == CALENDAR) {
+                    restartActivity(menuPosition);
+                }
+            }
+        }
     }
 
     @Override
@@ -229,16 +265,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onResume() {
         super.onResume();
         UpdateUtils.update(getApplicationContext(), false);
-        if (dayIsPassed) {
-            dayIsPassed = false;
+        if (!creationDate.equals(Utils.getGregorianToday())) {
             restartActivity(menuPosition);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(dayPassedReceiver);
-        super.onDestroy();
     }
 
     @Override

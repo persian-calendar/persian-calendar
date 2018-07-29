@@ -11,8 +11,6 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 /**
  * Startup broadcast receiver
  *
@@ -37,14 +35,6 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 
                 UpdateUtils.update(context, false);
-
-            } else if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED) ||
-                    intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
-
-                UpdateUtils.update(context, true);
-//                Utils.loadApp(context);
-                LocalBroadcastManager.getInstance(context)
-                        .sendBroadcast(new Intent(Constants.LOCAL_INTENT_DAY_PASSED));
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
                 startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));

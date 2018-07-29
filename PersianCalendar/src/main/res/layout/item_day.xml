@@ -18,8 +18,7 @@
         android:layout_height="@dimen/day_item_select_size"
         android:layout_centerInParent="true"
         android:background="?attr/circleCurrentDay"
-        android:gravity="center"
-        android:visibility="gone" />
+        android:gravity="center" />
 
     <View
         android:id="@+id/event"
@@ -29,7 +28,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8sp"
         android:background="?attr/colorSelectDay"
-        android:gravity="center"
-        android:visibility="gone" />
+        android:gravity="center" />
+
+    <View
+        android:id="@+id/and_device_event"
+        android:layout_width="8sp"
+        android:layout_height="1sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6sp"
+        android:background="?attr/colorSelectDay"
+        android:gravity="center" />
 
 </RelativeLayout>

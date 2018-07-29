@@ -2,10 +2,12 @@ package com.byagowi.persiancalendar;
 
 public class Constants {
 
-    public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
+    public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
+    public static final int CALENDAR_EVENT_ADD_REQUEST_CODE = 63;
+
 
     public static final String LANG_EN = "en";
     public static final String LANG_EN_US = "en-US";
@@ -23,6 +25,7 @@ public class Constants {
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
     public static final String PREF_IRAN_TIME = "IranTime";
     public static final String PREF_PERSIAN_DIGITS = "PersianDigits";
+    public static final String PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents";
     public static final String PREF_WIDGET_CLOCK = "WidgetClock";
     public static final String PREF_NOTIFY_DATE = "NotifyDate";
     public static final String PREF_NOTIFY_DATE_LOCK_SCREEN = "NotifyDateLockScreen";
@@ -68,9 +71,6 @@ public class Constants {
     public static final String DAY = "day";
     public static final String MONTH = "month";
     public static final String YEAR = "year";
-    public static final String HIJRI_SHAMSI = "hijri_shamsi";
-    public static final String HIJRI_QAMARI = "hijri_qamari";
-    public static final String GREGORIAN = "gregorian";
 
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";

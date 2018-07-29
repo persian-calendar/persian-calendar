@@ -162,8 +162,10 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        getLocation();
-        if (lacksPermission) // request for permission is rejected
-            dismiss();
+        if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
+            getLocation();
+            if (lacksPermission) // request for permission is rejected
+                dismiss();
+        }
     }
 }

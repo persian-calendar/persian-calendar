@@ -100,7 +100,7 @@
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
-    <string name="warn_if_events_not_set">To select and show holidays and events you like go to the preferences</string>
+    <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the preferences</string>
     <string name="date_diff_text">%s day (~%s year and %s month and %s day)</string>
     <string name="search_holidays">Search in events</string>
     <string name="main_calendar">Main Calendar</string>
@@ -114,5 +114,8 @@
     <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Select weekends days</string>
     <string name="search_in_events">Search in events</string>
+    <string name="show_device_calendar_events_summary">Show device calendar events</string>
+    <string name="show_device_calendar_events">Device Calendar Events</string>
+    <string name="add_event">Add event</string>
 
 </resources>

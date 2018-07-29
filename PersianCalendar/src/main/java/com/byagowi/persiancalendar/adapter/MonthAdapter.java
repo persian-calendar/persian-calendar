@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
@@ -77,6 +79,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         TextView num;
         View today;
         View event;
+        View deviceEvent;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -84,6 +87,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             num = itemView.findViewById(R.id.num);
             today = itemView.findViewById(R.id.today);
             event = itemView.findViewById(R.id.event);
+            deviceEvent = itemView.findViewById(R.id.and_device_event);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -126,14 +130,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 return false;
             }
 
-
-            try {
-                monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
-            } catch (Exception e) {
-                // Ignore it for now
-                // I guess it will occur on CyanogenMod phones
-                // where Google extra things is not installed
-            }
+            monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
             onClick(v);
 
             return false;
@@ -145,6 +142,20 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         View v = LayoutInflater.from(context).inflate(R.layout.item_day, parent, false);
 
         return new ViewHolder(v);
+    }
+
+    private boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
+        for (AbstractEvent event : dayEvents)
+            if (event.isHoliday())
+                return true;
+        return false;
+    }
+
+    private boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
+        for (AbstractEvent event : dayEvents)
+            if (event instanceof DeviceCalendarEvent)
+                return true;
+        return false;
     }
 
     @Override
@@ -175,6 +186,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             holder.today.setVisibility(View.GONE);
             holder.num.setBackgroundResource(0);
             holder.event.setVisibility(View.GONE);
+            holder.deviceEvent.setVisibility(View.GONE);
             holder.num.setVisibility(View.VISIBLE);
         } else {
             if (position - 7 - startingDayOfWeek >= 0) {
@@ -184,18 +196,30 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 DayEntity day = days.get(position - 7 - startingDayOfWeek);
 
                 holder.num.setTextSize(isArabicDigit ? 20 : 25);
-                holder.event.setVisibility(day.isEvent() ? View.VISIBLE : View.GONE);
+
+                List<AbstractEvent> events = Utils.getEvents(day.getJdn());
+                boolean isEvent = false,
+                        isHoliday = false;
+                if (Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events)) {
+                    isHoliday = true;
+                }
+                if (events.size() > 0) {
+                    isEvent = true;
+                }
+
+                holder.event.setVisibility(isEvent ? View.VISIBLE : View.GONE);
+                holder.deviceEvent.setVisibility(hasDeviceEvents(events) ? View.VISIBLE : View.GONE);
                 holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
 
                 if (originalPosition == selectedDay) {
                     holder.num.setBackgroundResource(shapeSelectDay.resourceId);
-                    holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
+                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
                             ? colorTextHoliday.resourceId
                             : colorPrimary.resourceId));
 
                 } else {
                     holder.num.setBackgroundResource(0);
-                    holder.num.setTextColor(ContextCompat.getColor(context, day.isHoliday()
+                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
                             ? colorHoliday.resourceId
                             : colorTextDay.resourceId));
                 }
@@ -211,6 +235,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         holder.today.setVisibility(View.GONE);
         holder.num.setVisibility(View.GONE);
         holder.event.setVisibility(View.GONE);
+        holder.deviceEvent.setVisibility(View.GONE);
     }
 
     @Override
