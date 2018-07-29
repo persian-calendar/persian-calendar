@@ -114,8 +114,8 @@
     <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Select weekends days</string>
     <string name="search_in_events">Search in events</string>
-    <string name="show_device_calendar_events_summary">Show device calendar events</string>
-    <string name="show_device_calendar_events">Device Calendar Events</string>
+    <string name="show_device_calendar_events_summary">Show personal calendar events</string>
+    <string name="show_device_calendar_events">Personal Calendar Events</string>
     <string name="add_event">Add event</string>
     <string name="device_calendar_does_not_support">Device calendar does not support the action</string>
     <string name="compact_widget_summary">Hide some of info from widget and notification to make it more compact</string>
