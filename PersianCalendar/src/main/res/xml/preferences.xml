@@ -150,6 +150,12 @@
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="CompactWidget"
+            android:summary="@string/compact_widget_summary"
+            android:title="@string/compact_widget" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pray_times_calculation_setting">

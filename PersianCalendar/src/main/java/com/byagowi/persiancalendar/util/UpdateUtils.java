@@ -93,7 +93,7 @@ public class UpdateUtils {
         Clock currentClock =
                 new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
         String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
-        if (!TextUtils.isEmpty(owghat)) {
+        if (!Utils.isCompactWidget() && !TextUtils.isEmpty(owghat)) {
             String cityName = Utils.getCityName(context, false);
             if (!TextUtils.isEmpty(cityName)) {
                 owghat = owghat + " (" + cityName + ")";
@@ -138,7 +138,9 @@ public class UpdateUtils {
                     remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
                     text2 = mainDateString;
                 }
-                text2 += Utils.getComma() + " " + subtitle;
+                if (!Utils.isCompactWidget()) {
+                    text2 += Utils.getComma() + " " + subtitle;
+                }
 
                 remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
                 remoteViews4.setTextViewText(R.id.textPlaceholder3_4x1, text3);
@@ -170,7 +172,7 @@ public class UpdateUtils {
                 }
 
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (!TextUtils.isEmpty(nonHolidays)) {
+                if (!Utils.isCompactWidget() && !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
@@ -184,7 +186,10 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
                 }
 
-                remoteViews2.setTextViewText(R.id.date_2x2, text2 + "\n" + subtitle);
+                if (!Utils.isCompactWidget()) {
+                    text2 = text2 + "\n" + subtitle;
+                }
+                remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
                 remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
                 manager.updateAppWidget(widget2x2, remoteViews2);
@@ -251,7 +256,7 @@ public class UpdateUtils {
                 else
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (!TextUtils.isEmpty(nonHolidays))
+                if (!Utils.isCompactWidget() && !TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
                 else
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);

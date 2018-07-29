@@ -118,5 +118,7 @@
     <string name="show_device_calendar_events">ڕووداوەکانی ڕۆژژمێری ئامراز</string>
     <string name="add_event">زیادکردنی ڕووداو</string>
     <string name="device_calendar_does_not_support">ڕۆژژمێری ئامراز لەم کردەوەیە پشتیوانی ناکات</string>
+    <string name="compact_widget_summary">مخفی کردن تعداد از اطلاعات به منظور خلوت شدن ویجت و نوار اعلان</string>
+    <string name="compact_widget">خلوت‌سازی ویجت</string>
 
 </resources>
