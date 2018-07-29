@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -64,7 +65,7 @@ import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
-import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_REQUEST_CODE;
+import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends Fragment
@@ -121,8 +122,6 @@ public class CalendarFragment extends Fragment
     private LinearLayoutCompat maghribLayout;
     private LinearLayoutCompat ishaLayout;
     private LinearLayoutCompat midnightLayout;
-
-    private CardView calendarsCard;
 
     private int viewPagerPosition;
 
@@ -209,8 +208,7 @@ public class CalendarFragment extends Fragment
         shamsiDateDay.setOnClickListener(this);
         shamsiDateLinear.setOnClickListener(this);
 
-        calendarsCard = view.findViewById(R.id.calendars_card);
-        calendarsCard.setOnClickListener(this);
+        view.findViewById(R.id.calendars_card).setOnClickListener(this);
 
         warnUserIcon.setVisibility(View.GONE);
         gregorianDateLinear.setVisibility(View.GONE);
@@ -242,7 +240,7 @@ public class CalendarFragment extends Fragment
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
-    long lastSelectedJdn = -1;
+    private long lastSelectedJdn = -1;
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
@@ -295,17 +293,15 @@ public class CalendarFragment extends Fragment
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         try {
-            startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
-        } catch (ActivityNotFoundException e) {
-            // We can do something here
+            startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
         } catch (Exception e) {
-            // But nvm really
+            Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CALENDAR_EVENT_ADD_REQUEST_CODE) {
+        if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             Utils.initUtils(getContext());
 
             if (lastSelectedJdn == -1)
@@ -320,9 +316,13 @@ public class CalendarFragment extends Fragment
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Intent intent = new Intent(Intent.ACTION_EDIT);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
-                startActivityForResult(intent, CALENDAR_EVENT_ADD_REQUEST_CODE);
+                try {
+                    startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+                } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
+                    Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                }
             }
         };
         ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -350,8 +350,8 @@ public class CalendarFragment extends Fragment
 
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn);
-        String holidays = Utils.getEventsTitle(events, true, false, false);
-        String nonHolidays = Utils.getEventsTitle(events, false, false, false);
+        String holidays = Utils.getEventsTitle(events, true, false, false, false);
+        String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
         event.setVisibility(View.GONE);
@@ -390,8 +390,8 @@ public class CalendarFragment extends Fragment
                 public void onClick(View textView) {
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.byagowi.persiancalendar")));
-                    } catch (ActivityNotFoundException e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar")));
+                    } catch (ActivityNotFoundException e) { // Should be ActivityNotFoundException but we don't care really
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.byagowi.p+ersiancalendar")));
                     }
                 }
             };
