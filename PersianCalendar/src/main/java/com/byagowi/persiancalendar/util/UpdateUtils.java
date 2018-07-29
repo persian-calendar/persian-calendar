@@ -181,7 +181,7 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
                 }
 
-                remoteViews2.setTextViewText(R.id.date_2x2, text2);
+                remoteViews2.setTextViewText(R.id.date_2x2, text2 + "\n" + subtitle);
 
                 remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
                 manager.updateAppWidget(widget2x2, remoteViews2);
