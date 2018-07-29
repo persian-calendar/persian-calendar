@@ -57,6 +57,9 @@ public class UpdateUtils {
         String colorInt = Utils.getSelectedWidgetTextColor();
         int color = Color.parseColor(colorInt);
 
+        // en-US is our only real LTR language for now
+        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
+
         // Widget 1x1
         ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
                 widget4x1 = new ComponentName(context, Widget4x1.class),
@@ -158,7 +161,7 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
 
-                String holidays = Utils.getEventsTitle(events, true, true, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true, isRTL);
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
@@ -166,7 +169,7 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
                 }
 
-                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (!TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
@@ -181,6 +184,9 @@ public class UpdateUtils {
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
                 }
 
+                if (false) {
+                    text2 = text2 + "\n" + subtitle;
+                }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
                 remoteViews2.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent);
@@ -192,8 +198,6 @@ public class UpdateUtils {
         // Permanent Notification Bar and DashClock Data Extension Update
         //
         //
-        // en-US is our only real LTR language for now
-        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
@@ -244,12 +248,12 @@ public class UpdateUtils {
                 bcv.setTextViewText(R.id.title, title);
                 bcv.setTextViewText(R.id.body, subtitle);
 
-                String holidays = Utils.getEventsTitle(events, true, true, true);
+                String holidays = Utils.getEventsTitle(events, true, true, true, isRTL);
                 if (!TextUtils.isEmpty(holidays))
                     bcv.setTextViewText(R.id.holidays, holidays);
                 else
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
-                String nonHolidays = Utils.getEventsTitle(events, false, true, true);
+                String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (!TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
                 else

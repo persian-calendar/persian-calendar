@@ -1085,7 +1085,8 @@ public class Utils {
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
-                                        boolean compact, boolean showDeviceCalendarEvents) {
+                                        boolean compact, boolean showDeviceCalendarEvents,
+                                        boolean insertRLM) {
         StringBuilder titles = new StringBuilder();
         boolean first = true;
 
@@ -1097,6 +1098,9 @@ public class Utils {
                     titles.append("\n");
 
                 String title = event.getTitle();
+                if (insertRLM) {
+                    title = Constants.RLM + title;
+                }
                 if (event instanceof DeviceCalendarEvent) {
                     if (!showDeviceCalendarEvents)
                         continue;

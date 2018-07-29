@@ -350,8 +350,8 @@ public class CalendarFragment extends Fragment
 
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn);
-        String holidays = Utils.getEventsTitle(events, true, false, false);
-        String nonHolidays = Utils.getEventsTitle(events, false, false, false);
+        String holidays = Utils.getEventsTitle(events, true, false, false, false);
+        String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
         event.setVisibility(View.GONE);
