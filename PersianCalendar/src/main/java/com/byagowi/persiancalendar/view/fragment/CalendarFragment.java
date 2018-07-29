@@ -123,8 +123,6 @@ public class CalendarFragment extends Fragment
     private LinearLayoutCompat ishaLayout;
     private LinearLayoutCompat midnightLayout;
 
-    private CardView calendarsCard;
-
     private int viewPagerPosition;
 
     @Nullable
@@ -210,8 +208,7 @@ public class CalendarFragment extends Fragment
         shamsiDateDay.setOnClickListener(this);
         shamsiDateLinear.setOnClickListener(this);
 
-        calendarsCard = view.findViewById(R.id.calendars_card);
-        calendarsCard.setOnClickListener(this);
+        view.findViewById(R.id.calendars_card).setOnClickListener(this);
 
         warnUserIcon.setVisibility(View.GONE);
         gregorianDateLinear.setVisibility(View.GONE);
@@ -243,7 +240,7 @@ public class CalendarFragment extends Fragment
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
 
-    long lastSelectedJdn = -1;
+    private long lastSelectedJdn = -1;
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
