@@ -63,6 +63,12 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name="com.byagowi.persiancalendar.view.activity.WidgetConfigurationActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".Widget1x1"
             android:exported="false"

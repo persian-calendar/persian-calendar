@@ -120,5 +120,6 @@
     <string name="device_calendar_does_not_support">نقویم دستگاه پشتیبانی نمی‌کند</string>
     <string name="compact_widget_summary">حذف تعدادی از امکانات ویجت به منظور خلوت شدن</string>
     <string name="compact_widget">خلوت‌سازی ویجت</string>
+    <string name="add">افزودن</string>
 
 </resources>

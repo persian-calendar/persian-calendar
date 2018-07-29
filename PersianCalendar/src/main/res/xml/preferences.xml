@@ -119,6 +119,7 @@
             android:summary="@string/notify_date_lock_screen_summary"
             android:title="@string/notify_date_lock_screen" />
 
+        <!-- See widget_preferences.xml -->
         <androidx.preference.ListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
@@ -128,7 +129,7 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
-
+-
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:icon="@drawable/ic_timezone_setting"
@@ -152,6 +153,7 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
+            android:icon="@drawable/ic_compact_setting"
             android:key="CompactWidget"
             android:summary="@string/compact_widget_summary"
             android:title="@string/compact_widget" />

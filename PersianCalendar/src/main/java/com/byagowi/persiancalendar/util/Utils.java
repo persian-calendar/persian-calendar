@@ -83,6 +83,7 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
+import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
@@ -346,12 +347,6 @@ public class Utils {
     static public String getAppLanguage() {
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
-    }
-
-    static public String getTheme(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getString(PREF_THEME, LIGHT_THEME);
     }
 
     static public String getSelectedWidgetTextColor() {
@@ -1235,6 +1230,21 @@ public class Utils {
             config.setLayoutDirection(config.locale);
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    public static void setTheme(AppCompatActivity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        switch (prefs.getString(PREF_THEME, LIGHT_THEME)) {
+            case DARK_THEME:
+                activity.setTheme(R.style.DarkTheme);
+                return;
+//            case CLASSIC_THEME:
+//                setTheme(R.style.ClassicTheme);
+//                return;
+            default:
+            case LIGHT_THEME:
+                activity.setTheme(R.style.LightTheme);
+        }
     }
 
     static private void loadLanguageResource(Context context) {

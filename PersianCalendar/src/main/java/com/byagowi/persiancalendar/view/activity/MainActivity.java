@@ -38,11 +38,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.CivilDate;
 
-import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
-import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
@@ -103,19 +101,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        switch (Utils.getTheme(this)) {
-            case DARK_THEME:
-                setTheme(R.style.DarkTheme);
-                break;
-//            case CLASSIC_THEME:
-//                setTheme(R.style.ClassicTheme);
-//                break;
-            default:
-            case LIGHT_THEME:
-                setTheme(R.style.LightTheme);
-                break;
-        }
-
+        Utils.setTheme(this);
         Utils.changeAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
