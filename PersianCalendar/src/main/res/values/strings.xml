@@ -117,5 +117,6 @@
     <string name="show_device_calendar_events_summary">Show device calendar events</string>
     <string name="show_device_calendar_events">Device Calendar Events</string>
     <string name="add_event">Add event</string>
+    <string name="device_calendar_does_not_support">Device calendar does not support the action</string>
 
 </resources>

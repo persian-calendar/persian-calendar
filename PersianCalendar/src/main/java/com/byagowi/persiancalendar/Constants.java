@@ -6,7 +6,7 @@ public class Constants {
 
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
-    public static final int CALENDAR_EVENT_ADD_REQUEST_CODE = 63;
+    public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
 
     public static final String LANG_EN = "en";
