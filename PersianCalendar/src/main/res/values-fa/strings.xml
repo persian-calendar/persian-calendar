@@ -117,6 +117,6 @@
     <string name="show_device_calendar_events_summary">نمایش مناسبت‌های تقویم دستگاه</string>
     <string name="show_device_calendar_events">مناسبت‌های تقویم دستگاه</string>
     <string name="add_event">افزودن رویداد</string>
-    <string name="device_calendar_does_not_support">نقویم دستگاه از این عمل پشتیبانی نمی‌کند</string>
+    <string name="device_calendar_does_not_support">نقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
 
 </resources>

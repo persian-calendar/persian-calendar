@@ -114,9 +114,9 @@
     <string name="week_ends">پشوودانی حەفتە</string>
     <string name="week_ends_summary">دیارکردنی ڕۆژانی پشوودانی حەفتە</string>
     <string name="search_in_events">گەڕان لە بۆنەکاندا</string>
-    <string name="show_device_calendar_events_summary">نمایش مناسبت‌های تقویم دستگاه</string>
-    <string name="show_device_calendar_events">مناسبت‌های تقویم دستگاه</string>
-    <string name="add_event">افزودن رویداد</string>
-    <string name="device_calendar_does_not_support">نقویم دستگاه از این عمل پشتیبانی نمی‌کند</string>
+    <string name="show_device_calendar_events_summary">نیشاندانی ڕووداوەکانی ڕۆژژمێری ئامراز</string>
+    <string name="show_device_calendar_events">ڕووداوەکانی ڕۆژژمێری ئامراز</string>
+    <string name="add_event">زیادکردنی ڕووداو</string>
+    <string name="device_calendar_does_not_support">ڕۆژژمێری ئامراز لەم کردەوەیە پشتیوانی ناکات</string>
 
 </resources>
