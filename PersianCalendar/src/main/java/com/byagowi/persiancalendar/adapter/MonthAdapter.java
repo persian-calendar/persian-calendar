@@ -170,6 +170,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     holder.num.setTextSize(12);
                     holder.num.setBackgroundResource(0);
                     holder.num.setVisibility(View.VISIBLE);
+                    holder.today.setVisibility(View.GONE);
+                    holder.event.setVisibility(View.GONE);
+                    holder.deviceEvent.setVisibility(View.GONE);
                 } else setEmpty(holder);
                 return;
             }
