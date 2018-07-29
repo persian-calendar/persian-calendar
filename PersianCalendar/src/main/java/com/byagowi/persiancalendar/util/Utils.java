@@ -1082,9 +1082,9 @@ public class Utils {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
-            title += " (" + event.getDescription().replaceAll("\\n", "").trim() + ")";
+            title += " (" + event.getDescription() + ")";
 
-        return title;
+        return title.replaceAll("\\n", " ").trim();
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,

@@ -257,7 +257,7 @@ public class UpdateUtils {
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays))
-                    bcv.setTextViewText(R.id.nonholidays, nonHolidays);
+                    bcv.setTextViewText(R.id.nonholidays, nonHolidays.trim());
                 else
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
 
