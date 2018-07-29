@@ -963,7 +963,8 @@ public class Utils {
                             CalendarContract.Events.EVENT_LOCATION, // 5
                             CalendarContract.Events.RRULE,          // 6
                             CalendarContract.Events.VISIBLE,        // 7
-                            CalendarContract.Events.ALL_DAY         // 8
+                            CalendarContract.Events.ALL_DAY,        // 8
+                            CalendarContract.Events.DELETED         // 9
                     }, null, null, null);
 
             if (cursor == null) {
@@ -971,7 +972,7 @@ public class Utils {
             }
 
             while (cursor.moveToNext()) {
-                if (!cursor.getString(7).equals("1"))
+                if (!cursor.getString(7).equals("1") || cursor.getString(9).equals("1"))
                     continue;
 
                 boolean allDay = false;

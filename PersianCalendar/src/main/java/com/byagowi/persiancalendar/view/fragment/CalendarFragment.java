@@ -316,7 +316,7 @@ public class CalendarFragment extends Fragment
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Intent intent = new Intent(Intent.ACTION_EDIT);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
                 try {
                     startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
