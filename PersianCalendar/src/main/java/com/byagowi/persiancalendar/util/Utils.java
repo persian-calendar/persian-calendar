@@ -248,7 +248,7 @@ public class Utils {
     static private int weekStartOffset;
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
-    static private boolean compactWidget;
+    static private Set<String> whatToShowOnWidgets;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -284,11 +284,12 @@ public class Utils {
             weekEnds[Integer.parseInt(s)] = true;
 
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
-        compactWidget = prefs.getBoolean("CompactWidget", false);
+        whatToShowOnWidgets = prefs.getStringSet("what_to_show",
+                new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
     }
 
-    public static boolean isCompactWidget() {
-        return compactWidget;
+    public static boolean isShownOnWidgets(String infoType) {
+        return whatToShowOnWidgets.contains(infoType);
     }
 
     public static boolean isShowDeviceCalendarEvents() {

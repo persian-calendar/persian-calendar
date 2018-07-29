@@ -93,7 +93,7 @@ public class UpdateUtils {
         Clock currentClock =
                 new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
         String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
-        if (!Utils.isCompactWidget() && !TextUtils.isEmpty(owghat)) {
+        if (Utils.isShownOnWidgets("owghat_location") && !TextUtils.isEmpty(owghat)) {
             String cityName = Utils.getCityName(context, false);
             if (!TextUtils.isEmpty(cityName)) {
                 owghat = owghat + " (" + cityName + ")";
@@ -138,7 +138,7 @@ public class UpdateUtils {
                     remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName);
                     text2 = mainDateString;
                 }
-                if (!Utils.isCompactWidget()) {
+                if (Utils.isShownOnWidgets("other_calendars")) {
                     text2 += Utils.getComma() + " " + subtitle;
                 }
 
@@ -172,21 +172,21 @@ public class UpdateUtils {
                 }
 
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (!Utils.isCompactWidget() && !TextUtils.isEmpty(nonHolidays)) {
+                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE);
                 }
 
-                if (!TextUtils.isEmpty(owghat)) {
+                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
                     remoteViews2.setTextViewText(R.id.owghat_2x2, owghat);
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE);
                 } else {
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE);
                 }
 
-                if (!Utils.isCompactWidget()) {
+                if (Utils.isShownOnWidgets("other_calendars")) {
                     text2 = text2 + "\n" + subtitle;
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
@@ -256,12 +256,12 @@ public class UpdateUtils {
                 else
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (!Utils.isCompactWidget() && !TextUtils.isEmpty(nonHolidays))
+                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays))
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays);
                 else
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
 
-                if (!TextUtils.isEmpty(owghat))
+                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat))
                     bcv.setTextViewText(R.id.owghat, owghat);
                 else
                     bcv.setViewVisibility(R.id.owghat, View.GONE);

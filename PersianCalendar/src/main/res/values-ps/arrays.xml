@@ -83,4 +83,11 @@
         <item>جمعه</item>
     </string-array>
 
+    <string-array name="what_to_show">
+        <item>سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</item>
+        <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>
+        <item>اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+        <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+    </string-array>
+
 </resources>

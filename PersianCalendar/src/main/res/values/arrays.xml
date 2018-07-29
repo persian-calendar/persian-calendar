@@ -188,4 +188,25 @@
         <item>6</item>
     </string-array>
 
+    <string-array name="what_to_show">
+        <item>Other calendars on 1x4 and 2x2 widgets</item>
+        <item>Non-holidays on 2x2 widget and notification</item>
+        <item>Pray times on 2x2 and notification (if is set)</item>
+        <item>Location of pray times on 2x2 and notification (if is set)</item>
+    </string-array>
+
+    <string-array name="what_to_show_keys" translatable="false">
+        <item>other_calendars</item>
+        <item>non_holiday_events</item>
+        <item>owghat</item>
+        <item>owghat_location</item>
+    </string-array>
+
+    <string-array name="what_to_show_default">
+        <item>other_calendars</item>
+        <item>non_holiday_events</item>
+        <item>owghat</item>
+        <item>owghat_location</item>
+    </string-array>
+
 </resources>

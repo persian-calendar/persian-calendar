@@ -24,25 +24,29 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         }
     }
 
+    protected void finishAndSuccess() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+            setResult(RESULT_OK, new Intent()
+                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId));
+        }
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Utils.setTheme(this);
         Utils.changeAppLanguage(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.widget_preference);
+        setContentView(R.layout.widget_preference_layout);
 
         getSupportFragmentManager().beginTransaction().add(
                 R.id.preference_fragment_holder,
                 PreferenceFragment.newInstance(), "TAG").commit();
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            int appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
-            findViewById(R.id.add_widget_button).setOnClickListener((v) -> {
-                setResult(RESULT_OK, new Intent()
-                        .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId));
-                finish();
-            });
-        }
+        findViewById(R.id.add_widget_button).setOnClickListener((v) -> {
+            finishAndSuccess();
+        });
     }
 }

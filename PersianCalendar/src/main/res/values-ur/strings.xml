@@ -114,12 +114,13 @@
     <string name="week_ends">روزهای تعطیل هفته</string>
     <string name="week_ends_summary">چه روزهایی در هفته تعطیل نمایش داده شوند</string>
     <string name="search_in_events">جستجو در مناسبت‌ها</string>
-    <string name="show_device_calendar_events_summary">نمایش مناسبت‌های تقویم دستگاه</string>
-    <string name="show_device_calendar_events">مناسبت‌های تقویم دستگاه</string>
+    <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
+    <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
-    <string name="device_calendar_does_not_support">نقویم دستگاه پشتیبانی نمی‌کند</string>
-    <string name="compact_widget_summary">حذف تعدادی از امکانات ویجت به منظور خلوت شدن</string>
-    <string name="compact_widget">خلوت‌سازی ویجت</string>
+    <string name="device_calendar_does_not_support">نقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
+    <string name="compact_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
+    <string name="compact_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
     <string name="add">افزودن</string>
+    <string name="which_one_to_show">کدام یک نمایش داده شود</string>
 
 </resources>

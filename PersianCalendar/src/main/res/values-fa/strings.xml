@@ -118,8 +118,9 @@
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
     <string name="device_calendar_does_not_support">نقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
-    <string name="compact_widget_summary">مخفی کردن بعضی از اطلاعات به منظور خلوت شدن ویجت و نوار اعلان</string>
-    <string name="compact_widget">خلوت‌سازی ویجت</string>
+    <string name="compact_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
+    <string name="compact_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
     <string name="add">افزودن</string>
+    <string name="which_one_to_show">کدام یک نمایش داده شود</string>
 
 </resources>

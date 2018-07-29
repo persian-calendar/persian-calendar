@@ -27,10 +27,15 @@
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/what_to_show_default"
+            android:dialogTitle="@string/which_one_to_show"
+            android:entries="@array/what_to_show"
+            android:entryValues="@array/what_to_show_keys"
             android:icon="@drawable/ic_compact_setting"
-            android:key="CompactWidget"
+            android:key="what_to_show"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/compact_widget_summary"
             android:title="@string/compact_widget" />
 

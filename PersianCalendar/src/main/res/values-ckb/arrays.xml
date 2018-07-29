@@ -83,4 +83,11 @@
         <item>ھەینی</item>
     </string-array>
 
+    <string-array name="what_to_show" translatable="false">
+        <item>ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</item>
+        <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>
+        <item>کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+        <item>شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+    </string-array>
+
 </resources>
