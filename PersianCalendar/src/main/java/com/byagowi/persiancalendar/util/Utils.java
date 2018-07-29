@@ -1095,11 +1095,6 @@ public class Utils {
 
         for (AbstractEvent event : dayEvents)
             if (event.isHoliday() == holiday) {
-                if (first)
-                    first = false;
-                else
-                    titles.append("\n");
-
                 String title = event.getTitle();
                 if (insertRLM) {
                     title = Constants.RLM + title;
@@ -1116,6 +1111,10 @@ public class Utils {
                         title = title.replaceAll(" \\(.*$", "");
                 }
 
+                if (first)
+                    first = false;
+                else
+                    titles.append("\n");
                 titles.append(title);
             }
 
