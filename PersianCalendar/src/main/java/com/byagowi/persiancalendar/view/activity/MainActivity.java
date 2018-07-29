@@ -247,6 +247,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (menuPosition == CALENDAR) {
                     restartActivity(menuPosition);
                 }
+            } else {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
+                edit.apply();
             }
         }
     }
