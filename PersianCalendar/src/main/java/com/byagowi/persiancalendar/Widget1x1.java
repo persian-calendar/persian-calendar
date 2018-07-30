@@ -15,8 +15,7 @@ import com.byagowi.persiancalendar.util.Utils;
 public class Widget1x1 extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
-//        Utils.startUpdateWorker();
-        Utils.startApplicationService(context);
+        Utils.startEitherServiceOrWorker(context);
         UpdateUtils.update(context, false);
     }
 }

@@ -28,8 +28,7 @@ public class BroadcastReceivers extends BroadcastReceiver {
                     intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
                     intent.getAction().equals(Constants.BROADCAST_RESTART_APP)) {
 
-//                Utils.startUpdateWorker();
-                Utils.startApplicationService(context);
+                Utils.startEitherServiceOrWorker(context);
 
             } else if (intent.getAction().equals(Intent.ACTION_TIME_TICK) ||
                     intent.getAction().equals(Intent.ACTION_TIME_CHANGED) ||

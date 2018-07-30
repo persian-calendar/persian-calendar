@@ -39,7 +39,7 @@ import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-//import com.byagowi.persiancalendar.service.UpdateWorker;
+import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -69,11 +69,11 @@ import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-//import androidx.work.ExistingPeriodicWorkPolicy;
-//import androidx.work.ExistingWorkPolicy;
-//import androidx.work.OneTimeWorkRequest;
-//import androidx.work.PeriodicWorkRequest;
-//import androidx.work.WorkManager;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -168,45 +168,6 @@ public class Utils {
             supportActionBar.setSubtitle(subtitle);
         }
     }
-
-    private static final long DAY_IN_SECOND = 86400;
-
-    public static long calculateDiffToChangeDate() {
-        Date currentTime = Calendar.getInstance().getTime();
-        long current = currentTime.getTime() / 1000;
-
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 1);
-
-        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
-
-        return start - current;
-    }
-
-//    static public void setChangeDateWorker(long second) {
-//        OneTimeWorkRequest changeDateWorker =
-//                new OneTimeWorkRequest.Builder(UpdateWorker.class)
-//                        .setInitialDelay(second, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
-//                        .build();
-//
-//        WorkManager.getInstance().beginUniqueWork(
-//                "changeDate",
-//                ExistingWorkPolicy.REPLACE,
-//                changeDateWorker).enqueue();
-//    }
-
-//    static public void startUpdateWorker() {
-//        PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-//                .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
-//
-//        PeriodicWorkRequest updateWork = updateBuilder.build();
-//        WorkManager.getInstance().enqueueUniquePeriodicWork(
-//                "update",
-//                ExistingPeriodicWorkPolicy.REPLACE,
-//                updateWork);
-//    }
 
     static public Coordinate getCoordinate(Context context) {
         CityEntity cityEntity = getCityFromPreference(context);
@@ -1396,32 +1357,83 @@ public class Utils {
         return startingYearOnYearSpinner;
     }
 
-    static public void loadApp(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+    //
+    //
+    //
+    // Service
+    //
+    private static final long DAY_IN_SECOND = 86400;
+
+    private static long calculateDiffToChangeDate() {
+        Date currentTime = Calendar.getInstance().getTime();
+        long current = currentTime.getTime() / 1000;
+
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 1);
-        Intent intent = new Intent(context, BroadcastReceivers.class);
-        intent.setAction(BROADCAST_RESTART_APP);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.SECOND, 1);
+
+        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
+
+        return start - current;
     }
 
-    static private boolean isServiceAlreadyRunning(Context context, Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
+    static public void setChangeDateWorker() {
+        long remainedSeconds = calculateDiffToChangeDate();
+        OneTimeWorkRequest changeDateWorker =
+                new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+                        .build();
+
+        WorkManager.getInstance().beginUniqueWork(
+                "changeDate",
+                ExistingWorkPolicy.REPLACE,
+                changeDateWorker).enqueue();
+    }
+
+    static public void loadApp(Context context) {
+        if (goForWorker()) {
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.HOUR_OF_DAY, 0);
+            startTime.set(Calendar.MINUTE, 1);
+            Intent intent = new Intent(context, BroadcastReceivers.class);
+            intent.setAction(BROADCAST_RESTART_APP);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null)
+                alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
         }
-        return false;
     }
 
-    public static void startApplicationService(Context context) {
-        if (!isServiceAlreadyRunning(context, ApplicationService.class)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(new Intent(context, ApplicationService.class));
-            context.startService(new Intent(context, ApplicationService.class));
+    public static boolean goForWorker() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+    public static void startEitherServiceOrWorker(Context context) {
+        if (goForWorker()) {
+            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
+
+            PeriodicWorkRequest updateWork = updateBuilder.build();
+            WorkManager.getInstance().enqueueUniquePeriodicWork(
+                    "update",
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    updateWork);
+        } else {
+            boolean alreadyRan = false;
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            if (manager != null) {
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (ApplicationService.class.getName().equals(service.service.getClassName())) {
+                        alreadyRan = true;
+                    }
+                }
+            }
+
+            if (!alreadyRan) {
+                context.startService(new Intent(context, ApplicationService.class));
+            }
         }
     }
 }

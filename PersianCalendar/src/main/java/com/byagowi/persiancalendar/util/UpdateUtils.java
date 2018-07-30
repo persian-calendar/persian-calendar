@@ -218,15 +218,14 @@ public class UpdateUtils {
                 .expandedTitle(title)
                 .expandedBody(subtitle).clickIntent(intent);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        ApplicationService applicationService = ApplicationService.getInstance();
-
-        if (notificationManager != null && applicationService != null && Utils.isNotifyDate()) {
+        if (Utils.isNotifyDate()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
-                notificationManager.createNotificationChannel(channel);
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null)
+                    notificationManager.createNotificationChannel(channel);
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
@@ -281,8 +280,21 @@ public class UpdateUtils {
                 builder = builder.setWhen(Calendar.getInstance().getTimeInMillis());
             }
 
-//            notificationManager.notify(NOTIFICATION_ID, builder.build());
-            applicationService.startForeground(NOTIFICATION_ID, builder.build());
+            if (Utils.goForWorker()) {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null)
+                    notificationManager.notify(NOTIFICATION_ID, builder.build());
+            } else {
+                ApplicationService applicationService = ApplicationService.getInstance();
+                if (applicationService != null)
+                    applicationService.startForeground(NOTIFICATION_ID, builder.build());
+            }
+        }
+
+        if (!Utils.goForWorker()) {
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null)
+                notificationManager.cancel(NOTIFICATION_ID);
         }
     }
 
