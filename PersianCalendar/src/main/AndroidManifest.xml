@@ -130,8 +130,12 @@
         </service>
 
         <service
+            android:name=".service.ApplicationService"
+            android:label="Calendar Service"/>
+
+        <service
             android:name=".service.PersianCalendarTileService"
-            android:icon="@drawable/day13"
+            android:icon="@drawable/day12"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
