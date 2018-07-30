@@ -182,29 +182,25 @@ public class Utils {
         return start - current;
     }
 
-    static private final String CHANGE_DATE_UPDATE_TAG = "changeDate";
     static public void setChangeDateWorker(long second) {
         OneTimeWorkRequest changeDateWorker =
                 new OneTimeWorkRequest.Builder(UpdateWorker.class)
                         .setInitialDelay(second, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
                         .build();
 
-        WorkManager.getInstance().cancelUniqueWork(CHANGE_DATE_UPDATE_TAG);
         WorkManager.getInstance().beginUniqueWork(
-                CHANGE_DATE_UPDATE_TAG,
+                "changeDate",
                 ExistingWorkPolicy.REPLACE,
                 changeDateWorker).enqueue();
     }
 
-    static private final String UPDATE_TAG = "update";
     static public void startUpdateWorker() {
         PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
                 .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
 
         PeriodicWorkRequest updateWork = updateBuilder.build();
-        WorkManager.getInstance().cancelAllWorkByTag(UPDATE_TAG);
         WorkManager.getInstance().enqueueUniquePeriodicWork(
-                UPDATE_TAG,
+                "update",
                 ExistingPeriodicWorkPolicy.REPLACE,
                 updateWork);
     }

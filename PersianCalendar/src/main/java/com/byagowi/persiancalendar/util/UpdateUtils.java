@@ -37,15 +37,8 @@ public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static AbstractDate pastDate;
     private static ExtensionData mExtensionData;
-    private static long lastUpdateTime = 0;
 
     public static void update(Context context, boolean updateDate) {
-        long updateTime = System.currentTimeMillis() / 1000L;
-        if (updateTime - lastUpdateTime < 120) {
-            Log.d("UpdateUtils", "update skipped");
-            lastUpdateTime = updateTime;
-            return;
-        }
         Log.d("UpdateUtils", "update");
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
