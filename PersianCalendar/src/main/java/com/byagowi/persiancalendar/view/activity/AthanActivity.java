@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +52,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         play();
 
-        new Handler().postDelayed(this::finish, TimeUnit.SECONDS.toMillis(45));
     }
 
     private void setPrayerView(String key) {
@@ -129,5 +127,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onCompletion(MediaPlayer mp) {
         mp.release();
+        finish();
     }
 }
