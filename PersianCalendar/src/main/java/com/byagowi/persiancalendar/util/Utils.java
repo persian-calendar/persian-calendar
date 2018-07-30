@@ -1379,7 +1379,8 @@ public class Utils {
         return start - current;
     }
 
-    static public void setChangeDateWorker() {
+    private static final String CHANGE_DATE_TAG = "changeDate";
+    public static void setChangeDateWorker() {
         long remainedSeconds = calculateDiffToChangeDate();
         OneTimeWorkRequest changeDateWorker =
                 new OneTimeWorkRequest.Builder(UpdateWorker.class)
@@ -1387,16 +1388,18 @@ public class Utils {
                         .build();
 
         WorkManager.getInstance().beginUniqueWork(
-                "changeDate",
+                CHANGE_DATE_TAG,
                 ExistingWorkPolicy.REPLACE,
                 changeDateWorker).enqueue();
     }
+
 
     static public void loadApp(Context context) {
         if (goForWorker()) {
             Calendar startTime = Calendar.getInstance();
             startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 1);
+            startTime.add(Calendar.DATE, 1);
             Intent intent = new Intent(context, BroadcastReceivers.class);
             intent.setAction(BROADCAST_RESTART_APP);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1410,17 +1413,21 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    private static final String UPDATE_TAG = "update";
     public static void startEitherServiceOrWorker(Context context) {
+        WorkManager workManager = WorkManager.getInstance();
         if (goForWorker()) {
             PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
                     .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
 
             PeriodicWorkRequest updateWork = updateBuilder.build();
-            WorkManager.getInstance().enqueueUniquePeriodicWork(
-                    "update",
+            workManager.enqueueUniquePeriodicWork(
+                    UPDATE_TAG,
                     ExistingPeriodicWorkPolicy.REPLACE,
                     updateWork);
         } else {
+            workManager.cancelAllWorkByTag(UPDATE_TAG);
+            workManager.cancelUniqueWork(CHANGE_DATE_TAG);
             boolean alreadyRan = false;
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
