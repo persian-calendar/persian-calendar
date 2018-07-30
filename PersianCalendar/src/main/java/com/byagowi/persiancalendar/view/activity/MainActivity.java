@@ -108,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utils.initUtils(this);
         TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
-        Utils.startUpdateWorker();
+//        Utils.startUpdateWorker();
+        Utils.startApplicationService(this);
+
         // Doesn't matter apparently
         // oneTimeClockDisablingForAndroid5LE();
         UpdateUtils.update(getApplicationContext(), false);
