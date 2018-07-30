@@ -20,7 +20,7 @@
         android:gravity="right"
         android:textColor="@android:color/white"
         android:textSize="34sp"
-        android:timeZone="Iran" />
+        android:timeZone="Asia/Tehran" />
 
     <TextView
         android:id="@+id/date_2x2"
