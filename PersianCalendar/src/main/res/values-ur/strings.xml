@@ -28,7 +28,7 @@
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
     <string name="notify_date">اطلاع نامہ فعال کریں</string>
-    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها؛ غیرفعال‌سازی آن نیاز به خاموش و روشن کردن دستگاه دارد</string>
+    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوشاک</string>
     <string name="skin">پوشاک</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>

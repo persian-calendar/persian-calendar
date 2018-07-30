@@ -28,7 +28,7 @@
     <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
     <string name="pray_times_calculation_setting">حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
     <string name="notify_date">ئاگاداریی ڕێککەوت</string>
-    <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت؛ بۆ ناچالاککردن پێویست بە کوژاندنەوە و ھەڵکردنەوەی ئامرازە</string>
+    <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت</string>
     <string name="select_skin">ھەڵبژاردنی پێستە</string>
     <string name="skin">پێستە</string>
     <string name="pray_methods">شێوازەکانی حیسابکردن</string>
