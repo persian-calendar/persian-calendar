@@ -1410,7 +1410,7 @@ public class Utils {
     }
 
     public static boolean goForWorker() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
     private static final String UPDATE_TAG = "update";
