@@ -54,21 +54,32 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
         play();
-        
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        assert telephonyManager != null;
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (telephonyManager != null)
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        } catch (Exception e) {
+            // nvm
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!hasFocus) {
+            stop();
+            finish();
+        }
     }
 
     private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             stop();
             finish();
-        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-            play();
         }
     };
-    
+
     private PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
