@@ -56,18 +56,16 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         play();
         
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        assert telephonyManager != null;
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
 
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                stop();
-                finish();
-            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                play();
-            }
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            stop();
+            finish();
+        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            play();
         }
     };
     
