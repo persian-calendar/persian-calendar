@@ -84,7 +84,7 @@ public class QiblaCompassView extends View {
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
         textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
-        textPaint.setTextSize(60);
+        textPaint.setTextSize(20);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class QiblaCompassView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.Radius = Math.min(px-50, py);
+        this.Radius = Math.min(px, py);
         this.r = Radius / 10; // Sun Moon radius;
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
@@ -186,8 +186,8 @@ public class QiblaCompassView extends View {
         markerPaint.reset();
         markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
         // Draw the background
-        canvas.drawCircle(px, py, Radius + 40, circlePaint);
-        canvas.drawCircle(px, py, Radius - 40, circlePaint);
+        canvas.drawCircle(px, py, Radius, circlePaint);
+        canvas.drawCircle(px, py, Radius - 20, circlePaint);
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
 
