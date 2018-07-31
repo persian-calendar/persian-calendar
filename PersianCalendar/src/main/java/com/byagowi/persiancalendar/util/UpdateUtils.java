@@ -280,22 +280,23 @@ public class UpdateUtils {
                 builder = builder.setWhen(Calendar.getInstance().getTimeInMillis());
             }
 
-            if (Utils.goForWorker()) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null)
-                    notificationManager.notify(NOTIFICATION_ID, builder.build());
-            } else {
+//            if (Utils.goForWorker()) {
+//                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                if (notificationManager != null)
+//                    notificationManager.notify(NOTIFICATION_ID, builder.build());
+//            } else {
                 ApplicationService applicationService = ApplicationService.getInstance();
                 if (applicationService != null)
                     applicationService.startForeground(NOTIFICATION_ID, builder.build());
-            }
-        } else {
-            if (Utils.goForWorker()) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null)
-                    notificationManager.cancel(NOTIFICATION_ID);
-            }
+//            }
         }
+//        else {
+//            if (Utils.goForWorker()) {
+//                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                if (notificationManager != null)
+//                    notificationManager.cancel(NOTIFICATION_ID);
+//            }
+//        }
     }
 
     public static ExtensionData getExtensionData() {

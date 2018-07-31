@@ -39,8 +39,7 @@ import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-import com.byagowi.persiancalendar.service.UpdateWorker;
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+//import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -70,11 +69,11 @@ import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+//import androidx.work.ExistingPeriodicWorkPolicy;
+//import androidx.work.ExistingWorkPolicy;
+//import androidx.work.OneTimeWorkRequest;
+//import androidx.work.PeriodicWorkRequest;
+//import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -1364,39 +1363,39 @@ public class Utils {
     //
     // Service
     //
-    private static final long DAY_IN_SECOND = 86400;
+//    private static final long DAY_IN_SECOND = 86400;
 
-    private static long calculateDiffToChangeDate() {
-        Date currentTime = Calendar.getInstance().getTime();
-        long current = currentTime.getTime() / 1000;
+//    private static long calculateDiffToChangeDate() {
+//        Date currentTime = Calendar.getInstance().getTime();
+//        long current = currentTime.getTime() / 1000;
+//
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 0);
+//        startTime.set(Calendar.MINUTE, 0);
+//        startTime.set(Calendar.SECOND, 1);
+//
+//        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
+//
+//        return start - current;
+//    }
 
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 1);
-
-        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
-
-        return start - current;
-    }
-
-    private static final String CHANGE_DATE_TAG = "changeDate";
-    public static void setChangeDateWorker() {
-        long remainedSeconds = calculateDiffToChangeDate();
-        OneTimeWorkRequest changeDateWorker =
-                new OneTimeWorkRequest.Builder(UpdateWorker.class)
-                        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
-                        .build();
-
-        WorkManager.getInstance().beginUniqueWork(
-                CHANGE_DATE_TAG,
-                ExistingWorkPolicy.REPLACE,
-                changeDateWorker).enqueue();
-    }
+//    private static final String CHANGE_DATE_TAG = "changeDate";
+//    public static void setChangeDateWorker() {
+//        long remainedSeconds = calculateDiffToChangeDate();
+//        OneTimeWorkRequest changeDateWorker =
+//                new OneTimeWorkRequest.Builder(UpdateWorker.class)
+//                        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+//                        .build();
+//
+//        WorkManager.getInstance().beginUniqueWork(
+//                CHANGE_DATE_TAG,
+//                ExistingWorkPolicy.REPLACE,
+//                changeDateWorker).enqueue();
+//    }
 
 
     static public void loadApp(Context context) {
-        if (!goForWorker()) {
+//        if (!goForWorker()) {
             Calendar startTime = Calendar.getInstance();
             startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 0);
@@ -1408,31 +1407,31 @@ public class Utils {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (alarmManager != null)
                 alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
-        }
+//        }
     }
 
-    public static boolean goForWorker() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
+//    public static boolean goForWorker() {
+//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+//    }
 
     private static final String UPDATE_TAG = "update";
     public static void startEitherServiceOrWorker(Context context) {
-        WorkManager workManager = WorkManager.getInstance();
-        if (goForWorker()) {
-            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
-
-            PeriodicWorkRequest updateWork = updateBuilder.build();
-            workManager.enqueueUniquePeriodicWork(
-                    UPDATE_TAG,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    updateWork);
-        } else {
-            // Disable all the scheduled workers, just in case enabled before
-            workManager.cancelAllWork();
-            // Or,
-            // workManager.cancelAllWorkByTag(UPDATE_TAG);
-            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+//        WorkManager workManager = WorkManager.getInstance();
+//        if (goForWorker()) {
+//            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+//                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
+//
+//            PeriodicWorkRequest updateWork = updateBuilder.build();
+//            workManager.enqueueUniquePeriodicWork(
+//                    UPDATE_TAG,
+//                    ExistingPeriodicWorkPolicy.REPLACE,
+//                    updateWork);
+//        } else {
+//            // Disable all the scheduled workers, just in case enabled before
+//            workManager.cancelAllWork();
+//            // Or,
+//            // workManager.cancelAllWorkByTag(UPDATE_TAG);
+//            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
             boolean alreadyRan = false;
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -1445,8 +1444,10 @@ public class Utils {
             }
 
             if (!alreadyRan) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    context.startForegroundService(new Intent(context, ApplicationService.class));
                 context.startService(new Intent(context, ApplicationService.class));
             }
-        }
+//        }
     }
 }
