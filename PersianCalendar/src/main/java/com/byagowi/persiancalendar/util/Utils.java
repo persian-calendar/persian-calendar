@@ -1426,8 +1426,12 @@ public class Utils {
                     ExistingPeriodicWorkPolicy.REPLACE,
                     updateWork);
         } else {
-            workManager.cancelAllWorkByTag(UPDATE_TAG);
-            workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+            // Disable all the scheduled workers, just in case enabled before
+            workManager.cancelAllWork();
+            // Or,
+            // workManager.cancelAllWorkByTag(UPDATE_TAG);
+            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+
             boolean alreadyRan = false;
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
