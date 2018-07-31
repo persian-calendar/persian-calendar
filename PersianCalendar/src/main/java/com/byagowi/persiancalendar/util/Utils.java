@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
+import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -1395,10 +1396,11 @@ public class Utils {
 
 
     static public void loadApp(Context context) {
-        if (goForWorker()) {
+        if (!goForWorker()) {
             Calendar startTime = Calendar.getInstance();
             startTime.set(Calendar.HOUR_OF_DAY, 0);
-            startTime.set(Calendar.MINUTE, 1);
+            startTime.set(Calendar.MINUTE, 0);
+            startTime.set(Calendar.SECOND, 1);
             startTime.add(Calendar.DATE, 1);
             Intent intent = new Intent(context, BroadcastReceivers.class);
             intent.setAction(BROADCAST_RESTART_APP);
