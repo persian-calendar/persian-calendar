@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.media.AudioManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -51,8 +54,34 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
         play();
-
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
+
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                stop();
+                finish();
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                play();
+            }
+        }
+    };
+    
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING) {
+                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+            }
+            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+            }
+        }
+    };
 
     private void setPrayerView(String key) {
         if (!TextUtils.isEmpty(key)) {
