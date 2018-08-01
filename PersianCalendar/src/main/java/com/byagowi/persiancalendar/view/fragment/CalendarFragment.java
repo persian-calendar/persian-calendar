@@ -200,6 +200,7 @@ public class CalendarFragment extends Fragment
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
         gregorianDate.setOnClickListener(this);
+        gregorianDateDay.setOnClickListener(this);
         gregorianDateLinear.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
         islamicDateDay.setOnClickListener(this);
