@@ -39,7 +39,6 @@ import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-//import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -69,11 +68,6 @@ import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-//import androidx.work.ExistingPeriodicWorkPolicy;
-//import androidx.work.ExistingWorkPolicy;
-//import androidx.work.OneTimeWorkRequest;
-//import androidx.work.PeriodicWorkRequest;
-//import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -134,6 +128,13 @@ import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EV
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
+
+//import com.byagowi.persiancalendar.service.UpdateWorker;
+//import androidx.work.ExistingPeriodicWorkPolicy;
+//import androidx.work.ExistingWorkPolicy;
+//import androidx.work.OneTimeWorkRequest;
+//import androidx.work.PeriodicWorkRequest;
+//import androidx.work.WorkManager;
 
 /**
  * Common utilities that needed for this calendar
@@ -911,7 +912,7 @@ public class Utils {
         }
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED) {
             if (context instanceof AppCompatActivity) {
                 askForCalendarPermission((AppCompatActivity) context);
             }
@@ -1068,7 +1069,7 @@ public class Utils {
                         continue;
 
                     if (!compact) {
-                       title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
+                        title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
                     }
                 } else {
                     if (compact)
@@ -1396,17 +1397,17 @@ public class Utils {
 
     static public void loadApp(Context context) {
 //        if (!goForWorker()) {
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.HOUR_OF_DAY, 0);
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.SECOND, 1);
-            startTime.add(Calendar.DATE, 1);
-            Intent intent = new Intent(context, BroadcastReceivers.class);
-            intent.setAction(BROADCAST_RESTART_APP);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            if (alarmManager != null)
-                alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.SECOND, 1);
+        startTime.add(Calendar.DATE, 1);
+        Intent intent = new Intent(context, BroadcastReceivers.class);
+        intent.setAction(BROADCAST_RESTART_APP);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null)
+            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
 //        }
     }
 
@@ -1415,6 +1416,7 @@ public class Utils {
 //    }
 
     private static final String UPDATE_TAG = "update";
+
     public static void startEitherServiceOrWorker(Context context) {
 //        WorkManager workManager = WorkManager.getInstance();
 //        if (goForWorker()) {
@@ -1433,21 +1435,21 @@ public class Utils {
 //            // workManager.cancelAllWorkByTag(UPDATE_TAG);
 //            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
-            boolean alreadyRan = false;
-            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            if (manager != null) {
-                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                    if (ApplicationService.class.getName().equals(service.service.getClassName())) {
-                        alreadyRan = true;
-                    }
+        boolean alreadyRan = false;
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (ApplicationService.class.getName().equals(service.service.getClassName())) {
+                    alreadyRan = true;
                 }
             }
+        }
 
-            if (!alreadyRan) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    context.startForegroundService(new Intent(context, ApplicationService.class));
-                context.startService(new Intent(context, ApplicationService.class));
-            }
+        if (!alreadyRan) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                context.startForegroundService(new Intent(context, ApplicationService.class));
+            context.startService(new Intent(context, ApplicationService.class));
+        }
 //        }
     }
 }

@@ -4,13 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.Nullable;
 
 /**
  * The Calendar Service that updates widget time and clock and build/update

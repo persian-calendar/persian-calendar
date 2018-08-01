@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             selectItem(CONVERTER);
         } else if ("ABOUT_SHORTCUT".equals(action)) {
             selectItem(ABOUT);
-        }  else {
+        } else {
             selectItem(DEFAULT);
         }
 
@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     boolean settingHasChanged = false;
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;

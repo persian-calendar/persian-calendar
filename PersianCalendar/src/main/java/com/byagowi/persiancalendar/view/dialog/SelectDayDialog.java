@@ -53,7 +53,8 @@ public class SelectDayDialog extends AppCompatDialogFragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) { }
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

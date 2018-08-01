@@ -129,7 +129,7 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
--
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:icon="@drawable/ic_timezone_setting"

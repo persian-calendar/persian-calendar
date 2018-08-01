@@ -4,14 +4,13 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.media.AudioManager;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -19,7 +18,6 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.PrayTime;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;

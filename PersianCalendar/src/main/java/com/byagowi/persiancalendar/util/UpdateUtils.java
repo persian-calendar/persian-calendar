@@ -285,9 +285,9 @@ public class UpdateUtils {
 //                if (notificationManager != null)
 //                    notificationManager.notify(NOTIFICATION_ID, builder.build());
 //            } else {
-                ApplicationService applicationService = ApplicationService.getInstance();
-                if (applicationService != null)
-                    applicationService.startForeground(NOTIFICATION_ID, builder.build());
+            ApplicationService applicationService = ApplicationService.getInstance();
+            if (applicationService != null)
+                applicationService.startForeground(NOTIFICATION_ID, builder.build());
 //            }
         }
 //        else {

@@ -242,6 +242,7 @@ public class CalendarFragment extends Fragment
     }
 
     private long lastSelectedJdn = -1;
+
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);

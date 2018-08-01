@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground">
@@ -10,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/fajr"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/athan_name"
@@ -24,7 +23,7 @@
         android:layout_marginTop="80dp"
         style="@style/ShadowTextStyle"
         android:background="@null"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="30dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/place"
@@ -38,6 +37,6 @@
         android:layout_marginTop="10dp"
         style="@style/ShadowTextStyle"
         android:background="@null"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="30dp" />
 
 </RelativeLayout>

@@ -61,6 +61,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
     private boolean lacksPermission = false;
     private boolean everRegisteredCallback = false;
+
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
