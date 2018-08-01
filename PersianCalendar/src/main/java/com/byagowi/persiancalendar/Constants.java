@@ -50,6 +50,7 @@ public class Constants {
     public static final boolean DEFAULT_PERSIAN_DIGITS = true;
     public static final boolean DEFAULT_WIDGET_CLOCK = true;
     public static final boolean DEFAULT_NOTIFY_DATE = true;
+    public static final boolean DEFAULT_NOTIFICATION_ATHAN = false;
     public static final boolean DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true;
     public static final int DEFAULT_ATHAN_VOLUME = 1;
 
