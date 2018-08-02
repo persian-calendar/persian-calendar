@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -212,16 +213,19 @@ public class UpdateUtils {
 
         int icon = Utils.getDayIconResource(date.getDayOfMonth());
 
-        if (Utils.isNotifyDate()) {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mExtensionData = new ExtensionData().visible(true).icon(icon)
+                .status(status)
+                .expandedTitle(title)
+                .expandedBody(subtitle).clickIntent(intent);
 
+        if (Utils.isNotifyDate()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
-                if (notificationManager != null) {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null)
                     notificationManager.createNotificationChannel(channel);
-                }
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
@@ -257,7 +261,7 @@ public class UpdateUtils {
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays))
-                    bcv.setTextViewText(R.id.nonholidays, nonHolidays);
+                    bcv.setTextViewText(R.id.nonholidays, nonHolidays.trim());
                 else
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
 
@@ -276,13 +280,23 @@ public class UpdateUtils {
                 builder = builder.setWhen(Calendar.getInstance().getTimeInMillis());
             }
 
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
+//            if (Utils.goForWorker()) {
+//                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                if (notificationManager != null)
+//                    notificationManager.notify(NOTIFICATION_ID, builder.build());
+//            } else {
+            ApplicationService applicationService = ApplicationService.getInstance();
+            if (applicationService != null)
+                applicationService.startForeground(NOTIFICATION_ID, builder.build());
+//            }
         }
-
-        mExtensionData = new ExtensionData().visible(true).icon(icon)
-                .status(status)
-                .expandedTitle(title)
-                .expandedBody(subtitle).clickIntent(intent);
+//        else {
+//            if (Utils.goForWorker()) {
+//                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                if (notificationManager != null)
+//                    notificationManager.cancel(NOTIFICATION_ID);
+//            }
+//        }
     }
 
     public static ExtensionData getExtensionData() {

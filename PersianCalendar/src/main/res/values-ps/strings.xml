@@ -28,7 +28,7 @@
     <string name="select_widgets_text_color">د ویجت دودیز رنگونه ټاکنه</string>
     <string name="pray_times_calculation_setting">د شرعی اوقات محاسبه او قبله نما غوراوي</string>
     <string name="notify_date">د نیټه یادښت توانول</string>
-    <string name="enable_notify">Persistent notification for all date types, needs device restart after turning it off</string>
+    <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">د پروگرام رنگ غوراوي</string>
     <string name="skin">د پروگرام رنگ</string>
     <string name="pray_methods">د حساب کارونه</string>

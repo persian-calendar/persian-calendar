@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.util;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -36,8 +37,8 @@ import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
-import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -67,11 +68,6 @@ import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.DateConverter;
@@ -83,6 +79,7 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
+import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
@@ -132,6 +129,13 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
 
+//import com.byagowi.persiancalendar.service.UpdateWorker;
+//import androidx.work.ExistingPeriodicWorkPolicy;
+//import androidx.work.ExistingWorkPolicy;
+//import androidx.work.OneTimeWorkRequest;
+//import androidx.work.PeriodicWorkRequest;
+//import androidx.work.WorkManager;
+
 /**
  * Common utilities that needed for this calendar
  *
@@ -164,45 +168,6 @@ public class Utils {
             supportActionBar.setTitle(title);
             supportActionBar.setSubtitle(subtitle);
         }
-    }
-
-    private static final long DAY_IN_SECOND = 86400;
-
-    public static long calculateDiffToChangeDate() {
-        Date currentTime = Calendar.getInstance().getTime();
-        long current = currentTime.getTime() / 1000;
-
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 1);
-
-        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
-
-        return start - current;
-    }
-
-    static public void setChangeDateWorker(long second) {
-        OneTimeWorkRequest changeDateWorker =
-                new OneTimeWorkRequest.Builder(UpdateWorker.class)
-                        .setInitialDelay(second, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
-                        .build();
-
-        WorkManager.getInstance().beginUniqueWork(
-                "changeDate",
-                ExistingWorkPolicy.REPLACE,
-                changeDateWorker).enqueue();
-    }
-
-    static public void startUpdateWorker() {
-        PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-                .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
-
-        PeriodicWorkRequest updateWork = updateBuilder.build();
-        WorkManager.getInstance().enqueueUniquePeriodicWork(
-                "update",
-                ExistingPeriodicWorkPolicy.REPLACE,
-                updateWork);
     }
 
     static public Coordinate getCoordinate(Context context) {
@@ -947,7 +912,7 @@ public class Utils {
         }
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED) {
             if (context instanceof AppCompatActivity) {
                 askForCalendarPermission((AppCompatActivity) context);
             }
@@ -1082,9 +1047,9 @@ public class Utils {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
-            title += " (" + event.getDescription().replaceAll("\\n", "").trim() + ")";
+            title += " (" + event.getDescription() + ")";
 
-        return title;
+        return title.replaceAll("\\n", " ").trim();
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
@@ -1104,7 +1069,7 @@ public class Utils {
                         continue;
 
                     if (!compact) {
-                       title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
+                        title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
                     }
                 } else {
                     if (compact)
@@ -1391,5 +1356,100 @@ public class Utils {
         //
 
         return startingYearOnYearSpinner;
+    }
+
+
+    //
+    //
+    //
+    // Service
+    //
+//    private static final long DAY_IN_SECOND = 86400;
+
+//    private static long calculateDiffToChangeDate() {
+//        Date currentTime = Calendar.getInstance().getTime();
+//        long current = currentTime.getTime() / 1000;
+//
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 0);
+//        startTime.set(Calendar.MINUTE, 0);
+//        startTime.set(Calendar.SECOND, 1);
+//
+//        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
+//
+//        return start - current;
+//    }
+
+//    private static final String CHANGE_DATE_TAG = "changeDate";
+//    public static void setChangeDateWorker() {
+//        long remainedSeconds = calculateDiffToChangeDate();
+//        OneTimeWorkRequest changeDateWorker =
+//                new OneTimeWorkRequest.Builder(UpdateWorker.class)
+//                        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+//                        .build();
+//
+//        WorkManager.getInstance().beginUniqueWork(
+//                CHANGE_DATE_TAG,
+//                ExistingWorkPolicy.REPLACE,
+//                changeDateWorker).enqueue();
+//    }
+
+
+    static public void loadApp(Context context) {
+//        if (!goForWorker()) {
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.SECOND, 1);
+        startTime.add(Calendar.DATE, 1);
+        Intent intent = new Intent(context, BroadcastReceivers.class);
+        intent.setAction(BROADCAST_RESTART_APP);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null)
+            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+//        }
+    }
+
+//    public static boolean goForWorker() {
+//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+//    }
+
+    private static final String UPDATE_TAG = "update";
+
+    public static void startEitherServiceOrWorker(Context context) {
+//        WorkManager workManager = WorkManager.getInstance();
+//        if (goForWorker()) {
+//            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+//                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
+//
+//            PeriodicWorkRequest updateWork = updateBuilder.build();
+//            workManager.enqueueUniquePeriodicWork(
+//                    UPDATE_TAG,
+//                    ExistingPeriodicWorkPolicy.REPLACE,
+//                    updateWork);
+//        } else {
+//            // Disable all the scheduled workers, just in case enabled before
+//            workManager.cancelAllWork();
+//            // Or,
+//            // workManager.cancelAllWorkByTag(UPDATE_TAG);
+//            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+
+        boolean alreadyRan = false;
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (ApplicationService.class.getName().equals(service.service.getClassName())) {
+                    alreadyRan = true;
+                }
+            }
+        }
+
+        if (!alreadyRan) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                context.startForegroundService(new Intent(context, ApplicationService.class));
+            context.startService(new Intent(context, ApplicationService.class));
+        }
+//        }
     }
 }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="?attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/drawer_item_height" >
+    android:layout_height="@dimen/drawer_item_height">
 
     <View
         android:id="@+id/background"
@@ -47,7 +46,7 @@
                 android:textColor="?attr/colorTextSecond"
                 android:layout_gravity="center_vertical|start|left"
                 android:visibility="gone"
-                android:id="@+id/itemSubtitle"/>
+                android:id="@+id/itemSubtitle" />
 
         </LinearLayout>
 

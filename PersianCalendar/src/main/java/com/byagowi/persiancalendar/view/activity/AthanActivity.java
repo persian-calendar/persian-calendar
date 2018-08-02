@@ -4,7 +4,8 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.PrayTime;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -53,8 +53,42 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         play();
 
-        new Handler().postDelayed(this::finish, TimeUnit.SECONDS.toMillis(45));
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (telephonyManager != null)
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        } catch (Exception e) {
+            // nvm
+        }
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!hasFocus) {
+            stop();
+            finish();
+        }
+    }
+
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            stop();
+            finish();
+        }
+    };
+
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING) {
+                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+            }
+            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+            }
+        }
+    };
 
     private void setPrayerView(String key) {
         if (!TextUtils.isEmpty(key)) {
@@ -107,6 +141,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(this, Utils.getAthanUri(getApplicationContext()));
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.prepare();
             mediaPlayer.start();
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
@@ -128,5 +163,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onCompletion(MediaPlayer mp) {
         mp.release();
+        finish();
     }
 }

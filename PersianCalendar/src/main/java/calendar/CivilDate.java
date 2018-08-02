@@ -39,19 +39,19 @@ public class CivilDate extends AbstractDate {
     public void setDayOfMonth(int day) {
         if (day < 1)
             throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " "  + Constants.IS_OUT_OF_RANGE);
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (month != 2 && day > daysInMonth[month])
             throw new DayOutOfRangeException(
-                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (month == 2 && isLeapYear() && day > 29)
             throw new DayOutOfRangeException(
-                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         if (month == 2 && (!isLeapYear()) && day > 28)
             throw new DayOutOfRangeException(
-                    Constants.DAY + " "  + day + " "  + Constants.IS_OUT_OF_RANGE);
+                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
         // TODO check for the case of leap year for February
         this.day = day;
@@ -80,7 +80,7 @@ public class CivilDate extends AbstractDate {
     public void setMonth(int month) {
         if (month < 1 || month > 12)
             throw new MonthOutOfRangeException(
-                    Constants.MONTH  + " " + month + " "  + Constants.IS_OUT_OF_RANGE);
+                    Constants.MONTH + " " + month + " " + Constants.IS_OUT_OF_RANGE);
 
         // Set the day again, so that exceptions are thrown if the
         // day is out of range
@@ -89,8 +89,13 @@ public class CivilDate extends AbstractDate {
         this.month = month;
     }
 
-    public int getWeekOfMonth() {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
+    public int getWeekOfMonth(int firstDayOfWeek) {
+        Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(firstDayOfWeek);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        return cal.get(Calendar.WEEK_OF_MONTH);
     }
 
     public int getWeekOfYear() {

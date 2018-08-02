@@ -26,8 +26,7 @@
             android:format24Hour="H:mm"
             android:gravity="right"
             android:textColor="@android:color/white"
-            android:textSize="36dp"
-            android:timeZone="Asia/Tehran" />
+            android:textSize="36dp" />
 
         <TextView
             android:id="@+id/textPlaceholder3_4x1"

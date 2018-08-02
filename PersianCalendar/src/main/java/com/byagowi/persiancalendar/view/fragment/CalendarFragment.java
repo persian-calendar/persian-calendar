@@ -200,6 +200,7 @@ public class CalendarFragment extends Fragment
         today.setOnClickListener(this);
         todayIcon.setOnClickListener(this);
         gregorianDate.setOnClickListener(this);
+        gregorianDateDay.setOnClickListener(this);
         gregorianDateLinear.setOnClickListener(this);
         islamicDate.setOnClickListener(this);
         islamicDateDay.setOnClickListener(this);
@@ -241,6 +242,7 @@ public class CalendarFragment extends Fragment
     }
 
     private long lastSelectedJdn = -1;
+
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);

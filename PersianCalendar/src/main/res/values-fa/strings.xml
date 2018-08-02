@@ -11,7 +11,7 @@
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">نمایش عددها به فارسی</string>
     <string name="persian_digits">عددهای فارسی</string>
-    <string name="showing_clock_on_widget">نمایش ساعت در ابزارک</string>
+    <string name="showing_clock_on_widget">نمایش ساعت در ابزارک ۲×۲ و ۴×۱</string>
     <string name="clock_on_widget">ساعت در ابزارک</string>
     <string name="showing_clock_in_24"> نمایش ساعت به صورت ۲۴تایی</string>
     <string name="clock_in_24">۲۴ ساعته</string>
@@ -28,7 +28,7 @@
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
     <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
     <string name="notify_date">فعال کردن آگاه‌سازی</string>
-    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها؛ غیرفعال‌سازی آن نیاز به خاموش و روشن کردن دستگاه دارد</string>
+    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>

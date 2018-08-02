@@ -34,7 +34,7 @@ public abstract class AbstractDate {
 
     public abstract int getWeekOfYear();
 
-    public abstract int getWeekOfMonth();
+    public abstract int getWeekOfMonth(int firstDayOfWeek);
 
     public abstract void rollDay(int amount, boolean up);
 
