@@ -137,6 +137,10 @@
             android:name=".service.ApplicationService"
             android:label="Calendar Service" />
 
+		<service
+            android:name=".service.AthanNotification"
+            android:label="Athan Service"/>
+
         <service
             android:name=".service.PersianCalendarTileService"
             android:icon="@drawable/day18"

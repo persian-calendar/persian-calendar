@@ -230,7 +230,11 @@ public class CalendarFragment extends Fragment
 
         // Easter egg to test AthanActivity
         owghatIcon.setOnLongClickListener(v -> {
-            startActivity(new Intent(getContext(), AthanActivity.class));
+            if (Utils.isNotificationAthan()) {
+                getContext().startService(new Intent(getContext(), AthanNotification.class));
+            } else {
+                startActivity(new Intent(getContext(), AthanActivity.class));
+            }
             return true;
         });
 
