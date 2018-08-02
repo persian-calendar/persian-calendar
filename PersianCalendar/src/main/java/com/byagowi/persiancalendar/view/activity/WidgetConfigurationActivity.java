@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, new Intent()
                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId));
         }
+        Utils.updateStoredPreference(this);
+        UpdateUtils.update(this, false);
         finish();
     }
 

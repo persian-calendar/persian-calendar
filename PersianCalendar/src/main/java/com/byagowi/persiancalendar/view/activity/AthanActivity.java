@@ -32,7 +32,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.changeAppLanguage(this);
-        String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
 
         setContentView(R.layout.activity_athan);
 
@@ -47,7 +46,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         athanIconView = findViewById(R.id.background_image);
         athanIconView.setOnClickListener(this);
 
-        setPrayerView(prayerKey);
+        String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
+        textAlarmName.setText(Utils.getPrayTimeText(prayerKey));
+        athanIconView.setImageResource(Utils.getPrayTimeImage(prayerKey));
 
         textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
@@ -91,36 +92,8 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     };
 
     private void setPrayerView(String key) {
-        if (!TextUtils.isEmpty(key)) {
-            PrayTime prayTime = PrayTime.valueOf(key);
-
-            switch (prayTime) {
-                case FAJR:
-                    textAlarmName.setText(getString(R.string.azan1));
-                    athanIconView.setImageResource(R.drawable.fajr);
-                    break;
-
-                case DHUHR:
-                    textAlarmName.setText(getString(R.string.azan2));
-                    athanIconView.setImageResource(R.drawable.dhuhr);
-                    break;
-
-                case ASR:
-                    textAlarmName.setText(getString(R.string.azan3));
-                    athanIconView.setImageResource(R.drawable.asr);
-                    break;
-
-                case MAGHRIB:
-                    textAlarmName.setText(getString(R.string.azan4));
-                    athanIconView.setImageResource(R.drawable.maghrib);
-                    break;
-
-                case ISHA:
-                    textAlarmName.setText(getString(R.string.azan5));
-                    athanIconView.setImageResource(R.drawable.isha);
-                    break;
-            }
-        }
+            textAlarmName.setText(Utils.getPrayTimeText(key));
+            athanIconView.setImageResource(Utils.getPrayTimeImage(key));
     }
 
     @Override
@@ -137,14 +110,17 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
     private void play() {
         try {
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setDataSource(this, Utils.getAthanUri(getApplicationContext()));
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.prepare();
             mediaPlayer.start();
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
+
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
+            }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }

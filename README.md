@@ -33,6 +33,4 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 Build
 -----------------------------
 0. git clone --depth=1 https://github.com/ebraminio/DroidPersianCalendar
-1. Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
-2. Import the project on Android Studio
-3. Click on "Sync Project with Gradle Files" after the import
+1. Import the project on Android Studio

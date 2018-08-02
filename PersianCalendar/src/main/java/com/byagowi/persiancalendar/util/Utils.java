@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.util;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -38,7 +37,9 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
+import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -62,9 +63,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.RawRes;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -204,7 +206,7 @@ public class Utils {
     static private boolean notifyInLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
     static private boolean widgetClock = DEFAULT_WIDGET_CLOCK;
     static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
-	static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
+    static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
     static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
     static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
@@ -290,10 +292,6 @@ public class Utils {
 
     static public boolean isNotifyDate() {
         return notifyDate;
-    }
-	
-    static public boolean isNotificationAthan() {
-        return notificationAthan;
     }
 
     static public boolean isWeekOfYearEnabled() {
@@ -654,14 +652,16 @@ public class Utils {
             }
             int compare = r.getCountryCode().compareTo(l.getCountryCode());
             if (compare != 0) return compare;
-            if (language.equals(LANG_EN))
-                return l.getEn().compareTo(r.getEn());
-            else if (language.equals(LANG_CKB))
-                return prepareForArabicSort(l.getCkb())
-                        .compareTo(prepareForArabicSort(r.getCkb()));
-            else
-                return prepareForArabicSort(l.getFa())
-                        .compareTo(prepareForArabicSort(r.getFa()));
+            switch (language) {
+                case LANG_EN:
+                    return l.getEn().compareTo(r.getEn());
+                case LANG_CKB:
+                    return prepareForArabicSort(l.getCkb())
+                            .compareTo(prepareForArabicSort(r.getCkb()));
+                default:
+                    return prepareForArabicSort(l.getFa())
+                            .compareTo(prepareForArabicSort(r.getFa()));
+            }
         });
 
         return Arrays.asList(cities);
@@ -1101,6 +1101,14 @@ public class Utils {
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
 
+        long athanGap;
+        try {
+            athanGap = (long) (Double.parseDouble(
+                    prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
+        } catch (NumberFormatException e) {
+            athanGap = 0;
+        }
+
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
@@ -1117,35 +1125,27 @@ public class Utils {
                 Clock alarmTime = prayTimes.get(prayTime);
 
                 if (alarmTime != null)
-                    setAlarm(context, prayTime, alarmTime, i);
+                    setAlarm(context, prayTime, alarmTime, i, athanGap);
             }
         }
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id) {
+    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id,
+                                 long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id);
+        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id, athanGap);
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
-        long athanGap;
-        try {
-            athanGap = (long) (Double.parseDouble(valAthanGap) * 60);
-        } catch (NumberFormatException e) {
-            athanGap = 0;
-        }
-
+    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id,
+                                 long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
-        triggerTime.setTimeInMillis(timeInMillis - TimeUnit.SECONDS.toMillis(athanGap));
+        triggerTime.setTimeInMillis(timeInMillis - athanGap);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // don't set an alarm in the past
-        if (!triggerTime.before(Calendar.getInstance())) {
+        if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
             Intent intent = new Intent(context, BroadcastReceivers.class);
@@ -1154,19 +1154,10 @@ public class Utils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                SetExactAlarm.setExactAlarm(alarmManager,
-                        AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             }
-        }
-    }
-
-    static private class SetExactAlarm {
-        @TargetApi(Build.VERSION_CODES.KITKAT)
-        public static void setExactAlarm(AlarmManager alarmManager,
-                                         int type, long triggerAtMillis, PendingIntent pendingIntent) {
-            alarmManager.setExact(type, triggerAtMillis, pendingIntent);
         }
     }
 
@@ -1175,7 +1166,58 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
-    static public String getOnlyLanguage(String string) {
+    static public @StringRes int getPrayTimeText(String athanKey) {
+        switch (athanKey) {
+            case "FAJR":
+                return R.string.azan1;
+
+            case "DHUHR":
+                return R.string.azan2;
+
+            case "ASR":
+                return R.string.azan3;
+
+            case "MAGHRIB":
+                return R.string.azan4;
+
+            case "ISHA":
+            default:
+                return R.string.azan5;
+        }
+    }
+
+    static public @DrawableRes int getPrayTimeImage(String athanKey) {
+        switch (athanKey) {
+            case "FAJR":
+                return R.drawable.fajr;
+
+            case "DHUHR":
+                return R.drawable.dhuhr;
+
+            case "ASR":
+                return R.drawable.asr;
+
+            case "MAGHRIB":
+                return R.drawable.maghrib;
+
+            case "ISHA":
+            default:
+                return R.drawable.isha;
+        }
+    }
+
+    static public void startAthan(Context context, String prayTimeKey) {
+        if (notificationAthan) {
+            context.startService(new Intent(context, AthanNotification.class)
+                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+        } else {
+            context.startActivity(new Intent(context, AthanActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+        }
+    }
+
+    static private String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
@@ -1412,10 +1454,12 @@ public class Utils {
         startTime.add(Calendar.DATE, 1);
         Intent intent = new Intent(context, BroadcastReceivers.class);
         intent.setAction(BROADCAST_RESTART_APP);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // 1000, so won't conflicted with Athan ids
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null)
+        if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+        }
 //        }
     }
 

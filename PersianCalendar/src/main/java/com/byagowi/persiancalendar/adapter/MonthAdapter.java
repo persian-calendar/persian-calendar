@@ -104,15 +104,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 position = fixForWeekOfYearNumber(position);
             }
 
-            if (totalDays < position - 6 - startingDayOfWeek) {
+            if (totalDays < position - 6 - startingDayOfWeek ||
+                    position - 7 - startingDayOfWeek < 0) {
                 return;
             }
 
-            if (position - 7 - startingDayOfWeek >= 0) {
-                monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
-
-                MonthAdapter.this.selectDay(1 + position - 7 - startingDayOfWeek);
-            }
+            monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
+            MonthAdapter.this.selectDay(1 + position - 7 - startingDayOfWeek);
         }
 
         @Override
@@ -126,7 +124,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 position = fixForWeekOfYearNumber(position);
             }
 
-            if (totalDays < position - 6 - startingDayOfWeek) {
+            if (totalDays < position - 6 - startingDayOfWeek ||
+                    position - 7 - startingDayOfWeek < 0) {
                 return false;
             }
 

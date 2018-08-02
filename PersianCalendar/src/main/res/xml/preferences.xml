@@ -223,13 +223,6 @@
         android:key="Athan"
         android:title="@string/athan">
 
-		<androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:icon="@drawable/ic_notification_setting"
-            android:key="NotificationAthan"
-            android:summary="@string/enable_notification_athan"
-            android:title="@string/notification_athan" />
-
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:icon="@drawable/ic_gap_setting"
             android:inputType="numberSigned"
@@ -252,6 +245,13 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_notification_setting"
+            android:key="NotificationAthan"
+            android:summary="@string/enable_notification_athan"
+            android:title="@string/notification_athan" />
 
     </androidx.preference.PreferenceCategory>
 
