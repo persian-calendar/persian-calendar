@@ -28,6 +28,7 @@ public class Constants {
     public static final String PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents";
     public static final String PREF_WIDGET_CLOCK = "WidgetClock";
     public static final String PREF_NOTIFY_DATE = "NotifyDate";
+	public static final String PREF_NOTIFICATION_ATHAN = "NotificationAthan";
     public static final String PREF_NOTIFY_DATE_LOCK_SCREEN = "NotifyDateLockScreen";
     public static final String PREF_ATHAN_VOLUME = "AthanVolume";
     public static final String PREF_APP_LANGUAGE = "AppLanguage";
@@ -50,6 +51,7 @@ public class Constants {
     public static final boolean DEFAULT_PERSIAN_DIGITS = true;
     public static final boolean DEFAULT_WIDGET_CLOCK = true;
     public static final boolean DEFAULT_NOTIFY_DATE = true;
+    public static final boolean DEFAULT_NOTIFICATION_ATHAN = false;
     public static final boolean DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true;
     public static final int DEFAULT_ATHAN_VOLUME = 1;
 
