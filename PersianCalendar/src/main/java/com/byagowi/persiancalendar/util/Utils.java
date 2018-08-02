@@ -646,14 +646,16 @@ public class Utils {
             }
             int compare = r.getCountryCode().compareTo(l.getCountryCode());
             if (compare != 0) return compare;
-            if (language.equals(LANG_EN))
-                return l.getEn().compareTo(r.getEn());
-            else if (language.equals(LANG_CKB))
-                return prepareForArabicSort(l.getCkb())
-                        .compareTo(prepareForArabicSort(r.getCkb()));
-            else
-                return prepareForArabicSort(l.getFa())
-                        .compareTo(prepareForArabicSort(r.getFa()));
+            switch (language) {
+                case LANG_EN:
+                    return l.getEn().compareTo(r.getEn());
+                case LANG_CKB:
+                    return prepareForArabicSort(l.getCkb())
+                            .compareTo(prepareForArabicSort(r.getCkb()));
+                default:
+                    return prepareForArabicSort(l.getFa())
+                            .compareTo(prepareForArabicSort(r.getFa()));
+            }
         });
 
         return Arrays.asList(cities);
@@ -1093,6 +1095,14 @@ public class Utils {
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
 
+        long athanGap;
+        try {
+            athanGap = (long) (Double.parseDouble(
+                    prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
+        } catch (NumberFormatException e) {
+            athanGap = 0;
+        }
+
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
@@ -1109,35 +1119,27 @@ public class Utils {
                 Clock alarmTime = prayTimes.get(prayTime);
 
                 if (alarmTime != null)
-                    setAlarm(context, prayTime, alarmTime, i);
+                    setAlarm(context, prayTime, alarmTime, i, athanGap);
             }
         }
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id) {
+    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id,
+                                 long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id);
+        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id, athanGap);
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String valAthanGap = prefs.getString(PREF_ATHAN_GAP, "0");
-        long athanGap;
-        try {
-            athanGap = (long) (Double.parseDouble(valAthanGap) * 60);
-        } catch (NumberFormatException e) {
-            athanGap = 0;
-        }
-
+    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id,
+                                 long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
-        triggerTime.setTimeInMillis(timeInMillis - TimeUnit.SECONDS.toMillis(athanGap));
+        triggerTime.setTimeInMillis(timeInMillis - athanGap);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // don't set an alarm in the past
-        if (!triggerTime.before(Calendar.getInstance())) {
+        if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
             Intent intent = new Intent(context, BroadcastReceivers.class);
@@ -1146,19 +1148,10 @@ public class Utils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                SetExactAlarm.setExactAlarm(alarmManager,
-                        AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
             }
-        }
-    }
-
-    static private class SetExactAlarm {
-        @TargetApi(Build.VERSION_CODES.KITKAT)
-        public static void setExactAlarm(AlarmManager alarmManager,
-                                         int type, long triggerAtMillis, PendingIntent pendingIntent) {
-            alarmManager.setExact(type, triggerAtMillis, pendingIntent);
         }
     }
 
@@ -1167,7 +1160,7 @@ public class Utils {
         return Uri.parse(defaultSoundUri);
     }
 
-    static public String getOnlyLanguage(String string) {
+    static private String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
@@ -1404,10 +1397,12 @@ public class Utils {
         startTime.add(Calendar.DATE, 1);
         Intent intent = new Intent(context, BroadcastReceivers.class);
         intent.setAction(BROADCAST_RESTART_APP);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // 1000, so won't conflicted with Athan ids
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null)
+        if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+        }
 //        }
     }
 
