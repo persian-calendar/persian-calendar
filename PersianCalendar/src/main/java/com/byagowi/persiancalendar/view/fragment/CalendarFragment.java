@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
