@@ -1329,9 +1329,13 @@ public class Utils {
     }
 
     static public void copyToClipboard(Context context, CharSequence text) {
-        ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
-                .setPrimaryClip(ClipData.newPlainText("converted date", text));
-        Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        ClipboardManager clipboardService =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (clipboardService != null) {
+            clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
+            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        }
     }
 
     static public SeasonEnum getSeason() {

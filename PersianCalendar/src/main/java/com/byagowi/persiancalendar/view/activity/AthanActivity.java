@@ -56,8 +56,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         try {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            if (telephonyManager != null)
+            if (telephonyManager != null) {
                 telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
         } catch (Exception e) {
             // nvm
         }

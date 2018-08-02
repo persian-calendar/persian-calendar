@@ -224,8 +224,9 @@ public class UpdateUtils {
                 NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null)
+                if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
+                }
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
