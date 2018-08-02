@@ -38,19 +38,10 @@ public class BroadcastReceivers extends BroadcastReceiver {
                 Utils.loadApp(context);
 
             } else if (intent.getAction().equals(Constants.BROADCAST_ALARM)) {
-                if (Utils.isNotificationAthan()) {
-                    context.startService(new Intent(context, AthanNotification.class));
-                } else {
-                    startAthanActivity(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
-                }
-			}
-        }
-    }
 
-    private void startAthanActivity(String string) {
-        Intent intent = new Intent(context, AthanActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constants.KEY_EXTRA_PRAYER_KEY, string);
-        context.startActivity(intent);
+                Utils.startAthan(context, intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY));
+
+            }
+        }
     }
 }

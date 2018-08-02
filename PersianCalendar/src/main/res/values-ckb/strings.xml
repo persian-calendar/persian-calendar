@@ -122,5 +122,7 @@
     <string name="compact_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
     <string name="add">زیادکردن</string>
     <string name="which_one_to_show">کامەیان نیشان بدرێ؟</string>
+    <string name="notification_athan">Athan Notification</string>
+    <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
 
 </resources>

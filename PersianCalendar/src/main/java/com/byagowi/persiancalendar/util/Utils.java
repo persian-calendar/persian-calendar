@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.util;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -38,7 +37,9 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
+import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -62,9 +63,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.RawRes;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -204,7 +206,7 @@ public class Utils {
     static private boolean notifyInLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
     static private boolean widgetClock = DEFAULT_WIDGET_CLOCK;
     static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
-	static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
+    static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
     static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
     static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
@@ -290,10 +292,6 @@ public class Utils {
 
     static public boolean isNotifyDate() {
         return notifyDate;
-    }
-	
-    static public boolean isNotificationAthan() {
-        return notificationAthan;
     }
 
     static public boolean isWeekOfYearEnabled() {
@@ -1166,6 +1164,57 @@ public class Utils {
     static public Uri getAthanUri(Context context) {
         String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
         return Uri.parse(defaultSoundUri);
+    }
+
+    static public @StringRes int getPrayTimeText(String athanKey) {
+        switch (athanKey) {
+            case "FAJR":
+                return R.string.azan1;
+
+            case "DHUHR":
+                return R.string.azan2;
+
+            case "ASR":
+                return R.string.azan3;
+
+            case "MAGHRIB":
+                return R.string.azan4;
+
+            case "ISHA":
+            default:
+                return R.string.azan5;
+        }
+    }
+
+    static public @DrawableRes int getPrayTimeImage(String athanKey) {
+        switch (athanKey) {
+            case "FAJR":
+                return R.drawable.fajr;
+
+            case "DHUHR":
+                return R.drawable.dhuhr;
+
+            case "ASR":
+                return R.drawable.asr;
+
+            case "MAGHRIB":
+                return R.drawable.maghrib;
+
+            case "ISHA":
+            default:
+                return R.drawable.isha;
+        }
+    }
+
+    static public void startAthan(Context context, String prayTimeKey) {
+        if (notificationAthan) {
+            context.startService(new Intent(context, AthanNotification.class)
+                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+        } else {
+            context.startActivity(new Intent(context, AthanActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+        }
     }
 
     static private String getOnlyLanguage(String string) {

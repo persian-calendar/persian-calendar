@@ -28,9 +28,7 @@
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
     <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
     <string name="notify_date">Enable Date Notification</string>
-	<string name="notification_athan">Enable Notification athan</string>
     <string name="enable_notify">Persistent notification for all date types</string>
-	<string name="enable_notification_athan">Enable notification for athan</string>
     <string name="select_skin">Select a skin</string>
     <string name="skin">Skin</string>
     <string name="pray_methods">Calculation methods</string>
@@ -124,5 +122,7 @@
     <string name="compact_widget">Widget Customization</string>
     <string name="add">Add</string>
     <string name="which_one_to_show">Which one to show</string>
+    <string name="notification_athan">Athan Notification</string>
+    <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
 
 </resources>
