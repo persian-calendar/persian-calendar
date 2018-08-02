@@ -321,6 +321,11 @@ public class Utils {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
 
+    static public boolean isLocaleRTL() {
+        // en-US is our only real LTR language for now
+        return !Utils.getAppLanguage().equals("en-US");
+    }
+
     static public String getSelectedWidgetTextColor() {
         return selectedWidgetTextColor;
     }

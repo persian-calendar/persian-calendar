@@ -59,7 +59,7 @@ public class UpdateUtils {
         int color = Color.parseColor(colorInt);
 
         // en-US is our only real LTR language for now
-        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
+        boolean isRTL = Utils.isLocaleRTL();
 
         // Widget 1x1
         ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
