@@ -583,6 +583,10 @@ public class CalendarFragment extends Fragment
             SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
             searchAutoComplete.setHint(R.string.search_in_events);
             SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
+            if (searchManager == null) {
+                return;
+            }
+
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
                     R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));

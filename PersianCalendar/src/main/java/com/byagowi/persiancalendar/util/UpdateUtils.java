@@ -59,7 +59,7 @@ public class UpdateUtils {
         int color = Color.parseColor(colorInt);
 
         // en-US is our only real LTR language for now
-        boolean isRTL = !Utils.getAppLanguage().equals("en-US");
+        boolean isRTL = Utils.isLocaleRTL();
 
         // Widget 1x1
         ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
@@ -224,8 +224,9 @@ public class UpdateUtils {
                 NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null)
+                if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
+                }
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))

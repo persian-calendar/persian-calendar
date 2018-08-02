@@ -101,12 +101,14 @@ public class CompassFragment extends Fragment {
         }
 
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-        if (sensor != null) {
-            sensorManager.registerListener(compassListener, sensor,
-                    SensorManager.SENSOR_DELAY_FASTEST);
-        } else {
-            Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+        if (sensorManager != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+            if (sensor != null) {
+                sensorManager.registerListener(compassListener, sensor,
+                        SensorManager.SENSOR_DELAY_FASTEST);
+            } else {
+                Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+            }
         }
         return view;
     }
@@ -125,6 +127,10 @@ public class CompassFragment extends Fragment {
         compassView.setScreenResolution(width, height - 2 * height / 8);
 
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) {
+            return;
+        }
+
         switch (wm.getDefaultDisplay().getOrientation()) {
             case Surface.ROTATION_0:
                 orientation = 0;

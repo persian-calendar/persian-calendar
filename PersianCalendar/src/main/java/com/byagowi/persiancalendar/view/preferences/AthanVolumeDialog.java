@@ -17,9 +17,9 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     private final String TAG = AthanVolumeDialog.class.getName();
 
-    int volume;
-    AudioManager audioManager;
-    MediaPlayer mediaPlayer;
+    private int volume;
+    private AudioManager audioManager;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected View onCreateDialogView(Context context) {
@@ -33,7 +33,9 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             mediaPlayer.setDataSource(
                     getContext(),
                     Utils.getAthanUri(context.getApplicationContext()));
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
+            if (audioManager != null) {
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
+            }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }

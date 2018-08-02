@@ -10,8 +10,9 @@ import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.TimeUtils;
+import android.widget.RemoteViews;
 
+import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
@@ -63,16 +64,32 @@ public class AthanNotification extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
+            String title = getString(Utils.getPrayTimeText(
+                    intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
+            String subtitle = getString(R.string.in_city_time) + " " +
+                    Utils.getCityName(this, true);
+
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.kaaba)
                     .setSound(Utils.getAthanUri(getApplicationContext()))
-                    .setContentTitle(getString(Utils.getPrayTimeText(
-                            intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY))))
-                    .setContentText(getString(R.string.in_city_time) + " " +
-                            Utils.getCityName(this, true));
+                    .setContentTitle(title)
+                    .setContentText(subtitle);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
+                RemoteViews cv = new RemoteViews(getApplicationContext().getPackageName(),
+                        Utils.isLocaleRTL()
+                                ? R.layout.custom_notification
+                                : R.layout.custom_notification_ltr);
+                cv.setTextViewText(R.id.title, title);
+                cv.setTextViewText(R.id.body, subtitle);
+
+                notificationBuilder = notificationBuilder
+                        .setCustomContentView(cv)
+                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+            }
 
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
 

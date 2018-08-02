@@ -63,6 +63,10 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     private boolean everRegisteredCallback = false;
 
     private void getLocation() {
+        if (locationManager == null) {
+            return;
+        }
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             lacksPermission = true;
@@ -152,8 +156,9 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             editor.apply();
         }
 
-        if (everRegisteredCallback)
+        if (everRegisteredCallback && locationManager != null) {
             locationManager.removeUpdates(locationListener);
+        }
 
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));

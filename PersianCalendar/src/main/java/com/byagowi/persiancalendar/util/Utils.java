@@ -321,6 +321,11 @@ public class Utils {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
 
+    static public boolean isLocaleRTL() {
+        // en-US is our only real LTR language for now
+        return !Utils.getAppLanguage().equals("en-US");
+    }
+
     static public String getSelectedWidgetTextColor() {
         return selectedWidgetTextColor;
     }
@@ -1324,9 +1329,13 @@ public class Utils {
     }
 
     static public void copyToClipboard(Context context, CharSequence text) {
-        ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE))
-                .setPrimaryClip(ClipData.newPlainText("converted date", text));
-        Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        ClipboardManager clipboardService =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (clipboardService != null) {
+            clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
+            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        }
     }
 
     static public SeasonEnum getSeason() {
