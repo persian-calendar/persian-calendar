@@ -2,14 +2,11 @@ package com.byagowi.persiancalendar.view.activity;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -17,9 +14,7 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.PrayTime;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -114,11 +109,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     };
-
-    private void setPrayerView(String key) {
-            textAlarmName.setText(Utils.getPrayTimeText(key));
-            athanIconView.setImageResource(Utils.getPrayTimeImage(key));
-    }
 
     @Override
     public void onClick(View v) {

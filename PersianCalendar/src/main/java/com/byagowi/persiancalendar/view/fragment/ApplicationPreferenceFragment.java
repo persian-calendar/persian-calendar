@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -35,7 +34,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import static android.app.Activity.RESULT_OK;
 import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
-import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 
 /**
  * Preference activity
