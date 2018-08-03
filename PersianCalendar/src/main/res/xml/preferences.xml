@@ -253,13 +253,17 @@
             android:summary="@string/enable_notification_athan"
             android:title="@string/notification_athan" />
 
-        <Preference
-            android:defaultValue="content://settings/system/notification_sound"
+        <androidx.preference.Preference
             android:icon="@drawable/ic_volume_setting"
             android:key="pref_key_ringtone"
-            android:negativeButtonText="@string/cancel"
-            android:summary="Set custom athan for notify"
-            android:title="Set Athan" />
+            android:summary="@string/custom_athan_summary"
+            android:title="@string/custom_athan" />
+
+        <androidx.preference.Preference
+            android:icon="@drawable/ic_volume_setting"
+            android:key="pref_key_ringtone_default"
+            android:summary="@string/default_athan_summary"
+            android:title="@string/default_athan" />
 
     </androidx.preference.PreferenceCategory>
 

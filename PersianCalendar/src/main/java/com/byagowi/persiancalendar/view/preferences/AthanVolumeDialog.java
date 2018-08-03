@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.view.preferences;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
@@ -19,26 +21,23 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
     private int volume;
     private AudioManager audioManager;
-    private MediaPlayer mediaPlayer;
+    private Ringtone ringtone;
 
     @Override
     protected View onCreateDialogView(Context context) {
         View view = super.onCreateDialogView(context);
 
         final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
+
+        ringtone = RingtoneManager.getRingtone(context, Utils.getAthanUri(context));
+        ringtone.setStreamType(AudioManager.STREAM_ALARM);
+
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-            mediaPlayer.setDataSource(
-                    getContext(),
-                    Utils.getAthanUri(context.getApplicationContext()));
-            if (audioManager != null) {
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+        if (audioManager != null) {
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
         }
+
+        ringtone.play();
 
         SeekBar seekBar = view.findViewById(R.id.sbVolumeSlider);
 
@@ -58,12 +57,8 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                try {
-                    if (!mediaPlayer.isPlaying()) {
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                    }
-                } catch (IOException | IllegalStateException ignored) {
+                if (!ringtone.isPlaying()) {
+                    ringtone.play();
                 }
             }
         });
@@ -74,7 +69,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     @Override
     public void onDialogClosed(boolean positiveResult) {
         final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
-        mediaPlayer.release();
+        ringtone.stop();
         if (positiveResult) {
             athanPref.setVolume(volume);
         }

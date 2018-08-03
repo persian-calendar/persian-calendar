@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.view.activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -18,19 +20,30 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.PrayTime;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
-public class AthanActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
+public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = AthanActivity.class.getName();
     private TextView textAlarmName;
     private AppCompatImageView athanIconView;
-    private MediaPlayer mediaPlayer;
+    private Ringtone ringtone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ringtone = RingtoneManager.getRingtone(this, Utils.getAthanUri(this));
+        ringtone.setStreamType(AudioManager.STREAM_ALARM);
+
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
+        }
+
         Utils.changeAppLanguage(this);
 
         setContentView(R.layout.activity_athan);
@@ -53,6 +66,18 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
         play();
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (ringtone != null && !ringtone.isPlaying()) {
+                    finish();
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(task, TimeUnit.SECONDS.toMillis(10),
+                TimeUnit.SECONDS.toMillis(5));
 
         try {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -83,10 +108,8 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     private PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-            if (state == TelephonyManager.CALL_STATE_RINGING) {
-                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
-            }
-            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+            if (state == TelephonyManager.CALL_STATE_RINGING ||
+                    state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
             }
         }
@@ -110,36 +133,14 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void play() {
-        try {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setDataSource(this, Utils.getAthanUri(getApplicationContext()));
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager != null) {
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+        if (ringtone != null) {
+            ringtone.play();
         }
     }
 
     private void stop() {
-        try {
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            }
-        } catch (IllegalStateException ignored) {
+        if (ringtone != null) {
+            ringtone.stop();
         }
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        mp.release();
-        finish();
     }
 }

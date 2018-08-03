@@ -4,7 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -24,6 +30,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
+import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 
 /**
  * Preference activity
@@ -98,34 +108,42 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             }
         }
     }
-    
+
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         if (preference.getKey().equals("pref_key_ringtone")) {
-            ringtone = preference;
             Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-
-            String existingValue = preference.toString(); // TODO
-            if (existingValue != null) {
-                if (existingValue.length() == 0) {
-                    // Select "Silent"
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-                } else {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(existingValue));
-                }
-            } else {
-                // No ringtone has been selected, set to the default
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-            }
-
-            startActivityForResult(intent, REQUEST_CODE_ALERT_RINGTONE);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
+            startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
+            return true;
+        } else if (preference.getKey().equals("pref_key_ringtone_default")) {
+            SharedPreferences.Editor editor = PreferenceManager
+                    .getDefaultSharedPreferences(getContext()).edit();
+            editor.remove(PREF_ATHAN_URI);
+            editor.apply();
+            Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
             return true;
         } else {
             return super.onPreferenceTreeClick(preference);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
+            if (resultCode == -1) {
+                SharedPreferences.Editor editor = PreferenceManager
+                        .getDefaultSharedPreferences(getContext()).edit();
+                editor.putString(PREF_ATHAN_URI, data
+                        .getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString());
+                editor.apply();
+                Toast.makeText(getContext(), R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

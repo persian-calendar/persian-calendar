@@ -124,5 +124,10 @@
     <string name="which_one_to_show">کدام یک نمایش داده شود</string>
     <string name="notification_athan">اذان به صورت اعلان</string>
     <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
+    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
+    <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
+    <string name="custom_athan_summary">Set custom athan for notify</string>
+    <string name="custom_athan">Set Athan</string>
+    <string name="default_athan">Default Athan</string>
 
 </resources>

@@ -114,6 +114,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
@@ -1166,12 +1167,15 @@ public class Utils {
         }
     }
 
+    private static String defaultSoundUri = "android.resource://com.byagowi.persiancalendar/" + R.raw.abdulbasit;
+
     static public Uri getAthanUri(Context context) {
-        String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
-        return Uri.parse(defaultSoundUri);
+        return Uri.parse(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_ATHAN_URI, defaultSoundUri));
     }
 
-    static public @StringRes int getPrayTimeText(String athanKey) {
+    static public @StringRes
+    int getPrayTimeText(String athanKey) {
         switch (athanKey) {
             case "FAJR":
                 return R.string.azan1;
@@ -1191,7 +1195,8 @@ public class Utils {
         }
     }
 
-    static public @DrawableRes int getPrayTimeImage(String athanKey) {
+    static public @DrawableRes
+    int getPrayTimeImage(String athanKey) {
         switch (athanKey) {
             case "FAJR":
                 return R.drawable.fajr;

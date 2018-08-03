@@ -101,7 +101,7 @@ public class AthanNotification extends Service {
                     stopSelf();
                 }
             };
-            timer.schedule(task, TimeUnit.MINUTES.toMillis(1));
+            timer.schedule(task, TimeUnit.MINUTES.toMillis(5));
         }
 
 

@@ -95,8 +95,7 @@
     <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>
     <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
-    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
-    <string name="shouldBeUpdated">ڕۆژژمێری کۆچیی مانگی ڕەنگە دروست نەبێ، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
+    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>    <string name="shouldBeUpdated">ڕۆژژمێری کۆچیی مانگی ڕەنگە دروست نەبێ، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
@@ -122,7 +121,12 @@
     <string name="compact_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
     <string name="add">زیادکردن</string>
     <string name="which_one_to_show">کامەیان نیشان بدرێ؟</string>
-    <string name="notification_athan">Athan Notification</string>
-    <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
+    <string name="notification_athan">ئاگاداریی بانگ</string>
+    <string name="enable_notification_athan">ڕاگەیاندنی بانگ بە ئاگاداری و لەرینەوەی ئامراز</string>
+    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
+    <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
+    <string name="custom_athan_summary">Set custom athan for notify</string>
+    <string name="custom_athan">Set Athan</string>
+    <string name="default_athan">Default Athan</string>
 
 </resources>
