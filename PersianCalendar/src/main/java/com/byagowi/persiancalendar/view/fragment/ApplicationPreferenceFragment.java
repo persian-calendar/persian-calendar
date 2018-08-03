@@ -128,20 +128,5 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             return super.onPreferenceTreeClick(preference);
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_ALERT_RINGTONE && data != null) {
-            Uri ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-            if (ringtone != null) {
-                //setRingtonPreferenceValue(ringtone.toString()); // TODO
-            } else {
-                // "Silent" was selected
-                //setRingtonPreferenceValue(""); // TODO
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
     
 }
