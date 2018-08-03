@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import static android.app.Activity.RESULT_OK;
 import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
@@ -135,13 +137,16 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
-            if (resultCode == -1) {
-                SharedPreferences.Editor editor = PreferenceManager
-                        .getDefaultSharedPreferences(getContext()).edit();
-                editor.putString(PREF_ATHAN_URI, data
-                        .getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString());
-                editor.apply();
-                Toast.makeText(getContext(), R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show();
+            if (resultCode == RESULT_OK) {
+                Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (uri != null) {
+                    SharedPreferences.Editor editor = PreferenceManager
+                            .getDefaultSharedPreferences(getContext()).edit();
+                    editor.putString(PREF_ATHAN_URI, uri.toString());
+                    editor.apply();
+                    Toast.makeText(getContext(), R.string.custom_notification_is_set,
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
