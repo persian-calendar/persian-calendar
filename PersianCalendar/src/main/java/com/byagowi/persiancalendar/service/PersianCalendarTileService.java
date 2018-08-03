@@ -1,26 +1,30 @@
 package com.byagowi.persiancalendar.service;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
+import android.util.Log;
 
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
-import androidx.annotation.RequiresApi;
 import calendar.AbstractDate;
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
  */
-@RequiresApi(api = Build.VERSION_CODES.N)
+@TargetApi(Build.VERSION_CODES.N)
 public class PersianCalendarTileService extends TileService {
     @Override
     public void onClick() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivityAndCollapse(intent);
+        try {
+            startActivityAndCollapse(new Intent(this, MainActivity.class));
+        } catch (Exception e) {
+            Log.e("TileService", "Tile onClick fail", e);
+        }
     }
 
 

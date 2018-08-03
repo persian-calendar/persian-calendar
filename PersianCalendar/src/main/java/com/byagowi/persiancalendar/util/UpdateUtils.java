@@ -80,9 +80,9 @@ public class UpdateUtils {
 
         if (pastDate == null || !pastDate.equals(date) || updateDate) {
             Log.d("UpdateUtils", "date has changed");
-            pastDate = date;
 
-            Utils.initUtils(context);
+            Utils.loadAlarms(context);
+            pastDate = date;
             updateDate = true;
         }
 
@@ -286,9 +286,14 @@ public class UpdateUtils {
 //                if (notificationManager != null)
 //                    notificationManager.notify(NOTIFICATION_ID, builder.build());
 //            } else {
-            ApplicationService applicationService = ApplicationService.getInstance();
-            if (applicationService != null)
-                applicationService.startForeground(NOTIFICATION_ID, builder.build());
+            try {
+                ApplicationService applicationService = ApplicationService.getInstance();
+                if (applicationService != null) {
+                    applicationService.startForeground(NOTIFICATION_ID, builder.build());
+                }
+            } catch (Exception e) {
+                Log.e("UpdateUtils", "failed to start service with the notification", e);
+            }
 //            }
         }
 //        else {
