@@ -125,8 +125,9 @@
     <string name="enable_notification_athan">ڕاگەیاندنی بانگ بە ئاگاداری و لەرینەوەی ئامراز</string>
     <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
-    <string name="custom_athan_summary">Set custom athan for notify</string>
-    <string name="custom_athan">Set Athan</string>
-    <string name="default_athan">Default Athan</string>
+    <string name="custom_athan_summary">انتخاب صدای اذان انتخابی</string>
+    <string name="custom_athan">انتخاب اذان</string>
+    <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
+    <string name="default_athan">اذان پیش‌فرض</string>
 
 </resources>
