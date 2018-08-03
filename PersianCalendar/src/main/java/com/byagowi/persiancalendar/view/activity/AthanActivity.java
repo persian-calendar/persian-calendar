@@ -7,6 +7,7 @@ import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
                 if (ringtone != null && !ringtone.isPlaying()) {
+                    timer.cancel();
                     finish();
                 }
             }
@@ -80,7 +82,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
                 telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             }
         } catch (Exception e) {
-            // nvm
+            Log.e("AthanActivity", "TelephonyManager handling fail", e);
         }
     }
 
