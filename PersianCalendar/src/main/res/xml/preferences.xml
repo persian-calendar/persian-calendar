@@ -247,14 +247,6 @@
             android:summary="@string/enable_notification_athan"
             android:title="@string/notification_athan" />
 
-        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
-            android:dependency="NotificationAthan"
-            android:icon="@drawable/ic_volume_setting"
-            android:key="AthanVolume"
-            android:negativeButtonText="@string/cancel"
-            android:summary="@string/athan_volume_summary"
-            android:title="@string/athan_volume" />
-
         <androidx.preference.Preference
             android:dependency="NotificationAthan"
             android:icon="@drawable/ic_volume_setting"
@@ -268,6 +260,14 @@
             android:key="pref_key_ringtone_default"
             android:summary="@string/default_athan_summary"
             android:title="@string/default_athan" />
+
+        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:dependency="NotificationAthan"
+            android:icon="@drawable/ic_volume_setting"
+            android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_volume_summary"
+            android:title="@string/athan_volume" />
 
     </androidx.preference.PreferenceCategory>
 
