@@ -130,5 +130,6 @@
     <string name="custom_athan">انتخاب اذان</string>
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
+    <string name="default_athan_name">عبدالباسط عبدالصمد</string>
 
 </resources>

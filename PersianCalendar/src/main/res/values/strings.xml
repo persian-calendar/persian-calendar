@@ -130,5 +130,6 @@
     <string name="custom_athan">Select Athan</string>
     <string name="default_athan_summary">Return to default Athan</string>
     <string name="default_athan">Default Athan</string>
+    <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
 
 </resources>

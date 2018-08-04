@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
@@ -33,6 +36,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import static android.app.Activity.RESULT_OK;
 import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_NAME;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 /**
@@ -54,6 +58,9 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+
+        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
     private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
@@ -69,7 +76,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         super.onDestroyView();
     }
 
-    public void updateAthanPreferencesState() {
+    private void updateAthanPreferencesState() {
         boolean locationEmpty = Utils.getCoordinate(getContext()) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
@@ -111,24 +118,27 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        if (preference.getKey().equals("pref_key_ringtone")) {
-            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
-            startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
-            return true;
-        } else if (preference.getKey().equals("pref_key_ringtone_default")) {
-            SharedPreferences.Editor editor = PreferenceManager
-                    .getDefaultSharedPreferences(getContext()).edit();
-            editor.remove(PREF_ATHAN_URI);
-            editor.apply();
-            Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return super.onPreferenceTreeClick(preference);
+        switch (preference.getKey()) {
+            case "pref_key_ringtone":
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
+                startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
+                return true;
+            case "pref_key_ringtone_default":
+                SharedPreferences.Editor editor = PreferenceManager
+                        .getDefaultSharedPreferences(getContext()).edit();
+                editor.remove(PREF_ATHAN_URI);
+                editor.remove(PREF_ATHAN_NAME);
+                editor.apply();
+                Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                putAthanNameOnSummary(getDefaultAthanName());
+                return true;
+            default:
+                return super.onPreferenceTreeClick(preference);
         }
     }
 
@@ -136,17 +146,35 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                Context context = getContext();
                 Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 if (uri != null) {
                     SharedPreferences.Editor editor = PreferenceManager
-                            .getDefaultSharedPreferences(getContext()).edit();
+                            .getDefaultSharedPreferences(context).edit();
+
+                    String ringtoneTitle = RingtoneManager
+                            .getRingtone(context, Uri.parse(uri.toString()))
+                            .getTitle(context);
+                    if (TextUtils.isEmpty(ringtoneTitle)) {
+                        ringtoneTitle = "";
+                    }
+                    editor.putString(PREF_ATHAN_NAME, ringtoneTitle);
                     editor.putString(PREF_ATHAN_URI, uri.toString());
                     editor.apply();
-                    Toast.makeText(getContext(), R.string.custom_notification_is_set,
+                    Toast.makeText(context, R.string.custom_notification_is_set,
                             Toast.LENGTH_SHORT).show();
+                    putAthanNameOnSummary(ringtoneTitle);
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private String getDefaultAthanName() {
+        return getContext().getString(R.string.default_athan_name);
+    }
+
+    private void putAthanNameOnSummary(String athanName) {
+        findPreference("pref_key_ringtone").setSummary(athanName);
     }
 }
