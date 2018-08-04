@@ -12,6 +12,12 @@ public class CivilDate extends AbstractDate {
     private int year;
     private int month;
     private int day;
+    
+    @Override
+    @Constants.CalendarType
+    public int getType() {
+        return Constants.CIVIL_CALENDAR;
+    }
 
     public CivilDate() {
         this(Calendar.getInstance());
