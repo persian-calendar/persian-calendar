@@ -123,11 +123,11 @@
     <string name="which_one_to_show">کامەیان نیشان بدرێ؟</string>
     <string name="notification_athan">ئاگاداریی بانگ</string>
     <string name="enable_notification_athan">ڕاگەیاندنی بانگ بە ئاگاداری و لەرینەوەی ئامراز</string>
-    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
-    <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
-    <string name="custom_athan_summary">انتخاب صدای اذان انتخابی</string>
-    <string name="custom_athan">انتخاب اذان</string>
-    <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
-    <string name="default_athan">اذان پیش‌فرض</string>
+    <string name="returned_to_default">گەڕایەوە بۆ ڕێکخستنی بنەڕەتی</string>
+    <string name="custom_notification_is_set">دەنگی داواکراو رێکخرا</string>
+    <string name="custom_athan_summary">ھەڵبژاردنی دەنگی بانگ</string>
+    <string name="custom_athan">ھەڵبژاردنی بانگ</string>
+    <string name="default_athan_summary">گەڕانەوە بۆ بانگی بنەڕەتی</string>
+    <string name="default_athan">بانگی بنەڕەتی</string>
 
 </resources>
