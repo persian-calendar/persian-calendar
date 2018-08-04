@@ -5,6 +5,7 @@ public class Constants {
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
+    public static final int ATHAN_RINGTONE_REQUEST_CODE = 19;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
@@ -25,6 +26,7 @@ public class Constants {
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
     public static final String PREF_IRAN_TIME = "IranTime";
     public static final String PREF_PERSIAN_DIGITS = "PersianDigits";
+    public static final String PREF_ATHAN_URI = "AthanURI";
     public static final String PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents";
     public static final String PREF_WIDGET_CLOCK = "WidgetClock";
     public static final String PREF_NOTIFY_DATE = "NotifyDate";

@@ -114,6 +114,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
@@ -1099,22 +1100,22 @@ public class Utils {
         return titles.toString();
     }
 
-    private static void loadAlarms(Context context) {
+    public static void loadAlarms(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
         Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
         CalculationMethod calculationMethod = getCalculationMethod();
 
-        long athanGap;
-        try {
-            athanGap = (long) (Double.parseDouble(
-                    prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
-        } catch (NumberFormatException e) {
-            athanGap = 0;
-        }
-
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
+            long athanGap;
+            try {
+                athanGap = (long) (Double.parseDouble(
+                        prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
+            } catch (NumberFormatException e) {
+                athanGap = 0;
+            }
+
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
             // convert comma separated string to a set
@@ -1166,12 +1167,15 @@ public class Utils {
         }
     }
 
+    private static String defaultSoundUri = "android.resource://com.byagowi.persiancalendar/" + R.raw.abdulbasit;
+
     static public Uri getAthanUri(Context context) {
-        String defaultSoundUri = "android.resource://" + context.getPackageName() + "/" + R.raw.abdulbasit;
-        return Uri.parse(defaultSoundUri);
+        return Uri.parse(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_ATHAN_URI, defaultSoundUri));
     }
 
-    static public @StringRes int getPrayTimeText(String athanKey) {
+    static public @StringRes
+    int getPrayTimeText(String athanKey) {
         switch (athanKey) {
             case "FAJR":
                 return R.string.azan1;
@@ -1191,7 +1195,8 @@ public class Utils {
         }
     }
 
-    static public @DrawableRes int getPrayTimeImage(String athanKey) {
+    static public @DrawableRes
+    int getPrayTimeImage(String athanKey) {
         switch (athanKey) {
             case "FAJR":
                 return R.drawable.fajr;
@@ -1456,18 +1461,22 @@ public class Utils {
 
     static public void loadApp(Context context) {
 //        if (!goForWorker()) {
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 1);
-        startTime.add(Calendar.DATE, 1);
-        Intent intent = new Intent(context, BroadcastReceivers.class);
-        intent.setAction(BROADCAST_RESTART_APP);
-        // 1000, so won't conflicted with Athan ids
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+        try {
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.HOUR_OF_DAY, 0);
+            startTime.set(Calendar.MINUTE, 0);
+            startTime.set(Calendar.SECOND, 1);
+            startTime.add(Calendar.DATE, 1);
+            Intent intent = new Intent(context, BroadcastReceivers.class);
+            intent.setAction(BROADCAST_RESTART_APP);
+            // 1000, so won't conflicted with Athan ids
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "loadApp fail", e);
         }
 //        }
     }
@@ -1507,9 +1516,14 @@ public class Utils {
         }
 
         if (!alreadyRan) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                context.startForegroundService(new Intent(context, ApplicationService.class));
-            context.startService(new Intent(context, ApplicationService.class));
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    context.startForegroundService(new Intent(context, ApplicationService.class));
+
+                context.startService(new Intent(context, ApplicationService.class));
+            } catch (Exception e) {
+                Log.e(TAG, "startEitherServiceOrWorker fail", e);
+            }
         }
 //        }
     }

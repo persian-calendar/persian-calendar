@@ -4,7 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -24,6 +30,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import static android.app.Activity.RESULT_OK;
+import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 /**
  * Preference activity
@@ -97,5 +107,46 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        if (preference.getKey().equals("pref_key_ringtone")) {
+            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
+            startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
+            return true;
+        } else if (preference.getKey().equals("pref_key_ringtone_default")) {
+            SharedPreferences.Editor editor = PreferenceManager
+                    .getDefaultSharedPreferences(getContext()).edit();
+            editor.remove(PREF_ATHAN_URI);
+            editor.apply();
+            Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onPreferenceTreeClick(preference);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (uri != null) {
+                    SharedPreferences.Editor editor = PreferenceManager
+                            .getDefaultSharedPreferences(getContext()).edit();
+                    editor.putString(PREF_ATHAN_URI, uri.toString());
+                    editor.apply();
+                    Toast.makeText(getContext(), R.string.custom_notification_is_set,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
