@@ -3,13 +3,15 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.1"
+
     defaultConfig {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 586
         versionName "5.8.6"
     }
+
     buildTypes {
         debug {
             versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" + "git rev-parse --short HEAD".execute().text.trim()
@@ -21,19 +23,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
     }
+
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
-    }
-    productFlavors {
     }
 }
 
 dependencies {
     def androidXVersion = '1.0.0-beta01'
+
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "com.google.android.material:material:$androidXVersion"
     implementation "androidx.preference:preference:$androidXVersion"
@@ -43,5 +46,5 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    //    implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
+//    implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
 }
