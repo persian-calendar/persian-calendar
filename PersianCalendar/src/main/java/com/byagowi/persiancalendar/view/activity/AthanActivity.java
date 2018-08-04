@@ -63,18 +63,17 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         play();
 
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                if (ringtone != null && !ringtone.isPlaying()) {
-                    timer.cancel();
-                    finish();
+        if (ringtone != null) {
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!ringtone.isPlaying()) {
+                        cancel();
+                        finish();
+                    }
                 }
-            }
-        };
-        timer.scheduleAtFixedRate(task, TimeUnit.SECONDS.toMillis(10),
-                TimeUnit.SECONDS.toMillis(5));
+            }, TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS.toMillis(5));
+        }
 
         try {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);

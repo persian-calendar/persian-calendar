@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <!-- Android Worker library was getting this, now that it is disabled we
          will get it so users won't noticed again when Worker is enabled -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -135,11 +137,12 @@
 
         <service
             android:name=".service.ApplicationService"
+            android:enabled="true"
             android:label="Calendar Service" />
 
-		<service
+        <service
             android:name=".service.AthanNotification"
-            android:label="Athan Service"/>
+            android:label="Athan Service" />
 
         <service
             android:name=".service.PersianCalendarTileService"

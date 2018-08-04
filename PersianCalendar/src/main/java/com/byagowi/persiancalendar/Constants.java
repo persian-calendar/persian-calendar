@@ -82,6 +82,7 @@ public class Constants {
     public static final String BROADCAST_FIELD_SELECT_DAY = "BROADCAST_FIELD_SELECT_DAY";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
+    public static final String BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP";
     public static final String KEY_EXTRA_PRAYER_KEY = "prayer_name";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
