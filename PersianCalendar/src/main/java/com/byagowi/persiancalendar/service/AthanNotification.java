@@ -103,15 +103,13 @@ public class AthanNotification extends Service {
 
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
 
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
+            new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     notificationManager.cancel(NOTIFICATION_ID);
                     stopSelf();
                 }
-            };
-            timer.schedule(task, TimeUnit.MINUTES.toMillis(5));
+            }, TimeUnit.MINUTES.toMillis(5));
         }
 
 
