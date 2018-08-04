@@ -1174,9 +1174,14 @@ public class Utils {
 
     private static String defaultSoundUri = "android.resource://com.byagowi.persiancalendar/" + R.raw.abdulbasit;
 
-    static public Uri getAthanUri(Context context) {
-        return Uri.parse(PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_ATHAN_URI, defaultSoundUri));
+    static public Uri getDefaultAthanUri() {
+        return Uri.parse(defaultSoundUri);
+    }
+
+    static public Uri getCustomAthanUri(Context context) {
+        String uri = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_ATHAN_URI, "");
+        return TextUtils.isEmpty(uri) ? null : Uri.parse(uri);
     }
 
     static public @StringRes

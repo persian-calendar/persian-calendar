@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -124,8 +123,12 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                        Settings.System.DEFAULT_NOTIFICATION_URI);
+                Uri customAthanUri = Utils.getCustomAthanUri(getContext());
+                if (customAthanUri != null) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri);
+                }
                 startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
                 return true;
             case "pref_key_ringtone_default":
