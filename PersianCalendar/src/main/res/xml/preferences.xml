@@ -239,19 +239,19 @@
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
-        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
-            android:icon="@drawable/ic_volume_setting"
-            android:key="AthanVolume"
-            android:negativeButtonText="@string/cancel"
-            android:summary="@string/athan_volume_summary"
-            android:title="@string/athan_volume" />
-
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:icon="@drawable/ic_notification_setting"
             android:key="NotificationAthan"
             android:summary="@string/enable_notification_athan"
             android:title="@string/notification_athan" />
+
+        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:icon="@drawable/ic_volume_setting"
+            android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_volume_summary"
+            android:title="@string/athan_volume" />
 
         <androidx.preference.Preference
             android:icon="@drawable/ic_volume_setting"

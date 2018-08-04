@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
@@ -46,6 +47,11 @@ public class AthanNotification extends Service {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel =
                         new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
@@ -54,6 +60,7 @@ public class AthanNotification extends Service {
                 AudioAttributes att = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .setLegacyStreamType(AudioManager.STREAM_ALARM)
                         .build();
                 notificationChannel.setDescription(getString(R.string.app_name));
                 notificationChannel.enableLights(true);
@@ -73,8 +80,8 @@ public class AthanNotification extends Service {
                     NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.kaaba)
-                    .setSound(Utils.getAthanUri(getApplicationContext()))
+                    .setSmallIcon(R.drawable.sun)
+                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
