@@ -82,6 +82,7 @@ import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
+import static com.byagowi.persiancalendar.Constants.BROADCAST_UPDATE_APP;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
@@ -1136,15 +1137,17 @@ public class Utils {
         }
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int id,
+    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), id, athanGap);
+        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), ord, athanGap);
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int id,
+    static private int ALARMS_BASE_ID = 2000;
+
+    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.setTimeInMillis(timeInMillis - athanGap);
@@ -1157,7 +1160,8 @@ public class Utils {
             Intent intent = new Intent(context, BroadcastReceivers.class);
             intent.setAction(BROADCAST_ALARM);
             intent.putExtra(KEY_EXTRA_PRAYER_KEY, prayTime.name());
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                    ALARMS_BASE_ID + ord, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
@@ -1458,22 +1462,36 @@ public class Utils {
 //                changeDateWorker).enqueue();
 //    }
 
+    static private final int LOAD_APP_ID = 1000;
+    static private final int HOURLY_APP_ID = 1010;
 
     static public void loadApp(Context context) {
 //        if (!goForWorker()) {
         try {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager == null) return;
+
             Calendar startTime = Calendar.getInstance();
             startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 0);
             startTime.set(Calendar.SECOND, 1);
             startTime.add(Calendar.DATE, 1);
-            Intent intent = new Intent(context, BroadcastReceivers.class);
-            intent.setAction(BROADCAST_RESTART_APP);
-            // 1000, so won't conflicted with Athan ids
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            if (alarmManager != null) {
-                alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), pendingIntent);
+
+            PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(context, LOAD_APP_ID,
+                    new Intent(context, BroadcastReceivers.class).setAction(BROADCAST_RESTART_APP),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), dailyPendingIntent);
+
+            // There are simpler triggers on older Androids like SCREEN_ON but they
+            // are not available anymore, lets register an hourly alarm for >= Oreo
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                PendingIntent hourlyPendingIntent = PendingIntent.getBroadcast(context, LOAD_APP_ID,
+                        new Intent(context, BroadcastReceivers.class).setAction(BROADCAST_UPDATE_APP),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                alarmManager.setInexactRepeating(AlarmManager.RTC,
+                        startTime.getTimeInMillis(),
+                        AlarmManager.INTERVAL_HOUR, hourlyPendingIntent);
             }
         } catch (Exception e) {
             Log.e(TAG, "loadApp fail", e);
