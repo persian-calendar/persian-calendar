@@ -28,7 +28,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 Author: Ebrahim Byagowi (ebraminio)
 Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222), Hamidreza Bayat (@HrBDev), Mehdi Dimyadi (@MEHDIMYADI)
-Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi), Masood Fallahpoor (MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Alireza Afkar (@alirezaafkar), Muhammad Shuaib (@yethrosh)
+Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi), Masood Fallahpoor (MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Alireza Afkar (@alirezaafkar), Muhammad Shuaib (@yethrosh), Aysha Aminnejad (@aysha319)
 Icon design and Athan backgrounds: Mehrara Abedi
 Previous designers: Behdad Pournader, Iman Soltanian
 

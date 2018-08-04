@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.RawRes;
@@ -1490,7 +1491,8 @@ public class Utils {
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
                 alarmManager.setInexactRepeating(AlarmManager.RTC,
-                        startTime.getTimeInMillis(),
+                        // Start from one hour from now
+                        Calendar.getInstance().getTimeInMillis() + TimeUnit.HOURS.toMillis(1),
                         AlarmManager.INTERVAL_HOUR, hourlyPendingIntent);
             }
         } catch (Exception e) {
