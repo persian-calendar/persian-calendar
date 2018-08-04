@@ -47,27 +47,27 @@ public class AthanNotification extends Service {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager != null) {
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
-            }
+//            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//            if (audioManager != null) {
+//                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
+//            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel =
                         new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
                                 NotificationManager.IMPORTANCE_DEFAULT);
 
-                AudioAttributes att = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .setLegacyStreamType(AudioManager.STREAM_ALARM)
-                        .build();
+//                AudioAttributes att = new AudioAttributes.Builder()
+//                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+//                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+//                        .setLegacyStreamType(AudioManager.STREAM_ALARM)
+//                        .build();
                 notificationChannel.setDescription(getString(R.string.app_name));
                 notificationChannel.enableLights(true);
                 notificationChannel.setLightColor(Color.GREEN);
                 notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
                 notificationChannel.enableVibration(true);
-                notificationChannel.setSound(Utils.getAthanUri(getApplicationContext()), att);
+//                notificationChannel.setSound(Utils.getAthanUri(getApplicationContext()), att);
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
@@ -81,9 +81,12 @@ public class AthanNotification extends Service {
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.sun)
-                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
+//                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
                     .setContentTitle(title)
                     .setContentText(subtitle);
+
+            notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
+            notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
                 RemoteViews cv = new RemoteViews(getApplicationContext().getPackageName(),
