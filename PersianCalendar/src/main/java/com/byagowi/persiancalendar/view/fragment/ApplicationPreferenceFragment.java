@@ -69,7 +69,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         super.onDestroyView();
     }
 
-    public void updateAthanPreferencesState() {
+    private void updateAthanPreferencesState() {
         boolean locationEmpty = Utils.getCoordinate(getContext()) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
@@ -111,24 +111,25 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        if (preference.getKey().equals("pref_key_ringtone")) {
-            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
-            startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
-            return true;
-        } else if (preference.getKey().equals("pref_key_ringtone_default")) {
-            SharedPreferences.Editor editor = PreferenceManager
-                    .getDefaultSharedPreferences(getContext()).edit();
-            editor.remove(PREF_ATHAN_URI);
-            editor.apply();
-            Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return super.onPreferenceTreeClick(preference);
+        switch (preference.getKey()) {
+            case "pref_key_ringtone":
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Utils.getAthanUri(getContext()));
+                startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
+                return true;
+            case "pref_key_ringtone_default":
+                SharedPreferences.Editor editor = PreferenceManager
+                        .getDefaultSharedPreferences(getContext()).edit();
+                editor.remove(PREF_ATHAN_URI);
+                editor.apply();
+                Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onPreferenceTreeClick(preference);
         }
     }
 
