@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.changeAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
         if (!creationDate.equals(Utils.getGregorianToday())) {
             restartActivity(menuPosition);
