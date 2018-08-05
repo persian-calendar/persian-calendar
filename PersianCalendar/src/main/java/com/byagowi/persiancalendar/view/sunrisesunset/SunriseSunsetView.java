@@ -238,8 +238,8 @@ public class SunriseSunsetView extends View {
 
         mLabelPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(Utils.getFormattedClock(mMiddayTime),
-                mBoardRectF.centerX() - mLabelHorizontalOffset, //FIXME, why 10?
-                mBoardRectF.top + 10 * mLabelVerticalOffset, mLabelPaint);
+                mBoardRectF.centerX() - mLabelHorizontalOffset,
+                mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
         baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset;
