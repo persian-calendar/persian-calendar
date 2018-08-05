@@ -41,14 +41,18 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             ringtone.setStreamType(AudioManager.STREAM_ALARM);
             ringtone.play();
         } else {
+            MediaPlayer player = new MediaPlayer();
             try {
-                MediaPlayer player = new MediaPlayer();
-                player.setDataSource(context, Utils.getDefaultAthanUri());
+                player.setDataSource(context, Utils.getDefaultAthanUri(context));
                 player.setAudioStreamType(AudioManager.STREAM_ALARM);
                 player.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
                 player.start();
                 mediaPlayer = player;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
