@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import calendar.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -567,7 +566,7 @@ public class CalendarFragment extends Fragment
     }
 
     public void bringDate(long jdn) {
-        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
         AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
@@ -604,22 +603,24 @@ public class CalendarFragment extends Fragment
     public void onPageScrollStateChanged(int state) {
     }
 
+    private SearchView mSearchView;
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setOnSearchClickListener(v -> {
-            SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        mSearchView.setOnSearchClickListener(v -> {
+            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
             searchAutoComplete.setHint(R.string.search_in_events);
             SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
             if (searchManager == null) {
                 return;
             }
 
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
                     R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
@@ -663,7 +664,7 @@ public class CalendarFragment extends Fragment
                     }
                     bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 }
-                searchView.onActionViewCollapsed();
+                mSearchView.onActionViewCollapsed();
             });
         });
     }
@@ -689,5 +690,13 @@ public class CalendarFragment extends Fragment
 
     public int getViewPagerPosition() {
         return viewPagerPosition;
+    }
+
+    public boolean closeSearch() {
+        if (mSearchView != null && !mSearchView.isIconified()) {
+            mSearchView.onActionViewCollapsed();
+            return true;
+        }
+        return false;
     }
 }

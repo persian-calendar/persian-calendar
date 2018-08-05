@@ -156,7 +156,7 @@
         <item>Gregorian Calendar</item>
     </string-array>
 
-    <!-- Should be matched with CalendarTypeEnum -->
+    <!-- Should be matched with CalendarType -->
     <string-array name="calendar_values" translatable="false">
         <item>SHAMSI</item>
         <item>ISLAMIC</item>

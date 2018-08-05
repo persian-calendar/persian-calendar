@@ -35,8 +35,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
-import com.byagowi.persiancalendar.enums.SeasonEnum;
+import calendar.CalendarType;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
@@ -216,7 +215,7 @@ public class Utils {
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
-    static private CalendarTypeEnum mainCalendar;
+    static private CalendarType mainCalendar;
     static private String comma;
     static private boolean showWeekOfYear;
     static private int weekStartOffset;
@@ -248,7 +247,7 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
-        mainCalendar = CalendarTypeEnum.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
+        mainCalendar = CalendarType.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
         comma = language.equals(LANG_EN_US) ? "," : "،";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
@@ -350,11 +349,11 @@ public class Utils {
         return new CivilDate(makeCalendarFromDate(new Date()));
     }
 
-    static public CalendarTypeEnum getMainCalendar() {
+    static public CalendarType getMainCalendar() {
         return mainCalendar;
     }
 
-    static public AbstractDate getTodayOfCalendar(CalendarTypeEnum calendar) {
+    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
         switch (calendar) {
             case ISLAMIC:
                 return getIslamicToday();
@@ -366,7 +365,7 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
+    static public AbstractDate getDateOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
                 return new IslamicDate(year, month, day);
@@ -378,7 +377,7 @@ public class Utils {
         }
     }
 
-    static public long getJdnOfCalendar(CalendarTypeEnum calendar, int year, int month, int day) {
+    static public long getJdnOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.islamicToJdn(year, month, day);
@@ -390,7 +389,7 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateFromJdnOfCalendar(CalendarTypeEnum calendar, long jdn) {
+    static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
                 return DateConverter.jdnToIslamic(jdn);
@@ -517,7 +516,7 @@ public class Utils {
                 formatNumber(date.getYear());
     }
 
-    static public String dateStringOfOtherCalendar(CalendarTypeEnum calendar, long jdn) {
+    static public String dateStringOfOtherCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
                 return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
@@ -1175,12 +1174,12 @@ public class Utils {
         }
     }
 
-    // https://stackoverflow.com/a/27788209/1414809
+    // https://stackoverflow.com/a/27788209
     private static Uri resourceToUri(Context context, int resID) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(resID) + '/' +
                 context.getResources().getResourceTypeName(resID) + '/' +
-                context.getResources().getResourceEntryName(resID) );
+                context.getResources().getResourceEntryName(resID));
     }
 
     static public Uri getDefaultAthanUri(Context context) {
@@ -1362,36 +1361,19 @@ public class Utils {
         }
     }
 
-    static public SeasonEnum getSeason() {
-        int month = getToday().getMonth();
-
-        if (month < 4) {
-            return SeasonEnum.SPRING;
-
-        } else if (month < 7) {
-            return SeasonEnum.SUMMER;
-
-        } else if (month < 10) {
-            return SeasonEnum.FALL;
-
-        } else {
-            return SeasonEnum.WINTER;
-        }
-    }
-
     // based on R.array.calendar_type order
-    static public CalendarTypeEnum calendarTypeFromPosition(int position) {
+    static public CalendarType calendarTypeFromPosition(int position) {
         switch (position) {
             case 0:
-                return CalendarTypeEnum.SHAMSI;
+                return CalendarType.SHAMSI;
             case 1:
-                return CalendarTypeEnum.ISLAMIC;
+                return CalendarType.ISLAMIC;
             default:
-                return CalendarTypeEnum.GREGORIAN;
+                return CalendarType.GREGORIAN;
         }
     }
 
-    static public int positionFromCalendarType(CalendarTypeEnum calendar) {
+    static public int positionFromCalendarType(CalendarType calendar) {
         switch (calendar) {
             case SHAMSI:
                 return 0;

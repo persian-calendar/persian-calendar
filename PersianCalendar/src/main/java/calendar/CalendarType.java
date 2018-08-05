@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.enums;
+package calendar;
 
 /**
  * Calendars Types
@@ -6,6 +6,6 @@ package com.byagowi.persiancalendar.enums;
  * @author ebraminio
  */
 // So vital, don't ever change names of these
-public enum CalendarTypeEnum {
+public enum CalendarType {
     SHAMSI, ISLAMIC, GREGORIAN
 }
