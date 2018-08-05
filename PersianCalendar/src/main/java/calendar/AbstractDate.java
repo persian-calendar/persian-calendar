@@ -49,6 +49,7 @@ public abstract class AbstractDate {
                 } else {
                     return new IslamicDate(Calendar.getInstance(zone, aLocale));
                 }
+            default:
             case GREGORIAN:
                 if (calendar != null) {
                     return new CivilDate(calendar);
@@ -56,7 +57,6 @@ public abstract class AbstractDate {
                     return new CivilDate(Calendar.getInstance(zone, aLocale));
                 }
         }
-        return new CivilDate(Calendar.getInstance(zone, aLocale));
     }
 
     public void setDate(int year, int month, int day) {
