@@ -9,13 +9,7 @@ public class IslamicDate extends AbstractDate {
     private int day;
     private int month;
     private int year;
-    
-    @Override
-    @Constants.CalendarType
-    public int getType()
-    {
-        return Constants.ISLAMIC_CALENDAR;
-    }
+   
     
        public IslamicDate()
     {
