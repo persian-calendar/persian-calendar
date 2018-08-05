@@ -9,6 +9,63 @@ package calendar;
  * @author ebraminio
  */
 public abstract class AbstractDate {
+    
+    public static AbstractDate getInstance()
+    {
+        return getDateImp(null,null,null,Constants.CIVIL_CALENDAR);
+    }
+    
+    public static AbstractDate getInstance(@Constants.CalendarType int type)
+    {
+        return getDateImp(null,TimeZone.getDefault(),Locale.getDefault(),type);
+    }
+
+    public static AbstractDate getInstance(TimeZone zone,@Constants.CalendarType int type)
+    {
+        return  getDateImp(null,zone,Locale.getDefault(),type);
+    }
+
+    public static AbstractDate getInstance(Calendar calendar,@Constants.CalendarType int type)
+    {
+        return getDateImp(calendar,null,null,type);
+    }
+
+    public static AbstractDate getInstance(TimeZone zone,Locale aLocale,@Constants.CalendarType int type)
+    {
+        return getDateImp(null,zone,aLocale,type);
+    }
+
+   private static AbstractDate getDateImp(Calendar calendar,TimeZone zone,Locale aLocale,@Constants.CalendarType int type)
+   {
+       if(type== Constants.PERSIAN_CALENDAR) {
+            if(calendar!=null) {
+                return new PersianDate(calendar);
+            }
+            else {
+                return new PersianDate(Calendar.getInstance(zone, aLocale));
+            }
+       }
+       else if(type== Constants.ISLAMIC_CALENDAR) {
+           if(calendar!=null) {
+               return new IslamicDate(calendar);
+           }
+           else {
+               return new IslamicDate(Calendar.getInstance(zone, aLocale));
+           }
+       }
+       else if(type== Constants.CIVIL_CALENDAR)
+       {
+           if(calendar!=null) {
+               return new CivilDate(calendar);
+           }
+           else {
+               return new CivilDate(Calendar.getInstance(zone, aLocale));
+           }
+       }
+       return new CivilDate(Calendar.getInstance(zone, aLocale));
+   }
+    
+
 
     public void setDate(int year, int month, int day) {
         setYear(year);
