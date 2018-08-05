@@ -1180,7 +1180,7 @@ public class Utils {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(resID) + '/' +
                 context.getResources().getResourceTypeName(resID) + '/' +
-                context.getResources().getResourceEntryName(resID) );
+                context.getResources().getResourceEntryName(resID));
     }
 
     static public Uri getDefaultAthanUri(Context context) {

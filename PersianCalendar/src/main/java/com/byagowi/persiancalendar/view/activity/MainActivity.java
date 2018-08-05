@@ -271,6 +271,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else if (menuPosition != DEFAULT) {
             selectItem(DEFAULT);
         } else {
+            CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
+                    .findFragmentByTag(CalendarFragment.class.getName());
+
+            if (calendarFragment != null) {
+                if (calendarFragment.closeSearch()) {
+                    return;
+                }
+            }
+
             finish();
         }
     }
