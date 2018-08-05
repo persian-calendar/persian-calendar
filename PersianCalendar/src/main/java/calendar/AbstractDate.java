@@ -65,7 +65,7 @@ public abstract class AbstractDate {
        return new CivilDate(Calendar.getInstance(zone, aLocale));
    }
     
-    public abstract @Constants.CalendarType int getType();
+
 
     public void setDate(int year, int month, int day) {
         setYear(year);
