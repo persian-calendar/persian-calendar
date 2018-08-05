@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.github.praytimes.Coordinate;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -72,8 +73,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         return null;
     }
 
-    static private String getSeason() {
+    private String getSeason() {
+        boolean isSouthernHemisphere = false;
+        Coordinate coordinate = Utils.getCoordinate(mainActivity);
+        if (coordinate != null && coordinate.getLatitude() < 0) {
+            isSouthernHemisphere = true;
+        }
+
         int month = Utils.getToday().getMonth();
+        if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
         if (month < 4) return "SPRING";
         else if (month < 7) return "SUMMER";
