@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import calendar.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private int startingDayOfWeek;
 
     private void fillTheFields() {
-        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
         typedDate = Utils.getTodayOfCalendar(mainCalendar);
         int month = typedDate.getMonth() - offset;

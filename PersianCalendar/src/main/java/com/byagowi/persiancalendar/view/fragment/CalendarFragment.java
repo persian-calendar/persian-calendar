@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import calendar.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -566,7 +566,7 @@ public class CalendarFragment extends Fragment
     }
 
     public void bringDate(long jdn) {
-        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
         AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =

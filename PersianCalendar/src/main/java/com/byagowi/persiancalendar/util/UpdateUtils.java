@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
-import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
+import calendar.CalendarType;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
@@ -42,7 +42,7 @@ public class UpdateUtils {
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
-        CalendarTypeEnum mainCalendar = Utils.getMainCalendar();
+        CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
         long jdn = Utils.getJdnDate(date);
 
