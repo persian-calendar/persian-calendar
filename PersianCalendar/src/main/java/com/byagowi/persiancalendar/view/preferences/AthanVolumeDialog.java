@@ -2,13 +2,17 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.view.View;
 import android.widget.SeekBar;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
+
+import java.io.IOException;
 
 import androidx.preference.PreferenceDialogFragmentCompat;
 
@@ -18,6 +22,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     private int volume;
     private AudioManager audioManager;
     private Ringtone ringtone;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected View onCreateDialogView(Context context) {
@@ -25,15 +30,28 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
         final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
 
-        ringtone = RingtoneManager.getRingtone(context, Utils.getAthanUri(context));
-        ringtone.setStreamType(AudioManager.STREAM_ALARM);
-
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if (audioManager != null) {
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.getVolume(), 0);
         }
 
-        ringtone.play();
+        Uri customAthanUri = Utils.getCustomAthanUri(context);
+        if (customAthanUri != null) {
+            ringtone = RingtoneManager.getRingtone(context, customAthanUri);
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+            ringtone.play();
+        } else {
+            try {
+                MediaPlayer player = new MediaPlayer();
+                player.setDataSource(context, Utils.getDefaultAthanUri());
+                player.setAudioStreamType(AudioManager.STREAM_ALARM);
+                player.prepare();
+                player.start();
+                mediaPlayer = player;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         SeekBar seekBar = view.findViewById(R.id.sbVolumeSlider);
 
@@ -53,8 +71,18 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (!ringtone.isPlaying()) {
+                if (ringtone != null && !ringtone.isPlaying()) {
                     ringtone.play();
+                }
+                if (mediaPlayer != null) {
+                    try {
+                        if (!mediaPlayer.isPlaying()) {
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                        }
+                    } catch (IOException | IllegalStateException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -65,7 +93,19 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
     @Override
     public void onDialogClosed(boolean positiveResult) {
         final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
-        ringtone.stop();
+        if (ringtone != null) {
+            ringtone.stop();
+        }
+        if (mediaPlayer != null) {
+            try {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+        }
         if (positiveResult) {
             athanPref.setVolume(volume);
         }
