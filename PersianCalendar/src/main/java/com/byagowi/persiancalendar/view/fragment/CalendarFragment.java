@@ -461,8 +461,15 @@ public class CalendarFragment extends Fragment
         if (isToday) {
             mSunriseSunsetView.setSunriseTime(sunriseClock);
             mSunriseSunsetView.setSunsetTime(maghribClock);
+
+            if (isOwghatOpen) {
+                mSunriseSunsetView.setVisibility(View.VISIBLE);
+                mSunriseSunsetView.animate();
+            }
         }
     }
+
+    private boolean isOwghatOpen = false;
 
     @Override
     public void onClick(View v) {
@@ -493,6 +500,7 @@ public class CalendarFragment extends Fragment
                 sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = Utils.getTodayJdn();
