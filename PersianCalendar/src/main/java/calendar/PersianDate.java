@@ -12,11 +12,7 @@ public class PersianDate extends AbstractDate {
     private int month;
     private int day;
 
-    @Override
-    @Constants.CalendarType
-    public int getType() {
-        return Constants.PERSIAN_CALENDAR;
-    }
+
     
     public PersianDate()
     {
