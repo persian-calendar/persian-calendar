@@ -187,7 +187,7 @@
                     android:layout_margin="10dp"
                     android:layout_width="match_parent"
                     app:ssv_label_text_color="#FF4081"
-                    app:ssv_label_text_size="16sp"
+                    app:ssv_label_text_size="@dimen/text_size_note"
                     app:ssv_label_horizontal_gap="12dp"
                     app:ssv_label_vertical_gap="2dp"
                     app:ssv_shadow_color="#809CCC65"
