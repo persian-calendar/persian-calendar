@@ -15,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Clock;
@@ -77,8 +76,6 @@ public class SunriseSunsetView extends View {
     private Clock mSunriseTime;
     private Clock mMiddayTime;
     private Clock mSunsetTime;
-
-    private boolean mIsRtl;
 
     private RectF mBoardRectF = new RectF();
 
@@ -151,11 +148,6 @@ public class SunriseSunsetView extends View {
 
         mLabelPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         prepareLabelPaint();
-
-        mIsRtl = false;
-        if (false) {
-            mIsRtl = Utils.isLocaleRTL();
-        }
     }
 
     private void prepareTrackPaint() {
@@ -207,15 +199,9 @@ public class SunriseSunsetView extends View {
         RectF rectF = new RectF(mBoardRectF.left, mBoardRectF.top, mBoardRectF.right, mBoardRectF.bottom + mBoardRectF.height());
         float curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * (float) Math.cos(Math.PI * mRatio);
 
-        if (mIsRtl) {
-            path.moveTo(curPointX, endY);
-            path.arcTo(rectF, 0, -180 * mRatio);
-            path.lineTo(rectF.right, endY);
-        } else {
-            path.moveTo(0, endY);
-            path.arcTo(rectF, 180, 180 * mRatio);
-            path.lineTo(curPointX, endY);
-        }
+        path.moveTo(0, endY);
+        path.arcTo(rectF, 180, 180 * mRatio);
+        path.lineTo(curPointX, endY);
         path.close();
         canvas.drawPath(path, mShadowPaint);
         canvas.restore();
@@ -241,13 +227,8 @@ public class SunriseSunsetView extends View {
         canvas.save();
 
         String leftLabel, rightLabel;
-        if (mIsRtl) {
-            rightLabel = Utils.getFormattedClock(mSunriseTime);
-            leftLabel = Utils.getFormattedClock(mSunsetTime);
-        } else {
-            leftLabel = Utils.getFormattedClock(mSunriseTime);
-            rightLabel = Utils.getFormattedClock(mSunsetTime);
-        }
+        leftLabel = Utils.getFormattedClock(mSunriseTime);
+        rightLabel = Utils.getFormattedClock(mSunsetTime);
 
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
@@ -256,7 +237,7 @@ public class SunriseSunsetView extends View {
         canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText( Utils.getFormattedClock(mMiddayTime),
+        canvas.drawText(Utils.getFormattedClock(mMiddayTime),
                 mBoardRectF.centerX() - mLabelHorizontalOffset, //FIXME, why 10?
                 mBoardRectF.top + 10 * mLabelVerticalOffset, mLabelPaint);
 
@@ -340,10 +321,6 @@ public class SunriseSunsetView extends View {
         float ratio = 1.0f * (currentTime - sunrise) / (sunset - sunrise);
         ratio = ratio <= 0 ? 0 : (ratio > 1.0f ? 1 : ratio);
         float fromRatio = 0;
-        if (mIsRtl) {
-            ratio = 1f - ratio;
-            fromRatio = 1f;
-        }
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", fromRatio, ratio);
         animator.setDuration(1500L);
         animator.setInterpolator(new LinearInterpolator());
