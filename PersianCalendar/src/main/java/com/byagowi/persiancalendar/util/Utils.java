@@ -1174,7 +1174,7 @@ public class Utils {
         }
     }
 
-    // https://stackoverflow.com/a/27788209/1414809
+    // https://stackoverflow.com/a/27788209
     private static Uri resourceToUri(Context context, int resID) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(resID) + '/' +
