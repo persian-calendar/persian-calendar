@@ -72,6 +72,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         return null;
     }
 
+    static private String getSeason() {
+        int month = Utils.getToday().getMonth();
+
+        if (month < 4) return "SPRING";
+        else if (month < 7) return "SUMMER";
+        else if (month < 10) return "FALL";
+        else return "WINTER";
+    }
+
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (!isPositionHeader(position)) {
@@ -94,20 +103,20 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
         } else {
 
-            switch (Utils.getSeason()) {
-                case SPRING:
+            switch (getSeason()) {
+                case "SPRING":
                     holder.imageView.setImageResource(R.drawable.spring);
                     break;
 
-                case SUMMER:
+                case "SUMMER":
                     holder.imageView.setImageResource(R.drawable.summer);
                     break;
 
-                case FALL:
+                case "FALL":
                     holder.imageView.setImageResource(R.drawable.fall);
                     break;
 
-                case WINTER:
+                case "WINTER":
                     holder.imageView.setImageResource(R.drawable.winter);
                     break;
             }

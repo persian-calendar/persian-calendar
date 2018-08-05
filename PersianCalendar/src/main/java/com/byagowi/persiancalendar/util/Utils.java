@@ -36,7 +36,6 @@ import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import calendar.CalendarType;
-import com.byagowi.persiancalendar.enums.SeasonEnum;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
@@ -1359,23 +1358,6 @@ public class Utils {
         if (clipboardService != null) {
             clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
             Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    static public SeasonEnum getSeason() {
-        int month = getToday().getMonth();
-
-        if (month < 4) {
-            return SeasonEnum.SPRING;
-
-        } else if (month < 7) {
-            return SeasonEnum.SUMMER;
-
-        } else if (month < 10) {
-            return SeasonEnum.FALL;
-
-        } else {
-            return SeasonEnum.WINTER;
         }
     }
 
