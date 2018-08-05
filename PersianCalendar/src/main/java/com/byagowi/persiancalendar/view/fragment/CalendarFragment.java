@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.enums.CalendarTypeEnum;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
+import com.byagowi.persiancalendar.view.sunrisesunset.SunriseSunsetView;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -123,7 +125,7 @@ public class CalendarFragment extends Fragment
     private LinearLayoutCompat midnightLayout;
 
     private int viewPagerPosition;
-	
+
     private SunriseSunsetView mSunriseSunsetView;
 
     @Nullable
@@ -263,7 +265,8 @@ public class CalendarFragment extends Fragment
         islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
         islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
-        if (Utils.getTodayJdn() == jdn) {
+        boolean isToday = Utils.getTodayJdn() == jdn;
+        if (isToday) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
             if (Utils.isIranTime())
@@ -273,7 +276,7 @@ public class CalendarFragment extends Fragment
             todayIcon.setVisibility(View.VISIBLE);
         }
 
-        setOwghat(civilDate);
+        setOwghat(civilDate, isToday);
         showEvent(jdn);
     }
 
@@ -430,7 +433,7 @@ public class CalendarFragment extends Fragment
         }
     }
 
-    private void setOwghat(CivilDate civilDate) {
+    private void setOwghat(CivilDate civilDate, boolean isToday) {
         if (coordinate == null) {
             owghat.setVisibility(View.GONE);
             return;
@@ -442,52 +445,32 @@ public class CalendarFragment extends Fragment
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
         imsakTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        fajrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.FAJR)));
+        Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
+        fajrTextView.setText(Utils.getFormattedClock(sunriseClock));
         sunriseTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
         dhuhrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.DHUHR)));
         asrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
         sunsetTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        maghribTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
+        Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
+        maghribTextView.setText(Utils.getFormattedClock(maghribClock));
         ishaTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         midnightTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-		
-        SunViews();
-		
-    }
-
-    private void SunViews() {
-
-        int sunriseHour = 6;
-        int sunriseMinute = 17;
-        int sunsetHour = 18;
-        int sunsetMinute = 32;
 
         mSunriseSunsetView = getView().findViewById(R.id.ssv);
-        mSunriseSunsetView.setLabelFormatter(new SunriseSunsetLabelFormatter() {
-            @Override
-            public String formatSunriseLabel(@NonNull Time sunrise) {
-                return formatLabel(sunrise);
-            }
+        mSunriseSunsetView.setVisibility(View.GONE);
+        if (isToday) {
+            mSunriseSunsetView.setSunriseTime(sunriseClock);
+            mSunriseSunsetView.setSunsetTime(maghribClock);
 
-            @Override
-            public String formatSunsetLabel(@NonNull Time sunset) {
-                return formatLabel(sunset);
+            if (isOwghatOpen) {
+                mSunriseSunsetView.setVisibility(View.VISIBLE);
+                mSunriseSunsetView.animate();
             }
-
-            private String formatLabel(Time time) {
-                return String.format(Locale.getDefault(), "%d:%d", time.hour, time.minute);
-            }
-        });
-
-        refreshSunV(sunriseHour, sunriseMinute, sunsetHour, sunsetMinute);
         }
-
-    private void refreshSunV(int sunriseHour, int sunriseMinute, int sunsetHour, int sunsetMinute) {
-        mSunriseSunsetView.setSunriseTime(new Time(sunriseHour, sunriseMinute));
-        mSunriseSunsetView.setSunsetTime(new Time(sunsetHour, sunsetMinute));
-        mSunriseSunsetView.startAnimate();
     }
-	
+
+    private boolean isOwghatOpen = false;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -517,6 +500,17 @@ public class CalendarFragment extends Fragment
                 sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                isOwghatOpen = isOpenOwghatCommand;
+
+                if (lastSelectedJdn == -1)
+                    lastSelectedJdn = Utils.getTodayJdn();
+
+                if (lastSelectedJdn == Utils.getTodayJdn() && isOpenOwghatCommand) {
+                    mSunriseSunsetView.setVisibility(View.VISIBLE);
+                    mSunriseSunsetView.startAnimate();
+                } else {
+                    mSunriseSunsetView.setVisibility(View.GONE);
+                }
 
                 break;
 

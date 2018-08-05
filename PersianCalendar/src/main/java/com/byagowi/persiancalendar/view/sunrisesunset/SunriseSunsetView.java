@@ -15,10 +15,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.Utils;
+import com.github.praytimes.Clock;
+
 import java.util.Calendar;
 import java.util.Locale;
-
-import com.byagowi.persiancalendar.R;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -29,13 +31,16 @@ public class SunriseSunsetView extends View {
     int DEFAULT_TRACK_COLOR = Color.WHITE;
     private static final int DEFAULT_TRACK_WIDTH_PX = 4;
 
-    private static final @ColorInt int DEFAULT_SUN_COLOR = Color.YELLOW;
+    private static final @ColorInt
+    int DEFAULT_SUN_COLOR = Color.YELLOW;
     private static final int DEFAULT_SUN_RADIUS_PX = 20;
     private static final int DEFAULT_SUN_STROKE_WIDTH_PX = 4;
 
-    private static final @ColorInt int DEFAULT_SHADOW_COLOR = Color.parseColor("#32FFFFFF");
+    private static final @ColorInt
+    int DEFAULT_SHADOW_COLOR = Color.parseColor("#32FFFFFF");
 
-    private static final @ColorInt int DEFAULT_LABEL_TEXT_COLOR = Color.WHITE;
+    private static final @ColorInt
+    int DEFAULT_LABEL_TEXT_COLOR = Color.WHITE;
     private static final int DEFAULT_LABEL_TEXT_SIZE = 40;
     private static final int DEFAULT_LABEL_VERTICAL_OFFSET_PX = 5;
     private static final int DEFAULT_LABEL_HORIZONTAL_OFFSET_PX = 20;
@@ -43,34 +48,35 @@ public class SunriseSunsetView extends View {
     private float mRatio;
 
     private Paint mTrackPaint;
-    private @ColorInt int mTrackColor = DEFAULT_TRACK_COLOR;
+    private @ColorInt
+    int mTrackColor = DEFAULT_TRACK_COLOR;
     private int mTrackWidth = DEFAULT_TRACK_WIDTH_PX;
     private PathEffect mTrackPathEffect = new DashPathEffect(new float[]{15, 15}, 1);
     private float mTrackRadius;
 
     private Paint mShadowPaint;
-    private @ColorInt int mShadowColor = DEFAULT_SHADOW_COLOR;
+    private @ColorInt
+    int mShadowColor = DEFAULT_SHADOW_COLOR;
 
     private Paint mSunPaint;
-    private @ColorInt int mSunColor = DEFAULT_SUN_COLOR;
+    private @ColorInt
+    int mSunColor = DEFAULT_SUN_COLOR;
     private float mSunRadius = DEFAULT_SUN_RADIUS_PX;
     private Paint.Style mSunPaintStyle = Paint.Style.FILL;
 
     private TextPaint mLabelPaint;
     private int mLabelTextSize = DEFAULT_LABEL_TEXT_SIZE;
-    private @ColorInt int mLabelTextColor = DEFAULT_LABEL_TEXT_COLOR;
+    private @ColorInt
+    int mLabelTextColor = DEFAULT_LABEL_TEXT_COLOR;
     private int mLabelVerticalOffset = DEFAULT_LABEL_VERTICAL_OFFSET_PX;
     private int mLabelHorizontalOffset = DEFAULT_LABEL_HORIZONTAL_OFFSET_PX;
 
     private static final int MINIMAL_TRACK_RADIUS_PX = 300;
 
-    private Time mSunriseTime;
-
-    private Time mSunsetTime;
+    private Clock mSunriseTime;
+    private Clock mSunsetTime;
 
     private RectF mBoardRectF = new RectF();
-
-    private SunriseSunsetLabelFormatter mLabelFormatter = new SimpleSunriseSunsetLabelFormatter();
 
     public SunriseSunsetView(Context context) {
         super(context);
@@ -214,7 +220,7 @@ public class SunriseSunsetView extends View {
         prepareLabelPaint();
 
         canvas.save();
-        String sunriseStr = mLabelFormatter.formatSunriseLabel(mSunriseTime);
+        String sunriseStr = Utils.getFormattedClock(mSunriseTime);
 
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
@@ -223,7 +229,7 @@ public class SunriseSunsetView extends View {
         canvas.drawText(sunriseStr, baseLineX, baseLineY, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
-        String sunsetStr = mLabelFormatter.formatSunsetLabel(mSunsetTime);
+        String sunsetStr = Utils.getFormattedClock(mSunsetTime);
         baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset;
         canvas.drawText(sunsetStr, baseLineX, baseLineY, mLabelPaint);
         canvas.restore();
@@ -234,32 +240,24 @@ public class SunriseSunsetView extends View {
         invalidate();
     }
 
-    public void setSunriseTime(Time sunriseTime) {
+    public void setSunriseTime(Clock sunriseTime) {
         mSunriseTime = sunriseTime;
     }
 
-    public Time getSunriseTime() {
+    public Clock getSunriseTime() {
         return mSunriseTime;
     }
 
-    public void setSunsetTime(Time sunsetTime) {
+    public void setSunsetTime(Clock sunsetTime) {
         mSunsetTime = sunsetTime;
     }
 
-    public Time getSunsetTime() {
+    public Clock getSunsetTime() {
         return mSunsetTime;
     }
 
     public float getSunRadius() {
         return mSunRadius;
-    }
-
-    public SunriseSunsetLabelFormatter getLabelFormatter() {
-        return mLabelFormatter;
-    }
-
-    public void setLabelFormatter(SunriseSunsetLabelFormatter labelFormatter) {
-        mLabelFormatter = labelFormatter;
     }
 
     public void setTrackColor(@ColorInt int trackColor) {
@@ -315,7 +313,7 @@ public class SunriseSunsetView extends View {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentMinute = calendar.get(Calendar.MINUTE);
-        int currentTime = currentHour * Time.MINUTES_PER_HOUR + currentMinute;
+        int currentTime = currentHour * Clock.MINUTES_PER_HOUR + currentMinute;
         float ratio = 1.0f * (currentTime - sunrise) / (sunset - sunrise);
         ratio = ratio <= 0 ? 0 : (ratio > 1.0f ? 1 : ratio);
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", 0f, ratio);
