@@ -49,14 +49,18 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             ringtone.setStreamType(AudioManager.STREAM_ALARM);
             ringtone.play();
         } else {
+            MediaPlayer player = new MediaPlayer();
             try {
-                MediaPlayer player = new MediaPlayer();
-                player.setDataSource(this, Utils.getDefaultAthanUri());
+                player.setDataSource(this, Utils.getDefaultAthanUri(this));
                 player.setAudioStreamType(AudioManager.STREAM_ALARM);
                 player.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
                 player.start();
                 mediaPlayer = player;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

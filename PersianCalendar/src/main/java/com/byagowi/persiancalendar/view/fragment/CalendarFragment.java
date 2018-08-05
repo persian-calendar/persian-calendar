@@ -448,7 +448,8 @@ public class CalendarFragment extends Fragment
         Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
         fajrTextView.setText(Utils.getFormattedClock(sunriseClock));
         sunriseTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        dhuhrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.DHUHR)));
+        Clock midddayClock = prayTimes.get(PrayTime.DHUHR);
+        dhuhrTextView.setText(Utils.getFormattedClock(midddayClock));
         asrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
         sunsetTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
         Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
@@ -460,6 +461,7 @@ public class CalendarFragment extends Fragment
         mSunriseSunsetView.setVisibility(View.GONE);
         if (isToday) {
             mSunriseSunsetView.setSunriseTime(sunriseClock);
+            mSunriseSunsetView.setMiddayTime(midddayClock);
             mSunriseSunsetView.setSunsetTime(maghribClock);
 
             if (isOwghatOpen) {

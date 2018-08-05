@@ -7,6 +7,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -1174,10 +1175,16 @@ public class Utils {
         }
     }
 
-    private static String defaultSoundUri = "android.resource://com.byagowi.persiancalendar/" + R.raw.abdulbasit;
+    // https://stackoverflow.com/a/27788209/1414809
+    private static Uri resourceToUri(Context context, int resID) {
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                context.getResources().getResourcePackageName(resID) + '/' +
+                context.getResources().getResourceTypeName(resID) + '/' +
+                context.getResources().getResourceEntryName(resID) );
+    }
 
-    static public Uri getDefaultAthanUri() {
-        return Uri.parse(defaultSoundUri);
+    static public Uri getDefaultAthanUri(Context context) {
+        return resourceToUri(context, R.raw.abdulbasit);
     }
 
     static public Uri getCustomAthanUri(Context context) {

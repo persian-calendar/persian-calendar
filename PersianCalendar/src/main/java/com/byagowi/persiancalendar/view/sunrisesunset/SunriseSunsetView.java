@@ -74,6 +74,7 @@ public class SunriseSunsetView extends View {
     private static final int MINIMAL_TRACK_RADIUS_PX = 300;
 
     private Clock mSunriseTime;
+    private Clock mMiddayTime;
     private Clock mSunsetTime;
 
     private RectF mBoardRectF = new RectF();
@@ -124,7 +125,11 @@ public class SunriseSunsetView extends View {
 
         mTrackRadius = 1.0f * (widthSpecSize - paddingLeft - paddingRight - 2 * mSunRadius) / 2;
         int expectedHeight = (int) (mTrackRadius + mSunRadius + paddingBottom + paddingTop);
-        mBoardRectF.set(paddingLeft + mSunRadius, paddingTop + mSunRadius, widthSpecSize - paddingRight - mSunRadius, expectedHeight - paddingBottom);
+        if (false) {
+            expectedHeight /= 2;
+        }
+        mBoardRectF.set(paddingLeft + mSunRadius, paddingTop + mSunRadius,
+                widthSpecSize - paddingRight - mSunRadius, expectedHeight - paddingBottom);
         setMeasuredDimension(widthSpecSize, expectedHeight);
     }
 
@@ -220,18 +225,25 @@ public class SunriseSunsetView extends View {
         prepareLabelPaint();
 
         canvas.save();
-        String sunriseStr = Utils.getFormattedClock(mSunriseTime);
+
+        String leftLabel, rightLabel;
+        leftLabel = Utils.getFormattedClock(mSunriseTime);
+        rightLabel = Utils.getFormattedClock(mSunsetTime);
 
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
         float baseLineX = mBoardRectF.left + mSunRadius + mLabelHorizontalOffset;
         float baseLineY = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
-        canvas.drawText(sunriseStr, baseLineX, baseLineY, mLabelPaint);
+        canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint);
+
+        mLabelPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(Utils.getFormattedClock(mMiddayTime),
+                mBoardRectF.centerX() - mLabelHorizontalOffset, //FIXME, why 10?
+                mBoardRectF.top + 10 * mLabelVerticalOffset, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
-        String sunsetStr = Utils.getFormattedClock(mSunsetTime);
         baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset;
-        canvas.drawText(sunsetStr, baseLineX, baseLineY, mLabelPaint);
+        canvas.drawText(rightLabel, baseLineX, baseLineY, mLabelPaint);
         canvas.restore();
     }
 
@@ -244,20 +256,12 @@ public class SunriseSunsetView extends View {
         mSunriseTime = sunriseTime;
     }
 
-    public Clock getSunriseTime() {
-        return mSunriseTime;
+    public void setMiddayTime(Clock middayTime) {
+        mMiddayTime = middayTime;
     }
 
     public void setSunsetTime(Clock sunsetTime) {
         mSunsetTime = sunsetTime;
-    }
-
-    public Clock getSunsetTime() {
-        return mSunsetTime;
-    }
-
-    public float getSunRadius() {
-        return mSunRadius;
     }
 
     public void setTrackColor(@ColorInt int trackColor) {
@@ -316,7 +320,8 @@ public class SunriseSunsetView extends View {
         int currentTime = currentHour * Clock.MINUTES_PER_HOUR + currentMinute;
         float ratio = 1.0f * (currentTime - sunrise) / (sunset - sunrise);
         ratio = ratio <= 0 ? 0 : (ratio > 1.0f ? 1 : ratio);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", 0f, ratio);
+        float fromRatio = 0;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", fromRatio, ratio);
         animator.setDuration(1500L);
         animator.setInterpolator(new LinearInterpolator());
         animator.start();
