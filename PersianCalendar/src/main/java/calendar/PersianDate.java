@@ -12,8 +12,6 @@ public class PersianDate extends AbstractDate {
     private int month;
     private int day;
 
-
-    
     public PersianDate()
     {
         this(Calendar.getInstance());
