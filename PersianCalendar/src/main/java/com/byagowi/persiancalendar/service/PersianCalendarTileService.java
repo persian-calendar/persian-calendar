@@ -21,7 +21,8 @@ public class PersianCalendarTileService extends TileService {
     @Override
     public void onClick() {
         try {
-            startActivityAndCollapse(new Intent(this, MainActivity.class));
+            startActivityAndCollapse(new Intent(this, MainActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (Exception e) {
             Log.e("TileService", "Tile onClick fail", e);
         }
