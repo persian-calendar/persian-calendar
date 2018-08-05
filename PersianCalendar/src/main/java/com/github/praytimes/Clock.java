@@ -29,4 +29,10 @@ public class Clock {
     public int getInt() {
         return (hour * 100) + minute;
     }
+
+    public static final int MINUTES_PER_HOUR = 60;
+
+    public int transformToMinutes() {
+        return hour * MINUTES_PER_HOUR + minute;
+    }
 }
