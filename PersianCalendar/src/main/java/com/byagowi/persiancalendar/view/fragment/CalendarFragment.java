@@ -123,6 +123,8 @@ public class CalendarFragment extends Fragment
     private LinearLayoutCompat midnightLayout;
 
     private int viewPagerPosition;
+	
+    private SunriseSunsetView mSunriseSunsetView;
 
     @Nullable
     @Override
@@ -448,8 +450,44 @@ public class CalendarFragment extends Fragment
         maghribTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB)));
         ishaTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         midnightTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+		
+        SunViews();
+		
     }
 
+    private void SunViews() {
+
+        int sunriseHour = 6;
+        int sunriseMinute = 17;
+        int sunsetHour = 18;
+        int sunsetMinute = 32;
+
+        mSunriseSunsetView = getView().findViewById(R.id.ssv);
+        mSunriseSunsetView.setLabelFormatter(new SunriseSunsetLabelFormatter() {
+            @Override
+            public String formatSunriseLabel(@NonNull Time sunrise) {
+                return formatLabel(sunrise);
+            }
+
+            @Override
+            public String formatSunsetLabel(@NonNull Time sunset) {
+                return formatLabel(sunset);
+            }
+
+            private String formatLabel(Time time) {
+                return String.format(Locale.getDefault(), "%d:%d", time.hour, time.minute);
+            }
+        });
+
+        refreshSunV(sunriseHour, sunriseMinute, sunsetHour, sunsetMinute);
+        }
+
+    private void refreshSunV(int sunriseHour, int sunriseMinute, int sunsetHour, int sunsetMinute) {
+        mSunriseSunsetView.setSunriseTime(new Time(sunriseHour, sunriseMinute));
+        mSunriseSunsetView.setSunsetTime(new Time(sunsetHour, sunsetMinute));
+        mSunriseSunsetView.startAnimate();
+    }
+	
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

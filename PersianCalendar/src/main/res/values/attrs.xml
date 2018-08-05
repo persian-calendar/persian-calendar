@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SunriseSunsetView">
+        <!-- Track color -->
+        <attr name="ssv_track_color" format="color|reference"/>
+        <!-- Track width -->
+        <attr name="ssv_track_width" format="dimension"/>
+
+        <!-- Sun radius -->
+        <attr name="ssv_sun_radius" format="dimension"/>
+        <!-- Sun color -->
+        <attr name="ssv_sun_color" format="color|reference"/>
+
+        <!-- Shadow color -->
+        <attr name="ssv_shadow_color" format="color|reference"/>
+
+        <!-- Label text size -->
+        <attr name="ssv_label_text_size" format="dimension"/>
+        <!-- Label text color -->
+        <attr name="ssv_label_text_color" format="color|reference"/>
+        <!-- Label vertical offset -->
+        <attr name="ssv_label_vertical_offset" format="dimension"/>
+        <attr name="ssv_label_vertical_gap" format="dimension"/>
+        <!-- Label horizontal gap -->
+        <attr name="ssv_label_horizontal_offset" format="dimension"/>
+        <attr name="ssv_label_horizontal_gap" format="dimension"/>
+    </declare-styleable>
+</resources>
