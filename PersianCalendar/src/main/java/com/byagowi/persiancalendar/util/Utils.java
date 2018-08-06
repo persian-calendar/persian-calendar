@@ -138,6 +138,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EV
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 
 //import com.byagowi.persiancalendar.service.UpdateWorker;
 //import androidx.work.ExistingPeriodicWorkPolicy;
@@ -1481,8 +1482,8 @@ public class Utils {
             // There are simpler triggers on older Androids like SCREEN_ON but they
             // are not available anymore, lets register an hourly alarm for >= Oreo
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                PendingIntent hourlyPendingIntent = PendingIntent.getBroadcast(context,
-                        HOURLY_APP_ID,
+                PendingIntent threeHoursPendingIntent = PendingIntent.getBroadcast(context,
+                        THREE_HOURS_APP_ID,
                         new Intent(context, BroadcastReceivers.class)
                                 .setAction(BROADCAST_UPDATE_APP),
                         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1490,7 +1491,7 @@ public class Utils {
                 alarmManager.setInexactRepeating(AlarmManager.RTC,
                         // Start from one hour from now
                         Calendar.getInstance().getTimeInMillis() + TimeUnit.HOURS.toMillis(1),
-                        AlarmManager.INTERVAL_HOUR, hourlyPendingIntent);
+                        TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent);
             }
         } catch (Exception e) {
             Log.e(TAG, "loadApp fail", e);

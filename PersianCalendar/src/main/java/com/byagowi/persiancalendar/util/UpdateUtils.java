@@ -46,9 +46,10 @@ public class UpdateUtils {
         AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
         long jdn = Utils.getJdnDate(date);
 
+        Intent intent = new Intent(context, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, MainActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets

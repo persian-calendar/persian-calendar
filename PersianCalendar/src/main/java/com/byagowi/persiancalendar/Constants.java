@@ -78,7 +78,7 @@ public class Constants {
     public static final String YEAR = "year";
 
     public static final int LOAD_APP_ID = 1000;
-    public static final int HOURLY_APP_ID = 1010;
+    public static final int THREE_HOURS_APP_ID = 1010;
     public static final int ALARMS_BASE_ID = 2000;
 
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
