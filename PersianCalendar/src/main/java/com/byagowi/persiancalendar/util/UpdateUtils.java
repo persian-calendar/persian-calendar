@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
-import calendar.CalendarType;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
@@ -33,6 +32,7 @@ import java.util.List;
 
 import androidx.core.app.NotificationCompat;
 import calendar.AbstractDate;
+import calendar.CalendarType;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
@@ -46,9 +46,10 @@ public class UpdateUtils {
         AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
         long jdn = Utils.getJdnDate(date);
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets
