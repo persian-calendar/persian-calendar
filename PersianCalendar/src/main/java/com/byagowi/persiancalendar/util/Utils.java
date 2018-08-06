@@ -77,6 +77,7 @@ import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static com.byagowi.persiancalendar.Constants.ALARMS_BASE_ID;
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
@@ -104,11 +105,13 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.HOURLY_APP_ID;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.LOAD_APP_ID;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
@@ -1146,8 +1149,6 @@ public class Utils {
         setAlarm(context, prayTime, triggerTime.getTimeInMillis(), ord, athanGap);
     }
 
-    static private int ALARMS_BASE_ID = 2000;
-
     static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
@@ -1158,11 +1159,12 @@ public class Utils {
         if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
             Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
 
-            Intent intent = new Intent(context, BroadcastReceivers.class);
-            intent.setAction(BROADCAST_ALARM);
-            intent.putExtra(KEY_EXTRA_PRAYER_KEY, prayTime.name());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    ALARMS_BASE_ID + ord, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    ALARMS_BASE_ID + ord,
+                    new Intent(context, BroadcastReceivers.class)
+                            .putExtra(KEY_EXTRA_PRAYER_KEY, prayTime.name())
+                            .setAction(BROADCAST_ALARM),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
@@ -1459,9 +1461,6 @@ public class Utils {
 //                changeDateWorker).enqueue();
 //    }
 
-    static private final int LOAD_APP_ID = 1000;
-    static private final int HOURLY_APP_ID = 1010;
-
     static public void loadApp(Context context) {
 //        if (!goForWorker()) {
         try {
@@ -1482,8 +1481,10 @@ public class Utils {
             // There are simpler triggers on older Androids like SCREEN_ON but they
             // are not available anymore, lets register an hourly alarm for >= Oreo
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                PendingIntent hourlyPendingIntent = PendingIntent.getBroadcast(context, LOAD_APP_ID,
-                        new Intent(context, BroadcastReceivers.class).setAction(BROADCAST_UPDATE_APP),
+                PendingIntent hourlyPendingIntent = PendingIntent.getBroadcast(context,
+                        HOURLY_APP_ID,
+                        new Intent(context, BroadcastReceivers.class)
+                                .setAction(BROADCAST_UPDATE_APP),
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
                 alarmManager.setInexactRepeating(AlarmManager.RTC,

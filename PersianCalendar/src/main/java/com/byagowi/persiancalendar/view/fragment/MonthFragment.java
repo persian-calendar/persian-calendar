@@ -136,11 +136,15 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int value = intent.getExtras().getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
+            Bundle extras = intent.getExtras();
+
+            if (extras == null) return;
+
+            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
                 updateTitle();
 
-                long jdn = intent.getExtras().getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
+                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
                 long selectedDay = 1 + jdn - baseJdn;
                 if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
                     adapter.selectDay((int) (1 + jdn - baseJdn));

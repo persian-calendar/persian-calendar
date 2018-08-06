@@ -46,8 +46,8 @@ public class UpdateUtils {
         AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
         long jdn = Utils.getJdnDate(date);
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0, intent,
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, MainActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         //

@@ -243,11 +243,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-            intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                    CalendarAdapter.positionToOffset(position));
-            intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn);
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                    new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                            .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                                    CalendarAdapter.positionToOffset(position))
+                            .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -298,25 +298,22 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addEventOnCalendar(long jdn) {
-        Intent intent = new Intent(Intent.ACTION_INSERT);
-        intent.setData(CalendarContract.Events.CONTENT_URI);
-
         CivilDate civil = DateConverter.jdnToCivil(jdn);
-
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
-
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
 
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                time.getTimeInMillis());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                time.getTimeInMillis());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
-
         try {
-            startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+            startActivityForResult(
+                    new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
+                            .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                    time.getTimeInMillis())
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                                    time.getTimeInMillis())
+                            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
+                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
         } catch (Exception e) {
             Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
         }
@@ -339,10 +336,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
                 try {
-                    startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+                    startActivityForResult(new Intent(Intent.ACTION_VIEW)
+                                    .setData(ContentUris.withAppendedId(
+                                            CalendarContract.Events.CONTENT_URI, event.getId())),
+                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
                     Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
                 }

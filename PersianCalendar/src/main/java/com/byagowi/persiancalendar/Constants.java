@@ -77,6 +77,10 @@ public class Constants {
     public static final String MONTH = "month";
     public static final String YEAR = "year";
 
+    public static final int LOAD_APP_ID = 1000;
+    public static final int HOURLY_APP_ID = 1010;
+    public static final int ALARMS_BASE_ID = 2000;
+
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
