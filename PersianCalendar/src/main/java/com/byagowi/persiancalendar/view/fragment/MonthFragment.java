@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
-import calendar.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
+import calendar.CalendarType;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private CalendarFragment calendarFragment;
@@ -36,6 +36,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private int weekOfYearStart;
     private int weeksCount;
     private int startingDayOfWeek;
+    private long baseJdn;
+    private int monthLength;
 
     private void fillTheFields() {
         CalendarType mainCalendar = Utils.getMainCalendar();
@@ -54,8 +56,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         month += 1;
         typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
-        long baseJdn = Utils.getJdnDate(typedDate);
-        int monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
+        baseJdn = Utils.getJdnDate(typedDate);
+        monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
         int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
@@ -119,7 +121,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 .getSupportFragmentManager()
                 .findFragmentByTag(CalendarFragment.class.getName());
 
-        if (offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
+        if (calendarFragment.firstTime && offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
+            calendarFragment.firstTime = false;
             calendarFragment.selectDay(Utils.getTodayJdn());
             updateTitle();
         }
@@ -137,13 +140,13 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             if (value == offset) {
                 updateTitle();
 
-                int day = intent.getExtras().getInt(Constants.BROADCAST_FIELD_SELECT_DAY);
-                if (day != -1) {
-                    adapter.selectDay(day);
+                long jdn = intent.getExtras().getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
+                long selectedDay = 1 + jdn - baseJdn;
+                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
+                    adapter.selectDay((int) (1 + jdn - baseJdn));
                 }
-
-            } else if (value == Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY) {
-                adapter.clearSelectedDay();
+            } else {
+                adapter.selectDay(-1);
             }
         }
     };

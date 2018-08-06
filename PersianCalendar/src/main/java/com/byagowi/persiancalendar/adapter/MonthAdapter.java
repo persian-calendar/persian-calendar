@@ -58,14 +58,14 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     private int selectedDay = -1;
 
-    public void clearSelectedDay() {
+    public void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;
         selectedDay = -1;
         notifyItemChanged(prevDay);
-    }
 
-    public void selectDay(int dayOfMonth) {
-        clearSelectedDay();
+        if (dayOfMonth == -1) {
+            return;
+        }
 
         selectedDay = dayOfMonth + 6 + startingDayOfWeek;
         if (Utils.isWeekOfYearEnabled()) {
