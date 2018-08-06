@@ -306,8 +306,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             startActivityForResult(
                     new Intent(Intent.ACTION_INSERT)
                             .setData(CalendarContract.Events.CONTENT_URI)
-                            .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            // Now that we can should them ourselves, lets not put anything here
+                            //.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                            //        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
                             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                     time.getTimeInMillis())
                             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
