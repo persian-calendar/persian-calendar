@@ -78,7 +78,7 @@ public class AthanNotification extends Service {
                     NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_brightness_5)
+                    .setSmallIcon(R.drawable.sun)
 //                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
                     .setContentTitle(title)
                     .setContentText(subtitle);
