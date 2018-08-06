@@ -306,9 +306,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             startActivityForResult(
                     new Intent(Intent.ACTION_INSERT)
                             .setData(CalendarContract.Events.CONTENT_URI)
-                            // Now that we can should them ourselves, lets not put anything here
-                            //.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                            //        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
                             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                     time.getTimeInMillis())
                             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -570,6 +569,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     private void bringTodayYearMonth() {
+        lastSelectedJdn = -1;
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
@@ -589,12 +589,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);
 
+        selectDay(jdn);
+
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
-
-        selectDay(jdn);
     }
 
     private SearchView mSearchView;
