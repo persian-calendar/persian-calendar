@@ -140,6 +140,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
             if (extras == null) return;
 
+            adapter.selectDay(-1);
+
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
                 updateTitle();
@@ -149,8 +151,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
                     adapter.selectDay((int) (1 + jdn - baseJdn));
                 }
-            } else {
-                adapter.selectDay(-1);
             }
         }
     };
