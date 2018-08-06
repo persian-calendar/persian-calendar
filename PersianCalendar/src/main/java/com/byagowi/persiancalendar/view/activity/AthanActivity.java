@@ -120,7 +120,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
                 telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             }
         } catch (Exception e) {
-            Log.e("AthanActivity", "TelephonyManager handling fail", e);
+            Log.e(TAG, "TelephonyManager handling fail", e);
         }
     }
 
