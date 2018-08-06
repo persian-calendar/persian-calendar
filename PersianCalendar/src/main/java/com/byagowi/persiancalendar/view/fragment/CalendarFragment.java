@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
-import calendar.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -60,6 +59,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
+import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -68,8 +68,7 @@ import calendar.PersianDate;
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
-public class CalendarFragment extends Fragment
-        implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class CalendarFragment extends Fragment implements View.OnClickListener {
     private ViewPager monthViewPager;
 
     private Calendar calendar = Calendar.getInstance();
@@ -196,7 +195,7 @@ public class CalendarFragment extends Fragment
                 Utils.isRTL(getContext())));
         CalendarAdapter.gotoOffset(monthViewPager, 0);
 
-        monthViewPager.addOnPageChangeListener(this);
+        monthViewPager.addOnPageChangeListener(changeListener);
 
         owghat.setOnClickListener(this);
         today.setOnClickListener(this);
@@ -239,6 +238,23 @@ public class CalendarFragment extends Fragment
         return view;
     }
 
+    public boolean firstTime = true;
+
+    ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                    new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                            .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                                    CalendarAdapter.positionToOffset(position))
+                            .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
+
+            today.setVisibility(View.VISIBLE);
+            todayIcon.setVisibility(View.VISIBLE);
+        }
+
+    };
+
     void changeMonth(int position) {
         monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
     }
@@ -268,8 +284,10 @@ public class CalendarFragment extends Fragment
         if (isToday) {
             today.setVisibility(View.GONE);
             todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime())
+            if (Utils.isIranTime()) {
                 weekDayName.setText(weekDayName.getText() + " (" + getString(R.string.iran_time) + ")");
+            }
+            lastSelectedJdn = -1;
         } else {
             today.setVisibility(View.VISIBLE);
             todayIcon.setVisibility(View.VISIBLE);
@@ -280,25 +298,23 @@ public class CalendarFragment extends Fragment
     }
 
     public void addEventOnCalendar(long jdn) {
-        Intent intent = new Intent(Intent.ACTION_INSERT);
-        intent.setData(CalendarContract.Events.CONTENT_URI);
-
         CivilDate civil = DateConverter.jdnToCivil(jdn);
-
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
-
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
 
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                time.getTimeInMillis());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                time.getTimeInMillis());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
-
         try {
-            startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+            startActivityForResult(
+                    new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
+                            // Now that we can should them ourselves, lets not put anything here
+                            //.putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                            //        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                    time.getTimeInMillis())
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                                    time.getTimeInMillis())
+                            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
+                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
         } catch (Exception e) {
             Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
         }
@@ -321,10 +337,11 @@ public class CalendarFragment extends Fragment
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.getId()));
                 try {
-                    startActivityForResult(intent, CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+                    startActivityForResult(new Intent(Intent.ACTION_VIEW)
+                                    .setData(ContentUris.withAppendedId(
+                                            CalendarContract.Events.CONTENT_URI, event.getId())),
+                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
                     Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
                 }
@@ -553,12 +570,11 @@ public class CalendarFragment extends Fragment
     }
 
     private void bringTodayYearMonth() {
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY);
-        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
-
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                                Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
+                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
 
         CalendarAdapter.gotoOffset(monthViewPager, 0);
 
@@ -573,34 +589,12 @@ public class CalendarFragment extends Fragment
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);
 
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition);
-        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, date.getDayOfMonth());
-
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
+                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
 
         selectDay(jdn);
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        Intent intent = new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT);
-        intent.putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                CalendarAdapter.positionToOffset(position));
-        intent.putExtra(Constants.BROADCAST_FIELD_SELECT_DAY, -1);
-
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-
-        today.setVisibility(View.VISIBLE);
-        todayIcon.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
     }
 
     private SearchView mSearchView;

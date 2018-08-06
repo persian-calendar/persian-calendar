@@ -77,10 +77,14 @@ public class Constants {
     public static final String MONTH = "month";
     public static final String YEAR = "year";
 
+    public static final int LOAD_APP_ID = 1000;
+    public static final int THREE_HOURS_APP_ID = 1010;
+    public static final int ALARMS_BASE_ID = 2000;
+
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
-    public static final String BROADCAST_FIELD_SELECT_DAY = "BROADCAST_FIELD_SELECT_DAY";
+    public static final String BROADCAST_FIELD_SELECT_DAY_JDN = "BROADCAST_FIELD_SELECT_DAY_JDN";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP";
