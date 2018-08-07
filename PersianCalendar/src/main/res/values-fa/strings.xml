@@ -131,5 +131,15 @@
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
     <string name="default_athan_name">عبدالباسط عبدالصمد</string>
+    <string name="license">مجوز</string>
+    <string name="license_sum">مجوز Apache، شرایط مجوز استفاده شده در تقویم فارسی را بررسی کنید.</string>
+    <string name="license_dialog_close">بستن</string>
+    <string name="report_bug">گزارش اشکال</string>
+    <string name="report_bug_sum">گزارش اشکال یا درخواست ویژگی های جدید</string>
+    <string name="sendMail">پست الکترونیکی</string>
+    <string name="noClient">برنامه ای جهت ارسال پست الکترونیکی وجود ندارد</string>
+    <string name="about_developers">توسعه دهندگان</string>
+    <string name="about_contributors">همکاران</string>
+    <string name="about_support_developers">پشتیبانی توسعه دهنده</string>
 
 </resources>

@@ -131,5 +131,16 @@
     <string name="default_athan_summary">Return to default Athan</string>
     <string name="default_athan">Default Athan</string>
     <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
+    <string name="license">License</string>
+    <string name="license_sum">Check Apache License, Version 2.0 license terms used on Persian Calendar.</string>
+    <string name="license_dialog_close">Close</string>
+    <string name="report_bug">Report bug</string>
+    <string name="report_bug_sum">Report bug or request new features.</string>
+    <string name="mailto" translatable="false">ebrahim@gnu.org</string>
+    <string name="sendMail">E-Mail</string>
+    <string name="noClient">There are no email clients installed</string>
+    <string name="about_developers">Developers</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_support_developers">Developer Support</string>
 
 </resources>

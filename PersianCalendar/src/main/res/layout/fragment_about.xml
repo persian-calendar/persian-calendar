@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="20sp"
-        android:paddingRight="20sp"
-        android:paddingTop="20sp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/version2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingTop="20sp"
-            android:paddingBottom="40sp"
-            android:textSize="30sp" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        style="@style/AboutCard"
+        android:gravity="center"
+        android:background="?attr/colorCard">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -31,10 +23,459 @@
             android:src="@drawable/gpl3_logo" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/license"
+            android:textColor="?attr/colorTextDrawer"
             android:layout_width="wrap_content"
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:paddingTop="@dimen/view_padding"
+            android:textSize="@dimen/text_size_title"
             android:layout_height="wrap_content"
-            android:paddingTop="10sp" />
+            android:text="@string/app_name"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/padding_item"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_description" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            style="@style/AboutCard"
+            android:background="?attr/colorCard">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:textColor="?attr/colorTextDrawer"
+            android:text="@string/license"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:id="@+id/licenses"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_gravity="bottom">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:tint="?attr/colorDrawerIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_licences"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="center"
+                android:id="@id/icon"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:id="@id/title"
+                android:textStyle="bold"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:text="@string/license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextSecond"
+                android:text="@string/license_sum"
+                android:textSize="12sp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_below="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout style="@style/AboutCard"
+            android:background="?attr/colorCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:text="@string/about_support_developers"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reportBug">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_bug"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/report_bug"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title"
+                    android:text="@string/report_bug_sum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat style="@style/AboutCard"
+            android:background="?attr/colorCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:text="@string/about_developers"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_1"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_1"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Ebrahim Byagowi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_1"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_1"
+                    android:text=" @ebraminio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_2">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_2"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_2"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_2"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Hamid Safdari"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_2"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_2"
+                    android:text=" @hamidsafdari"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_3">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_3"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_3"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_3"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Behdad Abedi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_3"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_3"
+                    android:text=" @behdad222"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_4">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_4"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_4"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_4"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Hamidreza Bayat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_4"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_4"
+                    android:text=" @HrBDev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_5">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_5"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_5"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_5"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Alireza Afkar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_5"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_5"
+                    android:text=" @alirezaafkar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dev_6">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/dev_6"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_dev_6"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_dev_6"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Mehdi Dimyadi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/summary_dev_6"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:layout_below="@+id/title_dev_6"
+                    android:text=" @MEHDIMYADI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat style="@style/AboutCard"
+            android:background="?attr/colorCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:text="@string/about_contributors"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:clickable="false"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/contributors">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_developer"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@+id/icon_contributors"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/title_contributors"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Javad Arjmandi (@La-Volpe), Mehdi Sadeghi (@mehdisadeghi), Masood Fallahpoor (@MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Muhammad Shuaib (@yethrosh), Aysha Aminnejad (@aysha319)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
