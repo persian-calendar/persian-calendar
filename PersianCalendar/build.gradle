@@ -8,8 +8,8 @@ android {
         applicationId "com.byagowi.persiancalendar"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 587
-        versionName "5.8.7"
+        versionCode 588
+        versionName "5.8.8"
     }
 
     buildTypes {
@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    def androidXVersion = '1.0.0-beta01'
+    def androidXVersion = '1.0.0-rc01'
 
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "com.google.android.material:material:$androidXVersion"
