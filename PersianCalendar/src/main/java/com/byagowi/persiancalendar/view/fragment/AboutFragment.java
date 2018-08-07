@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import calendar.AbstractDate;
+import calendar.CalendarType;
 
 /**
  * About Calendar Activity
@@ -59,6 +62,15 @@ public class AboutFragment extends Fragment {
             });
             builder.show();
         });
+
+        //help
+        CalendarType mainCalendar = Utils.getMainCalendar();
+        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
+        TextView help_title = view.findViewById(R.id.about_title);
+        help_title.setText(getString(R.string.about_help_title_one) + " " + Utils.formatNumber(today.getYear()) + " " + getString(R.string.about_help_title_two));
+        TextView help = view.findViewById(R.id.help_sum);
+        help.setText(R.string.about_help_sum);
+        help.setMovementMethod(new ScrollingMovementMethod());
 
         //report bug
         RelativeLayout bug = view.findViewById(R.id.reportBug);

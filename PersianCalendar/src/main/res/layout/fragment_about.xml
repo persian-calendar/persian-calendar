@@ -101,7 +101,64 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <LinearLayout style="@style/AboutCard"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            style="@style/AboutCard"
+            android:background="?attr/colorCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:text="@string/about_help_title"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:id="@+id/help"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_gravity="bottom">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_help"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="center"
+                    android:id="@id/icon"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextDrawer"
+                    android:id="@+id/about_title"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/colorTextSecond"
+                    android:id="@+id/help_sum"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/about_help_sum"
+                    android:layout_below="@+id/about_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <LinearLayout style="@style/AboutCard"
             android:background="?attr/colorCard">
 
             <androidx.appcompat.widget.AppCompatTextView
