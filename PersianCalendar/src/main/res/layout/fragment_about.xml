@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         style="@style/AboutCard"
@@ -42,18 +43,18 @@
             android:gravity="center"
             android:textSize="@dimen/text_size_description" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            style="@style/AboutCard"
-            android:background="?attr/colorCard">
+<androidx.appcompat.widget.LinearLayoutCompat
+    style="@style/AboutCard"
+    android:background="?attr/colorCard">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:textColor="?attr/colorTextDrawer"
-            android:text="@string/license"
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/license"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
         <RelativeLayout
             android:clickable="true"
@@ -97,146 +98,159 @@
                 android:layout_below="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         </RelativeLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+    style="@style/AboutCard"
+    android:background="?attr/colorCard">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/about_help_title"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:id="@+id/help"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_gravity="bottom"
+            android:focusable="true">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:tint="?attr/colorDrawerIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_help"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="center"
+                android:id="@id/icon"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:id="@+id/about_title"
+                android:textStyle="bold"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextSecond"
+                android:id="@+id/help_sum"
+                android:textSize="12sp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:text="@string/about_help_sum"
+                android:layout_below="@+id/about_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+    style="@style/AboutCard"
+    android:background="?attr/colorCard">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/about_support_developers"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reportBug"
+            android:focusable="true">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:tint="?attr/colorDrawerIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_bug"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="center"
+                android:id="@+id/icon"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextDrawer"
+                android:id="@+id/title"
+                android:textStyle="bold"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:text="@string/report_bug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="?attr/colorTextSecond"
+                android:id="@+id/summary"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="12sp"
+                android:layout_below="@+id/title"
+                android:text="@string/report_bug_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+    style="@style/AboutCard"
+    android:background="?attr/colorCard">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/about_developers"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            style="@style/AboutCard"
-            android:background="?attr/colorCard">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:textColor="?attr/colorTextDrawer"
-                android:text="@string/about_help_title"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RelativeLayout
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:id="@+id/help"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_gravity="bottom">
+        <RelativeLayout
+            android:clickable="false"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/dev_1">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_help"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:scaleType="center"
-                    android:id="@id/icon"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="?attr/colorTextDrawer"
-                    android:id="@+id/about_title"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="?attr/colorTextSecond"
-                    android:id="@+id/help_sum"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:text="@string/about_help_sum"
-                    android:layout_below="@+id/about_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <LinearLayout style="@style/AboutCard"
-            android:background="?attr/colorCard">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:textColor="?attr/colorTextDrawer"
-                android:text="@string/about_support_developers"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RelativeLayout
-                android:clickable="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/reportBug">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:tint="?attr/colorDrawerIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_bug"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:scaleType="center"
-                    android:id="@+id/icon"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="?attr/colorTextDrawer"
-                    android:id="@+id/title"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:text="@string/report_bug"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="?attr/colorTextSecond"
-                    android:id="@+id/summary"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:textSize="12sp"
-                    android:layout_below="@+id/title"
-                    android:text="@string/report_bug_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <androidx.appcompat.widget.LinearLayoutCompat style="@style/AboutCard"
-            android:background="?attr/colorCard">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:textColor="?attr/colorTextDrawer"
-                android:text="@string/about_developers"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RelativeLayout
-                android:clickable="false"
-                android:focusable="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dev_1">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_1"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -266,21 +280,24 @@
                     android:text=" @ebraminio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-            </RelativeLayout>
 
-            <RelativeLayout
-                android:clickable="false"
-                android:focusable="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/dev_2">
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:clickable="false"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/dev_2">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_2"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -310,21 +327,30 @@
                     android:text=" @hamidsafdari"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-            </RelativeLayout>
+
+        </RelativeLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" >
 
             <RelativeLayout
                 android:clickable="false"
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="5dp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/dev_3">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_3"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -354,6 +380,7 @@
                     android:text=" @behdad222"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -361,14 +388,16 @@
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="5dp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/dev_4">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_4"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -398,21 +427,30 @@
                     android:text=" @HrBDev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+
             </RelativeLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
             <RelativeLayout
                 android:clickable="false"
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="5dp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/dev_5">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_5"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -449,14 +487,16 @@
                 android:focusable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="5dp"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/dev_6">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:tint="?attr/colorDrawerIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/dev_6"
+                    app:srcCompat="@drawable/ic_developer"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
@@ -486,11 +526,15 @@
                     android:text=" @MEHDIMYADI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+
             </RelativeLayout>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat style="@style/AboutCard"
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            style="@style/AboutCard"
             android:background="?attr/colorCard">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -500,40 +544,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <RelativeLayout
-                android:clickable="false"
-                android:focusable="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/contributors">
+                <RelativeLayout
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/contributors">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:tint="?attr/colorDrawerIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_developer"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:scaleType="center"
-                    android:id="@+id/icon_contributors"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:tint="?attr/colorDrawerIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        app:srcCompat="@drawable/ic_developer"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="center"
+                        android:id="@+id/icon_contributors"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="?attr/colorTextDrawer"
-                    android:id="@+id/title_contributors"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:text="Javad Arjmandi (@La-Volpe), Mehdi Sadeghi (@mehdisadeghi), Masood Fallahpoor (@MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Muhammad Shuaib (@yethrosh), Aysha Aminnejad (@aysha319)"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textColor="?attr/colorTextDrawer"
+                        android:id="@+id/title_contributors"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:text="Javad Arjmandi (@La-Volpe), Mehdi Sadeghi (@mehdisadeghi), Masood Fallahpoor (@MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Muhammad Shuaib (@yethrosh), Aysha Aminnejad (@aysha319)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
