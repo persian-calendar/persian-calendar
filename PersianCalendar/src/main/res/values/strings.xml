@@ -132,7 +132,7 @@
     <string name="default_athan">Default Athan</string>
     <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
     <string name="license">License</string>
-    <string name="license_sum">Check Apache License, Version 2.0 license terms used on Persian Calendar.</string>
+    <string name="license_sum">Check GPL3 License, license terms used on Persian Calendar.</string>
     <string name="license_dialog_close">Close</string>
     <string name="about_help_title">Help</string>
     <string name="about_help_title_one">This is the version of the year</string>
