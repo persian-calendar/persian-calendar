@@ -51,7 +51,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:textColor="?attr/colorTextDrawer"
-        android:text="@string/license"
+        android:text="@string/about_license"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -63,7 +63,8 @@
             android:padding="5dp"
             android:id="@+id/licenses"
             android:background="?android:attr/selectableItemBackground"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:focusable="true">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:tint="?attr/colorDrawerIcon"
@@ -83,13 +84,13 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
-                android:text="@string/license"
+                android:text="@string/about_license_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:textColor="?attr/colorTextSecond"
-                android:text="@string/license_sum"
+                android:text="@string/about_license_sum"
                 android:textSize="12sp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginRight="30dp"
@@ -200,7 +201,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
-                android:text="@string/report_bug"
+                android:text="@string/about_report_bug"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -213,7 +214,7 @@
                 android:layout_marginLeft="30dp"
                 android:textSize="12sp"
                 android:layout_below="@+id/title"
-                android:text="@string/report_bug_sum"
+                android:text="@string/about_report_bug_sum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -264,7 +265,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Ebrahim Byagowi"
+                    android:text="@string/about_dev_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -277,7 +278,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_1"
-                    android:text=" @ebraminio"
+                    android:text="@string/about_dev_1_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -311,7 +312,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Hamid Safdari"
+                    android:text="@string/about_dev_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -324,7 +325,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_2"
-                    android:text=" @hamidsafdari"
+                    android:text="@string/about_dev_2_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -364,7 +365,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Behdad Abedi"
+                    android:text="@string/about_dev_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -377,7 +378,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_3"
-                    android:text=" @behdad222"
+                    android:text="@string/about_dev_3_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -411,7 +412,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Hamidreza Bayat"
+                    android:text="@string/about_dev_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -424,7 +425,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_4"
-                    android:text=" @HrBDev"
+                    android:text="@string/about_dev_4_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -464,7 +465,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Alireza Afkar"
+                    android:text="@string/about_dev_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -477,7 +478,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_5"
-                    android:text=" @alirezaafkar"
+                    android:text="@string/about_dev_5_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -510,7 +511,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Mehdi Dimyadi"
+                    android:text="@string/about_dev_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -523,7 +524,7 @@
                     android:layout_marginLeft="30dp"
                     android:textSize="12sp"
                     android:layout_below="@+id/title_dev_6"
-                    android:text=" @MEHDIMYADI"
+                    android:text="@string/about_dev_6_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -571,7 +572,7 @@
                         android:layout_marginRight="30dp"
                         android:layout_marginStart="30dp"
                         android:layout_marginLeft="30dp"
-                        android:text="Javad Arjmandi (@La-Volpe), Mehdi Sadeghi (@mehdisadeghi), Masood Fallahpoor (@MasoodFallahpoor), Abbas Oveissi (@abbas-oveissi), Muhammad Shuaib (@yethrosh), Aysha Aminnejad (@aysha319)"
+                        android:text="@string/about_contributors_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

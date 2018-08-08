@@ -54,10 +54,10 @@ public class AboutFragment extends Fragment {
             settings.setDefaultTextEncodingName("utf-8");
             wv.loadUrl("file:///android_res/raw/credits.txt");
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(getResources().getString(R.string.license));
+            builder.setTitle(getResources().getString(R.string.about_license_title));
             builder.setView(wv);
             builder.setCancelable(true);
-            builder.setNegativeButton(R.string.license_dialog_close, (dialog, which) -> {
+            builder.setNegativeButton(R.string.about_license_dialog_close, (dialog, which) -> {
             });
             builder.show();
         });
@@ -73,14 +73,14 @@ public class AboutFragment extends Fragment {
         //report bug
         RelativeLayout bug = view.findViewById(R.id.reportBug);
         bug.setOnClickListener(arg -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.mailto), null));
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
             try {
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "\n\n\n\n\n\n\n" +
                         "===Device Information===\nManufacturer: " + Build.MANUFACTURER + "\nModel: " + Build.MODEL + "\nAndroid Version: " + Build.VERSION.RELEASE + "\nApp Version Code: " + version.split("-")[0]);
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.sendMail)));
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
             } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(getActivity(), getString(R.string.noClient), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
             }
         });
 
