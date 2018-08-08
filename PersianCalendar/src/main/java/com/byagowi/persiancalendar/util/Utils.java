@@ -156,6 +156,10 @@ public class Utils {
 
     static private final String TAG = Utils.class.getName();
 
+    static public int getMaxSupportedYear() {
+        return 1397;
+    }
+
     // This should be called before any use of Utils on the activity and services
     static public void initUtils(Context context) {
         updateStoredPreference(context);

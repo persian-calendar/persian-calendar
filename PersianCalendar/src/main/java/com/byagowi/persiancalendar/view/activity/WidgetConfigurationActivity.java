@@ -48,8 +48,6 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
                 R.id.preference_fragment_holder,
                 PreferenceFragment.newInstance(), "TAG").commit();
 
-        findViewById(R.id.add_widget_button).setOnClickListener((v) -> {
-            finishAndSuccess();
-        });
+        findViewById(R.id.add_widget_button).setOnClickListener(v -> finishAndSuccess());
     }
 }
