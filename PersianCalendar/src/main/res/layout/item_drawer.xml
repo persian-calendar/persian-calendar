@@ -1,55 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="?attr/selectableItemBackground"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/drawer_item_height">
+    android:layout_height="@dimen/drawer_item_height"
+    android:layout_centerVertical="true"
+    android:orientation="horizontal">
 
-    <View
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorDrawerSelect" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ItemIcon"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/icon_margin"
+        android:layout_marginRight="@dimen/icon_margin"
+        android:tint="?attr/colorDrawerIcon" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_centerVertical="true">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ItemIcon"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_gravity="center_vertical"
-            android:tint="?attr/colorDrawerIcon"
-            android:layout_marginLeft="@dimen/icon_margin"
-            android:layout_marginRight="@dimen/icon_margin" />
-
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/itemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical|start|left"
+            android:textColor="?attr/colorTextDrawer"
+            android:textSize="@dimen/text_size_drawer" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_drawer"
-                android:textColor="?attr/colorTextDrawer"
-                android:layout_gravity="center_vertical|start|left"
-                android:id="@+id/itemTitle" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_drawer_subtitle"
-                android:textColor="?attr/colorTextSecond"
-                android:layout_gravity="center_vertical|start|left"
-                android:visibility="gone"
-                android:id="@+id/itemSubtitle" />
-
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/itemSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start|left"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="@dimen/text_size_drawer_subtitle"
+            android:visibility="gone" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</RelativeLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

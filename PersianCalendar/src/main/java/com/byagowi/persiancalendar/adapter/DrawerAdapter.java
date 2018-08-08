@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.adapter;
 
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Coordinate;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
@@ -23,18 +28,33 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String[] drawerSubtitles;
     private TypedArray drawerIcon;
 
+    @ColorInt
+    private int selectedBackgroundColor;
+
+    @DrawableRes
+    private int selectableBackgroundResource;
+
     public DrawerAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
         drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
+
+        Resources.Theme theme = mainActivity.getTheme();
+        TypedValue selectableBackground = new TypedValue();
+        theme.resolveAttribute(R.attr.selectableItemBackground, selectableBackground, true);
+
+        TypedValue selectedBackground = new TypedValue();
+        theme.resolveAttribute(R.attr.colorDrawerSelect, selectedBackground, true);
+
+        selectedBackgroundColor = ContextCompat.getColor(mainActivity, selectedBackground.resourceId);
+        selectableBackgroundResource = selectableBackground.resourceId;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView itemTitle;
         private TextView itemSubtitle;
         private AppCompatImageView imageView;
-        private View background;
 
         ViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -44,7 +64,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 itemTitle = itemView.findViewById(R.id.itemTitle);
                 itemSubtitle = itemView.findViewById(R.id.itemSubtitle);
                 imageView = itemView.findViewById(R.id.ItemIcon);
-                background = itemView.findViewById(R.id.background);
             } else {
                 imageView = itemView.findViewById(R.id.image);
             }
@@ -104,9 +123,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.imageView.setImageResource(drawerIcon.getResourceId(position - 1, 0));
 
             if (selectedItem == position) {
-                holder.background.setVisibility(View.VISIBLE);
+                holder.itemView.setBackgroundColor(selectedBackgroundColor);
             } else {
-                holder.background.setVisibility(View.GONE);
+                holder.itemView.setBackgroundResource(selectableBackgroundResource);
             }
 
         } else {
