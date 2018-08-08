@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -1073,7 +1074,7 @@ public class Utils {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
-            title += " (" + event.getDescription() + ")";
+            title += " (" + Html.fromHtml(event.getDescription()).toString().trim() + ")";
 
         return title.replaceAll("\\n", " ").trim();
     }
