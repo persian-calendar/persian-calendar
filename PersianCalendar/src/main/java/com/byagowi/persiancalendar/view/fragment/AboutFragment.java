@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +21,8 @@ import com.byagowi.persiancalendar.util.Utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
-import calendar.AbstractDate;
-import calendar.CalendarType;
 
 /**
  * About Calendar Activity
@@ -40,14 +38,14 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
-        //version
+        // version
         String version = programVersion();
         TextView versionTextView = view.findViewById(R.id.version);
         versionTextView.setText(getString(R.string.version) + " " +
                 Utils.formatNumber(version.split("-")[0]));
 
-        //licenses
-        RelativeLayout licenses = view.findViewById(R.id.licenses);
+        // licenses
+        LinearLayoutCompat licenses = view.findViewById(R.id.licenses);
         licenses.setOnClickListener(arg -> {
             WebView wv = new WebView(getActivity());
             WebSettings settings = wv.getSettings();
@@ -62,17 +60,26 @@ public class AboutFragment extends Fragment {
             builder.show();
         });
 
-        //help
-        CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
+        // help
         TextView help_title = view.findViewById(R.id.about_title);
-        help_title.setText(getString(R.string.about_help_title_one) + " " + Utils.formatNumber(today.getYear()) + " " + getString(R.string.about_help_title_two));
+        help_title.setText(String.format(getString(R.string.about_help_subtitle),
+                Utils.formatNumber(Utils.getMaxSupportedYear())));
         TextView help = view.findViewById(R.id.help_sum);
         help.setText(R.string.about_help_sum);
 
-        //report bug
-        RelativeLayout bug = view.findViewById(R.id.reportBug);
+        // report bug
+        LinearLayoutCompat bug = view.findViewById(R.id.reportBug);
         bug.setOnClickListener(arg -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/ebraminio/DroidPersianCalendar/issues/new")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        LinearLayoutCompat email = view.findViewById(R.id.email);
+        email.setOnClickListener(arg -> {
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
             try {

@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -155,6 +156,10 @@ import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 public class Utils {
 
     static private final String TAG = Utils.class.getName();
+
+    static public int getMaxSupportedYear() {
+        return 1397;
+    }
 
     // This should be called before any use of Utils on the activity and services
     static public void initUtils(Context context) {
@@ -853,6 +858,9 @@ public class Utils {
                 if (!iranHolidays && type.equals("Islamic Iran"))
                     holiday = false;
 
+                if (iranIslamic && type.equals("Islamic Iran"))
+                    addOrNot = true;
+
                 if (iranOthers && type.equals("Islamic Iran"))
                     addOrNot = true;
 
@@ -1066,7 +1074,7 @@ public class Utils {
         String desc = event.getDescription();
         String title = event.getTitle();
         if (!TextUtils.isEmpty(desc))
-            title += " (" + event.getDescription() + ")";
+            title += " (" + Html.fromHtml(event.getDescription()).toString().trim() + ")";
 
         return title.replaceAll("\\n", " ").trim();
     }
