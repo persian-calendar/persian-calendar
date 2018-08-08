@@ -131,5 +131,18 @@
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
     <string name="default_athan_name">عبدالباسط عبدالصمد</string>
+    <string name="about_license">مجوز</string>
+    <string name="about_license_title">مجوزهای برنامه</string>
+    <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
+    <string name="about_license_dialog_close">بستن</string>
+    <string name="about_help_title">کمک</string>
+    <string name="about_report_bug">گزارش اشکال</string>
+    <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
+    <string name="about_sendMail">رایانامه</string>
+    <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
+    <string name="about_developers">توسعه‌دهندگان</string>
+    <string name="about_contributors">همکاران</string>
+    <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
+    <string name="about_email_sum">ارسال رایانامه شخصی برای نویسنده برنامه</string>
 
 </resources>

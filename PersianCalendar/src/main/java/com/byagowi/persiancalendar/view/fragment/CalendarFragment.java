@@ -367,8 +367,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         return titles;
     }
 
-    private int maxSupportedYear = 1397;
-
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn);
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
@@ -403,7 +401,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-        if (Utils.getToday().getYear() > maxSupportedYear) {
+        if (Utils.getToday().getYear() > Utils.getMaxSupportedYear()) {
             String title = getString(R.string.shouldBeUpdated);
             SpannableString ss = new SpannableString(title);
             ClickableSpan clickableSpan = new ClickableSpan() {

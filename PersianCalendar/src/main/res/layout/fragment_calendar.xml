@@ -195,7 +195,7 @@
                     app:ssv_sun_color="#FFC400"
                     app:ssv_sun_radius="10dp"
                     app:ssv_track_color="#00BFA5"
-                    app:ssv_track_width="1.5dp"/>
+                    app:ssv_track_width="1.5dp" />
 
                 <!-- actual content -->
                 <com.google.android.flexbox.FlexboxLayout

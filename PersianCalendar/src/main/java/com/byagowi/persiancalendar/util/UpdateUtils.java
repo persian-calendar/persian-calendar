@@ -82,6 +82,7 @@ public class UpdateUtils {
         if (pastDate == null || !pastDate.equals(date) || updateDate) {
             Log.d("UpdateUtils", "date has changed");
 
+            Utils.changeAppLanguage(context);
             Utils.loadAlarms(context);
             pastDate = date;
             updateDate = true;
