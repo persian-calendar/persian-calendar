@@ -853,6 +853,9 @@ public class Utils {
                 if (!iranHolidays && type.equals("Islamic Iran"))
                     holiday = false;
 
+                if (iranIslamic && type.equals("Islamic Iran"))
+                    addOrNot = true;
+
                 if (iranOthers && type.equals("Islamic Iran"))
                     addOrNot = true;
 
