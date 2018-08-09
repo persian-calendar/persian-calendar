@@ -959,7 +959,7 @@ public class Utils {
                             CalendarContract.Events.VISIBLE,        // 7
                             CalendarContract.Events.ALL_DAY,        // 8
                             CalendarContract.Events.DELETED,        // 9
-                            CalendarContract.Events.CALENDAR_COLOR  // 10
+                            CalendarContract.Events.EVENT_COLOR     // 10
                     }, null, null, null);
 
             if (cursor == null) {
