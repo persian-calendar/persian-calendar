@@ -7,15 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.databinding.DataBindingUtil;
 import calendar.DateConverter;
 
 /**
@@ -28,28 +29,25 @@ public class SelectDayDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View view = inflater.inflate(R.layout.selectday_fragment, null);
+        SelectdayFragmentBinding binding = DataBindingUtil.inflate(inflater,
+                R.layout.selectday_fragment, null, false);
 
-        // fill members
-        Spinner calendarTypeSpinner = view.findViewById(R.id.calendarTypeSpinner);
-        Spinner yearSpinner = view.findViewById(R.id.yearSpinner);
-        Spinner monthSpinner = view.findViewById(R.id.monthSpinner);
-        Spinner daySpinner = view.findViewById(R.id.daySpinner);
-
-        calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
+        binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.calendar_type)));
 
-        calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
+        binding.calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
         startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+                binding.calendarTypeSpinner,
+                binding.yearSpinner, binding.monthSpinner, binding.daySpinner);
 
 
-        calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                        calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+                        binding.calendarTypeSpinner,
+                        binding.yearSpinner, binding.monthSpinner, binding.daySpinner);
             }
 
             @Override
@@ -58,20 +56,20 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view);
+        builder.setView(binding.getRoot());
         builder.setCustomTitle(null);
         builder.setPositiveButton(R.string.go, (dialogInterface, i) -> {
 
-            int year = startingYearOnYearSpinner + yearSpinner.getSelectedItemPosition();
-            int month = monthSpinner.getSelectedItemPosition() + 1;
-            int day = daySpinner.getSelectedItemPosition() + 1;
+            int year = startingYearOnYearSpinner + binding.yearSpinner.getSelectedItemPosition();
+            int month = binding.monthSpinner.getSelectedItemPosition() + 1;
+            int day = binding.daySpinner.getSelectedItemPosition() + 1;
 
             CalendarFragment calendarFragment = (CalendarFragment) getActivity()
                     .getSupportFragmentManager()
                     .findFragmentByTag(CalendarFragment.class.getName());
 
             try {
-                switch (Utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+                switch (Utils.calendarTypeFromPosition(binding.calendarTypeSpinner.getSelectedItemPosition())) {
                     case GREGORIAN:
                         calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
                         break;

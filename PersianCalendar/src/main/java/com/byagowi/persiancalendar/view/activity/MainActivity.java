@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
+import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -29,10 +30,9 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     // Default selected fragment
     private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
-    private DrawerLayout drawerLayout;
+    private ActivityMainBinding binding;
     private DrawerAdapter adapter;
     private Class<?>[] fragments = {
             null,
@@ -115,29 +115,26 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         UpdateUtils.update(getApplicationContext(), false);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setSupportActionBar(binding.toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-            toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+            binding.toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
 
         }
 
-        RecyclerView navigation = findViewById(R.id.navigation_view);
-        navigation.setHasFixedSize(true);
+        binding.navigationView.setHasFixedSize(true);
         adapter = new DrawerAdapter(this);
-        navigation.setAdapter(adapter);
+        binding.navigationView.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        navigation.setLayoutManager(layoutManager);
+        binding.navigationView.setLayoutManager(layoutManager);
 
-        drawerLayout = findViewById(R.id.drawer);
-        final View appMainView = findViewById(R.id.app_main_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = +1;
 
             {
@@ -155,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
             private void slidingAnimation(View drawerView, float slideOffset) {
-                appMainView.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
-                drawerLayout.bringChildToFront(drawerView);
-                drawerLayout.requestLayout();
+                binding.appMainLayout.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
+                binding.drawer.bringChildToFront(drawerView);
+                binding.drawer.requestLayout();
             }
         };
 
-        drawerLayout.addDrawerListener(drawerToggle);
+        binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS_SHORTCUT".equals(action)) {
@@ -249,9 +246,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Utils.initUtils(this);
-        View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            v.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            binding.drawer.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 
@@ -267,8 +263,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers();
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawers();
         } else if (menuPosition != DEFAULT) {
             selectItem(DEFAULT);
         } else {
@@ -289,10 +285,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Checking for the "menu" key
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawers();
+            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                binding.drawer.closeDrawers();
             } else {
-                drawerLayout.openDrawer(GravityCompat.START);
+                binding.drawer.openDrawer(GravityCompat.START);
             }
             return true;
         } else {
@@ -343,6 +339,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         adapter.setSelectedItem(menuPosition);
 
-        drawerLayout.closeDrawers();
+        binding.drawer.closeDrawers();
     }
 }

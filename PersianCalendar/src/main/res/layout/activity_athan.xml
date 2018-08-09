@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/athan_name"
-        style="@style/ShadowTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="80dp"
-        android:textColor="?attr/colorTextAthan"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        tools:text="اذان صبح" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/activity_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/place"
-        style="@style/ShadowTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:textColor="?attr/colorTextAthan"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="به افق شهر" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/athan_name"
+            style="@style/ShadowTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="80dp"
+            android:textColor="?attr/colorTextAthan"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:text="اذان صبح" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/place"
+            style="@style/ShadowTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:textColor="?attr/colorTextAthan"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="به افق شهر" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>
