@@ -37,17 +37,13 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                 getResources().getStringArray(R.array.calendar_type)));
 
         binding.calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
-        startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                binding.calendarTypeSpinner,
-                binding.yearSpinner, binding.monthSpinner, binding.daySpinner);
+        startingYearOnYearSpinner = Utils.fillSelectdaySpinners(getContext(), binding);
 
 
         binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                startingYearOnYearSpinner = Utils.fillYearMonthDaySpinners(getContext(),
-                        binding.calendarTypeSpinner,
-                        binding.yearSpinner, binding.monthSpinner, binding.daySpinner);
+                startingYearOnYearSpinner = Utils.fillSelectdaySpinners(getContext(), binding);
             }
 
             @Override

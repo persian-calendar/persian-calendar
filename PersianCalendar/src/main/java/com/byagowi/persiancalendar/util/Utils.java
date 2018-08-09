@@ -25,11 +25,11 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
@@ -1396,11 +1396,9 @@ public class Utils {
         }
     }
 
-    static public int fillYearMonthDaySpinners(Context context, Spinner calendarTypeSpinner,
-                                               Spinner yearSpinner, Spinner monthSpinner,
-                                               Spinner daySpinner) {
+    static public int fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding) {
         AbstractDate date = getTodayOfCalendar(calendarTypeFromPosition(
-                calendarTypeSpinner.getSelectedItemPosition()));
+                binding.calendarTypeSpinner.getSelectedItemPosition()));
 
         // years spinner init.
         String[] years = new String[200];
@@ -1408,8 +1406,8 @@ public class Utils {
         for (int i = 0; i < years.length; ++i) {
             years[i] = formatNumber(i + startingYearOnYearSpinner);
         }
-        yearSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years));
-        yearSpinner.setSelection(years.length / 2);
+        binding.yearSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years));
+        binding.yearSpinner.setSelection(years.length / 2);
         //
 
         // month spinner init.
@@ -1417,9 +1415,9 @@ public class Utils {
         for (int i = 0; i < months.length; ++i) {
             months[i] = months[i] + " / " + formatNumber(i + 1);
         }
-        monthSpinner.setAdapter(new ArrayAdapter<>(context,
+        binding.monthSpinner.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item, months));
-        monthSpinner.setSelection(date.getMonth() - 1);
+        binding.monthSpinner.setSelection(date.getMonth() - 1);
         //
 
         // days spinner init.
@@ -1427,9 +1425,9 @@ public class Utils {
         for (int i = 0; i < days.length; ++i) {
             days[i] = formatNumber(i + 1);
         }
-        daySpinner.setAdapter(new ArrayAdapter<>(context,
+        binding.daySpinner.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item, days));
-        daySpinner.setSelection(date.getDayOfMonth() - 1);
+        binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
         //
 
         return startingYearOnYearSpinner;
