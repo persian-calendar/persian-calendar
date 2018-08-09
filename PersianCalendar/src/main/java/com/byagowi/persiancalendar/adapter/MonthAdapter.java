@@ -17,6 +17,8 @@ import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
 import java.util.List;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,16 +27,23 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private MonthFragment monthFragment;
     private List<DayEntity> days;
     private boolean isArabicDigit;
-    private TypedValue colorHoliday = new TypedValue();
-    private TypedValue colorTextHoliday = new TypedValue();
-    private TypedValue colorTextDay = new TypedValue();
-    private TypedValue colorPrimary = new TypedValue();
-    private TypedValue colorDayName = new TypedValue();
-    private TypedValue shapeSelectDay = new TypedValue();
     private final int startingDayOfWeek;
     private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
+
+    @ColorInt
+    private int colorHoliday;
+    @ColorInt
+    private int colorTextHoliday;
+    @ColorInt
+    private int colorTextDay;
+    @ColorInt
+    private int colorPrimary;
+    @ColorInt
+    private int colorDayName;
+    @DrawableRes
+    private int shapeSelectDay;
 
     public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
@@ -48,12 +57,30 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.colorHoliday, colorHoliday, true);
-        theme.resolveAttribute(R.attr.colorTextHoliday, colorTextHoliday, true);
-        theme.resolveAttribute(R.attr.colorTextDay, colorTextDay, true);
-        theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
-        theme.resolveAttribute(R.attr.colorTextDayName, colorDayName, true);
-        theme.resolveAttribute(R.attr.circleSelect, shapeSelectDay, true);
+
+        TypedValue colorHolidayAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.colorHoliday, colorHolidayAttr, true);
+        colorHoliday = ContextCompat.getColor(context, colorHolidayAttr.resourceId);
+
+        TypedValue colorTextHolidayAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.colorTextHoliday, colorTextHolidayAttr, true);
+        colorTextHoliday = ContextCompat.getColor(context, colorTextHolidayAttr.resourceId);
+
+        TypedValue colorTextDayAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.colorTextDay, colorTextDayAttr, true);
+        colorTextDay = ContextCompat.getColor(context, colorTextDayAttr.resourceId);
+
+        TypedValue colorPrimaryAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.colorPrimary, colorPrimaryAttr, true);
+        colorPrimary = ContextCompat.getColor(context, colorPrimaryAttr.resourceId);
+
+        TypedValue colorDayNameAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.colorTextDayName, colorDayNameAttr, true);
+        colorDayName = ContextCompat.getColor(context, colorDayNameAttr.resourceId);
+
+        TypedValue shapeSelectDayAttr = new TypedValue();
+        theme.resolveAttribute(R.attr.circleSelect, shapeSelectDayAttr, true);
+        shapeSelectDay = shapeSelectDayAttr.resourceId;
     }
 
     private int selectedDay = -1;
@@ -165,7 +192,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 int row = position / 8;
                 if (row > 0 && row <= weeksCount) {
                     holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
-                    holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
+                    holder.num.setTextColor(colorDayName);
                     holder.num.setTextSize(12);
                     holder.num.setBackgroundResource(0);
                     holder.num.setVisibility(View.VISIBLE);
@@ -183,7 +210,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             setEmpty(holder);
         } else if (isPositionHeader(position)) {
             holder.num.setText(Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)));
-            holder.num.setTextColor(ContextCompat.getColor(context, colorDayName.resourceId));
+            holder.num.setTextColor(colorDayName);
             holder.num.setTextSize(20);
             holder.today.setVisibility(View.GONE);
             holder.num.setBackgroundResource(0);
@@ -214,16 +241,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
 
                 if (originalPosition == selectedDay) {
-                    holder.num.setBackgroundResource(shapeSelectDay.resourceId);
-                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
-                            ? colorTextHoliday.resourceId
-                            : colorPrimary.resourceId));
+                    holder.num.setBackgroundResource(shapeSelectDay);
+                    holder.num.setTextColor(isHoliday ? colorTextHoliday : colorPrimary);
 
                 } else {
                     holder.num.setBackgroundResource(0);
-                    holder.num.setTextColor(ContextCompat.getColor(context, isHoliday
-                            ? colorHoliday.resourceId
-                            : colorTextDay.resourceId));
+                    holder.num.setTextColor(isHoliday ? colorHoliday : colorTextDay);
                 }
 
             } else {

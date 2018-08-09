@@ -958,7 +958,8 @@ public class Utils {
                             CalendarContract.Events.RRULE,          // 6
                             CalendarContract.Events.VISIBLE,        // 7
                             CalendarContract.Events.ALL_DAY,        // 8
-                            CalendarContract.Events.DELETED         // 9
+                            CalendarContract.Events.DELETED,        // 9
+                            CalendarContract.Events.EVENT_COLOR     // 10
                     }, null, null, null);
 
             if (cursor == null) {
@@ -1019,7 +1020,8 @@ public class Utils {
                         startDate,
                         endDate,
                         cursor.getString(5),
-                        civilDate
+                        civilDate,
+                        cursor.getString(10)
                 );
                 list.add(event);
                 allEnabledEvents.add(event);

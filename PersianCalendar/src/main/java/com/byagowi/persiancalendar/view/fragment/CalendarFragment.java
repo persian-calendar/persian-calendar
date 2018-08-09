@@ -13,6 +13,7 @@ import android.provider.CalendarContract;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -343,6 +344,16 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
                     Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                try {
+                    ds.setColor(Integer.parseInt(event.getColor()));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };

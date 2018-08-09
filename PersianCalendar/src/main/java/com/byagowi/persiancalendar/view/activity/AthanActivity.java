@@ -24,12 +24,12 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = AthanActivity.class.getName();
     private TextView textAlarmName;
-    private AppCompatImageView athanIconView;
+    private LinearLayoutCompat activityRootView;
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
 
@@ -41,7 +41,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         if (audioManager != null) {
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
         }
-
 
         Uri customAthanUri = Utils.getCustomAthanUri(this);
         if (customAthanUri != null) {
@@ -69,20 +68,18 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_athan);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         textAlarmName = findViewById(R.id.athan_name);
         TextView textCityName = findViewById(R.id.place);
-        athanIconView = findViewById(R.id.background_image);
-        athanIconView.setOnClickListener(this);
+        activityRootView = findViewById(R.id.activity_root);
+        activityRootView.setOnClickListener(this);
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
         textAlarmName.setText(Utils.getPrayTimeText(prayerKey));
-        athanIconView.setImageResource(Utils.getPrayTimeImage(prayerKey));
+        activityRootView.setBackgroundResource(Utils.getPrayTimeImage(prayerKey));
 
         textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
