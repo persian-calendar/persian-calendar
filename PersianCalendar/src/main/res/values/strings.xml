@@ -180,5 +180,12 @@ Previous designers: Behdad Pournader, Iman Soltanian"</string>
     <string name="about_contributors">Contributors</string>
     <string name="about_support_developers">Developer Support</string>
     <string name="about_email_sum">Send personal email to the author of the app</string>
+    <string name="internet_location_enable">Please turn on the Internet connection and Location!</string>
+    <string name="location_enable">Please turn on the Location!</string>
+    <string name="internet_enable">Please turn on the Internet connection!</string>
+    <string name="gps_settings">GPS</string>
+    <string name="gprs_settings">GPRS</string>
+    <string name="wifi_settings">WiFi</string>
+    <string name="gps_internet_desc">Please Positioning (GPS) and the internet to find the direction of Mecca turn on.\nProgram need only once to access GPS and internet and ignore this message, but if you in new location access to GPS and internet is needed again.\nif they both have activated please exit here and reopen!</string>
 
 </resources>
