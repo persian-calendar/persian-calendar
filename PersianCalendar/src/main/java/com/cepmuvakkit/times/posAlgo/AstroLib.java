@@ -279,8 +279,7 @@ public class AstroLib {
         int Seconds = (((int) (hour * 3600)) % 3600) % 60;
         int Minute = ((int) (hour * 60)) % 60;
         int Hour = ((int) (hour));
-        int[] HHMMSS = {Hour, Minute, Seconds};
-        return HHMMSS;
+        return new int[]{Hour, Minute, Seconds};
     }
 
     /**
@@ -290,8 +289,7 @@ public class AstroLib {
     public static int[] convertHour2HHMM(double hour) {
         int Minute = ((int) Math.round((hour * 60)) % 60);
         int Hour = ((int) (hour));
-        int[] HHMM = {Hour, Minute};
-        return HHMM;
+        return new int[]{Hour, Minute};
     }
 
     /**

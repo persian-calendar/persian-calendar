@@ -2,13 +2,12 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.util.Utils;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.EditTextPreference;
 
 /**
  * Created by ebraminio on 2/16/16.
@@ -29,12 +28,6 @@ public class AthanNumericPreference extends EditTextPreference {
 
     public AthanNumericPreference(Context context) {
         super(context);
-    }
-
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-        Utils.getInstance(getContext()).setFontAndShape(holder);
     }
 
     private Double mDouble;

@@ -1,12 +1,11 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-
 import com.byagowi.persiancalendar.R;
 
 import java.util.Set;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 
@@ -17,7 +16,7 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
         super.onPrepareDialogBuilder(builder);
         PrayerSelectPreference prayerspref = (PrayerSelectPreference) getPreference();
 
-        final CharSequence[] entriesKeys = getResources().getStringArray(R.array.prayerTimeKeys);
+        CharSequence[] entriesKeys = getResources().getStringArray(R.array.prayerTimeKeys);
 
         prayers = prayerspref.getPrayers();
 
@@ -26,14 +25,11 @@ public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
             checked[i] = prayers.contains(entriesKeys[i]);
         }
 
-        builder.setMultiChoiceItems(R.array.prayerTimeNames, checked, new DialogInterface.OnMultiChoiceClickListener() {
-            public void onClick(DialogInterface dialog, int which,
-                                boolean isChecked) {
-                if (isChecked) {
-                    prayers.add(entriesKeys[which].toString());
-                } else {
-                    prayers.remove(entriesKeys[which].toString());
-                }
+        builder.setMultiChoiceItems(R.array.prayerTimeNames, checked, (dialog, which, isChecked) -> {
+            if (isChecked) {
+                prayers.add(entriesKeys[which].toString());
+            } else {
+                prayers.remove(entriesKeys[which].toString());
             }
         });
     }

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">فارسی کلیز</string>
-    <string name="app_name_debug">تقویم دیباگ</string>
+    <string name="cancel">لغو</string>
     <string name="widget_name">فارسی کلیز</string>
     <string name="widget_mini_name">فارسی کلیز (کوچنی)</string>
     <string name="latitude">جغرافیایی عرض</string>
@@ -22,15 +22,13 @@
     <string name="date">نیټه</string>
     <string name="date_converter">د نیټه مبدل</string>
     <string name="logo">نښه</string>
-    <string name="dari_months">دری میاشتو</string>
-    <string name="enable_dari">دری میاشتو توانول</string>
     <string name="widget_notification_dashclock">ویجت، د مطلع سازی نوار او دش کلاک</string>
     <string name="general">ټولګړي غوراوي</string>
     <string name="widget_text_color">د ویجت د لیکل رنگ</string>
     <string name="select_widgets_text_color">د ویجت دودیز رنگونه ټاکنه</string>
     <string name="pray_times_calculation_setting">د شرعی اوقات محاسبه او قبله نما غوراوي</string>
     <string name="notify_date">د نیټه یادښت توانول</string>
-    <string name="enable_notify">Persistent notification for all date types, needs device restart after turning it off</string>
+    <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">د پروگرام رنگ غوراوي</string>
     <string name="skin">د پروگرام رنگ</string>
     <string name="pray_methods">د حساب کارونه</string>
@@ -46,7 +44,6 @@
     <string name="qibla_compass">قطب‌نما/قبله‌نما</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">د قطب نما سنسور پیدا نشو</string>
-
     <string name="month_names">مياشت نومونه</string>
     <string name="calendar_font">د کلیز فانت</string>
     <string name="application_language">د پروگرام ژبه</string>
@@ -69,6 +66,7 @@
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
+    <string name="imsak">امساک</string>
     <string name="azan1">اذان صبح</string>
     <string name="azan2">اذان ظهر</string>
     <string name="azan3">عصر</string>
@@ -78,7 +76,8 @@
     <string name="aftab2">غروب آفتاب</string>
     <string name="aftab3">نیمه وقت شرعی</string>
     <string name="owghat">اوقات شرعی</string>
-    <string name="events">رویداد‌ها</string>
+    <string name="events">مناسبت‌ها</string>
+    <string name="events_summary">تنظیم نوع مناسبت‌های نمایش داده شده در تقویم</string>
     <string name="today">امروز</string>
     <string name="select_type_date">انتخاب نوع تاریخ</string>
     <string name="year">سال</string>
@@ -91,18 +90,67 @@
     <string name="in_city_time">در</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">تنظیم روز جهت جلو عقب کردن جهت اصلاح تقویم</string>
-
-    <string-array name="calendar_type">
-        <item>هجری شمسی</item>
-        <item>هجری قمری</item>
-        <item>میلادی</item>
-    </string-array>
-
     <string name="date_copied_clipboard">به کلیپ بودر کپی شد</string>
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="select">انتخاب</string>
+    <string name="go">برو</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="holidaysIncompletenessWarning">مناسبت‌های این سال در تقویم کامل نیست.</string>
-    <string name="shouldBeUpdated">مناسبت‌های امسال در تقویم به طور کامل وارد نشده‌است، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
+    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
+    <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
+    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
+    <string name="user_interface">رابط کاربری</string>
+    <string name="warn_if_events_not_set">جهت نمایش و انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
+    <string name="search_holidays">جستجو در مناسبت‌ها</string>
+    <string name="main_calendar">تقویم اصلی</string>
+    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
+    <string name="week_of_year">هفتهٔ سال</string>
+    <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
+    <string name="accept">تأیید</string>
+    <string name="calendar">تقویم</string>
+    <string name="week_start">شروع هفته</string>
+    <string name="week_start_summary">انتخاب شروع هفته</string>
+    <string name="week_ends">روزهای تعطیل هفته</string>
+    <string name="week_ends_summary">چه روزهایی در هفته تعطیل نمایش داده شوند</string>
+    <string name="search_in_events">جستجو در مناسبت‌ها</string>
+    <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
+    <string name="show_device_calendar_events">رویدادهای شخصی</string>
+    <string name="add_event">افزودن رویداد</string>
+    <string name="device_calendar_does_not_support">نقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
+    <string name="compact_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
+    <string name="compact_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
+    <string name="add">افزودن</string>
+    <string name="which_one_to_show">کدام یک نمایش داده شود</string>
+    <string name="notification_athan">اذان به صورت اعلان</string>
+    <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
+    <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
+    <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
+    <string name="custom_athan_summary">انتخاب صدای اذان انتخابی</string>
+    <string name="custom_athan">انتخاب اذان</string>
+    <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
+    <string name="default_athan">اذان پیش‌فرض</string>
+    <string name="default_athan_name">عبدالباسط عبدالصمد</string>
+    <string name="about_license">مجوز</string>
+    <string name="about_license_title">مجوزهای برنامه</string>
+    <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
+    <string name="about_license_dialog_close">بستن</string>
+    <string name="about_help_title">راهنما</string>
+    <string name="about_report_bug">گزارش اشکال</string>
+    <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
+    <string name="about_sendMail">رایانامه</string>
+    <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
+    <string name="about_developers">توسعه‌دهندگان</string>
+    <string name="about_contributors">همکاران</string>
+    <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
+    <string name="about_email_sum">ارسال رایانامه شخصی برای نویسنده برنامه</string>
+    <string name="internet_location_enable">لطفاً اینترنت و موقعیت‌یاب را روشن نمایید!</string>
+    <string name="location_enable">لطفاً موقعیت‌یاب را روشن نمایید!</string>
+    <string name="internet_enable">لطفاً اینترنت را روشن نمایید!</string>
+    <string name="gps_settings">GPS</string>
+    <string name="gprs_settings">GPRS</string>
+    <string name="wifi_settings">WiFi</string>
+    <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
+برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد و این پیام را نادیده بگیرید، اما در صورتی که مکان شما تغییر کرده است دوباره به این دسترسی‌ها نیاز است."</string>
+
 </resources>

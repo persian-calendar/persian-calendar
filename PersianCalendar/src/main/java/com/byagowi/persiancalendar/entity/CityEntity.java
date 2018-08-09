@@ -9,19 +9,24 @@ public class CityEntity {
     private String key;
     private String en;
     private String fa;
+    private String ckb;
     private String countryCode;
     private String countryEn;
     private String countryFa;
+    private String countryCkb;
     private Coordinate coordinate;
 
-    public CityEntity(String key, String en, String fa, String countryCode, String countryEn,
-                      String countryFa, Coordinate coordinate) {
+    public CityEntity(String key, String en, String fa, String ckb, String countryCode,
+                      String countryEn, String countryFa, String countryCkb,
+                      Coordinate coordinate) {
         this.key = key;
         this.en = en;
         this.fa = fa;
+        this.ckb = ckb;
         this.countryCode = countryCode;
         this.countryEn = countryEn;
         this.countryFa = countryFa;
+        this.countryCkb = countryCkb;
         this.coordinate = coordinate;
     }
 
@@ -49,6 +54,14 @@ public class CityEntity {
         this.countryFa = countryFa;
     }
 
+    public String getCountryCkb() {
+        return countryCkb;
+    }
+
+    public void setCountryCkb(String countryFa) {
+        this.countryCkb = countryCkb;
+    }
+
     public String getEn() {
         return en;
     }
@@ -63,6 +76,14 @@ public class CityEntity {
 
     public void setFa(String fa) {
         this.fa = fa;
+    }
+
+    public String getCkb() {
+        return ckb;
+    }
+
+    public void setCkb(String fa) {
+        this.ckb = ckb;
     }
 
     public String getKey() {

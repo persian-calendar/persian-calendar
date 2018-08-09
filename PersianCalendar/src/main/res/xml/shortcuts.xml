@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="25">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/sc_explore"
+        android:shortcutDisabledMessage="@string/compass_disabled_message"
+        android:shortcutId="COMPASS"
+        android:shortcutLongLabel="@string/compass_long_label"
+        android:shortcutShortLabel="@string/compass_short_label">
+        <!-- Each one of these intents needs an android:action, even if you don't
+             do anything with it. Otherwise you're in for a crash! -->
+        <intent
+            android:action="COMPASS_SHORTCUT"
+            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list is what the user sees when they
+             launch this shortcut. The previous intents will be put on the backstack -->
+        <!-- You can also specify the category of the shortcut via the <categories>
+             tag. As of this writing, the only supported category is
+             android.shortcut.conversation, and can be specified using android:name
+             like so: -->
+        <!-- <categories android:name="android.shortcut.conversation"/> -->
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/sc_swap_vertical_circle"
+        android:shortcutDisabledMessage="@string/converter_disabled_message"
+        android:shortcutId="CONVERTER"
+        android:shortcutLongLabel="@string/converter_long_label"
+        android:shortcutShortLabel="@string/converter_short_label">
+        <intent
+            android:action="CONVERTER_SHORTCUT"
+            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+
+    </shortcut>
+
+    <!--<shortcut
+        android:enabled="true"
+        android:icon="@drawable/sc_settings"
+        android:shortcutDisabledMessage="@string/preference_disabled_message"
+        android:shortcutId="PREFERENCE"
+        android:shortcutLongLabel="@string/preference_long_label"
+        android:shortcutShortLabel="@string/preference_short_label">
+        <intent
+            android:action="PREFERENCE_SHORTCUT"
+            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+
+    </shortcut>-->
+
+</shortcuts>

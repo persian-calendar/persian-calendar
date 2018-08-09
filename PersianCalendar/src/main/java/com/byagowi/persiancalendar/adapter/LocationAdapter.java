@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +14,20 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private String locale;
     private List<CityEntity> cities;
-    private Utils utils;
     private LocationPreferenceDialog locationPreferenceDialog;
     private LayoutInflater layoutInflater;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog) {
         Context context = locationPreferenceDialog.getContext();
-        utils = Utils.getInstance(locationPreferenceDialog.getContext());
         this.layoutInflater = LayoutInflater.from(context);
         this.locationPreferenceDialog = locationPreferenceDialog;
-        this.cities = utils.getAllCities(true);
-        this.locale = utils.getAppLanguage();
+        this.cities = Utils.getAllCities(context, true);
+        this.locale = Utils.getAppLanguage();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -38,11 +37,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            tvCity = (TextView) itemView.findViewById(R.id.tvCity);
-            tvCountry = (TextView) itemView.findViewById(R.id.tvCountry);
-
-            utils.setFont(tvCity);
-            utils.setFont(tvCountry);
+            tvCity = itemView.findViewById(R.id.tvCity);
+            tvCountry = itemView.findViewById(R.id.tvCountry);
         }
 
         @Override
@@ -58,13 +54,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvCity.setText(locale.equals(Constants.LANG_EN)
-                ? cities.get(position).getEn()
-                : utils.shape(cities.get(position).getFa()));
-
-        holder.tvCountry.setText(locale.equals(Constants.LANG_EN)
-                ? cities.get(position).getCountryEn()
-                : utils.shape(cities.get(position).getCountryFa()));
+        if (locale.equals(Constants.LANG_EN)) {
+            holder.tvCity.setText(cities.get(position).getEn());
+            holder.tvCountry.setText(cities.get(position).getCountryEn());
+        } else if (locale.equals(Constants.LANG_CKB)) {
+            holder.tvCity.setText(cities.get(position).getCkb());
+            holder.tvCountry.setText(cities.get(position).getCountryCkb());
+        } else {
+            holder.tvCity.setText(cities.get(position).getFa());
+            holder.tvCountry.setText(cities.get(position).getCountryFa());
+        }
     }
 
     @Override

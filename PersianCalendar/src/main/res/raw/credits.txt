@@ -1,17 +1,4 @@
-* این نسخه، نسخهٔ سال ۱۳۹۶ است و فقط دارای مناسبت‌های تعطیل قمری رسمی این سال است، برای مناسبت‌های قمری سال‌های بعد نیاز است در همان هنگام برنامه اگر توسعهٔ برنامه هنوز ادامه داشت، برنامه را به‌روز کنید به این دلیل که آن مناسبت‌ها تا زمان انتشار آن نسخه به صورت رسمی در تقویم کشور مشخص نشده‌اند. در صورتی که توسعهٔ برنامه در سالی که از برنامه استفاده می‌کنید ادامه نداشت برای داشتن مناسبت‌های تعطیل رسمی پیشنهاد می‌شود از تقویم دیگری استفاده کنید. مناسبت‌های خورشیدی رسمی برای همه سال‌های اعمال شده است ولی ممکن است در سال که در تقویم آن مناسبت را مشاهده می‌کنید آن مناسبت دیگر تعطیل رسمی نبوده یا دیگر نباشد.
-* مناسبت‌های این برنامه با تقویم ایران تنظیم شده‌است. ممکن است در کشورهای دیگر از جمله افغانستان این مناسبت‌ها کاربرد نداشته باشد ولی در امکانات مختلف برنامه سعی شده جامعیت برنامه حفظ شود.
-* دسترسی مکان به منظور امکان تنظیم اوقات شرعی در تنظیمات گرفته شده است، اگر مکانتان مثلاً از شهری به شهری دیگر تغییر می‌کند نیاز است هر با تغییر، آن را تنظیم کنید.
-* تقویم قمری ممکن است دارای اشکال باشد به همین دلیل ممکن است نیاز باشد دستی در تنظیمات آن را تنظیم کنید. راه‌حل‌های از جمله به‌روزرسانی اختلاف از طریق اینترنت مطلوب توسعهٔ این برنامه نبوده به این دلیل که نیازمند دسترسی اینترنت است و هدف توسعهٔ این برنامه نگرفتن دسترسی‌ها تاجای ممکن بوده است.
-* فقط مناسبت‌های تعطیل که از تقویم قمری هستند در این برنامه وجود دارد و مناسبت‌های غیر تعطیل به دلیل دقیق نبودن تقویم قمری  و نیاز به به‌روزرسانی هر ساله با تقویم رسمی منتشر شده در این برنامه آورده نشده‌اند.
-* تضمینی در صحت کارکرد برنامه وجود ندارد، فقط سعی شده برنامه‌ای مفید ارائه شود. مشهور است که هیچ برنامه، نرم‌افزار و الگوریتمی بی‌نقص نیست و ممکن است نیاز باشد خروجی برنامه را با منابع دیگر بررسی کنید. ممکن است به دلیل حجم کم حافظه دستگاه، برنامه قادر به‌روزرسانی شماره روز ماه در نوار اعلان نباشد و روز عقب‌تری را نشان دهند. پیشنهاد می‌شود برنامه‌های اضافی دستگاه که حافظه‌ای اضافی گرفته‌اند را حذف کنید یا گزینهٔ نوار اعلان برنامه را غیر فعال کنید یا از برنامهٔ دیگری را بیازمایید.
-* انتخاب طراحی این برنامه بوده که اذان فقط شامل چهار الله اکبر اول باشد، اذان‌های متنوع باعث افزایش حجم می‌شود و امکان انتخاب اذان از گوشی باعث پیچیدگی برنامه و نیازمند دسترسی‌های بیشتر برنامه می‌شود که به همین دلیل حداقل تا این نسخهٔ برنامه ممکن نیست.
-* این تقویم به صورت شخصی، بدون هیچ منفعت مالی و با کمک افراد و کتابخانه‌های نرم‌افزاری که زیر ذکر شده است به امید اینکه مفید باشد طراحی شده‌است و با مجوز جی‌پی‌ال نسخهٔ ۳ تولید شده‌است.
-* مجوز جی‌پی‌ال به معنی آن است که استفاده از کدهای این برنامه فقط در صورتی امکان‌پذیر است که کدهایی که تغییر داده شده و به پروژه اضافه شده (به اصطلاح لینک شده) تحت همین مجوز به صورت آزاد منتشر شوند، انتخاب این مجوز به دلیل استفاده از کدهایی با همین مجوز بوده است و استفاده از کدهای این برنامه در برنامه‌هایی غیر متن‌باز از نظر مجوز استفاده شده در این پروژه و خصوصاً کتابخانه‌های جی‌پی‌ال استفاده شده نادرست است و در صورت استفاده از کدها و کتابخانه‌های جی‌پی‌ال نیاز است منبع و مجوز آن را به دقت در چنین صفحه‌ای در برنامه بیاورید.
-* مانند قسمت‌های دیگر این برنامه، تضمینی در درستی علمکرد قطب‌نما نیست خصوصاً اینکه این قابلیت به وجود و درست تنظیم بودن سنسور قطب‌نمای دستگاه وابسته است. پیشنهاد می‌شود شمال را همیشه از طریق دیگر بدست آورید تا بتوانید از سایر اطلاعاتی که آن قسمت در اختیار قرار می‌دهد استفاده کنید ولی معمولاً این قسمت در صورتی که دستگاه را قبل از ورود به این بخش تخت و صاف قرار داده باشید درست عمل می‌کند.
-* برای گزارش کاستی‌ها و خطاهای برنامه و درخواست ویژگی‌های جدید لطفاً از http://github.com/ebraminio/DroidPersianCalendar استفاده کنید.
-
-
-Copyright (C) 2012-2017  ebrahim@gnu.org  ابراهیم بیاگوی
+Copyright (C) 2012-2018 Ebrahim Byagowi
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,21 +14,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
 
-Author: Ebrahim Byagowi (ebraminio)
-Collaborators: Hamid Safdari (hamidsafdari), Behdad Abedi (behdad222)
-Contributors: Javad Arjmandi (La-Volpe), Mehdi Sadeghi (mehdisadeghi), Masood Fallahpoor (MasoodFallahpoor)
-Icon design and Athan backgrounds: Mehrara Abedi
-Previous designers: Behdad Pournader, Iman Soltanian
-
-
 Assets:
 * {fajr,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
 * {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
 * kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
-  https://www.behance.net/gallery/21015893/Google-Calendar
+https://www.behance.net/gallery/21015893/Google-Calendar
 * abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due to being so
-  old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
+old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
 * Noto Naskh Arabic from Noto fonts project https://github.com/googlei18n/noto-fonts (OFL 1.1)
 
 
@@ -81,6 +61,10 @@ Libraries:
   be useful, but WITHOUT ANY WARRANTY.
 
 * Part of holidays list from https://github.com/ilius/starcal (GPLv3)
+  * Saeed Rasooli <saeed.gnu@gmail.com>
+  * Mola Pahnadayan <mola.mp@gmail.com>
+  * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی
+  * رضا مرادی غیاث‌آبادی
 
   Copyright (C) 2017  Saeed Rasooli
 
@@ -96,22 +80,6 @@ Libraries:
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-* ArabicShaper http://code.google.com/p/arabicreshaper/ (Apache 2.0)
-
-  Copyright (C) 2010 Aziz Huss (azizAnroid)
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
 
 * QiblaCompassView.java and its dependencies from https://code.google.com/p/android-salat-times (GPLv3)
 
@@ -147,24 +115,9 @@ Libraries:
   limitations under the License.
 
 * Android Support Library http://developer.android.com/tools/support-library (Apache 2.0)
+  Flexbox for Android https://github.com/google/flexbox-layout (Apache 2.0)
 
-  Copyright (C) 2017 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
-* TypefaceSpan from https://gist.github.com/twaddington/b91341ea5615698b53b8 (Apache 2.0)
-
-  Copyright 2013 Simple Finance Corporation. All rights reserved.
+  Copyright (C) 2018 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

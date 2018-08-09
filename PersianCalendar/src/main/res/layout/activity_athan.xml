@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorBackground">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/background_image"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/activity_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/fajr"
-        android:scaleType="centerCrop"/>
+        android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/athan_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="36sp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:textColor="?attr/colorTextAthan"
-        android:textStyle="bold"
-        android:layout_marginTop="80dp"
-        style="@style/ShadowTextStyle"
-        android:background="@null"
-        android:layout_marginRight="30dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/athan_name"
+            style="@style/ShadowTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="80dp"
+            android:textColor="?attr/colorTextAthan"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:text="اذان صبح" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/athan_name"
-        android:textColor="?attr/colorTextAthan"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        style="@style/ShadowTextStyle"
-        android:background="@null"
-        android:layout_marginRight="30dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/place"
+            style="@style/ShadowTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:textColor="?attr/colorTextAthan"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="به افق شهر" />
 
-</RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

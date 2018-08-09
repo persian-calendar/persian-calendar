@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="compass_disabled_message">Shortcuts are disabled!</string>
+    <string name="compass_long_label">Qibla/Compass</string>
+    <string name="compass_short_label">Compass</string>
+
+    <string name="preference_disabled_message">Shortcuts are disabled!</string>
+    <string name="preference_long_label">Preference</string>
+    <string name="preference_short_label">Preference</string>
+
+    <string name="converter_disabled_message">Shortcuts are disabled!</string>
+    <string name="converter_long_label">Date Converter</string>
+    <string name="converter_short_label">Converter</string>
+</resources>

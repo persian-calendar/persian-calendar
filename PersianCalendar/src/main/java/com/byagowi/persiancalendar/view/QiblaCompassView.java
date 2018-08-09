@@ -11,7 +11,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -22,6 +21,8 @@ import com.cepmuvakkit.times.posAlgo.Horizontal;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
+
+import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
     private Paint dashedPaint;
@@ -158,7 +159,7 @@ public class QiblaCompassView extends View {
         int r = Radius / 12;
         // Construct a wedge-shaped path
         mPath.reset();
-        mPath.moveTo(px, py - px);
+        mPath.moveTo(px, py - Radius);
         mPath.lineTo(px - r, py);
         mPath.lineTo(px, py + r);
         mPath.lineTo(px + r, py);
@@ -166,7 +167,7 @@ public class QiblaCompassView extends View {
         mPath.close();
         canvas.drawPath(mPath, trueNorthArrowPaint);
         dashedPaint.setColor(Color.RED);
-        canvas.drawLine(px, py - px, px, py + Radius, dashedPaint);
+        canvas.drawLine(px, py - Radius, px, py + Radius, dashedPaint);
         canvas.drawCircle(px, py, 5, dashedPaint);
         canvas.restore();
     }
@@ -204,17 +205,16 @@ public class QiblaCompassView extends View {
             if (i % 6 == 0) {
                 String dirString = "";
                 switch (i) {
-                    case (0): {
+                    case 0:
                         dirString = northString;
                         break;
-                    }
-                    case (6):
+                    case 6:
                         dirString = eastString;
                         break;
-                    case (12):
+                    case 12:
                         dirString = southString;
                         break;
-                    case (18):
+                    case 18:
                         dirString = westString;
                         break;
                 }

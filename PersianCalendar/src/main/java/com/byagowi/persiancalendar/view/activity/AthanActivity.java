@@ -3,103 +3,146 @@ package com.byagowi.persiancalendar.view.activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
-import android.text.TextUtils;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.ActivityAthanBinding;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.PrayTime;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class AthanActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = AthanActivity.class.getName();
-    private TextView textAlarmName;
-    private AppCompatImageView athanIconView;
+    private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
-    private Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        utils = Utils.getInstance(getApplicationContext());
-
-        utils.changeAppLanguage(this);
-        utils.loadLanguageResource();
-
-        setContentView(R.layout.activity_athan);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
         }
+
+        Uri customAthanUri = Utils.getCustomAthanUri(this);
+        if (customAthanUri != null) {
+            ringtone = RingtoneManager.getRingtone(this, customAthanUri);
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+            ringtone.play();
+        } else {
+            MediaPlayer player = new MediaPlayer();
+            try {
+                player.setDataSource(this, UIUtils.getDefaultAthanUri(this));
+                player.setAudioStreamType(AudioManager.STREAM_ALARM);
+                player.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                player.start();
+                mediaPlayer = player;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Utils.changeAppLanguage(this);
+
+        ActivityAthanBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_athan);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        textAlarmName = (TextView) findViewById(R.id.athan_name);
-        TextView textCityName = (TextView) findViewById(R.id.place);
-        athanIconView = (AppCompatImageView) findViewById(R.id.background_image);
-        athanIconView.setOnClickListener(this);
+        String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
+        binding.athanName.setText(UIUtils.getPrayTimeText(prayerKey));
 
-        setPrayerView(prayerKey);
+        View root = binding.getRoot();
+        root.setOnClickListener(this);
+        root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
 
-        textCityName.setText(getString(R.string.in_city_time) + " " + utils.getCityName(true));
+        binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
-        play();
-
-        new Handler().postDelayed(new Runnable() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                finish();
+                if (ringtone == null && mediaPlayer == null) {
+                    cancel();
+                    finish();
+                }
+                try {
+                    if (ringtone != null) {
+                        if (!ringtone.isPlaying()) {
+                            cancel();
+                            finish();
+                        }
+                    }
+                    if (mediaPlayer != null) {
+                        if (!mediaPlayer.isPlaying()) {
+                            cancel();
+                            finish();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    cancel();
+                    finish();
+                }
             }
-        }, TimeUnit.SECONDS.toMillis(45));
-    }
+        }, TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS.toMillis(5));
 
-    private void setPrayerView(String key) {
-        if (!TextUtils.isEmpty(key)) {
-            PrayTime prayTime = PrayTime.valueOf(key);
-
-            switch (prayTime) {
-                case FAJR:
-                    textAlarmName.setText(getString(R.string.azan1));
-                    athanIconView.setImageResource(R.drawable.fajr);
-                    break;
-
-                case DHUHR:
-                    textAlarmName.setText(getString(R.string.azan2));
-                    athanIconView.setImageResource(R.drawable.dhuhr);
-                    break;
-
-                case ASR:
-                    textAlarmName.setText(getString(R.string.azan3));
-                    athanIconView.setImageResource(R.drawable.asr);
-                    break;
-
-                case MAGHRIB:
-                    textAlarmName.setText(getString(R.string.azan4));
-                    athanIconView.setImageResource(R.drawable.maghrib);
-                    break;
-
-                case ISHA:
-                    textAlarmName.setText(getString(R.string.azan5));
-                    athanIconView.setImageResource(R.drawable.isha);
-                    break;
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (telephonyManager != null) {
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             }
+        } catch (Exception e) {
+            Log.e(TAG, "TelephonyManager handling fail", e);
         }
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!hasFocus) {
+            stop();
+            finish();
+        }
+    }
+
+    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            stop();
+            finish();
+        }
+    };
+
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING ||
+                    state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -108,42 +151,24 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
         stop();
         finish();
     }
 
-    private void play() {
-        try {
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setDataSource(this, utils.getAthanUri());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, utils.getAthanVolume(), 0);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-    }
-
     private void stop() {
-        try {
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            }
-        } catch (IllegalStateException ignored) {
+        if (ringtone != null) {
+            ringtone.stop();
         }
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        mp.release();
+        if (mediaPlayer != null) {
+            try {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

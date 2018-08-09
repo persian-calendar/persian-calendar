@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- See preferences.xml -->
+    <androidx.preference.ListPreference
+        android:defaultValue="#ffffffff"
+        android:entries="@array/colorNames"
+        android:entryValues="@array/colorKeys"
+        android:icon="@drawable/ic_brush_setting"
+        android:key="SelectedWidgetTextColor"
+        android:negativeButtonText="@string/cancel"
+        android:summary="@string/select_widgets_text_color"
+        android:title="@string/widget_text_color" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:icon="@drawable/ic_timezone_setting"
+        android:key="IranTime"
+        android:summary="@string/showing_iran_time"
+        android:title="@string/iran_time" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:icon="@drawable/ic_watch_setting"
+        android:key="WidgetClock"
+        android:summary="@string/showing_clock_on_widget"
+        android:title="@string/clock_on_widget" />
+
+    <androidx.preference.MultiSelectListPreference
+        android:defaultValue="@array/what_to_show_default"
+        android:dialogTitle="@string/which_one_to_show"
+        android:entries="@array/what_to_show"
+        android:entryValues="@array/what_to_show_keys"
+        android:icon="@drawable/ic_compact_setting"
+        android:key="what_to_show"
+        android:negativeButtonText="@string/cancel"
+        android:positiveButtonText="@string/accept"
+        android:summary="@string/compact_widget_summary"
+        android:title="@string/compact_widget" />
+
+</androidx.preference.PreferenceScreen>

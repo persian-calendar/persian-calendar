@@ -7,36 +7,58 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-    <uses-feature android:name="android.hardware.location" android:required="false" />
-    <uses-feature android:name="android.hardware.location.network" android:required="false" />
-    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- Android Worker library was getting this, now that it is disabled we
+         will get it so users won't noticed again when Worker is enabled -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_label"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/LightTheme">
 
         <activity
             android:name=".view.activity.MainActivity"
-            android:resizeableActivity="true"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout">
+            android:resizeableActivity="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
 
         <activity
             android:name=".view.activity.AthanActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/FullscreenTheme"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:launchMode="singleTop" />
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:theme="@style/FullscreenTheme" />
 
         <receiver
             android:name=".service.BroadcastReceivers"
@@ -46,6 +68,12 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name="com.byagowi.persiancalendar.view.activity.WidgetConfigurationActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".Widget1x1"
@@ -109,7 +137,22 @@
 
         <service
             android:name=".service.ApplicationService"
+            android:enabled="true"
             android:label="Calendar Service" />
+
+        <service
+            android:name=".service.AthanNotification"
+            android:label="Athan Service" />
+
+        <service
+            android:name=".service.PersianCalendarTileService"
+            android:icon="@drawable/day18"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

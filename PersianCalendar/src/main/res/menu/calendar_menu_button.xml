@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="100"
+        android:title="@string/search_holidays"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/add_event"
+        android:icon="@drawable/ic_add"
+        android:orderInCategory="100"
+        android:title="@string/add_event"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/go_to"
+        android:icon="@drawable/ic_goto"
+        android:orderInCategory="100"
+        android:title="@string/goto_date"
+        app:showAsAction="always" />
+
+</menu>

@@ -1,38 +1,9 @@
 package com.byagowi.persiancalendar.entity;
 
-import calendar.PersianDate;
-
 public class DayEntity {
-    private String num;
-    private boolean holiday;
     private boolean today;
+    private long jdn;
     private int dayOfWeek;
-    private PersianDate persianDate;
-    private boolean event;
-
-    public boolean isEvent() {
-        return event;
-    }
-
-    public void setEvent(boolean event) {
-        this.event = event;
-    }
-
-    public String getNum() {
-        return num;
-    }
-
-    public void setNum(String num) {
-        this.num = num;
-    }
-
-    public boolean isHoliday() {
-        return holiday;
-    }
-
-    public void setHoliday(boolean holiday) {
-        this.holiday = holiday;
-    }
 
     public boolean isToday() {
         return today;
@@ -42,19 +13,19 @@ public class DayEntity {
         this.today = today;
     }
 
-    public int getDayOfWeek() {
-        return dayOfWeek;
-    }
-
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public PersianDate getPersianDate() {
-        return persianDate;
+    public int getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setPersianDate(PersianDate persianDate) {
-        this.persianDate = persianDate;
+    public long getJdn() {
+        return jdn;
+    }
+
+    public void setJdn(long jdn) {
+        this.jdn = jdn;
     }
 }

@@ -12,6 +12,18 @@ public class PersianDate extends AbstractDate {
     private int month;
     private int day;
 
+    public PersianDate() {
+        this(Calendar.getInstance());
+    }
+
+    public PersianDate(Calendar calendar) {
+        PersianDate persianDate = DateConverter.civilToPersian
+                (new CivilDate(calendar));
+        setDayOfMonth(persianDate.getDayOfMonth());
+        setYear(persianDate.getYear());
+        setMonth(persianDate.getMonth());
+    }
+
     public PersianDate(int year, int month, int day) {
         setYear(year);
         // Initialize day, so that we get no exceptions when setting month
@@ -100,10 +112,13 @@ public class PersianDate extends AbstractDate {
     }
 
     public int getDayOfWeek() {
+        CivilDate civilDate = DateConverter.persianToCivil(this);
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.YEAR, civilDate.getYear());
+        cal.set(Calendar.MONTH, civilDate.getMonth() - 1);
+        cal.set(Calendar.DAY_OF_MONTH, civilDate.getDayOfMonth());
+        cal.getTimeInMillis();
+
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
@@ -111,8 +126,35 @@ public class PersianDate extends AbstractDate {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
-    public int getWeekOfMonth() {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
+    public int getWeekOfMonth(int firstDayOfWeek) {
+        int dowOfFirstDayOfMonth = (new PersianDate(year, month, 1)).getDayOfWeek();
+        int dayCountInFirstWeek = (7 - dowOfFirstDayOfMonth) + firstDayOfWeek;
+        if (dayCountInFirstWeek > 7)
+            dayCountInFirstWeek = dayCountInFirstWeek % 7;
+
+        int week1 = dayCountInFirstWeek;
+        int week2 = week1 + 7;
+        int week3 = week2 + 7;
+        int week4 = week3 + 7;
+        int week5 = week4 + 7;
+        int week6 = week5 + 7;
+        int week7 = week6 + 7;
+
+        if (day <= week1)
+            return 1;
+        else if (day <= week2)
+            return 2;
+        else if (day <= week3)
+            return 3;
+        else if (day <= week4)
+            return 4;
+        else if (day <= week5)
+            return 5;
+        else if (day <= week6)
+            return 6;
+        else if (day <= week7)
+            return 7;
+        return 0;
     }
 
     public boolean isLeapYear() {
@@ -125,8 +167,8 @@ public class PersianDate extends AbstractDate {
     }
 
     public boolean equals(PersianDate persianDate) {
-        return this.getDayOfMonth() == persianDate.getDayOfMonth()
-                && this.getMonth() == persianDate.getMonth()
-                && (this.getYear() == persianDate.getYear() || this.getYear() == -1);
+        return getDayOfMonth() == persianDate.getDayOfMonth()
+                && getMonth() == persianDate.getMonth()
+                && (getYear() == persianDate.getYear() || getYear() == -1);
     }
 }

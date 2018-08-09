@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="compass_disabled_message">میانبرها غیر فعال هستند!</string>
+    <string name="compass_long_label">قبله‌نما/قطب‌نما</string>
+    <string name="compass_short_label">قطب‌نما</string>
+
+    <string name="preference_disabled_message">میانبرها غیر فعال هستند!</string>
+    <string name="preference_long_label">تنظیمات</string>
+    <string name="preference_short_label">تنظیمات</string>
+
+    <string name="converter_disabled_message">میانبرها غیر فعال هستند!</string>
+    <string name="converter_long_label">مبدل تاریخ</string>
+    <string name="converter_short_label">مبدل</string>
+</resources>

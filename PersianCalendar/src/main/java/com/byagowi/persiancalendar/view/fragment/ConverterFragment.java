@@ -1,24 +1,22 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.ShapedArrayAdapter;
+import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -31,129 +29,111 @@ import calendar.PersianDate;
  */
 public class ConverterFragment extends Fragment implements
         AdapterView.OnItemSelectedListener, View.OnClickListener {
-    private Utils utils;
-    private Spinner calendarTypeSpinner;
-    private Spinner yearSpinner;
-    private Spinner monthSpinner;
-    private Spinner daySpinner;
+
     private int startingYearOnYearSpinner = 0;
-    private TextView date0;
-    private TextView date1;
-    private TextView date2;
-    private RelativeLayout moreDate;
+
+    private FragmentConverterBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_converter, container, false);
-        utils = Utils.getInstance(getContext());
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
-        // fill members
-        calendarTypeSpinner = (Spinner) view.findViewById(R.id.calendarTypeSpinner);
-        yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
-        monthSpinner = (Spinner) view.findViewById(R.id.monthSpinner);
-        daySpinner = (Spinner) view.findViewById(R.id.daySpinner);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
+                false);
 
-        date0 = (TextView) view.findViewById(R.id.date0);
-        date1 = (TextView) view.findViewById(R.id.date1);
-        date2 = (TextView) view.findViewById(R.id.date2);
+        binding.calendarsCard.calendarsCardIcon.setImageResource(R.drawable.ic_swap_vertical_circle);
 
-        date0.setOnClickListener(this);
-        date1.setOnClickListener(this);
-        date2.setOnClickListener(this);
+        binding.calendarsCard.today.setVisibility(View.GONE);
+        binding.calendarsCard.todayIcon.setVisibility(View.GONE);
+        binding.calendarsCard.today.setOnClickListener(this);
+        binding.calendarsCard.todayIcon.setOnClickListener(this);
 
-        moreDate = (RelativeLayout) view.findViewById(R.id.more_date);
+        // Hide the button, we don't need it here
+        binding.calendarsCard.moreCalendar.setVisibility(View.GONE);
 
-        // Shape and set font
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelDay));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelMonth));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.converterLabelYear));
-        utils.setFontAndShape((TextView) view.findViewById(R.id.calendarTypeTitle));
-
-        utils.setFont(date0);
-        utils.setFont(date1);
-        utils.setFont(date2);
-        //
+        binding.calendarsCard.shamsiDateLinear.setOnClickListener(this);
+        binding.calendarsCard.shamsiDateDay.setOnClickListener(this);
+        binding.calendarsCard.shamsiDate.setOnClickListener(this);
+        binding.calendarsCard.gregorianDateLinear.setOnClickListener(this);
+        binding.calendarsCard.gregorianDateDay.setOnClickListener(this);
+        binding.calendarsCard.gregorianDate.setOnClickListener(this);
+        binding.calendarsCard.islamicDateLinear.setOnClickListener(this);
+        binding.calendarsCard.islamicDateDay.setOnClickListener(this);
+        binding.calendarsCard.islamicDate.setOnClickListener(this);
 
         // fill views
-        calendarTypeSpinner.setAdapter(new ShapedArrayAdapter<>(getContext(),
-                Utils.DROPDOWN_LAYOUT, getResources().getStringArray(R.array.calendar_type)));
-        calendarTypeSpinner.setSelection(0);
+        binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.calendar_type)));
 
-        startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
-                calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+        binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
+        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
 
-        calendarTypeSpinner.setOnItemSelectedListener(this);
+        binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
-        yearSpinner.setOnItemSelectedListener(this);
-        monthSpinner.setOnItemSelectedListener(this);
-        daySpinner.setOnItemSelectedListener(this);
-        //
-        return view;
+        binding.selectdayFragment.yearSpinner.setOnItemSelectedListener(this);
+        binding.selectdayFragment.monthSpinner.setOnItemSelectedListener(this);
+        binding.selectdayFragment.daySpinner.setOnItemSelectedListener(this);
+
+        return binding.getRoot();
     }
 
     private void fillCalendarInfo() {
-        int year = startingYearOnYearSpinner + yearSpinner.getSelectedItemPosition();
-        int month = monthSpinner.getSelectedItemPosition() + 1;
-        int day = daySpinner.getSelectedItemPosition() + 1;
+        int year = startingYearOnYearSpinner + binding.selectdayFragment.yearSpinner.getSelectedItemPosition();
+        int month = binding.selectdayFragment.monthSpinner.getSelectedItemPosition() + 1;
+        int day = binding.selectdayFragment.daySpinner.getSelectedItemPosition() + 1;
 
-        CivilDate civilDate = null;
-        PersianDate persianDate;
-        IslamicDate islamicDate;
-
-        StringBuilder sb = new StringBuilder();
+        long jdn;
 
         try {
-            moreDate.setVisibility(View.VISIBLE);
+            binding.calendarsCard.shamsiContainer.setVisibility(View.VISIBLE);
+            binding.calendarsCard.gregorianContainer.setVisibility(View.VISIBLE);
+            binding.calendarsCard.islamicContainer.setVisibility(View.VISIBLE);
 
-            List<String> calendarsTextList = new ArrayList<>();
-            switch (utils.calendarTypeFromPosition(calendarTypeSpinner.getSelectedItemPosition())) {
+            switch (CalendarUtils.calendarTypeFromPosition(binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
-                    civilDate = new CivilDate(year, month, day);
-                    islamicDate = DateConverter.civilToIslamic(civilDate, 0);
-                    persianDate = DateConverter.civilToPersian(civilDate);
-
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(persianDate));
-                    calendarsTextList.add(utils.dateToString(islamicDate));
+                    jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
+                    binding.calendarsCard.gregorianContainer.setVisibility(View.GONE);
                     break;
 
                 case ISLAMIC:
-                    islamicDate = new IslamicDate(year, month, day);
-                    civilDate = DateConverter.islamicToCivil(islamicDate);
-                    persianDate = DateConverter.islamicToPersian(islamicDate);
-
-                    calendarsTextList.add(utils.dateToString(islamicDate));
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(persianDate));
+                    jdn = DateConverter.islamicToJdn(new IslamicDate(year, month, day));
+                    binding.calendarsCard.islamicContainer.setVisibility(View.GONE);
                     break;
 
                 case SHAMSI:
-                    persianDate = new PersianDate(year, month, day);
-                    civilDate = DateConverter.persianToCivil(persianDate);
-                    islamicDate = DateConverter.persianToIslamic(persianDate);
-
-                    calendarsTextList.add(utils.dateToString(persianDate));
-                    calendarsTextList.add(utils.dateToString(civilDate));
-                    calendarsTextList.add(utils.dateToString(islamicDate));
+                default:
+                    jdn = DateConverter.persianToJdn(new PersianDate(year, month, day));
+                    binding.calendarsCard.shamsiContainer.setVisibility(View.GONE);
                     break;
             }
 
-            sb.append(utils.getWeekDayName(civilDate));
-            sb.append(Constants.PERSIAN_COMMA);
-            sb.append(" ");
-            sb.append(calendarsTextList.get(0));
+            boolean isToday = CalendarUtils.getTodayJdn() == jdn;
+            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
 
-            date0.setText(utils.shape(sb.toString()));
-            date1.setText(utils.shape(calendarsTextList.get(1)));
-            date2.setText(utils.shape(calendarsTextList.get(2)));
+            binding.calendarsCard.calendarsCard.setVisibility(View.VISIBLE);
+
+            long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
+            CivilDate civilBase = new CivilDate(2000, 1, 1);
+            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
+            int yearDiff = civilOffset.getYear() - 2000;
+            int monthDiff = civilOffset.getMonth() - 1;
+            int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
+            binding.calendarsCard.diffDate.setText(String.format(getString(R.string.date_diff_text),
+                    Utils.formatNumber((int) diffDays),
+                    Utils.formatNumber(yearDiff),
+                    Utils.formatNumber(monthDiff),
+                    Utils.formatNumber(dayOfMonthDiff)));
+            binding.calendarsCard.diffDate.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
+            binding.calendarsCard.today.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
+            binding.calendarsCard.todayIcon.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
 
         } catch (RuntimeException e) {
-            moreDate.setVisibility(View.GONE);
-            date0.setText(utils.shape(getString(R.string.date_exception)));
+            binding.calendarsCard.calendarsCard.setVisibility(View.GONE);
+            Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -167,8 +147,7 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = utils.fillYearMonthDaySpinners(getContext(),
-                        calendarTypeSpinner, yearSpinner, monthSpinner, daySpinner);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
                 break;
         }
     }
@@ -180,6 +159,42 @@ public class ConverterFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        utils.copyToClipboard(view);
+        switch (view.getId()) {
+
+            case R.id.shamsi_date:
+            case R.id.shamsi_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
+                        binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.shamsi_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
+                break;
+
+            case R.id.gregorian_date:
+            case R.id.gregorian_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
+                        binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.gregorian_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
+                break;
+
+            case R.id.islamic_date:
+            case R.id.islamic_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
+                        binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
+                break;
+
+            case R.id.islamic_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
+                break;
+
+            case R.id.today:
+            case R.id.today_icon:
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                break;
+        }
     }
 }

@@ -19,6 +19,7 @@
         <item>White</item>
         <item>Red</item>
         <item>Green</item>
+        <item>Yellow</item>
         <item>Black</item>
     </string-array>
 
@@ -31,11 +32,11 @@
     </string-array>
 
     <string-array name="islamicOffsetNames">
-        <item>-۲</item>
-        <item>-۱</item>
+        <item>۲-</item>
+        <item>۱-</item>
         <item>۰</item>
-        <item>+۱</item>
-        <item>+۲</item>
+        <item>۱+</item>
+        <item>۲+</item>
     </string-array>
 
     <string-array name="drawerTitles">
@@ -55,4 +56,38 @@
         <item></item>
         <item></item>
     </string-array>
+
+    <string-array name="holidays_types">
+        <item>تعطیلات در ایران</item>
+        <item>مناسبت‌های اسلامی در ایران</item>
+        <item>مناسبت‌های ایران باستان</item>
+        <item>سایر مناسبت‌های ایران</item>
+        <item>مناسبت‌های بین‌المللی</item>
+        <item>رخصتی‌های افغانستان</item>
+        <item>سایر مناسبت‌های افغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>هجری شمسی</item>
+        <item>هجری قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>شنبه</item>
+        <item>یک‌شنبه</item>
+        <item>دوشنبه</item>
+        <item>سه‌شنبه</item>
+        <item>چهارشنبه</item>
+        <item>پنج‌شنبه</item>
+        <item>جمعه</item>
+    </string-array>
+
+    <string-array name="what_to_show">
+        <item>سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</item>
+        <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>
+        <item>اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+        <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+    </string-array>
+
 </resources>

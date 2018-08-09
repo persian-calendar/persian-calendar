@@ -2,12 +2,18 @@ package com.byagowi.persiancalendar;
 
 public class Constants {
 
-    public static final String LOCAL_INTENT_DAY_PASSED = "day-passed";
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
 
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
+    public static final int ATHAN_RINGTONE_REQUEST_CODE = 19;
+    public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
+    public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
+
 
     public static final String LANG_EN = "en";
+    public static final String LANG_EN_US = "en-US";
+    public static final String LANG_CKB = "ckb";
+    public static final String LANG_UR = "ur";
 
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
@@ -20,14 +26,20 @@ public class Constants {
     public static final String PREF_WIDGET_IN_24 = "WidgetIn24";
     public static final String PREF_IRAN_TIME = "IranTime";
     public static final String PREF_PERSIAN_DIGITS = "PersianDigits";
+    public static final String PREF_ATHAN_URI = "AthanURI";
+    public static final String PREF_ATHAN_NAME = "AthanName";
+    public static final String PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents";
     public static final String PREF_WIDGET_CLOCK = "WidgetClock";
     public static final String PREF_NOTIFY_DATE = "NotifyDate";
+    public static final String PREF_NOTIFICATION_ATHAN = "NotificationAthan";
+    public static final String PREF_NOTIFY_DATE_LOCK_SCREEN = "NotifyDateLockScreen";
     public static final String PREF_ATHAN_VOLUME = "AthanVolume";
     public static final String PREF_APP_LANGUAGE = "AppLanguage";
     public static final String PREF_SELECTED_WIDGET_TEXT_COLOR = "SelectedWidgetTextColor";
     public static final String PREF_ATHAN_ALARM = "AthanAlarm";
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
+    public static final String PREF_HOLIDAY_TYPES = "holiday_types";
 
     public static final String DEFAULT_CITY = "CUSTOM";
     public static final String DEFAULT_PRAY_TIME_METHOD = "Tehran";
@@ -42,10 +54,13 @@ public class Constants {
     public static final boolean DEFAULT_PERSIAN_DIGITS = true;
     public static final boolean DEFAULT_WIDGET_CLOCK = true;
     public static final boolean DEFAULT_NOTIFY_DATE = true;
+    public static final boolean DEFAULT_NOTIFICATION_ATHAN = false;
+    public static final boolean DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true;
     public static final int DEFAULT_ATHAN_VOLUME = 1;
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
+    public static final String CLASSIC_THEME = "ClassicTheme";
 
     public static final String FAJR = "fajr";
     public static final String SUNRISE = "sunrise";
@@ -61,33 +76,33 @@ public class Constants {
     public static final String DAY = "day";
     public static final String MONTH = "month";
     public static final String YEAR = "year";
-    public static final String HIJRI_SHAMSI = "hijri_shamsi";
-    public static final String HIJRI_QAMARI = "hijri_qamari";
-    public static final String GREGORIAN = "gregorian";
 
-    public static final int MONTHS_LIMIT = 5000; // this should be an even number
+    public static final int LOAD_APP_ID = 1000;
+    public static final int THREE_HOURS_APP_ID = 1010;
+    public static final int ALARMS_BASE_ID = 2000;
+
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
-    public static final String BROADCAST_FIELD_SELECT_DAY = "BROADCAST_FIELD_SELECT_DAY";
+    public static final String BROADCAST_FIELD_SELECT_DAY_JDN = "BROADCAST_FIELD_SELECT_DAY_JDN";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
+    public static final String BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP";
     public static final String KEY_EXTRA_PRAYER_KEY = "prayer_name";
     public static final int BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE;
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
-    public static final char PERSIAN_COMMA = '،';
     public static final char RLM = '\u200F';
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
-    public static final String[] FIRST_CHAR_OF_DAYS_OF_WEEK_NAME = {"ش", "ی", "د", "س",
-            "چ", "پ", "ج"};
     public static final char[] ARABIC_DIGITS = {'0', '1', '2', '3', '4', '5', '6',
             '7', '8', '9'};
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',
             '۷', '۸', '۹'};
     public static final String AM_IN_PERSIAN = "ق.ظ";
+    public static final String AM_IN_CKB = "ب.ن";
     public static final String PM_IN_PERSIAN = "ب.ظ";
+    public static final String PM_IN_CKB = "د.ن";
 
     public static final int[] DAYS_ICONS = {0,
             R.drawable.day1, R.drawable.day2, R.drawable.day3,
@@ -114,4 +129,17 @@ public class Constants {
             R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar,
             R.drawable.day28_ar, R.drawable.day29_ar, R.drawable.day30_ar,
             R.drawable.day31_ar};
+
+    public static final int[] DAYS_ICONS_CKB = {0,
+            R.drawable.day1, R.drawable.day2, R.drawable.day3,
+            R.drawable.day4_ckb, R.drawable.day5_ckb, R.drawable.day6_ckb,
+            R.drawable.day7, R.drawable.day8, R.drawable.day9,
+            R.drawable.day10, R.drawable.day11, R.drawable.day12,
+            R.drawable.day13, R.drawable.day14_ckb, R.drawable.day15_ckb,
+            R.drawable.day16_ckb, R.drawable.day17, R.drawable.day18,
+            R.drawable.day19, R.drawable.day20, R.drawable.day21,
+            R.drawable.day22, R.drawable.day23, R.drawable.day24_ckb,
+            R.drawable.day25_ckb, R.drawable.day26_ckb, R.drawable.day27,
+            R.drawable.day28, R.drawable.day29, R.drawable.day30,
+            R.drawable.day31};
 }

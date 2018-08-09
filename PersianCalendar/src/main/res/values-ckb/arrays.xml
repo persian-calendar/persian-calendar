@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themeNames">
+        <item>ڕووناک</item>
+        <item>تاریک</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames">
+        <item>شیعەی دوازدە ئیمامی، ئەنستیتیووتی لیوا، قوم</item>
+        <item>یەکیەتیی جیھانیی ئیسلام، عەربستانی سعوودی</item>
+        <item>کۆمەڵگای ئیسلامیی ئەمریکای باکوور</item>
+        <item>دەسەڵاتی گشتیی ڕووپێویی میسر</item>
+        <item>زانستگای ئوممەلقورا، مەککە</item>
+        <item>زانستگای زانستە ئیسلامییەکان، کەراچی</item>
+        <item>ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</item>
+    </string-array>
+
+    <string-array name="colorNames">
+        <item>سپی</item>
+        <item>سوور</item>
+        <item>کەسک</item>
+        <item>زەرد</item>
+        <item>ڕەش</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>بەیانی</item>
+        <item>نیوەڕۆ</item>
+        <item>ئێوارە</item>
+        <item>شێوان</item>
+        <item>خەوتنان</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>٢-</item>
+        <item>١-</item>
+        <item>٠</item>
+        <item>١+</item>
+        <item>٢+</item>
+    </string-array>
+
+    <string-array name="drawerTitles">
+        <item>ڕۆژژمێر</item>
+        <item>بگۆڕی ڕێککەوت</item>
+        <item>جەمسەرنوێن</item>
+        <item>ڕێکخستن</item>
+        <item>لەبارە</item>
+        <item>دەرچوون</item>
+    </string-array>
+
+    <string-array name="drawerSubtitles">
+        <item></item>
+        <item></item>
+        <item>و ڕووگەنوێن، ئەگەر لە ڕێکخستندا شوێن دیاری کرابێ</item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="holidays_types">
+        <item>پشوودانەکانی ئێران</item>
+        <item>بۆنە ئیسلامییەکانی ئێران</item>
+        <item>بۆنەکانی ئێرانی کەونار</item>
+        <item>بۆنەکانی تری ئێران</item>
+        <item>بۆنە نێونەتەوەیییەکان</item>
+        <item>پشوودانەکانی ئەفغانستان</item>
+        <item>بۆنەکانی تری ئەفغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>کۆچیی ھەتاوی</item>
+        <item>کۆچیی مانگی</item>
+        <item>زایینی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>شەممە</item>
+        <item>یەکشەممە</item>
+        <item>دووشەممە</item>
+        <item>سێشەممە</item>
+        <item>چوارشەممە</item>
+        <item>پێنجشەممە</item>
+        <item>ھەینی</item>
+    </string-array>
+
+    <string-array name="what_to_show" translatable="false">
+        <item>ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</item>
+        <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>
+        <item>کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+        <item>شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+    </string-array>
+
+</resources>

@@ -1,94 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
-        android:title="@string/general">
+    <androidx.preference.PreferenceCategory android:title="@string/user_interface">
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="fa"
             android:entries="@array/languageNames"
             android:entryValues="@array/languageKeys"
+            android:icon="@drawable/ic_translate_setting"
             android:key="AppLanguage"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/language" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="LightTheme"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
+            android:icon="@drawable/ic_theme_setting"
             android:key="Theme"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
             android:title="@string/skin" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
+            android:icon="@drawable/ic_looks_4_setting"
             android:key="PersianDigits"
             android:summary="@string/enable_persian_digits"
             android:title="@string/persian_digits" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/calendar">
+
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/default_holidays"
+            android:dialogTitle="@string/events"
+            android:entries="@array/holidays_types"
+            android:entryValues="@array/holidays_values"
+            android:icon="@drawable/ic_event_setting"
+            android:key="holiday_types"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/events_summary"
+            android:title="@string/events" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_event_setting"
+            android:key="showDeviceCalendarEvents"
+            android:summary="@string/show_device_calendar_events_summary"
+            android:title="@string/show_device_calendar_events" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="SHAMSI"
+            android:entries="@array/calendar_type"
+            android:entryValues="@array/calendar_values"
+            android:icon="@drawable/ic_calendar_setting"
+            android:key="mainCalendarType"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/main_calendar_summary"
+            android:title="@string/main_calendar" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_week_of_year_setting"
+            android:key="showWeekOfYearNumber"
+            android:summary="@string/week_of_year_summary"
+            android:title="@string/week_of_year" />
+
+        <androidx.preference.ListPreference
             android:defaultValue="0"
             android:entries="@array/islamicOffsetNames"
             android:entryValues="@array/islamicOffsetKeys"
+            android:icon="@drawable/ic_plus_1_setting"
             android:key="islamicOffset"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/islamic_offset_summary"
             android:title="@string/islamic_offset" />
 
-    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
+        <androidx.preference.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:icon="@drawable/ic_weekstart_setting"
+            android:key="WeekStart"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/week_start_summary"
+            android:title="@string/week_start" />
 
-    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
-        android:title="@string/widget_notification_dashclock">
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/default_weekends"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:icon="@drawable/ic_weekend_setting"
+            android:key="WeekEnds"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/week_ends_summary"
+            android:title="@string/week_ends" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/widget_notification_dashclock">
+
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
+            android:icon="@drawable/ic_notification_setting"
             android:key="NotifyDate"
             android:summary="@string/enable_notify"
             android:title="@string/notify_date" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:dependency="NotifyDate"
+            android:icon="@drawable/ic_lock_outline_setting"
+            android:key="NotifyDateLockScreen"
+            android:summary="@string/notify_date_lock_screen_summary"
+            android:title="@string/notify_date_lock_screen" />
+
+        <!-- See widget_preferences.xml -->
+        <androidx.preference.ListPreference
             android:defaultValue="#ffffffff"
             android:entries="@array/colorNames"
             android:entryValues="@array/colorKeys"
+            android:icon="@drawable/ic_brush_setting"
             android:key="SelectedWidgetTextColor"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/select_widgets_text_color"
             android:title="@string/widget_text_color" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
+            android:icon="@drawable/ic_timezone_setting"
             android:key="IranTime"
             android:summary="@string/showing_iran_time"
             android:title="@string/iran_time" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
+            android:icon="@drawable/ic_watch_setting"
             android:key="WidgetClock"
             android:summary="@string/showing_clock_on_widget"
             android:title="@string/clock_on_widget" />
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedCheckBoxPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
+            android:icon="@drawable/ic_ampm_setting"
             android:key="WidgetIn24"
             android:summary="@string/showing_clock_in_24"
             android:title="@string/clock_in_24" />
 
-    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/what_to_show_default"
+            android:dialogTitle="@string/which_one_to_show"
+            android:entries="@array/what_to_show"
+            android:entryValues="@array/what_to_show_keys"
+            android:icon="@drawable/ic_compact_setting"
+            android:key="what_to_show"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/compact_widget_summary"
+            android:title="@string/compact_widget" />
 
-    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
-        android:title="@string/pray_times_calculation_setting">
+    </androidx.preference.PreferenceCategory>
 
-        <com.byagowi.persiancalendar.view.preferences.ShapedListPreference
+    <androidx.preference.PreferenceCategory android:title="@string/pray_times_calculation_setting">
+
+        <androidx.preference.ListPreference
             android:defaultValue="Tehran"
             android:entries="@array/prayMethodsNames"
             android:entryValues="@array/prayMethodsKeys"
+            android:icon="@drawable/ic_method_setting"
             android:key="SelectedPrayTimeMethod"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods" />
 
         <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
+            android:icon="@drawable/ic_gps_setting"
             android:key="dummy"
             android:summary="@string/gps_location_help"
             android:title="@string/gps_location" />
 
         <com.byagowi.persiancalendar.view.preferences.LocationPreference
+            android:icon="@drawable/ic_location_city_setting"
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location" />
@@ -96,47 +192,83 @@
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_coord_setting"
             android:inputType="numberDecimal"
             android:key="Latitude"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/latitude" />
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_coord_setting"
             android:inputType="numberDecimal"
             android:key="Longitude"
+            android:negativeButtonText="@string/cancel"
             android:title="@string/longitude" />
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
+            android:icon="@drawable/ic_waves_setting"
             android:inputType="numberDecimal"
             android:key="Altitude"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude" />
 
-    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:key="Athan"
         android:title="@string/athan">
 
         <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
+            android:icon="@drawable/ic_gap_setting"
             android:inputType="numberSigned"
             android:key="AthanGap"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap" />
 
         <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
+            android:icon="@drawable/ic_speaker_phone_setting"
             android:key="AthanAlarm"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm" />
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:icon="@drawable/ic_notification_setting"
+            android:key="NotificationAthan"
+            android:summary="@string/enable_notification_athan"
+            android:title="@string/notification_athan" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:icon="@drawable/ic_volume_setting"
+            android:key="pref_key_ringtone"
+            android:summary="@string/custom_athan_summary"
+            android:title="@string/custom_athan" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:icon="@drawable/ic_volume_setting"
+            android:key="pref_key_ringtone_default"
+            android:summary="@string/default_athan_summary"
+            android:title="@string/default_athan" />
+
         <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:dependency="NotificationAthan"
+            android:icon="@drawable/ic_volume_setting"
             android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume" />
 
-    </com.byagowi.persiancalendar.view.preferences.ShapedPreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

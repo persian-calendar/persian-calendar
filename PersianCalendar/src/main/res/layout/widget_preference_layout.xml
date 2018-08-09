@@ -1,0 +1,19 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/preference_fragment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_widget_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

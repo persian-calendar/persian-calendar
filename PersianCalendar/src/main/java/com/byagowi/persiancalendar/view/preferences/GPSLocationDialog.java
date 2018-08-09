@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -10,11 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
@@ -26,55 +23,68 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
+
 public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
-    LocationManager locationManager;
-    Context context;
-    TextView textView;
-    Utils utils;
+    private LocationManager locationManager;
+    private Context context;
+    private TextView textView;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
-        context = getContext();
-        utils = Utils.getInstance(context);
+        context = builder.getContext();
 
         textView = new TextView(context);
         textView.setPadding(32, 32, 32, 32);
         textView.setTextSize(20);
         textView.setText(R.string.pleasewaitgps);
-        utils.setFontAndShape(textView);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        tryRetrieveLocation();
+        getLocation();
+        if (lacksPermission) {
+            askForPermission();
+        }
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
         builder.setView(textView);
     }
 
-
-    public void tryRetrieveLocation() {
-        if (checkPermission()) {
-            getLocation();
-        } else {
-            getPermission();
-        }
-    }
+    private boolean lacksPermission = false;
+    private boolean everRegisteredCallback = false;
 
     private void getLocation() {
+        if (locationManager == null) {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            lacksPermission = true;
+            return;
+        }
+
         if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            everRegisteredCallback = true;
         }
 
         if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            everRegisteredCallback = true;
         }
     }
 
-    private void getPermission() {
+    private void askForPermission() {
         requestPermissions(new String[]{
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -82,10 +92,11 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 Constants.LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    LocationListener locationListener = new LocationListener() {
+    private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            showLocation(location);
+            if (location != null)
+                showLocation(location);
         }
 
         @Override
@@ -101,11 +112,11 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
     };
 
-    String latitude;
-    String longitude;
-    String cityName;
+    private String latitude;
+    private String longitude;
+    private String cityName;
 
-    public void showLocation(Location location) {
+    private void showLocation(Location location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());
         longitude = String.format(Locale.ENGLISH, "%f", location.getLongitude());
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
@@ -120,20 +131,19 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
 
         String result = "";
-        if (cityName != null) {
+        if (!TextUtils.isEmpty(cityName)) {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += utils.formatCoordinate(
-                new Coordinate(location.getLatitude(), location.getLongitude()),
-                "\n");
-        textView.setText(utils.shape(result));
+        result += Utils.formatCoordinate(context,
+                new Coordinate(location.getLatitude(), location.getLongitude()), "\n");
+        textView.setText(result);
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (latitude != null && longitude != null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Constants.PREF_LATITUDE, latitude);
             editor.putString(Constants.PREF_LONGITUDE, longitude);
@@ -143,28 +153,25 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
                 editor.putString(Constants.PREF_GEOCODED_CITYNAME, "");
             }
             editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY);
-            editor.commit();
+            editor.apply();
         }
 
-        if (checkPermission()) {
+        if (everRegisteredCallback && locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (checkPermission()) {
+        if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
             getLocation();
-        } else {
-            dismiss();
+            if (lacksPermission) // request for permission is rejected
+                dismiss();
         }
-    }
-
-
-    private boolean checkPermission() {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }

@@ -1,0 +1,53 @@
+{
+  "PersianCalendarMonths": [
+    "Farvardin",
+    "Ordibehesht",
+    "Khordad",
+    "Tir",
+    "Mordad",
+    "Shahrivar",
+    "Mehr",
+    "Aban",
+    "Azar",
+    "Dey",
+    "Bahman",
+    "Esfand"
+  ],
+  "IslamicCalendarMonths": [
+    "Muharram",
+    "Safar",
+    "Rabi' al-awwal",
+    "Rabi' al-Thani",
+    "Jumada al-awwal",
+    "Jumada al-Thani",
+    "Rajab",
+    "Sha'ban",
+    "Ramadan",
+    "Shawwal",
+    "Dhu al-Qidah",
+    "Dhu al-Hijjah"
+  ],
+  "GregorianCalendarMonths": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
+  "WeekDays": [
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday"
+  ]
+}

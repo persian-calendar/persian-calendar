@@ -104,8 +104,7 @@ public class PrayTimesCalculator {
     // compute mid-day time
     private double midDay(double time) {
         double eqt = sunPosition(_jDate + time).getEquation();
-        double noon = fixHour(12 - eqt);
-        return noon;
+        return fixHour(12 - eqt);
     }
 
     // compute the time at which sun reaches a specific angle below horizon
@@ -163,13 +162,12 @@ public class PrayTimesCalculator {
         double A = Math.floor((double) year / 100);
         double B = 2 - A + Math.floor(A / 4);
 
-        double JD = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
-        return JD;
+        return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
     }
 
     // adjust times
     private Map<PrayTime, Double> adjustTimes(Map<PrayTime, Double> times) {
-        Map<PrayTime, Double> result = new HashMap<PrayTime, Double>();
+        Map<PrayTime, Double> result = new HashMap<>();
         for (Map.Entry<PrayTime, Double> i : times.entrySet()) {
             result.put(i.getKey(), i.getValue() + _timeZone - _coordinate.getLongitude() / 15d);
         }

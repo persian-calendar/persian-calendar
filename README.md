@@ -1,9 +1,8 @@
-Android Persian Calendar [![Build Status](https://travis-ci.org/ebraminio/DroidPersianCalendar.svg?branch=master)](https://travis-ci.org/ebraminio/DroidPersianCalendar)
+Android Persian Calendar [![CircleCI](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master.svg?style=svg)](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master)
 =============================
 <div lang="fa" dir="rtl">تقویم فارسی اندروید<br />
 تقویم ساده، رایگان و آزاد اندروید به همراه ویجت و حمایت از DashClock<br />
 برای دریافت و نصب بر برگهٔ releases در بالای صفحه کلیک کنید.</div>
------------------------------
 
 Download
 -----------------------------
@@ -16,7 +15,7 @@ Download
 
 License
 -----------------------------
-Copyright (C) 2012-2017  ebrahim@gnu.org
+Copyright (C) 2012-2018  ebrahim@gnu.org
 
 This program is free software: you can redistribute it and/or modify 
 it under the terms of the GNU General Public License as published by 
@@ -34,6 +33,4 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 Build
 -----------------------------
 0. git clone --depth=1 https://github.com/ebraminio/DroidPersianCalendar
-1. Install Support Library on your Android SDK ([more](https://developer.android.com/tools/support-library/setup.html))
-2. Import the project on Android Studio
-3. Click on "Sync Project with Gradle Files" after the import
+1. Import the project on Android Studio

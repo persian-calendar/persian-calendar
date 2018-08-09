@@ -1,43 +1,62 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.1"
 
     defaultConfig {
         applicationId "com.byagowi.persiancalendar"
-        minSdkVersion 9
-        targetSdkVersion 25
-        versionCode 531
-        versionName "5.3.1"
-        vectorDrawables.useSupportLibrary = true
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 588
+        versionName "5.8.8"
+
+        // Disabled due to this issue with AndroidX preferences' widgets
+        // https://issuetracker.google.com/issues/112126733
+        // will be enabled again once it is fixed
+        // vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         debug {
-            resValue "string", "app_label", "@string/app_name_debug"
-            applicationIdSuffix "." + "debug"
-            versionNameSuffix "-" + "git rev-parse --short HEAD".execute().text.trim()
+            versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" + "git rev-parse --short HEAD".execute().text.trim()
         }
         release {
             minifyEnabled true
-            proguardFile getDefaultProguardFile('proguard-android.txt')
-            resValue "string", "app_label", "@string/app_name"
+            shrinkResources true
+            // Maybe proguard-android-optimize.txt in future
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:preference-v7:25.4.0'
-    compile 'com.android.support:recyclerview-v7:25.4.0'
-    compile 'com.android.support:support-annotations:25.4.0'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support:cardview-v7:25.4.0'
-    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    def androidXVersion = '1.0.0-rc01'
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "com.google.android.material:material:$androidXVersion"
+    implementation "androidx.preference:preference:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "androidx.cardview:cardview:$androidXVersion"
+    implementation 'com.google.android:flexbox:1.1.0-beta1'
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    // implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
+}
+repositories {
+    mavenCentral()
 }

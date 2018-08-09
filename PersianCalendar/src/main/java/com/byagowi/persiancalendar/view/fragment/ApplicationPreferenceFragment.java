@@ -4,15 +4,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
@@ -23,8 +32,16 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreference;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
-import com.byagowi.persiancalendar.view.preferences.ShapedListDialog;
-import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+
+import static android.app.Activity.RESULT_OK;
+import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_NAME;
+import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 /**
  * Preference activity
@@ -33,12 +50,10 @@ import com.byagowi.persiancalendar.view.preferences.ShapedListPreference;
  */
 public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     private Preference categoryAthan;
-    private Utils utils;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        utils = Utils.getInstance(getContext());
-        utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         addPreferencesFromResource(R.xml.preferences);
 
@@ -47,6 +62,9 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+
+        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
     private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
@@ -62,8 +80,8 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         super.onDestroyView();
     }
 
-    public void updateAthanPreferencesState() {
-        boolean locationEmpty = utils.getCoordinate() == null;
+    private void updateAthanPreferencesState() {
+        boolean locationEmpty = Utils.getCoordinate(getContext()) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
             categoryAthan.setSummary(R.string.athan_disabled_summary);
@@ -84,9 +102,34 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         } else if (preference instanceof AthanNumericPreference) {
             fragment = new AthanNumericDialog();
         } else if (preference instanceof GPSLocationPreference) {
-            fragment = new GPSLocationDialog();
-        } else if (preference instanceof ShapedListPreference) {
-            fragment = new ShapedListDialog();
+            //check whether gps provider and network providers are enabled or not
+            Context context = getContext();
+            LocationManager gps = (LocationManager)
+                    context.getSystemService(Context.LOCATION_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo info = null;
+            if (connectivityManager != null) {
+                info = connectivityManager.getActiveNetworkInfo();
+            }
+
+            boolean gpsEnabled = false;
+
+            if (gps != null) {
+                try {
+                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (!gpsEnabled || info == null) {
+                // Custom Android Alert Dialog Title
+                DialogFragment frag = new GPSDiagnosticDialog();
+                frag.show(getActivity().getSupportFragmentManager(), "GPSDiagnosticDialog");
+            } else {
+                fragment = new GPSLocationDialog();
+            }
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
@@ -96,7 +139,77 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
             bundle.putString("key", preference.getKey());
             fragment.setArguments(bundle);
             fragment.setTargetFragment(this, 0);
-            fragment.show(getChildFragmentManager(), fragment.getClass().getName());
+            try {
+                fragment.show(getActivity().getSupportFragmentManager(), fragment.getClass().getName());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        switch (preference.getKey()) {
+            case "pref_key_ringtone":
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                                Settings.System.DEFAULT_NOTIFICATION_URI);
+                Uri customAthanUri = Utils.getCustomAthanUri(getContext());
+                if (customAthanUri != null) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri);
+                }
+                startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
+                return true;
+            case "pref_key_ringtone_default":
+                SharedPreferences.Editor editor = PreferenceManager
+                        .getDefaultSharedPreferences(getContext()).edit();
+                editor.remove(PREF_ATHAN_URI);
+                editor.remove(PREF_ATHAN_NAME);
+                editor.apply();
+                Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                putAthanNameOnSummary(getDefaultAthanName());
+                return true;
+            default:
+                return super.onPreferenceTreeClick(preference);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Context context = getContext();
+                Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (uri != null) {
+                    SharedPreferences.Editor editor = PreferenceManager
+                            .getDefaultSharedPreferences(context).edit();
+
+                    String ringtoneTitle = RingtoneManager
+                            .getRingtone(context, Uri.parse(uri.toString()))
+                            .getTitle(context);
+                    if (TextUtils.isEmpty(ringtoneTitle)) {
+                        ringtoneTitle = "";
+                    }
+                    editor.putString(PREF_ATHAN_NAME, ringtoneTitle);
+                    editor.putString(PREF_ATHAN_URI, uri.toString());
+                    editor.apply();
+                    Toast.makeText(context, R.string.custom_notification_is_set,
+                            Toast.LENGTH_SHORT).show();
+                    putAthanNameOnSummary(ringtoneTitle);
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private String getDefaultAthanName() {
+        return getContext().getString(R.string.default_athan_name);
+    }
+
+    private void putAthanNameOnSummary(String athanName) {
+        findPreference("pref_key_ringtone").setSummary(athanName);
     }
 }
