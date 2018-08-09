@@ -199,6 +199,21 @@ public class SunriseSunsetView extends View {
         RectF rectF = new RectF(mBoardRectF.left, mBoardRectF.top, mBoardRectF.right, mBoardRectF.bottom + mBoardRectF.height());
         float curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * (float) Math.cos(Math.PI * mRatio);
 
+        mLabelPaint.setTextAlign(Paint.Align.LEFT);
+        Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
+        float baseLineX = mBoardRectF.left - mLabelHorizontalOffset;
+        float baseLineY = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
+        canvas.drawText("•", baseLineX, baseLineY, mLabelPaint);
+
+        mLabelPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("•",
+                mBoardRectF.centerX() - mLabelHorizontalOffset,
+                mBoardRectF.top, mLabelPaint);
+
+        mLabelPaint.setTextAlign(Paint.Align.RIGHT);
+        baseLineX = mBoardRectF.right + mLabelHorizontalOffset;
+        canvas.drawText("•", baseLineX, baseLineY, mLabelPaint);
+
         path.moveTo(0, endY);
         path.arcTo(rectF, 180, 180 * mRatio);
         path.lineTo(curPointX, endY);
