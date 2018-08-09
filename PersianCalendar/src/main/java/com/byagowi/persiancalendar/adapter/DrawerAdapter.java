@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Coordinate;
@@ -99,7 +100,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             isSouthernHemisphere = true;
         }
 
-        int month = Utils.getPersianToday().getMonth();
+        int month = CalendarUtils.getPersianToday().getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
         if (month < 4) return "SPRING";

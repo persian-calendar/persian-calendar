@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.annotation.Nullable;
@@ -37,7 +39,7 @@ public class ConverterFragment extends Fragment implements
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
                 false);
@@ -67,8 +69,8 @@ public class ConverterFragment extends Fragment implements
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.calendar_type)));
 
-        binding.selectdayFragment.calendarTypeSpinner.setSelection(Utils.positionFromCalendarType(Utils.getMainCalendar()));
-        startingYearOnYearSpinner = Utils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+        binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
+        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
 
         binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -91,7 +93,7 @@ public class ConverterFragment extends Fragment implements
             binding.calendarsCard.gregorianContainer.setVisibility(View.VISIBLE);
             binding.calendarsCard.islamicContainer.setVisibility(View.VISIBLE);
 
-            switch (Utils.calendarTypeFromPosition(binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition())) {
+            switch (CalendarUtils.calendarTypeFromPosition(binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
                     jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
                     binding.calendarsCard.gregorianContainer.setVisibility(View.GONE);
@@ -109,12 +111,12 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
-            boolean isToday = Utils.getTodayJdn() == jdn;
-            Utils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
+            boolean isToday = CalendarUtils.getTodayJdn() == jdn;
+            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
 
             binding.calendarsCard.calendarsCard.setVisibility(View.VISIBLE);
 
-            long diffDays = Math.abs(Utils.getTodayJdn() - jdn);
+            long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
             CivilDate civilBase = new CivilDate(2000, 1, 1);
             CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
             int yearDiff = civilOffset.getYear() - 2000;
@@ -145,7 +147,7 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = Utils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
                 break;
         }
     }
@@ -161,37 +163,37 @@ public class ConverterFragment extends Fragment implements
 
             case R.id.shamsi_date:
             case R.id.shamsi_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
                         binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.shamsi_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
                 break;
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
                         binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.gregorian_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
                 break;
 
             case R.id.islamic_date:
             case R.id.islamic_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
                         binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.islamic_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
                 break;
 
             case R.id.today:
             case R.id.today_icon:
-                startingYearOnYearSpinner = Utils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
                 break;
         }
     }

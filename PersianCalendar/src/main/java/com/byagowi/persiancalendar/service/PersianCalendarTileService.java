@@ -8,6 +8,7 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
+import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
@@ -32,12 +33,12 @@ public class PersianCalendarTileService extends TileService {
     @Override
     public void onStartListening() {
         Tile tile = getQsTile();
-        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
 
         tile.setIcon(Icon.createWithResource(this,
                 Utils.getDayIconResource(today.getDayOfMonth())));
         tile.setLabel(Utils.getWeekDayName(today));
-        tile.setContentDescription(Utils.getMonthName(today));
+        tile.setContentDescription(CalendarUtils.getMonthName(today));
         // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
         tile.setState(Tile.STATE_ACTIVE);
         tile.updateTile();

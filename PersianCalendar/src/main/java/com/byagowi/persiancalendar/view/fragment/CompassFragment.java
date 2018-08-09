@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
@@ -48,9 +49,9 @@ public class CompassFragment extends Fragment {
         Context context = getContext();
         Coordinate coordinate = Utils.getCoordinate(getContext());
         if (coordinate == null) {
-            Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
+            UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
         } else {
-            Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
+            UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
                     Utils.getCityName(context, true));
         }
 

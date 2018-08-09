@@ -18,7 +18,9 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
+import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypeFaceUtil;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setTheme(this);
+        UIUtils.setTheme(this);
         Utils.changeAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (Utils.isRTL(getApplicationContext()))
+                    if (UIUtils.isRTL(getApplicationContext()))
                         slidingDirection = -1;
                 }
             }
@@ -178,11 +180,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (Utils.isShowDeviceCalendarEvents()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                Utils.askForCalendarPermission(this);
+                UIUtils.askForCalendarPermission(this);
             }
         }
 
-        creationDate = Utils.getGregorianToday();
+        creationDate = CalendarUtils.getGregorianToday();
         Utils.changeAppLanguage(this);
     }
 
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
             if (sharedPreferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true)) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.askForCalendarPermission(this);
+                    UIUtils.askForCalendarPermission(this);
                 }
             }
         }
@@ -247,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onConfigurationChanged(newConfig);
         Utils.initUtils(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding.drawer.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            binding.drawer.setLayoutDirection(UIUtils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         Utils.changeAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
-        if (!creationDate.equals(Utils.getGregorianToday())) {
+        if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
             restartActivity(menuPosition);
         }
     }

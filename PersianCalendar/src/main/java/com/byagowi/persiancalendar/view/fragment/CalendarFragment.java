@@ -35,6 +35,8 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
@@ -92,7 +94,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         coordinate = Utils.getCoordinate(getContext());
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         binding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
-                Utils.isRTL(getContext())));
+                UIUtils.isRTL(getContext())));
         CalendarAdapter.gotoOffset(binding.calendarPager, 0);
 
         binding.calendarPager.addOnPageChangeListener(changeListener);
@@ -124,8 +126,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         // Easter egg to test AthanActivity
@@ -162,8 +164,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
-        boolean isToday = Utils.getTodayJdn() == jdn;
-        Utils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
+        boolean isToday = CalendarUtils.getTodayJdn() == jdn;
+        UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
         setOwghat(jdn, isToday);
         showEvent(jdn);
     }
@@ -177,8 +179,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             startActivityForResult(
                     new Intent(Intent.ACTION_INSERT)
                             .setData(CalendarContract.Events.CONTENT_URI)
-                            .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
+                                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
                             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                     time.getTimeInMillis())
                             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -196,13 +198,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             Utils.initUtils(getContext());
 
             if (lastSelectedJdn == -1)
-                lastSelectedJdn = Utils.getTodayJdn();
+                lastSelectedJdn = CalendarUtils.getTodayJdn();
             selectDay(lastSelectedJdn);
         }
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
-        String title = Utils.formatDeviceCalendarEventTitle(event);
+        String title = UIUtils.formatDeviceCalendarEventTitle(event);
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -282,7 +284,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-        if (Utils.getPersianToday().getYear() > Utils.getMaxSupportedYear()) {
+        if (CalendarUtils.getPersianToday().getYear() > Utils.getMaxSupportedYear()) {
             String title = getString(R.string.shouldBeUpdated);
             SpannableString ss = new SpannableString(title);
             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -339,18 +341,18 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        binding.imsak.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        binding.imsak.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
         Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
-        binding.fajr.setText(Utils.getFormattedClock(sunriseClock));
-        binding.sunrise.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        binding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
+        binding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
         Clock midddayClock = prayTimes.get(PrayTime.DHUHR);
-        binding.dhuhr.setText(Utils.getFormattedClock(midddayClock));
-        binding.asr.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
-        binding.sunset.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        binding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
+        binding.asr.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
+        binding.sunset.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
         Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
-        binding.maghrib.setText(Utils.getFormattedClock(maghribClock));
-        binding.isgha.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        binding.midnight.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        binding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
+        binding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        binding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
 
         binding.ssv.setVisibility(View.GONE);
         if (isToday) {
@@ -399,9 +401,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
-                    lastSelectedJdn = Utils.getTodayJdn();
+                    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                if (lastSelectedJdn == Utils.getTodayJdn() && isOpenOwghatCommand) {
+                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
                     binding.ssv.setVisibility(View.VISIBLE);
                     binding.ssv.startAnimate();
                 } else {
@@ -417,32 +419,32 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
             case R.id.shamsi_date:
             case R.id.shamsi_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
                         binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.shamsi_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
                 break;
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
                         binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.gregorian_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
                 break;
 
             case R.id.islamic_date:
             case R.id.islamic_date_day:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
                         binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.islamic_date_linear:
-                Utils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
                 break;
         }
     }
@@ -457,13 +459,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         CalendarAdapter.gotoOffset(binding.calendarPager, 0);
 
-        selectDay(Utils.getTodayJdn());
+        selectDay(CalendarUtils.getTodayJdn());
     }
 
     public void bringDate(long jdn) {
         CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
         CalendarAdapter.gotoOffset(binding.calendarPager, viewPagerPosition);
@@ -499,10 +501,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
                         (String) parent.getItemAtPosition(position)));
-                long todayJdn = Utils.getTodayJdn();
+                long todayJdn = CalendarUtils.getTodayJdn();
 
                 if (ev instanceof PersianCalendarEvent) {
-                    PersianDate todayPersian = Utils.getPersianToday();
+                    PersianDate todayPersian = CalendarUtils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -511,7 +513,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof IslamicCalendarEvent) {
-                    IslamicDate todayIslamic = Utils.getIslamicToday();
+                    IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
                     IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -520,7 +522,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof GregorianCalendarEvent) {
-                    CivilDate todayCivil = Utils.getGregorianToday();
+                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((GregorianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -529,7 +531,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof DeviceCalendarEvent) {
-                    CivilDate todayCivil = Utils.getGregorianToday();
+                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -552,7 +554,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.add_event:
                 if (lastSelectedJdn == -1)
-                    lastSelectedJdn = Utils.getTodayJdn();
+                    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
                 addEventOnCalendar(lastSelectedJdn);
                 break;

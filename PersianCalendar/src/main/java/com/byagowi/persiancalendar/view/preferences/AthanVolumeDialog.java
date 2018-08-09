@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
         } else {
             MediaPlayer player = new MediaPlayer();
             try {
-                player.setDataSource(context, Utils.getDefaultAthanUri(context));
+                player.setDataSource(context, UIUtils.getDefaultAthanUri(context));
                 player.setAudioStreamType(AudioManager.STREAM_ALARM);
                 player.prepare();
             } catch (IOException e) {

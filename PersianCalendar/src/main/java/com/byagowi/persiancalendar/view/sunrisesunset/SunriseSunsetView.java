@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.github.praytimes.Clock;
 
 import java.util.Calendar;
@@ -227,8 +227,8 @@ public class SunriseSunsetView extends View {
         canvas.save();
 
         String leftLabel, rightLabel;
-        leftLabel = Utils.getFormattedClock(mSunriseTime);
-        rightLabel = Utils.getFormattedClock(mSunsetTime);
+        leftLabel = UIUtils.getFormattedClock(mSunriseTime);
+        rightLabel = UIUtils.getFormattedClock(mSunsetTime);
 
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
@@ -237,7 +237,7 @@ public class SunriseSunsetView extends View {
         canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(Utils.getFormattedClock(mMiddayTime),
+        canvas.drawText(UIUtils.getFormattedClock(mMiddayTime),
                 mBoardRectF.centerX() - mLabelHorizontalOffset,
                 mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset, mLabelPaint);
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,7 @@ public class AboutFragment extends Fragment {
         FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
                 container, false);
 
-        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
         // version
         String version = programVersion();

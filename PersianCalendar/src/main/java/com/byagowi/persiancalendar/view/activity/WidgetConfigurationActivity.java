@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
@@ -39,7 +40,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setTheme(this);
+        UIUtils.setTheme(this);
         Utils.changeAppLanguage(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.widget_preference_layout);
