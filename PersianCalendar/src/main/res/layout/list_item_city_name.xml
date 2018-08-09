@@ -2,8 +2,8 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/card_padding"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:padding="@dimen/card_padding">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvCity"

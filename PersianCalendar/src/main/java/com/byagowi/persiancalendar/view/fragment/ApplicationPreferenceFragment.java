@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.dialog.GPSNetworkDialog;
+import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
@@ -103,19 +103,29 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         } else if (preference instanceof GPSLocationPreference) {
             //check whether gps provider and network providers are enabled or not
             Context context = getContext();
-            LocationManager gps = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            NetworkInfo info = ((ConnectivityManager)
-                    context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-            boolean gps_enabled = false;
+            LocationManager gps = (LocationManager)
+                    context.getSystemService(Context.LOCATION_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            try {
-                gps_enabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            } catch(Exception ignored) {}
+            NetworkInfo info = null;
+            if (connectivityManager != null) {
+                info = connectivityManager.getActiveNetworkInfo();
+            }
 
-            if(!gps_enabled || info == null) {
+            boolean gpsEnabled = false;
+
+            if (gps != null) {
+                try {
+                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (!gpsEnabled || info == null) {
                 // Custom Android Alert Dialog Title
-                DialogFragment frag = new GPSNetworkDialog();
-                frag.show(getActivity().getSupportFragmentManager(), "GPSNetworkDialog");
+                DialogFragment frag = new GPSDiagnosticDialog();
+                frag.show(getActivity().getSupportFragmentManager(), "GPSDiagnosticDialog");
             } else {
                 fragment = new GPSLocationDialog();
             }

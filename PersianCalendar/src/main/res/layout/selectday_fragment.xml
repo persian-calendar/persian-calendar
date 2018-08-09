@@ -63,9 +63,9 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/containerDaySelector"
-                android:layout_weight="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -90,9 +90,9 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/containerMonthSelector"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView

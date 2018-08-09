@@ -4,8 +4,8 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layoutDirection="rtl"
+    android:orientation="vertical"
     tools:context=".Widget4x1">
 
     <LinearLayout
