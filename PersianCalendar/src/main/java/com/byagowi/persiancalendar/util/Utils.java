@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.CalendarsCardBinding;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.CityEntity;
@@ -341,7 +342,7 @@ public class Utils {
         return selectedWidgetTextColor;
     }
 
-    static public PersianDate getToday() {
+    static public PersianDate getPersianToday() {
         return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
@@ -369,7 +370,7 @@ public class Utils {
                 return getGregorianToday();
             case SHAMSI:
             default:
-                return getToday();
+                return getPersianToday();
         }
     }
 
@@ -1551,5 +1552,36 @@ public class Utils {
             }
         }
 //        }
+    }
+
+    public static void fillCalendarsCard(Context context, long jdn,
+                                         CalendarsCardBinding binding, boolean isToday) {
+        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
+        CivilDate civilDate = DateConverter.jdnToCivil(jdn);
+        IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, getIslamicOffset());
+
+        binding.weekDayName.setText(getWeekDayName(civilDate));
+        binding.shamsiDateLinear.setText(toLinearDate(persianDate));
+        binding.shamsiDateDay.setText(formatNumber(persianDate.getDayOfMonth()));
+        binding.shamsiDate.setText(getMonthName(persianDate) + "\n" + formatNumber(persianDate.getYear()));
+
+        binding.gregorianDateLinear.setText(toLinearDate(civilDate));
+        binding.gregorianDateDay.setText(formatNumber(civilDate.getDayOfMonth()));
+        binding.gregorianDate.setText(getMonthName(civilDate) + "\n" + formatNumber(civilDate.getYear()));
+
+        binding.islamicDateLinear.setText(toLinearDate(hijriDate));
+        binding.islamicDateDay.setText(formatNumber(hijriDate.getDayOfMonth()));
+        binding.islamicDate.setText(getMonthName(hijriDate) + "\n" + formatNumber(hijriDate.getYear()));
+
+        if (isToday) {
+            binding.today.setVisibility(View.GONE);
+            binding.todayIcon.setVisibility(View.GONE);
+            if (Utils.isIranTime()) {
+                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
+            }
+        } else {
+            binding.today.setVisibility(View.VISIBLE);
+            binding.todayIcon.setVisibility(View.VISIBLE);
+        }
     }
 }

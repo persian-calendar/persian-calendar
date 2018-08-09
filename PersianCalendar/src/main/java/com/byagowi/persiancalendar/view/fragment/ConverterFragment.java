@@ -84,9 +84,7 @@ public class ConverterFragment extends Fragment implements
         int month = binding.selectdayFragment.monthSpinner.getSelectedItemPosition() + 1;
         int day = binding.selectdayFragment.daySpinner.getSelectedItemPosition() + 1;
 
-        CivilDate civilDate = null;
-        PersianDate persianDate;
-        IslamicDate hijriDate;
+        long jdn;
 
         try {
             binding.calendarsCard.shamsiContainer.setVisibility(View.VISIBLE);
@@ -95,47 +93,28 @@ public class ConverterFragment extends Fragment implements
 
             switch (Utils.calendarTypeFromPosition(binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition())) {
                 case GREGORIAN:
-                    civilDate = new CivilDate(year, month, day);
-                    hijriDate = DateConverter.civilToIslamic(civilDate, 0);
-                    persianDate = DateConverter.civilToPersian(civilDate);
+                    jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
                     binding.calendarsCard.gregorianContainer.setVisibility(View.GONE);
                     break;
 
                 case ISLAMIC:
-                    hijriDate = new IslamicDate(year, month, day);
-                    civilDate = DateConverter.islamicToCivil(hijriDate);
-                    persianDate = DateConverter.islamicToPersian(hijriDate);
+                    jdn = DateConverter.islamicToJdn(new IslamicDate(year, month, day));
                     binding.calendarsCard.islamicContainer.setVisibility(View.GONE);
                     break;
 
                 case SHAMSI:
                 default:
-                    persianDate = new PersianDate(year, month, day);
-                    civilDate = DateConverter.persianToCivil(persianDate);
-                    hijriDate = DateConverter.persianToIslamic(persianDate);
+                    jdn = DateConverter.persianToJdn(new PersianDate(year, month, day));
                     binding.calendarsCard.shamsiContainer.setVisibility(View.GONE);
                     break;
             }
 
-
-            binding.calendarsCard.weekDayName.setText(Utils.getWeekDayName(persianDate));
-
-            binding.calendarsCard.shamsiDateLinear.setText(Utils.toLinearDate(persianDate));
-            binding.calendarsCard.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
-            binding.calendarsCard.shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
-
-            binding.calendarsCard.gregorianDateLinear.setText(Utils.toLinearDate(civilDate));
-            binding.calendarsCard.gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
-            binding.calendarsCard.gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
-
-            binding.calendarsCard.islamicDateLinear.setText(Utils.toLinearDate(hijriDate));
-            binding.calendarsCard.islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
-            binding.calendarsCard.islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
+            boolean isToday = Utils.getTodayJdn() == jdn;
+            Utils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
 
             binding.calendarsCard.calendarsCard.setVisibility(View.VISIBLE);
 
-            PersianDate today = Utils.getToday();
-            long diffDays = Math.abs(DateConverter.persianToJdn(today) - DateConverter.persianToJdn(persianDate));
+            long diffDays = Math.abs(Utils.getTodayJdn() - jdn);
             CivilDate civilBase = new CivilDate(2000, 1, 1);
             CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
             int yearDiff = civilOffset.getYear() - 2000;

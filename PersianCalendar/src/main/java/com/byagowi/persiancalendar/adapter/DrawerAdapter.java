@@ -99,7 +99,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             isSouthernHemisphere = true;
         }
 
-        int month = Utils.getToday().getMonth();
+        int month = Utils.getPersianToday().getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
         if (month < 4) return "SPRING";

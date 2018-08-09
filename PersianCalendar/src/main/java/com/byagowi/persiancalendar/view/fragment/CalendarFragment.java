@@ -162,37 +162,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
-        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
-        binding.calendarsCard.weekDayName.setText(Utils.getWeekDayName(persianDate));
-        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
-
-        binding.calendarsCard.shamsiDateLinear.setText(Utils.toLinearDate(persianDate));
-        binding.calendarsCard.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
-        binding.calendarsCard.shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
-
-        binding.calendarsCard.gregorianDateLinear.setText(Utils.toLinearDate(civilDate));
-        binding.calendarsCard.gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
-        binding.calendarsCard.gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
-
-        binding.calendarsCard.islamicDateLinear.setText(Utils.toLinearDate(hijriDate));
-        binding.calendarsCard.islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
-        binding.calendarsCard.islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
-
         boolean isToday = Utils.getTodayJdn() == jdn;
-        if (isToday) {
-            binding.calendarsCard.today.setVisibility(View.GONE);
-            binding.calendarsCard.todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                binding.calendarsCard.weekDayName.setText(binding.calendarsCard.weekDayName.getText() + " (" + getString(R.string.iran_time) + ")");
-            }
-            lastSelectedJdn = -1;
-        } else {
-            binding.calendarsCard.today.setVisibility(View.VISIBLE);
-            binding.calendarsCard.todayIcon.setVisibility(View.VISIBLE);
-        }
-
-        setOwghat(civilDate, isToday);
+        Utils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
+        setOwghat(jdn, isToday);
         showEvent(jdn);
     }
 
@@ -310,7 +282,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-        if (Utils.getToday().getYear() > Utils.getMaxSupportedYear()) {
+        if (Utils.getPersianToday().getYear() > Utils.getMaxSupportedYear()) {
             String title = getString(R.string.shouldBeUpdated);
             SpannableString ss = new SpannableString(title);
             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -355,12 +327,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void setOwghat(CivilDate civilDate, boolean isToday) {
+    private void setOwghat(long jdn, boolean isToday) {
         if (coordinate == null) {
             binding.owghat.setVisibility(View.GONE);
             return;
         }
 
+        CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         Date date = calendar.getTime();
 
@@ -526,12 +499,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
                         (String) parent.getItemAtPosition(position)));
-                PersianDate todayPersian = Utils.getToday();
-                long todayJdn = DateConverter.persianToJdn(todayPersian);
-                IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
-                CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
+                long todayJdn = Utils.getTodayJdn();
 
                 if (ev instanceof PersianCalendarEvent) {
+                    PersianDate todayPersian = Utils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -540,6 +511,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof IslamicCalendarEvent) {
+                    IslamicDate todayIslamic = Utils.getIslamicToday();
                     IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -548,6 +520,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof GregorianCalendarEvent) {
+                    CivilDate todayCivil = Utils.getGregorianToday();
                     CivilDate date = ((GregorianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -556,6 +529,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof DeviceCalendarEvent) {
+                    CivilDate todayCivil = Utils.getGregorianToday();
                     CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
                     int year = date.getYear();
                     if (year == -1) {
