@@ -134,7 +134,7 @@
     <string name="about_license_title">مجوزهای برنامه</string>
     <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
     <string name="about_license_dialog_close">بستن</string>
-    <string name="about_help_title">کمک</string>
+    <string name="about_help_title">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_sendMail">رایانامه</string>
     <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
@@ -143,12 +143,14 @@
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامه شخصی برای نویسنده برنامه</string>
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
-    <string name="internet_location_enable">لطفا اینترنت و موقعیت‌یاب را روشن نمایید!</string>
-    <string name="location_enable">لطفا موقعیت‌یاب را روشن نمایید!</string>
-    <string name="internet_enable">لطفا اینترنت را روشن نمایید!</string>
+    <string name="internet_location_enable">لطفاً اینترنت و موقعیت‌یاب را روشن نمایید!</string>
+    <string name="location_enable">لطفاً موقعیت‌یاب را روشن نمایید!</string>
+    <string name="internet_enable">لطفاً اینترنت را روشن نمایید!</string>
     <string name="gps_settings">GPS</string>
     <string name="gprs_settings">GPRS</string>
     <string name="wifi_settings">WiFi</string>
-    <string name="gps_internet_desc">لطفا موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.\nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد و این پیام را نادیده بگیرید، اما در صورتی که مکان شما تغییر کرده است دوباره نیاز به این دسترسی‌ها می باشد.\nدر صورتی که دسترسی‌ها را فعال نمودید دوباره وارد قبله‌نما/قطب‌نما شوید!</string>
+    <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
+برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد و این پیام را نادیده بگیرید، اما در صورتی که مکان شما تغییر کرده است دوباره به این دسترسی‌ها نیاز است.
+در صورتی که دسترسی‌ها را فعال نمودید دوباره وارد قبله‌نما/قطب‌نما شوید!"</string>
 
 </resources>

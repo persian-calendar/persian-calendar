@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:text="@string/add"
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_widget_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/add" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
