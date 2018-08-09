@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.dialog.GPSNetworkDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
@@ -97,7 +101,24 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
         } else if (preference instanceof AthanNumericPreference) {
             fragment = new AthanNumericDialog();
         } else if (preference instanceof GPSLocationPreference) {
-            fragment = new GPSLocationDialog();
+            //check whether gps provider and network providers are enabled or not
+            Context context = getContext();
+            LocationManager gps = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            NetworkInfo info = ((ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+            boolean gps_enabled = false;
+
+            try {
+                gps_enabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch(Exception ignored) {}
+
+            if(!gps_enabled || info == null) {
+                // Custom Android Alert Dialog Title
+                DialogFragment frag = new GPSNetworkDialog();
+                frag.show(getActivity().getSupportFragmentManager(), "GPSNetworkDialog");
+            } else {
+                fragment = new GPSLocationDialog();
+            }
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
