@@ -16,11 +16,8 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.DialogFragment;
 
 public class GPSDiagnosticDialog extends DialogFragment {
@@ -35,7 +32,7 @@ public class GPSDiagnosticDialog extends DialogFragment {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_accses, null);
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_access, null);
         dialogBuilder.setView(dialogView);
 
         // check whether gps provider and network providers are enabled or not
