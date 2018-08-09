@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.navigationView.setLayoutManager(layoutManager);
 
-        final View appMainView = findViewById(R.id.app_main_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = +1;
 
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
             private void slidingAnimation(View drawerView, float slideOffset) {
-                appMainView.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
+                binding.appMainLayout.setTranslationX(slideOffset * drawerView.getWidth() * slidingDirection);
                 binding.drawer.bringChildToFront(drawerView);
                 binding.drawer.requestLayout();
             }
@@ -247,9 +246,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Utils.initUtils(this);
-        View v = findViewById(R.id.drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            v.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            binding.drawer.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 

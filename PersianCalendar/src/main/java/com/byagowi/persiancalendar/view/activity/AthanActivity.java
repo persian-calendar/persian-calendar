@@ -12,10 +12,10 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.ActivityAthanBinding;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
@@ -24,12 +24,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.databinding.DataBindingUtil;
 
 public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = AthanActivity.class.getName();
-    private TextView textAlarmName;
-    private LinearLayoutCompat activityRootView;
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
 
@@ -66,22 +64,20 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         Utils.changeAppLanguage(this);
 
-        setContentView(R.layout.activity_athan);
+        ActivityAthanBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_athan);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        textAlarmName = findViewById(R.id.athan_name);
-        TextView textCityName = findViewById(R.id.place);
-        activityRootView = findViewById(R.id.activity_root);
-        activityRootView.setOnClickListener(this);
-
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        textAlarmName.setText(Utils.getPrayTimeText(prayerKey));
-        activityRootView.setBackgroundResource(Utils.getPrayTimeImage(prayerKey));
+        binding.athanName.setText(Utils.getPrayTimeText(prayerKey));
 
-        textCityName.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
+        View root = binding.getRoot();
+        root.setOnClickListener(this);
+        root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey));
+
+        binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
