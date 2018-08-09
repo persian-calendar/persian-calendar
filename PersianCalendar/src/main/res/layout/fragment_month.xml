@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/grid_calendar_height"
-    android:orientation="vertical"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/prev"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:layout_alignParentLeft="true"
-        android:gravity="center"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_keyboard_arrow_left"
+        android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="@dimen/grid_calendar_padding_bottom"
+        android:scrollbars="vertical" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/next"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:layout_alignParentRight="true"
-        app:srcCompat="@drawable/ic_keyboard_arrow_right"
-        android:gravity="center"
+        android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:paddingBottom="@dimen/grid_calendar_padding_bottom"
-        android:layout_toRightOf="@+id/prev"
-        android:layout_toLeftOf="@+id/next">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-</RelativeLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -93,6 +93,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(Utils.getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
+    private boolean isRTL = false;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater,
@@ -100,10 +102,17 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
+        isRTL = Utils.isRTL(getContext());
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
         AppCompatImageView prev = view.findViewById(R.id.prev);
         AppCompatImageView next = view.findViewById(R.id.next);
+        prev.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
+        next.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_left
+                : R.drawable.ic_keyboard_arrow_right);
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
@@ -173,11 +182,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                calendarFragment.changeMonth(1);
+                calendarFragment.changeMonth(isRTL ? -1 : 1);
                 break;
 
             case R.id.prev:
-                calendarFragment.changeMonth(-1);
+                calendarFragment.changeMonth(isRTL ? 1 : -1);
                 break;
         }
     }
