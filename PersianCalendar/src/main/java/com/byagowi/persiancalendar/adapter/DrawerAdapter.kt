@@ -36,7 +36,7 @@ class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapt
         isSouthernHemisphere = true
       }
 
-      var month = CalendarUtils.getPersianToday().month
+      var month = CalendarUtils.persianToday.month
       if (isSouthernHemisphere) month = (month + 6 - 1) % 12 + 1
 
       return if (month < 4)

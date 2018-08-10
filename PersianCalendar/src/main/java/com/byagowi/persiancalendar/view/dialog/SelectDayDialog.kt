@@ -39,13 +39,17 @@ class SelectDayDialog : AppCompatDialogFragment() {
         android.R.layout.simple_spinner_dropdown_item,
         resources.getStringArray(R.array.calendar_type))
 
-    binding.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()))
-    startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(context, binding)
-
+    binding.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.mainCalendar))
+    val ctx = context
+    if (ctx != null) {
+      startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding)
+    }
 
     binding.calendarTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-      override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(context, binding)
+      override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {    val ctx = context
+        if (ctx != null) {
+          startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding)
+        }
       }
 
       override fun onNothingSelected(adapterView: AdapterView<*>) {}
@@ -71,11 +75,11 @@ class SelectDayDialog : AppCompatDialogFragment() {
           CalendarType.ISLAMIC -> calendarFragment?.bringDate(DateConverter.islamicToJdn(year, month, day))
 
           CalendarType.SHAMSI -> calendarFragment?.bringDate(DateConverter.persianToJdn(year, month, day))
-
-          else -> {}
         }
       } catch (e: RuntimeException) {
-        Toast.makeText(context, getString(R.string.date_exception), Toast.LENGTH_SHORT).show()
+        if (ctx != null) {
+          Toast.makeText(context, getString(R.string.date_exception), Toast.LENGTH_SHORT).show()
+        }
         Log.e("SelectDayDialog", "", e)
       }
     }

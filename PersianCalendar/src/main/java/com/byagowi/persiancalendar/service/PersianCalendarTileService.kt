@@ -29,7 +29,7 @@ class PersianCalendarTileService : TileService() {
 
   override fun onStartListening() {
     val tile = qsTile
-    val today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar())
+    val today = CalendarUtils.getTodayOfCalendar(Utils.mainCalendar)
 
     tile.icon = Icon.createWithResource(this,
         Utils.getDayIconResource(today.dayOfMonth))

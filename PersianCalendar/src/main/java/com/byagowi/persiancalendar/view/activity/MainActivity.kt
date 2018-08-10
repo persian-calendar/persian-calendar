@@ -159,13 +159,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     val prefs = PreferenceManager.getDefaultSharedPreferences(this)
     prefs.registerOnSharedPreferenceChangeListener(this)
 
-    if (Utils.isShowDeviceCalendarEvents()) {
+    if (Utils.isShowDeviceCalendarEvents) {
       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
         UIUtils.askForCalendarPermission(this)
       }
     }
 
-    creationDate = CalendarUtils.getGregorianToday()
+    creationDate = CalendarUtils.gregorianToday
     Utils.changeAppLanguage(this)
   }
 
@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     super.onResume()
     Utils.changeAppLanguage(this)
     UpdateUtils.update(applicationContext, false)
-    if (creationDate?.equals(CalendarUtils.getGregorianToday()) == false) {
+    if (creationDate?.equals(CalendarUtils.gregorianToday) == false) {
       restartActivity(menuPosition)
     }
   }

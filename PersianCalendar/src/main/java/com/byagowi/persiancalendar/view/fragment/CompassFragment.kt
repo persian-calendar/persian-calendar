@@ -43,17 +43,20 @@ class CompassFragment : Fragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
+    val ctx = context ?: return null
     setHasOptionsMenu(true)
 
     val view = inflater.inflate(R.layout.fragment_compass, container, false)
 
-    val context = context
-    val coordinate = Utils.getCoordinate(getContext())
-    if (coordinate == null) {
-      UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.compass), "")
-    } else {
-      UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.qibla_compass),
-          Utils.getCityName(context, true))
+    val localActivity = activity
+    val coordinate = Utils.getCoordinate(ctx)
+    if (localActivity != null) {
+      if (coordinate == null) {
+        UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.compass), "")
+      } else {
+        UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.qibla_compass),
+            Utils.getCityName(ctx, true))
+      }
     }
 
 

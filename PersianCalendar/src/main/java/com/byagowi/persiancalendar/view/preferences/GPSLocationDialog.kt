@@ -119,8 +119,11 @@ class GPSLocationDialog : PreferenceDialogFragmentCompat() {
       result = cityName + "\n\n"
     }
     // this time, with native digits
-    result += Utils.formatCoordinate(context,
-        Coordinate(location.latitude, location.longitude), "\n")
+    val ctx = context
+    if (ctx != null) {
+      result += Utils.formatCoordinate(ctx,
+          Coordinate(location.latitude, location.longitude), "\n")
+    }
     textView?.text = result
   }
 

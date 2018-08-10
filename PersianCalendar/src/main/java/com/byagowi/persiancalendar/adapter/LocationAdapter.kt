@@ -20,10 +20,10 @@ class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDi
   private val layoutInflater: LayoutInflater
 
   init {
-    val context = locationPreferenceDialog.context
-    this.layoutInflater = LayoutInflater.from(context)
-    this.cities = Utils.getAllCities(context, true)
-    this.locale = Utils.getAppLanguage()
+    val ctx = locationPreferenceDialog.context
+    this.layoutInflater = LayoutInflater.from(ctx)
+    this.cities = if (ctx == null) emptyList() else Utils.getAllCities(ctx!!, true)
+    this.locale = Utils.appLanguage
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

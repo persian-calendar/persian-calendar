@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -76,17 +75,15 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
   internal var changeListener: ViewPager.OnPageChangeListener = object : ViewPager.SimpleOnPageChangeListener() {
     override fun onPageSelected(position: Int) {
-      val ctx = context
-      if (ctx != null) {
-        LocalBroadcastManager.getInstance(ctx).sendBroadcast(
-            Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                    CalendarAdapter.positionToOffset(position))
-                .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn))
-      }
-
       binding.calendarsCard.today.visibility = View.VISIBLE
       binding.calendarsCard.todayIcon.visibility = View.VISIBLE
+
+      val ctx = context ?: return
+      LocalBroadcastManager.getInstance(ctx).sendBroadcast(
+          Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+              .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                  CalendarAdapter.positionToOffset(position))
+              .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn))
     }
 
   }
@@ -100,6 +97,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
   @Nullable
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
+    val ctx = context ?: return null
     setHasOptionsMenu(true)
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
@@ -109,9 +107,8 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     binding.calendarsCard.today.visibility = View.GONE
     binding.calendarsCard.todayIcon.visibility = View.GONE
 
-    coordinate = Utils.getCoordinate(context)
-    binding.calendarPager.adapter = CalendarAdapter(childFragmentManager,
-        UIUtils.isRTL(context))
+    coordinate = Utils.getCoordinate(ctx)
+    binding.calendarPager.adapter = CalendarAdapter(childFragmentManager, UIUtils.isRTL(ctx))
     CalendarAdapter.gotoOffset(binding.calendarPager, 0)
 
     binding.calendarPager.addOnPageChangeListener(changeListener)
@@ -136,20 +133,26 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     binding.calendarsCard.islamicDateLinear.visibility = View.GONE
     binding.calendarsCard.shamsiDateLinear.visibility = View.GONE
 
-    val cityName = Utils.getCityName(context, false)
+    val cityName = Utils.getCityName(ctx, false)
     if (!TextUtils.isEmpty(cityName)) {
       binding.owghatText.append(" ($cityName)")
     }
 
     // This will immediately be replaced by the same functionality on fragment but is here to
     // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-    val today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar())
-    UIUtils.setActivityTitleAndSubtitle(activity, CalendarUtils.getMonthName(today),
-        Utils.formatNumber(today.year))
+    val today = CalendarUtils.getTodayOfCalendar(Utils.mainCalendar)
+    val localActivity = activity
+    if (localActivity != null) {
+      UIUtils.setActivityTitleAndSubtitle(localActivity, CalendarUtils.getMonthName(today),
+          Utils.formatNumber(today.year))
+    }
 
     // Easter egg to test AthanActivity
     binding.owghatIcon.setOnLongClickListener {
-      Utils.startAthan(context, "FAJR")
+      val ctx = context
+      if (ctx != null) {
+        Utils.startAthan(ctx, "FAJR")
+      }
       true
     }
 
@@ -162,8 +165,11 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
   fun selectDay(jdn: Long) {
     lastSelectedJdn = jdn
-    val isToday = CalendarUtils.getTodayJdn() == jdn
-    UIUtils.fillCalendarsCard(context, jdn, binding.calendarsCard, isToday)
+    val isToday = CalendarUtils.todayJdn == jdn
+    val ctx = context
+    if (ctx != null) {
+      UIUtils.fillCalendarsCard(ctx, jdn, binding.calendarsCard, isToday)
+    }
     setOwghat(jdn, isToday)
     showEvent(jdn)
   }
@@ -178,7 +184,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
           Intent(Intent.ACTION_INSERT)
               .setData(CalendarContract.Events.CONTENT_URI)
               .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
-                  CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                  CalendarUtils.getDateFromJdnOfCalendar(Utils.mainCalendar, jdn)))
               .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                   time.timeInMillis)
               .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -193,10 +199,13 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-      Utils.initUtils(context)
+      val ctx = context
+      if (ctx != null) {
+        Utils.initUtils(ctx)
+      }
 
       if (lastSelectedJdn == -1L)
-        lastSelectedJdn = CalendarUtils.getTodayJdn()
+        lastSelectedJdn = CalendarUtils.todayJdn
       selectDay(lastSelectedJdn)
     }
   }
@@ -282,7 +291,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     }
 
     val messageToShow = SpannableStringBuilder()
-    if (CalendarUtils.getPersianToday().year > Utils.getMaxSupportedYear()) {
+    if (CalendarUtils.persianToday.year > Utils.maxSupportedYear) {
       val title = getString(R.string.shouldBeUpdated)
       val ss = SpannableString(title)
       val clickableSpan = object : ClickableSpan() {
@@ -340,18 +349,18 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     val prayTimes = prayTimesCalculator.calculate(date, coordinate)
 
     val nullClock = Clock(0, 0)
-    binding.imsak.text = UIUtils.getFormattedClock(prayTimes[PrayTime.IMSAK])
+    binding.imsak.text = UIUtils.getFormattedClock(prayTimes[PrayTime.IMSAK] ?: nullClock)
     val sunriseClock = prayTimes[PrayTime.FAJR] ?: nullClock
     binding.fajr.text = UIUtils.getFormattedClock(sunriseClock)
-    binding.sunrise.text = UIUtils.getFormattedClock(prayTimes[PrayTime.SUNRISE])
+    binding.sunrise.text = UIUtils.getFormattedClock(prayTimes[PrayTime.SUNRISE] ?: nullClock)
     val midddayClock = prayTimes[PrayTime.DHUHR] ?: nullClock
     binding.dhuhr.text = UIUtils.getFormattedClock(midddayClock)
-    binding.asr.text = UIUtils.getFormattedClock(prayTimes[PrayTime.ASR])
-    binding.sunset.text = UIUtils.getFormattedClock(prayTimes[PrayTime.SUNSET])
+    binding.asr.text = UIUtils.getFormattedClock(prayTimes[PrayTime.ASR] ?: nullClock)
+    binding.sunset.text = UIUtils.getFormattedClock(prayTimes[PrayTime.SUNSET] ?: nullClock)
     val maghribClock = prayTimes[PrayTime.MAGHRIB] ?: nullClock
     binding.maghrib.text = UIUtils.getFormattedClock(maghribClock)
-    binding.isgha.text = UIUtils.getFormattedClock(prayTimes[PrayTime.ISHA])
-    binding.midnight.text = UIUtils.getFormattedClock(prayTimes[PrayTime.MIDNIGHT])
+    binding.isgha.text = UIUtils.getFormattedClock(prayTimes[PrayTime.ISHA] ?: nullClock)
+    binding.midnight.text = UIUtils.getFormattedClock(prayTimes[PrayTime.MIDNIGHT] ?: nullClock)
 
     binding.ssv.visibility = View.GONE
     if (isToday) {
@@ -367,6 +376,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
   }
 
   override fun onClick(v: View) {
+    val ctx = context ?: return
     when (v.id) {
 
       R.id.calendars_card -> {
@@ -398,9 +408,9 @@ class CalendarFragment : Fragment(), View.OnClickListener {
         isOwghatOpen = isOpenOwghatCommand
 
         if (lastSelectedJdn == -1L)
-          lastSelectedJdn = CalendarUtils.getTodayJdn()
+          lastSelectedJdn = CalendarUtils.todayJdn
 
-        if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
+        if (lastSelectedJdn == CalendarUtils.todayJdn && isOpenOwghatCommand) {
           binding.ssv.visibility = View.VISIBLE
           binding.ssv.startAnimate()
         } else {
@@ -410,20 +420,20 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
       R.id.today, R.id.today_icon -> bringTodayYearMonth()
 
-      R.id.shamsi_date, R.id.shamsi_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateDay.text.toString() + " " +
+      R.id.shamsi_date, R.id.shamsi_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.shamsiDateDay.text.toString() + " " +
           binding.calendarsCard.shamsiDate.text.toString().replace("\n", " "))
 
-      R.id.shamsi_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateLinear.text)
+      R.id.shamsi_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.shamsiDateLinear.text)
 
-      R.id.gregorian_date, R.id.gregorian_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateDay.text.toString() + " " +
+      R.id.gregorian_date, R.id.gregorian_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.gregorianDateDay.text.toString() + " " +
           binding.calendarsCard.gregorianDate.text.toString().replace("\n", " "))
 
-      R.id.gregorian_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateLinear.text)
+      R.id.gregorian_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.gregorianDateLinear.text)
 
-      R.id.islamic_date, R.id.islamic_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateDay.text.toString() + " " +
+      R.id.islamic_date, R.id.islamic_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.islamicDateDay.text.toString() + " " +
           binding.calendarsCard.islamicDate.text.toString().replace("\n", " "))
 
-      R.id.islamic_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateLinear.text)
+      R.id.islamic_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.islamicDateLinear.text)
     }
   }
 
@@ -440,11 +450,11 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
     CalendarAdapter.gotoOffset(binding.calendarPager, 0)
 
-    selectDay(CalendarUtils.getTodayJdn())
+    selectDay(CalendarUtils.todayJdn)
   }
 
   fun bringDate(jdn: Long) {
-    val mainCalendar = Utils.getMainCalendar()
+    val mainCalendar = Utils.mainCalendar
     val today = CalendarUtils.getTodayOfCalendar(mainCalendar)
     val date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn)
     viewPagerPosition = (today.year - date.year) * 12 + today.month - date.month
@@ -481,7 +491,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
               parent.getItemAtPosition(position) as String)]
 
           if (ev is PersianCalendarEvent) {
-            val todayPersian = CalendarUtils.getPersianToday()
+            val todayPersian = CalendarUtils.persianToday
             val date = ev.date
             var year = date.year
             if (year == -1) {
@@ -489,7 +499,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
             }
             bringDate(DateConverter.persianToJdn(year, date.month, date.dayOfMonth))
           } else if (ev is IslamicCalendarEvent) {
-            val todayIslamic = CalendarUtils.getIslamicToday()
+            val todayIslamic = CalendarUtils.islamicToday
             val date = ev.date
             var year = date.year
             if (year == -1) {
@@ -497,7 +507,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
             }
             bringDate(DateConverter.islamicToJdn(year, date.month, date.dayOfMonth))
           } else if (ev is GregorianCalendarEvent) {
-            val todayCivil = CalendarUtils.getGregorianToday()
+            val todayCivil = CalendarUtils.gregorianToday
             val date = ev.date
             var year = date.year
             if (year == -1) {
@@ -505,7 +515,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
             }
             bringDate(DateConverter.civilToJdn(year.toLong(), date.month.toLong(), date.dayOfMonth.toLong()))
           } else if (ev is DeviceCalendarEvent) {
-            val todayCivil = CalendarUtils.getGregorianToday()
+            val todayCivil = CalendarUtils.gregorianToday
             val date = ev.civilDate
             var year = date.year
             if (year == -1) {
@@ -525,7 +535,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
           SelectDayDialog::class.java.name)
       R.id.add_event -> {
         if (lastSelectedJdn == -1L)
-          lastSelectedJdn = CalendarUtils.getTodayJdn()
+          lastSelectedJdn = CalendarUtils.todayJdn
 
         addEventOnCalendar(lastSelectedJdn)
       }

@@ -8,7 +8,7 @@ class DashClockUpdate : DashClockExtension() {
   override fun onUpdateData(reason: Int) {
     setUpdateWhenScreenOn(true)
     UpdateUtils.update(applicationContext, false)
-    publishUpdate(UpdateUtils.getExtensionData())
+    publishUpdate(UpdateUtils.extensionData)
   }
 
 }

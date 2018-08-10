@@ -32,8 +32,9 @@ class ConverterFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-
-    UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.date_converter), "")
+    val localActivity = activity ?: return null
+    val ctx = context ?: return null
+    UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.date_converter), "")
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
         false)
@@ -59,12 +60,12 @@ class ConverterFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
     binding.calendarsCard.islamicDate.setOnClickListener(this)
 
     // fill views
-    binding.selectdayFragment.calendarTypeSpinner.adapter = ArrayAdapter(context,
+    binding.selectdayFragment.calendarTypeSpinner.adapter = ArrayAdapter(ctx,
         android.R.layout.simple_spinner_dropdown_item,
         resources.getStringArray(R.array.calendar_type))
 
-    binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()))
-    startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(context, binding.selectdayFragment)
+    binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.mainCalendar))
+    startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding.selectdayFragment)
 
     binding.selectdayFragment.calendarTypeSpinner.onItemSelectedListener = this
 
@@ -102,18 +103,17 @@ class ConverterFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
           jdn = DateConverter.persianToJdn(PersianDate(year, month, day))
           binding.calendarsCard.shamsiContainer.visibility = View.GONE
         }
-        else -> {
-          jdn = DateConverter.persianToJdn(PersianDate(year, month, day))
-          binding.calendarsCard.shamsiContainer.visibility = View.GONE
-        }
       }
 
-      val isToday = CalendarUtils.getTodayJdn() == jdn
-      UIUtils.fillCalendarsCard(context, jdn, binding.calendarsCard, isToday)
+      val isToday = CalendarUtils.todayJdn == jdn
+      val ctx = context
+      if (ctx != null) {
+        UIUtils.fillCalendarsCard(ctx, jdn, binding.calendarsCard, isToday)
+      }
 
       binding.calendarsCard.calendarsCard.visibility = View.VISIBLE
 
-      val diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn)
+      val diffDays = Math.abs(CalendarUtils.todayJdn - jdn)
       val civilBase = CivilDate(2000, 1, 1)
       val civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase))
       val yearDiff = civilOffset.year - 2000
@@ -136,34 +136,36 @@ class ConverterFragment : Fragment(), AdapterView.OnItemSelectedListener, View.O
   }
 
   override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+    val ctx = context ?: return
     when (parent.id) {
       R.id.yearSpinner, R.id.monthSpinner, R.id.daySpinner -> fillCalendarInfo()
 
-      R.id.calendarTypeSpinner -> startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(context, binding.selectdayFragment)
+      R.id.calendarTypeSpinner -> startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding.selectdayFragment)
     }
   }
 
   override fun onNothingSelected(parent: AdapterView<*>) = Unit
 
   override fun onClick(view: View) {
+    val ctx = context ?: return
     when (view.id) {
 
-      R.id.shamsi_date, R.id.shamsi_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateDay.text.toString() + " " +
+      R.id.shamsi_date, R.id.shamsi_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.shamsiDateDay.text.toString() + " " +
           binding.calendarsCard.shamsiDate.text.toString().replace("\n", " "))
 
-      R.id.shamsi_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateLinear.text)
+      R.id.shamsi_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.shamsiDateLinear.text)
 
-      R.id.gregorian_date, R.id.gregorian_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateDay.text.toString() + " " +
+      R.id.gregorian_date, R.id.gregorian_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.gregorianDateDay.text.toString() + " " +
           binding.calendarsCard.gregorianDate.text.toString().replace("\n", " "))
 
-      R.id.gregorian_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateLinear.text)
+      R.id.gregorian_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.gregorianDateLinear.text)
 
-      R.id.islamic_date, R.id.islamic_date_day -> UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateDay.text.toString() + " " +
+      R.id.islamic_date, R.id.islamic_date_day -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.islamicDateDay.text.toString() + " " +
           binding.calendarsCard.islamicDate.text.toString().replace("\n", " "))
 
-      R.id.islamic_date_linear -> UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateLinear.text)
+      R.id.islamic_date_linear -> UIUtils.copyToClipboard(ctx, binding.calendarsCard.islamicDateLinear.text)
 
-      R.id.today, R.id.today_icon -> startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(context, binding.selectdayFragment)
+      R.id.today, R.id.today_icon -> startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding.selectdayFragment)
     }
   }
 }

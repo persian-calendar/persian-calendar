@@ -60,7 +60,8 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
     get() = context?.getString(R.string.default_athan_name) ?: ""
 
   override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
-    UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.settings), "")
+    val localActivity = activity ?: return
+    UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.settings), "")
 
     addPreferencesFromResource(R.xml.preferences)
 
@@ -85,7 +86,8 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
   }
 
   private fun updateAthanPreferencesState() {
-    val locationEmpty = Utils.getCoordinate(context) == null
+    val ctx = context ?: return
+    val locationEmpty = Utils.getCoordinate(ctx) == null
     categoryAthan.isEnabled = !locationEmpty
     if (locationEmpty) {
       categoryAthan.setSummary(R.string.athan_disabled_summary)
@@ -155,9 +157,12 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
             .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
             .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                 Settings.System.DEFAULT_NOTIFICATION_URI)
-        val customAthanUri = Utils.getCustomAthanUri(context)
-        if (customAthanUri != null) {
-          intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
+        val ctx = context
+        if (ctx != null) {
+          val customAthanUri = Utils.getCustomAthanUri(ctx)
+          if (customAthanUri != null) {
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
+          }
         }
         startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
         return true

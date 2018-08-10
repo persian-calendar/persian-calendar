@@ -35,7 +35,7 @@ class AboutFragment : Fragment() {
     val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater, R.layout.fragment_about,
         container, false)
 
-    UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.about), "")
+    UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.about), "")
 
     // version
     val version = programVersion()
@@ -43,7 +43,7 @@ class AboutFragment : Fragment() {
 
     // licenses
     binding.licenses.setOnClickListener {
-      val wv = WebView(activity)
+      val wv = WebView(localActivity)
       val settings = wv.settings
       settings.defaultTextEncodingName = "utf-8"
       wv.loadUrl("file:///android_res/raw/credits.txt")
@@ -57,7 +57,7 @@ class AboutFragment : Fragment() {
 
     // help
     binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
-        Utils.formatNumber(Utils.getMaxSupportedYear()))
+        Utils.formatNumber(Utils.maxSupportedYear))
     binding.helpSum.setText(R.string.about_help_sum)
 
     // report bug
@@ -78,7 +78,7 @@ class AboutFragment : Fragment() {
             "===Device Information===\nManufacturer: " + Build.MANUFACTURER + "\nModel: " + Build.MODEL + "\nAndroid Version: " + Build.VERSION.RELEASE + "\nApp Version Code: " + version.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
         startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
       } catch (ex: android.content.ActivityNotFoundException) {
-        Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show()
+        Toast.makeText(localActivity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show()
       }
     }
 

@@ -193,33 +193,33 @@ class SunriseSunsetView : View {
   private fun drawSunriseSunsetLabel(canvas: Canvas) {
     val sunriseTime = mSunriseTime
     val sunsetTime = mSunsetTime
-    if (mSunriseTime == null || mSunsetTime == null) {
-      return
+    val middayTime = mMiddayTime
+    if (sunriseTime != null && sunsetTime != null && middayTime != null) {
+      prepareLabelPaint()
+
+      canvas.save()
+
+      val leftLabel: String
+      val rightLabel: String
+      leftLabel = UIUtils.getFormattedClock(sunriseTime)
+      rightLabel = UIUtils.getFormattedClock(sunsetTime)
+
+      mLabelPaint.textAlign = Paint.Align.LEFT
+      val metricsInt = mLabelPaint.fontMetricsInt
+      var baseLineX = mBoardRectF.left + mSunRadius + mLabelHorizontalOffset.toFloat()
+      val baseLineY = mBoardRectF.bottom - metricsInt.bottom.toFloat() - mLabelVerticalOffset.toFloat()
+      canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint)
+
+      mLabelPaint.textAlign = Paint.Align.CENTER
+      canvas.drawText(UIUtils.getFormattedClock(middayTime),
+          mBoardRectF.centerX() - mLabelHorizontalOffset,
+          mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset, mLabelPaint)
+
+      mLabelPaint.textAlign = Paint.Align.RIGHT
+      baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset.toFloat()
+      canvas.drawText(rightLabel, baseLineX, baseLineY, mLabelPaint)
+      canvas.restore()
     }
-    prepareLabelPaint()
-
-    canvas.save()
-
-    val leftLabel: String
-    val rightLabel: String
-    leftLabel = UIUtils.getFormattedClock(sunriseTime)
-    rightLabel = UIUtils.getFormattedClock(sunsetTime)
-
-    mLabelPaint.textAlign = Paint.Align.LEFT
-    val metricsInt = mLabelPaint.fontMetricsInt
-    var baseLineX = mBoardRectF.left + mSunRadius + mLabelHorizontalOffset.toFloat()
-    val baseLineY = mBoardRectF.bottom - metricsInt.bottom.toFloat() - mLabelVerticalOffset.toFloat()
-    canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint)
-
-    mLabelPaint.textAlign = Paint.Align.CENTER
-    canvas.drawText(UIUtils.getFormattedClock(mMiddayTime),
-        mBoardRectF.centerX() - mLabelHorizontalOffset,
-        mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset, mLabelPaint)
-
-    mLabelPaint.textAlign = Paint.Align.RIGHT
-    baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset.toFloat()
-    canvas.drawText(rightLabel, baseLineX, baseLineY, mLabelPaint)
-    canvas.restore()
   }
 
   fun setSunriseTime(sunriseTime: Clock) {

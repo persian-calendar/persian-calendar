@@ -61,9 +61,10 @@ class MonthFragment : Fragment(), View.OnClickListener {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-
+    val ctx = context ?: return null
     val view = inflater.inflate(R.layout.fragment_month, container, false)
-    isRTL = UIUtils.isRTL(context)
+    isRTL = UIUtils.isRTL(ctx)
+
     offset = arguments?.getInt(Constants.OFFSET_ARGUMENT) ?: 0
 
     val prev = view.findViewById<AppCompatImageView>(R.id.prev)
@@ -81,11 +82,11 @@ class MonthFragment : Fragment(), View.OnClickListener {
     val recyclerView = view.findViewById<RecyclerView>(R.id.RecyclerView)
     recyclerView.setHasFixedSize(true)
 
-    val layoutManager = GridLayoutManager(context, if (Utils.isWeekOfYearEnabled()) 8 else 7)
-    recyclerView.layoutManager = layoutManager
+    recyclerView.layoutManager =
+        GridLayoutManager(context, if (Utils.isWeekOfYearEnabled) 8 else 7)
     //////////////////
     //////////////////
-    val mainCalendar = Utils.getMainCalendar()
+    val mainCalendar = Utils.mainCalendar
     val days = ArrayList<DayEntity>()
     typedDate = CalendarUtils.getTodayOfCalendar(mainCalendar)
     var month = typedDate.month - offset
@@ -107,7 +108,7 @@ class MonthFragment : Fragment(), View.OnClickListener {
 
     var dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn)
 
-    val todayJdn = CalendarUtils.getTodayJdn()
+    val todayJdn = CalendarUtils.todayJdn
     for (i in 0 until monthLength) {
       val jdn = baseJdn + i
       days.add(DayEntity(jdn, jdn == todayJdn, dayOfWeek))
@@ -124,7 +125,7 @@ class MonthFragment : Fragment(), View.OnClickListener {
     val startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn)
     //////////////////
     //////////////////
-    adapter = MonthAdapter(context, this, days, startingDayOfWeek, weekOfYearStart, weeksCount)
+    adapter = MonthAdapter(ctx, this, days, startingDayOfWeek, weekOfYearStart, weeksCount)
     recyclerView.adapter = adapter
     recyclerView.itemAnimator = null
 
@@ -136,16 +137,13 @@ class MonthFragment : Fragment(), View.OnClickListener {
       if (calendar.firstTime && offset == 0 &&
           calendar.viewPagerPosition == offset) {
         calendar.firstTime = false
-        calendar.selectDay(CalendarUtils.getTodayJdn())
+        calendar.selectDay(CalendarUtils.todayJdn)
         updateTitle()
       }
     }
 
-    val ctx = context
-    if (ctx != null) {
-      LocalBroadcastManager.getInstance(ctx).registerReceiver(setCurrentMonthReceiver,
-          IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT))
-    }
+    LocalBroadcastManager.getInstance(ctx).registerReceiver(setCurrentMonthReceiver,
+        IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT))
 
     return view
   }
@@ -170,9 +168,11 @@ class MonthFragment : Fragment(), View.OnClickListener {
     }
   }
 
-  private fun updateTitle() =
-      UIUtils.setActivityTitleAndSubtitle(activity, CalendarUtils.getMonthName(typedDate),
-          Utils.formatNumber(typedDate.year))
+  private fun updateTitle() {
+    val localActivity = activity ?: return
+    UIUtils.setActivityTitleAndSubtitle(localActivity, CalendarUtils.getMonthName(typedDate),
+        Utils.formatNumber(typedDate.year))
+  }
 
   companion object {
     internal var isRTL = false
