@@ -164,32 +164,17 @@ class SunriseSunsetView : View {
 
   private fun drawShadow(canvas: Canvas) {
     prepareShadowPaint()
-    canvas.save()
 
+    canvas.save()
     val path = Path()
     val endY = mBoardRectF.bottom
     val rectF = RectF(mBoardRectF.left, mBoardRectF.top, mBoardRectF.right, mBoardRectF.bottom + mBoardRectF.height())
     val curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * Math.cos(Math.PI * mRatio).toFloat()
+
     path.moveTo(0f, endY)
     path.arcTo(rectF, 180f, 180 * mRatio)
     path.lineTo(curPointX, endY)
     path.close()
-
-    //Draw Dot
-    val dot = "•"
-    mLabelPaint.color = mTrackColor
-    mLabelPaint.textAlign = Paint.Align.LEFT
-    val metricsInt = mLabelPaint.fontMetricsInt
-    var baseLineX = mBoardRectF.left - mLabelHorizontalOffset;
-    val baseLineYLeft = mBoardRectF.bottom - metricsInt.bottom + mLabelVerticalOffset
-    val baseLineYRight = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset
-    canvas.drawText(dot, baseLineX, baseLineYLeft, mLabelPaint)
-    mLabelPaint.textAlign = Paint.Align.CENTER
-    canvas.drawText(dot, mBoardRectF.centerX() - mLabelHorizontalOffset, mBoardRectF.top, mLabelPaint)
-    mLabelPaint.textAlign = Paint.Align.RIGHT
-    baseLineX = mBoardRectF.right + mLabelHorizontalOffset
-    canvas.drawText(dot, baseLineX, baseLineYRight, mLabelPaint)
-
     canvas.drawPath(path, mShadowPaint)
     canvas.restore()
   }
