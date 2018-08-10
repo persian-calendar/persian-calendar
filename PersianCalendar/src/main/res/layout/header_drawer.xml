@@ -13,18 +13,4 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop" />
 
-    <!-- Code convince, not use for now -->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/itemTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-    <!-- Code convince, not use for now -->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/itemSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.util;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -92,7 +90,6 @@ public class CalendarUtils {
         return new CivilDate(makeCalendarFromDate(new Date()));
     }
 
-    @NotNull
     static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
         switch (calendar) {
             case ISLAMIC:
