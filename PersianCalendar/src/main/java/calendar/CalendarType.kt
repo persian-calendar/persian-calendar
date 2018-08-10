@@ -1,4 +1,4 @@
-package calendar;
+package calendar
 
 /**
  * Calendars Types
@@ -6,6 +6,6 @@ package calendar;
  * @author ebraminio
  */
 // So vital, don't ever change names of these
-public enum CalendarType {
+enum class CalendarType {
     SHAMSI, ISLAMIC, GREGORIAN
 }
