@@ -192,18 +192,33 @@ public class SunriseSunsetView extends View {
 
     private void drawShadow(Canvas canvas) {
         prepareShadowPaint();
-
         canvas.save();
+
+        //Draw Dot
+        String dot = "•";
+        mLabelPaint.setColor(mTrackColor);
+        mLabelPaint.setTextAlign(Paint.Align.LEFT);
+        Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
+        float baseLineX = mBoardRectF.left - mLabelHorizontalOffset;
+        float baseLineYLeft = mBoardRectF.bottom - metricsInt.bottom + mLabelVerticalOffset;
+        float baseLineYRight = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
+        canvas.drawText(dot, baseLineX, baseLineYLeft, mLabelPaint);
+        mLabelPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(dot, mBoardRectF.centerX() - mLabelHorizontalOffset, mBoardRectF.top, mLabelPaint);
+        mLabelPaint.setTextAlign(Paint.Align.RIGHT);
+        baseLineX = mBoardRectF.right + mLabelHorizontalOffset;
+        canvas.drawText(dot, baseLineX, baseLineYRight, mLabelPaint);
+
         Path path = new Path();
         float endY = mBoardRectF.bottom;
         RectF rectF = new RectF(mBoardRectF.left, mBoardRectF.top, mBoardRectF.right, mBoardRectF.bottom + mBoardRectF.height());
         float curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * (float) Math.cos(Math.PI * mRatio);
-
         path.moveTo(0, endY);
         path.arcTo(rectF, 180, 180 * mRatio);
         path.lineTo(curPointX, endY);
         path.close();
         canvas.drawPath(path, mShadowPaint);
+
         canvas.restore();
     }
 
@@ -233,13 +248,13 @@ public class SunriseSunsetView extends View {
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
         float baseLineX = mBoardRectF.left + mSunRadius + mLabelHorizontalOffset;
-        float baseLineY = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
+        float baseLineY = mBoardRectF.bottom - metricsInt.bottom + mLabelVerticalOffset;
         canvas.drawText(leftLabel, baseLineX, baseLineY, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(UIUtils.getFormattedClock(mMiddayTime),
                 mBoardRectF.centerX() - mLabelHorizontalOffset,
-                mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset, mLabelPaint);
+                mBoardRectF.top + metricsInt.bottom * mLabelVerticalOffset + mSunRadius, mLabelPaint);
 
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
         baseLineX = mBoardRectF.right - mSunRadius - mLabelHorizontalOffset;
