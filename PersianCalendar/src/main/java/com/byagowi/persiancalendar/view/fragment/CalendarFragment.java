@@ -24,21 +24,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
-import com.byagowi.persiancalendar.view.sunrisesunset.SunriseSunsetView;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -52,10 +53,8 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
@@ -70,62 +69,11 @@ import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_RE
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends Fragment implements View.OnClickListener {
-    private ViewPager monthViewPager;
-
     private Calendar calendar = Calendar.getInstance();
-
     private Coordinate coordinate;
-
     private PrayTimesCalculator prayTimesCalculator;
-    private TextView imsakTextView;
-    private TextView fajrTextView;
-    private TextView dhuhrTextView;
-    private TextView asrTextView;
-    private TextView maghribTextView;
-    private TextView ishaTextView;
-    private TextView sunriseTextView;
-    private TextView sunsetTextView;
-    private TextView midnightTextView;
-
-    private TextView weekDayName;
-    private TextView gregorianDate;
-    private TextView gregorianDateDay;
-    private TextView gregorianDateLinear;
-    private TextView islamicDate;
-    private TextView islamicDateDay;
-    private TextView islamicDateLinear;
-    private TextView shamsiDate;
-    private TextView shamsiDateDay;
-    private TextView shamsiDateLinear;
-    private TextView deviceEventTitle;
-    private TextView eventTitle;
-    private TextView eventMessage;
-    private TextView holidayTitle;
-    private TextView today;
-    private AppCompatImageView todayIcon;
-    private AppCompatImageView warnUserIcon;
-
-    private AppCompatImageView moreCalendar;
-    private AppCompatImageView moreOwghat;
-    private AppCompatImageView owghatIcon;
-
-
-    private CardView owghat;
-    private CardView event;
-
-    private LinearLayoutCompat imsakLayout;
-    private LinearLayoutCompat fajrLayout;
-    private LinearLayoutCompat sunriseLayout;
-    private LinearLayoutCompat dhuhrLayout;
-    private LinearLayoutCompat asrLayout;
-    private LinearLayoutCompat sunsetLayout;
-    private LinearLayoutCompat maghribLayout;
-    private LinearLayoutCompat ishaLayout;
-    private LinearLayoutCompat midnightLayout;
-
     private int viewPagerPosition;
-
-    private SunriseSunsetView mSunriseSunsetView;
+    private FragmentCalendarBinding binding;
 
     @Nullable
     @Override
@@ -136,107 +84,59 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
+                false);
         viewPagerPosition = 0;
 
-        imsakLayout = view.findViewById(R.id.imsakLayout);
-        fajrLayout = view.findViewById(R.id.fajrLayout);
-        sunriseLayout = view.findViewById(R.id.sunriseLayout);
-        dhuhrLayout = view.findViewById(R.id.dhuhrLayout);
-        asrLayout = view.findViewById(R.id.asrLayout);
-        sunsetLayout = view.findViewById(R.id.sunsetLayout);
-        maghribLayout = view.findViewById(R.id.maghribLayout);
-        ishaLayout = view.findViewById(R.id.ishaLayout);
-        midnightLayout = view.findViewById(R.id.midnightLayout);
-
-        gregorianDate = view.findViewById(R.id.gregorian_date);
-        gregorianDateDay = view.findViewById(R.id.gregorian_date_day);
-        gregorianDateLinear = view.findViewById(R.id.gregorian_date_linear);
-        islamicDate = view.findViewById(R.id.islamic_date);
-        islamicDateDay = view.findViewById(R.id.islamic_date_day);
-        islamicDateLinear = view.findViewById(R.id.islamic_date_linear);
-        shamsiDate = view.findViewById(R.id.shamsi_date);
-        shamsiDateDay = view.findViewById(R.id.shamsi_date_day);
-        shamsiDateLinear = view.findViewById(R.id.shamsi_date_linear);
-        weekDayName = view.findViewById(R.id.week_day_name);
-        today = view.findViewById(R.id.today);
-        todayIcon = view.findViewById(R.id.today_icon);
-        warnUserIcon = view.findViewById(R.id.warn_user_icon);
-        today.setVisibility(View.GONE);
-        todayIcon.setVisibility(View.GONE);
-
-        imsakTextView = view.findViewById(R.id.imsak);
-        fajrTextView = view.findViewById(R.id.fajr);
-        dhuhrTextView = view.findViewById(R.id.dhuhr);
-        asrTextView = view.findViewById(R.id.asr);
-        maghribTextView = view.findViewById(R.id.maghrib);
-        ishaTextView = view.findViewById(R.id.isgha);
-        sunriseTextView = view.findViewById(R.id.sunrise);
-        sunsetTextView = view.findViewById(R.id.sunset);
-        midnightTextView = view.findViewById(R.id.midnight);
-
-        moreCalendar = view.findViewById(R.id.more_calendar);
-
-        moreOwghat = view.findViewById(R.id.more_owghat);
-
-        deviceEventTitle = view.findViewById(R.id.device_event_title);
-        eventTitle = view.findViewById(R.id.event_title);
-        eventMessage = view.findViewById(R.id.event_message);
-        holidayTitle = view.findViewById(R.id.holiday_title);
-
-        owghat = view.findViewById(R.id.owghat);
-        owghatIcon = view.findViewById(R.id.owghat_icon);
-        event = view.findViewById(R.id.cardEvent);
-
-        monthViewPager = view.findViewById(R.id.calendar_pager);
+        binding.calendarsCard.today.setVisibility(View.GONE);
+        binding.calendarsCard.todayIcon.setVisibility(View.GONE);
 
         coordinate = Utils.getCoordinate(getContext());
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
-        monthViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
-                Utils.isRTL(getContext())));
-        CalendarAdapter.gotoOffset(monthViewPager, 0);
+        binding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
+                UIUtils.isRTL(getContext())));
+        CalendarAdapter.gotoOffset(binding.calendarPager, 0);
 
-        monthViewPager.addOnPageChangeListener(changeListener);
+        binding.calendarPager.addOnPageChangeListener(changeListener);
 
-        owghat.setOnClickListener(this);
-        today.setOnClickListener(this);
-        todayIcon.setOnClickListener(this);
-        gregorianDate.setOnClickListener(this);
-        gregorianDateDay.setOnClickListener(this);
-        gregorianDateLinear.setOnClickListener(this);
-        islamicDate.setOnClickListener(this);
-        islamicDateDay.setOnClickListener(this);
-        islamicDateLinear.setOnClickListener(this);
-        shamsiDate.setOnClickListener(this);
-        shamsiDateDay.setOnClickListener(this);
-        shamsiDateLinear.setOnClickListener(this);
+        binding.owghat.setOnClickListener(this);
+        binding.calendarsCard.today.setOnClickListener(this);
+        binding.calendarsCard.todayIcon.setOnClickListener(this);
+        binding.calendarsCard.gregorianDate.setOnClickListener(this);
+        binding.calendarsCard.gregorianDateDay.setOnClickListener(this);
+        binding.calendarsCard.gregorianDateLinear.setOnClickListener(this);
+        binding.calendarsCard.islamicDate.setOnClickListener(this);
+        binding.calendarsCard.islamicDateDay.setOnClickListener(this);
+        binding.calendarsCard.islamicDateLinear.setOnClickListener(this);
+        binding.calendarsCard.shamsiDate.setOnClickListener(this);
+        binding.calendarsCard.shamsiDateDay.setOnClickListener(this);
+        binding.calendarsCard.shamsiDateLinear.setOnClickListener(this);
 
-        view.findViewById(R.id.calendars_card).setOnClickListener(this);
+        binding.calendarsCard.calendarsCard.setOnClickListener(this);
 
-        warnUserIcon.setVisibility(View.GONE);
-        gregorianDateLinear.setVisibility(View.GONE);
-        islamicDateLinear.setVisibility(View.GONE);
-        shamsiDateLinear.setVisibility(View.GONE);
+        binding.warnUserIcon.setVisibility(View.GONE);
+        binding.calendarsCard.gregorianDateLinear.setVisibility(View.GONE);
+        binding.calendarsCard.islamicDateLinear.setVisibility(View.GONE);
+        binding.calendarsCard.shamsiDateLinear.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
-            ((TextView) view.findViewById(R.id.owghat_text))
-                    .append(" (" + cityName + ")");
+            binding.owghatText.append(" (" + cityName + ")");
         }
 
         // This will immediately be replaced by the same functionality on fragment but is here to
         // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
-        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(today),
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         // Easter egg to test AthanActivity
-        owghatIcon.setOnLongClickListener(v -> {
+        binding.owghatIcon.setOnLongClickListener(v -> {
             Utils.startAthan(getContext(), "FAJR");
             return true;
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     public boolean firstTime = true;
@@ -250,51 +150,23 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                     CalendarAdapter.positionToOffset(position))
                             .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
-            today.setVisibility(View.VISIBLE);
-            todayIcon.setVisibility(View.VISIBLE);
+            binding.calendarsCard.today.setVisibility(View.VISIBLE);
+            binding.calendarsCard.todayIcon.setVisibility(View.VISIBLE);
         }
 
     };
 
     void changeMonth(int position) {
-        monthViewPager.setCurrentItem(monthViewPager.getCurrentItem() + position, true);
+        binding.calendarPager.setCurrentItem(binding.calendarPager.getCurrentItem() + position, true);
     }
 
     private long lastSelectedJdn = -1;
 
     void selectDay(long jdn) {
         lastSelectedJdn = jdn;
-        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
-        weekDayName.setText(Utils.getWeekDayName(persianDate));
-        CivilDate civilDate = DateConverter.persianToCivil(persianDate);
-        IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
-
-        shamsiDateLinear.setText(Utils.toLinearDate(persianDate));
-        shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
-        shamsiDate.setText(Utils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
-
-        gregorianDateLinear.setText(Utils.toLinearDate(civilDate));
-        gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
-        gregorianDate.setText(Utils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
-
-        islamicDateLinear.setText(Utils.toLinearDate(hijriDate));
-        islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
-        islamicDate.setText(Utils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
-
-        boolean isToday = Utils.getTodayJdn() == jdn;
-        if (isToday) {
-            today.setVisibility(View.GONE);
-            todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                weekDayName.setText(weekDayName.getText() + " (" + getString(R.string.iran_time) + ")");
-            }
-            lastSelectedJdn = -1;
-        } else {
-            today.setVisibility(View.VISIBLE);
-            todayIcon.setVisibility(View.VISIBLE);
-        }
-
-        setOwghat(civilDate, isToday);
+        boolean isToday = CalendarUtils.getTodayJdn() == jdn;
+        UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
+        setOwghat(jdn, isToday);
         showEvent(jdn);
     }
 
@@ -307,8 +179,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             startActivityForResult(
                     new Intent(Intent.ACTION_INSERT)
                             .setData(CalendarContract.Events.CONTENT_URI)
-                            .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                            .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
+                                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
                             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                     time.getTimeInMillis())
                             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -326,13 +198,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             Utils.initUtils(getContext());
 
             if (lastSelectedJdn == -1)
-                lastSelectedJdn = Utils.getTodayJdn();
+                lastSelectedJdn = CalendarUtils.getTodayJdn();
             selectDay(lastSelectedJdn);
         }
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
-        String title = Utils.formatDeviceCalendarEventTitle(event);
+        String title = UIUtils.formatDeviceCalendarEventTitle(event);
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -384,35 +256,35 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
-        event.setVisibility(View.GONE);
-        holidayTitle.setVisibility(View.GONE);
-        deviceEventTitle.setVisibility(View.GONE);
-        eventTitle.setVisibility(View.GONE);
-        eventMessage.setVisibility(View.GONE);
+        binding.cardEvent.setVisibility(View.GONE);
+        binding.holidayTitle.setVisibility(View.GONE);
+        binding.deviceEventTitle.setVisibility(View.GONE);
+        binding.eventTitle.setVisibility(View.GONE);
+        binding.eventMessage.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
-            holidayTitle.setText(holidays);
-            holidayTitle.setVisibility(View.VISIBLE);
-            event.setVisibility(View.VISIBLE);
+            binding.holidayTitle.setText(holidays);
+            binding.holidayTitle.setVisibility(View.VISIBLE);
+            binding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
-            deviceEventTitle.setText(deviceEvents);
-            deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.deviceEventTitle.setText(deviceEvents);
+            binding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
-            deviceEventTitle.setVisibility(View.VISIBLE);
-            event.setVisibility(View.VISIBLE);
+            binding.deviceEventTitle.setVisibility(View.VISIBLE);
+            binding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(nonHolidays)) {
-            eventTitle.setText(nonHolidays);
+            binding.eventTitle.setText(nonHolidays);
 
-            eventTitle.setVisibility(View.VISIBLE);
-            event.setVisibility(View.VISIBLE);
+            binding.eventTitle.setVisibility(View.VISIBLE);
+            binding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-        if (Utils.getToday().getYear() > Utils.getMaxSupportedYear()) {
+        if (CalendarUtils.getPersianToday().getYear() > Utils.getMaxSupportedYear()) {
             String title = getString(R.string.shouldBeUpdated);
             SpannableString ss = new SpannableString(title);
             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -448,49 +320,49 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-            warnUserIcon.setVisibility(View.VISIBLE);
-            eventMessage.setText(messageToShow);
-            eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.warnUserIcon.setVisibility(View.VISIBLE);
+            binding.eventMessage.setText(messageToShow);
+            binding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
-            eventMessage.setVisibility(View.VISIBLE);
-            event.setVisibility(View.VISIBLE);
+            binding.eventMessage.setVisibility(View.VISIBLE);
+            binding.cardEvent.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setOwghat(CivilDate civilDate, boolean isToday) {
+    private void setOwghat(long jdn, boolean isToday) {
         if (coordinate == null) {
-            owghat.setVisibility(View.GONE);
+            binding.owghat.setVisibility(View.GONE);
             return;
         }
 
+        CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         Date date = calendar.getTime();
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        imsakTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        binding.imsak.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
         Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
-        fajrTextView.setText(Utils.getFormattedClock(sunriseClock));
-        sunriseTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        binding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
+        binding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
         Clock midddayClock = prayTimes.get(PrayTime.DHUHR);
-        dhuhrTextView.setText(Utils.getFormattedClock(midddayClock));
-        asrTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
-        sunsetTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        binding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
+        binding.asr.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
+        binding.sunset.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
         Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
-        maghribTextView.setText(Utils.getFormattedClock(maghribClock));
-        ishaTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        midnightTextView.setText(Utils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        binding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
+        binding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        binding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
 
-        mSunriseSunsetView = getView().findViewById(R.id.ssv);
-        mSunriseSunsetView.setVisibility(View.GONE);
+        binding.ssv.setVisibility(View.GONE);
         if (isToday) {
-            mSunriseSunsetView.setSunriseTime(sunriseClock);
-            mSunriseSunsetView.setMiddayTime(midddayClock);
-            mSunriseSunsetView.setSunsetTime(maghribClock);
+            binding.ssv.setSunriseTime(sunriseClock);
+            binding.ssv.setMiddayTime(midddayClock);
+            binding.ssv.setSunsetTime(maghribClock);
 
             if (isOwghatOpen) {
-                mSunriseSunsetView.setVisibility(View.VISIBLE);
-                mSunriseSunsetView.animate();
+                binding.ssv.setVisibility(View.VISIBLE);
+                binding.ssv.animate();
             }
         }
     }
@@ -502,40 +374,40 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.calendars_card:
-                boolean isOpenCalendarCommand = gregorianDateLinear.getVisibility() != View.VISIBLE;
+                boolean isOpenCalendarCommand = binding.calendarsCard.gregorianDateLinear.getVisibility() != View.VISIBLE;
 
-                moreCalendar.setImageResource(isOpenCalendarCommand
+                binding.calendarsCard.moreCalendar.setImageResource(isOpenCalendarCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                binding.calendarsCard.gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                binding.calendarsCard.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                binding.calendarsCard.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
                 break;
 
             case R.id.owghat:
 
-                boolean isOpenOwghatCommand = sunriseLayout.getVisibility() == View.GONE;
+                boolean isOpenOwghatCommand = binding.sunriseLayout.getVisibility() == View.GONE;
 
-                moreOwghat.setImageResource(isOpenOwghatCommand
+                binding.moreOwghat.setImageResource(isOpenOwghatCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                binding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
-                    lastSelectedJdn = Utils.getTodayJdn();
+                    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                if (lastSelectedJdn == Utils.getTodayJdn() && isOpenOwghatCommand) {
-                    mSunriseSunsetView.setVisibility(View.VISIBLE);
-                    mSunriseSunsetView.startAnimate();
+                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
+                    binding.ssv.setVisibility(View.VISIBLE);
+                    binding.ssv.startAnimate();
                 } else {
-                    mSunriseSunsetView.setVisibility(View.GONE);
+                    binding.ssv.setVisibility(View.GONE);
                 }
 
                 break;
@@ -547,32 +419,32 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
             case R.id.shamsi_date:
             case R.id.shamsi_date_day:
-                Utils.copyToClipboard(getContext(), shamsiDateDay.getText() + " " +
-                        shamsiDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
+                        binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.shamsi_date_linear:
-                Utils.copyToClipboard(getContext(), shamsiDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
                 break;
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                Utils.copyToClipboard(getContext(), gregorianDateDay.getText() + " " +
-                        gregorianDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
+                        binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.gregorian_date_linear:
-                Utils.copyToClipboard(getContext(), gregorianDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
                 break;
 
             case R.id.islamic_date:
             case R.id.islamic_date_day:
-                Utils.copyToClipboard(getContext(), islamicDateDay.getText() + " " +
-                        islamicDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
+                        binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.islamic_date_linear:
-                Utils.copyToClipboard(getContext(), islamicDateLinear.getText());
+                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
                 break;
         }
     }
@@ -585,18 +457,18 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
 
-        CalendarAdapter.gotoOffset(monthViewPager, 0);
+        CalendarAdapter.gotoOffset(binding.calendarPager, 0);
 
-        selectDay(Utils.getTodayJdn());
+        selectDay(CalendarUtils.getTodayJdn());
     }
 
     public void bringDate(long jdn) {
         CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
-        CalendarAdapter.gotoOffset(monthViewPager, viewPagerPosition);
+        CalendarAdapter.gotoOffset(binding.calendarPager, viewPagerPosition);
 
         selectDay(jdn);
 
@@ -629,12 +501,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
                         (String) parent.getItemAtPosition(position)));
-                PersianDate todayPersian = Utils.getToday();
-                long todayJdn = DateConverter.persianToJdn(todayPersian);
-                IslamicDate todayIslamic = DateConverter.jdnToIslamic(todayJdn);
-                CivilDate todayCivil = DateConverter.jdnToCivil(todayJdn);
+                long todayJdn = CalendarUtils.getTodayJdn();
 
                 if (ev instanceof PersianCalendarEvent) {
+                    PersianDate todayPersian = CalendarUtils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -643,6 +513,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof IslamicCalendarEvent) {
+                    IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
                     IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -651,6 +522,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof GregorianCalendarEvent) {
+                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((GregorianCalendarEvent) ev).getDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -659,6 +531,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     }
                     bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
                 } else if (ev instanceof DeviceCalendarEvent) {
+                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
                     int year = date.getYear();
                     if (year == -1) {
@@ -681,7 +554,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.add_event:
                 if (lastSelectedJdn == -1)
-                    lastSelectedJdn = Utils.getTodayJdn();
+                    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
                 addEventOnCalendar(lastSelectedJdn);
                 break;

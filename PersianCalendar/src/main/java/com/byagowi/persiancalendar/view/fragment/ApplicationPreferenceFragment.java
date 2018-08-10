@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
@@ -52,7 +53,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-        Utils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         addPreferencesFromResource(R.xml.preferences);
 

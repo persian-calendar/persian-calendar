@@ -41,10 +41,10 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Calendar calendar = Utils.makeCalendarFromDate(new Date());
+        Calendar calendar = CalendarUtils.makeCalendarFromDate(new Date());
         CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
-        long jdn = Utils.getJdnDate(date);
+        AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        long jdn = CalendarUtils.getJdnDate(date);
 
         Intent intent = new Intent(context, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -74,7 +74,7 @@ public class UpdateUtils {
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                     Utils.formatNumber(date.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(date));
+                    CalendarUtils.getMonthName(date));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
@@ -89,9 +89,9 @@ public class UpdateUtils {
         }
 
         String weekDayName = Utils.getWeekDayName(date);
-        String status = Utils.getMonthName(date);
-        String title = Utils.dayTitleSummary(date);
-        String subtitle = Utils.dateStringOfOtherCalendar(mainCalendar, jdn);
+        String status = CalendarUtils.getMonthName(date);
+        String title = CalendarUtils.dayTitleSummary(date);
+        String subtitle = CalendarUtils.dateStringOfOtherCalendar(mainCalendar, jdn);
 
         Clock currentClock =
                 new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));

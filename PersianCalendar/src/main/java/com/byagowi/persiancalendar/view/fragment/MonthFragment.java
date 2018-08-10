@@ -13,6 +13,8 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private void fillTheFields() {
         CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
-        typedDate = Utils.getTodayOfCalendar(mainCalendar);
+        typedDate = CalendarUtils.getTodayOfCalendar(mainCalendar);
         int month = typedDate.getMonth() - offset;
         month -= 1;
         int year = typedDate.getYear();
@@ -54,15 +56,15 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             month += 12;
         }
         month += 1;
-        typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
+        typedDate = CalendarUtils.getDateOfCalendar(mainCalendar, year, month, 1);
 
-        baseJdn = Utils.getJdnDate(typedDate);
-        monthLength = (int) (Utils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
+        baseJdn = CalendarUtils.getJdnDate(typedDate);
+        monthLength = (int) (CalendarUtils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
                 month == 12 ? 1 : month + 1, 1) - baseJdn);
 
-        int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
+        int dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
 
-        long todayJdn = Utils.getTodayJdn();
+        long todayJdn = CalendarUtils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             DayEntity dayEntity = new DayEntity();
             dayEntity.setJdn(baseJdn + i);
@@ -81,18 +83,19 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
         this.days = days;
 
-        long startOfYearJdn = Utils.getJdnOfCalendar(mainCalendar, year, 1, 1);
+        long startOfYearJdn = CalendarUtils.getJdnOfCalendar(mainCalendar, year, 1, 1);
         weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
         weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
-        startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
+        startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
     }
 
     private int calculateWeekOfYear(long jdn, long startOfYear) {
         long dayOfYear = jdn - startOfYear;
-        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(Utils.getDayOfWeekFromJdn(jdn))) / 7.);
+        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(CalendarUtils.getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
+    static boolean isRTL = false;
 
     @Override
     public View onCreateView(
@@ -101,7 +104,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
-        boolean isRTL = Utils.isRTL(getContext());
+        isRTL = UIUtils.isRTL(getContext());
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
         AppCompatImageView prev = view.findViewById(R.id.prev);
@@ -131,7 +134,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         if (calendarFragment.firstTime && offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.firstTime = false;
-            calendarFragment.selectDay(Utils.getTodayJdn());
+            calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }
 
@@ -181,18 +184,17 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                calendarFragment.changeMonth(Utils.isLocaleRTL() ? -1 : 1);
+                calendarFragment.changeMonth(isRTL ? -1 : 1);
                 break;
 
             case R.id.prev:
-                calendarFragment.changeMonth(Utils.isLocaleRTL() ? 1 : -1);
+                calendarFragment.changeMonth(isRTL ? 1 : -1);
                 break;
         }
     }
 
     private void updateTitle() {
-        Utils.setActivityTitleAndSubtitle(getActivity(), Utils.getMonthName(typedDate),
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }
-
 }

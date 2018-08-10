@@ -14,6 +14,7 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Timer;
@@ -69,7 +70,7 @@ public class AthanNotification extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
-            String title = getString(Utils.getPrayTimeText(
+            String title = getString(UIUtils.getPrayTimeText(
                     intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
             String subtitle = getString(R.string.in_city_time) + " " +
                     Utils.getCityName(this, true);
