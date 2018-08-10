@@ -22,7 +22,7 @@ class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
       checked[i] = prayers.contains(entriesKeys[i])
     }
 
-    builder?.setMultiChoiceItems(R.array.prayerTimeNames, checked) { dialog, which, isChecked ->
+    builder?.setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
       if (isChecked) {
         prayers.add(entriesKeys[which].toString())
       } else {
