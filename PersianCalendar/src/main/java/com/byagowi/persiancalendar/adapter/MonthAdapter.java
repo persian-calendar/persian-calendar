@@ -238,7 +238,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
                 holder.event.setVisibility(isEvent ? View.VISIBLE : View.GONE);
                 holder.deviceEvent.setVisibility(hasDeviceEvents(events) ? View.VISIBLE : View.GONE);
-                holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
+                holder.today.setVisibility(day.getToday() ? View.VISIBLE : View.GONE);
 
                 if (originalPosition == selectedDay) {
                     holder.num.setBackgroundResource(shapeSelectDay);

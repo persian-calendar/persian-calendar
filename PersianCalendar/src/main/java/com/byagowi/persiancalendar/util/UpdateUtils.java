@@ -289,7 +289,7 @@ public class UpdateUtils {
 //                    notificationManager.notify(NOTIFICATION_ID, builder.build());
 //            } else {
             try {
-                ApplicationService applicationService = ApplicationService.getInstance();
+                ApplicationService applicationService = ApplicationService.Companion.getInstance();
                 if (applicationService != null) {
                     applicationService.startForeground(NOTIFICATION_ID, builder.build());
                 }

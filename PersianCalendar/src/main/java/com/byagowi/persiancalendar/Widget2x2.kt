@@ -7,12 +7,7 @@ import android.content.Intent
 import com.byagowi.persiancalendar.util.UpdateUtils
 import com.byagowi.persiancalendar.util.Utils
 
-/**
- * 1x1 widget provider, implementation is on `CalendarWidget`
- *
- * @author ebraminio
- */
-class Widget1x1 : AppWidgetProvider() {
+class Widget2x2 : AppWidgetProvider() {
   override fun onReceive(context: Context, intent: Intent) {
     Utils.startEitherServiceOrWorker(context)
     UpdateUtils.update(context, false)
