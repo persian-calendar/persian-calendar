@@ -5,13 +5,7 @@ import com.github.praytimes.Coordinate
 /**
  * Created by ebraminio on 2/18/16.
  */
-class CityEntity(var key: String?, var en: String?, var fa: String?, var ckb: String?, var countryCode: String?,
-                 var countryEn: String?, var countryFa: String?, var countryCkb: String?,
-                 coordinate: Coordinate) {
-    var coordinate: Coordinate? = null
-        private set
-
-    init {
-        this.coordinate = coordinate
-    }
-}
+class CityEntity(val key: String, val en: String, val fa: String, val ckb: String,
+                 val countryCode: String,
+                 val countryEn: String, val countryFa: String, val countryCkb: String,
+                 val coordinate: Coordinate)

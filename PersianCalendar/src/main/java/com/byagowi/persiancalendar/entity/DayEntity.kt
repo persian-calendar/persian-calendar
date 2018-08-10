@@ -1,7 +1,3 @@
 package com.byagowi.persiancalendar.entity
 
-class DayEntity {
-    var isToday: Boolean = false
-    var jdn: Long = 0
-    var dayOfWeek: Int = 0
-}
+class DayEntity(val jdn: Long, val today: Boolean, val dayOfWeek: Int)

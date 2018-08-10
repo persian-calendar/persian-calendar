@@ -66,16 +66,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
         long todayJdn = CalendarUtils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
-            DayEntity dayEntity = new DayEntity();
-            dayEntity.setJdn(baseJdn + i);
-
-            if (baseJdn + i == todayJdn) {
-                dayEntity.setToday(true);
-            }
-
-            dayEntity.setDayOfWeek(dayOfWeek);
-
-            days.add(dayEntity);
+            long jdn = baseJdn + i;
+            days.add(new DayEntity(jdn, jdn == todayJdn, dayOfWeek));
             dayOfWeek++;
             if (dayOfWeek == 7) {
                 dayOfWeek = 0;
