@@ -26,7 +26,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
     val athanPref = preference as AthanVolumePreference
 
-    audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
 
     val customAthanUri = Utils.getCustomAthanUri(context)

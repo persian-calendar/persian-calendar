@@ -62,7 +62,7 @@ class GPSLocationDialog : PreferenceDialogFragmentCompat() {
     textView?.textSize = 20f
     textView?.setText(R.string.pleasewaitgps)
 
-    locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
 
     getLocation()
     if (lacksPermission) {
@@ -96,10 +96,9 @@ class GPSLocationDialog : PreferenceDialogFragmentCompat() {
     }
   }
 
-  private fun askForPermission() {
-    requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-        Constants.LOCATION_PERMISSION_REQUEST_CODE)
-  }
+  private fun askForPermission() =
+      requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+          Constants.LOCATION_PERMISSION_REQUEST_CODE)
 
   private fun showLocation(location: Location) {
     latitude = String.format(Locale.ENGLISH, "%f", location.latitude)

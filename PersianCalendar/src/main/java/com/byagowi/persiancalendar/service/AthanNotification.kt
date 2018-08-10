@@ -24,12 +24,10 @@ import java.util.concurrent.TimeUnit
 class AthanNotification : Service() {
   internal var NOTIFICATION_CHANNEL_ID = "1002"
 
-  override fun onBind(intent: Intent): IBinder? {
-    return null
-  }
+  override fun onBind(intent: Intent): IBinder? = null
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
     //            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     //            if (audioManager != null) {
     //                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
@@ -50,7 +48,7 @@ class AthanNotification : Service() {
       notificationChannel.vibrationPattern = longArrayOf(0, 1000, 500, 1000)
       notificationChannel.enableVibration(true)
       //                notificationChannel.setSound(Utils.getAthanUri(getApplicationContext()), att);
-      notificationManager.createNotificationChannel(notificationChannel)
+      notificationManager?.createNotificationChannel(notificationChannel)
     }
 
     val title = getString(UIUtils.getPrayTimeText(
@@ -84,11 +82,11 @@ class AthanNotification : Service() {
           .setStyle(NotificationCompat.DecoratedCustomViewStyle())
     }
 
-    notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+    notificationManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
 
     Timer().schedule(object : TimerTask() {
       override fun run() {
-        notificationManager.cancel(NOTIFICATION_ID)
+        notificationManager?.cancel(NOTIFICATION_ID)
         stopSelf()
       }
     }, TimeUnit.MINUTES.toMillis(5))

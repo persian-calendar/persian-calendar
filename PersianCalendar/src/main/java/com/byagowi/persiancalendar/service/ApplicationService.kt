@@ -18,9 +18,7 @@ import java.lang.ref.WeakReference
  */
 class ApplicationService : Service() {
 
-  override fun onBind(paramIntent: Intent): IBinder? {
-    return null
-  }
+  override fun onBind(paramIntent: Intent): IBinder? = null
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
     instance = WeakReference(this)
@@ -46,8 +44,6 @@ class ApplicationService : Service() {
     private var instance: WeakReference<ApplicationService>? = null
 
     @Nullable
-    fun getInstance(): ApplicationService? {
-      return instance?.get()
-    }
+    fun getInstance(): ApplicationService? = instance?.get()
   }
 }

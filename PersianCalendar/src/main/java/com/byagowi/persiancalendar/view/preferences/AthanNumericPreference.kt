@@ -35,9 +35,7 @@ class AthanNumericPreference : EditTextPreference {
         .sendBroadcast(Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE))
   }
 
-  override fun getText(): String? {
-    return if (mDouble != null) mDouble.toString() else null
-  }
+  override fun getText(): String? = if (mDouble != null) mDouble.toString() else null
 
   private fun parseDouble(text: String): Double? {
     try {

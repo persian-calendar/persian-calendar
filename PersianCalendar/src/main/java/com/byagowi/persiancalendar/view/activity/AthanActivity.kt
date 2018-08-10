@@ -38,7 +38,7 @@ class AthanActivity : AppCompatActivity(), View.OnClickListener {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager?
     audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0)
 
     val customAthanUri = Utils.getCustomAthanUri(this)
@@ -115,7 +115,7 @@ class AthanActivity : AppCompatActivity(), View.OnClickListener {
     }, TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS.toMillis(5))
 
     try {
-      val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+      val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager?
       telephonyManager?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
     } catch (e: Exception) {
       Log.e(TAG, "TelephonyManager handling fail", e)
