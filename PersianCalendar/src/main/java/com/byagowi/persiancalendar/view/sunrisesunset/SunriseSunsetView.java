@@ -199,20 +199,22 @@ public class SunriseSunsetView extends View {
         RectF rectF = new RectF(mBoardRectF.left, mBoardRectF.top, mBoardRectF.right, mBoardRectF.bottom + mBoardRectF.height());
         float curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * (float) Math.cos(Math.PI * mRatio);
 
+        //Draw Dot
+        String dot = "•";
+        mLabelPaint.setColor(mTrackColor);
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
         float baseLineX = mBoardRectF.left - mLabelHorizontalOffset;
-        float baseLineY = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
-        canvas.drawText("•", baseLineX, baseLineY, mLabelPaint);
-
+        float baseLineYLeft = mBoardRectF.bottom - metricsInt.bottom + mLabelVerticalOffset;
+        float baseLineYRight = mBoardRectF.bottom - metricsInt.bottom - mLabelVerticalOffset;
+        canvas.drawText(dot, baseLineX, baseLineYLeft, mLabelPaint);
         mLabelPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("•",
+        canvas.drawText(dot,
                 mBoardRectF.centerX() - mLabelHorizontalOffset,
                 mBoardRectF.top, mLabelPaint);
-
         mLabelPaint.setTextAlign(Paint.Align.RIGHT);
         baseLineX = mBoardRectF.right + mLabelHorizontalOffset;
-        canvas.drawText("•", baseLineX, baseLineY, mLabelPaint);
+        canvas.drawText(dot, baseLineX, baseLineYRight, mLabelPaint);
 
         path.moveTo(0, endY);
         path.arcTo(rectF, 180, 180 * mRatio);
