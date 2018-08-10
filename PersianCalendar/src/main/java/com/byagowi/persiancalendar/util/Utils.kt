@@ -6,11 +6,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.content.res.Resources
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
@@ -18,49 +14,11 @@ import android.provider.CalendarContract
 import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
-
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entity.AbstractEvent
-import com.byagowi.persiancalendar.entity.CityEntity
-import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
-import com.byagowi.persiancalendar.entity.GregorianCalendarEvent
-import com.byagowi.persiancalendar.entity.IslamicCalendarEvent
-import com.byagowi.persiancalendar.entity.PersianCalendarEvent
-import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.service.AthanNotification
-import com.byagowi.persiancalendar.service.BroadcastReceivers
-import com.byagowi.persiancalendar.view.activity.AthanActivity
-import com.github.praytimes.CalculationMethod
-import com.github.praytimes.Clock
-import com.github.praytimes.Coordinate
-import com.github.praytimes.PrayTime
-import com.github.praytimes.PrayTimesCalculator
-
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-
-import java.io.InputStream
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Calendar
-import java.util.Date
-import java.util.HashSet
-import java.util.Locale
-import java.util.Scanner
-import java.util.concurrent.TimeUnit
-
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import calendar.AbstractDate
-import calendar.CalendarType
-import calendar.CivilDate
-import calendar.DateConverter
-import calendar.IslamicDate
-import calendar.PersianDate
-
+import calendar.*
+import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.ALARMS_BASE_ID
 import com.byagowi.persiancalendar.Constants.ARABIC_DIGITS
 import com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS
@@ -115,6 +73,19 @@ import com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entity.*
+import com.byagowi.persiancalendar.service.ApplicationService
+import com.byagowi.persiancalendar.service.AthanNotification
+import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.view.activity.AthanActivity
+import com.github.praytimes.*
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.InputStream
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 //import com.byagowi.persiancalendar.service.UpdateWorker;
 //import androidx.work.ExistingPeriodicWorkPolicy;
@@ -183,7 +154,7 @@ object Utils {
   val isLocaleRTL: Boolean
     get() = appLanguage != "en-US"
 
-  private lateinit var prayTimes: Map<PrayTime, Clock>
+  private var prayTimes: Map<PrayTime, Clock>? = null
 
   private var cachedCityKey = ""
   private var cachedCity: CityEntity? = null
@@ -277,13 +248,9 @@ object Utils {
         HashSet(Arrays.asList(*context.resources.getStringArray(R.array.what_to_show_default))))
   }
 
-  fun isShownOnWidgets(infoType: String): Boolean {
-    return whatToShowOnWidgets.contains(infoType)
-  }
+  fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
 
-  fun isWeekEnd(dayOfWeek: Int): Boolean {
-    return weekEnds[dayOfWeek]
-  }
+  fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
 
   fun getAthanVolume(context: Context): Int {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -291,23 +258,16 @@ object Utils {
     return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
   }
 
-  fun getCalculationMethod(): CalculationMethod {
-    return CalculationMethod.valueOf(calculationMethod)
-  }
+  fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
-  fun getIslamicOffset(): Int {
-    return Integer.parseInt(islamicOffset.replace("+", ""))
-  }
+  fun getIslamicOffset(): Int = Integer.parseInt(islamicOffset.replace("+", ""))
 
   fun getNextOwghatTime(context: Context, clock: Clock, dateHasChanged: Boolean): String? {
     if (coordinate == null) return null
 
     var localPrayTimes = prayTimes
-    if (dateHasChanged) {
-      localPrayTimes = PrayTimesCalculator(getCalculationMethod()).calculate(Date(), coordinate)
-          .withDefault { Clock(0, 0) }
-      prayTimes = localPrayTimes
-    }
+        ?: PrayTimesCalculator(getCalculationMethod()).calculate(Date(), coordinate)
+    prayTimes = localPrayTimes
 
     return if (localPrayTimes[PrayTime.FAJR]!!.int > clock.int) {
       context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.FAJR]!!)
@@ -338,9 +298,7 @@ object Utils {
     }
   }
 
-  fun formatNumber(number: Int): String {
-    return formatNumber(Integer.toString(number))
-  }
+  fun formatNumber(number: Int): String = formatNumber(Integer.toString(number))
 
   fun formatNumber(number: String): String {
     if (preferredDigits == ARABIC_DIGITS)
@@ -355,19 +313,16 @@ object Utils {
     return String(result)
   }
 
-  fun dateToString(date: AbstractDate): String {
-    return formatNumber(date.dayOfMonth) + ' '.toString() + CalendarUtils.getMonthName(date) + ' '.toString() +
-        formatNumber(date.year)
-  }
+  fun dateToString(date: AbstractDate): String =
+      formatNumber(date.dayOfMonth) + ' '.toString() + CalendarUtils.getMonthName(date) + ' '.toString() +
+          formatNumber(date.year)
 
-  fun monthsNamesOfCalendar(date: AbstractDate): Array<String> {
-    return if (date is PersianDate)
-      persianMonths
-    else if (date is IslamicDate)
-      islamicMonths
-    else
-      gregorianMonths
-  }
+  fun monthsNamesOfCalendar(date: AbstractDate): Array<String> = if (date is PersianDate)
+    persianMonths
+  else if (date is IslamicDate)
+    islamicMonths
+  else
+    gregorianMonths
 
   fun getWeekDayName(inputDate: AbstractDate): String {
     var date = inputDate
@@ -399,26 +354,23 @@ object Utils {
     return if (s.hasNext()) s.next() else ""
   }
 
-  private fun readRawResource(context: Context, @RawRes res: Int): String {
-    return readStream(context.resources.openRawResource(res))
-  }
+  private fun readRawResource(context: Context, @RawRes res: Int): String =
+      readStream(context.resources.openRawResource(res))
 
-  private fun prepareForArabicSort(text: String): String {
-    return text
-        .replace("ی".toRegex(), "ي")
-        .replace("ک".toRegex(), "ك")
-        .replace("گ".toRegex(), "كی")
-        .replace("ژ".toRegex(), "زی")
-        .replace("چ".toRegex(), "جی")
-        .replace("پ".toRegex(), "بی")
-        .replace("ڕ".toRegex(), "ری")
-        .replace("ڵ".toRegex(), "لی")
-        .replace("ڤ".toRegex(), "فی")
-        .replace("ۆ".toRegex(), "وی")
-        .replace("ێ".toRegex(), "یی")
-        .replace("ھ".toRegex(), "نی")
-        .replace("ە".toRegex(), "هی")
-  }
+  private fun prepareForArabicSort(text: String): String = text
+      .replace("ی".toRegex(), "ي")
+      .replace("ک".toRegex(), "ك")
+      .replace("گ".toRegex(), "كی")
+      .replace("ژ".toRegex(), "زی")
+      .replace("چ".toRegex(), "جی")
+      .replace("پ".toRegex(), "بی")
+      .replace("ڕ".toRegex(), "ری")
+      .replace("ڵ".toRegex(), "لی")
+      .replace("ڤ".toRegex(), "فی")
+      .replace("ۆ".toRegex(), "وی")
+      .replace("ێ".toRegex(), "یی")
+      .replace("ھ".toRegex(), "نی")
+      .replace("ە".toRegex(), "هی")
 
   fun getAllCities(context: Context, needsSort: Boolean): List<CityEntity> {
     val result = ArrayList<CityEntity>()
@@ -471,9 +423,9 @@ object Utils {
       val compare = r.countryCode.compareTo(l.countryCode)
       if (compare == 0) compare
       return@sort when (language) {
-         LANG_EN -> l.en.compareTo(r.en)
+        LANG_EN -> l.en.compareTo(r.en)
         LANG_CKB -> prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
-            else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
+        else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
       }
     }
 
@@ -970,13 +922,9 @@ object Utils {
     }
   }
 
-  fun fixDayOfWeek(dayOfWeek: Int): Int {
-    return (dayOfWeek + weekStartOffset) % 7
-  }
+  fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
-  fun fixDayOfWeekReverse(dayOfWeek: Int): Int {
-    return (dayOfWeek + 7 - weekStartOffset) % 7
-  }
+  fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
   // Context preferably should be activity context not application
   fun changeAppLanguage(context: Context) {
@@ -1043,9 +991,7 @@ object Utils {
 
   }
 
-  fun getInitialOfWeekDay(position: Int): String {
-    return weekDaysInitials[position % 7]
-  }
+  fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
 
   //
   //

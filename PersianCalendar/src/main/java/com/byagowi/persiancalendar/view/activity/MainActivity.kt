@@ -12,22 +12,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.adapter.DrawerAdapter
-import com.byagowi.persiancalendar.databinding.ActivityMainBinding
-import com.byagowi.persiancalendar.util.CalendarUtils
-import com.byagowi.persiancalendar.util.TypeFaceUtil
-import com.byagowi.persiancalendar.util.UIUtils
-import com.byagowi.persiancalendar.util.UpdateUtils
-import com.byagowi.persiancalendar.util.Utils
-import com.byagowi.persiancalendar.view.fragment.AboutFragment
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment
-import com.byagowi.persiancalendar.view.fragment.CompassFragment
-import com.byagowi.persiancalendar.view.fragment.ConverterFragment
-
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +21,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import calendar.CivilDate
-
+import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE
 import com.byagowi.persiancalendar.Constants.LANG_EN_US
 import com.byagowi.persiancalendar.Constants.LANG_UR
@@ -45,6 +29,11 @@ import com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.Constants.PREF_THEME
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.adapter.DrawerAdapter
+import com.byagowi.persiancalendar.databinding.ActivityMainBinding
+import com.byagowi.persiancalendar.util.*
+import com.byagowi.persiancalendar.view.fragment.*
 
 /**
  * Program activity for android

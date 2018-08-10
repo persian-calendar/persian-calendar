@@ -3,11 +3,8 @@ package com.byagowi.persiancalendar.view.preferences
 import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
-
-import java.util.Arrays
-import java.util.HashSet
-
 import androidx.preference.DialogPreference
+import java.util.*
 
 class PrayerSelectPreference(context: Context, attrs: AttributeSet) : DialogPreference(context, attrs) {
   // convert comma separated string to a set

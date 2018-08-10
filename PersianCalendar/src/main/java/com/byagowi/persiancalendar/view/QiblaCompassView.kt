@@ -3,26 +3,16 @@
 package com.byagowi.persiancalendar.view
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-
+import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.EarthHeading
 import com.cepmuvakkit.times.posAlgo.Horizontal
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
-
-import java.util.GregorianCalendar
-
-import androidx.core.content.ContextCompat
+import java.util.*
 
 class QiblaCompassView : View {
   private lateinit var dashedPaint: Paint

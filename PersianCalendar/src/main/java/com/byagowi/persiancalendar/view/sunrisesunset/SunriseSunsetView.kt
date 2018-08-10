@@ -2,28 +2,17 @@ package com.byagowi.persiancalendar.view.sunrisesunset
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.DashPathEffect
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PathEffect
-import android.graphics.RectF
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
-
+import androidx.annotation.ColorInt
+import androidx.annotation.Nullable
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.util.UIUtils
 import com.github.praytimes.Clock
-
-import java.util.Calendar
-import java.util.Locale
-
-import androidx.annotation.ColorInt
-import androidx.annotation.Nullable
+import java.util.*
 
 class SunriseSunsetView : View {
 

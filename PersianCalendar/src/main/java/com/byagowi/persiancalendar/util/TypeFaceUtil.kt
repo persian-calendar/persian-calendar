@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.Log
 
-import java.lang.reflect.Field
-
 // https://gist.github.com/artem-zinnatullin/7749076
 object TypeFaceUtil {
 

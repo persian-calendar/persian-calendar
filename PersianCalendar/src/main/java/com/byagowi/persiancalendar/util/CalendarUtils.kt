@@ -1,15 +1,7 @@
 package com.byagowi.persiancalendar.util
 
-import java.util.Calendar
-import java.util.Date
-import java.util.TimeZone
-
-import calendar.AbstractDate
-import calendar.CalendarType
-import calendar.CivilDate
-import calendar.DateConverter
-import calendar.IslamicDate
-import calendar.PersianDate
+import calendar.*
+import java.util.*
 
 object CalendarUtils {
 
@@ -104,17 +96,11 @@ object CalendarUtils {
     }
   }
 
-  fun dayTitleSummary(date: AbstractDate): String {
-    return Utils.getWeekDayName(date) + Utils.comma + " " + Utils.dateToString(date)
-  }
+  fun dayTitleSummary(date: AbstractDate): String = Utils.getWeekDayName(date) + Utils.comma + " " + Utils.dateToString(date)
 
-  fun getMonthName(date: AbstractDate): String {
-    return Utils.monthsNamesOfCalendar(date)[date.month - 1]
-  }
+  fun getMonthName(date: AbstractDate): String = Utils.monthsNamesOfCalendar(date)[date.month - 1]
 
-  fun getDayOfWeekFromJdn(jdn: Long): Int {
-    return DateConverter.jdnToCivil(jdn).dayOfWeek % 7
-  }
+  fun getDayOfWeekFromJdn(jdn: Long): Int = DateConverter.jdnToCivil(jdn).dayOfWeek % 7
 
   // based on R.array.calendar_type order
   fun calendarTypeFromPosition(position: Int): CalendarType {

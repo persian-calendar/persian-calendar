@@ -13,25 +13,14 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
-
-import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Widget1x1
-import com.byagowi.persiancalendar.Widget2x2
-import com.byagowi.persiancalendar.Widget4x1
-import com.byagowi.persiancalendar.entity.AbstractEvent
+import androidx.core.app.NotificationCompat
+import calendar.AbstractDate
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.view.activity.MainActivity
 import com.github.praytimes.Clock
 import com.google.android.apps.dashclock.api.ExtensionData
-
-import java.util.Calendar
-import java.util.Date
-
-import androidx.core.app.NotificationCompat
-import calendar.AbstractDate
-import calendar.CalendarType
+import java.util.*
 
 object UpdateUtils {
   private val NOTIFICATION_ID = 1001

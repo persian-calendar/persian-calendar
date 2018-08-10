@@ -3,11 +3,9 @@ package com.byagowi.persiancalendar.view.preferences
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
-
-import com.byagowi.persiancalendar.Constants
-
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.DialogPreference
+import com.byagowi.persiancalendar.Constants
 
 /**
  * persian_calendar

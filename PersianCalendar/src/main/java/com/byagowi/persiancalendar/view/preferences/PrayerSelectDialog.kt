@@ -1,9 +1,8 @@
 package com.byagowi.persiancalendar.view.preferences
 
-import com.byagowi.persiancalendar.R
-
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceDialogFragmentCompat
+import com.byagowi.persiancalendar.R
 
 class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
 

@@ -6,7 +6,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentResolver
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
@@ -15,26 +14,11 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.CalendarsCardBinding
-import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding
-import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
-import com.github.praytimes.Clock
-
-import java.util.Locale
-
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import calendar.AbstractDate
-import calendar.CivilDate
 import calendar.DateConverter
-import calendar.IslamicDate
-import calendar.PersianDate
-
+import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.AM_IN_CKB
 import com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN
 import com.byagowi.persiancalendar.Constants.DARK_THEME
@@ -42,6 +26,12 @@ import com.byagowi.persiancalendar.Constants.LIGHT_THEME
 import com.byagowi.persiancalendar.Constants.PM_IN_CKB
 import com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN
 import com.byagowi.persiancalendar.Constants.PREF_THEME
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.databinding.CalendarsCardBinding
+import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
+import com.github.praytimes.Clock
+import java.util.*
 
 object UIUtils {
   fun setActivityTitleAndSubtitle(activity: Activity, title: String, subtitle: String) {
@@ -137,9 +127,7 @@ object UIUtils {
     return title.replace("\\n".toRegex(), " ").trim { it <= ' ' }
   }
 
-  internal fun clockToString(hour: Int, minute: Int): String {
-    return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
-  }
+  internal fun clockToString(hour: Int, minute: Int): String = Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
 
   fun isRTL(context: Context): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -237,11 +225,7 @@ object UIUtils {
         context.resources.getResourceEntryName(resID))
   }
 
-  fun getDefaultAthanUri(context: Context): Uri {
-    return resourceToUri(context, R.raw.abdulbasit)
-  }
+  fun getDefaultAthanUri(context: Context): Uri = resourceToUri(context, R.raw.abdulbasit)
 
-  internal fun getOnlyLanguage(string: String): String {
-    return string.replace("-(IR|AF|US)".toRegex(), "")
-  }
+  internal fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")
 }

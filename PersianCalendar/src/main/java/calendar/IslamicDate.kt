@@ -27,9 +27,7 @@ class IslamicDate : AbstractDate {
         dayOfMonth = day
     }
 
-    override fun getDayOfMonth(): Int {
-        return day
-    }
+    override fun getDayOfMonth(): Int = day
 
     override fun setDayOfMonth(day: Int) {
         // TODO This check is not very exact! But it's not worth of it
@@ -50,9 +48,7 @@ class IslamicDate : AbstractDate {
         return cal.get(Calendar.DAY_OF_WEEK)
     }
 
-    override fun getMonth(): Int {
-        return month
-    }
+    override fun getMonth(): Int = month
 
     override fun setMonth(month: Int) {
         if (month < 1 || month > 12)
@@ -70,9 +66,7 @@ class IslamicDate : AbstractDate {
         throw RuntimeException(Constants.NOT_IMPLEMENTED_YET)
     }
 
-    override fun getYear(): Int {
-        return year
-    }
+    override fun getYear(): Int = year
 
     override fun setYear(year: Int) {
         if (year == 0)
@@ -143,7 +137,5 @@ class IslamicDate : AbstractDate {
                 && (getYear() == islamicDate.getYear() || getYear() == -1))
     }
 
-    override fun clone(): IslamicDate {
-        return IslamicDate(getYear(), getMonth(), dayOfMonth)
-    }
+    override fun clone(): IslamicDate = IslamicDate(getYear(), getMonth(), dayOfMonth)
 }

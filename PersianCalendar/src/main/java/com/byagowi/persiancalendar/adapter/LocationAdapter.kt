@@ -1,18 +1,15 @@
 package com.byagowi.persiancalendar.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entity.CityEntity
 import com.byagowi.persiancalendar.util.Utils
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog
-
-import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections.emptyList
 
 class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDialog) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {

@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.view.preferences
 
 import android.content.Context
 import android.util.AttributeSet
-
-import com.byagowi.persiancalendar.R
-
 import androidx.preference.DialogPreference
+import com.byagowi.persiancalendar.R
 
 class AthanVolumePreference(context: Context, attrs: AttributeSet) : DialogPreference(context, attrs) {
 

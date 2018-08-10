@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment
 
+import android.app.Activity.RESULT_OK
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -15,32 +16,19 @@ import android.preference.PreferenceManager
 import android.provider.Settings
 import android.text.TextUtils
 import android.widget.Toast
-
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.util.UIUtils
-import com.byagowi.persiancalendar.util.Utils
-import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog
-import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog
-import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
-import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog
-import com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
-import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog
-import com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
-import com.byagowi.persiancalendar.view.preferences.LocationPreference
-import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog
-import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog
-import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
-
 import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-
-import android.app.Activity.RESULT_OK
+import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE
 import com.byagowi.persiancalendar.Constants.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.util.UIUtils
+import com.byagowi.persiancalendar.util.Utils
+import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog
+import com.byagowi.persiancalendar.view.preferences.*
 
 /**
  * Preference activity

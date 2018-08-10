@@ -7,19 +7,17 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.databinding.DataBindingUtil
+import calendar.CalendarType
+import calendar.DateConverter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.byagowi.persiancalendar.util.UIUtils
 import com.byagowi.persiancalendar.util.Utils
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment
-
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.databinding.DataBindingUtil
-import calendar.CalendarType
-import calendar.DateConverter
 
 /**
  * Created by ebrahim on 3/20/16.

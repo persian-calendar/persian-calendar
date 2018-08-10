@@ -1,24 +1,21 @@
 package com.byagowi.persiancalendar.adapter
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entity.AbstractEvent
 import com.byagowi.persiancalendar.entity.DayEntity
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
 import com.byagowi.persiancalendar.util.Utils
 import com.byagowi.persiancalendar.view.fragment.MonthFragment
-
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 
 class MonthAdapter(private val context: Context, private val monthFragment: MonthFragment, private val days: List<DayEntity>,
                    startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
@@ -245,15 +242,10 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
     holder.deviceEvent.visibility = View.GONE
   }
 
-  override fun getItemCount(): Int {
-    return 7 * if (Utils.isWeekOfYearEnabled) 8 else 7 // days of week * month view rows
-  }
+  override fun getItemCount(): Int =
+      7 * if (Utils.isWeekOfYearEnabled) 8 else 7 // days of week * month view rows
 
-  private fun isPositionHeader(position: Int): Boolean {
-    return position < 7
-  }
+  private fun isPositionHeader(position: Int): Boolean = position < 7
 
-  private fun fixForWeekOfYearNumber(position: Int): Int {
-    return position - position / 8 - 1
-  }
+  private fun fixForWeekOfYearNumber(position: Int): Int = position - position / 8 - 1
 }

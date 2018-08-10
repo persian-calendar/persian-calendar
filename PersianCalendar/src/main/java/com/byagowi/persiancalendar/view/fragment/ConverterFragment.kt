@@ -7,17 +7,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import calendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.byagowi.persiancalendar.util.UIUtils
 import com.byagowi.persiancalendar.util.Utils
-
-import androidx.annotation.Nullable
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import calendar.*
 
 /**
  * Program activity for android

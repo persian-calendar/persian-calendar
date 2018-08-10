@@ -8,7 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import calendar.AbstractDate
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.adapter.MonthAdapter
@@ -16,15 +21,7 @@ import com.byagowi.persiancalendar.entity.DayEntity
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.byagowi.persiancalendar.util.UIUtils
 import com.byagowi.persiancalendar.util.Utils
-
-import java.util.ArrayList
-
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import calendar.AbstractDate
+import java.util.*
 
 class MonthFragment : Fragment(), View.OnClickListener {
   private var calendarFragment: CalendarFragment? = null

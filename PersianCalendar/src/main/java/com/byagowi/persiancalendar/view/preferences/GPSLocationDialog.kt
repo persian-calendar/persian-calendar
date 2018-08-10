@@ -3,31 +3,22 @@ package com.byagowi.persiancalendar.view.preferences
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.*
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.TextView
-
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.util.Utils
-import com.github.praytimes.Coordinate
-
-import java.io.IOException
-import java.util.Locale
-
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceDialogFragmentCompat
 import androidx.preference.PreferenceManager
+import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.util.Utils
+import com.github.praytimes.Coordinate
+import java.io.IOException
+import java.util.*
 
 class GPSLocationDialog : PreferenceDialogFragmentCompat() {
 

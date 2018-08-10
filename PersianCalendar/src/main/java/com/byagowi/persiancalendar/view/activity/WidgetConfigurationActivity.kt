@@ -5,14 +5,12 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.util.UIUtils
 import com.byagowi.persiancalendar.util.UpdateUtils
 import com.byagowi.persiancalendar.util.Utils
-
-import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceFragmentCompat
 
 class WidgetConfigurationActivity : AppCompatActivity() {
 
@@ -24,9 +22,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
     }
 
     companion object {
-      internal fun newInstance(): PreferenceFragment {
-        return PreferenceFragment()
-      }
+      internal fun newInstance(): PreferenceFragment = PreferenceFragment()
     }
   }
 

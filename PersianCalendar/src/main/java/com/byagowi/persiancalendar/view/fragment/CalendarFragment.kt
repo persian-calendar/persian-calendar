@@ -9,31 +9,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.CalendarContract
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.TextUtils
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
-
+import androidx.annotation.Nullable
+import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.viewpager.widget.ViewPager
+import calendar.DateConverter
 import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+import com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.adapter.CalendarAdapter
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
-import com.byagowi.persiancalendar.entity.AbstractEvent
-import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
-import com.byagowi.persiancalendar.entity.GregorianCalendarEvent
-import com.byagowi.persiancalendar.entity.IslamicCalendarEvent
-import com.byagowi.persiancalendar.entity.PersianCalendarEvent
+import com.byagowi.persiancalendar.entity.*
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.byagowi.persiancalendar.util.UIUtils
 import com.byagowi.persiancalendar.util.Utils
@@ -43,26 +38,7 @@ import com.github.praytimes.Clock
 import com.github.praytimes.Coordinate
 import com.github.praytimes.PrayTime
 import com.github.praytimes.PrayTimesCalculator
-
-import java.util.Calendar
-import java.util.Date
-import java.util.HashSet
-
-import androidx.annotation.Nullable
-import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.viewpager.widget.ViewPager
-import calendar.AbstractDate
-import calendar.CalendarType
-import calendar.CivilDate
-import calendar.DateConverter
-import calendar.IslamicDate
-import calendar.PersianDate
-
-import com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-import com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES
+import java.util.*
 
 class CalendarFragment : Fragment(), View.OnClickListener {
   private val calendar = Calendar.getInstance()

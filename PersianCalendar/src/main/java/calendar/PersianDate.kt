@@ -27,13 +27,9 @@ class PersianDate : AbstractDate {
         dayOfMonth = day
     }
 
-    override fun clone(): PersianDate {
-        return PersianDate(getYear(), getMonth(), dayOfMonth)
-    }
+    override fun clone(): PersianDate = PersianDate(getYear(), getMonth(), dayOfMonth)
 
-    override fun getDayOfMonth(): Int {
-        return day
-    }
+    override fun getDayOfMonth(): Int = day
 
     override fun setDayOfMonth(day: Int) {
         if (day < 1)
@@ -59,9 +55,7 @@ class PersianDate : AbstractDate {
         this.day = day
     }
 
-    override fun getMonth(): Int {
-        return month
-    }
+    override fun getMonth(): Int = month
 
     override fun setMonth(month: Int) {
         if (month < 1 || month > 12)
@@ -79,9 +73,7 @@ class PersianDate : AbstractDate {
         throw RuntimeException(Constants.NOT_IMPLEMENTED_YET)
     }
 
-    override fun getYear(): Int {
-        return year
-    }
+    override fun getYear(): Int = year
 
     override fun setYear(year: Int) {
         if (year == 0)
