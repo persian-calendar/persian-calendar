@@ -166,9 +166,8 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
     return false
   }
 
-  override fun onBindViewHolder(holder: MonthAdapter.ViewHolder, position: Int) {
-    var position = position
-    val originalPosition = position
+  override fun onBindViewHolder(holder: MonthAdapter.ViewHolder, originalPosition: Int) {
+    var position = originalPosition
     if (Utils.isWeekOfYearEnabled) {
       if (position % 8 == 0) {
         val row = position / 8

@@ -225,7 +225,7 @@ object UpdateUtils {
         val importance = NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel(NOTIFICATION_ID.toString(), context.getString(R.string.app_name), importance)
         channel.setShowBadge(false)
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         notificationManager?.createNotificationChannel(channel)
       }
 

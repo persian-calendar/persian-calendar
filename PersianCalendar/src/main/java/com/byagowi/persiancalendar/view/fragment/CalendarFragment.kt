@@ -149,10 +149,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
 
     // Easter egg to test AthanActivity
     binding.owghatIcon.setOnLongClickListener {
-      val ctx = context
-      if (ctx != null) {
-        Utils.startAthan(ctx, "FAJR")
-      }
+      Utils.startAthan(ctx, "FAJR")
       true
     }
 

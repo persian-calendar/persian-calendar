@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.util.Utils
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog
 
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Collections.emptyList
 
 class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDialog) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
   private val locale: String
@@ -22,7 +23,7 @@ class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDi
   init {
     val ctx = locationPreferenceDialog.context
     this.layoutInflater = LayoutInflater.from(ctx)
-    this.cities = if (ctx == null) emptyList() else Utils.getAllCities(ctx!!, true)
+    this.cities = if (ctx == null) emptyList() else Utils.getAllCities(ctx, true)
     this.locale = Utils.appLanguage
   }
 

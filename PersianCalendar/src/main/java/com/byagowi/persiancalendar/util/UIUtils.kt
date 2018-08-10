@@ -206,7 +206,7 @@ object UIUtils {
   }
 
   fun copyToClipboard(context: Context, text: CharSequence) {
-    val clipboardService = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clipboardService = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
 
     if (clipboardService != null) {
       clipboardService.primaryClip = ClipData.newPlainText("converted date", text)

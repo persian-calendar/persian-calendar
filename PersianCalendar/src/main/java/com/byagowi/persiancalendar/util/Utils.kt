@@ -162,23 +162,22 @@ object Utils {
   private var coordinate: Coordinate? = null
   lateinit var mainCalendar: CalendarType
     private set
-  var comma: String? = null
+  lateinit var comma: String
     private set
   var isWeekOfYearEnabled: Boolean = false
     private set
   private var weekStartOffset: Int = 0
-  private var weekEnds: BooleanArray? = null
+  private lateinit var weekEnds: BooleanArray
   var isShowDeviceCalendarEvents: Boolean = false
     private set
-  private var whatToShowOnWidgets: Set<String>? = null
+  private lateinit var whatToShowOnWidgets: Set<String>
 
   val isArabicDigitSelected: Boolean
     get() = preferredDigits.contentEquals(ARABIC_DIGITS)
 
   // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
   val appLanguage: String
-    get() = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE
-    else (language ?: DEFAULT_APP_LANGUAGE)
+    get() = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
 
   // en-US is our only real LTR language for now
   val isLocaleRTL: Boolean
@@ -189,10 +188,10 @@ object Utils {
   private var cachedCityKey = ""
   private var cachedCity: CityEntity? = null
 
-  private var persianCalendarEvents: SparseArray<List<PersianCalendarEvent>>? = null
-  private var islamicCalendarEvents: SparseArray<List<IslamicCalendarEvent>>? = null
-  private var gregorianCalendarEvents: SparseArray<List<GregorianCalendarEvent>>? = null
-  private var deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>? = null
+  private lateinit var persianCalendarEvents: SparseArray<MutableList<PersianCalendarEvent>>
+  private lateinit var islamicCalendarEvents: SparseArray<MutableList<IslamicCalendarEvent>>
+  private lateinit var gregorianCalendarEvents: SparseArray<MutableList<GregorianCalendarEvent>>
+  private lateinit var deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>
   lateinit var allEnabledEvents: MutableList<Any>
   lateinit var allEnabledEventsTitles: MutableList<String>
 
@@ -279,11 +278,11 @@ object Utils {
   }
 
   fun isShownOnWidgets(infoType: String): Boolean {
-    return whatToShowOnWidgets!!.contains(infoType)
+    return whatToShowOnWidgets.contains(infoType)
   }
 
   fun isWeekEnd(dayOfWeek: Int): Boolean {
-    return weekEnds!![dayOfWeek]
+    return weekEnds[dayOfWeek]
   }
 
   fun getAthanVolume(context: Context): Int {
@@ -297,46 +296,46 @@ object Utils {
   }
 
   fun getIslamicOffset(): Int {
-    return Integer.parseInt(islamicOffset!!.replace("+", ""))
+    return Integer.parseInt(islamicOffset.replace("+", ""))
   }
 
   fun getNextOwghatTime(context: Context, clock: Clock, dateHasChanged: Boolean): String? {
-    return null
-//    if (coordinate == null) return null
-//
-//    var localPrayTimes = prayTimes
-//    if (dateHasChanged) {
-//      localPrayTimes = PrayTimesCalculator(getCalculationMethod()).calculate(Date(), coordinate)
-//      prayTimes = localPrayTimes
-//    }
-//
-//    return if (localPrayTimes[PrayTime.FAJR]!!.int > clock.int) {
-//      context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.FAJR])
-//
-//    } else if (localPrayTimes[PrayTime.SUNRISE].getInt() > clock.int) {
-//      context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.SUNRISE])
-//
-//    } else if (localPrayTimes[PrayTime.DHUHR].getInt() > clock.int) {
-//      context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.DHUHR])
-//
-//    } else if (localPrayTimes[PrayTime.ASR].getInt() > clock.int) {
-//      context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.ASR])
-//
-//    } else if (localPrayTimes[PrayTime.SUNSET].getInt() > clock.int) {
-//      context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.SUNSET])
-//
-//    } else if (localPrayTimes[PrayTime.MAGHRIB].getInt() > clock.int) {
-//      context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.MAGHRIB])
-//
-//    } else if (localPrayTimes[PrayTime.ISHA].getInt() > clock.int) {
-//      context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.ISHA])
-//
-//    } else if (localPrayTimes[PrayTime.MIDNIGHT].getInt() > clock.int) {
-//      context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.MIDNIGHT])
-//
-//    } else {
-//      context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.FAJR]) //this is today & not tomorrow
-//    }
+    if (coordinate == null) return null
+
+    var localPrayTimes = prayTimes
+    if (dateHasChanged) {
+      localPrayTimes = PrayTimesCalculator(getCalculationMethod()).calculate(Date(), coordinate)
+          .withDefault { Clock(0, 0) }
+      prayTimes = localPrayTimes
+    }
+
+    return if (localPrayTimes[PrayTime.FAJR]!!.int > clock.int) {
+      context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.FAJR]!!)
+
+    } else if (localPrayTimes[PrayTime.SUNRISE]!!.int > clock.int) {
+      context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.SUNRISE]!!)
+
+    } else if (localPrayTimes[PrayTime.DHUHR]!!.int > clock.int) {
+      context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.DHUHR]!!)
+
+    } else if (localPrayTimes[PrayTime.ASR]!!.int > clock.int) {
+      context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.ASR]!!)
+
+    } else if (localPrayTimes[PrayTime.SUNSET]!!.int > clock.int) {
+      context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.SUNSET]!!)
+
+    } else if (localPrayTimes[PrayTime.MAGHRIB]!!.int > clock.int) {
+      context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.MAGHRIB]!!)
+
+    } else if (localPrayTimes[PrayTime.ISHA]!!.int > clock.int) {
+      context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.ISHA]!!)
+
+    } else if (localPrayTimes[PrayTime.MIDNIGHT]!!.int > clock.int) {
+      context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.MIDNIGHT]!!)
+
+    } else {
+      context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(localPrayTimes[PrayTime.FAJR]!!) //this is today & not tomorrow
+    }
   }
 
   fun formatNumber(number: Int): String {
@@ -370,8 +369,8 @@ object Utils {
       gregorianMonths
   }
 
-  fun getWeekDayName(date: AbstractDate): String {
-    var date = date
+  fun getWeekDayName(inputDate: AbstractDate): String {
+    var date = inputDate
     if (date is IslamicDate)
       date = DateConverter.islamicToCivil(date)
     else if (date is PersianDate)
@@ -527,9 +526,10 @@ object Utils {
     if (!TextUtils.isEmpty(geocodedCityName))
       return geocodedCityName
 
+    val coord = coordinate
     if (fallbackToCoord)
-      if (coordinate != null)
-        return formatCoordinate(context, coordinate!!, comma!! + " ")
+      if (coord != null)
+        return formatCoordinate(context, coord, comma + " ")
 
     return ""
   }
@@ -549,9 +549,9 @@ object Utils {
     val iranOthers = enabledTypes.contains("iran_others")
     val international = enabledTypes.contains("international")
 
-    val persianCalendarEvents = SparseArray<List<PersianCalendarEvent>>()
-    val islamicCalendarEvents = SparseArray<List<IslamicCalendarEvent>>()
-    val gregorianCalendarEvents = SparseArray<List<GregorianCalendarEvent>>()
+    val persianCalendarEvents = SparseArray<MutableList<PersianCalendarEvent>>()
+    val islamicCalendarEvents = SparseArray<MutableList<IslamicCalendarEvent>>()
+    val gregorianCalendarEvents = SparseArray<MutableList<GregorianCalendarEvent>>()
     val allEnabledEvents = ArrayList<Any>()
     val allEnabledEventsTitles = ArrayList<String>()
 
@@ -609,16 +609,16 @@ object Utils {
           }
           title += formatNumber(day) + " " + persianMonths[month - 1] + ")"
 
-//          var list: MutableList<PersianCalendarEvent>? =
-//              persianCalendarEvents.get(month * 100 + day).toMutableList()
-//          if (list == null) {
-//            list = ArrayList()
-//            persianCalendarEvents.put(month * 100 + day, list)
-//          }
-//          val ev = PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
-//          list.add(ev)
-//          allEnabledEvents.add(ev)
-//          allEnabledEventsTitles.add(title)
+          var list: MutableList<PersianCalendarEvent>? =
+              persianCalendarEvents.get(month * 100 + day)
+          if (list == null) {
+            list = ArrayList()
+            persianCalendarEvents.put(month * 100 + day, list)
+          }
+          val ev = PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
+          list.add(ev)
+          allEnabledEvents.add(ev)
+          allEnabledEventsTitles.add(title)
         }
       }
 
@@ -664,17 +664,17 @@ object Utils {
             else if (type == "Islamic Afghanistan")
               title += "افغانستان، "
           }
-          title += formatNumber(day) + " " + islamicMonths!![month - 1] + ")"
-//          var list: MutableList<IslamicCalendarEvent>? =
-//              islamicCalendarEvents.get(month * 100 + day).toMutableList()
-//          if (list == null) {
-//            list = ArrayList()
-//            islamicCalendarEvents.put(month * 100 + day, list)
-//          }
-//          val ev = IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
-//          list.add(ev)
-//          allEnabledEvents.add(ev)
-//          allEnabledEventsTitles.add(title)
+          title += formatNumber(day) + " " + islamicMonths[month - 1] + ")"
+          var list: MutableList<IslamicCalendarEvent>? =
+              islamicCalendarEvents.get(month * 100 + day)
+          if (list == null) {
+            list = ArrayList()
+            islamicCalendarEvents.put(month * 100 + day, list)
+          }
+          val ev = IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
+          list.add(ev)
+          allEnabledEvents.add(ev)
+          allEnabledEventsTitles.add(title)
         }
       }
 
@@ -689,16 +689,16 @@ object Utils {
 
         if (international) {
           title += " (" + formatNumber(day) + " " + gregorianMonths[month - 1] + ")"
-//          var list: MutableList<GregorianCalendarEvent>? =
-//              gregorianCalendarEvents.get(month * 100 + day).toMutableList()
-//          if (list == null) {
-//            list = ArrayList()
-//            gregorianCalendarEvents.put(month * 100 + day, list)
-//          }
-//          val ev = GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
-//          list.add(ev)
-//          allEnabledEvents.add(ev)
-//          allEnabledEventsTitles.add(title)
+          var list: MutableList<GregorianCalendarEvent>? =
+              gregorianCalendarEvents.get(month * 100 + day)
+          if (list == null) {
+            list = ArrayList()
+            gregorianCalendarEvents.put(month * 100 + day, list)
+          }
+          val ev = GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
+          list.add(ev)
+          allEnabledEvents.add(ev)
+          allEnabledEventsTitles.add(title)
         }
       }
 
@@ -821,25 +821,25 @@ object Utils {
 
     val result = ArrayList<AbstractEvent>()
 
-    val persianList = persianCalendarEvents!!.get(day.month * 100 + day.dayOfMonth)
+    val persianList = persianCalendarEvents.get(day.month * 100 + day.dayOfMonth)
     if (persianList != null)
       for (persianCalendarEvent in persianList)
         if (persianCalendarEvent.date.equals(day))
           result.add(persianCalendarEvent)
 
-    val islamicList = islamicCalendarEvents!!.get(islamic.month * 100 + islamic.dayOfMonth)
+    val islamicList = islamicCalendarEvents.get(islamic.month * 100 + islamic.dayOfMonth)
     if (islamicList != null)
       for (islamicCalendarEvent in islamicList)
         if (islamicCalendarEvent.date.equals(islamic))
           result.add(islamicCalendarEvent)
 
-    val gregorianList = gregorianCalendarEvents!!.get(civil.month * 100 + civil.dayOfMonth)
+    val gregorianList = gregorianCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
     if (gregorianList != null)
       for (gregorianCalendarEvent in gregorianList)
         if (gregorianCalendarEvent.date.equals(civil))
           result.add(gregorianCalendarEvent)
 
-    val deviceEventList = deviceCalendarEvents!!.get(civil.month * 100 + civil.dayOfMonth)
+    val deviceEventList = deviceCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
     if (deviceEventList != null)
       for (deviceCalendarEvent in deviceEventList)
         if (deviceCalendarEvent.civilDate.equals(civil))
@@ -889,7 +889,7 @@ object Utils {
     Log.d(TAG, "reading and loading all alarms from prefs: " + prefString!!)
     val calculationMethod = getCalculationMethod()
 
-    if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
+    if (coordinate != null && !TextUtils.isEmpty(prefString)) {
       var athanGap: Long
       try {
         athanGap = (java.lang.Double.parseDouble(
@@ -930,7 +930,7 @@ object Utils {
                        athanGap: Long) {
     val triggerTime = Calendar.getInstance()
     triggerTime.timeInMillis = timeInMillis - athanGap
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
     // don't set an alarm in the past
     if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
@@ -1085,7 +1085,7 @@ object Utils {
   fun loadApp(context: Context) {
     //        if (!goForWorker()) {
     try {
-      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager ?: return
+      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager? ?: return
 
       val startTime = Calendar.getInstance()
       startTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -1138,7 +1138,7 @@ object Utils {
     //            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
     var alreadyRan = false
-    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
     if (manager != null) {
       for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
         if (ApplicationService::class.java.name == service.service.className) {

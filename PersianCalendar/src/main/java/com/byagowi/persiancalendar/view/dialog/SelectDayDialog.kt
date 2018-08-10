@@ -46,7 +46,7 @@ class SelectDayDialog : AppCompatDialogFragment() {
     }
 
     binding.calendarTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-      override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {    val ctx = context
+      override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
         if (ctx != null) {
           startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(ctx, binding)
         }
