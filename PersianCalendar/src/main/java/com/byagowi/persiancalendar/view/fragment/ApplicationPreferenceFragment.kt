@@ -16,6 +16,7 @@ import android.preference.PreferenceManager
 import android.provider.Settings
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.Preference
@@ -51,6 +52,7 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
     val localActivity = activity ?: return
     UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.settings), "")
 
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     addPreferencesFromResource(R.xml.preferences)
 
     categoryAthan = findPreference(Constants.PREF_KEY_ATHAN)

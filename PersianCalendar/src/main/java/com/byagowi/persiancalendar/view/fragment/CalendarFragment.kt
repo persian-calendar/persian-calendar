@@ -174,7 +174,11 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
       val ctx = context
       if (ctx != null) {
-        Utils.initUtils(ctx)
+        if (Utils.isShowDeviceCalendarEvents) {
+          Utils.initUtils(ctx)
+        } else {
+          Toast.makeText(ctx, R.string.enable_device_calendar, Toast.LENGTH_LONG).show()
+        }
       }
 
       if (lastSelectedJdn == -1L)

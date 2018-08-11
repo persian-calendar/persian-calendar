@@ -354,7 +354,7 @@ object Utils {
     return if (s.hasNext()) s.next() else ""
   }
 
-  private fun readRawResource(context: Context, @RawRes res: Int): String =
+  fun readRawResource(context: Context, @RawRes res: Int): String =
       readStream(context.resources.openRawResource(res))
 
   private fun prepareForArabicSort(text: String): String = text

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.util.UIUtils
@@ -18,6 +19,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
   class PreferenceFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
       addPreferencesFromResource(R.xml.widget_preferences)
     }
 

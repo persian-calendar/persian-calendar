@@ -3,14 +3,18 @@ package com.byagowi.persiancalendar.view.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.util.Linkify
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -41,13 +45,16 @@ class AboutFragment : Fragment() {
 
     // licenses
     binding.licenses.setOnClickListener {
-      val wv = WebView(localActivity)
-      val settings = wv.settings
-      settings.defaultTextEncodingName = "utf-8"
-      wv.loadUrl("file:///android_res/raw/credits.txt")
       val builder = AlertDialog.Builder(localActivity)
       builder.setTitle(resources.getString(R.string.about_license_title))
-      builder.setView(wv)
+      val licenseTextView = TextView(localActivity)
+      licenseTextView.text = Utils.readRawResource(localActivity, R.raw.credits)
+      licenseTextView.setPadding(20, 20, 20, 20)
+      licenseTextView.typeface = Typeface.MONOSPACE
+      Linkify.addLinks(licenseTextView, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+      val scrollView = ScrollView(localActivity)
+      scrollView.addView(licenseTextView)
+      builder.setView(scrollView)
       builder.setCancelable(true)
       builder.setNegativeButton(R.string.about_license_dialog_close) { _, _ -> }
       builder.show()

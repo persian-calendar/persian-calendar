@@ -11,11 +11,7 @@ android {
         targetSdkVersion 28
         versionCode 588
         versionName "5.8.8"
-
-        // Disabled due to this issue with AndroidX preferences' widgets
-        // https://issuetracker.google.com/issues/112126733
-        // will be enabled again once it is fixed
-        // vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
