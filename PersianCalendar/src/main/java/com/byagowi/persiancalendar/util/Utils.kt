@@ -752,7 +752,8 @@ object Utils {
             endDate,
             cursor.getString(5),
             civilDate,
-            cursor.getString(10)
+            cursor.getString(10),
+            false
         )
         list.add(event)
         allEnabledEvents.add(event)
