@@ -837,8 +837,8 @@ object Utils {
   fun loadAlarms(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val prefString = prefs.getString(PREF_ATHAN_ALARM, "")
-    Log.d(TAG, "reading and loading all alarms from prefs: " + prefString!!)
+    val prefString = prefs.getString(PREF_ATHAN_ALARM, "") ?: ""
+    Log.d(TAG, "reading and loading all alarms from prefs: " + prefString)
     val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && !TextUtils.isEmpty(prefString)) {
