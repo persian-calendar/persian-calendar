@@ -1,17 +1,21 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
@@ -36,24 +40,30 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Context ctx = getContext();
+        if (ctx == null) return null;
+
         FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
                 container, false);
 
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.about), "");
 
         // version
-        String version = programVersion();
+        String version = programVersion(ctx);
         binding.version.setText(getString(R.string.version) + " " + Utils.formatNumber(version.split("-")[0]));
 
         // licenses
         binding.licenses.setOnClickListener(arg -> {
-            WebView wv = new WebView(getActivity());
-            WebSettings settings = wv.getSettings();
-            settings.setDefaultTextEncodingName("utf-8");
-            wv.loadUrl("file:///android_res/raw/credits.txt");
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             builder.setTitle(getResources().getString(R.string.about_license_title));
-            builder.setView(wv);
+            TextView licenseTextView = new TextView(ctx);
+            licenseTextView.setText(Utils.readRawResource(ctx, R.raw.credits));
+            licenseTextView.setPadding(20, 20, 20, 20);
+            licenseTextView.setTypeface(Typeface.MONOSPACE);
+            Linkify.addLinks(licenseTextView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+            ScrollView scrollView = new ScrollView(ctx);
+            scrollView.addView(licenseTextView);
+            builder.setView(scrollView);
             builder.setCancelable(true);
             builder.setNegativeButton(R.string.about_license_dialog_close, (dialog, which) -> {
             });
@@ -83,16 +93,16 @@ public class AboutFragment extends Fragment {
                         "===Device Information===\nManufacturer: " + Build.MANUFACTURER + "\nModel: " + Build.MODEL + "\nAndroid Version: " + Build.VERSION.RELEASE + "\nApp Version Code: " + version.split("-")[0]);
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
             } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(getActivity(), getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
             }
         });
 
         return binding.getRoot();
     }
 
-    private String programVersion() {
+    private String programVersion(Context context) {
         try {
-            return getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
+            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(AboutFragment.class.getName(), "Name not found on PersianCalendarUtils.programVersion");
             return "";
