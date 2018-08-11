@@ -37,7 +37,7 @@ public class SunriseSunsetView extends View {
     private static final int DEFAULT_SUN_STROKE_WIDTH_PX = 4;
 
     private static final @ColorInt
-    int DEFAULT_SHADOW_COLOR = Color.parseColor("#32FFFFFF");
+    int DEFAULT_SHADOW_COLOR = Color.parseColor("#ffeecd");
 
     private static final @ColorInt
     int DEFAULT_LABEL_TEXT_COLOR = Color.WHITE;
@@ -51,13 +51,14 @@ public class SunriseSunsetView extends View {
     private @ColorInt
     int mTrackColor = DEFAULT_TRACK_COLOR;
     private int mTrackWidth = DEFAULT_TRACK_WIDTH_PX;
-    private PathEffect mTrackPathEffect = new DashPathEffect(new float[]{15, 15}, 1);
+    private PathEffect mTrackPathEffect = new DashPathEffect(new float[]{15, 15}, 0);
     private float mTrackRadius;
 
     private Paint mShadowPaint;
     private @ColorInt
     int mShadowColor = DEFAULT_SHADOW_COLOR;
 
+    private Paint mSunRaysPaint;
     private Paint mSunPaint;
     private @ColorInt
     int mSunColor = DEFAULT_SUN_COLOR;
@@ -108,7 +109,7 @@ public class SunriseSunsetView extends View {
         }
         init();
     }
-
+    
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int paddingRight = getPaddingRight();
@@ -164,6 +165,14 @@ public class SunriseSunsetView extends View {
         mSunPaint.setColor(mSunColor);
         mSunPaint.setStrokeWidth(DEFAULT_SUN_STROKE_WIDTH_PX);
         mSunPaint.setStyle(mSunPaintStyle);
+
+        mSunRaysPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mSunRaysPaint.setColor(mSunColor);
+        mSunRaysPaint.setStyle(Paint.Style.STROKE);
+        mSunRaysPaint.setStrokeWidth(12);
+        PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
+        mSunRaysPaint.setPathEffect(sunRaysEffects);
+
     }
 
     private void prepareLabelPaint() {
@@ -180,6 +189,7 @@ public class SunriseSunsetView extends View {
         drawShadow(canvas);
         drawSun(canvas);
         drawSunriseSunsetLabel(canvas);
+
     }
 
     private void drawSunTrack(Canvas canvas) {
@@ -196,7 +206,7 @@ public class SunriseSunsetView extends View {
 
         //Draw Dot
         String dot = "•";
-        mLabelPaint.setColor(mTrackColor);
+        mLabelPaint.setColor(mLabelTextColor);
         mLabelPaint.setTextAlign(Paint.Align.LEFT);
         Paint.FontMetricsInt metricsInt = mLabelPaint.getFontMetricsInt();
         float baseLineX = mBoardRectF.left - mLabelHorizontalOffset;
@@ -228,7 +238,8 @@ public class SunriseSunsetView extends View {
 
         float curPointX = mBoardRectF.left + mTrackRadius - mTrackRadius * (float) Math.cos(Math.PI * mRatio);
         float curPointY = mBoardRectF.bottom - mTrackRadius * (float) Math.sin(Math.PI * mRatio);
-        canvas.drawCircle(curPointX, curPointY, mSunRadius, mSunPaint);
+        canvas.drawCircle(curPointX, curPointY, mSunRadius, mSunRaysPaint);
+        canvas.drawCircle(curPointX, curPointY, mSunRadius - 12, mSunPaint);
 
         canvas.restore();
     }
