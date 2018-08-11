@@ -794,7 +794,7 @@ object Utils {
     val deviceEventList = deviceCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
     if (deviceEventList != null)
       for (deviceCalendarEvent in deviceEventList)
-        if (deviceCalendarEvent.civilDate.equals(civil))
+        if (deviceCalendarEvent.date.equals(civil))
           result.add(deviceCalendarEvent)
 
     return result

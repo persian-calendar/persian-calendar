@@ -6,7 +6,7 @@ import com.byagowi.persiancalendar.R
 
 class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
 
-  internal lateinit var prayers: MutableSet<String>
+  private lateinit var prayers: MutableSet<String>
 
   override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
     super.onPrepareDialogBuilder(builder)

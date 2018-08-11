@@ -493,7 +493,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
             bringDate(DateConverter.civilToJdn(year.toLong(), date.month.toLong(), date.dayOfMonth.toLong()))
           } else if (ev is DeviceCalendarEvent) {
             val todayCivil = CalendarUtils.gregorianToday
-            val date = ev.civilDate
+            val date = ev.date
             var year = date.year
             if (year == -1) {
               year = todayCivil.year + if (date.month < todayCivil.month) 1 else 0

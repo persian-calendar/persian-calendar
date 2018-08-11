@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.view.fragment.MonthFragment
 
 class CalendarAdapter(fm: FragmentManager, isRTL: Boolean) : FragmentStatePagerAdapter(fm) {
-
   init {
     CalendarAdapter.isRTL = isRTL
   }

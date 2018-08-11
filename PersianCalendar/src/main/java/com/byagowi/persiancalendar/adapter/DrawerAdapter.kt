@@ -19,8 +19,8 @@ import com.byagowi.persiancalendar.view.activity.MainActivity
 class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
   private var selectedItem: Int = 0
   private val drawerTitles: Array<String> = mainActivity.resources.getStringArray(R.array.drawerTitles)
-  private val drawerSubtitles: Array<String>
-  private val drawerIcon: TypedArray
+  private val drawerSubtitles: Array<String> = mainActivity.resources.getStringArray(R.array.drawerSubtitles)
+  private val drawerIcon: TypedArray = mainActivity.resources.obtainTypedArray(R.array.drawerIcons)
 
   @ColorInt
   private val selectedBackgroundColor: Int
@@ -50,9 +50,6 @@ class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapt
     }
 
   init {
-    drawerSubtitles = mainActivity.resources.getStringArray(R.array.drawerSubtitles)
-    drawerIcon = mainActivity.resources.obtainTypedArray(R.array.drawerIcons)
-
     val theme = mainActivity.theme
     val selectableBackground = TypedValue()
     theme.resolveAttribute(R.attr.selectableItemBackground, selectableBackground, true)
@@ -138,7 +135,7 @@ class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapt
   private fun isPositionHeader(position: Int): Boolean = position == 0
 
   companion object {
-    private val TYPE_HEADER = 0
-    private val TYPE_ITEM = 1
+    private const val TYPE_HEADER = 0
+    private const val TYPE_ITEM = 1
   }
 }
