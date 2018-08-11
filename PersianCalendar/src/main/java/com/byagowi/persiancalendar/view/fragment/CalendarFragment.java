@@ -195,7 +195,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-            Utils.initUtils(getContext());
+            if (Utils.isShowDeviceCalendarEvents()) {
+                Utils.initUtils(getContext());
+            } else {
+                Toast.makeText(getContext(), R.string.enable_device_calendar,
+                        Toast.LENGTH_LONG).show();
+            }
 
             if (lastSelectedJdn == -1)
                 lastSelectedJdn = CalendarUtils.getTodayJdn();

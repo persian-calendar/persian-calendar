@@ -415,7 +415,7 @@ public class Utils {
         return s.hasNext() ? s.next() : "";
     }
 
-    static private String readRawResource(Context context, @RawRes int res) {
+    public static String readRawResource(Context context, @RawRes int res) {
         return readStream(context.getResources().openRawResource(res));
     }
 
