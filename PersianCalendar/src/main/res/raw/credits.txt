@@ -14,17 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
 
-Assets:
-* {fajr,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
-* {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
-* Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
-* kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
-https://www.behance.net/gallery/21015893/Google-Calendar
-* abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due to being so
-old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
-* Noto Naskh Arabic from Noto fonts project https://github.com/googlei18n/noto-fonts (OFL 1.1)
-
-
 Libraries:
 * Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
 
@@ -114,7 +103,7 @@ Libraries:
   See the License for the specific language governing permissions and
   limitations under the License.
 
-* Android Support Library http://developer.android.com/tools/support-library (Apache 2.0)
+* AndroidX https://developer.android.com/topic/libraries/support-library/androidx-overview (Apache 2.0)
   Flexbox for Android https://github.com/google/flexbox-layout (Apache 2.0)
 
   Copyright (C) 2018 The Android Open Source Project
