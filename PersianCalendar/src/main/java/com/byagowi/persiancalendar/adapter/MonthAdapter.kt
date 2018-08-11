@@ -19,9 +19,9 @@ import com.byagowi.persiancalendar.view.fragment.MonthFragment
 
 class MonthAdapter(private val context: Context, private val monthFragment: MonthFragment, private val days: List<DayEntity>,
                    startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
-  private val isArabicDigit: Boolean
+  private val isArabicDigit: Boolean = Utils.isArabicDigitSelected
   private val startingDayOfWeek: Int = Utils.fixDayOfWeekReverse(startingDayOfWeek)
-  private val totalDays: Int
+  private val totalDays: Int = days.size
 
   @ColorInt
   private val colorHoliday: Int
@@ -39,9 +39,6 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
   private var selectedDay = -1
 
   init {
-    totalDays = days.size
-    isArabicDigit = Utils.isArabicDigitSelected
-
     val theme = context.theme
 
     val colorHolidayAttr = TypedValue()
@@ -88,16 +85,11 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
     var num: TextView = itemView.findViewById(R.id.num)
-    var today: View
-    var event: View
-    var deviceEvent: View
+    var today: View = itemView.findViewById(R.id.today)
+    var event: View = itemView.findViewById(R.id.event)
+    var deviceEvent: View = itemView.findViewById(R.id.and_device_event)
 
     init {
-
-      today = itemView.findViewById(R.id.today)
-      event = itemView.findViewById(R.id.event)
-      deviceEvent = itemView.findViewById(R.id.and_device_event)
-
       itemView.setOnClickListener(this)
       itemView.setOnLongClickListener(this)
     }

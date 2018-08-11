@@ -62,18 +62,14 @@ class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapt
   }
 
   inner class ViewHolder(itemView: View, viewType: Int) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-    var itemTitle: TextView
-    var itemSubtitle: TextView
-    var imageView: AppCompatImageView
+    var itemTitle: TextView = itemView.findViewById(R.id.itemTitle)
+    var itemSubtitle: TextView = itemView.findViewById(R.id.itemSubtitle)
+    var imageView: AppCompatImageView = itemView.findViewById(R.id.image)
 
     init {
       if (viewType == TYPE_ITEM) {
         itemView.setOnClickListener(this)
       }
-
-      imageView = itemView.findViewById(R.id.image)
-      itemTitle = itemView.findViewById(R.id.itemTitle)
-      itemSubtitle = itemView.findViewById(R.id.itemSubtitle)
     }
 
     override fun onClick(view: View) = mainActivity.selectItem(adapterPosition)

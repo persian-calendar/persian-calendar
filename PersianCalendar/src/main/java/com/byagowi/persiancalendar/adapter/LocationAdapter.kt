@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog
 import java.util.Collections.emptyList
 
 class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDialog) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
-  private val locale: String
+  private val locale: String = Utils.appLanguage
   private val cities: List<CityEntity>
   private val layoutInflater: LayoutInflater
 
@@ -21,17 +21,14 @@ class LocationAdapter(private val locationPreferenceDialog: LocationPreferenceDi
     val ctx = locationPreferenceDialog.context
     this.layoutInflater = LayoutInflater.from(ctx)
     this.cities = if (ctx == null) emptyList() else Utils.getAllCities(ctx, true)
-    this.locale = Utils.appLanguage
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-    val tvCountry: TextView
-    val tvCity: TextView
+    val tvCountry: TextView = itemView.findViewById(R.id.tvCity)
+    val tvCity: TextView = itemView.findViewById(R.id.tvCountry)
 
     init {
       itemView.setOnClickListener(this)
-      tvCity = itemView.findViewById(R.id.tvCity)
-      tvCountry = itemView.findViewById(R.id.tvCountry)
     }
 
     override fun onClick(view: View) =
