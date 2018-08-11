@@ -50,7 +50,7 @@
     <string name="language">Language</string>
     <string name="calendar_language">Calendar Language</string>
     <string name="calendar_language_summary">The language to show the month and day names in</string>
-    <string name="version">Version</string>
+    <string name="version">Version %s</string>
     <string name="calendar_font_summary">Change the font for the calendar</string>
     <string name="athan">Athan</string>
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
@@ -100,7 +100,7 @@
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
-    <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the preferences</string>
+    <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
     <string name="date_diff_text">%s day (~%s year and %s month and %s day)</string>
     <string name="search_holidays">Search in events</string>
     <string name="main_calendar">Main Calendar</string>
@@ -188,6 +188,6 @@ Previous designers: Behdad Pournader, Iman Soltanian"</string>
     <string name="wifi_settings">WiFi</string>
     <string name="gps_internet_desc">"Enable device's GPS and Internet connection to find your location, please.
 The app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again."</string>
-    <string name="enable_device_calendar">In order to see the personal events, enable the related option from preferences.</string>
+    <string name="enable_device_calendar">In order to see the personal events, enable the related option from the settings.</string>
 
 </resources>

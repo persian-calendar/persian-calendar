@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
@@ -55,6 +56,7 @@ public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle bundle, String s) {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         addPreferencesFromResource(R.xml.preferences);
 
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);

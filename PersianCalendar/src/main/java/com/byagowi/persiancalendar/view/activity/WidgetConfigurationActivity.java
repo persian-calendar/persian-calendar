@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class WidgetConfigurationActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
             addPreferencesFromResource(R.xml.widget_preferences);
         }
     }

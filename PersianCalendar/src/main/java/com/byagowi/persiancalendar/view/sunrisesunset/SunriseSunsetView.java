@@ -109,7 +109,7 @@ public class SunriseSunsetView extends View {
         }
         init();
     }
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int paddingRight = getPaddingRight();
