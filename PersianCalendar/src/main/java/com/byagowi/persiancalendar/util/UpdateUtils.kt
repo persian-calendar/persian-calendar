@@ -148,11 +148,11 @@ object UpdateUtils {
         remoteViews2.setTextColor(R.id.event_2x2, color)
         remoteViews2.setTextColor(R.id.owghat_2x2, color)
 
-        if (enableClock) {
-          text2 = title
+        text2 = if (enableClock) {
+          title
         } else {
           remoteViews2.setTextViewText(R.id.time_2x2, weekDayName)
-          text2 = mainDateString
+          mainDateString
         }
 
         val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)

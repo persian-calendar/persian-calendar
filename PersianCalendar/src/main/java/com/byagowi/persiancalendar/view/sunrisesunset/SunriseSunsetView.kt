@@ -213,10 +213,8 @@ class SunriseSunsetView : View {
 
     canvas.save()
 
-    val leftLabel: String
-    val rightLabel: String
-    leftLabel = UIUtils.getFormattedClock(mSunriseTime!!)
-    rightLabel = UIUtils.getFormattedClock(mSunsetTime!!)
+    val leftLabel: String = UIUtils.getFormattedClock(mSunriseTime!!)
+    val rightLabel: String = UIUtils.getFormattedClock(mSunsetTime!!)
 
     mLabelPaint!!.textAlign = Paint.Align.LEFT
     val metricsInt = mLabelPaint!!.fontMetricsInt

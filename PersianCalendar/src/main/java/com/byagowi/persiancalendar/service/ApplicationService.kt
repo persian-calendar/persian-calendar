@@ -29,7 +29,7 @@ class ApplicationService : Service() {
     intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
     intentFilter.addAction(Intent.ACTION_TIME_CHANGED)
     intentFilter.addAction(Intent.ACTION_SCREEN_ON)
-    //        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+    // intentFilter.addAction(Intent.ACTION_TIME_TICK);
     registerReceiver(BroadcastReceivers(), intentFilter)
 
     Utils.updateStoredPreference(applicationContext)

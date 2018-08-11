@@ -118,13 +118,13 @@ class QiblaCompassView : View {
     val specMode = View.MeasureSpec.getMode(measureSpec)
     val specSize = View.MeasureSpec.getSize(measureSpec)
 
-    if (specMode == View.MeasureSpec.UNSPECIFIED) {
+    result = if (specMode == View.MeasureSpec.UNSPECIFIED) {
       // Return a default size of 200 if no bounds are specified.
-      result = 600
+      600
     } else {
       // As you want to fill the available space
       // always return the full available bounds.
-      result = specSize
+      specSize
     }
     return result
   }

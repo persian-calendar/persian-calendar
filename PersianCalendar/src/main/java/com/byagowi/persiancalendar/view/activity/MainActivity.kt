@@ -161,11 +161,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
   override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
     settingHasChanged = true
     if (key == PREF_APP_LANGUAGE) {
-      val persianDigits: Boolean
-      when (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
-        LANG_EN_US -> persianDigits = false
-        LANG_UR -> persianDigits = false
-        else -> persianDigits = true
+      val persianDigits: Boolean = when (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
+        LANG_EN_US -> false
+        LANG_UR -> false
+        else -> true
       }
 
       val editor = sharedPreferences.edit()
@@ -243,15 +242,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
   override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
     // Checking for the "menu" key
-    if (keyCode == KeyEvent.KEYCODE_MENU) {
+    return if (keyCode == KeyEvent.KEYCODE_MENU) {
       if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
         binding.drawer.closeDrawers()
       } else {
         binding.drawer.openDrawer(GravityCompat.START)
       }
-      return true
+      true
     } else {
-      return super.onKeyDown(keyCode, event)
+      super.onKeyDown(keyCode, event)
     }
   }
 

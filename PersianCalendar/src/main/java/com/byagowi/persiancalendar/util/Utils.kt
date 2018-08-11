@@ -189,7 +189,7 @@ object Utils {
       return cityEntity.coordinate
     }
 
-    try {
+    return try {
       val coord = Coordinate(
           java.lang.Double.parseDouble(prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)),
           java.lang.Double.parseDouble(prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)),
@@ -197,12 +197,12 @@ object Utils {
       )
 
       // If latitude or longitude is zero probably preference is not set yet
-      return if (coord.latitude == 0.0 && coord.longitude == 0.0) {
+      if (coord.latitude == 0.0 && coord.longitude == 0.0) {
         null
       } else coord
 
     } catch (e: NumberFormatException) {
-      return null
+      null
     }
 
   }
@@ -726,10 +726,10 @@ object Utils {
 
         var title = cursor.getString(1)
         if (allDay) {
-          if (civilDate.year == -1) {
-            title = "\uD83C\uDF89 $title"
+          title = if (civilDate.year == -1) {
+            "\uD83C\uDF89 $title"
           } else {
-            title = "\uD83D\uDCC5 $title"
+            "\uD83D\uDCC5 $title"
           }
         } else {
           title = "\uD83D\uDD53 $title"
@@ -842,12 +842,11 @@ object Utils {
     val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && !TextUtils.isEmpty(prefString)) {
-      var athanGap: Long
-      try {
-        athanGap = (java.lang.Double.parseDouble(
+      val athanGap: Long = try {
+        (java.lang.Double.parseDouble(
             prefs.getString(PREF_ATHAN_GAP, "0")) * 60.0 * 1000.0).toLong()
       } catch (e: NumberFormatException) {
-        athanGap = 0
+        0
       }
 
       val calculator = PrayTimesCalculator(calculationMethod)
@@ -941,15 +940,14 @@ object Utils {
   }
 
   private fun loadLanguageResource(context: Context) {
-    @RawRes val messagesFile: Int
-    when (language) {
-      "fa-AF" -> messagesFile = R.raw.messages_fa_af
-      "ps" -> messagesFile = R.raw.messages_ps
-      "ckb" -> messagesFile = R.raw.messages_ckb
-      "ur" -> messagesFile = R.raw.messages_ur
-      "en-US" -> messagesFile = R.raw.messages_en
-      "en", "fa" -> messagesFile = R.raw.messages_fa
-      else -> messagesFile = R.raw.messages_fa
+    @RawRes val messagesFile: Int = when (language) {
+      "fa-AF" -> R.raw.messages_fa_af
+      "ps" -> R.raw.messages_ps
+      "ckb" -> R.raw.messages_ckb
+      "ur" -> R.raw.messages_ur
+      "en-US" -> R.raw.messages_en
+      "en", "fa" -> R.raw.messages_fa
+      else -> R.raw.messages_fa
     }
 
     val persianMonthsLocal = mutableListOf<String>()

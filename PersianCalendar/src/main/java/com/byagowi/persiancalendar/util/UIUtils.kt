@@ -129,11 +129,10 @@ object UIUtils {
 
   internal fun clockToString(hour: Int, minute: Int): String = Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
 
-  fun isRTL(context: Context): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
-    } else false
-  }
+  fun isRTL(context: Context): Boolean =
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+      } else false
 
   fun getFormattedClock(clock: Clock): String {
     var timeText: String? = null
@@ -162,35 +161,32 @@ object UIUtils {
   }
 
   @StringRes
-  fun getPrayTimeText(athanKey: String): Int {
-    when (athanKey) {
-      "FAJR" -> return R.string.azan1
+  fun getPrayTimeText(athanKey: String): Int = when (athanKey) {
+    "FAJR" -> R.string.azan1
 
-      "DHUHR" -> return R.string.azan2
+    "DHUHR" -> R.string.azan2
 
-      "ASR" -> return R.string.azan3
+    "ASR" -> R.string.azan3
 
-      "MAGHRIB" -> return R.string.azan4
+    "MAGHRIB" -> R.string.azan4
 
-      "ISHA" -> return R.string.azan5
-      else -> return R.string.azan5
-    }
+    "ISHA" -> R.string.azan5
+    else -> R.string.azan5
   }
 
   @DrawableRes
-  fun getPrayTimeImage(athanKey: String): Int {
-    when (athanKey) {
-      "FAJR" -> return R.drawable.fajr
+  fun getPrayTimeImage(athanKey: String): Int = when (athanKey) {
+    "FAJR" -> R.drawable.fajr
 
-      "DHUHR" -> return R.drawable.dhuhr
+    "DHUHR" -> R.drawable.dhuhr
 
-      "ASR" -> return R.drawable.asr
+    "ASR" -> R.drawable.asr
 
-      "MAGHRIB" -> return R.drawable.maghrib
+    "MAGHRIB" -> R.drawable.maghrib
 
-      "ISHA" -> return R.drawable.isha
-      else -> return R.drawable.isha
-    }
+    "ISHA" -> R.drawable.isha
+
+    else -> R.drawable.isha
   }
 
   fun copyToClipboard(context: Context, text: CharSequence) {
@@ -204,8 +200,7 @@ object UIUtils {
   }
 
   fun setTheme(activity: AppCompatActivity) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-    when (prefs.getString(PREF_THEME, LIGHT_THEME)) {
+    when (PreferenceManager.getDefaultSharedPreferences(activity).getString(PREF_THEME, LIGHT_THEME)) {
       DARK_THEME -> {
         activity.setTheme(R.style.DarkTheme)
         return
@@ -219,12 +214,11 @@ object UIUtils {
   }
 
   // https://stackoverflow.com/a/27788209
-  private fun resourceToUri(context: Context, resID: Int): Uri {
-    return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-        context.resources.getResourcePackageName(resID) + '/'.toString() +
-        context.resources.getResourceTypeName(resID) + '/'.toString() +
-        context.resources.getResourceEntryName(resID))
-  }
+  private fun resourceToUri(context: Context, resID: Int): Uri =
+      Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+          context.resources.getResourcePackageName(resID) + '/'.toString() +
+          context.resources.getResourceTypeName(resID) + '/'.toString() +
+          context.resources.getResourceEntryName(resID))
 
   fun getDefaultAthanUri(context: Context): Uri = resourceToUri(context, R.raw.abdulbasit)
 

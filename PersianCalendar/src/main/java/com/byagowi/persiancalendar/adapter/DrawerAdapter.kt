@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.view.activity.MainActivity
 
 class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
   private var selectedItem: Int = 0
-  private val drawerTitles: Array<String>
+  private val drawerTitles: Array<String> = mainActivity.resources.getStringArray(R.array.drawerTitles)
   private val drawerSubtitles: Array<String>
   private val drawerIcon: TypedArray
 
@@ -50,7 +50,6 @@ class DrawerAdapter(private val mainActivity: MainActivity) : RecyclerView.Adapt
     }
 
   init {
-    drawerTitles = mainActivity.resources.getStringArray(R.array.drawerTitles)
     drawerSubtitles = mainActivity.resources.getStringArray(R.array.drawerSubtitles)
     drawerIcon = mainActivity.resources.obtainTypedArray(R.array.drawerIcons)
 

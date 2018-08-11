@@ -17,43 +17,35 @@ object CalendarUtils {
   val gregorianToday: CivilDate
     get() = CivilDate(makeCalendarFromDate(Date()))
 
-  fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate {
-    when (calendar) {
-      CalendarType.ISLAMIC -> return IslamicDate(year, month, day)
-      CalendarType.GREGORIAN -> return CivilDate(year, month, day)
-      CalendarType.SHAMSI -> return PersianDate(year, month, day)
-      else -> return PersianDate(year, month, day)
-    }
+  fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
+      when (calendar) {
+        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+        CalendarType.GREGORIAN -> CivilDate(year, month, day)
+        CalendarType.SHAMSI -> PersianDate(year, month, day)
+        else -> PersianDate(year, month, day)
+      }
+
+  fun getJdnOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): Long =
+      when (calendar) {
+        CalendarType.ISLAMIC -> DateConverter.islamicToJdn(year, month, day)
+        CalendarType.GREGORIAN -> DateConverter.civilToJdn(year.toLong(), month.toLong(), day.toLong())
+        CalendarType.SHAMSI -> DateConverter.persianToJdn(year, month, day)
+      }
+
+  fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate = when (calendar) {
+    CalendarType.ISLAMIC -> DateConverter.jdnToIslamic(jdn)
+    CalendarType.GREGORIAN -> DateConverter.jdnToCivil(jdn)
+    CalendarType.SHAMSI -> DateConverter.jdnToPersian(jdn)
   }
 
-  fun getJdnOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): Long {
-    when (calendar) {
-      CalendarType.ISLAMIC -> return DateConverter.islamicToJdn(year, month, day)
-      CalendarType.GREGORIAN -> return DateConverter.civilToJdn(year.toLong(), month.toLong(), day.toLong())
-      CalendarType.SHAMSI -> return DateConverter.persianToJdn(year, month, day)
-      else -> return DateConverter.persianToJdn(year, month, day)
-    }
-  }
-
-  fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate {
-    when (calendar) {
-      CalendarType.ISLAMIC -> return DateConverter.jdnToIslamic(jdn)
-      CalendarType.GREGORIAN -> return DateConverter.jdnToCivil(jdn)
-      CalendarType.SHAMSI -> return DateConverter.jdnToPersian(jdn)
-      else -> return DateConverter.jdnToPersian(jdn)
-    }
-  }
-
-  fun getJdnDate(date: AbstractDate): Long {
-    return if (date is PersianDate) {
-      DateConverter.persianToJdn(date)
-    } else if (date is IslamicDate) {
-      DateConverter.islamicToJdn(date)
-    } else if (date is CivilDate) {
-      DateConverter.civilToJdn(date)
-    } else {
-      0
-    }
+  fun getJdnDate(date: AbstractDate): Long = if (date is PersianDate) {
+    DateConverter.persianToJdn(date)
+  } else if (date is IslamicDate) {
+    DateConverter.islamicToJdn(date)
+  } else if (date is CivilDate) {
+    DateConverter.civilToJdn(date)
+  } else {
+    0
   }
 
   fun makeCalendarFromDate(date: Date): Calendar {
@@ -65,35 +57,28 @@ object CalendarUtils {
     return calendar
   }
 
-  fun toLinearDate(date: AbstractDate): String {
-    return String.format("%s/%s/%s", Utils.formatNumber(date.year),
-        Utils.formatNumber(date.month), Utils.formatNumber(date.dayOfMonth))
+  fun toLinearDate(date: AbstractDate): String =
+      String.format("%s/%s/%s", Utils.formatNumber(date.year),
+          Utils.formatNumber(date.month), Utils.formatNumber(date.dayOfMonth))
+
+  fun getTodayOfCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
+    CalendarType.ISLAMIC -> islamicToday
+    CalendarType.GREGORIAN -> gregorianToday
+    CalendarType.SHAMSI -> persianToday
   }
 
-  fun getTodayOfCalendar(calendar: CalendarType): AbstractDate {
-    when (calendar) {
-      CalendarType.ISLAMIC -> return islamicToday
-      CalendarType.GREGORIAN -> return gregorianToday
-      CalendarType.SHAMSI -> return persianToday
-      else -> return persianToday
-    }
-  }
-
-  fun dateStringOfOtherCalendar(calendar: CalendarType, jdn: Long): String {
-    when (calendar) {
-      CalendarType.ISLAMIC -> return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-          Utils.comma + " " +
-          Utils.dateToString(DateConverter.jdnToCivil(jdn))
-      CalendarType.GREGORIAN -> return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-          Utils.comma + " " +
-          Utils.dateToString(DateConverter.civilToIslamic(
-              DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()))
-      CalendarType.SHAMSI -> return Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
-          Utils.comma + " " +
-          Utils.dateToString(DateConverter.civilToIslamic(
-              DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()))
-      else -> return Utils.dateToString(DateConverter.jdnToCivil(jdn)) + Utils.comma + " " + Utils.dateToString(DateConverter.civilToIslamic(DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()))
-    }
+  fun dateStringOfOtherCalendar(calendar: CalendarType, jdn: Long): String = when (calendar) {
+    CalendarType.ISLAMIC -> Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+        Utils.comma + " " +
+        Utils.dateToString(DateConverter.jdnToCivil(jdn))
+    CalendarType.GREGORIAN -> Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
+        Utils.comma + " " +
+        Utils.dateToString(DateConverter.civilToIslamic(
+            DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()))
+    CalendarType.SHAMSI -> Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
+        Utils.comma + " " +
+        Utils.dateToString(DateConverter.civilToIslamic(
+            DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()))
   }
 
   fun dayTitleSummary(date: AbstractDate): String = Utils.getWeekDayName(date) + Utils.comma + " " + Utils.dateToString(date)
@@ -103,19 +88,15 @@ object CalendarUtils {
   fun getDayOfWeekFromJdn(jdn: Long): Int = DateConverter.jdnToCivil(jdn).dayOfWeek % 7
 
   // based on R.array.calendar_type order
-  fun calendarTypeFromPosition(position: Int): CalendarType {
-    when (position) {
-      0 -> return CalendarType.SHAMSI
-      1 -> return CalendarType.ISLAMIC
-      else -> return CalendarType.GREGORIAN
-    }
+  fun calendarTypeFromPosition(position: Int): CalendarType = when (position) {
+    0 -> CalendarType.SHAMSI
+    1 -> CalendarType.ISLAMIC
+    else -> CalendarType.GREGORIAN
   }
 
-  fun positionFromCalendarType(calendar: CalendarType): Int {
-    when (calendar) {
-      CalendarType.SHAMSI -> return 0
-      CalendarType.ISLAMIC -> return 1
-      else -> return 2
-    }
+  fun positionFromCalendarType(calendar: CalendarType): Int = when (calendar) {
+    CalendarType.SHAMSI -> 0
+    CalendarType.ISLAMIC -> 1
+    else -> 2
   }
 }

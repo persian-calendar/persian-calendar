@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.view.fragment.MonthFragment
 class MonthAdapter(private val context: Context, private val monthFragment: MonthFragment, private val days: List<DayEntity>,
                    startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
   private val isArabicDigit: Boolean
-  private val startingDayOfWeek: Int
+  private val startingDayOfWeek: Int = Utils.fixDayOfWeekReverse(startingDayOfWeek)
   private val totalDays: Int
 
   @ColorInt
@@ -39,7 +39,6 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
   private var selectedDay = -1
 
   init {
-    this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek)
     totalDays = days.size
     isArabicDigit = Utils.isArabicDigitSelected
 
@@ -88,14 +87,13 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
   }
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
-    var num: TextView
+    var num: TextView = itemView.findViewById(R.id.num)
     var today: View
     var event: View
     var deviceEvent: View
 
     init {
 
-      num = itemView.findViewById(R.id.num)
       today = itemView.findViewById(R.id.today)
       event = itemView.findViewById(R.id.event)
       deviceEvent = itemView.findViewById(R.id.and_device_event)

@@ -28,7 +28,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
     }
   }
 
-  protected fun finishAndSuccess() {
+  private fun finishAndSuccess() {
     val extras = intent.extras
     if (extras != null) {
       val appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)

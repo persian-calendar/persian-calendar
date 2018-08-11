@@ -36,12 +36,12 @@ class AthanNumericPreference : EditTextPreference {
   override fun getText(): String? = if (mDouble != null) mDouble.toString() else null
 
   private fun parseDouble(text: String): Double? {
-    try {
-      return java.lang.Double.parseDouble(text)
+    return try {
+      java.lang.Double.parseDouble(text)
     } catch (e: NumberFormatException) {
-      return null
+      null
     } catch (e: NullPointerException) {
-      return null
+      null
     }
 
   }

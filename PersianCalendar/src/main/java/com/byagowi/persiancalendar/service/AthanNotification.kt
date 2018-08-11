@@ -62,7 +62,7 @@ class AthanNotification : Service() {
     notificationBuilder.setAutoCancel(true)
         .setWhen(System.currentTimeMillis())
         .setSmallIcon(R.drawable.sun)
-        //                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
+        // .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
         .setContentTitle(title)
         .setContentText(subtitle)
 
