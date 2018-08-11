@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:padding="@dimen/card_padding">
+<layout>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCity"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/padding_item"
-        android:paddingLeft="@dimen/padding_item"
-        android:paddingRight="@dimen/padding_item"
-        android:paddingStart="@dimen/padding_item"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/card_padding">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/darker_gray" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_item"
+            android:paddingLeft="@dimen/padding_item"
+            android:paddingEnd="@dimen/padding_item"
+            android:paddingRight="@dimen/padding_item"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
