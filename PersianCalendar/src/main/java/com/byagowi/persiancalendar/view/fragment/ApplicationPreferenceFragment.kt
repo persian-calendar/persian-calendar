@@ -102,7 +102,8 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
       val localActivity = activity
       if (ctx != null && localActivity != null) {
         val gps = ctx.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-        val connectivityManager = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val info: NetworkInfo? = connectivityManager?.activeNetworkInfo
 
         var gpsEnabled = false
@@ -172,23 +173,23 @@ class ApplicationPreferenceFragment : PreferenceFragmentCompat() {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-      val context = context
-      val uri = data.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-      if (uri != null) {
+    if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
+      val ctx = context
+      val uri = data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+      if (ctx != null && uri != null) {
         val editor = PreferenceManager
             .getDefaultSharedPreferences(context).edit()
 
         var ringtoneTitle = RingtoneManager
-            .getRingtone(context, Uri.parse(uri.toString()))
-            .getTitle(context)
+            .getRingtone(ctx, Uri.parse(uri.toString()))
+            .getTitle(ctx)
         if (TextUtils.isEmpty(ringtoneTitle)) {
           ringtoneTitle = ""
         }
         editor.putString(PREF_ATHAN_NAME, ringtoneTitle)
         editor.putString(PREF_ATHAN_URI, uri.toString())
         editor.apply()
-        Toast.makeText(context, R.string.custom_notification_is_set,
+        Toast.makeText(ctx, R.string.custom_notification_is_set,
             Toast.LENGTH_SHORT).show()
         putAthanNameOnSummary(ringtoneTitle)
       }

@@ -23,9 +23,7 @@ class PersianCalendarTileService : TileService() {
     } catch (e: Exception) {
       Log.e("TileService", "Tile onClick fail", e)
     }
-
   }
-
 
   override fun onStartListening() {
     val tile = qsTile

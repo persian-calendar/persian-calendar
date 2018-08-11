@@ -11,7 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entity.AbstractEvent
+import com.byagowi.persiancalendar.entity.BaseEvent
 import com.byagowi.persiancalendar.entity.DayEntity
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent
 import com.byagowi.persiancalendar.util.Utils
@@ -149,14 +149,14 @@ class MonthAdapter(private val context: Context, private val monthFragment: Mont
     return ViewHolder(v)
   }
 
-  private fun hasAnyHolidays(dayEvents: List<AbstractEvent>): Boolean {
+  private fun hasAnyHolidays(dayEvents: List<BaseEvent>): Boolean {
     for (event in dayEvents)
       if (event.isHoliday)
         return true
     return false
   }
 
-  private fun hasDeviceEvents(dayEvents: List<AbstractEvent>): Boolean {
+  private fun hasDeviceEvents(dayEvents: List<BaseEvent>): Boolean {
     for (event in dayEvents)
       if (event is DeviceCalendarEvent)
         return true

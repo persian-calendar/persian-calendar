@@ -10,7 +10,7 @@ class PrayerSelectPreference(context: Context, attrs: AttributeSet) : DialogPref
   // convert comma separated string to a set
   // convert set to a comma separated string
   var prayers: Set<String>
-    get() = HashSet(Arrays.asList(*TextUtils.split(getPersistedString(""), ",")))
+    get() = hashSetOf(*TextUtils.split(getPersistedString(""), ","))
     set(prayers) {
       val wasBlocking = shouldDisableDependents()
       persistString(TextUtils.join(",", prayers))

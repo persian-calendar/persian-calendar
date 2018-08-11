@@ -163,7 +163,7 @@ object Utils {
   private lateinit var islamicCalendarEvents: SparseArray<MutableList<IslamicCalendarEvent>>
   private lateinit var gregorianCalendarEvents: SparseArray<MutableList<GregorianCalendarEvent>>
   private lateinit var deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>
-  lateinit var allEnabledEvents: MutableList<Any>
+  lateinit var allEnabledEvents: MutableList<BaseEvent>
   lateinit var allEnabledEventsTitles: MutableList<String>
 
   //    public static boolean goForWorker() {
@@ -239,13 +239,13 @@ object Utils {
     weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"))
     // WeekEnds, 6 means Friday
     val weekEndz = BooleanArray(7)
-    for (s in prefs.getStringSet("WeekEnds", HashSet(Arrays.asList("6"))))
+    for (s in prefs.getStringSet("WeekEnds", hashSetOf("6")))
       weekEndz[Integer.parseInt(s)] = true
     weekEnds = weekEndz
 
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     whatToShowOnWidgets = prefs.getStringSet("what_to_show",
-        HashSet(Arrays.asList(*context.resources.getStringArray(R.array.what_to_show_default))))
+        hashSetOf(*context.resources.getStringArray(R.array.what_to_show_default)))
   }
 
   fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
@@ -265,7 +265,7 @@ object Utils {
   fun getNextOwghatTime(context: Context, clock: Clock, dateHasChanged: Boolean): String? {
     if (coordinate == null) return null
 
-    var localPrayTimes = prayTimes
+    val localPrayTimes = prayTimes
         ?: PrayTimesCalculator(getCalculationMethod()).calculate(Date(), coordinate)
     prayTimes = localPrayTimes
 
@@ -317,12 +317,11 @@ object Utils {
       formatNumber(date.dayOfMonth) + ' '.toString() + CalendarUtils.getMonthName(date) + ' '.toString() +
           formatNumber(date.year)
 
-  fun monthsNamesOfCalendar(date: AbstractDate): Array<String> = if (date is PersianDate)
-    persianMonths
-  else if (date is IslamicDate)
-    islamicMonths
-  else
-    gregorianMonths
+  fun monthsNamesOfCalendar(date: AbstractDate): Array<String> = when (date) {
+    is PersianDate -> persianMonths
+    is IslamicDate -> islamicMonths
+    else -> gregorianMonths
+  }
 
   fun getWeekDayName(inputDate: AbstractDate): String {
     var date = inputDate
@@ -488,10 +487,10 @@ object Utils {
 
   private fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    var enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
+    var enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, hashSetOf())
 
-    if (enabledTypes!!.isEmpty())
-      enabledTypes = HashSet(Arrays.asList("iran_holidays"))
+    if (enabledTypes == null || enabledTypes.isEmpty())
+      enabledTypes = hashSetOf("iran_holidays")
 
     val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
     val afghanistanOthers = enabledTypes.contains("afghanistan_others")
@@ -504,7 +503,7 @@ object Utils {
     val persianCalendarEvents = SparseArray<MutableList<PersianCalendarEvent>>()
     val islamicCalendarEvents = SparseArray<MutableList<IslamicCalendarEvent>>()
     val gregorianCalendarEvents = SparseArray<MutableList<GregorianCalendarEvent>>()
-    val allEnabledEvents = ArrayList<Any>()
+    val allEnabledEvents = ArrayList<BaseEvent>()
     val allEnabledEventsTitles = ArrayList<String>()
 
     try {
@@ -767,12 +766,12 @@ object Utils {
 
   }
 
-  fun getEvents(jdn: Long): List<AbstractEvent> {
+  fun getEvents(jdn: Long): List<BaseEvent> {
     val day = DateConverter.jdnToPersian(jdn)
     val civil = DateConverter.jdnToCivil(jdn)
     val islamic = DateConverter.jdnToIslamic(jdn)
 
-    val result = ArrayList<AbstractEvent>()
+    val result = ArrayList<BaseEvent>()
 
     val persianList = persianCalendarEvents.get(day.month * 100 + day.dayOfMonth)
     if (persianList != null)
@@ -801,7 +800,7 @@ object Utils {
     return result
   }
 
-  fun getEventsTitle(dayEvents: List<AbstractEvent>, holiday: Boolean,
+  fun getEventsTitle(dayEvents: List<BaseEvent>, holiday: Boolean,
                      compact: Boolean, showDeviceCalendarEvents: Boolean,
                      insertRLM: Boolean): String {
     val titles = StringBuilder()
@@ -854,7 +853,7 @@ object Utils {
       val calculator = PrayTimesCalculator(calculationMethod)
       val prayTimes = calculator.calculate(Date(), coordinate)
       // convert comma separated string to a set
-      val alarmTimesSet = HashSet(Arrays.asList(*TextUtils.split(prefString, ",")))
+      val alarmTimesSet = hashSetOf(*TextUtils.split(prefString, ","))
       // in the past IMSAK was used but now we figured out FAJR was what we wanted
       if (alarmTimesSet.remove("IMSAK"))
         alarmTimesSet.add("FAJR")

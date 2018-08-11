@@ -27,7 +27,8 @@ class AthanNotification : Service() {
   override fun onBind(intent: Intent): IBinder? = null
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+    val notificationManager =
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
     //            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     //            if (audioManager != null) {
     //                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);

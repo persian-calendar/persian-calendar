@@ -217,7 +217,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     return ss
   }
 
-  private fun getDeviceEventsTitle(dayEvents: List<AbstractEvent>): SpannableStringBuilder {
+  private fun getDeviceEventsTitle(dayEvents: List<BaseEvent>): SpannableStringBuilder {
     val titles = SpannableStringBuilder()
     var first = true
 
@@ -286,7 +286,7 @@ class CalendarFragment : Fragment(), View.OnClickListener {
     }
 
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
+    val enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, hashSetOf())
     if (enabledTypes.size == 0) {
       if (!TextUtils.isEmpty(messageToShow))
         messageToShow.append("\n")

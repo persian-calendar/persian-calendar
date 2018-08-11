@@ -30,7 +30,6 @@ import com.byagowi.persiancalendar.util.Utils
  */
 class AboutFragment : Fragment() {
 
-  @SuppressLint("SetTextI18n")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val localActivity = activity ?: return null
     val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater, R.layout.fragment_about,
@@ -40,7 +39,10 @@ class AboutFragment : Fragment() {
 
     // version
     val version = programVersion()
-    binding.version.text = getString(R.string.version) + " " + Utils.formatNumber(version.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
+    binding.version.text = String.format(
+        getString(R.string.version),
+        Utils.formatNumber(version.split("-".toRegex())
+            .dropLastWhile { it.isEmpty() }.toTypedArray()[0]))
 
     // licenses
     binding.licenses.setOnClickListener {
@@ -62,7 +64,6 @@ class AboutFragment : Fragment() {
     // help
     binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
         Utils.formatNumber(Utils.maxSupportedYear))
-    binding.helpSum.setText(R.string.about_help_sum)
 
     // report bug
     binding.reportBug.setOnClickListener {
