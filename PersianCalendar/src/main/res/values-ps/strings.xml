@@ -50,7 +50,7 @@
     <string name="language">ژبه</string>
     <string name="calendar_language">د کلیز ژبه</string>
     <string name="calendar_language_summary">The language to show the month and day names in</string>
-    <string name="version">نسخه</string>
+    <string name="version">نسخه %s</string>
     <string name="calendar_font_summary">دکلیز فانت</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">Prayres to sound the alarm for</string>

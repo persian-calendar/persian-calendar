@@ -50,7 +50,7 @@
     <string name="language">زبان</string>
     <string name="calendar_language">تقویم کی زبان</string>
     <string name="calendar_language_summary">زبانی که ماه‌ها و روزها به آن نمایش داده می‌شوند</string>
-    <string name="version">نسخہ</string>
+    <string name="version">نسخہ %s</string>
     <string name="calendar_font_summary">تقویم کے فانٹ کی تبدیلی</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">ان نمازوں کے لیے اذان کو فعال کریں</string>

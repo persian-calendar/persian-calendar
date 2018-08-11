@@ -50,7 +50,7 @@
     <string name="language">زمان</string>
     <string name="calendar_language">زمانی ڕۆژژمێر</string>
     <string name="calendar_language_summary">زمانی نیشاندانی مانگەکان و ڕۆژەکان</string>
-    <string name="version">وەشان</string>
+    <string name="version">وەشان %s</string>
     <string name="calendar_font_summary">گۆڕینی فۆنتی ڕۆژژمێر</string>
     <string name="athan">بانگ</string>
     <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
