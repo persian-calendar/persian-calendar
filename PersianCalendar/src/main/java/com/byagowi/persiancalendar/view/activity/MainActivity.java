@@ -223,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             restartActivity(PREFERENCE);
         }
 
+        Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
     }
 

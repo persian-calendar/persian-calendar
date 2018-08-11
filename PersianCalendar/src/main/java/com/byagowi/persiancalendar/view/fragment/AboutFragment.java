@@ -17,10 +17,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +38,6 @@ import androidx.fragment.app.Fragment;
  */
 public class AboutFragment extends Fragment {
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -49,7 +51,14 @@ public class AboutFragment extends Fragment {
 
         // version
         String version = programVersion(ctx);
-        binding.version.setText(getString(R.string.version) + " " + Utils.formatNumber(version.split("-")[0]));
+
+        if (BuildConfig.DEBUG) {
+            binding.version.setText(String.format(getString(R.string.version),
+                    "\n" + version));
+        } else {
+            binding.version.setText(String.format(getString(R.string.version),
+                    Utils.formatNumber(version)));
+        }
 
         // licenses
         binding.licenses.setOnClickListener(arg -> {

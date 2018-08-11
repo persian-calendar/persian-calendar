@@ -50,7 +50,7 @@
     <string name="language">Language</string>
     <string name="calendar_language">Calendar Language</string>
     <string name="calendar_language_summary">The language to show the month and day names in</string>
-    <string name="version">Version</string>
+    <string name="version">Version %s</string>
     <string name="calendar_font_summary">Change the font for the calendar</string>
     <string name="athan">Athan</string>
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
