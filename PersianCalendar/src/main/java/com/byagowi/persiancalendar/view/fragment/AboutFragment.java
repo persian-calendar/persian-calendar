@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
