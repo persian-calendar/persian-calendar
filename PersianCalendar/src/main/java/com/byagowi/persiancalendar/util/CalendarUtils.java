@@ -102,7 +102,7 @@ public class CalendarUtils {
         }
     }
 
-    static public String dateStringOfOtherCalendar(CalendarType calendar, long jdn) {
+    static public String dateStringOfOtherCalendars(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
                 return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +

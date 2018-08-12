@@ -87,7 +87,7 @@ public class UpdateUtils {
 
         String weekDayName = Utils.getWeekDayName(date);
         String title = CalendarUtils.dayTitleSummary(date);
-        String subtitle = CalendarUtils.dateStringOfOtherCalendar(mainCalendar, jdn);
+        String subtitle = CalendarUtils.dateStringOfOtherCalendars(mainCalendar, jdn);
 
         Clock currentClock =
                 new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
