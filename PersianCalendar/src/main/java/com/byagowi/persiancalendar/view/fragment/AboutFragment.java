@@ -68,7 +68,6 @@ public class AboutFragment extends Fragment {
         // help
         binding.aboutTitle.setText(String.format(getString(R.string.about_help_subtitle),
                 Utils.formatNumber(Utils.getMaxSupportedYear())));
-        binding.helpSum.setText(R.string.about_help_sum);
 
         // report bug
         binding.reportBug.setOnClickListener(arg -> {
