@@ -6,10 +6,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -27,20 +29,22 @@ import androidx.annotation.Nullable;
 
 public class SunriseSunsetView extends View {
 
-    private static final @ColorInt
-    int DEFAULT_TRACK_COLOR = Color.WHITE;
+    @ColorInt
+    private static final int DEFAULT_TRACK_COLOR = Color.WHITE;
     private static final int DEFAULT_TRACK_WIDTH_PX = 4;
 
-    private static final @ColorInt
-    int DEFAULT_SUN_COLOR = Color.YELLOW;
+    @ColorInt
+    private static final int DEFAULT_SUN_COLOR = Color.YELLOW;
     private static final int DEFAULT_SUN_RADIUS_PX = 20;
     private static final int DEFAULT_SUN_STROKE_WIDTH_PX = 4;
 
-    private static final @ColorInt
-    int DEFAULT_SHADOW_COLOR = Color.parseColor("#ffeecd");
+    @ColorInt
+    private static final int DEFAULT_SHADOW_COLOR = Color.parseColor("#8064B5F6");
+    @ColorInt
+    private static final int DEFAULT_SHADOW_SECOND_COLOR = Color.parseColor("#80BBDEFB");
+    @ColorInt
+    private static final int DEFAULT_LABEL_TEXT_COLOR = Color.WHITE;
 
-    private static final @ColorInt
-    int DEFAULT_LABEL_TEXT_COLOR = Color.WHITE;
     private static final int DEFAULT_LABEL_TEXT_SIZE = 40;
     private static final int DEFAULT_LABEL_VERTICAL_OFFSET_PX = 5;
     private static final int DEFAULT_LABEL_HORIZONTAL_OFFSET_PX = 20;
@@ -48,27 +52,29 @@ public class SunriseSunsetView extends View {
     private float mRatio;
 
     private Paint mTrackPaint;
-    private @ColorInt
-    int mTrackColor = DEFAULT_TRACK_COLOR;
+    @ColorInt
+    private int mTrackColor = DEFAULT_TRACK_COLOR;
     private int mTrackWidth = DEFAULT_TRACK_WIDTH_PX;
     private PathEffect mTrackPathEffect = new DashPathEffect(new float[]{15, 15}, 0);
     private float mTrackRadius;
 
     private Paint mShadowPaint;
-    private @ColorInt
-    int mShadowColor = DEFAULT_SHADOW_COLOR;
+    @ColorInt
+    private int mShadowColor = DEFAULT_SHADOW_COLOR;
+    @ColorInt
+    private int mShadowSecondColor = DEFAULT_SHADOW_SECOND_COLOR;
 
     private Paint mSunRaysPaint;
     private Paint mSunPaint;
-    private @ColorInt
-    int mSunColor = DEFAULT_SUN_COLOR;
+    @ColorInt
+    private int mSunColor = DEFAULT_SUN_COLOR;
     private float mSunRadius = DEFAULT_SUN_RADIUS_PX;
     private Paint.Style mSunPaintStyle = Paint.Style.FILL;
 
     private TextPaint mLabelPaint;
     private int mLabelTextSize = DEFAULT_LABEL_TEXT_SIZE;
-    private @ColorInt
-    int mLabelTextColor = DEFAULT_LABEL_TEXT_COLOR;
+    @ColorInt
+    private int mLabelTextColor = DEFAULT_LABEL_TEXT_COLOR;
     private int mLabelVerticalOffset = DEFAULT_LABEL_VERTICAL_OFFSET_PX;
     private int mLabelHorizontalOffset = DEFAULT_LABEL_HORIZONTAL_OFFSET_PX;
 
@@ -97,6 +103,7 @@ public class SunriseSunsetView extends View {
             mTrackWidth = a.getDimensionPixelSize(R.styleable.SunriseSunsetView_ssv_track_width, DEFAULT_TRACK_WIDTH_PX);
 
             mShadowColor = a.getColor(R.styleable.SunriseSunsetView_ssv_shadow_color, DEFAULT_SHADOW_COLOR);
+            mShadowSecondColor = a.getColor(R.styleable.SunriseSunsetView_ssv_shadow_second_color, DEFAULT_SHADOW_COLOR);
 
             mSunColor = a.getColor(R.styleable.SunriseSunsetView_ssv_sun_color, DEFAULT_SUN_COLOR);
             mSunRadius = a.getDimensionPixelSize(R.styleable.SunriseSunsetView_ssv_sun_radius, DEFAULT_SUN_RADIUS_PX);
@@ -158,7 +165,8 @@ public class SunriseSunsetView extends View {
     }
 
     private void prepareShadowPaint() {
-        mShadowPaint.setColor(mShadowColor);
+        mShadowPaint.setShader(new LinearGradient(0, 0, getWidth(), 0,
+                mShadowColor, mShadowSecondColor, Shader.TileMode.MIRROR));
     }
 
     private void prepareSunPaint() {
@@ -316,6 +324,10 @@ public class SunriseSunsetView extends View {
 
     public void setShadowColor(@ColorInt int shadowColor) {
         mShadowColor = shadowColor;
+    }
+
+    public void setShadowSecondColor(@ColorInt int shadowSecondColor) {
+        mShadowSecondColor = shadowSecondColor;
     }
 
     public void setLabelTextSize(int labelTextSize) {

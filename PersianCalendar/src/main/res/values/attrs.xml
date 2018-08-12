@@ -13,6 +13,7 @@
 
         <!-- Shadow color -->
         <attr name="ssv_shadow_color" format="color|reference" />
+        <attr name="ssv_shadow_second_color" format="color|reference" />
 
         <!-- Label text size -->
         <attr name="ssv_label_text_size" format="dimension" />
