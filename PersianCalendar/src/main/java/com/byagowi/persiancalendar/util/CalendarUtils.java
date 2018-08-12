@@ -156,4 +156,9 @@ public class CalendarUtils {
                 return 2;
         }
     }
+
+    public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
+        long dayOfYear = jdn - startOfYearJdn;
+        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
+    }
 }

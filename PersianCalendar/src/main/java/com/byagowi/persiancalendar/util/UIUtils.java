@@ -30,6 +30,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import calendar.AbstractDate;
+import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -54,7 +55,8 @@ public class UIUtils {
     }
 
     public static void fillCalendarsCard(Context context, long jdn,
-                                         CalendarsCardBinding binding, boolean isToday) {
+                                         CalendarsCardBinding binding,
+                                         CalendarType calendarType) {
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
@@ -72,15 +74,54 @@ public class UIUtils {
         binding.islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
         binding.islamicDate.setText(CalendarUtils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
 
-        if (isToday) {
+        long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
+
+        if (diffDays == 0) {
             binding.today.setVisibility(View.GONE);
             binding.todayIcon.setVisibility(View.GONE);
             if (Utils.isIranTime()) {
                 binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
             }
+            binding.today.setVisibility(View.GONE);
+            binding.todayIcon.setVisibility(View.GONE);
+            binding.diffDate.setVisibility(View.GONE);
         } else {
             binding.today.setVisibility(View.VISIBLE);
             binding.todayIcon.setVisibility(View.VISIBLE);
+            binding.diffDate.setVisibility(View.VISIBLE);
+
+            CivilDate civilBase = new CivilDate(2000, 1, 1);
+            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
+            int yearDiff = civilOffset.getYear() - 2000;
+            int monthDiff = civilOffset.getMonth() - 1;
+            int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
+            binding.diffDate.setText(String.format(context.getString(R.string.date_diff_text),
+                    Utils.formatNumber((int) diffDays),
+                    Utils.formatNumber(yearDiff),
+                    Utils.formatNumber(monthDiff),
+                    Utils.formatNumber(dayOfMonthDiff)));
+        }
+
+        {
+            AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(calendarType, jdn);
+            AbstractDate startOfYear = CalendarUtils.getDateOfCalendar(calendarType,
+                    mainDate.getYear(), 1, 1);
+            AbstractDate startOfNextYear = CalendarUtils.getDateOfCalendar(
+                    calendarType, mainDate.getYear() + 1, 1, 1);
+            long startOfYearJdn = CalendarUtils.getJdnDate(startOfYear);
+            long endOfYearJdn = CalendarUtils.getJdnDate(startOfNextYear) - 1;
+            int currentWeek = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
+            int weeksCount = CalendarUtils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
+
+            binding.startAndEndOfYearDiff.setText(
+                    String.format(context.getString(R.string.start_of_year_diff) + "\n" +
+                                    context.getString(R.string.end_of_year_diff),
+                            Utils.formatNumber((int) (jdn - startOfYearJdn)),
+                            Utils.formatNumber(currentWeek),
+                            Utils.formatNumber(mainDate.getMonth()),
+                            Utils.formatNumber((int) (endOfYearJdn - jdn)),
+                            Utils.formatNumber(weeksCount - currentWeek),
+                            Utils.formatNumber(12 - mainDate.getMonth())));
         }
     }
 
