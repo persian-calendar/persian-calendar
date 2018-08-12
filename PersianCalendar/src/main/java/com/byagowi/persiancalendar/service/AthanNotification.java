@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
@@ -59,11 +61,13 @@ public class AthanNotification extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
-            String title = getString(UIUtils.getPrayTimeText(intent == null
-                    ? "" :
-                    intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
-            String subtitle = getString(R.string.in_city_time) + " " +
-                    Utils.getCityName(this, true);
+            String title = intent == null
+                    ? ""
+                    : getString(UIUtils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
+            String cityName = Utils.getCityName(this, false);
+            String subtitle = TextUtils.isEmpty(cityName)
+                    ? ""
+                    : getString(R.string.in_city_time) + " " + cityName;
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     NOTIFICATION_CHANNEL_ID);
@@ -83,7 +87,11 @@ public class AthanNotification extends Service {
                         ? R.layout.custom_notification
                         : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
-                cv.setTextViewText(R.id.body, subtitle);
+                if (TextUtils.isEmpty(subtitle)) {
+                    cv.setViewVisibility(R.id.body, View.GONE);
+                } else {
+                    cv.setTextViewText(R.id.body, subtitle);
+                }
 
                 notificationBuilder = notificationBuilder
                         .setCustomContentView(cv)
