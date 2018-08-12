@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
@@ -46,54 +48,50 @@ public class AthanNotification extends Service {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
-//            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//            if (audioManager != null) {
-//                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0);
-//            }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel =
                         new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
                                 NotificationManager.IMPORTANCE_DEFAULT);
 
-//                AudioAttributes att = new AudioAttributes.Builder()
-//                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-//                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-//                        .setLegacyStreamType(AudioManager.STREAM_ALARM)
-//                        .build();
                 notificationChannel.setDescription(getString(R.string.app_name));
                 notificationChannel.enableLights(true);
                 notificationChannel.setLightColor(Color.GREEN);
                 notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
                 notificationChannel.enableVibration(true);
-//                notificationChannel.setSound(Utils.getAthanUri(getApplicationContext()), att);
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
-            String title = getString(UIUtils.getPrayTimeText(
-                    intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
-            String subtitle = getString(R.string.in_city_time) + " " +
-                    Utils.getCityName(this, true);
+            String title = intent == null
+                    ? ""
+                    : getString(UIUtils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
+            String cityName = Utils.getCityName(this, false);
+            String subtitle = TextUtils.isEmpty(cityName)
+                    ? ""
+                    : getString(R.string.in_city_time) + " " + cityName;
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.sun)
-//                    .setSound(Utils.getAthanUri(getApplicationContext()), AudioManager.STREAM_ALARM)
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
             notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
             notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
-                RemoteViews cv = new RemoteViews(getApplicationContext().getPackageName(),
-                        Utils.isLocaleRTL()
-                                ? R.layout.custom_notification
-                                : R.layout.custom_notification_ltr);
+            Context appContext = getApplicationContext();
+            if (appContext != null &&
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
+                RemoteViews cv = new RemoteViews(appContext.getPackageName(), Utils.isLocaleRTL()
+                        ? R.layout.custom_notification
+                        : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
-                cv.setTextViewText(R.id.body, subtitle);
+                if (TextUtils.isEmpty(subtitle)) {
+                    cv.setViewVisibility(R.id.body, View.GONE);
+                } else {
+                    cv.setTextViewText(R.id.body, subtitle);
+                }
 
                 notificationBuilder = notificationBuilder
                         .setCustomContentView(cv)

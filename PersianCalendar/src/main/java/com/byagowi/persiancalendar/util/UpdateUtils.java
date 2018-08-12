@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
-import com.google.android.apps.dashclock.api.ExtensionData;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +36,6 @@ import calendar.CalendarType;
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static AbstractDate pastDate;
-    private static ExtensionData mExtensionData;
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
@@ -46,10 +44,9 @@ public class UpdateUtils {
         AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);
         long jdn = CalendarUtils.getJdnDate(date);
 
-        Intent intent = new Intent(context, MainActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets
@@ -89,9 +86,8 @@ public class UpdateUtils {
         }
 
         String weekDayName = Utils.getWeekDayName(date);
-        String status = CalendarUtils.getMonthName(date);
         String title = CalendarUtils.dayTitleSummary(date);
-        String subtitle = CalendarUtils.dateStringOfOtherCalendar(mainCalendar, jdn);
+        String subtitle = CalendarUtils.dateStringOfOtherCalendars(mainCalendar, jdn);
 
         Clock currentClock =
                 new Clock(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
@@ -213,13 +209,6 @@ public class UpdateUtils {
             subtitle = Constants.RLM + subtitle;
         }
 
-        int icon = Utils.getDayIconResource(date.getDayOfMonth());
-
-        mExtensionData = new ExtensionData().visible(true).icon(icon)
-                .status(status)
-                .expandedTitle(title)
-                .expandedBody(subtitle).clickIntent(intent);
-
         if (Utils.isNotifyDate()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
@@ -233,7 +222,7 @@ public class UpdateUtils {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setSmallIcon(icon)
+                    .setSmallIcon(Utils.getDayIconResource(date.getDayOfMonth()))
                     .setOngoing(true)
                     .setWhen(0)
                     .setContentIntent(launchAppPendingIntent)
@@ -306,9 +295,4 @@ public class UpdateUtils {
 //            }
 //        }
     }
-
-    public static ExtensionData getExtensionData() {
-        return mExtensionData;
-    }
-
 }
