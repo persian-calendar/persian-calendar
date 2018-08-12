@@ -125,9 +125,14 @@ public class UIUtils {
         }
     }
 
-    static public int fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding) {
-        AbstractDate date = CalendarUtils.getTodayOfCalendar(CalendarUtils.calendarTypeFromPosition(
-                binding.calendarTypeSpinner.getSelectedItemPosition()));
+    static public int fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding, long jdn) {
+        if (jdn == -1) {
+            jdn = CalendarUtils.getTodayJdn();
+        }
+        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
+                CalendarUtils.calendarTypeFromPosition(
+                        binding.calendarTypeSpinner.getSelectedItemPosition()),
+                jdn);
 
         // years spinner init.
         String[] years = new String[200];

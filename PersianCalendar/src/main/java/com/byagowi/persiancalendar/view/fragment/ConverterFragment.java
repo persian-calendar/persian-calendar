@@ -34,6 +34,7 @@ public class ConverterFragment extends Fragment implements
     private int startingYearOnYearSpinner = 0;
 
     private FragmentConverterBinding binding;
+    private long lastSelectedJdn = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -71,7 +72,8 @@ public class ConverterFragment extends Fragment implements
                 getResources().getStringArray(R.array.calendar_type)));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                binding.selectdayFragment, lastSelectedJdn);
 
         binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -115,6 +117,7 @@ public class ConverterFragment extends Fragment implements
             }
 
             UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, calendarType);
+            lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {
                 binding.calendarsCard.diffDateContainer.setVisibility(View.VISIBLE);
             }
@@ -137,7 +140,8 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                        binding.selectdayFragment, lastSelectedJdn);
                 break;
         }
     }
@@ -183,7 +187,9 @@ public class ConverterFragment extends Fragment implements
 
             case R.id.today:
             case R.id.today_icon:
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                lastSelectedJdn = -1;
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                        binding.selectdayFragment, lastSelectedJdn);
                 break;
         }
     }

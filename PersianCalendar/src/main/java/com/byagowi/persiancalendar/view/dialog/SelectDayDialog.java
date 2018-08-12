@@ -39,13 +39,13 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                 getResources().getStringArray(R.array.calendar_type)));
 
         binding.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding);
+        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
 
 
         binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
             }
 
             @Override
