@@ -49,7 +49,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
  *
  * @author ebraminio
  */
-public class ApplicationPreferenceFragment extends PreferenceFragmentCompat {
+public class PreferenceFragment extends PreferenceFragmentCompat {
     private Preference categoryAthan;
 
     @Override

@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
-import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
+import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             CalendarFragment.class,
             ConverterFragment.class,
             CompassFragment.class,
-            ApplicationPreferenceFragment.class,
+            PreferenceFragment.class,
             AboutFragment.class
     };
     private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
