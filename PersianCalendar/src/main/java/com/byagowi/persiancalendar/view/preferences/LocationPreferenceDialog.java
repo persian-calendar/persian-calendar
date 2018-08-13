@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.LocationAdapter;
+import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceDialogFragmentCompat;
@@ -28,7 +29,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new LocationAdapter(this));
+        recyclerView.setAdapter(new LocationAdapter(this, Utils.getAllCities(getContext(), true)));
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
