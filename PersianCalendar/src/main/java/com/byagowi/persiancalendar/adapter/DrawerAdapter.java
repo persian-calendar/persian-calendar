@@ -76,6 +76,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         holder.binding.setTitle(drawerTitles[position]);
         holder.binding.setSubtitle(drawerSubtitles[position]);
         holder.binding.setShowSubtitle(!TextUtils.isEmpty(drawerSubtitles[position]));
+        holder.binding.executePendingBindings();
 
         holder.binding.itemIcon.setImageResource(drawerIcon.getResourceId(position, 0));
         if (selectedItem == position) {

@@ -72,6 +72,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                     binding.setCountry(cityEntity.getCountryFa());
                     break;
             }
+            binding.executePendingBindings();
         }
     }
 }
