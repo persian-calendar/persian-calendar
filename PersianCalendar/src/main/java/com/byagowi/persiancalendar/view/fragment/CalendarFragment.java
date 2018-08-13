@@ -119,7 +119,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.calendarsCard.islamicDateLinear.setVisibility(View.GONE);
         binding.calendarsCard.shamsiDateLinear.setVisibility(View.GONE);
         binding.calendarsCard.diffDateContainer.setVisibility(View.GONE);
-        binding.calendarsCard.startAndEndOfYearDiffContainer.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
@@ -391,7 +390,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 binding.calendarsCard.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 binding.calendarsCard.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 binding.calendarsCard.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                binding.calendarsCard.startAndEndOfYearDiffContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
                 break;
 
