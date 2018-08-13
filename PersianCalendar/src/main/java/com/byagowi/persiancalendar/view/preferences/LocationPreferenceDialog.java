@@ -1,10 +1,5 @@
 package com.byagowi.persiancalendar.view.preferences;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.LocationAdapter;
 import com.byagowi.persiancalendar.util.Utils;
 
