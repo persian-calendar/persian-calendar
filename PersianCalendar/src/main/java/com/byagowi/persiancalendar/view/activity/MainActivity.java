@@ -55,18 +55,18 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
  */
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int CALENDAR = 1;
-    private static final int CONVERTER = 2;
-    private static final int COMPASS = 3;
+    private static final int CALENDAR = 1,
+            CONVERTER = 2,
+            COMPASS = 3,
+            ABOUT = 5,
+            EXIT = 6,
+            DEFAULT = CALENDAR;
     public static final int PREFERENCE = 4;
-    private static final int ABOUT = 5;
-    private static final int EXIT = 6;
     // Default selected fragment
-    private static final int DEFAULT = CALENDAR;
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
     private DrawerAdapter adapter;
-    private Class<?>[] fragments = {
+    private final Class<?>[] fragments = {
             null,
             CalendarFragment.class,
             ConverterFragment.class,
