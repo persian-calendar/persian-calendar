@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final int CALENDAR = 1,
             CONVERTER = 2,
             COMPASS = 3,
+            PREFERENCE = 4,
             ABOUT = 5,
             EXIT = 6,
             DEFAULT = CALENDAR;
-    public static final int PREFERENCE = 4;
     // Default selected fragment
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
@@ -312,6 +312,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         finish();
         startActivity(intent);
+    }
+
+    public void bringPreferences() {
+        selectItem(PREFERENCE);
     }
 
     public void selectItem(int item) {

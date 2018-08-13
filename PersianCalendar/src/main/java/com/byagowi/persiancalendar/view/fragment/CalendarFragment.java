@@ -320,7 +320,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    ((MainActivity) getActivity()).selectItem(MainActivity.PREFERENCE);
+                    ((MainActivity) getActivity()).bringPreferences();
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
