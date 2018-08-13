@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.view.fragment.ApplicationPreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
+import com.github.praytimes.Coordinate;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -55,26 +56,25 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
  */
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int CALENDAR = 1,
-            CONVERTER = 2,
-            COMPASS = 3,
-            PREFERENCE = 4,
-            ABOUT = 5,
-            EXIT = 6,
+    private static final int CALENDAR = 0,
+            CONVERTER = 1,
+            COMPASS = 2,
+            PREFERENCE = 3,
+            ABOUT = 4,
+            EXIT = 5,
             DEFAULT = CALENDAR;
     // Default selected fragment
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
     private DrawerAdapter adapter;
     private final Class<?>[] fragments = {
-            null,
             CalendarFragment.class,
             ConverterFragment.class,
             CompassFragment.class,
             ApplicationPreferenceFragment.class,
             AboutFragment.class
     };
-    private int menuPosition = 0; // it should be zero otherwise #selectItem won't be called
+    private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
 
     // https://stackoverflow.com/a/3410200
     public int getStatusBarHeight() {
@@ -184,8 +184,42 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+        switch (getSeason()) {
+            case "SPRING":
+                binding.seasonImage.setImageResource(R.drawable.spring);
+                break;
+
+            case "SUMMER":
+                binding.seasonImage.setImageResource(R.drawable.summer);
+                break;
+
+            case "FALL":
+                binding.seasonImage.setImageResource(R.drawable.fall);
+                break;
+
+            case "WINTER":
+                binding.seasonImage.setImageResource(R.drawable.winter);
+                break;
+        }
+
         creationDate = CalendarUtils.getGregorianToday();
         Utils.changeAppLanguage(this);
+    }
+
+    private String getSeason() {
+        boolean isSouthernHemisphere = false;
+        Coordinate coordinate = Utils.getCoordinate(this);
+        if (coordinate != null && coordinate.getLatitude() < 0) {
+            isSouthernHemisphere = true;
+        }
+
+        int month = CalendarUtils.getPersianToday().getMonth();
+        if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
+
+        if (month < 4) return "SPRING";
+        else if (month < 7) return "SUMMER";
+        else if (month < 10) return "FALL";
+        else return "WINTER";
     }
 
     boolean settingHasChanged = false;

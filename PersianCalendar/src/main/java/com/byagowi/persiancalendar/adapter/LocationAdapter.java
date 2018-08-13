@@ -60,16 +60,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         void bindLocation(CityEntity cityEntity) {
             switch (Utils.getAppLanguage()) {
                 case Constants.LANG_EN:
-                    binding.tvCity.setText(cityEntity.getEn());
-                    binding.tvCountry.setText(cityEntity.getCountryEn());
+                    binding.setCity(cityEntity.getEn());
+                    binding.setCountry(cityEntity.getCountryEn());
                     break;
                 case Constants.LANG_CKB:
-                    binding.tvCity.setText(cityEntity.getCkb());
-                    binding.tvCountry.setText(cityEntity.getCountryCkb());
+                    binding.setCity(cityEntity.getCkb());
+                    binding.setCountry(cityEntity.getCountryCkb());
                     break;
                 default:
-                    binding.tvCity.setText(cityEntity.getFa());
-                    binding.tvCountry.setText(cityEntity.getCountryFa());
+                    binding.setCity(cityEntity.getFa());
+                    binding.setCountry(cityEntity.getCountryFa());
                     break;
             }
         }

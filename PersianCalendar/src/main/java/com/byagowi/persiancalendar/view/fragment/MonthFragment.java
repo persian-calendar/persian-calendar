@@ -102,6 +102,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         isRTL = UIUtils.isRTL(getContext());
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
+        // We deliberately like to avoid DataBinding thing here, at least for now
         AppCompatImageView prev = view.findViewById(R.id.prev);
         AppCompatImageView next = view.findViewById(R.id.next);
         prev.setImageResource(isRTL

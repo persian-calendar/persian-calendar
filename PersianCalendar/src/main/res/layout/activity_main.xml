@@ -27,15 +27,29 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/navigation_view"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="@dimen/drawer_width"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="?attr/colorDrawerBackground"
+            android:orientation="vertical"
             android:scrollbars="vertical">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/season_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drawer_header_height"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/navigation_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

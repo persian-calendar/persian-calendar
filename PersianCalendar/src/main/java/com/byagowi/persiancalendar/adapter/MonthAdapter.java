@@ -111,6 +111,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         ViewHolder(View itemView) {
             super(itemView);
 
+            // We deliberately like to avoid DataBinding thing here, at least for now
             num = itemView.findViewById(R.id.num);
             today = itemView.findViewById(R.id.today);
             event = itemView.findViewById(R.id.event);
