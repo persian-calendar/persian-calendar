@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/drawer_item_height"
-    android:layout_centerVertical="true"
-    android:orientation="horizontal">
+<layout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ItemIcon"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/icon_margin"
-        android:layout_marginRight="@dimen/icon_margin"
-        android:tint="?attr/colorDrawerIcon" />
+    <data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical">
+        <import type="android.view.View" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/itemTitle"
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="subtitle"
+            type="String" />
+
+        <variable
+            name="showSubtitle"
+            type="boolean" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drawer_item_height"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/itemIcon"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/icon_margin"
+            android:layout_marginRight="@dimen/icon_margin"
+            android:tint="?attr/colorDrawerIcon" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start|left"
-            android:textColor="?attr/colorTextDrawer"
-            android:textSize="@dimen/text_size_drawer" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/itemSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start|left"
-            android:textColor="?attr/colorTextSecond"
-            android:textSize="@dimen/text_size_drawer_subtitle"
-            android:visibility="gone" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start|left"
+                android:text="@{title}"
+                android:textColor="?attr/colorTextDrawer"
+                android:textSize="@dimen/text_size_drawer" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start|left"
+                android:text="@{subtitle}"
+                android:textColor="?attr/colorTextSecond"
+                android:textSize="@dimen/text_size_drawer_subtitle"
+                android:visibility="@{showSubtitle ? View.VISIBLE :  View.GONE}" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

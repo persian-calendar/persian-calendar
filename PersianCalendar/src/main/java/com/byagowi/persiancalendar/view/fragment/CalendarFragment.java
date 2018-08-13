@@ -119,7 +119,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.calendarsCard.islamicDateLinear.setVisibility(View.GONE);
         binding.calendarsCard.shamsiDateLinear.setVisibility(View.GONE);
         binding.calendarsCard.diffDateContainer.setVisibility(View.GONE);
-        binding.calendarsCard.startAndEndOfYearDiffContainer.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(getContext(), false);
         if (!TextUtils.isEmpty(cityName)) {
@@ -320,7 +319,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    ((MainActivity) getActivity()).selectItem(MainActivity.PREFERENCE);
+                    ((MainActivity) getActivity()).bringPreferences();
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -391,7 +390,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 binding.calendarsCard.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 binding.calendarsCard.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 binding.calendarsCard.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                binding.calendarsCard.startAndEndOfYearDiffContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
                 break;
 

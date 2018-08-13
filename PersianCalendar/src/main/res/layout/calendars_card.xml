@@ -238,7 +238,10 @@
                 android:id="@+id/diff_date_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:divider="?attr/appDivider"
+                app:dividerPadding="@dimen/divider_margin"
+                app:showDividers="middle">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/diff_date"
@@ -252,14 +255,6 @@
                     android:textColor="?attr/colorTextNormal"
                     android:textSize="@dimen/text_size_description"
                     tools:text="@string/date_diff_text" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/start_and_end_of_year_diff_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/start_and_end_of_year_diff"
