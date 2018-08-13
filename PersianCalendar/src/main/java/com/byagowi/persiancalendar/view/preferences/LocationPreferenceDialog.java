@@ -23,17 +23,15 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.preference_location, (ViewGroup) getView(), false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
+        RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new LocationAdapter(this, Utils.getAllCities(getContext(), true)));
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
-        builder.setView(view);
+        builder.setView(recyclerView);
     }
 
     @Override

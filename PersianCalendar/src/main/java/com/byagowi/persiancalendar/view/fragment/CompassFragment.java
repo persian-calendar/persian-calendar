@@ -19,12 +19,13 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.QiblaCompassView;
 import com.github.praytimes.Coordinate;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -33,18 +34,19 @@ import androidx.fragment.app.Fragment;
  * @author ebraminio
  */
 public class CompassFragment extends Fragment {
-    public QiblaCompassView compassView;
     private SensorManager sensorManager;
     private Sensor sensor;
     private SensorEventListener compassListener;
     private float orientation = 0;
+    private FragmentCompassBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_compass, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_compass,
+                container, false);
 
         Context context = getContext();
         Coordinate coordinate = Utils.getCoordinate(getContext());
@@ -54,7 +56,6 @@ public class CompassFragment extends Fragment {
             UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
                     Utils.getCityName(context, true));
         }
-
 
         compassListener = new SensorEventListener() {
             /*
@@ -76,8 +77,8 @@ public class CompassFragment extends Fragment {
                 float angle = event.values[0] + orientation;
                 if (stop) angle = 0;
                 azimuth = lowPass(angle, azimuth);
-                compassView.setBearing(azimuth);
-                compassView.invalidate();
+                binding.compassView.setBearing(azimuth);
+                binding.compassView.invalidate();
             }
 
             /**
@@ -91,14 +92,13 @@ public class CompassFragment extends Fragment {
                 return output + ALPHA * (input - output);
             }
         };
-        compassView = view.findViewById(R.id.compass_view);
         setCompassMetrics();
 
         if (coordinate != null) {
-            compassView.setLongitude(coordinate.getLongitude());
-            compassView.setLatitude(coordinate.getLatitude());
-            compassView.initCompassView();
-            compassView.invalidate();
+            binding.compassView.setLongitude(coordinate.getLongitude());
+            binding.compassView.setLatitude(coordinate.getLatitude());
+            binding.compassView.initCompassView();
+            binding.compassView.invalidate();
         }
 
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -111,7 +111,7 @@ public class CompassFragment extends Fragment {
                 Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
             }
         }
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -125,7 +125,7 @@ public class CompassFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        compassView.setScreenResolution(width, height - 2 * height / 8);
+        binding.compassView.setScreenResolution(width, height - 2 * height / 8);
 
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) {
