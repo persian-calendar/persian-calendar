@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.util.Utils;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
@@ -33,6 +34,7 @@ public class ConverterFragment extends Fragment implements
     private int startingYearOnYearSpinner = 0;
 
     private FragmentConverterBinding binding;
+    private long lastSelectedJdn = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -70,7 +72,8 @@ public class ConverterFragment extends Fragment implements
                 getResources().getStringArray(R.array.calendar_type)));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                binding.selectdayFragment, lastSelectedJdn);
 
         binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -93,7 +96,9 @@ public class ConverterFragment extends Fragment implements
             binding.calendarsCard.gregorianContainer.setVisibility(View.VISIBLE);
             binding.calendarsCard.islamicContainer.setVisibility(View.VISIBLE);
 
-            switch (CalendarUtils.calendarTypeFromPosition(binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition())) {
+            CalendarType calendarType = CalendarUtils.calendarTypeFromPosition(
+                    binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition());
+            switch (calendarType) {
                 case GREGORIAN:
                     jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
                     binding.calendarsCard.gregorianContainer.setVisibility(View.GONE);
@@ -111,25 +116,13 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
-            boolean isToday = CalendarUtils.getTodayJdn() == jdn;
-            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, isToday);
+            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard, calendarType);
+            lastSelectedJdn = jdn;
+            if (CalendarUtils.getTodayJdn() == jdn) {
+                binding.calendarsCard.diffDateContainer.setVisibility(View.VISIBLE);
+            }
 
             binding.calendarsCard.calendarsCard.setVisibility(View.VISIBLE);
-
-            long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
-            CivilDate civilBase = new CivilDate(2000, 1, 1);
-            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
-            int yearDiff = civilOffset.getYear() - 2000;
-            int monthDiff = civilOffset.getMonth() - 1;
-            int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
-            binding.calendarsCard.diffDate.setText(String.format(getString(R.string.date_diff_text),
-                    Utils.formatNumber((int) diffDays),
-                    Utils.formatNumber(yearDiff),
-                    Utils.formatNumber(monthDiff),
-                    Utils.formatNumber(dayOfMonthDiff)));
-            binding.calendarsCard.diffDate.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
-            binding.calendarsCard.today.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
-            binding.calendarsCard.todayIcon.setVisibility(diffDays == 0 ? View.GONE : View.VISIBLE);
 
         } catch (RuntimeException e) {
             binding.calendarsCard.calendarsCard.setVisibility(View.GONE);
@@ -147,7 +140,8 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                        binding.selectdayFragment, lastSelectedJdn);
                 break;
         }
     }
@@ -193,7 +187,9 @@ public class ConverterFragment extends Fragment implements
 
             case R.id.today:
             case R.id.today_icon:
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment);
+                lastSelectedJdn = -1;
+                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                        binding.selectdayFragment, lastSelectedJdn);
                 break;
         }
     }

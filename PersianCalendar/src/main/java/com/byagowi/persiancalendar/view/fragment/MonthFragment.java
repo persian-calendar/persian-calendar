@@ -84,15 +84,10 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         this.days = days;
 
         long startOfYearJdn = CalendarUtils.getJdnOfCalendar(mainCalendar, year, 1, 1);
-        weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn);
-        weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+        weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
+        weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
         startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
-    }
-
-    private int calculateWeekOfYear(long jdn, long startOfYear) {
-        long dayOfYear = jdn - startOfYear;
-        return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(CalendarUtils.getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
     static boolean isRTL = false;

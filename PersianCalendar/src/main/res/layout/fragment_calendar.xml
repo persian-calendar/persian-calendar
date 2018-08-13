@@ -192,13 +192,14 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         app:ssv_label_horizontal_gap="12dp"
-                        app:ssv_label_text_color="#FF4081"
+                        app:ssv_label_text_color="?attr/colorTextSecond"
                         app:ssv_label_text_size="@dimen/text_size_note"
                         app:ssv_label_vertical_gap="2dp"
-                        app:ssv_shadow_color="#ffeecd"
-                        app:ssv_sun_color="#d2ac62"
+                        app:ssv_shadow_color="#FDD84B"
+                        app:ssv_shadow_second_color="#FF6D00"
+                        app:ssv_sun_color="#FFB74D"
                         app:ssv_sun_radius="10dp"
-                        app:ssv_track_color="#776868"
+                        app:ssv_track_color="#757575"
                         app:ssv_track_width="1.5dp" />
 
                     <!-- actual content -->

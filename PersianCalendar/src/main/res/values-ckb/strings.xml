@@ -153,5 +153,7 @@
     <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی شوێنەکەت، GPS و ئینتەرنێتی ئامرازەکە چالاک بکه.
 بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ دیسان ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
     <string name="enable_device_calendar">بۆ دیتنی ڕووداوەکان، پێویستە لە ڕێکخستندا بەشی ڕووداوەکان چالاک بکەی.</string>
+    <string name="start_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) لە سەرەتای ساڵەوە</string>
+    <string name="end_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) بۆ کۆتای ساڵ</string>
 
 </resources>

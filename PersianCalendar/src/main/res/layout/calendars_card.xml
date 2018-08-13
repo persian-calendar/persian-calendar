@@ -234,19 +234,47 @@
 
             </com.google.android.flexbox.FlexboxLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/diff_date"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/diff_date_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingBottom="@dimen/padding_item"
-                android:paddingLeft="@dimen/card_padding"
-                android:paddingRight="@dimen/card_padding"
-                android:paddingTop="@dimen/padding_item"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description"
-                android:visibility="gone"
-                tools:text="Diff" />
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/diff_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/padding_item"
+                    android:paddingLeft="@dimen/card_padding"
+                    android:paddingRight="@dimen/card_padding"
+                    android:paddingTop="@dimen/padding_item"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="@string/date_diff_text" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/start_and_end_of_year_diff_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/start_and_end_of_year_diff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/padding_item"
+                    android:paddingLeft="@dimen/card_padding"
+                    android:paddingRight="@dimen/card_padding"
+                    android:paddingTop="@dimen/padding_item"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="@string/date_diff_text" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
