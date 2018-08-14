@@ -186,21 +186,89 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <com.byagowi.persiancalendar.view.sunrisesunset.SunriseSunsetView
-                        android:id="@+id/ssv"
+                    <!-- sun content -->
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/svLayout"
+                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        app:ssv_label_horizontal_gap="12dp"
-                        app:ssv_label_text_color="?attr/colorTextSecond"
-                        app:ssv_label_text_size="@dimen/text_size_note"
-                        app:ssv_label_vertical_gap="2dp"
-                        app:ssv_shadow_color="#FDD84B"
-                        app:ssv_shadow_second_color="#FF6D00"
-                        app:ssv_sun_color="#FFB74D"
-                        app:ssv_sun_radius="10dp"
-                        app:ssv_track_color="#757575"
-                        app:ssv_track_width="1.5dp" />
+                        android:orientation="vertical"
+                        android:padding="2dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp">
+
+                            <com.byagowi.persiancalendar.view.sunrisesunset.SunView
+                                android:id="@+id/svPlot"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp" />
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sunrise"
+                                    android:textColor="?attr/colorTextNormal"
+                                    android:textSize="@dimen/text_size_title"
+                                    android:layout_gravity="center_horizontal" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvSunrise"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="?attr/colorTextSecond"
+                                    android:textSize="@dimen/text_size_note"
+                                    tools:text="06:00"
+                                    android:layout_gravity="center_horizontal" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/sunset"
+                                    android:textColor="?attr/colorTextNormal"
+                                    android:textSize="@dimen/text_size_title"
+                                    android:layout_gravity="center_horizontal" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tvSunset"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="?attr/colorTextSecond"
+                                    android:textSize="@dimen/text_size_note"
+                                    tools:text="18:00"
+                                    android:layout_gravity="center_horizontal" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </RelativeLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvNextSunTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorTextNormal"
+                            tools:text="Next Friday will start July 15, 2016 at 18:00"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <!-- actual content -->
                     <com.google.android.flexbox.FlexboxLayout
