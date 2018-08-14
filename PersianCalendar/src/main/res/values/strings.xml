@@ -192,9 +192,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="start_of_year_diff">%s days (~%s weeks or %s months) from start of the year</string>
     <string name="end_of_year_diff">%s days (~%s weeks or %s months) to end of the year</string>
     <!-- Sun Info -->
-    <string name="is_friday">It\'s friday and sunset is </string>
     <string name="sunrise">Sunrise</string>
+    <string name="midday">Midday</string>
     <string name="sunset">Sunset</string>
-    <string name="next_friday_sun_info">\'Next Friday will start\' MMMM dd, yyyy \'sunset is\' HH:mm</string>
 
 </resources>

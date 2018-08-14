@@ -52,7 +52,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -364,13 +363,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
         binding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         binding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-//        binding.svLayout.setVisibility(View.VISIBLE);
         binding.svPlot.setSunriseSunsetCalculator(prayTimes);
-        binding.svPlot.startAnimate();
 
-
-        if (isToday) {
+        if (isToday && !isOwghatOpen) {
             binding.svPlot.setVisibility(View.VISIBLE);
+            binding.svPlot.startAnimate();
         } else {
             binding.svPlot.setVisibility(View.GONE);
         }
@@ -410,14 +407,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 binding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 isOwghatOpen = isOpenOwghatCommand;
 
-                //if (lastSelectedJdn == -1)
-                //    lastSelectedJdn = CalendarUtils.getTodayJdn();
+                if (lastSelectedJdn == -1)
+                    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                //if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
-                //        binding.svLayout.setVisibility(View.VISIBLE);
-                //} else {
-                //        binding.svLayout.setVisibility(View.GONE);
-                //}
+                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && !isOpenOwghatCommand) {
+                    binding.svPlot.setVisibility(View.VISIBLE);
+                    binding.svPlot.startAnimate();
+                } else {
+                    binding.svPlot.setVisibility(View.GONE);
+                }
 
                 break;
 

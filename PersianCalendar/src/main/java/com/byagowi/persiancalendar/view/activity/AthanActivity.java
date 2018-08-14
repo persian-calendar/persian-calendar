@@ -63,7 +63,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             }
         }
 
-        Utils.changeAppLanguage(this);
+        Utils.applyAppLanguage(this);
 
         ActivityAthanBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_athan);
 

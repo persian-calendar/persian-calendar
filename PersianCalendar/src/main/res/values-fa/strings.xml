@@ -156,9 +156,8 @@
     <string name="start_of_year_diff">%s روز (~%s هفته و یا %s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%s روز (~%s هفته و یا %s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
-    <string name="is_friday">امروز جمعه و غروب آفتاب:</string>
     <string name="sunrise">طلوع</string>
+    <string name="midday">ظهر</string>
     <string name="sunset">غروب</string>
-    <string name="next_friday_sun_info">\'جمعه‌ی آینده\' MMMM dd, yyyy \'و غروب آفتاب\' HH:mm \'خواهد بود\'</string>
 
 </resources>

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UIUtils.setTheme(this);
-        Utils.changeAppLanguage(this);
+        Utils.applyAppLanguage(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         creationDate = CalendarUtils.getGregorianToday();
-        Utils.changeAppLanguage(this);
+        Utils.applyAppLanguageIfNeeded(this);
     }
 
     private String getSeason() {
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        Utils.changeAppLanguage(this);
+        Utils.applyAppLanguageIfNeeded(this);
         UpdateUtils.update(getApplicationContext(), false);
         if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
             restartActivity(menuPosition);
