@@ -27,8 +27,8 @@ import androidx.core.content.ContextCompat;
 public class QiblaCompassView extends View {
     private Paint dashedPaint;
     private int px, py; // Center of Compass (px,py)
-    private int Radius; // Radius of Compass dial
-    private int r; // Radius of Sun and Moon
+    private int radius; // radius of Compass dial
+    private int r; // radius of Sun and Moon
     private String northString, eastString, southString, westString;
     private DashPathEffect dashPath;
     private float bearing;
@@ -120,8 +120,8 @@ public class QiblaCompassView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.Radius = Math.min(px, py);
-        this.r = Radius / 10; // Sun Moon radius;
+        this.radius = Math.min(px, py);
+        this.r = radius / 10; // Sun Moon radius;
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
@@ -156,10 +156,10 @@ public class QiblaCompassView extends View {
         trueNorthArrowPaint.setColor(Color.RED);
         trueNorthArrowPaint.setStyle(Paint.Style.FILL);
         trueNorthArrowPaint.setAlpha(100);
-        int r = Radius / 12;
+        int r = radius / 12;
         // Construct a wedge-shaped path
         mPath.reset();
-        mPath.moveTo(px, py - Radius);
+        mPath.moveTo(px, py - radius);
         mPath.lineTo(px - r, py);
         mPath.lineTo(px, py + r);
         mPath.lineTo(px + r, py);
@@ -167,7 +167,7 @@ public class QiblaCompassView extends View {
         mPath.close();
         canvas.drawPath(mPath, trueNorthArrowPaint);
         dashedPaint.setColor(Color.RED);
-        canvas.drawLine(px, py - Radius, px, py + Radius, dashedPaint);
+        canvas.drawLine(px, py - radius, px, py + radius, dashedPaint);
         canvas.drawCircle(px, py, 5, dashedPaint);
         canvas.restore();
     }
@@ -186,19 +186,19 @@ public class QiblaCompassView extends View {
         markerPaint.reset();
         markerPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
         // Draw the background
-        canvas.drawCircle(px, py, Radius, circlePaint);
-        canvas.drawCircle(px, py, Radius - 20, circlePaint);
+        canvas.drawCircle(px, py, radius, circlePaint);
+        canvas.drawCircle(px, py, radius - 20, circlePaint);
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
 
         int textWidth = (int) textPaint.measureText("W");
         int cardinalX = px - textWidth / 2;
-        int cardinalY = py - Radius + textHeight;
+        int cardinalY = py - radius + textHeight;
 
         // Draw the marker every 15 degrees and text every 45.
         for (int i = 0; i < 24; i++) {
             // Draw a marker.
-            canvas.drawLine(px, py - Radius, px, py - Radius + 10, markerPaint);
+            canvas.drawLine(px, py - radius, px, py - radius + 10, markerPaint);
             canvas.save();
             canvas.translate(0, textHeight);
             // Draw the cardinal points
@@ -224,7 +224,7 @@ public class QiblaCompassView extends View {
                 String angle = String.valueOf(i * 15);
                 float angleTextWidth = textPaint.measureText(angle);
                 int angleTextX = (int) (px - angleTextWidth / 2);
-                int angleTextY = py - Radius + textHeight;
+                int angleTextY = py - radius + textHeight;
                 canvas.drawText(angle, angleTextX, angleTextY, textPaint);
             }
             canvas.restore();
@@ -246,10 +246,10 @@ public class QiblaCompassView extends View {
             canvas.rotate((float) sunPosition.getAzimuth() - 360, px, py);
             sunPaint.setPathEffect(dashPath);
 
-            int ry = (int) (((90 - sunPosition.getElevation()) / 90) * Radius);
+            int ry = (int) (((90 - sunPosition.getElevation()) / 90) * radius);
             canvas.drawCircle(px, py - ry, r, sunPaint);
             dashedPaint.setColor(Color.YELLOW);
-            canvas.drawLine(px, py - Radius, px, py + Radius, dashedPaint);
+            canvas.drawLine(px, py - radius, px, py + radius, dashedPaint);
             sunPaint.setPathEffect(null);
             canvas.restore();
         }
@@ -280,19 +280,19 @@ public class QiblaCompassView extends View {
         double moonPhase = sunMoonPosition.getMoonPhase();
         if (moonPosition.getElevation() > -5) {
             canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
-            int eOffset = (int) ((moonPosition.getElevation() / 90) * Radius);
+            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
             // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect.set(px - r, py + eOffset - Radius - r, px + r, py + eOffset - Radius + r);
+            moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
             canvas.drawArc(moonRect, 90, 180, false, moonPaint);
             canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
             int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
             moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
-            moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - Radius - r,
-                    px + Math.abs(arcWidth) / 2, py + eOffset - Radius + r);
+            moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
+                    px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
             canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
             canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
             moonPaintD.setPathEffect(dashPath);
-            canvas.drawLine(px, py - Radius, px, py + Radius, moonPaintD);
+            canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
             moonPaintD.setPathEffect(null);
             canvas.restore();
 
@@ -312,9 +312,9 @@ public class QiblaCompassView extends View {
         qiblaPaint.setPathEffect(dashPath);
         qiblaPaint.setStrokeWidth(5.5f);
 
-        canvas.drawLine(px, py - Radius, px, py + Radius, qiblaPaint);
+        canvas.drawLine(px, py - radius, px, py + radius, qiblaPaint);
         qiblaPaint.setPathEffect(null);
-        canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - Radius - kaaba.getHeight() / 2,
+        canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - radius - kaaba.getHeight() / 2,
                 qiblaPaint);
         canvas.restore();
 
