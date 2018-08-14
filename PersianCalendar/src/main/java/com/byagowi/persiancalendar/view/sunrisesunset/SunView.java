@@ -215,15 +215,15 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
-        float current = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
+        float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
 
         float c;
-        if (current <= sunrise) {
-            c = ((current - midnight) / sunrise) * 0.17f;
-        } else if (current <= sunset) {
-            c = (((current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+        if (now <= sunrise) {
+            c = ((now - midnight) / sunrise) * 0.17f;
+        } else if (now <= sunset) {
+            c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
-            c = (((current - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+            c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
 
         ValueAnimator animator = ValueAnimator.ofFloat(0, c);
