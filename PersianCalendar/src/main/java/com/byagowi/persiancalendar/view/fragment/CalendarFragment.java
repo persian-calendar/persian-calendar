@@ -54,6 +54,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -77,9 +78,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private PrayTimesCalculator prayTimesCalculator;
     private int viewPagerPosition;
     private FragmentCalendarBinding binding;
-
-    SimpleDateFormat formatter;
-    SimpleDateFormat nextFridayFormatter;
 
     @SuppressLint("SimpleDateFormat")
     @Nullable
@@ -143,10 +141,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             Utils.startAthan(getContext(), "FAJR");
             return true;
         });
-
-        formatter = new SimpleDateFormat("HH:mm");
-        nextFridayFormatter = new SimpleDateFormat(getString(R.string.next_friday_sun_info));
-        initTime(com.byagowi.persiancalendar.view.sunrisesunset.Utils.getSunriseSunsetCalculator(getContext()));
+        initTime(new SunCalculator(Utils.getCoordinate(getContext()), TimeZone.getDefault()));
 
         return binding.getRoot();
 
@@ -176,7 +171,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             nextFriday.set(Calendar.WEEK_OF_YEAR, currentWeek);
 
             nextFriday = calculator.getOfficialSunsetCalendarForDate(nextFriday);
-            binding.tvNextSunTime.setText(Utils.formatNumber(nextFridayFormatter.format(nextFriday.getTime())));
+            binding.tvNextSunTime.setText(UIUtils.getFormattedClock(new Clock(nextFriday)));
 
         }
     }
