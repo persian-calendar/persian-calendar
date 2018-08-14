@@ -54,6 +54,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -146,7 +147,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         formatter = new SimpleDateFormat("HH:mm");
         nextFridayFormatter = new SimpleDateFormat(getString(R.string.next_friday_sun_info));
-        initTime(com.byagowi.persiancalendar.view.sunrisesunset.Utils.getSunriseSunsetCalculator(getContext()));
+        initTime(new SunCalculator(Utils.getCoordinate(getContext()), TimeZone.getDefault()));
 
         return binding.getRoot();
 
