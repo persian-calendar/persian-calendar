@@ -187,7 +187,7 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <!-- sun content -->
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/svLayout"
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
@@ -205,7 +205,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp" />
 
-                            <LinearLayout
+                            <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
@@ -213,7 +213,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true">
 
-                                <TextView
+                                <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/sunrise"
@@ -221,7 +221,7 @@
                                     android:textSize="@dimen/text_size_title"
                                     android:layout_gravity="center_horizontal" />
 
-                                <TextView
+                                <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvSunrise"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -230,9 +230,9 @@
                                     tools:text="06:00"
                                     android:layout_gravity="center_horizontal" />
 
-                            </LinearLayout>
+                            </androidx.appcompat.widget.LinearLayoutCompat>
 
-                            <LinearLayout
+                            <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
@@ -240,7 +240,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true">
 
-                                <TextView
+                                <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/sunset"
@@ -248,7 +248,7 @@
                                     android:textSize="@dimen/text_size_title"
                                     android:layout_gravity="center_horizontal" />
 
-                                <TextView
+                                <androidx.appcompat.widget.AppCompatTextView
                                     android:id="@+id/tvSunset"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -257,18 +257,18 @@
                                     tools:text="18:00"
                                     android:layout_gravity="center_horizontal" />
 
-                            </LinearLayout>
+                            </androidx.appcompat.widget.LinearLayoutCompat>
 
                         </RelativeLayout>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvNextSunTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextNormal"
                             tools:text="Next Friday will start July 15, 2016 at 18:00"/>
 
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <!-- actual content -->
                     <com.google.android.flexbox.FlexboxLayout
