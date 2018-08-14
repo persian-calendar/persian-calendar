@@ -513,6 +513,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     private SearchView mSearchView;
+    private SearchView.SearchAutoComplete mSearchAutoComplete;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -528,13 +529,17 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setOnSearchClickListener(v -> {
-            SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
-            searchAutoComplete.setHint(R.string.search_in_events);
+            if (mSearchAutoComplete != null) {
+                mSearchAutoComplete.setOnClickListener(null);
+            }
+
+            mSearchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            mSearchAutoComplete.setHint(R.string.search_in_events);
 
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            searchAutoComplete.setAdapter(new ArrayAdapter<>(context,
+            mSearchAutoComplete.setAdapter(new ArrayAdapter<>(context,
                     R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+            mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
                         (String) parent.getItemAtPosition(position)));
                 if (ev instanceof PersianCalendarEvent) {
@@ -584,6 +589,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (mSearchView != null) {
             mSearchView.setOnSearchClickListener(null);
         }
+
+        if (mSearchAutoComplete != null) {
+            mSearchAutoComplete.setOnClickListener(null);
+        }
+
         super.onDestroy();
     }
 
