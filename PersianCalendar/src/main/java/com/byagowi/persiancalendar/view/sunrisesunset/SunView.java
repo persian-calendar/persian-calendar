@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,10 +13,15 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.github.praytimes.Clock;
+import com.github.praytimes.PrayTime;
 
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.Map;
 
 import androidx.core.content.ContextCompat;
 
@@ -45,7 +51,7 @@ public class SunView extends View {
     Path nightPath;
     double segmentByPixel;
 
-    SunCalculator mSSCalculator;
+    Map<PrayTime, Clock> prayTime;
 
     public SunView(Context context) {
         super(context);
@@ -128,11 +134,17 @@ public class SunView extends View {
         nightPath.close();
     }
 
+    float current = 0;
+
+    @androidx.annotation.Keep
+    public void setRatio(float ratio) {
+        current = ratio;
+        postInvalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        float current = getCurrentTime();
 
         mPaint.setStyle(Paint.Style.FILL);
 
@@ -179,43 +191,45 @@ public class SunView extends View {
         return height - (height * (float) cos) + (height * 0.1f);
     }
 
-    public void setSunriseSunsetCalculator(SunCalculator calculator) {
-        this.mSSCalculator = calculator;
+    public void setSunriseSunsetCalculator(Map<PrayTime, Clock> prayTime) {
+        this.prayTime = prayTime;
         postInvalidate();
     }
 
-    private float getCurrentTime() {
-        if (mSSCalculator == null)
-            return 0;
+    private final float FULL_DAY = new Clock(24, 0).toInt();
+    private final float HALF_DAY = new Clock(12, 0).toInt();
 
-        Calendar cCurrent = Calendar.getInstance();
-        Calendar cSunrise = mSSCalculator.getOfficialSunriseCalendarForDate(cCurrent);
-        Calendar cSunset = mSSCalculator.getOfficialSunsetCalendarForDate(cCurrent);
+    public void startAnimate() {
+        if (prayTime == null)
+            return;
+//
+//        int sunset = prayTime.get(PrayTime.SUNSET).toInt();
+//        if (midnight < HALF_DAY) midnight += FULL_DAY;
+//        int sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
+//
+//        // recalculate from cero
+//        int noon = prayTime.get(PrayTime.DHUHR).toInt();
+//        int end = noon + new Clock(24, 0).toInt() / 2;
+//
+//
+//        float c = 0;
 
-        long sunrise = cSunrise.getTimeInMillis();
-        long sunset = cSunset.getTimeInMillis();
+//        if (current <= sunrise) {
+//            c = ((float) current / sunrise) * 0.17f;
+//        } else if (current <= sunset) {
+//            c = (((float) (current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+//        } else if (current <= end) {
+//            c = (((float) (current - sunset) / (end - sunset)) * 0.17f) + 0.17f + 0.66f;
+//        }
 
-        long noon = sunrise + ((sunset - sunrise) / 2);
-        long start = noon - (12 * 60 * 60 * 1000);
+        float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
+//        if (midnight > HALF_DAY) midnight = FULL_DAY - midnight;
+        float current = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
+        float ratio = (current - midnight) / FULL_DAY;
 
-        // recalculate from cero
-        sunrise = sunrise - start;
-        noon = noon - start;
-        sunset = sunset - start;
-        long end = noon + (12 * 60 * 60 * 1000);
-
-        long current = cCurrent.getTimeInMillis() - start;
-
-        float c = 0;
-
-        if (current <= sunrise) {
-            c = ((float) current / sunrise) * 0.17f;
-        } else if (current <= sunset) {
-            c = (((float) (current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
-        } else if (current <= end) {
-            c = (((float) (current - sunset) / (end - sunset)) * 0.17f) + 0.17f + 0.66f;
-        }
-
-        return c;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", 0, ratio);
+        animator.setDuration(1500L);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.start();
     }
 }

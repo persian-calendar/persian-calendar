@@ -32,13 +32,9 @@ public class Clock {
         return minute;
     }
 
-    public int getInt() {
-        return (hour * 100) + minute;
-    }
+    private static final int MINUTES_PER_HOUR = 60;
 
-    public static final int MINUTES_PER_HOUR = 60;
-
-    public int transformToMinutes() {
-        return hour * MINUTES_PER_HOUR + minute;
+    public int toInt() {
+        return (hour * MINUTES_PER_HOUR + minute);
     }
 }

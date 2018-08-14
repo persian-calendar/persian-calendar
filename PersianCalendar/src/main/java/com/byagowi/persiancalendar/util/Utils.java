@@ -323,28 +323,28 @@ public class Utils {
                     .calculate(new Date(), coordinate);
         }
 
-        if (prayTimes.get(PrayTime.FAJR).getInt() > clock.getInt()) {
+        if (prayTimes.get(PrayTime.FAJR).toInt() > clock.toInt()) {
             return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.FAJR));
 
-        } else if (prayTimes.get(PrayTime.SUNRISE).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.SUNRISE).toInt() > clock.toInt()) {
             return context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE));
 
-        } else if (prayTimes.get(PrayTime.DHUHR).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.DHUHR).toInt() > clock.toInt()) {
             return context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.DHUHR));
 
-        } else if (prayTimes.get(PrayTime.ASR).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.ASR).toInt() > clock.toInt()) {
             return context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR));
 
-        } else if (prayTimes.get(PrayTime.SUNSET).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.SUNSET).toInt() > clock.toInt()) {
             return context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET));
 
-        } else if (prayTimes.get(PrayTime.MAGHRIB).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.MAGHRIB).toInt() > clock.toInt()) {
             return context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
 
-        } else if (prayTimes.get(PrayTime.ISHA).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.ISHA).toInt() > clock.toInt()) {
             return context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA));
 
-        } else if (prayTimes.get(PrayTime.MIDNIGHT).getInt() > clock.getInt()) {
+        } else if (prayTimes.get(PrayTime.MIDNIGHT).toInt() > clock.toInt()) {
             return context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
 
         } else {
