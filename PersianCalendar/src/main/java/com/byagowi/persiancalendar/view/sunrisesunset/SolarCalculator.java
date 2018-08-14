@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
+import com.github.praytimes.Coordinate;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -12,11 +14,11 @@ import java.util.TimeZone;
  */
 
 public class SolarCalculator {
-    final private Location location;
+    final private Coordinate coordinate;
     final private TimeZone timeZone;
 
-    public SolarCalculator(Location location, TimeZone timeZone) {
-        this.location = location;
+    public SolarCalculator(Coordinate coordinate, TimeZone timeZone) {
+        this.coordinate = coordinate;
         this.timeZone = timeZone;
     }
 
@@ -53,7 +55,7 @@ public class SolarCalculator {
     }
 
     private BigDecimal getBaseLongitudeHour() {
-        return divideBy(location.getLongitude(), BigDecimal.valueOf(15));
+        return divideBy(new BigDecimal(coordinate.getLongitude()), BigDecimal.valueOf(15));
     }
 
     private BigDecimal getLongitudeHour(Calendar date, Boolean isSunrise) {
@@ -117,8 +119,8 @@ public class SolarCalculator {
 
         BigDecimal zenithInRads = convertDegreesToRadians(zen.degrees());
         BigDecimal cosineZenith = BigDecimal.valueOf(Math.cos(zenithInRads.doubleValue()));
-        BigDecimal sinLatitude = BigDecimal.valueOf(Math.sin(convertDegreesToRadians(location.getLatitude()).doubleValue()));
-        BigDecimal cosLatitude = BigDecimal.valueOf(Math.cos(convertDegreesToRadians(location.getLatitude()).doubleValue()));
+        BigDecimal sinLatitude = BigDecimal.valueOf(Math.sin(convertDegreesToRadians(new BigDecimal(coordinate.getLatitude())).doubleValue()));
+        BigDecimal cosLatitude = BigDecimal.valueOf(Math.cos(convertDegreesToRadians(new BigDecimal(coordinate.getLatitude())).doubleValue()));
 
         BigDecimal sinDeclinationTimesSinLat = sinSunDeclination.multiply(sinLatitude);
         BigDecimal dividend = cosineZenith.subtract(sinDeclinationTimesSinLat);
