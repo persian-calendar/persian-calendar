@@ -10,8 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.DialogAccessBinding;
@@ -57,29 +55,29 @@ public class GPSDiagnosticDialog extends DialogFragment {
         if (activity == null) return null;
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-
         DialogAccessBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity),
                 R.layout.dialog_access, null, false);
         dialogBuilder.setView(binding.getRoot());
 
-        // check whether gps provider and network providers are enabled or not
-        LocationManager gps = (LocationManager)
-                activity.getSystemService(Context.LOCATION_SERVICE);
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo info = null;
-        if (connectivityManager != null) {
-            info = connectivityManager.getActiveNetworkInfo();
-        }
-
         boolean gpsEnabled = false;
+        try {
+            // check whether gps provider and network providers are enabled or not
+            LocationManager gps = (LocationManager)
+                    activity.getSystemService(Context.LOCATION_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    activity.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (gps != null) {
-            try {
-                gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            } catch (Exception ignored) {
+            NetworkInfo info = null;
+            if (connectivityManager != null) {
+                info = connectivityManager.getActiveNetworkInfo();
             }
+            if (gps != null) {
+                try {
+                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                } catch (Exception ignored) {
+                }
+            }
+        } catch (Exception ignore) {
         }
 
         binding.dialogButtonGPS.setOnClickListener(v -> {
@@ -104,22 +102,6 @@ public class GPSDiagnosticDialog extends DialogFragment {
             dismiss();
             // exit
         });
-
-        if (!gpsEnabled && info == null) {
-            Toast.makeText(activity, R.string.internet_location_enable, Toast.LENGTH_SHORT).show();
-            binding.dialogButtonGPS.setVisibility(View.VISIBLE);
-            binding.dialogButtonWiFi.setVisibility(View.VISIBLE);
-            binding.dialogButtonGPRS.setVisibility(View.VISIBLE);
-        } else if (!gpsEnabled) {
-            Toast.makeText(activity, R.string.location_enable, Toast.LENGTH_SHORT).show();
-            binding.dialogButtonGPRS.setVisibility(View.GONE);
-            binding.dialogButtonWiFi.setVisibility(View.GONE);
-        } else if (info == null) {
-            Toast.makeText(activity, R.string.internet_enable, Toast.LENGTH_SHORT).show();
-            binding.dialogButtonGPS.setVisibility(View.GONE);
-        }
-
-        setCancelable(true);
 
         return dialogBuilder.create();
     }

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
@@ -76,7 +75,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private int viewPagerPosition;
     private FragmentCalendarBinding binding;
 
-    @SuppressLint("SimpleDateFormat")
     @Nullable
     @Override
     public View onCreateView(
