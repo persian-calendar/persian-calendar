@@ -7,6 +7,7 @@ public class Constants {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
     public static final int ATHAN_RINGTONE_REQUEST_CODE = 19;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
+    public static final int WRITE_EXTERNAL_STORAGE = 76;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
 

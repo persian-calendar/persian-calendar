@@ -41,6 +41,7 @@ android {
 
 ext {
     androidXVersion = '1.0.0-rc01'
+    leakCanaryVersion = '1.6.1'
 }
 
 dependencies {
@@ -51,5 +52,8 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    // Optional, if you use support library fragments:
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
     // implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
 }
