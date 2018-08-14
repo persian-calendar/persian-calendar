@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         creationDate = CalendarUtils.getGregorianToday();
-        Utils.applyAppLanguage(this);
+        Utils.applyAppLanguageIfNeeded(this);
     }
 
     private String getSeason() {
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        Utils.applyAppLanguage(this);
+        Utils.applyAppLanguageIfNeeded(this);
         UpdateUtils.update(getApplicationContext(), false);
         if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
             restartActivity(menuPosition);
