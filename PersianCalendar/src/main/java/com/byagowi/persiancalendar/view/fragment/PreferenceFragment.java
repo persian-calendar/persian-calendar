@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.media.RingtoneManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -35,6 +32,7 @@ import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -105,30 +103,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             fragment = new AthanNumericDialog();
         } else if (preference instanceof GPSLocationPreference) {
             //check whether gps provider and network providers are enabled or not
-            Context context = getContext();
-            LocationManager gps = (LocationManager)
-                    context.getSystemService(Context.LOCATION_SERVICE);
-            ConnectivityManager connectivityManager = (ConnectivityManager)
-                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            FragmentActivity activity = getActivity();
+            if (activity == null) return;
 
-            NetworkInfo info = null;
-            if (connectivityManager != null) {
-                info = connectivityManager.getActiveNetworkInfo();
-            }
-
-            boolean gpsEnabled = false;
-
-            if (gps != null) {
-                try {
-                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                } catch (Exception ignored) {
-                }
-            }
-
-            if (!gpsEnabled || info == null) {
+            if (GPSDiagnosticDialog.needsDiagnostic(activity)) {
                 // Custom Android Alert Dialog Title
                 DialogFragment frag = new GPSDiagnosticDialog();
-                frag.show(getActivity().getSupportFragmentManager(), "GPSDiagnosticDialog");
+                frag.show(activity.getSupportFragmentManager(), "GPSDiagnosticDialog");
             } else {
                 fragment = new GPSLocationDialog();
             }
