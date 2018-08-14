@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
@@ -180,6 +181,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (Utils.isShowDeviceCalendarEvents()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 UIUtils.askForCalendarPermission(this);
+            }
+        }
+
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("debug")) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                UIUtils.askforExternalStoragePermission(this);
             }
         }
 
