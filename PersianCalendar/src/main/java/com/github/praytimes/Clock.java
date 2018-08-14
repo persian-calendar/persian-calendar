@@ -1,5 +1,7 @@
 package com.github.praytimes;
 
+import java.util.Calendar;
+
 import static com.github.praytimes.StaticUtils.fixHour;
 
 public class Clock {
@@ -9,6 +11,10 @@ public class Clock {
     public Clock(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
+    }
+
+    public Clock(Calendar calendar) {
+        this(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
     }
 
     static Clock fromDouble(double arg) {

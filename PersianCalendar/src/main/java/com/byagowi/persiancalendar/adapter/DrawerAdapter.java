@@ -48,6 +48,30 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         selectableBackgroundResource = selectableBackground.resourceId;
     }
 
+    @Override
+    public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.item_drawer, parent, false)
+        );
+    }
+
+    @Override
+    public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
+        holder.bind(position);
+
+    }
+
+    public void setSelectedItem(int item) {
+        selectedItem = item;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return drawerTitles.length;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ItemDrawerBinding binding;
 
@@ -61,38 +85,19 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         public void onClick(View view) {
             mainActivity.selectItem(getAdapterPosition());
         }
-    }
 
-    @Override
-    public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.item_drawer, parent, false)
-        );
-    }
+        void bind(int position) {
+            binding.setTitle(drawerTitles[position]);
+            binding.setSubtitle(drawerSubtitles[position]);
+            binding.setShowSubtitle(!TextUtils.isEmpty(drawerSubtitles[position]));
+            binding.executePendingBindings();
 
-    @Override
-    public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
-        holder.binding.setTitle(drawerTitles[position]);
-        holder.binding.setSubtitle(drawerSubtitles[position]);
-        holder.binding.setShowSubtitle(!TextUtils.isEmpty(drawerSubtitles[position]));
-        holder.binding.executePendingBindings();
-
-        holder.binding.itemIcon.setImageResource(drawerIcon.getResourceId(position, 0));
-        if (selectedItem == position) {
-            holder.itemView.setBackgroundColor(selectedBackgroundColor);
-        } else {
-            holder.itemView.setBackgroundResource(selectableBackgroundResource);
+            binding.itemIcon.setImageResource(drawerIcon.getResourceId(position, 0));
+            if (selectedItem == position) {
+                itemView.setBackgroundColor(selectedBackgroundColor);
+            } else {
+                itemView.setBackgroundResource(selectableBackgroundResource);
+            }
         }
-    }
-
-    public void setSelectedItem(int item) {
-        selectedItem = item;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        return drawerTitles.length;
     }
 }
