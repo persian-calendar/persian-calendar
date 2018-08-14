@@ -176,6 +176,14 @@ public class SunView extends View {
         canvas.drawLine(width * 0.17f, height * 0.2f, width * 0.17f, height * 0.7f, mPaint);
         canvas.drawLine(width * 0.83f, height * 0.2f, width * 0.83f, height * 0.7f, mPaint);
 
+        // draw text
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTextSize(30);
+        mPaint.setColor(dayColor);
+        canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.1f, mPaint);
+        mPaint.setColor(nightColor);
+        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.1f, mPaint);
+
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
