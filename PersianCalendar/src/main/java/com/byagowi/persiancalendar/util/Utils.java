@@ -144,7 +144,7 @@ public class Utils {
     // This should be called before any use of Utils on the activity and services
     static public void initUtils(Context context) {
         updateStoredPreference(context);
-        changeAppLanguage(context);
+        applyAppLanguage(context);
         loadLanguageResource(context);
         loadAlarms(context);
         loadEvents(context);
@@ -1015,8 +1015,15 @@ public class Utils {
         return (dayOfWeek + 7 - weekStartOffset) % 7;
     }
 
+    static public void applyAppLanguageIfNeeded(Context context) {
+        if (!Locale.getDefault().getLanguage().equals(
+                UIUtils.getOnlyLanguage(language))) {
+            applyAppLanguage(context);
+        }
+    }
+
     // Context preferably should be activity context not application
-    static public void changeAppLanguage(Context context) {
+    static public void applyAppLanguage(Context context) {
         String localeCode = UIUtils.getOnlyLanguage(language);
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);

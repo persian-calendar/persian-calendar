@@ -43,7 +43,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UIUtils.setTheme(this);
-        Utils.changeAppLanguage(this);
+        Utils.applyAppLanguage(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.widget_preference_layout);
 
