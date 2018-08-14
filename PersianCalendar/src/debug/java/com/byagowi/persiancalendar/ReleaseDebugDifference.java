@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -11,6 +12,11 @@ public class ReleaseDebugDifference {
             // You should not init your app in this process.
             return;
         }
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
+                .detectAll()
+                .penaltyLog()
+//                .penaltyDeath()
+                .build());
         LeakCanary.install(app);
     }
 }

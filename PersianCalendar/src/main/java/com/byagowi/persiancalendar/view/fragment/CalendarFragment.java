@@ -82,6 +82,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        Context context = getContext();
+        if (context == null) return null;
+
         setHasOptionsMenu(true);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
@@ -91,10 +94,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.calendarsCard.today.setVisibility(View.GONE);
         binding.calendarsCard.todayIcon.setVisibility(View.GONE);
 
-        coordinate = Utils.getCoordinate(getContext());
+        coordinate = Utils.getCoordinate(context);
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         binding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
-                UIUtils.isRTL(getContext())));
+                UIUtils.isRTL(context)));
         CalendarAdapter.gotoOffset(binding.calendarPager, 0);
 
         binding.calendarPager.addOnPageChangeListener(changeListener);
@@ -120,7 +123,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.calendarsCard.shamsiDateLinear.setVisibility(View.GONE);
         binding.calendarsCard.diffDateContainer.setVisibility(View.GONE);
 
-        String cityName = Utils.getCityName(getContext(), false);
+        String cityName = Utils.getCityName(context, false);
         if (!TextUtils.isEmpty(cityName)) {
             binding.owghatText.append(" (" + cityName + ")");
         }
@@ -133,7 +136,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         // Easter egg to test AthanActivity
         binding.owghatIcon.setOnLongClickListener(v -> {
-            Utils.startAthan(getContext(), "FAJR");
+            Utils.startAthan(context, "FAJR");
             return true;
         });
 
@@ -146,7 +149,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+            Context context = getContext();
+            if (context == null) return;
+
+            LocalBroadcastManager.getInstance(context).sendBroadcast(
                     new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                             .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                                     CalendarAdapter.positionToOffset(position))
@@ -165,15 +171,20 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private long lastSelectedJdn = -1;
 
     void selectDay(long jdn) {
+        Context context = getContext();
+        if (context == null) return;
+
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsCard,
-                Utils.getMainCalendar());
+        UIUtils.fillCalendarsCard(context, jdn, binding.calendarsCard, Utils.getMainCalendar());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
         showEvent(jdn);
     }
 
     public void addEventOnCalendar(long jdn) {
+        Context context = getContext();
+        if (context == null) return;
+
         CivilDate civil = DateConverter.jdnToCivil(jdn);
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -191,17 +202,20 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                             .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
         } catch (Exception e) {
-            Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Context context = getContext();
+        if (context == null) return;
+
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                Utils.initUtils(getContext());
+                Utils.initUtils(context);
             } else {
-                Toast.makeText(getContext(), R.string.enable_device_calendar,
+                Toast.makeText(context, R.string.enable_device_calendar,
                         Toast.LENGTH_LONG).show();
             }
 
@@ -212,6 +226,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
+        Context context = getContext();
+        if (context == null) return null;
+
         String title = UIUtils.formatDeviceCalendarEventTitle(event);
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -223,7 +240,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                             CalendarContract.Events.CONTENT_URI, event.getId())),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
-                    Toast.makeText(getContext(), R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -309,7 +326,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             messageToShow.append(ss);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Context context = getContext();
+        if (context == null) return;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
             if (!TextUtils.isEmpty(messageToShow))
@@ -375,6 +395,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Context context = getContext();
+        if (context == null) return;
+
         switch (v.getId()) {
 
             case R.id.calendars_card:
@@ -424,39 +447,42 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
             case R.id.shamsi_date:
             case R.id.shamsi_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateDay.getText() + " " +
+                UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateDay.getText() + " " +
                         binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.shamsi_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.shamsiDateLinear.getText());
+                UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateLinear.getText());
                 break;
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateDay.getText() + " " +
+                UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateDay.getText() + " " +
                         binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.gregorian_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.gregorianDateLinear.getText());
+                UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateLinear.getText());
                 break;
 
             case R.id.islamic_date:
             case R.id.islamic_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateDay.getText() + " " +
+                UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateDay.getText() + " " +
                         binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.islamic_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsCard.islamicDateLinear.getText());
+                UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateLinear.getText());
                 break;
         }
     }
 
     private void bringTodayYearMonth() {
+        Context context = getContext();
+        if (context == null) return;
+
         lastSelectedJdn = -1;
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+        LocalBroadcastManager.getInstance(context).sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
@@ -468,6 +494,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     public void bringDate(long jdn) {
+        Context context = getContext();
+        if (context == null) return;
+
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
@@ -477,7 +506,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         selectDay(jdn);
 
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+        LocalBroadcastManager.getInstance(context).sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
@@ -491,23 +520,23 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
+        Context context = getContext();
+        if (context == null) return;
+
+        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+        if (searchManager == null) return;
+
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setOnSearchClickListener(v -> {
             SearchView.SearchAutoComplete searchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
             searchAutoComplete.setHint(R.string.search_in_events);
-            SearchManager searchManager = (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
-            if (searchManager == null) {
-                return;
-            }
 
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            searchAutoComplete.setAdapter(new ArrayAdapter<>(getContext(),
+            searchAutoComplete.setAdapter(new ArrayAdapter<>(context,
                     R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
             searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
                         (String) parent.getItemAtPosition(position)));
-                long todayJdn = CalendarUtils.getTodayJdn();
-
                 if (ev instanceof PersianCalendarEvent) {
                     PersianDate todayPersian = CalendarUtils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();
@@ -548,6 +577,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 mSearchView.onActionViewCollapsed();
             });
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mSearchView != null) {
+            mSearchView.setOnSearchClickListener(null);
+        }
+        super.onDestroy();
     }
 
     @Override
