@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("debug")) {
+        if (BuildConfig.DEBUG) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 UIUtils.askforExternalStoragePermission(this);
             }
