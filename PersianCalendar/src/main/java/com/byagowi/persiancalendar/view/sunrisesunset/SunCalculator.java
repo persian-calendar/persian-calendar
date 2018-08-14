@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
+import com.github.praytimes.Coordinate;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -12,8 +14,8 @@ public class SunCalculator {
 
     private SolarCalculator calculator;
 
-    SunCalculator(Location location, TimeZone timeZone) {
-        this.calculator = new SolarCalculator(location, timeZone);
+    public SunCalculator(Coordinate coordinate, TimeZone timeZone) {
+        this.calculator = new SolarCalculator(coordinate, timeZone);
     }
 
     public String getOfficialSunriseForDate(Calendar date) {
