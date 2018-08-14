@@ -58,7 +58,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
-        holder.bindDrawer(position);
+        holder.bind(position);
 
     }
 
@@ -86,7 +86,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             mainActivity.selectItem(getAdapterPosition());
         }
 
-        void bindDrawer(int position) {
+        void bind(int position) {
             binding.setTitle(drawerTitles[position]);
             binding.setSubtitle(drawerSubtitles[position]);
             binding.setShowSubtitle(!TextUtils.isEmpty(drawerSubtitles[position]));

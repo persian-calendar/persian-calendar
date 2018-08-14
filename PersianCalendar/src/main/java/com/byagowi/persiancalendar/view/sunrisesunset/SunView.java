@@ -13,8 +13,11 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.byagowi.persiancalendar.R;
+
 import java.util.Calendar;
+
 import androidx.core.content.ContextCompat;
 
 /**
@@ -103,7 +106,7 @@ public class SunView extends View {
         segmentByPixel = (2 * Math.PI) / width;
 
         for (int x = 0; x <= width; x++) {
-            curvePath.lineTo(x, getY(x, segmentByPixel, (int)(height * 0.9f)));
+            curvePath.lineTo(x, getY(x, segmentByPixel, (int) (height * 0.9f)));
         }
 
         nightPath = new Path(curvePath);
@@ -155,7 +158,7 @@ public class SunView extends View {
             mSunPaint.setColor(sunColor);
             mSunPaint.setStyle(Paint.Style.FILL);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f -12, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f - 12, mSunPaint);
             //mPaint.clearShadowLayer();
 
             @SuppressLint("DrawAllocation") Paint mSunRaisePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -171,7 +174,7 @@ public class SunView extends View {
 
     private float getY(int x, double segment, int height) {
         double cos = (Math.cos(-Math.PI + (x * segment)) + 1) / 2;
-        return height - (height * (float)cos) + (height * 0.1f);
+        return height - (height * (float) cos) + (height * 0.1f);
     }
 
     public void setSunriseSunsetCalculator(SunCalculator calculator) {
@@ -199,12 +202,12 @@ public class SunView extends View {
         sunset = sunset - start;
         long end = noon + (12 * 60 * 60 * 1000);
 
-        long current = cCurrent.getTimeInMillis()- start;
+        long current = cCurrent.getTimeInMillis() - start;
 
         float c = 0;
 
         if (current <= sunrise) {
-            c = ((float)current / sunrise) * 0.17f;
+            c = ((float) current / sunrise) * 0.17f;
         } else if (current <= sunset) {
             c = (((float) (current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else if (current <= end) {

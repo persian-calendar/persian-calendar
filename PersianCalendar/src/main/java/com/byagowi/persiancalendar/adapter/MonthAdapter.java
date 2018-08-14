@@ -125,7 +125,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
-        holder.bindMonth(position);
+        holder.bind(position);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             return false;
         }
 
-        void bindMonth(int position) {
+        void bind(int position) {
             int originalPosition = position;
             if (Utils.isWeekOfYearEnabled()) {
                 if (position % 8 == 0) {
