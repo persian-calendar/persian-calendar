@@ -585,7 +585,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDetach() {
+        super.onDetach();
+
         if (mSearchView != null) {
             mSearchView.setOnSearchClickListener(null);
         }
@@ -593,8 +595,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (mSearchAutoComplete != null) {
             mSearchAutoComplete.setOnClickListener(null);
         }
-
-        super.onDestroy();
     }
 
     @Override
