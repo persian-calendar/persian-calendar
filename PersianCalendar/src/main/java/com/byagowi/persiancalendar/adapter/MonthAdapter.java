@@ -102,6 +102,45 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         notifyItemChanged(selectedDay);
     }
 
+    @Override
+    public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.item_day, parent, false);
+
+        return new ViewHolder(v);
+    }
+
+    private boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
+        for (AbstractEvent event : dayEvents)
+            if (event.isHoliday())
+                return true;
+        return false;
+    }
+
+    private boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
+        for (AbstractEvent event : dayEvents)
+            if (event instanceof DeviceCalendarEvent)
+                return true;
+        return false;
+    }
+
+    @Override
+    public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
+        holder.bindMonth(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
+    }
+
+    private boolean isPositionHeader(int position) {
+        return position < 7;
+    }
+
+    private int fixForWeekOfYearNumber(int position) {
+        return position - position / 8 - 1;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView num;
         View today;
@@ -162,118 +201,83 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
             return false;
         }
-    }
 
-    @Override
-    public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_day, parent, false);
+        void bindMonth(int position) {
+            int originalPosition = position;
+            if (Utils.isWeekOfYearEnabled()) {
+                if (position % 8 == 0) {
+                    int row = position / 8;
+                    if (row > 0 && row <= weeksCount) {
+                        num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
+                        num.setTextColor(colorDayName);
+                        num.setTextSize(12);
+                        num.setBackgroundResource(0);
+                        num.setVisibility(View.VISIBLE);
+                        today.setVisibility(View.GONE);
+                        event.setVisibility(View.GONE);
+                        deviceEvent.setVisibility(View.GONE);
+                    } else setEmpty();
+                    return;
+                }
 
-        return new ViewHolder(v);
-    }
-
-    private boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
-        for (AbstractEvent event : dayEvents)
-            if (event.isHoliday())
-                return true;
-        return false;
-    }
-
-    private boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
-        for (AbstractEvent event : dayEvents)
-            if (event instanceof DeviceCalendarEvent)
-                return true;
-        return false;
-    }
-
-    @Override
-    public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
-        int originalPosition = position;
-        if (Utils.isWeekOfYearEnabled()) {
-            if (position % 8 == 0) {
-                int row = position / 8;
-                if (row > 0 && row <= weeksCount) {
-                    holder.num.setText(Utils.formatNumber(weekOfYearStart + row - 1));
-                    holder.num.setTextColor(colorDayName);
-                    holder.num.setTextSize(12);
-                    holder.num.setBackgroundResource(0);
-                    holder.num.setVisibility(View.VISIBLE);
-                    holder.today.setVisibility(View.GONE);
-                    holder.event.setVisibility(View.GONE);
-                    holder.deviceEvent.setVisibility(View.GONE);
-                } else setEmpty(holder);
-                return;
+                position = fixForWeekOfYearNumber(position);
             }
 
-            position = fixForWeekOfYearNumber(position);
-        }
+            if (totalDays < position - 6 - startingDayOfWeek) {
+                setEmpty();
+            } else if (isPositionHeader(position)) {
+                num.setText(Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)));
+                num.setTextColor(colorDayName);
+                num.setTextSize(20);
+                today.setVisibility(View.GONE);
+                num.setBackgroundResource(0);
+                event.setVisibility(View.GONE);
+                deviceEvent.setVisibility(View.GONE);
+                num.setVisibility(View.VISIBLE);
+            } else {
+                if (position - 7 - startingDayOfWeek >= 0) {
+                    num.setText(Utils.formatNumber(1 + position - 7 - startingDayOfWeek));
+                    num.setVisibility(View.VISIBLE);
 
-        if (totalDays < position - 6 - startingDayOfWeek) {
-            setEmpty(holder);
-        } else if (isPositionHeader(position)) {
-            holder.num.setText(Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)));
-            holder.num.setTextColor(colorDayName);
-            holder.num.setTextSize(20);
-            holder.today.setVisibility(View.GONE);
-            holder.num.setBackgroundResource(0);
-            holder.event.setVisibility(View.GONE);
-            holder.deviceEvent.setVisibility(View.GONE);
-            holder.num.setVisibility(View.VISIBLE);
-        } else {
-            if (position - 7 - startingDayOfWeek >= 0) {
-                holder.num.setText(Utils.formatNumber(1 + position - 7 - startingDayOfWeek));
-                holder.num.setVisibility(View.VISIBLE);
+                    DayEntity day = days.get(position - 7 - startingDayOfWeek);
 
-                DayEntity day = days.get(position - 7 - startingDayOfWeek);
+                    num.setTextSize(isArabicDigit ? 20 : 25);
 
-                holder.num.setTextSize(isArabicDigit ? 20 : 25);
+                    List<AbstractEvent> events = Utils.getEvents(day.getJdn());
+                    boolean isEvent = false,
+                            isHoliday = false;
+                    if (Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events)) {
+                        isHoliday = true;
+                    }
+                    if (events.size() > 0) {
+                        isEvent = true;
+                    }
 
-                List<AbstractEvent> events = Utils.getEvents(day.getJdn());
-                boolean isEvent = false,
-                        isHoliday = false;
-                if (Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events)) {
-                    isHoliday = true;
-                }
-                if (events.size() > 0) {
-                    isEvent = true;
-                }
+                    event.setVisibility(isEvent ? View.VISIBLE : View.GONE);
+                    deviceEvent.setVisibility(hasDeviceEvents(events) ? View.VISIBLE : View.GONE);
+                    today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
 
-                holder.event.setVisibility(isEvent ? View.VISIBLE : View.GONE);
-                holder.deviceEvent.setVisibility(hasDeviceEvents(events) ? View.VISIBLE : View.GONE);
-                holder.today.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
+                    if (originalPosition == selectedDay) {
+                        num.setBackgroundResource(shapeSelectDay);
+                        num.setTextColor(isHoliday ? colorTextHoliday : colorPrimary);
 
-                if (originalPosition == selectedDay) {
-                    holder.num.setBackgroundResource(shapeSelectDay);
-                    holder.num.setTextColor(isHoliday ? colorTextHoliday : colorPrimary);
+                    } else {
+                        num.setBackgroundResource(0);
+                        num.setTextColor(isHoliday ? colorHoliday : colorTextDay);
+                    }
 
                 } else {
-                    holder.num.setBackgroundResource(0);
-                    holder.num.setTextColor(isHoliday ? colorHoliday : colorTextDay);
+                    setEmpty();
                 }
 
-            } else {
-                setEmpty(holder);
             }
-
         }
-    }
 
-    private void setEmpty(MonthAdapter.ViewHolder holder) {
-        holder.today.setVisibility(View.GONE);
-        holder.num.setVisibility(View.GONE);
-        holder.event.setVisibility(View.GONE);
-        holder.deviceEvent.setVisibility(View.GONE);
-    }
-
-    @Override
-    public int getItemCount() {
-        return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
-    }
-
-    private boolean isPositionHeader(int position) {
-        return position < 7;
-    }
-
-    private int fixForWeekOfYearNumber(int position) {
-        return position - position / 8 - 1;
+        private void setEmpty() {
+            today.setVisibility(View.GONE);
+            num.setVisibility(View.GONE);
+            event.setVisibility(View.GONE);
+            deviceEvent.setVisibility(View.GONE);
+        }
     }
 }

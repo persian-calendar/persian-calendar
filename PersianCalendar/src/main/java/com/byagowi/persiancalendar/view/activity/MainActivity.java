@@ -24,10 +24,10 @@ import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
+import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.github.praytimes.Coordinate;
 
 import androidx.annotation.NonNull;
@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             PREFERENCE = 3,
             ABOUT = 4,
             EXIT = 5,
-            DEFAULT = CALENDAR;
-    // Default selected fragment
+            DEFAULT = CALENDAR; // Default selected fragment
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
     private DrawerAdapter adapter;
