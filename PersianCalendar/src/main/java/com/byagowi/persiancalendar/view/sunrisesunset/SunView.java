@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -28,6 +27,8 @@ import androidx.core.content.ContextCompat;
 public class SunView extends View {
 
     Paint mPaint;
+    Paint mSunPaint;
+    Paint mSunRaisePaint;
 
     int horizonColor;
     int timelineColor;
@@ -88,6 +89,17 @@ public class SunView extends View {
         }
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        mSunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mSunPaint.setColor(sunColor);
+        mSunPaint.setStyle(Paint.Style.FILL);
+
+        mSunRaisePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mSunRaisePaint.setColor(sunColor);
+        mSunRaisePaint.setStyle(Paint.Style.STROKE);
+        mSunRaisePaint.setStrokeWidth(12);
+        PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
+        mSunRaisePaint.setPathEffect(sunRaysEffects);
 
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             setLayerType(LAYER_TYPE_SOFTWARE, mPaint);*/
@@ -154,19 +166,9 @@ public class SunView extends View {
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
-            @SuppressLint("DrawAllocation") Paint mSunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mSunPaint.setColor(sunColor);
-            mSunPaint.setStyle(Paint.Style.FILL);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
             canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f - 12, mSunPaint);
             //mPaint.clearShadowLayer();
-
-            @SuppressLint("DrawAllocation") Paint mSunRaisePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mSunRaisePaint.setColor(sunColor);
-            mSunRaisePaint.setStyle(Paint.Style.STROKE);
-            mSunRaisePaint.setStrokeWidth(12);
-            @SuppressLint("DrawAllocation") PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
-            mSunRaisePaint.setPathEffect(sunRaysEffects);
             canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f, mSunRaisePaint);
         }
 

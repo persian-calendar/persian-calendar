@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.service;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -26,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-@SuppressLint("Registered")
 public class AthanNotification extends Service {
 
     @Nullable

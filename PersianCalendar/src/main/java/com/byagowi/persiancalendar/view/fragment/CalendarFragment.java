@@ -79,9 +79,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private int viewPagerPosition;
     private FragmentCalendarBinding binding;
 
-    SimpleDateFormat formatter;
-    SimpleDateFormat nextFridayFormatter;
-
     @SuppressLint("SimpleDateFormat")
     @Nullable
     @Override
@@ -144,9 +141,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             Utils.startAthan(getContext(), "FAJR");
             return true;
         });
-
-        formatter = new SimpleDateFormat("HH:mm");
-        nextFridayFormatter = new SimpleDateFormat(getString(R.string.next_friday_sun_info));
         initTime(new SunCalculator(Utils.getCoordinate(getContext()), TimeZone.getDefault()));
 
         return binding.getRoot();
@@ -177,7 +171,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             nextFriday.set(Calendar.WEEK_OF_YEAR, currentWeek);
 
             nextFriday = calculator.getOfficialSunsetCalendarForDate(nextFriday);
-            binding.tvNextSunTime.setText(Utils.formatNumber(nextFridayFormatter.format(nextFriday.getTime())));
+            binding.tvNextSunTime.setText(UIUtils.getFormattedClock(new Clock(nextFriday)));
 
         }
     }
