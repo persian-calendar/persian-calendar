@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
@@ -40,11 +41,13 @@ import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
+import com.byagowi.persiancalendar.view.sunrisesunset.SunCalculator;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -75,6 +78,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private int viewPagerPosition;
     private FragmentCalendarBinding binding;
 
+    SimpleDateFormat formatter;
+    SimpleDateFormat nextFridayFormatter;
+
+    @SuppressLint("SimpleDateFormat")
     @Nullable
     @Override
     public View onCreateView(
@@ -137,7 +144,41 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             return true;
         });
 
+        formatter = new SimpleDateFormat("HH:mm");
+        nextFridayFormatter = new SimpleDateFormat(getString(R.string.next_friday_sun_info));
+        initTime(com.byagowi.persiancalendar.view.sunrisesunset.Utils.getSunriseSunsetCalculator(getContext()));
+
         return binding.getRoot();
+
+    }
+
+    //SunView
+    @SuppressLint("SimpleDateFormat")
+    private void initTime(SunCalculator calculator) {
+
+        binding.tvSunrise.setText(Utils.formatNumber(calculator.getOfficialSunriseForDate(Calendar.getInstance())));
+        binding.tvSunset.setText(Utils.formatNumber(calculator.getOfficialSunsetForDate(Calendar.getInstance())));
+        binding.svPlot.setSunriseSunsetCalculator(calculator);
+
+        Calendar currentCal = Calendar.getInstance();
+        currentCal.setFirstDayOfWeek(Calendar.SATURDAY);
+        int currentDay = currentCal.get(Calendar.DAY_OF_WEEK);
+
+        if (currentDay == Calendar.FRIDAY) {
+            binding.tvNextSunTime.setText(getString(R.string.is_friday) + " " + Utils.formatNumber(calculator.getOfficialSunsetForDate(Calendar.getInstance())));
+
+        } else {
+
+            Calendar nextFriday = currentCal;
+            int currentWeek = nextFriday.get(Calendar.WEEK_OF_YEAR);
+            nextFriday.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            nextFriday.set(Calendar.HOUR_OF_DAY, 12);
+            nextFriday.set(Calendar.WEEK_OF_YEAR, currentWeek);
+
+            nextFriday = calculator.getOfficialSunsetCalendarForDate(nextFriday);
+            binding.tvNextSunTime.setText(Utils.formatNumber(nextFridayFormatter.format(nextFriday.getTime())));
+
+        }
     }
 
     public boolean firstTime = true;
@@ -360,18 +401,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         binding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
         binding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         binding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        binding.svLayout.setVisibility(View.VISIBLE);
 
-        binding.ssv.setVisibility(View.GONE);
-        if (isToday) {
-            binding.ssv.setSunriseTime(sunriseClock);
-            binding.ssv.setMiddayTime(midddayClock);
-            binding.ssv.setSunsetTime(maghribClock);
-
-            if (isOwghatOpen) {
-                binding.ssv.setVisibility(View.VISIBLE);
-                binding.ssv.animate();
-            }
-        }
+        //if (isToday) {
+        //    binding.svLayout.setVisibility(View.VISIBLE);
+        //} else {
+        //    binding.svLayout.setVisibility(View.GONE);
+        //}
     }
 
     private boolean isOwghatOpen = false;
@@ -408,15 +444,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 binding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 isOwghatOpen = isOpenOwghatCommand;
 
-                if (lastSelectedJdn == -1)
-                    lastSelectedJdn = CalendarUtils.getTodayJdn();
+                //if (lastSelectedJdn == -1)
+                //    lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
-                    binding.ssv.setVisibility(View.VISIBLE);
-                    binding.ssv.startAnimate();
-                } else {
-                    binding.ssv.setVisibility(View.GONE);
-                }
+                //if (lastSelectedJdn == CalendarUtils.getTodayJdn() && isOpenOwghatCommand) {
+                //        binding.svLayout.setVisibility(View.VISIBLE);
+                //} else {
+                //        binding.svLayout.setVisibility(View.GONE);
+                //}
 
                 break;
 

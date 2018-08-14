@@ -82,4 +82,13 @@
     <color name="classic_icon">#587994</color>
     <color name="classic_icon_drawer">#587994</color>
 
+    <!-- Custom view SunView default colors -->
+    <color name="sViewHorizonColor">#32000000</color>
+    <color name="sViewTimelineColor">#32000000</color>
+    <color name="sViewTaglineColor">#14000000</color>
+    <color name="sViewSunColor">#ffcc00</color>
+    <color name="sViewDayColor">#FDD84B</color>
+    <color name="sViewDaySecondColor">#FF6D00</color>
+    <color name="sViewNightColor">#6d302873</color>
+
 </resources>
