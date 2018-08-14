@@ -1,15 +1,17 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
-import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Region;
+import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -30,11 +32,12 @@ import androidx.core.content.ContextCompat;
  * MEHDIMYADI
  */
 
-public class SunView extends View {
+public class SunView extends View implements ValueAnimator.AnimatorUpdateListener {
 
     Paint mPaint;
     Paint mSunPaint;
     Paint mSunRaisePaint;
+    Paint mDayPaint;
 
     int horizonColor;
     int timelineColor;
@@ -60,7 +63,9 @@ public class SunView extends View {
     }
 
     public SunView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+
+        init(context, attrs);
     }
 
     public SunView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -77,7 +82,6 @@ public class SunView extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
-
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
 
@@ -107,8 +111,10 @@ public class SunView extends View {
         PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
         mSunRaisePaint.setPathEffect(sunRaysEffects);
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            setLayerType(LAYER_TYPE_SOFTWARE, mPaint);*/
+        mDayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mDayPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mDayPaint.setShader(new LinearGradient(0, 0, getWidth() / 2, 0,
+                dayColor, daySecondColor, Shader.TileMode.MIRROR));
     }
 
     @Override
@@ -136,28 +142,20 @@ public class SunView extends View {
 
     float current = 0;
 
-    @androidx.annotation.Keep
-    public void setRatio(float ratio) {
-        current = ratio;
-        postInvalidate();
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // draw fill of night
         mPaint.setStyle(Paint.Style.FILL);
-
-        // draw fill of day
         mPaint.setColor(nightColor);
         canvas.clipRect(0, height * 0.75f, width * current, height);
         canvas.drawPath(nightPath, mPaint);
 
-        // draw fill of night
-        mPaint.setColor(dayColor);
+        // draw fill of day
         canvas.clipRect(0, 0, width, height, Region.Op.REPLACE);
         canvas.clipRect(0, 0, width * current, height * 0.75f);
-        canvas.drawPath(curvePath, mPaint);
+        canvas.drawPath(curvePath, mDayPaint);
 
         // draw time curve
         canvas.clipRect(0, 0, width, height, Region.Op.REPLACE);
@@ -212,34 +210,32 @@ public class SunView extends View {
     public void startAnimate() {
         if (prayTime == null)
             return;
-//
-//        int sunset = prayTime.get(PrayTime.SUNSET).toInt();
-//        if (midnight < HALF_DAY) midnight += FULL_DAY;
-//        int sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
-//
-//        // recalculate from cero
-//        int noon = prayTime.get(PrayTime.DHUHR).toInt();
-//        int end = noon + new Clock(24, 0).toInt() / 2;
-//
-//
-//        float c = 0;
 
-//        if (current <= sunrise) {
-//            c = ((float) current / sunrise) * 0.17f;
-//        } else if (current <= sunset) {
-//            c = (((float) (current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
-//        } else if (current <= end) {
-//            c = (((float) (current - sunset) / (end - sunset)) * 0.17f) + 0.17f + 0.66f;
-//        }
-
+        float sunset = prayTime.get(PrayTime.SUNSET).toInt();
+        float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
-//        if (midnight > HALF_DAY) midnight = FULL_DAY - midnight;
+        if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float current = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
-        float ratio = (current - midnight) / FULL_DAY;
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "ratio", 0, ratio);
+        float c;
+        if (current <= sunrise) {
+            c = ((current - midnight) / sunrise) * 0.17f;
+        } else if (current <= sunset) {
+            c = (((current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+        } else {
+            c = (((current - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+        }
+
+        ValueAnimator animator = ValueAnimator.ofFloat(0, c);
         animator.setDuration(1500L);
         animator.setInterpolator(new DecelerateInterpolator());
+        animator.addUpdateListener(this);
         animator.start();
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        current = (float) valueAnimator.getAnimatedValue();
+        postInvalidate();
     }
 }
