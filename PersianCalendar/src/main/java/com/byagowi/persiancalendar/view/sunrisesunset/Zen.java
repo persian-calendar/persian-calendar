@@ -14,9 +14,11 @@ public class Zen {
     public static final Zen NAUTICAL = new Zen(102);
     public static final Zen CIVIL = new Zen(96);
     public static final Zen OFFICIAL = new Zen(90.8333);
+
     private Zen(double degrees) {
         this.degrees = BigDecimal.valueOf(degrees);
     }
+
     public BigDecimal degrees() {
         return degrees;
     }
