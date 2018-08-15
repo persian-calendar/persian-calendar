@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_widget_button"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add" />

@@ -75,7 +75,7 @@
                     <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
 
                     <com.google.android.material.tabs.TabLayout
-                        style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                        style="@style/Widget.MaterialComponents.TabLayout"
                         android:id="@+id/tab_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
