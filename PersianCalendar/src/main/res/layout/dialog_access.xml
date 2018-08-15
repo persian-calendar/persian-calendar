@@ -15,17 +15,19 @@
             android:textColor="?attr/colorTextDrawer"
             android:textSize="17sp" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="16dp"
-            android:gravity="center_horizontal|center_vertical">
+            android:gravity="center_horizontal|center_vertical"
+            android:showDividers="middle">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialogButtonExit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/exit" />
 
             <com.google.android.material.button.MaterialButton
@@ -46,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gprs_settings" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
