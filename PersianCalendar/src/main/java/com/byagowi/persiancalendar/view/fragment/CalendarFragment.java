@@ -220,6 +220,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
+        mainBinding.weekDayName.setText(CalendarUtils.dayTitleSummary(
+                CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
         UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);

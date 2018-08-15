@@ -113,6 +113,8 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
+            binding.weekDayName.setText(CalendarUtils.dayTitleSummary(
+                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
             UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType);
             lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {

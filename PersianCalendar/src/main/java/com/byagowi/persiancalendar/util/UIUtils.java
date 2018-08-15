@@ -61,7 +61,6 @@ public class UIUtils {
         CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
-//        binding.weekDayName.setText(Utils.getWeekDayName(civilDate));
         binding.shamsiDateLinear.setText(CalendarUtils.toLinearDate(persianDate));
         binding.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
         binding.shamsiDate.setText(CalendarUtils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
