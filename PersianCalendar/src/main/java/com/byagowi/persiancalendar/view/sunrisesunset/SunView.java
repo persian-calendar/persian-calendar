@@ -153,12 +153,12 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawPath(nightPath, mPaint);
 
         // draw fill of day
-        canvas.clipRect(0, 0, width, height, Region.Op.REPLACE);
+        canvas.clipRect(0, 0, width, height, Region.Op.DIFFERENCE); //FIXME: It should be Region.Op.REPLACE but doesn't work on Android P
         canvas.clipRect(0, 0, width * current, height * 0.75f);
         canvas.drawPath(curvePath, mDayPaint);
 
         // draw time curve
-        canvas.clipRect(0, 0, width, height, Region.Op.REPLACE);
+        canvas.clipRect(0, 0, width, height, Region.Op.DIFFERENCE); //FIXME: It should be Region.Op.REPLACE but doesn't work on Android P
         mPaint.setStrokeWidth(3);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(timelineColor);
@@ -182,7 +182,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(nightColor);
         canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.1f, mPaint);
         mPaint.setColor(daySecondColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth()/2, canvas.getHeight() -20, mPaint);
+        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 20, mPaint);
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
@@ -215,15 +215,15 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
-        float current = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
+        float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
 
         float c;
-        if (current <= sunrise) {
-            c = ((current - midnight) / sunrise) * 0.17f;
-        } else if (current <= sunset) {
-            c = (((current - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+        if (now <= sunrise) {
+            c = ((now - midnight) / sunrise) * 0.17f;
+        } else if (now <= sunset) {
+            c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
-            c = (((current - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+            c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
 
         ValueAnimator animator = ValueAnimator.ofFloat(0, c);

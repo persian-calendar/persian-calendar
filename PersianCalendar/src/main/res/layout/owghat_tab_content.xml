@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/owghat_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        app:divider="?attr/appDivider"
+        app:dividerPadding="@dimen/divider_margin"
+        app:showDividers="middle">
+
+        <!-- title: prayer times -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/owghat_icon"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_margin="@dimen/icon_margin"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_access_time" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/owghat_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/owghat"
+                    android:textColor="?attr/colorTextPrimary"
+                    android:textSize="@dimen/text_size_title" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/more_owghat"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="center_vertical"
+                android:tint="?attr/colorIcon"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!-- sun content -->
+        <com.byagowi.persiancalendar.view.sunrisesunset.SunView
+            android:id="@+id/svPlot"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <!-- actual content -->
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/padding_item"
+            android:paddingLeft="@dimen/card_padding"
+            android:paddingRight="@dimen/card_padding"
+            android:paddingTop="@dimen/padding_item"
+            app:divider="?attr/appDivider"
+            app:dividerPadding="@dimen/divider_margin2"
+            app:flexWrap="wrap"
+            app:justifyContent="center"
+            app:showDividers="middle">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/imsakLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconImasak"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_4" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/imsakText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/imsak"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/imsak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/fajrLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconMorning"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_4" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fajrText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/azan1"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fajr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/sunriseLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sunriseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aftab1"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/dhuhrLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_5" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dhuhrText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/azan2"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dhuhr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/asrLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_5" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/asrText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/azan3"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/asr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/sunsetLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_6" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sunsetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aftab2"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/maghribLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_3" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/maghribText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/azan4"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/maghrib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/ishaLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_3" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ishaText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/azan5"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/isgha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/midnightLayout"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_calendar_margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:tint="?attr/colorIcon"
+                    app:srcCompat="@drawable/ic_brightness_2" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midnightText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aftab3"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_note" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midnight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="12:34" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

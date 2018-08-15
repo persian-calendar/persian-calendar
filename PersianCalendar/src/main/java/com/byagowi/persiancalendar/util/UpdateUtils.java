@@ -89,7 +89,7 @@ public class UpdateUtils {
         String title = CalendarUtils.dayTitleSummary(date);
         String subtitle = CalendarUtils.dateStringOfOtherCalendars(mainCalendar, jdn);
 
-        Clock currentClock =  new Clock(calendar);
+        Clock currentClock = new Clock(calendar);
         String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
         if (Utils.isShownOnWidgets("owghat_location") && !TextUtils.isEmpty(owghat)) {
             String cityName = Utils.getCityName(context, false);
