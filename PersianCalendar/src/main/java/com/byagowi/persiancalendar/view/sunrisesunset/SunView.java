@@ -146,23 +146,34 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        canvas.save();
+
         // draw fill of night
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(nightColor);
         canvas.clipRect(0, height * 0.75f, width * current, height);
         canvas.drawPath(nightPath, mPaint);
+        canvas.restore();
+
+        canvas.save();
 
         // draw fill of day
-        canvas.clipRect(0, 0, width, height, Region.Op.DIFFERENCE); //FIXME: It should be Region.Op.REPLACE but doesn't work on Android P
+        canvas.clipRect(0, 0, width, height);
         canvas.clipRect(0, 0, width * current, height * 0.75f);
         canvas.drawPath(curvePath, mDayPaint);
 
+        canvas.restore();
+
+        canvas.save();
+
         // draw time curve
-        canvas.clipRect(0, 0, width, height, Region.Op.DIFFERENCE); //FIXME: It should be Region.Op.REPLACE but doesn't work on Android P
+        canvas.clipRect(0, 0, width, height);
         mPaint.setStrokeWidth(3);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(timelineColor);
         canvas.drawPath(curvePath, mPaint);
+
+        canvas.restore();
 
         // draw horizon line
         mPaint.setColor(horizonColor);
