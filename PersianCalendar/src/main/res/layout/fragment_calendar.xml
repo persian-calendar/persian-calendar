@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:id="@+id/about_layout"
@@ -10,7 +9,7 @@
         android:orientation="vertical"
         android:scrollbars="none">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -26,53 +25,53 @@
                 android:layout_margin="@dimen/card_margin"
                 app:cardBackgroundColor="?attr/colorCard">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!--<androidx.appcompat.widget.LinearLayoutCompat-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="horizontal">-->
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
 
-                        <!--<androidx.appcompat.widget.AppCompatTextView-->
-                            <!--android:id="@+id/week_day_name"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="match_parent"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:textColor="?attr/colorTextPrimary"-->
-                            <!--android:textSize="@dimen/text_size_title"-->
-                            <!--tools:text="Calendar" />-->
+                    <!--<androidx.appcompat.widget.AppCompatTextView-->
+                    <!--android:id="@+id/week_day_name"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:textColor="?attr/colorTextPrimary"-->
+                    <!--android:textSize="@dimen/text_size_title"-->
+                    <!--tools:text="Calendar" />-->
 
-                        <!--<androidx.appcompat.widget.LinearLayoutCompat-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="match_parent"-->
-                            <!--android:layout_gravity="right|end"-->
-                            <!--android:layout_marginEnd="@dimen/icon_margin"-->
-                            <!--android:layout_marginRight="@dimen/icon_margin"-->
-                            <!--android:gravity="end|right|center_vertical">-->
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="right|end"-->
+                    <!--android:layout_marginEnd="@dimen/icon_margin"-->
+                    <!--android:layout_marginRight="@dimen/icon_margin"-->
+                    <!--android:gravity="end|right|center_vertical">-->
 
-                            <!--<androidx.appcompat.widget.AppCompatImageView-->
-                                <!--android:id="@+id/today_icon"-->
-                                <!--android:layout_width="18dp"-->
-                                <!--android:layout_height="match_parent"-->
-                                <!--android:layout_centerVertical="true"-->
-                                <!--android:tint="?attr/colorTextPrimary"-->
-                                <!--app:srcCompat="@drawable/ic_restore_modified" />-->
+                    <!--<androidx.appcompat.widget.AppCompatImageView-->
+                    <!--android:id="@+id/today_icon"-->
+                    <!--android:layout_width="18dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:tint="?attr/colorTextPrimary"-->
+                    <!--app:srcCompat="@drawable/ic_restore_modified" />-->
 
-                            <!--<androidx.appcompat.widget.AppCompatTextView-->
-                                <!--android:id="@+id/today"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="match_parent"-->
-                                <!--android:gravity="center_vertical"-->
-                                <!--android:text="@string/today"-->
-                                <!--android:textColor="?attr/colorTextPrimary"-->
-                                <!--android:textSize="@dimen/text_size_title" />-->
+                    <!--<androidx.appcompat.widget.AppCompatTextView-->
+                    <!--android:id="@+id/today"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="@string/today"-->
+                    <!--android:textColor="?attr/colorTextPrimary"-->
+                    <!--android:textSize="@dimen/text_size_title" />-->
 
-                        <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+                    <!--</LinearLayout>-->
 
-                    <!--</androidx.appcompat.widget.LinearLayoutCompat>-->
+                    <!--</LinearLayout>-->
 
                     <com.google.android.material.tabs.TabLayout
                         style="@style/Widget.MaterialComponents.TabLayout"
@@ -85,11 +84,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="120sp" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </ScrollView>
 
