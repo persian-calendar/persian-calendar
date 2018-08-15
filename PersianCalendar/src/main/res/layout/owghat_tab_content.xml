@@ -13,46 +13,6 @@
         app:dividerPadding="@dimen/divider_margin"
         app:showDividers="middle">
 
-        <!-- title: prayer times -->
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/owghat_icon"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:layout_margin="@dimen/icon_margin"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_access_time" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/owghat_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/owghat"
-                    android:textColor="?attr/colorTextPrimary"
-                    android:textSize="@dimen/text_size_title" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/more_owghat"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_gravity="center_vertical"
-                android:tint="?attr/colorIcon"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
         <!-- sun content -->
         <com.byagowi.persiancalendar.view.sunrisesunset.SunView
             android:id="@+id/svPlot"
