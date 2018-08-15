@@ -29,7 +29,11 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
+import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
+import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
+import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
+import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -45,6 +49,7 @@ import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -73,7 +78,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private Coordinate coordinate;
     private PrayTimesCalculator prayTimesCalculator;
     private int viewPagerPosition;
-    private FragmentCalendarBinding binding;
+    private FragmentCalendarBinding mainBinding;
+    private CalendarsTabContentBinding calendarsBinding;
+    private OwghatTabContentBinding owghatBinding;
+    private EventsTabContentBinding eventsBinding;
 
     @Nullable
     @Override
@@ -87,45 +95,82 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         setHasOptionsMenu(true);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
+        mainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
                 false);
         viewPagerPosition = 0;
 
-        binding.calendarsCard.today.setVisibility(View.GONE);
-        binding.calendarsCard.todayIcon.setVisibility(View.GONE);
+        boolean isRTL = UIUtils.isRTL(context);
+        List<String> titles = new ArrayList<>();
+        List<View> tabs = new ArrayList<>();
+
+        titles.add(getString(R.string.calendar));
+        calendarsBinding = DataBindingUtil.inflate(inflater, R.layout.calendars_tab_content, container, false);
+        tabs.add(calendarsBinding.getRoot());
+
+        titles.add(getString(R.string.events));
+        eventsBinding = DataBindingUtil.inflate(inflater, R.layout.events_tab_content, container, false);
+        tabs.add(eventsBinding.getRoot());
 
         coordinate = Utils.getCoordinate(context);
+        if (coordinate != null) {
+            titles.add(getString(R.string.owghat));
+            owghatBinding = DataBindingUtil.inflate(inflater, R.layout.owghat_tab_content, container, false);
+            tabs.add(owghatBinding.getRoot());
+            owghatBinding.getRoot().setOnClickListener(this);
+        }
+
+        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), isRTL,
+                context, tabs, titles));
+        mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, 0);
+        if (lastTab >= tabs.size())
+            lastTab = 0;
+
+        if (lastTab != 0) {
+            mainBinding.tabContent.setCurrentItem(lastTab, false);
+        }
+
+        // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
+        if (isRTL) {
+            for (View tab : tabs) {
+                tab.setRotationY(180);
+            }
+            mainBinding.tabContent.setRotationY(180);
+        }
+
+        calendarsBinding.today.setVisibility(View.GONE);
+        calendarsBinding.todayIcon.setVisibility(View.GONE);
+
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
-        binding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
-                UIUtils.isRTL(context)));
-        CalendarAdapter.gotoOffset(binding.calendarPager, 0);
+        mainBinding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
+        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
 
-        binding.calendarPager.addOnPageChangeListener(changeListener);
+        mainBinding.calendarPager.addOnPageChangeListener(changeListener);
 
-        binding.owghat.setOnClickListener(this);
-        binding.calendarsCard.today.setOnClickListener(this);
-        binding.calendarsCard.todayIcon.setOnClickListener(this);
-        binding.calendarsCard.gregorianDate.setOnClickListener(this);
-        binding.calendarsCard.gregorianDateDay.setOnClickListener(this);
-        binding.calendarsCard.gregorianDateLinear.setOnClickListener(this);
-        binding.calendarsCard.islamicDate.setOnClickListener(this);
-        binding.calendarsCard.islamicDateDay.setOnClickListener(this);
-        binding.calendarsCard.islamicDateLinear.setOnClickListener(this);
-        binding.calendarsCard.shamsiDate.setOnClickListener(this);
-        binding.calendarsCard.shamsiDateDay.setOnClickListener(this);
-        binding.calendarsCard.shamsiDateLinear.setOnClickListener(this);
+        calendarsBinding.today.setOnClickListener(this);
+        calendarsBinding.todayIcon.setOnClickListener(this);
+        calendarsBinding.gregorianDate.setOnClickListener(this);
+        calendarsBinding.gregorianDateDay.setOnClickListener(this);
+        calendarsBinding.gregorianDateLinear.setOnClickListener(this);
+        calendarsBinding.islamicDate.setOnClickListener(this);
+        calendarsBinding.islamicDateDay.setOnClickListener(this);
+        calendarsBinding.islamicDateLinear.setOnClickListener(this);
+        calendarsBinding.shamsiDate.setOnClickListener(this);
+        calendarsBinding.shamsiDateDay.setOnClickListener(this);
+        calendarsBinding.shamsiDateLinear.setOnClickListener(this);
 
-        binding.calendarsCard.calendarsCard.setOnClickListener(this);
+        calendarsBinding.calendarsCard.setOnClickListener(this);
 
-        binding.warnUserIcon.setVisibility(View.GONE);
-        binding.calendarsCard.gregorianDateLinear.setVisibility(View.GONE);
-        binding.calendarsCard.islamicDateLinear.setVisibility(View.GONE);
-        binding.calendarsCard.shamsiDateLinear.setVisibility(View.GONE);
-        binding.calendarsCard.diffDateContainer.setVisibility(View.GONE);
+        calendarsBinding.gregorianDateLinear.setVisibility(View.GONE);
+        calendarsBinding.islamicDateLinear.setVisibility(View.GONE);
+        calendarsBinding.shamsiDateLinear.setVisibility(View.GONE);
+        calendarsBinding.diffDateContainer.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(context, false);
         if (!TextUtils.isEmpty(cityName)) {
-            binding.owghatText.append(" (" + cityName + ")");
+//            mainBinding.owghatText.append(" (" + cityName + ")");
         }
 
         // This will immediately be replaced by the same functionality on fragment but is here to
@@ -135,12 +180,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 Utils.formatNumber(today.getYear()));
 
         // Easter egg to test AthanActivity
-        binding.owghatIcon.setOnLongClickListener(v -> {
-            Utils.startAthan(context, "FAJR");
-            return true;
-        });
+//        mainBinding.owghatIcon.setOnLongClickListener(v -> {
+//            Utils.startAthan(context, "FAJR");
+//            return true;
+//        });
 
-        return binding.getRoot();
+        return mainBinding.getRoot();
 
     }
 
@@ -158,14 +203,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                     CalendarAdapter.positionToOffset(position))
                             .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
-            binding.calendarsCard.today.setVisibility(View.VISIBLE);
-            binding.calendarsCard.todayIcon.setVisibility(View.VISIBLE);
+            calendarsBinding.today.setVisibility(View.VISIBLE);
+            calendarsBinding.todayIcon.setVisibility(View.VISIBLE);
         }
 
     };
 
     void changeMonth(int position) {
-        binding.calendarPager.setCurrentItem(binding.calendarPager.getCurrentItem() + position, true);
+        mainBinding.calendarPager.setCurrentItem(mainBinding.calendarPager.getCurrentItem() + position, true);
     }
 
     private long lastSelectedJdn = -1;
@@ -175,7 +220,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(context, jdn, binding.calendarsCard, Utils.getMainCalendar());
+        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
         showEvent(jdn);
@@ -281,31 +326,32 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
-        binding.cardEvent.setVisibility(View.GONE);
-        binding.holidayTitle.setVisibility(View.GONE);
-        binding.deviceEventTitle.setVisibility(View.GONE);
-        binding.eventTitle.setVisibility(View.GONE);
-        binding.eventMessage.setVisibility(View.GONE);
+        eventsBinding.warnUserIcon.setVisibility(View.GONE);
+//        eventsBinding.cardEvent.setVisibility(View.GONE);
+        eventsBinding.holidayTitle.setVisibility(View.GONE);
+        eventsBinding.deviceEventTitle.setVisibility(View.GONE);
+        eventsBinding.eventTitle.setVisibility(View.GONE);
+        eventsBinding.eventMessage.setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(holidays)) {
-            binding.holidayTitle.setText(holidays);
-            binding.holidayTitle.setVisibility(View.VISIBLE);
-            binding.cardEvent.setVisibility(View.VISIBLE);
+            eventsBinding.holidayTitle.setText(holidays);
+            eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
+//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
-            binding.deviceEventTitle.setText(deviceEvents);
-            binding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            eventsBinding.deviceEventTitle.setText(deviceEvents);
+            eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
-            binding.deviceEventTitle.setVisibility(View.VISIBLE);
-            binding.cardEvent.setVisibility(View.VISIBLE);
+            eventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
+//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(nonHolidays)) {
-            binding.eventTitle.setText(nonHolidays);
+            eventsBinding.eventTitle.setText(nonHolidays);
 
-            binding.eventTitle.setVisibility(View.VISIBLE);
-            binding.cardEvent.setVisibility(View.VISIBLE);
+            eventsBinding.eventTitle.setVisibility(View.VISIBLE);
+//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
@@ -348,18 +394,17 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-            binding.warnUserIcon.setVisibility(View.VISIBLE);
-            binding.eventMessage.setText(messageToShow);
-            binding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
+            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
+            eventsBinding.eventMessage.setText(messageToShow);
+            eventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
-            binding.eventMessage.setVisibility(View.VISIBLE);
-            binding.cardEvent.setVisibility(View.VISIBLE);
+            eventsBinding.eventMessage.setVisibility(View.VISIBLE);
+//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
     }
 
     private void setOwghat(long jdn, boolean isToday) {
         if (coordinate == null) {
-            binding.owghat.setVisibility(View.GONE);
             return;
         }
 
@@ -369,25 +414,24 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        binding.imsak.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
+        owghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
         Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
-        binding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
-        binding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
+        owghatBinding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
+        owghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
         Clock midddayClock = prayTimes.get(PrayTime.DHUHR);
-        binding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
-        binding.asr.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
-        binding.sunset.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
+        owghatBinding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
+        owghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
+        owghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
         Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
-        binding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
-        binding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        binding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-        binding.svPlot.setSunriseSunsetCalculator(prayTimes);
+        owghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
+        owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
+        owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        owghatBinding.svPlot.setSunriseSunsetCalculator(prayTimes);
 
         if (isToday && !isOwghatOpen) {
-            binding.svPlot.setVisibility(View.VISIBLE);
-            binding.svPlot.startAnimate();
+            owghatBinding.svPlot.setVisibility(View.VISIBLE);
         } else {
-            binding.svPlot.setVisibility(View.GONE);
+            owghatBinding.svPlot.setVisibility(View.GONE);
         }
     }
 
@@ -401,41 +445,41 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.calendars_card:
-                boolean isOpenCalendarCommand = binding.calendarsCard.gregorianDateLinear.getVisibility() != View.VISIBLE;
+                boolean isOpenCalendarCommand = calendarsBinding.gregorianDateLinear.getVisibility() != View.VISIBLE;
 
-                binding.calendarsCard.moreCalendar.setImageResource(isOpenCalendarCommand
+                calendarsBinding.moreCalendar.setImageResource(isOpenCalendarCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                binding.calendarsCard.gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                binding.calendarsCard.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                binding.calendarsCard.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                binding.calendarsCard.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
                 break;
 
-            case R.id.owghat:
+            case R.id.owghat_content:
 
-                boolean isOpenOwghatCommand = binding.sunriseLayout.getVisibility() == View.GONE;
+                boolean isOpenOwghatCommand = owghatBinding.sunriseLayout.getVisibility() == View.GONE;
 
-                binding.moreOwghat.setImageResource(isOpenOwghatCommand
+                owghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                binding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                binding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                binding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                binding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                binding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                binding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
 
                 if (lastSelectedJdn == CalendarUtils.getTodayJdn() && !isOpenOwghatCommand) {
-                    binding.svPlot.setVisibility(View.VISIBLE);
-                    binding.svPlot.startAnimate();
+                    owghatBinding.svPlot.setVisibility(View.VISIBLE);
+                    owghatBinding.svPlot.startAnimate();
                 } else {
-                    binding.svPlot.setVisibility(View.GONE);
+                    owghatBinding.svPlot.setVisibility(View.GONE);
                 }
 
                 break;
@@ -447,32 +491,32 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
             case R.id.shamsi_date:
             case R.id.shamsi_date_day:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateDay.getText() + " " +
-                        binding.calendarsCard.shamsiDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(context, calendarsBinding.shamsiDateDay.getText() + " " +
+                        calendarsBinding.shamsiDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.shamsi_date_linear:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.shamsiDateLinear.getText());
+                UIUtils.copyToClipboard(context, calendarsBinding.shamsiDateLinear.getText());
                 break;
 
             case R.id.gregorian_date:
             case R.id.gregorian_date_day:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateDay.getText() + " " +
-                        binding.calendarsCard.gregorianDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(context, calendarsBinding.gregorianDateDay.getText() + " " +
+                        calendarsBinding.gregorianDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.gregorian_date_linear:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.gregorianDateLinear.getText());
+                UIUtils.copyToClipboard(context, calendarsBinding.gregorianDateLinear.getText());
                 break;
 
             case R.id.islamic_date:
             case R.id.islamic_date_day:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateDay.getText() + " " +
-                        binding.calendarsCard.islamicDate.getText().toString().replace("\n", " "));
+                UIUtils.copyToClipboard(context, calendarsBinding.islamicDateDay.getText() + " " +
+                        calendarsBinding.islamicDate.getText().toString().replace("\n", " "));
                 break;
 
             case R.id.islamic_date_linear:
-                UIUtils.copyToClipboard(context, binding.calendarsCard.islamicDateLinear.getText());
+                UIUtils.copyToClipboard(context, calendarsBinding.islamicDateLinear.getText());
                 break;
         }
     }
@@ -488,7 +532,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
 
-        CalendarAdapter.gotoOffset(binding.calendarPager, 0);
+        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
 
         selectDay(CalendarUtils.getTodayJdn());
     }
@@ -502,7 +546,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
-        CalendarAdapter.gotoOffset(binding.calendarPager, viewPagerPosition);
+        CalendarAdapter.gotoOffset(mainBinding.calendarPager, viewPagerPosition);
 
         selectDay(jdn);
 

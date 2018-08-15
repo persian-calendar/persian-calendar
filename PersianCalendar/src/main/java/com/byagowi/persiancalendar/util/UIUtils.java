@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.CalendarsCardBinding;
+import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.github.praytimes.Clock;
@@ -55,7 +55,7 @@ public class UIUtils {
     }
 
     public static void fillCalendarsCard(Context context, long jdn,
-                                         CalendarsCardBinding binding,
+                                         CalendarsTabContentBinding binding,
                                          CalendarType calendarType) {
         PersianDate persianDate = DateConverter.jdnToPersian(jdn);
         CivilDate civilDate = DateConverter.jdnToCivil(jdn);
