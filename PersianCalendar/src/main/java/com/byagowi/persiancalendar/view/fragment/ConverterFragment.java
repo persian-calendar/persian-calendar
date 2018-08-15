@@ -46,15 +46,12 @@ public class ConverterFragment extends Fragment implements
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
                 false);
 
-        binding.calendarsTabContent.calendarsCardIcon.setImageResource(R.drawable.ic_swap_vertical_circle);
+        binding.calendarsCardIcon.setImageResource(R.drawable.ic_swap_vertical_circle);
 
-        binding.calendarsTabContent.today.setVisibility(View.GONE);
-        binding.calendarsTabContent.todayIcon.setVisibility(View.GONE);
-        binding.calendarsTabContent.today.setOnClickListener(this);
-        binding.calendarsTabContent.todayIcon.setOnClickListener(this);
-
-        // Hide the button, we don't need it here
-        binding.calendarsTabContent.moreCalendar.setVisibility(View.GONE);
+        binding.today.setVisibility(View.GONE);
+        binding.todayIcon.setVisibility(View.GONE);
+        binding.today.setOnClickListener(this);
+        binding.todayIcon.setOnClickListener(this);
 
         binding.calendarsTabContent.shamsiDateLinear.setOnClickListener(this);
         binding.calendarsTabContent.shamsiDateDay.setOnClickListener(this);
@@ -116,16 +113,18 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
+            binding.weekDayName.setText(CalendarUtils.dayTitleSummary(
+                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
             UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType);
             lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {
                 binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
             }
 
-            binding.calendarsTabContent.calendarsCard.setVisibility(View.VISIBLE);
+            binding.calendarsTabContent.getRoot().setVisibility(View.VISIBLE);
 
         } catch (RuntimeException e) {
-            binding.calendarsTabContent.calendarsCard.setVisibility(View.GONE);
+            binding.calendarsTabContent.getRoot().setVisibility(View.GONE);
             Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
         }
     }

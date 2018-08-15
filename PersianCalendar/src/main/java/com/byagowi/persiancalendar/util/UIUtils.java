@@ -61,7 +61,6 @@ public class UIUtils {
         CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
-        binding.weekDayName.setText(Utils.getWeekDayName(civilDate));
         binding.shamsiDateLinear.setText(CalendarUtils.toLinearDate(persianDate));
         binding.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
         binding.shamsiDate.setText(CalendarUtils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
@@ -77,17 +76,17 @@ public class UIUtils {
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 
         if (diffDays == 0) {
-            binding.today.setVisibility(View.GONE);
-            binding.todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
-            }
-            binding.today.setVisibility(View.GONE);
-            binding.todayIcon.setVisibility(View.GONE);
+//            binding.today.setVisibility(View.GONE);
+//            binding.todayIcon.setVisibility(View.GONE);
+//            if (Utils.isIranTime()) {
+//                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
+//            }
+//            binding.today.setVisibility(View.GONE);
+//            binding.todayIcon.setVisibility(View.GONE);
             binding.diffDate.setVisibility(View.GONE);
         } else {
-            binding.today.setVisibility(View.VISIBLE);
-            binding.todayIcon.setVisibility(View.VISIBLE);
+//            binding.today.setVisibility(View.VISIBLE);
+//            binding.todayIcon.setVisibility(View.VISIBLE);
             binding.diffDate.setVisibility(View.VISIBLE);
 
             CivilDate civilBase = new CivilDate(2000, 1, 1);
