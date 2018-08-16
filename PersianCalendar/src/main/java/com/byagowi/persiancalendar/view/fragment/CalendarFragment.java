@@ -82,6 +82,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private CalendarsTabContentBinding calendarsBinding;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
+    private static final int
+            CALENDARS_TAB = 0,
+            EVENT_TAB = 1,
+            OWGHAT_TAB = 2;
 
     @Nullable
     @Override
@@ -124,11 +128,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, 0);
-        if (lastTab >= tabs.size())
-            lastTab = 0;
+        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
+        if (lastTab >= tabs.size()) {
+            lastTab = CALENDARS_TAB;
+        }
 
-        if (lastTab != 0) {
+        if (lastTab != CALENDARS_TAB) {
             mainBinding.tabContent.setCurrentItem(lastTab, false);
         }
 
@@ -432,6 +437,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (isToday && !isOwghatOpen) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
+            if (mainBinding.tabContent.getCurrentItem() == OWGHAT_TAB) {
+                owghatBinding.svPlot.startAnimate();
+            }
         } else {
             owghatBinding.svPlot.setVisibility(View.GONE);
         }
