@@ -431,7 +431,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
         owghatBinding.svPlot.setSunriseSunsetCalculator(prayTimes);
 
-        if (isToday && !isOwghatOpen) {
+        if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
             if (mainBinding.tabContent.getCurrentItem() == OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate();
@@ -440,8 +440,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.svPlot.setVisibility(View.GONE);
         }
     }
-
-    private boolean isOwghatOpen = false;
 
     @Override
     public void onClick(View v) {
@@ -476,12 +474,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && !isOpenOwghatCommand) {
+                if (lastSelectedJdn == CalendarUtils.getTodayJdn()) {
                     owghatBinding.svPlot.setVisibility(View.VISIBLE);
                     owghatBinding.svPlot.startAnimate();
                 } else {
