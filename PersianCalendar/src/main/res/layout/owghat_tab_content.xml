@@ -35,14 +35,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iconImasak"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_4" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/imsakText"
                     android:layout_width="wrap_content"
@@ -69,14 +61,6 @@
                 android:layout_marginBottom="@dimen/item_calendar_margin_top"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iconMorning"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_4" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fajrText"
@@ -106,13 +90,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_7" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sunriseText"
                     android:layout_width="wrap_content"
@@ -139,13 +116,6 @@
                 android:layout_marginBottom="@dimen/item_calendar_margin_top"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_5" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/dhuhrText"
@@ -175,13 +145,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_5" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/asrText"
                     android:layout_width="wrap_content"
@@ -210,13 +173,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_6" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sunsetText"
                     android:layout_width="wrap_content"
@@ -243,13 +199,6 @@
                 android:layout_marginBottom="@dimen/item_calendar_margin_top"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_3" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/maghribText"
@@ -279,13 +228,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_3" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ishaText"
                     android:layout_width="wrap_content"
@@ -314,13 +256,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:gravity="center"
-                    android:tint="?attr/colorIcon"
-                    app:srcCompat="@drawable/ic_brightness_2" />
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midnightText"
                     android:layout_width="wrap_content"
@@ -345,9 +280,9 @@
         <!-- sun content -->
         <com.byagowi.persiancalendar.view.sunrisesunset.SunView
             android:id="@+id/svPlot"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:layout_margin="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
