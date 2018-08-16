@@ -10,7 +10,6 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
-import android.graphics.Region;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -153,6 +152,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(nightColor);
         canvas.clipRect(0, height * 0.75f, width * current, height);
         canvas.drawPath(nightPath, mPaint);
+
         canvas.restore();
 
         canvas.save();
@@ -182,18 +182,19 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw sunset and sunrise tag line indicator
         mPaint.setColor(taggingColor);
         mPaint.setStrokeWidth(2);
-        canvas.drawLine(width * 0.17f, height * 0.2f, width * 0.17f, height * 0.7f, mPaint);
-        canvas.drawLine(width * 0.83f, height * 0.2f, width * 0.83f, height * 0.7f, mPaint);
+        canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
+        canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint);
+        canvas.drawLine(canvas.getWidth() / 2, height * 0.1f, canvas.getWidth() / 2, height * 0.8f, mPaint);
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(30);
         mPaint.setColor(dayColor);
-        canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.1f, mPaint);
+        canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(nightColor);
-        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.1f, mPaint);
+        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
         mPaint.setColor(daySecondColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 20, mPaint);
+        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 10, mPaint);
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
