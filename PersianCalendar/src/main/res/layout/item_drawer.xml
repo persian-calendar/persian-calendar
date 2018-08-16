@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
-            name="title"
-            type="String" />
-
-        <variable
-            name="subtitle"
-            type="String" />
-
-        <variable
-            name="showSubtitle"
-            type="boolean" />
+            name="model"
+            type="com.byagowi.persiancalendar.viewmodel.DrawerItemViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/drawer_item_height"
-        android:layout_centerVertical="true"
+        android:onClick="@{model.callback}"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/itemIcon"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/icon_margin"
             android:layout_marginRight="@dimen/icon_margin"
-            android:tint="?attr/colorDrawerIcon" />
+            android:tint="?attr/colorDrawerIcon"
+            app:srcCompat="@{model.icon}"
+            tools:src="@drawable/ic_settings" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -43,18 +36,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start|left"
-                android:text="@{title}"
+                android:text="@{model.title}"
                 android:textColor="?attr/colorTextDrawer"
-                android:textSize="@dimen/text_size_drawer" />
+                android:textSize="@dimen/text_size_drawer"
+                tools:text="Title" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start|left"
-                android:text="@{subtitle}"
+                android:text="@{model.subtitle}"
                 android:textColor="?attr/colorTextSecond"
                 android:textSize="@dimen/text_size_drawer_subtitle"
-                android:visibility="@{showSubtitle ? View.VISIBLE :  View.GONE}" />
+                android:visibility="@{model.subtitleVisibility}"
+                tools:text="Subtitle" />
 
         </LinearLayout>
 

@@ -46,12 +46,13 @@ public class ConverterFragment extends Fragment implements
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
                 false);
 
-        binding.calendarsCardIcon.setImageResource(R.drawable.ic_swap_vertical_circle);
+        // Always on
+        binding.calendarsTabContent.moreCalendar.setVisibility(View.GONE);
 
-        binding.today.setVisibility(View.GONE);
-        binding.todayIcon.setVisibility(View.GONE);
-        binding.today.setOnClickListener(this);
-        binding.todayIcon.setOnClickListener(this);
+        binding.calendarsTabContent.today.setVisibility(View.GONE);
+        binding.calendarsTabContent.todayIcon.setVisibility(View.GONE);
+        binding.calendarsTabContent.today.setOnClickListener(this);
+        binding.calendarsTabContent.todayIcon.setOnClickListener(this);
 
         binding.calendarsTabContent.shamsiDateLinear.setOnClickListener(this);
         binding.calendarsTabContent.shamsiDateDay.setOnClickListener(this);
@@ -113,8 +114,6 @@ public class ConverterFragment extends Fragment implements
                     break;
             }
 
-            binding.weekDayName.setText(CalendarUtils.dayTitleSummary(
-                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
             UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType);
             lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {

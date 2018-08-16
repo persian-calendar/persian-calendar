@@ -39,7 +39,7 @@ public class UpdateUtils {
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
-        Utils.applyAppLanguageIfNeeded(context);
+        Utils.applyAppLanguage(context);
         Calendar calendar = CalendarUtils.makeCalendarFromDate(new Date());
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);

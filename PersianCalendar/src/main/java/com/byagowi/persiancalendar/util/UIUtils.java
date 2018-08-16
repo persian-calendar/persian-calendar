@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
@@ -29,6 +30,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.BindingAdapter;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
@@ -61,6 +63,7 @@ public class UIUtils {
         CivilDate civilDate = DateConverter.jdnToCivil(jdn);
         IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
 
+        binding.weekDayName.setText(Utils.getWeekDayName(civilDate));
         binding.shamsiDateLinear.setText(CalendarUtils.toLinearDate(persianDate));
         binding.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
         binding.shamsiDate.setText(CalendarUtils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
@@ -76,17 +79,17 @@ public class UIUtils {
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 
         if (diffDays == 0) {
-//            binding.today.setVisibility(View.GONE);
-//            binding.todayIcon.setVisibility(View.GONE);
-//            if (Utils.isIranTime()) {
-//                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
-//            }
-//            binding.today.setVisibility(View.GONE);
-//            binding.todayIcon.setVisibility(View.GONE);
+            binding.today.setVisibility(View.GONE);
+            binding.todayIcon.setVisibility(View.GONE);
+            if (Utils.isIranTime()) {
+                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
+            }
+            binding.today.setVisibility(View.GONE);
+            binding.todayIcon.setVisibility(View.GONE);
             binding.diffDate.setVisibility(View.GONE);
         } else {
-//            binding.today.setVisibility(View.VISIBLE);
-//            binding.todayIcon.setVisibility(View.VISIBLE);
+            binding.today.setVisibility(View.VISIBLE);
+            binding.todayIcon.setVisibility(View.VISIBLE);
             binding.diffDate.setVisibility(View.VISIBLE);
 
             CivilDate civilBase = new CivilDate(2000, 1, 1);
@@ -309,5 +312,11 @@ public class UIUtils {
 
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    // https://stackoverflow.com/a/36941125
+    @BindingAdapter({"app:srcCompat"})
+    public static void setImageViewResource(ImageView imageView, int resource) {
+        imageView.setImageResource(resource);
     }
 }

@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
+import com.byagowi.persiancalendar.viewmodel.LocationAdapterViewModel;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private List<CityEntity> cities;
     private LocationPreferenceDialog locationPreferenceDialog;
 
-    public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog, List<CityEntity> cities) {
+    public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog,
+                           List<CityEntity> cities) {
         this.locationPreferenceDialog = locationPreferenceDialog;
         this.cities = cities;
     }
@@ -49,30 +51,32 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         ViewHolder(ListItemCityNameBinding itemBinding) {
             super(itemBinding.getRoot());
             this.binding = itemBinding;
-            itemBinding.getRoot().setOnClickListener(this);
+        }
+
+        void bindLocation(CityEntity cityEntity) {
+            String city, country;
+            switch (Utils.getAppLanguage()) {
+                case Constants.LANG_EN:
+                    city = cityEntity.getEn();
+                    country = cityEntity.getCountryEn();
+                    break;
+                case Constants.LANG_CKB:
+                    city = cityEntity.getCkb();
+                    country = cityEntity.getCountryCkb();
+                    break;
+                default:
+                    city = cityEntity.getFa();
+                    country = cityEntity.getCountryFa();
+                    break;
+            }
+            LocationAdapterViewModel model = new LocationAdapterViewModel(city, country, this);
+            binding.setModel(model);
+            binding.executePendingBindings();
         }
 
         @Override
         public void onClick(View view) {
             locationPreferenceDialog.selectItem(cities.get(getAdapterPosition()).getKey());
-        }
-
-        void bindLocation(CityEntity cityEntity) {
-            switch (Utils.getAppLanguage()) {
-                case Constants.LANG_EN:
-                    binding.setCity(cityEntity.getEn());
-                    binding.setCountry(cityEntity.getCountryEn());
-                    break;
-                case Constants.LANG_CKB:
-                    binding.setCity(cityEntity.getCkb());
-                    binding.setCountry(cityEntity.getCountryCkb());
-                    break;
-                default:
-                    binding.setCity(cityEntity.getFa());
-                    binding.setCountry(cityEntity.getCountryFa());
-                    break;
-            }
-            binding.executePendingBindings();
         }
     }
 }
