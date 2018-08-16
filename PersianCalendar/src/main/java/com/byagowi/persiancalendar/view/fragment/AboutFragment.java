@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +25,14 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.google.android.material.chip.Chip;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -91,6 +98,38 @@ public class AboutFragment extends Fragment {
                 Toast.makeText(localActivity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
             }
         });
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        Drawable developerIcon = ContextCompat.getDrawable(localActivity, R.drawable.ic_developer);
+        Drawable designerIcon = ContextCompat.getDrawable(localActivity, R.drawable.ic_designer);
+        Resources.Theme theme = localActivity.getTheme();
+        TypedValue color = new TypedValue();
+        theme.resolveAttribute(R.attr.colorDrawerIcon, color, true);
+
+        for (String line : getString(R.string.about_developers_list).trim().split("\n")) {
+            Chip chip = new Chip(localActivity);
+            chip.setText(line);
+            chip.setChipIcon(developerIcon);
+            chip.setChipIconTintResource(color.resourceId);
+            binding.developers.addView(chip);
+        }
+
+        for (String line : getString(R.string.about_designers_list).trim().split("\n")) {
+            Chip chip = new Chip(localActivity);
+            chip.setText(line);
+            chip.setChipIcon(designerIcon);
+            chip.setChipIconTintResource(color.resourceId);
+            binding.developers.addView(chip);
+        }
+
+        for (String line : getString(R.string.about_contributors_list).trim().split("\n")) {
+            Chip chip = new Chip(localActivity);
+            chip.setText(line);
+            chip.setChipIcon(developerIcon);
+            chip.setChipIconTintResource(color.resourceId);
+            binding.developers.addView(chip);
+        }
+
 
         return binding.getRoot();
     }

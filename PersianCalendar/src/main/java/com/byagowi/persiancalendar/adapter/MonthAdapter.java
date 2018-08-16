@@ -57,30 +57,25 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
+        TypedValue value = new TypedValue();
 
-        TypedValue colorHolidayAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.colorHoliday, colorHolidayAttr, true);
-        colorHoliday = ContextCompat.getColor(context, colorHolidayAttr.resourceId);
+        theme.resolveAttribute(R.attr.colorHoliday, value, true);
+        colorHoliday = ContextCompat.getColor(context, value.resourceId);
 
-        TypedValue colorTextHolidayAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.colorTextHoliday, colorTextHolidayAttr, true);
-        colorTextHoliday = ContextCompat.getColor(context, colorTextHolidayAttr.resourceId);
+        theme.resolveAttribute(R.attr.colorTextHoliday, value, true);
+        colorTextHoliday = ContextCompat.getColor(context, value.resourceId);
 
-        TypedValue colorTextDayAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.colorTextDay, colorTextDayAttr, true);
-        colorTextDay = ContextCompat.getColor(context, colorTextDayAttr.resourceId);
+        theme.resolveAttribute(R.attr.colorTextDay, value, true);
+        colorTextDay = ContextCompat.getColor(context, value.resourceId);
 
-        TypedValue colorPrimaryAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.colorPrimary, colorPrimaryAttr, true);
-        colorPrimary = ContextCompat.getColor(context, colorPrimaryAttr.resourceId);
+        theme.resolveAttribute(R.attr.colorPrimary, value, true);
+        colorPrimary = ContextCompat.getColor(context, value.resourceId);
 
-        TypedValue colorDayNameAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.colorTextDayName, colorDayNameAttr, true);
-        colorDayName = ContextCompat.getColor(context, colorDayNameAttr.resourceId);
+        theme.resolveAttribute(R.attr.colorTextDayName, value, true);
+        colorDayName = ContextCompat.getColor(context, value.resourceId);
 
-        TypedValue shapeSelectDayAttr = new TypedValue();
-        theme.resolveAttribute(R.attr.circleSelect, shapeSelectDayAttr, true);
-        shapeSelectDay = shapeSelectDayAttr.resourceId;
+        theme.resolveAttribute(R.attr.circleSelect, value, true);
+        shapeSelectDay = value.resourceId;
     }
 
     private int selectedDay = -1;
