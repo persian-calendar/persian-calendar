@@ -34,18 +34,21 @@
                 android:id="@+id/dialogButtonGPS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/gps_settings" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialogButtonWiFi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/wifi_settings" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialogButtonGPRS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:text="@string/gprs_settings" />
 
         </LinearLayout>
