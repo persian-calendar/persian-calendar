@@ -16,6 +16,10 @@ android {
     buildTypes {
         debug {
             versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" + "git rev-parse --short HEAD".execute().text.trim()
+
+            apply plugin: 'io.fabric'
+            // apply plugin: 'com.jakewharton.hugo'
+            // apply plugin: 'com.frogermcs.androiddevmetrics'
         }
         release {
             minifyEnabled true
@@ -52,8 +56,9 @@ dependencies {
     implementation "androidx.cardview:cardview:$androidXVersion"
     implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    // Optional, if you use support library fragments:
-    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
     // implementation 'android.arch.work:work-runtime:1.0.0-alpha05'
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
+    debugImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 }
