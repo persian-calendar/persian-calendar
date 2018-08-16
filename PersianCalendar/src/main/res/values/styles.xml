@@ -26,7 +26,7 @@
     <attr name="appDivider" format="reference" />
 
     <!-- Base application theme. -->
-    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
@@ -62,7 +62,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>

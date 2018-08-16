@@ -8,12 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard"
                 android:gravity="center">
@@ -43,9 +43,9 @@
                     android:paddingBottom="@dimen/padding_item"
                     android:textSize="@dimen/text_size_description" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
@@ -56,7 +56,7 @@
                     android:text="@string/about_license"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/licenses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                         android:tint="?attr/colorDrawerIcon"
                         app:srcCompat="@drawable/ic_licences" />
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -95,13 +95,13 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="12sp" />
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
@@ -112,7 +112,7 @@
                     android:text="@string/about_help_title"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/help"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         android:tint="?attr/colorDrawerIcon"
                         app:srcCompat="@drawable/ic_help" />
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -152,13 +152,13 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="12sp" />
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
@@ -169,7 +169,7 @@
                     android:text="@string/about_support_developers"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/reportBug"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                         android:tint="?attr/colorDrawerIcon"
                         app:srcCompat="@drawable/ic_bug" />
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -208,11 +208,11 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="12sp" />
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                         android:tint="?attr/colorDrawerIcon"
                         app:srcCompat="@drawable/ic_email" />
 
-                    <androidx.appcompat.widget.LinearLayoutCompat
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -251,13 +251,13 @@
                             android:textColor="?attr/colorTextSecond"
                             android:textSize="12sp" />
 
-                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
@@ -268,7 +268,7 @@
                     android:text="@string/about_developers"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/developers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -290,11 +290,11 @@
                         android:text="@string/about_developers_list"
                         android:textColor="?attr/colorTextDrawer" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
@@ -305,7 +305,7 @@
                     android:text="@string/about_contributors"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:id="@+id/contributors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -327,11 +327,11 @@
                         android:text="@string/about_contributors_list"
                         android:textColor="?attr/colorTextDrawer" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
     </ScrollView>
 

@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/calendars_tab_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:orientation="vertical"
-        app:divider="?attr/appDivider"
-        app:dividerPadding="@dimen/divider_margin"
-        app:showDividers="middle">
+        android:divider="?attr/appDivider"
+        android:dividerPadding="@dimen/divider_margin"
+        android:showDividers="middle">
 
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
@@ -22,20 +22,20 @@
             android:paddingLeft="@dimen/card_padding"
             android:paddingRight="@dimen/card_padding"
             android:paddingTop="@dimen/padding_item"
-            app:divider="?attr/appDivider"
-            app:dividerPadding="@dimen/divider_margin2"
+            android:divider="?attr/appDivider"
+            android:dividerPadding="@dimen/divider_margin2"
             app:flexWrap="wrap"
             app:justifyContent="center"
-            app:showDividers="middle">
+            android:showDividers="middle">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/shamsi_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
@@ -61,7 +61,7 @@
                         android:textSize="@dimen/text_size_description"
                         tools:text="a\nb" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/shamsi_date_linear"
@@ -72,16 +72,16 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="1/1/1990" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/gregorian_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
@@ -107,7 +107,7 @@
                         android:textSize="@dimen/text_size_description"
                         tools:text="a\nb" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gregorian_date_linear"
@@ -118,16 +118,16 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="1/1/1990" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/islamic_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
@@ -153,7 +153,7 @@
                         android:textSize="@dimen/text_size_description"
                         tools:text="a\nb" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/islamic_date_linear"
@@ -164,18 +164,18 @@
                     android:textSize="@dimen/text_size_description"
                     tools:text="1/1/1990" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
         </com.google.android.flexbox.FlexboxLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/diff_date_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:divider="?attr/appDivider"
-            app:dividerPadding="@dimen/divider_margin"
-            app:showDividers="middle">
+            android:divider="?attr/appDivider"
+            android:dividerPadding="@dimen/divider_margin"
+            android:showDividers="middle">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/diff_date"
@@ -203,8 +203,8 @@
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
 </layout>

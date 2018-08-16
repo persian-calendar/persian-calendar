@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         binding.navigationView.setHasFixedSize(true);
         adapter = new DrawerAdapter(this);
         binding.navigationView.setAdapter(adapter);
+        binding.navigationView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.navigationView.setLayoutManager(layoutManager);
