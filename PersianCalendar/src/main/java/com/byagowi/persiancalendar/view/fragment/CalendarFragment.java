@@ -133,9 +133,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             lastTab = CALENDARS_TAB;
         }
 
-        if (lastTab != CALENDARS_TAB) {
-            mainBinding.tabContent.setCurrentItem(lastTab, false);
-        }
+        mainBinding.tabContent.setCurrentItem(lastTab, false);
 
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
@@ -145,17 +143,17 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             mainBinding.tabContent.setRotationY(180);
         }
 
-//        mainBinding.today.setVisibility(View.GONE);
-//        mainBinding.todayIcon.setVisibility(View.GONE);
-
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         mainBinding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
         CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
 
         mainBinding.calendarPager.addOnPageChangeListener(changeListener);
 
-//        mainBinding.today.setOnClickListener(this);
-//        mainBinding.todayIcon.setOnClickListener(this);
+        calendarsBinding.today.setVisibility(View.GONE);
+        calendarsBinding.todayIcon.setVisibility(View.GONE);
+        calendarsBinding.today.setOnClickListener(this);
+        calendarsBinding.todayIcon.setOnClickListener(this);
+
         calendarsBinding.gregorianDate.setOnClickListener(this);
         calendarsBinding.gregorianDateDay.setOnClickListener(this);
         calendarsBinding.gregorianDateLinear.setOnClickListener(this);
@@ -175,7 +173,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         String cityName = Utils.getCityName(context, false);
         if (!TextUtils.isEmpty(cityName)) {
-//            mainBinding.owghatText.append(" (" + cityName + ")");
+            owghatBinding.owghatText.setText(cityName);
         }
 
         // This will immediately be replaced by the same functionality on fragment but is here to
@@ -208,8 +206,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                     CalendarAdapter.positionToOffset(position))
                             .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
-//            mainBinding.today.setVisibility(View.VISIBLE);
-//            mainBinding.todayIcon.setVisibility(View.VISIBLE);
+            calendarsBinding.today.setVisibility(View.VISIBLE);
+            calendarsBinding.todayIcon.setVisibility(View.VISIBLE);
         }
 
     };
@@ -225,8 +223,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-//        mainBinding.weekDayName.setText(CalendarUtils.dayTitleSummary(
-//                CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)));
         UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
@@ -457,9 +453,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             case R.id.calendars_tab_content:
                 boolean isOpenCalendarCommand = calendarsBinding.gregorianDateLinear.getVisibility() != View.VISIBLE;
 
-//                calendarsBinding.moreCalendar.setImageResource(isOpenCalendarCommand
-//                        ? R.drawable.ic_keyboard_arrow_up
-//                        : R.drawable.ic_keyboard_arrow_down);
+                calendarsBinding.moreCalendar.setImageResource(isOpenCalendarCommand
+                        ? R.drawable.ic_keyboard_arrow_up
+                        : R.drawable.ic_keyboard_arrow_down);
                 calendarsBinding.gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
@@ -471,9 +467,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
                 boolean isOpenOwghatCommand = owghatBinding.sunriseLayout.getVisibility() == View.GONE;
 
-//                owghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
-//                        ? R.drawable.ic_keyboard_arrow_up
-//                        : R.drawable.ic_keyboard_arrow_down);
+                owghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
+                        ? R.drawable.ic_keyboard_arrow_up
+                        : R.drawable.ic_keyboard_arrow_down);
                 owghatBinding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);

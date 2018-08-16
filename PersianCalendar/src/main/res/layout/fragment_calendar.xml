@@ -30,49 +30,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<androidx.appcompat.widget.AppCompatTextView-->
-                    <!--android:id="@+id/week_day_name"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:textColor="?attr/colorTextPrimary"-->
-                    <!--android:textSize="@dimen/text_size_title"-->
-                    <!--tools:text="Calendar" />-->
-
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_gravity="right|end"-->
-                    <!--android:layout_marginEnd="@dimen/icon_margin"-->
-                    <!--android:layout_marginRight="@dimen/icon_margin"-->
-                    <!--android:gravity="end|right|center_vertical">-->
-
-                    <!--<androidx.appcompat.widget.AppCompatImageView-->
-                    <!--android:id="@+id/today_icon"-->
-                    <!--android:layout_width="18dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:tint="?attr/colorTextPrimary"-->
-                    <!--app:srcCompat="@drawable/ic_restore_modified" />-->
-
-                    <!--<androidx.appcompat.widget.AppCompatTextView-->
-                    <!--android:id="@+id/today"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:text="@string/today"-->
-                    <!--android:textColor="?attr/colorTextPrimary"-->
-                    <!--android:textSize="@dimen/text_size_title" />-->
-
-                    <!--</LinearLayout>-->
-
-                    <!--</LinearLayout>-->
-
                     <com.google.android.material.tabs.TabLayout
                         style="@style/Widget.MaterialComponents.TabLayout"
                         android:id="@+id/tab_layout"
