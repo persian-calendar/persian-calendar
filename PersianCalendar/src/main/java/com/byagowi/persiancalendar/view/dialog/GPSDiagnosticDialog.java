@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -20,7 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 
-public class GPSDiagnosticDialog extends DialogFragment {
+public class GPSDiagnosticDialog extends DialogFragment implements View.OnClickListener {
 
     public static boolean needsDiagnostic(Context context) {
         try {
@@ -95,38 +96,39 @@ public class GPSDiagnosticDialog extends DialogFragment {
             binding.dialogButtonGPS.setVisibility(View.GONE);
         }
 
-        binding.dialogButtonGPS.setOnClickListener(v -> {
-            Context ctx = getContext();
-            if (ctx != null) {
-                ctx.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-            dismiss();
-            // get gps
-        });
-
-        binding.dialogButtonWiFi.setOnClickListener(v -> {
-            Context ctx = getContext();
-            if (ctx != null) {
-                ctx.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-            }
-            dismiss();
-            // get wifi
-        });
-
-        binding.dialogButtonGPRS.setOnClickListener(v -> {
-            Context ctx = getContext();
-            if (ctx != null) {
-                ctx.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-            }
-            dismiss();
-            // get gprs
-        });
-
-        binding.dialogButtonExit.setOnClickListener(v -> {
-            dismiss();
-            // exit
-        });
+        binding.dialogButtonGPS.setOnClickListener(this);
+        binding.dialogButtonWiFi.setOnClickListener(this);
+        binding.dialogButtonGPRS.setOnClickListener(this);
+        binding.dialogButtonExit.setOnClickListener(this);
 
         return dialogBuilder.create();
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = null;
+        switch (view.getId()) {
+            case R.id.dialogButtonGPS:
+                intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                break;
+
+            case R.id.dialogButtonWiFi:
+                intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                break;
+
+            case R.id.dialogButtonGPRS:
+                intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                break;
+        }
+
+        Context context = getContext();
+        if (intent != null && context != null) {
+            try {
+                context.startActivity(intent);
+            } catch (Exception e) {
+                Log.e("GPSDiagnosticDialog", "startActivity fail", e);
+            }
+        }
+        dismiss();
     }
 }
