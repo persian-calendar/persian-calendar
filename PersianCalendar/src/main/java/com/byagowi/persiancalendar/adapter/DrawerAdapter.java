@@ -38,14 +38,13 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
 
         Resources.Theme theme = mainActivity.getTheme();
-        TypedValue selectableBackground = new TypedValue();
-        theme.resolveAttribute(R.attr.selectableItemBackground, selectableBackground, true);
+        TypedValue value = new TypedValue();
 
-        TypedValue selectedBackground = new TypedValue();
-        theme.resolveAttribute(R.attr.colorDrawerSelect, selectedBackground, true);
+        theme.resolveAttribute(R.attr.selectableItemBackground, value, true);
+        selectableBackgroundResource = value.resourceId;
 
-        selectedBackgroundColor = ContextCompat.getColor(mainActivity, selectedBackground.resourceId);
-        selectableBackgroundResource = selectableBackground.resourceId;
+        theme.resolveAttribute(R.attr.colorDrawerSelect, value, true);
+        selectedBackgroundColor = ContextCompat.getColor(mainActivity, value.resourceId);
     }
 
     @Override

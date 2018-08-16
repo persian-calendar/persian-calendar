@@ -268,66 +268,14 @@
                     android:text="@string/about_developers"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <LinearLayout
+                <com.google.android.material.chip.ChipGroup
                     android:id="@+id/developers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icon_developers"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:tint="?attr/colorDrawerIcon"
-                        app:srcCompat="@drawable/ic_developer" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/title_developers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/about_developers_list"
-                        android:textColor="?attr/colorTextDrawer" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/AboutCard"
-                android:background="?attr/colorCard">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/about_contributors"
+                    android:layoutDirection="ltr"
+                    android:padding="5dp"
                     android:textColor="?attr/colorTextDrawer" />
-
-                <LinearLayout
-                    android:id="@+id/contributors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icon_contributors"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:tint="?attr/colorDrawerIcon"
-                        app:srcCompat="@drawable/ic_developer" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/title_contributors"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/about_contributors_list"
-                        android:textColor="?attr/colorTextDrawer" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
