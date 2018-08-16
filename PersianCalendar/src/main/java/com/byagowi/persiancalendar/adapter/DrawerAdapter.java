@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ItemDrawerBinding;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.viewmodel.DrawerItemViewModel;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -77,7 +77,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         ViewHolder(ItemDrawerBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.getRoot().setOnClickListener(this);
         }
 
         @Override
@@ -86,12 +85,11 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         }
 
         void bind(int position) {
-            binding.setTitle(drawerTitles[position]);
-            binding.setSubtitle(drawerSubtitles[position]);
-            binding.setShowSubtitle(!TextUtils.isEmpty(drawerSubtitles[position]));
+            binding.setModel(new DrawerItemViewModel(drawerIcon.getResourceId(position, 0),
+                    drawerTitles[position], drawerSubtitles[position], this));
             binding.executePendingBindings();
 
-            binding.itemIcon.setImageResource(drawerIcon.getResourceId(position, 0));
+            // These also should be moved to a better place
             if (selectedItem == position) {
                 itemView.setBackgroundColor(selectedBackgroundColor);
             } else {

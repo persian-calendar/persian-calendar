@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
@@ -29,6 +30,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.BindingAdapter;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
@@ -309,5 +311,11 @@ public class UIUtils {
 
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    // https://stackoverflow.com/a/36941125
+    @BindingAdapter({"app:srcCompat"})
+    public static void setImageViewResource(ImageView imageView, int resource) {
+        imageView.setImageResource(resource);
     }
 }

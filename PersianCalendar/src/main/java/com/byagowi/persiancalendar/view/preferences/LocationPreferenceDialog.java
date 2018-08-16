@@ -22,7 +22,8 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new LocationAdapter(this, Utils.getAllCities(getContext(), true)));
+        recyclerView.setAdapter(new LocationAdapter(this,
+                Utils.getAllCities(getContext(), true)));
 
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);

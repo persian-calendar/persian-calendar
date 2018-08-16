@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -1014,13 +1013,6 @@ public class Utils {
 
     static public int fixDayOfWeekReverse(int dayOfWeek) {
         return (dayOfWeek + 7 - weekStartOffset) % 7;
-    }
-
-    static public void applyAppLanguageIfNeeded(Context context) {
-        if (!Locale.getDefault().getLanguage().equals(
-                UIUtils.getOnlyLanguage(language))) {
-            applyAppLanguage(context);
-        }
     }
 
     // Context preferably should be activity context not application
