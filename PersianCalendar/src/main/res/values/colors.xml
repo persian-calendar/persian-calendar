@@ -87,8 +87,8 @@
     <color name="sViewTimelineColor">#32000000</color>
     <color name="sViewTaglineColor">#14000000</color>
     <color name="sViewSunColor">#ffcc00</color>
-    <color name="sViewDayColor">#FDD84B</color>
+    <color name="sViewDayColor">#74BBEF</color>
     <color name="sViewDaySecondColor">#FF6D00</color>
-    <color name="sViewNightColor">#6d302873</color>
+    <color name="sViewNightColor">#383C7C</color>
 
 </resources>
