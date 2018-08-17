@@ -97,11 +97,15 @@ public class UIUtils {
             int yearDiff = civilOffset.getYear() - 2000;
             int monthDiff = civilOffset.getMonth() - 1;
             int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
-            binding.diffDate.setText(String.format(context.getString(R.string.date_diff_text),
+            String text = String.format(context.getString(R.string.date_diff_text),
                     Utils.formatNumber((int) diffDays),
                     Utils.formatNumber(yearDiff),
                     Utils.formatNumber(monthDiff),
-                    Utils.formatNumber(dayOfMonthDiff)));
+                    Utils.formatNumber(dayOfMonthDiff));
+            if (diffDays <= 30) {
+                text = text.split("\\(")[0];
+            }
+            binding.diffDate.setText(text);
         }
 
         {

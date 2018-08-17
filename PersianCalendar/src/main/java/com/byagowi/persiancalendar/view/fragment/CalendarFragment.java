@@ -124,8 +124,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), isRTL,
-                context, tabs, titles));
+                context, tabs));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
+
+        mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
+        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_setting);
+        if (coordinate != null) {
+            mainBinding.tabLayout.getTabAt(2).setIcon(R.drawable.ic_access_time);
+        }
 
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
@@ -174,8 +180,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             lastTab = CALENDARS_TAB;
         }
 
-        // FIXME: This should be enabled again
-        //mainBinding.tabContent.setCurrentItem(lastTab, false);
+        mainBinding.tabContent.setCurrentItem(lastTab, false);
 
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
@@ -336,6 +341,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
         eventsBinding.noEvent.setVisibility(View.VISIBLE);
+
+        eventsBinding.noEvent.setText(Utils.isShowDeviceCalendarEvents()
+                ? R.string.no_event
+                : R.string.no_event_if_no_calendar);
 
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);

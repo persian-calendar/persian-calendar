@@ -39,13 +39,11 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
 
     private Context context;
     private List<View> tabs;
-    private List<String> titles;
 
     public CardTabsAdapter(FragmentManager fm, boolean isRTL, Context context,
-                           List<View> tabs, List<String> titles) {
+                           List<View> tabs) {
         super(fm);
         this.tabs = tabs;
-        this.titles = titles;
         this.context = context;
     }
 
@@ -55,13 +53,8 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return titles.get(position);
-    }
-
-    @Override
     public int getCount() {
-        return titles.size();
+        return tabs.size();
     }
 
     private int mCurrentPosition = -1;
