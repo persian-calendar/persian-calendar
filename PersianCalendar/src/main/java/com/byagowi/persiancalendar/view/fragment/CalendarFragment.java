@@ -127,14 +127,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 context, tabs, titles));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
-        if (lastTab >= tabs.size()) {
-            lastTab = CALENDARS_TAB;
-        }
-
-        mainBinding.tabContent.setCurrentItem(lastTab, false);
-
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
             for (View tab : tabs) {
@@ -176,8 +168,16 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.owghatText.setText(cityName);
         }
 
-        // This will immediately be replaced by the same functionality on fragment but is here to
-        // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
+        if (lastTab >= tabs.size()) {
+            lastTab = CALENDARS_TAB;
+        }
+
+        // FIXME: This should be enabled again
+        //mainBinding.tabContent.setCurrentItem(lastTab, false);
+
+
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
@@ -329,7 +329,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
-        eventsBinding.warnUserIcon.setVisibility(View.GONE);
+//        eventsBinding.warnUserIcon.setVisibility(View.GONE);
 //        eventsBinding.cardEvent.setVisibility(View.GONE);
         eventsBinding.holidayTitle.setVisibility(View.GONE);
         eventsBinding.deviceEventTitle.setVisibility(View.GONE);
@@ -397,7 +397,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
+//            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
             eventsBinding.eventMessage.setText(messageToShow);
             eventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 

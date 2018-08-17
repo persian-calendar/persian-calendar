@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/day_item_size"
     android:layout_gravity="center"
@@ -10,7 +11,8 @@
         android:layout_width="@dimen/day_item_select_size"
         android:layout_height="@dimen/day_item_select_size"
         android:layout_centerInParent="true"
-        android:gravity="center" />
+        android:gravity="center"
+        tools:text="23" />
 
     <View
         android:id="@+id/today"

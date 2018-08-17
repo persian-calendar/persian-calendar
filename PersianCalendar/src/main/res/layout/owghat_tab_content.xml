@@ -10,6 +10,18 @@
         android:background="?attr/selectableItemBackground"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/owghat_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical"
+            android:textColor="?attr/colorTextPrimary"
+            android:textSize="@dimen/text_size_title"
+            tools:text="City" />
+
         <!-- actual content -->
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
@@ -290,16 +302,6 @@
             android:layout_margin="8dp"
             android:gravity="center"
             android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/owghat_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textColor="?attr/colorTextPrimary"
-                android:textSize="@dimen/text_size_title"
-                android:visibility="gone"
-                tools:text="City" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/more_owghat"

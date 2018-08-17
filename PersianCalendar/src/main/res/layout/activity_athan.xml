@@ -6,7 +6,8 @@
         android:id="@+id/activity_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:background="@drawable/fajr">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/athan_name"

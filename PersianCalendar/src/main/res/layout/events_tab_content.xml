@@ -5,9 +5,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:divider="?attr/appDivider"
         android:dividerPadding="@dimen/divider_margin"
+        android:orientation="vertical"
         android:showDividers="middle">
 
         <LinearLayout
@@ -16,19 +16,20 @@
             android:orientation="horizontal"
             android:padding="@dimen/card_padding">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/warn_user_icon"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:tint="?attr/colorHoliday"
-                app:srcCompat="@drawable/ic_info" />
-
             <LinearLayout
                 android:id="@+id/eventContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/no_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_event_is_found_for_this_day"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_description" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/holiday_title"
@@ -58,7 +59,6 @@
                     android:textAlignment="center"
                     android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description" />
-
 
             </LinearLayout>
 

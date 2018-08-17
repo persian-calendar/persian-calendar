@@ -159,5 +159,6 @@
     <string name="sunrise">طلوع</string>
     <string name="midday">ظهر</string>
     <string name="sunset">غروب</string>
+    <string name="no_event_is_found_for_this_day">No event is found for this day.</string>
 
 </resources>
