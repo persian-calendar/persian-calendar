@@ -31,8 +31,8 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.tabs.TabLayout
-                        style="@style/Widget.MaterialComponents.TabLayout"
                         android:id="@+id/tab_layout"
+                        style="@style/TabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
