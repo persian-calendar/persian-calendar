@@ -335,14 +335,17 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         eventsBinding.deviceEventTitle.setVisibility(View.GONE);
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
+        eventsBinding.noEvent.setVisibility(View.VISIBLE);
 
         if (!TextUtils.isEmpty(holidays)) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.holidayTitle.setText(holidays);
             eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
 //            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.deviceEventTitle.setText(deviceEvents);
             eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -351,6 +354,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(nonHolidays)) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.eventTitle.setText(nonHolidays);
 
             eventsBinding.eventTitle.setVisibility(View.VISIBLE);
@@ -381,6 +385,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(messageToShow))
                 messageToShow.append("\n");
 
