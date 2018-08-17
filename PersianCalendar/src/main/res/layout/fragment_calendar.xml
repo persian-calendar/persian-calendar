@@ -39,7 +39,7 @@
                     <com.byagowi.persiancalendar.adapter.CardsViewPager
                         android:id="@+id/tab_content"
                         android:layout_width="match_parent"
-                        android:layout_height="120sp" />
+                        android:layout_height="170sp" />
 
                 </LinearLayout>
 

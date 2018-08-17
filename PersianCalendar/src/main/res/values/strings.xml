@@ -195,5 +195,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="sunrise">Sunrise</string>
     <string name="midday">Midday</string>
     <string name="sunset">Sunset</string>
+    <string name="no_event_is_found_for_this_day">No event is found for this day.</string>
 
 </resources>

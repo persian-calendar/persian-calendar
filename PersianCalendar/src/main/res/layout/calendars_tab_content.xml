@@ -13,7 +13,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12sp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -24,14 +28,6 @@
                 android:textColor="?attr/colorTextPrimary"
                 android:textSize="@dimen/text_size_title"
                 tools:text="Calendar" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/more_calendar"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_gravity="center_vertical"
-                android:tint="?attr/colorIcon"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -248,6 +244,22 @@
                 android:textColor="?attr/colorTextNormal"
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/more_calendar"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8sp"
+                android:tint="?attr/colorIcon"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
         </LinearLayout>
 

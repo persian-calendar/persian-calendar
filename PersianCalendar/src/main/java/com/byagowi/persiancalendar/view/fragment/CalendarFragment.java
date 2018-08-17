@@ -127,14 +127,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 context, tabs, titles));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
-        if (lastTab >= tabs.size()) {
-            lastTab = CALENDARS_TAB;
-        }
-
-        mainBinding.tabContent.setCurrentItem(lastTab, false);
-
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
             for (View tab : tabs) {
@@ -176,8 +168,16 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.owghatText.setText(cityName);
         }
 
-        // This will immediately be replaced by the same functionality on fragment but is here to
-        // make sure enough space is dedicated to actionbar's title and subtitle, kinda hack anyway
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
+        if (lastTab >= tabs.size()) {
+            lastTab = CALENDARS_TAB;
+        }
+
+        // FIXME: This should be enabled again
+        //mainBinding.tabContent.setCurrentItem(lastTab, false);
+
+
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
@@ -329,20 +329,23 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
-        eventsBinding.warnUserIcon.setVisibility(View.GONE);
+//        eventsBinding.warnUserIcon.setVisibility(View.GONE);
 //        eventsBinding.cardEvent.setVisibility(View.GONE);
         eventsBinding.holidayTitle.setVisibility(View.GONE);
         eventsBinding.deviceEventTitle.setVisibility(View.GONE);
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
+        eventsBinding.noEvent.setVisibility(View.VISIBLE);
 
         if (!TextUtils.isEmpty(holidays)) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.holidayTitle.setText(holidays);
             eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
 //            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.deviceEventTitle.setText(deviceEvents);
             eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -351,6 +354,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(nonHolidays)) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.eventTitle.setText(nonHolidays);
 
             eventsBinding.eventTitle.setVisibility(View.VISIBLE);
@@ -381,6 +385,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
+            eventsBinding.noEvent.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(messageToShow))
                 messageToShow.append("\n");
 
@@ -397,7 +402,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
+//            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
             eventsBinding.eventMessage.setText(messageToShow);
             eventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -431,7 +436,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
         owghatBinding.svPlot.setSunriseSunsetCalculator(prayTimes);
 
-        if (isToday && !isOwghatOpen) {
+        if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
             if (mainBinding.tabContent.getCurrentItem() == OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate();
@@ -440,8 +445,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.svPlot.setVisibility(View.GONE);
         }
     }
-
-    private boolean isOwghatOpen = false;
 
     @Override
     public void onClick(View v) {
@@ -476,12 +479,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                isOwghatOpen = isOpenOwghatCommand;
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                if (lastSelectedJdn == CalendarUtils.getTodayJdn() && !isOpenOwghatCommand) {
+                if (lastSelectedJdn == CalendarUtils.getTodayJdn()) {
                     owghatBinding.svPlot.setVisibility(View.VISIBLE);
                     owghatBinding.svPlot.startAnimate();
                 } else {

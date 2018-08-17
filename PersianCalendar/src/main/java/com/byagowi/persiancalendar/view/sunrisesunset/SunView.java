@@ -199,9 +199,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f - 12, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f, mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f, mSunRaisePaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.09f, mSunRaisePaint);
         }
 
     }

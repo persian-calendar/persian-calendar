@@ -24,13 +24,6 @@
             android:showDividers="middle">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/dialogButtonExit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:text="@string/exit" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialogButtonGPS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,6 +43,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:text="@string/gprs_settings" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialogButtonExit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/exit" />
 
         </LinearLayout>
 
