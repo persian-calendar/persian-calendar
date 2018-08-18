@@ -334,10 +334,4 @@ public class UIUtils {
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
-
-    // https://stackoverflow.com/a/36941125
-    @BindingAdapter({"app:srcCompat"})
-    public static void setImageViewResource(ImageView imageView, int resource) {
-        imageView.setImageResource(resource);
-    }
 }
