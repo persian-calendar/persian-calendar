@@ -43,6 +43,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public RecyclerListAdapter(Context context, CalendarPreferenceDialog calendarPreferenceDialog) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
         mItems.addAll(Arrays.asList(context.getResources().getStringArray(R.array.calendar_values)));
+        //FIXME: It should consider current ordering
     }
 
     @Override
