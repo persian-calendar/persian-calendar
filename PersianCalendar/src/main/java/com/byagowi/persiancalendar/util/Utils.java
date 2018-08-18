@@ -283,10 +283,22 @@ public class Utils {
         return result;
     }
 
+    static public List<CalendarType> getOrderedCalendarTypes() {
+        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
+
+        List<CalendarType> result = new ArrayList<>(enabledCalendarTypes);
+        for (CalendarType key : CalendarType.values()) {
+            if (!enabledCalendarTypes.contains(key)) {
+                result.add(key);
+            }
+        }
+
+        return result;
+    }
+
     static public List<String> getOrderedCalendarTitles() {
         List<String> result = new ArrayList<>();
-        result.add(calendarTypeToTitleMap.get(getMainCalendar()));
-        for (CalendarType type : getOtherCalendars()) {
+        for (CalendarType type : getOrderedCalendarTypes()) {
             result.add(calendarTypeToTitleMap.get(type));
         }
 

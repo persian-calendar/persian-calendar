@@ -36,6 +36,18 @@ public class CalendarUtils {
         }
     }
 
+    static public long getJdnOfCalendarWithException(CalendarType calendar, int year, int month, int day) {
+        switch (calendar) {
+            case ISLAMIC:
+                return DateConverter.islamicToJdn(new IslamicDate(year, month, day));
+            case GREGORIAN:
+                return DateConverter.civilToJdn(new CivilDate(year, month, day));
+            case SHAMSI:
+            default:
+                return DateConverter.persianToJdn(new PersianDate(year, month, day));
+        }
+    }
+
     static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
