@@ -13,6 +13,7 @@ import android.graphics.PathEffect;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -83,11 +84,18 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
+            TypedValue typedValue = new TypedValue();
 
             try {
-                horizonColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, ContextCompat.getColor(context, R.color.sViewHorizonColor));
-                timelineColor = typedArray.getColor(R.styleable.SunView_SunViewTimelineColor, ContextCompat.getColor(context, R.color.sViewTimelineColor));
-                taggingColor = typedArray.getColor(R.styleable.SunView_SunViewTaglineColor, ContextCompat.getColor(context, R.color.sViewTaglineColor));
+                context.getTheme().resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true);
+                int HorizonColor = ContextCompat.getColor(context, typedValue.resourceId);
+                horizonColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor);
+                context.getTheme().resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true);
+                int TimelineColor = ContextCompat.getColor(context, typedValue.resourceId);
+                timelineColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor);
+                context.getTheme().resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
+                int TaglineColor = ContextCompat.getColor(context, typedValue.resourceId);
+                taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TaglineColor);
                 nightColor = typedArray.getColor(R.styleable.SunView_SunViewNightColor, ContextCompat.getColor(context, R.color.sViewNightColor));
                 dayColor = typedArray.getColor(R.styleable.SunView_SunViewDayColor, ContextCompat.getColor(context, R.color.sViewDayColor));
                 daySecondColor = typedArray.getColor(R.styleable.SunView_SunViewDaySecondColor, ContextCompat.getColor(context, R.color.sViewDaySecondColor));

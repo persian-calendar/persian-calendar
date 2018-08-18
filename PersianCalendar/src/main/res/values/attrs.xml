@@ -5,9 +5,9 @@
 -->
 <resources>
     <declare-styleable name="SunView">
-        <attr name="SunViewHorizonColor" format="color" />
-        <attr name="SunViewTimelineColor" format="color" />
-        <attr name="SunViewTaglineColor" format="color" />
+        <attr name="SunViewHorizonColor" format="reference" />
+        <attr name="SunViewTimelineColor" format="reference" />
+        <attr name="SunViewTaglineColor" format="reference" />
         <attr name="SunViewNightColor" format="color" />
         <attr name="SunViewDayColor" format="color" />
         <attr name="SunViewDaySecondColor" format="color" />

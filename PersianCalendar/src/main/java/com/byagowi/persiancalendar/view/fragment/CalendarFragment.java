@@ -187,8 +187,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
+        // Easter egg to test AthanActivity
         if (coordinate != null) {
-            // Easter egg to test AthanActivity
             owghatBinding.owghatText.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
                 return true;
