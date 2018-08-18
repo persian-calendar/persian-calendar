@@ -18,10 +18,8 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/padding_item"
             android:paddingLeft="@dimen/padding_item"
             android:paddingRight="@dimen/padding_item"
-            android:paddingStart="@dimen/padding_item"
             android:text="@{model.city}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 

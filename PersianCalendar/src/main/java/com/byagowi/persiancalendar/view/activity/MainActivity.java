@@ -39,7 +39,6 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
@@ -134,9 +133,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         adapter = new DrawerAdapter(this);
         binding.navigationView.setAdapter(adapter);
         binding.navigationView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        binding.navigationView.setLayoutManager(layoutManager);
+        binding.navigationView.setLayoutManager(new LinearLayoutManager(this));
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = +1;

@@ -214,15 +214,13 @@
             android:id="@+id/diff_date_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:showDividers="middle">
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/diff_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="@dimen/padding_item"
                 android:paddingLeft="@dimen/card_padding"
                 android:paddingRight="@dimen/card_padding"
                 android:paddingTop="@dimen/padding_item"
