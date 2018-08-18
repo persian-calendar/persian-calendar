@@ -124,8 +124,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), isRTL,
-                context, tabs, titles));
+                context, tabs));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
+
+        mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
+        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_setting);
+        if (coordinate != null) {
+            mainBinding.tabLayout.getTabAt(2).setIcon(R.drawable.ic_access_time);
+        }
 
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
@@ -174,8 +180,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             lastTab = CALENDARS_TAB;
         }
 
-        // FIXME: This should be enabled again
-        //mainBinding.tabContent.setCurrentItem(lastTab, false);
+        mainBinding.tabContent.setCurrentItem(lastTab, false);
 
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
@@ -183,10 +188,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 Utils.formatNumber(today.getYear()));
 
         // Easter egg to test AthanActivity
-//        mainBinding.owghatIcon.setOnLongClickListener(v -> {
-//            Utils.startAthan(context, "FAJR");
-//            return true;
-//        });
+        owghatBinding.owghatText.setOnLongClickListener(v -> {
+            Utils.startAthan(context, "FAJR");
+            return true;
+        });
 
         return mainBinding.getRoot();
 
@@ -329,19 +334,20 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
 
-//        eventsBinding.warnUserIcon.setVisibility(View.GONE);
-//        eventsBinding.cardEvent.setVisibility(View.GONE);
         eventsBinding.holidayTitle.setVisibility(View.GONE);
         eventsBinding.deviceEventTitle.setVisibility(View.GONE);
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
         eventsBinding.noEvent.setVisibility(View.VISIBLE);
 
+        eventsBinding.noEvent.setText(Utils.isShowDeviceCalendarEvents()
+                ? R.string.no_event
+                : R.string.no_event_if_no_calendar);
+
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.holidayTitle.setText(holidays);
             eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
-//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
@@ -350,7 +356,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
             eventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
-//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(nonHolidays)) {
@@ -358,7 +363,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             eventsBinding.eventTitle.setText(nonHolidays);
 
             eventsBinding.eventTitle.setVisibility(View.VISIBLE);
-//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
@@ -402,12 +406,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-//            eventsBinding.warnUserIcon.setVisibility(View.VISIBLE);
             eventsBinding.eventMessage.setText(messageToShow);
             eventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
             eventsBinding.eventMessage.setVisibility(View.VISIBLE);
-//            eventsBinding.cardEvent.setVisibility(View.VISIBLE);
         }
     }
 
@@ -573,17 +575,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
-        Context context = getContext();
-        if (context == null) return;
-
-        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager == null) return;
-
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setOnSearchClickListener(v -> {
-            if (mSearchAutoComplete != null) {
-                mSearchAutoComplete.setOnClickListener(null);
-            }
+            if (mSearchAutoComplete != null) mSearchAutoComplete.setOnItemClickListener(null);
+
+            Context context = getContext();
+            if (context == null) return;
+
+            SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+            if (searchManager == null) return;
 
             mSearchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
             mSearchAutoComplete.setHint(R.string.search_in_events);
@@ -636,17 +636,28 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
+    private void destroySearchView() {
         if (mSearchView != null) {
             mSearchView.setOnSearchClickListener(null);
+            mSearchView = null;
         }
 
         if (mSearchAutoComplete != null) {
-            mSearchAutoComplete.setOnClickListener(null);
+            mSearchAutoComplete.setOnItemClickListener(null);
+            mSearchAutoComplete = null;
         }
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        destroySearchView();
+        super.onDestroyOptionsMenu();
+    }
+
+    @Override
+    public void onDestroy() {
+        destroySearchView();
+        super.onDestroy();
     }
 
     @Override

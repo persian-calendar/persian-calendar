@@ -157,8 +157,10 @@
     <string name="end_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
     <string name="sunrise">طلوع</string>
-    <string name="midday">ظهر</string>
+    <string name="midday">نیوەڕۆ</string>
     <string name="sunset">غروب</string>
-    <string name="no_event_is_found_for_this_day">No event is found for this day.</string>
+    <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
+    <string name="no_event_if_no_calendar">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید.</string>
+
 
 </resources>

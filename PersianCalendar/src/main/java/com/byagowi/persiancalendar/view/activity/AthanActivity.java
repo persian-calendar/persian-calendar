@@ -31,6 +31,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = AthanActivity.class.getName();
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,8 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
 
-        new Timer().scheduleAtFixedRate(new TimerTask() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (ringtone == null && mediaPlayer == null) {
@@ -123,14 +125,12 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         super.onWindowFocusChanged(hasFocus);
         if (!hasFocus) {
             stop();
-            finish();
         }
     }
 
     private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             stop();
-            finish();
         }
     };
 
@@ -147,13 +147,11 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         stop();
-        finish();
     }
 
     @Override
     public void onBackPressed() {
         stop();
-        finish();
     }
 
     private void stop() {
@@ -170,5 +168,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
             }
         }
+        timer.cancel();
+        finish();
     }
 }

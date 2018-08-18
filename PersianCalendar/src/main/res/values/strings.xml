@@ -195,6 +195,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="sunrise">Sunrise</string>
     <string name="midday">Midday</string>
     <string name="sunset">Sunset</string>
-    <string name="no_event_is_found_for_this_day">No event is found for this day.</string>
+    <string name="no_event">No event or appointment is found for this day.</string>
+    <string name="no_event_if_no_calendar">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید.</string>
+
 
 </resources>

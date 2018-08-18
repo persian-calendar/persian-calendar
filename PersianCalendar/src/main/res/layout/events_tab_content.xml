@@ -27,7 +27,6 @@
                     android:id="@+id/no_event"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_event_is_found_for_this_day"
                     android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description" />
 
