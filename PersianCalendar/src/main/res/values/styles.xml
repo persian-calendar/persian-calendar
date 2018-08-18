@@ -60,6 +60,11 @@
         <item name="circleSelect">@drawable/circle_select_dark</item>
         <item name="appDivider">@drawable/app_divider_dark</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+
+        <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
+        <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
+        <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
+
     </style>
 
     <!-- Base application theme. -->
@@ -98,6 +103,10 @@
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+
+        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
+        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
+        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
     </style>
 
     <!-- The revived old application theme. -->
