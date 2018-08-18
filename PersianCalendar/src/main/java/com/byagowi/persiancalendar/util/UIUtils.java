@@ -36,8 +36,6 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -59,11 +57,18 @@ public class UIUtils {
 
     public static void fillCalendarsCard(Context context, long jdn,
                                          CalendarsTabContentBinding binding,
-                                         CalendarType calendarType) {
-        List<CalendarType> calendarTypes = Utils.getOrderedCalendarTypes();
-        AbstractDate firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarTypes.get(0), jdn);
-        AbstractDate secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarTypes.get(1), jdn);
-        AbstractDate thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarTypes.get(2), jdn);
+                                         CalendarType calendarType,
+                                         List<CalendarType> calendars) {
+        AbstractDate firstCalendar,
+                secondCalendar = null,
+                thirdCalendar = null;
+        firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(0), jdn);
+        if (calendars.size() > 1) {
+            secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(1), jdn);
+        }
+        if (calendars.size() > 2) {
+            thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(2), jdn);
+        }
 
         binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
 
@@ -71,13 +76,21 @@ public class UIUtils {
         binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
         binding.firstCalendarDate.setText(CalendarUtils.getMonthName(firstCalendar) + "\n" + Utils.formatNumber(firstCalendar.getYear()));
 
-        binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
-        binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
-        binding.secondCalendarDate.setText(CalendarUtils.getMonthName(secondCalendar) + "\n" + Utils.formatNumber(secondCalendar.getYear()));
+        if (secondCalendar == null) {
+            binding.secondCalendarContainer.setVisibility(View.GONE);
+        } else {
+            binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
+            binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
+            binding.secondCalendarDate.setText(CalendarUtils.getMonthName(secondCalendar) + "\n" + Utils.formatNumber(secondCalendar.getYear()));
+        }
 
-        binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
-        binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
-        binding.thirdCalendarDate.setText(CalendarUtils.getMonthName(thirdCalendar) + "\n" + Utils.formatNumber(thirdCalendar.getYear()));
+        if (thirdCalendar == null) {
+            binding.thirdCalendarContainer.setVisibility(View.GONE);
+        } else {
+            binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
+            binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
+            binding.thirdCalendarDate.setText(CalendarUtils.getMonthName(thirdCalendar) + "\n" + Utils.formatNumber(thirdCalendar.getYear()));
+        }
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 

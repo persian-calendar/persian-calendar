@@ -18,10 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import calendar.CalendarType;
-import calendar.CivilDate;
-import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 /**
  * Program activity for android
@@ -96,7 +92,8 @@ public class ConverterFragment extends Fragment implements
                     (String) binding.selectdayFragment.calendarTypeSpinner.getSelectedItem());
             long jdn = CalendarUtils.getJdnOfCalendarWithException(calendarType, year, month, day);
 
-            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType);
+            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
+                    Utils.getOrderedCalendarTypes());
             lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {
                 binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
