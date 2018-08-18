@@ -100,7 +100,7 @@
     <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
-    <string name="warn_if_events_not_set">جهت فعال کردن و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
     <string name="main_calendar">تقویم اصلی</string>
@@ -160,6 +160,5 @@
     <string name="midday">ظهر</string>
     <string name="sunset">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
-    <string name="no_event_if_no_calendar">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید.</string>
 
 </resources>

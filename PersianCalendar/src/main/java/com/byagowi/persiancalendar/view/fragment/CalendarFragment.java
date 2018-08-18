@@ -187,11 +187,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
-        // Easter egg to test AthanActivity
-        owghatBinding.owghatText.setOnLongClickListener(v -> {
-            Utils.startAthan(context, "FAJR");
-            return true;
-        });
+        if (coordinate != null) {
+            // Easter egg to test AthanActivity
+            owghatBinding.owghatText.setOnLongClickListener(v -> {
+                Utils.startAthan(context, "FAJR");
+                return true;
+            });
+        }
 
         return mainBinding.getRoot();
 
@@ -339,10 +341,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
         eventsBinding.noEvent.setVisibility(View.VISIBLE);
-
-        eventsBinding.noEvent.setText(Utils.isShowDeviceCalendarEvents()
-                ? R.string.no_event
-                : R.string.no_event_if_no_calendar);
 
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);

@@ -12,11 +12,11 @@ public class ReleaseDebugDifference {
             // You should not init your app in this process.
             return;
         }
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
-                .detectAll()
-                .penaltyLog()
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
+//                .detectAll()
+//                .penaltyLog()
 //                .penaltyDeath()
-                .build());
+//                .build());
         LeakCanary.install(app);
     }
 }
