@@ -135,9 +135,10 @@ public class UIUtils {
         if (jdn == -1) {
             jdn = CalendarUtils.getTodayJdn();
         }
+
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
-                CalendarUtils.calendarTypeFromPosition(
-                        binding.calendarTypeSpinner.getSelectedItemPosition()),
+                Utils.getCalendarTypeFromTitle(
+                        (String) binding.calendarTypeSpinner.getSelectedItem()),
                 jdn);
 
         // years spinner init.

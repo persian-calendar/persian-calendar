@@ -13,7 +13,7 @@
         app:srcCompat="@drawable/ic_drag_handle" />
 
     <CheckedTextView
-        android:id="@+id/text"
+        android:id="@+id/check_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

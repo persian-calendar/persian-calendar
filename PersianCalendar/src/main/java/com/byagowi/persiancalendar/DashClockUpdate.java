@@ -22,7 +22,7 @@ public class DashClockUpdate extends DashClockExtension {
                 .icon(Utils.getDayIconResource(date.getDayOfMonth()))
                 .status(CalendarUtils.getMonthName(date))
                 .expandedTitle(CalendarUtils.dayTitleSummary(date))
-                .expandedBody(CalendarUtils.dateStringOfOtherCalendars(mainCalendar, jdn))
+                .expandedBody(Utils.dateStringOfOtherCalendars(jdn))
                 .clickIntent(new Intent(getApplicationContext(), MainActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)));
     }

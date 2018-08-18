@@ -67,9 +67,9 @@ public class ConverterFragment extends Fragment implements
         // fill views
         binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.calendar_type)));
+                Utils.getOrderedCalendarTitles()));
 
-        binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
+        binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
         startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
                 binding.selectdayFragment, lastSelectedJdn);
 
@@ -94,8 +94,8 @@ public class ConverterFragment extends Fragment implements
             binding.calendarsTabContent.gregorianContainer.setVisibility(View.VISIBLE);
             binding.calendarsTabContent.islamicContainer.setVisibility(View.VISIBLE);
 
-            CalendarType calendarType = CalendarUtils.calendarTypeFromPosition(
-                    binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition());
+            CalendarType calendarType = Utils.getCalendarTypeFromTitle(
+                    (String) binding.selectdayFragment.calendarTypeSpinner.getSelectedItem());
             switch (calendarType) {
                 case GREGORIAN:
                     jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
