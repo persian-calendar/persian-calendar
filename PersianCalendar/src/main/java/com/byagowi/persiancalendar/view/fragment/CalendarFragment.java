@@ -123,8 +123,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), isRTL,
-                context, tabs));
+        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
 
         mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
@@ -225,7 +224,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     private long lastSelectedJdn = -1;
 
-    void selectDay(long jdn) {
+    public void selectDay(long jdn) {
         Context context = getContext();
         if (context == null) return;
 
@@ -588,11 +587,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             mSearchAutoComplete.setHint(R.string.search_in_events);
 
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            mSearchAutoComplete.setAdapter(new ArrayAdapter<>(context,
-                    R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
+            ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
+                    R.layout.suggestion, android.R.id.text1);
+            eventsAdapter.addAll(Utils.allEnabledEvents);
+            mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
-                        (String) parent.getItemAtPosition(position)));
+                AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);
                 if (ev instanceof PersianCalendarEvent) {
                     PersianDate todayPersian = CalendarUtils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();

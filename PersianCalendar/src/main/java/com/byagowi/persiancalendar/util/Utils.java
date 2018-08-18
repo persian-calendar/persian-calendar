@@ -640,8 +640,7 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
     static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-    static public List<Object> allEnabledEvents;
-    static public List<String> allEnabledEventsTitles;
+    static public List<AbstractEvent> allEnabledEvents;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -661,8 +660,7 @@ public class Utils {
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
         SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
-        ArrayList<Object> allEnabledEvents = new ArrayList<>();
-        ArrayList<String> allEnabledEventsTitles = new ArrayList<>();
+        ArrayList<AbstractEvent> allEnabledEvents = new ArrayList<>();
 
         try {
             JSONArray days;
@@ -726,7 +724,6 @@ public class Utils {
                     PersianCalendarEvent ev = new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -781,7 +778,6 @@ public class Utils {
                     IslamicCalendarEvent ev = new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -804,7 +800,6 @@ public class Utils {
                     GregorianCalendarEvent ev = new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -816,7 +811,6 @@ public class Utils {
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
         Utils.allEnabledEvents = allEnabledEvents;
-        Utils.allEnabledEventsTitles = allEnabledEventsTitles;
 
         readDeviceCalendarEvents(context);
     }
@@ -916,7 +910,6 @@ public class Utils {
                 );
                 list.add(event);
                 allEnabledEvents.add(event);
-                allEnabledEventsTitles.add(title);
             }
             cursor.close();
         } catch (Exception e) {

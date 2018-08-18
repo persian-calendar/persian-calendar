@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return result;
     }
 
+    // A never used migration
     private void oneTimeClockDisablingForAndroid5LE() {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             String key = "oneTimeClockDisablingForAndroid5LE";

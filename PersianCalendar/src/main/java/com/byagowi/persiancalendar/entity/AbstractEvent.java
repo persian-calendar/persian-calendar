@@ -16,4 +16,8 @@ abstract public class AbstractEvent {
     public boolean isHoliday() {
         return holiday;
     }
+
+    public String toString() {
+        return title;
+    }
 }

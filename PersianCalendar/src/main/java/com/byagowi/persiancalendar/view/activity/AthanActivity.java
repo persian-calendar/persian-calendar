@@ -128,18 +128,12 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = focusChange -> {
-        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-            stop();
-        }
-    };
-
     private PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (state == TelephonyManager.CALL_STATE_RINGING ||
                     state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                mOnAudioFocusChangeListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS);
+                stop();
             }
         }
     };
@@ -155,6 +149,16 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void stop() {
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (telephonyManager != null) {
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+            }
+            phoneStateListener = null;
+        } catch (RuntimeException e) {
+            Log.e(TAG, "TelephonyManager handling fail", e);
+        }
+
         if (ringtone != null) {
             ringtone.stop();
         }

@@ -13,18 +13,17 @@ import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.MonthFragment;
+import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
 import java.util.List;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
-    private Context context;
-    private MonthFragment monthFragment;
     private List<DayEntity> days;
     private boolean isArabicDigit;
     private final int startingDayOfWeek;
@@ -45,12 +44,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     @DrawableRes
     private int shapeSelectDay;
 
-    public MonthAdapter(Context context, MonthFragment monthFragment, List<DayEntity> days,
+    public MonthAdapter(Context context, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
         totalDays = days.size();
-        this.monthFragment = monthFragment;
-        this.context = context;
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
@@ -99,7 +96,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     @Override
     public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_day, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_day, parent, false);
 
         return new ViewHolder(v);
     }
@@ -134,6 +131,15 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     private int fixForWeekOfYearNumber(int position) {
         return position - position / 8 - 1;
+    }
+
+    private static CalendarFragment getCalendarFragment(View view) {
+        Context ctx = view.getContext();
+        if (ctx != null && ctx instanceof FragmentActivity) {
+            return (CalendarFragment) ((FragmentActivity) ctx).getSupportFragmentManager()
+                    .findFragmentByTag(CalendarFragment.class.getName());
+        }
+        return null;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -171,7 +177,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 return;
             }
 
-            monthFragment.onClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
+            CalendarFragment calendarFragment = getCalendarFragment(v);
+            if (calendarFragment != null) {
+                calendarFragment.selectDay(days.get(position - 7 - startingDayOfWeek).getJdn());
+            }
             MonthAdapter.this.selectDay(1 + position - 7 - startingDayOfWeek);
         }
 
@@ -191,7 +200,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 return false;
             }
 
-            monthFragment.onLongClickItem(days.get(position - 7 - startingDayOfWeek).getJdn());
+            CalendarFragment calendarFragment = getCalendarFragment(v);
+            if (calendarFragment != null) {
+                calendarFragment.addEventOnCalendar(days.get(position - 7 - startingDayOfWeek).getJdn());
+            }
             onClick(v);
 
             return false;

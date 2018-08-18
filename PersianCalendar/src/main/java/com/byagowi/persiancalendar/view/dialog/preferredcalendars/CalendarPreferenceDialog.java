@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.dialog;
+package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,8 +9,6 @@ import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.RecyclerListAdapter;
-import com.byagowi.persiancalendar.adapter.SimpleItemTouchHelperCallback;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;

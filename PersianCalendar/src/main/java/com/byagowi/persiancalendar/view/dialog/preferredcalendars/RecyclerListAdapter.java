@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.adapter;
+package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
 /*
  * Copyright (C) 2015 Paul Burke
  *
@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.dialog.CalendarPreferenceDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,7 +65,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             return false;
         });
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.checkedTextView.setOnClickListener(v -> {
             boolean newState = !holder.checkedTextView.isChecked();
             holder.checkedTextView.setChecked(newState);
             enabled.set(position, newState);

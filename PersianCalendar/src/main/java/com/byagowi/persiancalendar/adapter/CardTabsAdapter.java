@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.adapter;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,14 +36,11 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    private Context context;
     private List<View> tabs;
 
-    public CardTabsAdapter(FragmentManager fm, boolean isRTL, Context context,
-                           List<View> tabs) {
+    public CardTabsAdapter(FragmentManager fm, List<View> tabs) {
         super(fm);
         this.tabs = tabs;
-        this.context = context;
     }
 
     @Override
@@ -81,7 +77,8 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
             }
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                container.getContext());
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Constants.LAST_CHOSEN_TAB_KEY, position);
         editor.apply();
