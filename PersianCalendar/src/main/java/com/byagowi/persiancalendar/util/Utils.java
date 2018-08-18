@@ -108,6 +108,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
 import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
+import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFICATION_ATHAN;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE_LOCK_SCREEN;
@@ -226,7 +227,7 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
-        mainCalendar = CalendarType.valueOf(prefs.getString("mainCalendarType", "SHAMSI"));
+        mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
         comma = language.equals(LANG_EN_US) ? "," : "،";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 

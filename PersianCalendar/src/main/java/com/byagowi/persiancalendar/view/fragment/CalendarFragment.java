@@ -194,6 +194,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 return true;
             });
         }
+
         return mainBinding.getRoot();
 
     }
@@ -340,10 +341,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         eventsBinding.eventTitle.setVisibility(View.GONE);
         eventsBinding.eventMessage.setVisibility(View.GONE);
         eventsBinding.noEvent.setVisibility(View.VISIBLE);
-
-        eventsBinding.noEvent.setText(Utils.isShowDeviceCalendarEvents()
-                ? R.string.no_event
-                : R.string.no_event_if_no_calendar);
 
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);
