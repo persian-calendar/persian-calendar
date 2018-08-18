@@ -188,11 +188,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 Utils.formatNumber(today.getYear()));
 
         // Easter egg to test AthanActivity
-        owghatBinding.owghatText.setOnLongClickListener(v -> {
-            Utils.startAthan(context, "FAJR");
-            return true;
-        });
-
+        if (coordinate != null) {
+            owghatBinding.owghatText.setOnLongClickListener(v -> {
+                Utils.startAthan(context, "FAJR");
+                return true;
+            });
+        }
         return mainBinding.getRoot();
 
     }
