@@ -575,17 +575,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_button, menu);
 
-        Context context = getContext();
-        if (context == null) return;
-
-        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager == null) return;
-
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setOnSearchClickListener(v -> {
-            if (mSearchAutoComplete != null) {
-                mSearchAutoComplete.setOnItemClickListener(null);
-            }
+            if (mSearchAutoComplete != null) mSearchAutoComplete.setOnItemClickListener(null);
+
+            Context context = getContext();
+            if (context == null) return;
+
+            SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+            if (searchManager == null) return;
 
             mSearchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
             mSearchAutoComplete.setHint(R.string.search_in_events);
