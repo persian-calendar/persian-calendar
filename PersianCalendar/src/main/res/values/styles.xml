@@ -59,6 +59,7 @@
         <item name="circleCurrentDay">@drawable/circle_current_day_dark</item>
         <item name="circleSelect">@drawable/circle_select_dark</item>
         <item name="appDivider">@drawable/app_divider_dark</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
     <!-- Base application theme. -->
@@ -96,6 +97,7 @@
         <item name="circleSelect">@drawable/circle_select_light</item>
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
     <!-- The revived old application theme. -->
@@ -133,6 +135,7 @@
         <item name="circleSelect">@drawable/circle_select_light</item>
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
