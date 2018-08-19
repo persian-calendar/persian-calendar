@@ -22,6 +22,7 @@ import android.util.SparseArray;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -208,7 +209,6 @@ public class Utils {
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
     static private Map<CalendarType, String> calendarTypeToTitleMap;
-    static private Map<String, CalendarType> titleToCalendarTypeMap;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -271,11 +271,6 @@ public class Utils {
         for (int i = 0; i < titles.length; ++i) {
             calendarTypeToTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
         }
-
-        titleToCalendarTypeMap = new HashMap<>();
-        for (int i = 0; i < titles.length; ++i) {
-            titleToCalendarTypeMap.put(titles[i], CalendarType.valueOf(values[i]));
-        }
     }
 
     static public List<CalendarType> getEnabledCalendarTypes() {
@@ -298,28 +293,12 @@ public class Utils {
         return result;
     }
 
-    static public List<String> getOrderedCalendarTitles() {
-        List<String> result = new ArrayList<>();
+    static public List<CalendarTypeEntity> getOrderedCalendarEntities() {
+        List<CalendarTypeEntity> result = new ArrayList<>();
         for (CalendarType type : getOrderedCalendarTypes()) {
-            result.add(calendarTypeToTitleMap.get(type));
+            result.add(new CalendarTypeEntity(type, calendarTypeToTitleMap.get(type)));
         }
-
-        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
-        for (CalendarType key : CalendarType.values()) {
-            if (!enabledCalendarTypes.contains(key)) {
-                result.add(Utils.getTitleFromCalendarType(key));
-            }
-        }
-
         return result;
-    }
-
-    static public String getTitleFromCalendarType(CalendarType type) {
-        return calendarTypeToTitleMap.get(type);
-    }
-
-    static public CalendarType getCalendarTypeFromTitle(String title) {
-        return titleToCalendarTypeMap.get(title);
     }
 
     public static boolean isClockIn24() {

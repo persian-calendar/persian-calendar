@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -37,18 +38,11 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
 
         Utils.updateStoredPreference(context);
         List<CalendarType> enabledCalendarTypes = Utils.getEnabledCalendarTypes();
-        for (CalendarType key : enabledCalendarTypes) {
-            values.add(key.toString());
-            titles.add(Utils.getTitleFromCalendarType(key));
-            enabled.add(true);
-        }
-
-        for (CalendarType key : CalendarType.values()) {
-            if (!enabledCalendarTypes.contains(key)) {
-                values.add(key.toString());
-                titles.add(Utils.getTitleFromCalendarType(key));
-                enabled.add(false);
-            }
+        List<CalendarTypeEntity> orderedCalendarTypes = Utils.getOrderedCalendarEntities();
+        for (CalendarTypeEntity entity : orderedCalendarTypes) {
+            values.add(entity.getType().toString());
+            titles.add(entity.toString());
+            enabled.add(enabledCalendarTypes.contains(entity.getType()));
         }
 
         RecyclerListAdapter adapter = new RecyclerListAdapter(this,

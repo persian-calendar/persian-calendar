@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;

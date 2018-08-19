@@ -14,13 +14,13 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
+import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.github.praytimes.Clock;
 
@@ -31,7 +31,6 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.BindingAdapter;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
@@ -153,8 +152,7 @@ public class UIUtils {
         }
 
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
-                Utils.getCalendarTypeFromTitle(
-                        (String) binding.calendarTypeSpinner.getSelectedItem()),
+                ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType(),
                 jdn);
 
         // years spinner init.

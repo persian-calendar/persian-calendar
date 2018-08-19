@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
+import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -63,7 +64,7 @@ public class ConverterFragment extends Fragment implements
         // fill views
         binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                Utils.getOrderedCalendarTitles()));
+                Utils.getOrderedCalendarEntities()));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
         startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
@@ -88,8 +89,8 @@ public class ConverterFragment extends Fragment implements
             binding.calendarsTabContent.secondCalendarContainer.setVisibility(View.VISIBLE);
             binding.calendarsTabContent.thirdCalendarContainer.setVisibility(View.VISIBLE);
 
-            CalendarType calendarType = Utils.getCalendarTypeFromTitle(
-                    (String) binding.selectdayFragment.calendarTypeSpinner.getSelectedItem());
+            CalendarType calendarType = ((CalendarTypeEntity)
+                    binding.selectdayFragment.calendarTypeSpinner.getSelectedItem()).getType();
             long jdn = CalendarUtils.getJdnOfCalendarWithException(calendarType, year, month, day);
 
             UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
