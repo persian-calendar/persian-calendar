@@ -24,7 +24,6 @@ import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import calendar.DateConverter;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private SparseArray<List<DeviceCalendarEvent>> monthEvents = new SparseArray<>();
@@ -48,6 +47,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     @DrawableRes
     private int shapeSelectDay;
 
+    public void initializeMonthEvents(Context context) {
+        if (Utils.isShowDeviceCalendarEvents()) {
+            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
+        }
+    }
+
     public MonthAdapter(Context context, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
@@ -55,9 +60,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
-        if (Utils.isShowDeviceCalendarEvents()) {
-            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
-        }
+        initializeMonthEvents(context);
         isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
@@ -193,6 +196,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
         @Override
         public boolean onLongClick(View v) {
+            onClick(v);
+
             int position = getAdapterPosition();
             if (Utils.isWeekOfYearEnabled()) {
                 if (position % 8 == 0) {
@@ -211,7 +216,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             if (calendarFragment != null) {
                 calendarFragment.addEventOnCalendar(days.get(position - 7 - startingDayOfWeek).getJdn());
             }
-            onClick(v);
 
             return false;
         }
@@ -274,7 +278,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     if (originalPosition == selectedDay) {
                         num.setBackgroundResource(shapeSelectDay);
                         num.setTextColor(isHoliday ? colorTextHoliday : colorPrimary);
-
                     } else {
                         num.setBackgroundResource(0);
                         num.setTextColor(isHoliday ? colorHoliday : colorTextDay);

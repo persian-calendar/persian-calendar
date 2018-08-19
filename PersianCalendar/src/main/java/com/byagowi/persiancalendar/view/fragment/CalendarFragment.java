@@ -270,16 +270,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(
                         new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                                 .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
-                                .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true));
+                                .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true)
+                                .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
             } else {
                 Toast.makeText(context, R.string.enable_device_calendar,
                         Toast.LENGTH_LONG).show();
             }
-
-            if (lastSelectedJdn == -1) {
-                lastSelectedJdn = CalendarUtils.getTodayJdn();
-            }
-            selectDay(lastSelectedJdn);
         }
     }
 

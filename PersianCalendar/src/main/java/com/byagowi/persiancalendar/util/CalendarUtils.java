@@ -308,7 +308,6 @@ public class CalendarUtils {
         }
 
         try {
-
             Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
             ContentUris.appendId(builder, startingDate.getTimeInMillis() - DAY_IN_MILLIS);
             ContentUris.appendId(builder, startingDate.getTimeInMillis() + rangeInMillis + DAY_IN_MILLIS);
@@ -318,13 +317,12 @@ public class CalendarUtils {
                             CalendarContract.Instances.EVENT_ID,       // 0
                             CalendarContract.Instances.TITLE,          // 1
                             CalendarContract.Instances.DESCRIPTION,    // 2
-                            CalendarContract.Instances.DTSTART,        // 3
-                            CalendarContract.Instances.DTEND,          // 4
+                            CalendarContract.Instances.BEGIN,        // 3
+                            CalendarContract.Instances.END,          // 4
                             CalendarContract.Instances.EVENT_LOCATION, // 5
                             CalendarContract.Instances.RRULE,          // 6
                             CalendarContract.Instances.VISIBLE,        // 7
                             CalendarContract.Instances.ALL_DAY,        // 8
-                            CalendarContract.Instances.VISIBLE,        // 9
                             CalendarContract.Instances.EVENT_COLOR     // 10
                     }, null, null, null);
 
@@ -333,8 +331,8 @@ public class CalendarUtils {
             }
 
             while (cursor.moveToNext()) {
-//                if (!cursor.getString(7).equals("1") || cursor.getString(9).equals("1"))
-//                    continue;
+                if (!cursor.getString(7).equals("1"))
+                    continue;
 
                 boolean allDay = false;
                 if (cursor.getString(8).equals("1"))
@@ -350,10 +348,6 @@ public class CalendarUtils {
                 int month = civilDate.getMonth();
                 int day = civilDate.getDayOfMonth();
 
-//                String repeatRule = cursor.getString(6);
-//                if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
-//                    civilDate.setYear(-1);
-
                 List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
                 if (list == null) {
                     list = new ArrayList<>();
@@ -362,11 +356,7 @@ public class CalendarUtils {
 
                 String title = cursor.getString(1);
                 if (allDay) {
-                    if (civilDate.getYear() == -1) {
-                        title = "\uD83C\uDF89 " + title;
-                    } else {
-                        title = "\uD83D\uDCC5 " + title;
-                    }
+                    title = "\uD83D\uDCC5 " + title;
                 } else {
                     title = "\uD83D\uDD53 " + title;
                     title += " (" + UIUtils.clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
@@ -387,9 +377,8 @@ public class CalendarUtils {
                         endDate,
                         cursor.getString(5),
                         civilDate,
-                        cursor.getString(10)
+                        cursor.getString(9)
                 );
-                Log.e("", event.toString());
                 list.add(event);
                 allEnabledAppointments.add(event);
             }
