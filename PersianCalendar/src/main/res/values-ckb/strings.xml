@@ -103,8 +103,8 @@
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
-    <string name="main_calendar">ڕۆژژمێری سەرەکی</string>
-    <string name="main_calendar_summary">گۆڕینی ڕۆژژمێری سەرەکی لە گشت بەشەکاندا</string>
+    <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
+    <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
     <string name="week_of_year">ژمارەی حەفتە</string>
     <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ</string>
     <string name="accept">باشە</string>

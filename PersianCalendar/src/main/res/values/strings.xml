@@ -103,8 +103,8 @@
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
     <string name="date_diff_text">%s day (~%s year and %s month and %s day)</string>
     <string name="search_holidays">Search in events</string>
-    <string name="main_calendar">Main Calendar</string>
-    <string name="main_calendar_summary">Change main calendar of the app</string>
+    <string name="calendars_priority">Calendars Priority</string>
+    <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
     <string name="week_of_year">Week of Year</string>
     <string name="week_of_year_summary">Show week of year on calendar</string>
     <string name="accept">OK</string>
