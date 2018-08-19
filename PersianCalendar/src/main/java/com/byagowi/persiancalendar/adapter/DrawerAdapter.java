@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
-    private final MainActivity mainActivity;
     private int selectedItem;
     private String[] drawerTitles;
     private String[] drawerSubtitles;
@@ -32,20 +31,19 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     @DrawableRes
     private int selectableBackgroundResource;
 
-    public DrawerAdapter(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        drawerTitles = mainActivity.getResources().getStringArray(R.array.drawerTitles);
-        drawerSubtitles = mainActivity.getResources().getStringArray(R.array.drawerSubtitles);
-        drawerIcon = mainActivity.getResources().obtainTypedArray(R.array.drawerIcons);
+    public DrawerAdapter(Context context) {
+        drawerTitles = context.getResources().getStringArray(R.array.drawerTitles);
+        drawerSubtitles = context.getResources().getStringArray(R.array.drawerSubtitles);
+        drawerIcon = context.getResources().obtainTypedArray(R.array.drawerIcons);
 
-        Resources.Theme theme = mainActivity.getTheme();
+        Resources.Theme theme = context.getTheme();
         TypedValue value = new TypedValue();
 
         theme.resolveAttribute(R.attr.selectableItemBackground, value, true);
         selectableBackgroundResource = value.resourceId;
 
         theme.resolveAttribute(R.attr.colorDrawerSelect, value, true);
-        selectedBackgroundColor = ContextCompat.getColor(mainActivity, value.resourceId);
+        selectedBackgroundColor = ContextCompat.getColor(context, value.resourceId);
     }
 
     @Override
@@ -87,7 +85,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             if (ctx instanceof MainActivity) {
                 ((MainActivity) ctx).selectItem(getAdapterPosition());
             }
-            mainActivity.selectItem(getAdapterPosition());
         }
 
         void bind(int position) {
