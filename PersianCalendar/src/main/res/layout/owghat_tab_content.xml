@@ -8,15 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
+        android:minHeight="250dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/owghat_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_vertical"
             android:textColor="?attr/colorTextPrimary"
             android:textSize="@dimen/text_size_title"

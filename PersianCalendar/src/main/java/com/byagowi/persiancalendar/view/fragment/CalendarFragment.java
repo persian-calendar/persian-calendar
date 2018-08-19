@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
@@ -268,7 +267,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                Utils.initUtils(context);
+                Utils.readDeviceCalendarEvents(context);
             } else {
                 Toast.makeText(context, R.string.enable_device_calendar,
                         Toast.LENGTH_LONG).show();
@@ -580,16 +579,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             Context context = getContext();
             if (context == null) return;
 
-            SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
-            if (searchManager == null) return;
-
             mSearchAutoComplete = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
             mSearchAutoComplete.setHint(R.string.search_in_events);
 
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
                     R.layout.suggestion, android.R.id.text1);
-            eventsAdapter.addAll(Utils.allEnabledEvents);
+            eventsAdapter.addAll(Utils.getAllEnabledEvents());
+            eventsAdapter.addAll(Utils.getAllEnabledAppointments());
             mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);

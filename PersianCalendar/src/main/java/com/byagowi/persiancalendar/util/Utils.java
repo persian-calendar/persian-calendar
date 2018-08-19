@@ -22,6 +22,7 @@ import android.util.SparseArray;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -151,6 +152,8 @@ public class Utils {
         loadLanguageResource(context);
         loadAlarms(context);
         loadEvents(context);
+        //FIXME: Shouldn't be here
+        readDeviceCalendarEvents(context);
     }
 
     static private String[] persianMonths;
@@ -206,7 +209,6 @@ public class Utils {
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
     static private Map<CalendarType, String> calendarTypeToTitleMap;
-    static private Map<String, CalendarType> titleToCalendarTypeMap;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -269,11 +271,6 @@ public class Utils {
         for (int i = 0; i < titles.length; ++i) {
             calendarTypeToTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
         }
-
-        titleToCalendarTypeMap = new HashMap<>();
-        for (int i = 0; i < titles.length; ++i) {
-            titleToCalendarTypeMap.put(titles[i], CalendarType.valueOf(values[i]));
-        }
     }
 
     static public List<CalendarType> getEnabledCalendarTypes() {
@@ -296,28 +293,12 @@ public class Utils {
         return result;
     }
 
-    static public List<String> getOrderedCalendarTitles() {
-        List<String> result = new ArrayList<>();
+    static public List<CalendarTypeEntity> getOrderedCalendarEntities() {
+        List<CalendarTypeEntity> result = new ArrayList<>();
         for (CalendarType type : getOrderedCalendarTypes()) {
-            result.add(calendarTypeToTitleMap.get(type));
+            result.add(new CalendarTypeEntity(type, calendarTypeToTitleMap.get(type)));
         }
-
-        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
-        for (CalendarType key : CalendarType.values()) {
-            if (!enabledCalendarTypes.contains(key)) {
-                result.add(Utils.getTitleFromCalendarType(key));
-            }
-        }
-
         return result;
-    }
-
-    static public String getTitleFromCalendarType(CalendarType type) {
-        return calendarTypeToTitleMap.get(type);
-    }
-
-    static public CalendarType getCalendarTypeFromTitle(String title) {
-        return titleToCalendarTypeMap.get(title);
     }
 
     public static boolean isClockIn24() {
@@ -639,8 +620,7 @@ public class Utils {
     static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
-    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-    static public List<AbstractEvent> allEnabledEvents;
+    static private List<AbstractEvent> allEnabledEvents;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -811,13 +791,24 @@ public class Utils {
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
         Utils.allEnabledEvents = allEnabledEvents;
-
-        readDeviceCalendarEvents(context);
     }
 
-    private static void readDeviceCalendarEvents(Context context) {
+    public static List<AbstractEvent> getAllEnabledEvents() {
+        return allEnabledEvents;
+    }
+
+    public static List<DeviceCalendarEvent> getAllEnabledAppointments() {
+        return allEnabledAppointments;
+    }
+
+    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
+    static private List<DeviceCalendarEvent> allEnabledAppointments;
+
+    public static void readDeviceCalendarEvents(Context context) {
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
         Utils.deviceCalendarEvents = deviceCalendarEvents;
+        List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
+        Utils.allEnabledAppointments = allEnabledAppointments;
 
         if (!showDeviceCalendarEvents) {
             return;
@@ -909,7 +900,7 @@ public class Utils {
                         cursor.getString(10)
                 );
                 list.add(event);
-                allEnabledEvents.add(event);
+                allEnabledAppointments.add(event);
             }
             cursor.close();
         } catch (Exception e) {
