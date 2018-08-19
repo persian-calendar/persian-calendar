@@ -12,7 +12,7 @@
         android:layout_margin="@dimen/icon_margin"
         app:srcCompat="@drawable/ic_drag_handle" />
 
-    <CheckedTextView
+    <androidx.appcompat.widget.AppCompatCheckedTextView
         android:id="@+id/check_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
