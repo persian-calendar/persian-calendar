@@ -94,8 +94,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 int TimelineColor = ContextCompat.getColor(context, typedValue.resourceId);
                 timelineColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor);
                 context.getTheme().resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
-                int TaglineColor = ContextCompat.getColor(context, typedValue.resourceId);
-                taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TaglineColor);
+                int taglineColor = ContextCompat.getColor(context, typedValue.resourceId);
+                taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor);
                 nightColor = typedArray.getColor(R.styleable.SunView_SunViewNightColor, ContextCompat.getColor(context, R.color.sViewNightColor));
                 dayColor = typedArray.getColor(R.styleable.SunView_SunViewDayColor, ContextCompat.getColor(context, R.color.sViewDayColor));
                 daySecondColor = typedArray.getColor(R.styleable.SunView_SunViewDaySecondColor, ContextCompat.getColor(context, R.color.sViewDaySecondColor));

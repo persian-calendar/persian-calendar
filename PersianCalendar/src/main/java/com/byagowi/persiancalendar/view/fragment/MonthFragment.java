@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 
+import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
+
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private AbstractDate typedDate;
+    private RecyclerView recyclerView;
     private int offset;
 
     private MonthAdapter adapter;
@@ -113,7 +117,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
+        recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
@@ -150,12 +154,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
-                updateTitle();
+                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
+                    Log.e("", "ASDASD");
+                    adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    updateTitle();
 
-                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
-                long selectedDay = 1 + jdn - baseJdn;
-                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
-                    adapter.selectDay((int) (1 + jdn - baseJdn));
+                    long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
+                    long selectedDay = 1 + jdn - baseJdn;
+                    if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
+                        adapter.selectDay((int) (1 + jdn - baseJdn));
+                    }
                 }
             }
         }

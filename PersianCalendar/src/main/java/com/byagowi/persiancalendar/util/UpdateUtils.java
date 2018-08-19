@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -21,6 +22,7 @@ import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
+import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.github.praytimes.Clock;
@@ -36,6 +38,15 @@ import calendar.CalendarType;
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static AbstractDate pastDate;
+    private static SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
+
+    public static void setDeviceCalendarEvents(Context context) {
+        try {
+            deviceCalendarEvents = CalendarUtils.readDayDeviceEvents(context, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
@@ -83,6 +94,7 @@ public class UpdateUtils {
             Utils.loadAlarms(context);
             pastDate = date;
             updateDate = true;
+            setDeviceCalendarEvents(context);
         }
 
         String weekDayName = Utils.getWeekDayName(date);
@@ -97,7 +109,7 @@ public class UpdateUtils {
                 owghat = owghat + " (" + cityName + ")";
             }
         }
-        List<AbstractEvent> events = Utils.getEvents(jdn);
+        List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {

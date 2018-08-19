@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
+import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
@@ -22,8 +24,10 @@ import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import calendar.DateConverter;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
+    private SparseArray<List<DeviceCalendarEvent>> monthEvents = new SparseArray<>();
     private List<DayEntity> days;
     private boolean isArabicDigit;
     private final int startingDayOfWeek;
@@ -51,6 +55,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
+        if (Utils.isShowDeviceCalendarEvents()) {
+            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
+        }
         isArabicDigit = Utils.isArabicDigitSelected();
 
         Resources.Theme theme = context.getTheme();
@@ -250,7 +257,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
                     num.setTextSize(isArabicDigit ? 20 : 25);
 
-                    List<AbstractEvent> events = Utils.getEvents(day.getJdn());
+                    List<AbstractEvent> events = Utils.getEvents(day.getJdn(), monthEvents);
                     boolean isEvent = false,
                             isHoliday = false;
                     if (Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events)) {
