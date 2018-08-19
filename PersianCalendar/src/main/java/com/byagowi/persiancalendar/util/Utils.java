@@ -151,6 +151,8 @@ public class Utils {
         loadLanguageResource(context);
         loadAlarms(context);
         loadEvents(context);
+        //FIXME: Shouldn't be here
+        readDeviceCalendarEvents(context);
     }
 
     static private String[] persianMonths;
@@ -639,8 +641,7 @@ public class Utils {
     static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
-    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-    static public List<AbstractEvent> allEnabledEvents;
+    static private List<AbstractEvent> allEnabledEvents;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -811,13 +812,24 @@ public class Utils {
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
         Utils.allEnabledEvents = allEnabledEvents;
-
-        readDeviceCalendarEvents(context);
     }
 
-    private static void readDeviceCalendarEvents(Context context) {
+    public static List<AbstractEvent> getAllEnabledEvents() {
+        return allEnabledEvents;
+    }
+
+    public static List<DeviceCalendarEvent> getAllEnabledAppointments() {
+        return allEnabledAppointments;
+    }
+
+    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
+    static private List<DeviceCalendarEvent> allEnabledAppointments;
+
+    public static void readDeviceCalendarEvents(Context context) {
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
         Utils.deviceCalendarEvents = deviceCalendarEvents;
+        List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
+        Utils.allEnabledAppointments = allEnabledAppointments;
 
         if (!showDeviceCalendarEvents) {
             return;
@@ -909,7 +921,7 @@ public class Utils {
                         cursor.getString(10)
                 );
                 list.add(event);
-                allEnabledEvents.add(event);
+                allEnabledAppointments.add(event);
             }
             cursor.close();
         } catch (Exception e) {
