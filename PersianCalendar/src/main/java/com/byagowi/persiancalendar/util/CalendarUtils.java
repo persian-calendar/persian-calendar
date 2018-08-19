@@ -36,6 +36,18 @@ public class CalendarUtils {
         }
     }
 
+    static public long getJdnOfCalendarWithException(CalendarType calendar, int year, int month, int day) {
+        switch (calendar) {
+            case ISLAMIC:
+                return DateConverter.islamicToJdn(new IslamicDate(year, month, day));
+            case GREGORIAN:
+                return DateConverter.civilToJdn(new CivilDate(year, month, day));
+            case SHAMSI:
+            default:
+                return DateConverter.persianToJdn(new PersianDate(year, month, day));
+        }
+    }
+
     static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
@@ -102,28 +114,8 @@ public class CalendarUtils {
         }
     }
 
-    static public String dateStringOfOtherCalendars(CalendarType calendar, long jdn) {
-        switch (calendar) {
-            case ISLAMIC:
-                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-                        Utils.getComma() + " " +
-                        Utils.dateToString(DateConverter.jdnToCivil(jdn));
-            case GREGORIAN:
-                return Utils.dateToString(DateConverter.jdnToPersian(jdn)) +
-                        Utils.getComma() + " " +
-                        Utils.dateToString(DateConverter.civilToIslamic(
-                                DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()));
-            case SHAMSI:
-            default:
-                return Utils.dateToString(DateConverter.jdnToCivil(jdn)) +
-                        Utils.getComma() + " " +
-                        Utils.dateToString(DateConverter.civilToIslamic(
-                                DateConverter.jdnToCivil(jdn), Utils.getIslamicOffset()));
-        }
-    }
-
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getComma() + " " + Utils.dateToString(date);
+        return Utils.getWeekDayName(date) + Utils.getComma() + " " + dateToString(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -134,31 +126,13 @@ public class CalendarUtils {
         return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
     }
 
-    // based on R.array.calendar_type order
-    static public CalendarType calendarTypeFromPosition(int position) {
-        switch (position) {
-            case 0:
-                return CalendarType.SHAMSI;
-            case 1:
-                return CalendarType.ISLAMIC;
-            default:
-                return CalendarType.GREGORIAN;
-        }
-    }
-
-    static public int positionFromCalendarType(CalendarType calendar) {
-        switch (calendar) {
-            case SHAMSI:
-                return 0;
-            case ISLAMIC:
-                return 1;
-            default:
-                return 2;
-        }
-    }
-
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
         long dayOfYear = jdn - startOfYearJdn;
         return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
+    }
+
+    static public String dateToString(AbstractDate date) {
+        return Utils.formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
+                Utils.formatNumber(date.getYear());
     }
 }

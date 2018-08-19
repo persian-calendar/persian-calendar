@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -112,6 +113,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFICATION_ATHAN;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE_LOCK_SCREEN;
+import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
@@ -196,12 +198,15 @@ public class Utils {
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
     static private CalendarType mainCalendar;
+    static private CalendarType[] otherCalendars;
     static private String comma;
     static private boolean showWeekOfYear;
     static private int weekStartOffset;
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
+    static private Map<CalendarType, String> calendarTypeToTitleMap;
+    static private Map<String, CalendarType> titleToCalendarTypeMap;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -227,7 +232,23 @@ public class Utils {
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
         coordinate = getCoordinate(context);
-        mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
+        try {
+            mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
+            String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC").trim();
+            if (TextUtils.isEmpty(otherCalendarsString)) {
+                otherCalendars = new CalendarType[0];
+            } else {
+                String[] calendars = otherCalendarsString.split(",");
+                otherCalendars = new CalendarType[calendars.length];
+                for (int i = 0; i < calendars.length; ++i) {
+                    otherCalendars[i] = CalendarType.valueOf(calendars[i]);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Fail on parsing calendar preference", e);
+            mainCalendar = CalendarType.SHAMSI;
+            otherCalendars = new CalendarType[]{CalendarType.GREGORIAN, CalendarType.ISLAMIC};
+        }
         comma = language.equals(LANG_EN_US) ? "," : "،";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
@@ -240,6 +261,63 @@ public class Utils {
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
+
+        String[] values = context.getResources().getStringArray(R.array.calendar_values);
+        String[] titles = context.getResources().getStringArray(R.array.calendar_type);
+
+        calendarTypeToTitleMap = new HashMap<>();
+        for (int i = 0; i < titles.length; ++i) {
+            calendarTypeToTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
+        }
+
+        titleToCalendarTypeMap = new HashMap<>();
+        for (int i = 0; i < titles.length; ++i) {
+            titleToCalendarTypeMap.put(titles[i], CalendarType.valueOf(values[i]));
+        }
+    }
+
+    static public List<CalendarType> getEnabledCalendarTypes() {
+        List<CalendarType> result = new ArrayList<>();
+        result.add(getMainCalendar());
+        result.addAll(Arrays.asList(getOtherCalendars()));
+        return result;
+    }
+
+    static public List<CalendarType> getOrderedCalendarTypes() {
+        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
+
+        List<CalendarType> result = new ArrayList<>(enabledCalendarTypes);
+        for (CalendarType key : CalendarType.values()) {
+            if (!enabledCalendarTypes.contains(key)) {
+                result.add(key);
+            }
+        }
+
+        return result;
+    }
+
+    static public List<String> getOrderedCalendarTitles() {
+        List<String> result = new ArrayList<>();
+        for (CalendarType type : getOrderedCalendarTypes()) {
+            result.add(calendarTypeToTitleMap.get(type));
+        }
+
+        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
+        for (CalendarType key : CalendarType.values()) {
+            if (!enabledCalendarTypes.contains(key)) {
+                result.add(Utils.getTitleFromCalendarType(key));
+            }
+        }
+
+        return result;
+    }
+
+    static public String getTitleFromCalendarType(CalendarType type) {
+        return calendarTypeToTitleMap.get(type);
+    }
+
+    static public CalendarType getCalendarTypeFromTitle(String title) {
+        return titleToCalendarTypeMap.get(title);
     }
 
     public static boolean isClockIn24() {
@@ -314,6 +392,10 @@ public class Utils {
         return mainCalendar;
     }
 
+    static public CalendarType[] getOtherCalendars() {
+        return otherCalendars;
+    }
+
     static private Map<PrayTime, Clock> prayTimes;
 
     static public String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
@@ -368,11 +450,6 @@ public class Utils {
                 result[i] = preferredDigits[Character.getNumericValue(c)];
         }
         return String.valueOf(result);
-    }
-
-    static public String dateToString(AbstractDate date) {
-        return formatNumber(date.getDayOfMonth()) + ' ' + CalendarUtils.getMonthName(date) + ' ' +
-                formatNumber(date.getYear());
     }
 
     static public String getComma() {
@@ -563,8 +640,7 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
     static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-    static public List<Object> allEnabledEvents;
-    static public List<String> allEnabledEventsTitles;
+    static public List<AbstractEvent> allEnabledEvents;
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -584,8 +660,7 @@ public class Utils {
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
         SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
-        ArrayList<Object> allEnabledEvents = new ArrayList<>();
-        ArrayList<String> allEnabledEventsTitles = new ArrayList<>();
+        ArrayList<AbstractEvent> allEnabledEvents = new ArrayList<>();
 
         try {
             JSONArray days;
@@ -649,7 +724,6 @@ public class Utils {
                     PersianCalendarEvent ev = new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -704,7 +778,6 @@ public class Utils {
                     IslamicCalendarEvent ev = new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -727,7 +800,6 @@ public class Utils {
                     GregorianCalendarEvent ev = new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false);
                     list.add(ev);
                     allEnabledEvents.add(ev);
-                    allEnabledEventsTitles.add(title);
                 }
             }
 
@@ -739,7 +811,6 @@ public class Utils {
         Utils.islamicCalendarEvents = islamicCalendarEvents;
         Utils.gregorianCalendarEvents = gregorianCalendarEvents;
         Utils.allEnabledEvents = allEnabledEvents;
-        Utils.allEnabledEventsTitles = allEnabledEventsTitles;
 
         readDeviceCalendarEvents(context);
     }
@@ -839,7 +910,6 @@ public class Utils {
                 );
                 list.add(event);
                 allEnabledEvents.add(event);
-                allEnabledEventsTitles.add(title);
             }
             cursor.close();
         } catch (Exception e) {
@@ -1208,5 +1278,20 @@ public class Utils {
             }
         }
 //        }
+    }
+
+    static public String dateStringOfOtherCalendars(long jdn) {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (CalendarType type : otherCalendars) {
+            if (!first) {
+                result.append(comma);
+                result.append(" ");
+            }
+            result.append(CalendarUtils.dateToString(
+                    CalendarUtils.getDateFromJdnOfCalendar(type, jdn)));
+            first = false;
+        }
+        return result.toString();
     }
 }

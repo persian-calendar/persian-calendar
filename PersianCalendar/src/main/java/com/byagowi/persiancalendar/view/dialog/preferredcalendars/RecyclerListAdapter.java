@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.adapter;
+package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
 /*
  * Copyright (C) 2015 Paul Burke
  *
@@ -15,20 +15,16 @@ package com.byagowi.persiancalendar.adapter;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.dialog.CalendarPreferenceDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,25 +33,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
 
-    private final List<String> mItems = new ArrayList<>();
+    private final List<String> titles;
+    private final List<String> values;
+    private final List<Boolean> enabled;
     CalendarPreferenceDialog calendarPreferenceDialog;
 
-    public RecyclerListAdapter(Context context, CalendarPreferenceDialog calendarPreferenceDialog) {
+    public RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
+                               List<String> titles, List<String> values, List<Boolean> enabled) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
-        mItems.addAll(Arrays.asList(context.getResources().getStringArray(R.array.calendar_values)));
-        //FIXME: It should consider current ordering
+        this.titles = new ArrayList<>(titles);
+        this.values = new ArrayList<>(values);
+        this.enabled = new ArrayList<>(enabled);
     }
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_type_item, parent, false);
-        ItemViewHolder itemViewHolder = new ItemViewHolder(view);
-        return itemViewHolder;
+        return new ItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
-        holder.textView.setText(mItems.get(position));
+        holder.checkedTextView.setText(titles.get(position));
+        holder.checkedTextView.setChecked(enabled.get(position));
 
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener((v, event) -> {
@@ -64,43 +64,50 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             }
             return false;
         });
+
+        holder.checkedTextView.setOnClickListener(v -> {
+            boolean newState = !holder.checkedTextView.isChecked();
+            holder.checkedTextView.setChecked(newState);
+            enabled.set(position, newState);
+        });
     }
 
     public boolean onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(mItems, fromPosition, toPosition);
+        Collections.swap(titles, fromPosition, toPosition);
+        Collections.swap(values, fromPosition, toPosition);
+        Collections.swap(enabled, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
 
     public void onItemDismiss(int position) {
-        mItems.remove(position);
+        titles.remove(position);
+        values.remove(position);
+        enabled.remove(position);
         notifyItemRemoved(position);
     }
 
-    public List<String> getOrdering() {
-        return new ArrayList<>(mItems);
+    public List<String> getResult() {
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < values.size(); ++i) {
+            if (enabled.get(i)) {
+                result.add(values.get(i));
+            }
+        }
+        return result;
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return titles.size();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        public final TextView textView;
+        final CheckedTextView checkedTextView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.text);
-            textView.setOnClickListener(v -> {
-                CheckedTextView ctv = (CheckedTextView) v;
-                if (ctv.isChecked())
-                    ctv.setChecked(false);
-                else
-                    ctv.setChecked(true);
-                return;
-            });
+            checkedTextView = itemView.findViewById(R.id.check_text_view);
         }
 
         public void onItemSelected() {

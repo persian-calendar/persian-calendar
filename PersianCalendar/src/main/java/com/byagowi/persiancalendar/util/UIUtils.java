@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.github.praytimes.Clock;
 
+import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.DrawableRes;
@@ -35,8 +36,6 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -58,23 +57,40 @@ public class UIUtils {
 
     public static void fillCalendarsCard(Context context, long jdn,
                                          CalendarsTabContentBinding binding,
-                                         CalendarType calendarType) {
-        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
-        CivilDate civilDate = DateConverter.jdnToCivil(jdn);
-        IslamicDate hijriDate = DateConverter.civilToIslamic(civilDate, Utils.getIslamicOffset());
+                                         CalendarType calendarType,
+                                         List<CalendarType> calendars) {
+        AbstractDate firstCalendar,
+                secondCalendar = null,
+                thirdCalendar = null;
+        firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(0), jdn);
+        if (calendars.size() > 1) {
+            secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(1), jdn);
+        }
+        if (calendars.size() > 2) {
+            thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(2), jdn);
+        }
 
-        binding.weekDayName.setText(Utils.getWeekDayName(civilDate));
-        binding.shamsiDateLinear.setText(CalendarUtils.toLinearDate(persianDate));
-        binding.shamsiDateDay.setText(Utils.formatNumber(persianDate.getDayOfMonth()));
-        binding.shamsiDate.setText(CalendarUtils.getMonthName(persianDate) + "\n" + Utils.formatNumber(persianDate.getYear()));
+        binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
 
-        binding.gregorianDateLinear.setText(CalendarUtils.toLinearDate(civilDate));
-        binding.gregorianDateDay.setText(Utils.formatNumber(civilDate.getDayOfMonth()));
-        binding.gregorianDate.setText(CalendarUtils.getMonthName(civilDate) + "\n" + Utils.formatNumber(civilDate.getYear()));
+        binding.firstCalendarDateLinear.setText(CalendarUtils.toLinearDate(firstCalendar));
+        binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
+        binding.firstCalendarDate.setText(CalendarUtils.getMonthName(firstCalendar) + "\n" + Utils.formatNumber(firstCalendar.getYear()));
 
-        binding.islamicDateLinear.setText(CalendarUtils.toLinearDate(hijriDate));
-        binding.islamicDateDay.setText(Utils.formatNumber(hijriDate.getDayOfMonth()));
-        binding.islamicDate.setText(CalendarUtils.getMonthName(hijriDate) + "\n" + Utils.formatNumber(hijriDate.getYear()));
+        if (secondCalendar == null) {
+            binding.secondCalendarContainer.setVisibility(View.GONE);
+        } else {
+            binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
+            binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
+            binding.secondCalendarDate.setText(CalendarUtils.getMonthName(secondCalendar) + "\n" + Utils.formatNumber(secondCalendar.getYear()));
+        }
+
+        if (thirdCalendar == null) {
+            binding.thirdCalendarContainer.setVisibility(View.GONE);
+        } else {
+            binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
+            binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
+            binding.thirdCalendarDate.setText(CalendarUtils.getMonthName(thirdCalendar) + "\n" + Utils.formatNumber(thirdCalendar.getYear()));
+        }
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 
@@ -135,9 +151,10 @@ public class UIUtils {
         if (jdn == -1) {
             jdn = CalendarUtils.getTodayJdn();
         }
+
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
-                CalendarUtils.calendarTypeFromPosition(
-                        binding.calendarTypeSpinner.getSelectedItemPosition()),
+                Utils.getCalendarTypeFromTitle(
+                        (String) binding.calendarTypeSpinner.getSelectedItem()),
                 jdn);
 
         // years spinner init.

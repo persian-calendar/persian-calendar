@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.byagowi.persiancalendar.adapter;
+package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
 
 import android.graphics.Canvas;
 

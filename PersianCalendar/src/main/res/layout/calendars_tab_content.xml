@@ -71,7 +71,7 @@
             app:justifyContent="center">
 
             <LinearLayout
-                android:id="@+id/shamsi_container"
+                android:id="@+id/first_calendar_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -84,7 +84,7 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/shamsi_date_day"
+                        android:id="@+id/first_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -94,7 +94,7 @@
                         tools:text="a" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/shamsi_date"
+                        android:id="@+id/first_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -106,7 +106,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/shamsi_date_linear"
+                    android:id="@+id/first_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -117,7 +117,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/gregorian_container"
+                android:id="@+id/second_calendar_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -130,7 +130,7 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/gregorian_date_day"
+                        android:id="@+id/second_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -140,7 +140,7 @@
                         tools:text="a" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/gregorian_date"
+                        android:id="@+id/second_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -152,7 +152,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/gregorian_date_linear"
+                    android:id="@+id/second_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -163,7 +163,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/islamic_container"
+                android:id="@+id/third_calendar_container"
                 android:layout_width="@dimen/owghatSize"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -176,7 +176,7 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/islamic_date_day"
+                        android:id="@+id/third_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -186,7 +186,7 @@
                         tools:text="a" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/islamic_date"
+                        android:id="@+id/third_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -198,7 +198,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/islamic_date_linear"
+                    android:id="@+id/third_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -215,17 +215,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:showDividers="middle">
+            android:paddingBottom="@dimen/padding_item"
+            android:paddingLeft="@dimen/card_padding"
+            android:paddingRight="@dimen/card_padding"
+            android:paddingTop="@dimen/padding_item">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/diff_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="@dimen/padding_item"
-                android:paddingLeft="@dimen/card_padding"
-                android:paddingRight="@dimen/card_padding"
-                android:paddingTop="@dimen/padding_item"
                 android:textColor="?attr/colorTextNormal"
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />
@@ -235,10 +234,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="@dimen/padding_item"
-                android:paddingLeft="@dimen/card_padding"
-                android:paddingRight="@dimen/card_padding"
-                android:paddingTop="@dimen/padding_item"
                 android:textColor="?attr/colorTextNormal"
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />

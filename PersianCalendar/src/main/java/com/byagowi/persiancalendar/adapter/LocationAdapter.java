@@ -37,7 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bindLocation(cities.get(position));
+        holder.bind(cities.get(position));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             this.binding = itemBinding;
         }
 
-        void bindLocation(CityEntity cityEntity) {
+        void bind(CityEntity cityEntity) {
             String city, country;
             switch (Utils.getAppLanguage()) {
                 case Constants.LANG_EN:

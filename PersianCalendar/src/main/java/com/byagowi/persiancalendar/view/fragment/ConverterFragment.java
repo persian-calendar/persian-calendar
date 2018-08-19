@@ -18,10 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import calendar.CalendarType;
-import calendar.CivilDate;
-import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 /**
  * Program activity for android
@@ -54,22 +50,22 @@ public class ConverterFragment extends Fragment implements
         binding.calendarsTabContent.today.setOnClickListener(this);
         binding.calendarsTabContent.todayIcon.setOnClickListener(this);
 
-        binding.calendarsTabContent.shamsiDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.shamsiDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.shamsiDate.setOnClickListener(this);
-        binding.calendarsTabContent.gregorianDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.gregorianDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.gregorianDate.setOnClickListener(this);
-        binding.calendarsTabContent.islamicDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.islamicDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.islamicDate.setOnClickListener(this);
+        binding.calendarsTabContent.firstCalendarDateLinear.setOnClickListener(this);
+        binding.calendarsTabContent.firstCalendarDateDay.setOnClickListener(this);
+        binding.calendarsTabContent.firstCalendarDate.setOnClickListener(this);
+        binding.calendarsTabContent.secondCalendarDateLinear.setOnClickListener(this);
+        binding.calendarsTabContent.secondCalendarDateDay.setOnClickListener(this);
+        binding.calendarsTabContent.secondCalendarDate.setOnClickListener(this);
+        binding.calendarsTabContent.thirdCalendarDateLinear.setOnClickListener(this);
+        binding.calendarsTabContent.thirdCalendarDateDay.setOnClickListener(this);
+        binding.calendarsTabContent.thirdCalendarDate.setOnClickListener(this);
 
         // fill views
         binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.calendar_type)));
+                Utils.getOrderedCalendarTitles()));
 
-        binding.selectdayFragment.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
+        binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
         startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
                 binding.selectdayFragment, lastSelectedJdn);
 
@@ -87,34 +83,17 @@ public class ConverterFragment extends Fragment implements
         int month = binding.selectdayFragment.monthSpinner.getSelectedItemPosition() + 1;
         int day = binding.selectdayFragment.daySpinner.getSelectedItemPosition() + 1;
 
-        long jdn;
-
         try {
-            binding.calendarsTabContent.shamsiContainer.setVisibility(View.VISIBLE);
-            binding.calendarsTabContent.gregorianContainer.setVisibility(View.VISIBLE);
-            binding.calendarsTabContent.islamicContainer.setVisibility(View.VISIBLE);
+            binding.calendarsTabContent.firstCalendarContainer.setVisibility(View.GONE);
+            binding.calendarsTabContent.secondCalendarContainer.setVisibility(View.VISIBLE);
+            binding.calendarsTabContent.thirdCalendarContainer.setVisibility(View.VISIBLE);
 
-            CalendarType calendarType = CalendarUtils.calendarTypeFromPosition(
-                    binding.selectdayFragment.calendarTypeSpinner.getSelectedItemPosition());
-            switch (calendarType) {
-                case GREGORIAN:
-                    jdn = DateConverter.civilToJdn(new CivilDate(year, month, day));
-                    binding.calendarsTabContent.gregorianContainer.setVisibility(View.GONE);
-                    break;
+            CalendarType calendarType = Utils.getCalendarTypeFromTitle(
+                    (String) binding.selectdayFragment.calendarTypeSpinner.getSelectedItem());
+            long jdn = CalendarUtils.getJdnOfCalendarWithException(calendarType, year, month, day);
 
-                case ISLAMIC:
-                    jdn = DateConverter.islamicToJdn(new IslamicDate(year, month, day));
-                    binding.calendarsTabContent.islamicContainer.setVisibility(View.GONE);
-                    break;
-
-                case SHAMSI:
-                default:
-                    jdn = DateConverter.persianToJdn(new PersianDate(year, month, day));
-                    binding.calendarsTabContent.shamsiContainer.setVisibility(View.GONE);
-                    break;
-            }
-
-            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType);
+            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
+                    Utils.getOrderedCalendarTypes());
             lastSelectedJdn = jdn;
             if (CalendarUtils.getTodayJdn() == jdn) {
                 binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
@@ -153,34 +132,34 @@ public class ConverterFragment extends Fragment implements
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.shamsi_date:
-            case R.id.shamsi_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.shamsiDateDay.getText() + " " +
-                        binding.calendarsTabContent.shamsiDate.getText().toString().replace("\n", " "));
+            case R.id.first_calendar_date:
+            case R.id.first_calendar_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.firstCalendarDateDay.getText() + " " +
+                        binding.calendarsTabContent.firstCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.shamsi_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.shamsiDateLinear.getText());
+            case R.id.first_calendar_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.firstCalendarDateLinear.getText());
                 break;
 
-            case R.id.gregorian_date:
-            case R.id.gregorian_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.gregorianDateDay.getText() + " " +
-                        binding.calendarsTabContent.gregorianDate.getText().toString().replace("\n", " "));
+            case R.id.second_calendar_date:
+            case R.id.second_calendar_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.secondCalendarDateDay.getText() + " " +
+                        binding.calendarsTabContent.secondCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.gregorian_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.gregorianDateLinear.getText());
+            case R.id.second_calendar_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.secondCalendarDateLinear.getText());
                 break;
 
-            case R.id.islamic_date:
-            case R.id.islamic_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.islamicDateDay.getText() + " " +
-                        binding.calendarsTabContent.islamicDate.getText().toString().replace("\n", " "));
+            case R.id.third_calendar_date:
+            case R.id.third_calendar_date_day:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.thirdCalendarDateDay.getText() + " " +
+                        binding.calendarsTabContent.thirdCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.islamic_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.islamicDateLinear.getText());
+            case R.id.third_calendar_date_linear:
+                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.thirdCalendarDateLinear.getText());
                 break;
 
             case R.id.today:

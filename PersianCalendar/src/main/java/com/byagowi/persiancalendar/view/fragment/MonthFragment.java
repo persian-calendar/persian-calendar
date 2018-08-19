@@ -29,7 +29,6 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 
 public class MonthFragment extends Fragment implements View.OnClickListener {
-    private CalendarFragment calendarFragment;
     private AbstractDate typedDate;
     private int offset;
 
@@ -120,11 +119,11 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
         recyclerView.setLayoutManager(layoutManager);
         fillTheFields();
-        adapter = new MonthAdapter(getContext(), this, days, startingDayOfWeek, weekOfYearStart, weeksCount);
+        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
-        calendarFragment = (CalendarFragment) getActivity()
+        CalendarFragment calendarFragment = (CalendarFragment) getActivity()
                 .getSupportFragmentManager()
                 .findFragmentByTag(CalendarFragment.class.getName());
 
@@ -168,16 +167,12 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         super.onDestroy();
     }
 
-    public void onClickItem(long jdn) {
-        calendarFragment.selectDay(jdn);
-    }
-
-    public void onLongClickItem(long jdn) {
-        calendarFragment.addEventOnCalendar(jdn);
-    }
-
     @Override
     public void onClick(View v) {
+        CalendarFragment calendarFragment = (CalendarFragment) getActivity()
+                .getSupportFragmentManager()
+                .findFragmentByTag(CalendarFragment.class.getName());
+
         switch (v.getId()) {
             case R.id.next:
                 calendarFragment.changeMonth(isRTL ? -1 : 1);

@@ -123,8 +123,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), isRTL,
-                context, tabs));
+        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
 
         mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
@@ -152,21 +151,21 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         calendarsBinding.today.setOnClickListener(this);
         calendarsBinding.todayIcon.setOnClickListener(this);
 
-        calendarsBinding.gregorianDate.setOnClickListener(this);
-        calendarsBinding.gregorianDateDay.setOnClickListener(this);
-        calendarsBinding.gregorianDateLinear.setOnClickListener(this);
-        calendarsBinding.islamicDate.setOnClickListener(this);
-        calendarsBinding.islamicDateDay.setOnClickListener(this);
-        calendarsBinding.islamicDateLinear.setOnClickListener(this);
-        calendarsBinding.shamsiDate.setOnClickListener(this);
-        calendarsBinding.shamsiDateDay.setOnClickListener(this);
-        calendarsBinding.shamsiDateLinear.setOnClickListener(this);
+        calendarsBinding.firstCalendarDateLinear.setOnClickListener(this);
+        calendarsBinding.firstCalendarDateDay.setOnClickListener(this);
+        calendarsBinding.firstCalendarDate.setOnClickListener(this);
+        calendarsBinding.secondCalendarDateLinear.setOnClickListener(this);
+        calendarsBinding.secondCalendarDateDay.setOnClickListener(this);
+        calendarsBinding.secondCalendarDate.setOnClickListener(this);
+        calendarsBinding.thirdCalendarDateLinear.setOnClickListener(this);
+        calendarsBinding.thirdCalendarDateDay.setOnClickListener(this);
+        calendarsBinding.thirdCalendarDate.setOnClickListener(this);
 
         calendarsBinding.getRoot().setOnClickListener(this);
 
-        calendarsBinding.gregorianDateLinear.setVisibility(View.GONE);
-        calendarsBinding.islamicDateLinear.setVisibility(View.GONE);
-        calendarsBinding.shamsiDateLinear.setVisibility(View.GONE);
+        calendarsBinding.firstCalendarDateLinear.setVisibility(View.GONE);
+        calendarsBinding.secondCalendarDateLinear.setVisibility(View.GONE);
+        calendarsBinding.thirdCalendarDateLinear.setVisibility(View.GONE);
         calendarsBinding.diffDateContainer.setVisibility(View.GONE);
 
         String cityName = Utils.getCityName(context, false);
@@ -225,12 +224,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     private long lastSelectedJdn = -1;
 
-    void selectDay(long jdn) {
+    public void selectDay(long jdn) {
         Context context = getContext();
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar());
+        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar(),
+                Utils.getEnabledCalendarTypes());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
         showEvent(jdn);
@@ -454,14 +454,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.calendars_tab_content:
-                boolean isOpenCalendarCommand = calendarsBinding.gregorianDateLinear.getVisibility() != View.VISIBLE;
+                boolean isOpenCalendarCommand = calendarsBinding.firstCalendarDateLinear.getVisibility() != View.VISIBLE;
 
                 calendarsBinding.moreCalendar.setImageResource(isOpenCalendarCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                calendarsBinding.gregorianDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                calendarsBinding.islamicDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                calendarsBinding.shamsiDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.firstCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.secondCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+                calendarsBinding.thirdCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
                 break;
@@ -497,34 +497,34 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 bringTodayYearMonth();
                 break;
 
-            case R.id.shamsi_date:
-            case R.id.shamsi_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.shamsiDateDay.getText() + " " +
-                        calendarsBinding.shamsiDate.getText().toString().replace("\n", " "));
+            case R.id.first_calendar_date:
+            case R.id.first_calendar_date_day:
+                UIUtils.copyToClipboard(context, calendarsBinding.firstCalendarDateDay.getText() + " " +
+                        calendarsBinding.firstCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.shamsi_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.shamsiDateLinear.getText());
+            case R.id.first_calendar_date_linear:
+                UIUtils.copyToClipboard(context, calendarsBinding.firstCalendarDateLinear.getText());
                 break;
 
-            case R.id.gregorian_date:
-            case R.id.gregorian_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.gregorianDateDay.getText() + " " +
-                        calendarsBinding.gregorianDate.getText().toString().replace("\n", " "));
+            case R.id.second_calendar_date:
+            case R.id.second_calendar_date_day:
+                UIUtils.copyToClipboard(context, calendarsBinding.secondCalendarDateDay.getText() + " " +
+                        calendarsBinding.secondCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.gregorian_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.gregorianDateLinear.getText());
+            case R.id.second_calendar_date_linear:
+                UIUtils.copyToClipboard(context, calendarsBinding.secondCalendarDateLinear.getText());
                 break;
 
-            case R.id.islamic_date:
-            case R.id.islamic_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.islamicDateDay.getText() + " " +
-                        calendarsBinding.islamicDate.getText().toString().replace("\n", " "));
+            case R.id.third_calendar_date:
+            case R.id.third_calendar_date_day:
+                UIUtils.copyToClipboard(context, calendarsBinding.thirdCalendarDateDay.getText() + " " +
+                        calendarsBinding.thirdCalendarDate.getText().toString().replace("\n", " "));
                 break;
 
-            case R.id.islamic_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.islamicDateLinear.getText());
+            case R.id.third_calendar_date_linear:
+                UIUtils.copyToClipboard(context, calendarsBinding.thirdCalendarDateLinear.getText());
                 break;
         }
     }
@@ -587,11 +587,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             mSearchAutoComplete.setHint(R.string.search_in_events);
 
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            mSearchAutoComplete.setAdapter(new ArrayAdapter<>(context,
-                    R.layout.suggestion, android.R.id.text1, Utils.allEnabledEventsTitles));
+            ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
+                    R.layout.suggestion, android.R.id.text1);
+            eventsAdapter.addAll(Utils.allEnabledEvents);
+            mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                Object ev = Utils.allEnabledEvents.get(Utils.allEnabledEventsTitles.indexOf(
-                        (String) parent.getItemAtPosition(position)));
+                AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);
                 if (ev instanceof PersianCalendarEvent) {
                     PersianDate todayPersian = CalendarUtils.getPersianToday();
                     PersianDate date = ((PersianCalendarEvent) ev).getDate();

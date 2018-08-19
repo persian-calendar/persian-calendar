@@ -18,6 +18,7 @@ public class Constants {
     public static final String LAST_CHOSEN_TAB_KEY = "LastChosenTab";
 
     public static final String PREF_MAIN_CALENDAR_KEY = "mainCalendarType";
+    public static final String PREF_OTHER_CALENDARS_KEY = "otherCalendarTypes";
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
     public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";

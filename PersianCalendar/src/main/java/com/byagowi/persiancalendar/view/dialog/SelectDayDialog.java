@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
@@ -36,9 +35,9 @@ public class SelectDayDialog extends AppCompatDialogFragment {
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.calendar_type)));
+                Utils.getOrderedCalendarTitles()));
 
-        binding.calendarTypeSpinner.setSelection(CalendarUtils.positionFromCalendarType(Utils.getMainCalendar()));
+        binding.calendarTypeSpinner.setSelection(0);
         startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
 
 
@@ -67,7 +66,8 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                     .findFragmentByTag(CalendarFragment.class.getName());
 
             try {
-                switch (CalendarUtils.calendarTypeFromPosition(binding.calendarTypeSpinner.getSelectedItemPosition())) {
+                switch (Utils.getCalendarTypeFromTitle(
+                        (String) binding.calendarTypeSpinner.getSelectedItem())) {
                     case GREGORIAN:
                         calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
                         break;

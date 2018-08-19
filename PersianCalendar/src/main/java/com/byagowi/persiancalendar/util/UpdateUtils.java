@@ -87,7 +87,7 @@ public class UpdateUtils {
 
         String weekDayName = Utils.getWeekDayName(date);
         String title = CalendarUtils.dayTitleSummary(date);
-        String subtitle = CalendarUtils.dateStringOfOtherCalendars(mainCalendar, jdn);
+        String subtitle = Utils.dateStringOfOtherCalendars(jdn);
 
         Clock currentClock = new Clock(calendar);
         String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
@@ -116,7 +116,7 @@ public class UpdateUtils {
                 remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
             }
 
-            String mainDateString = Utils.dateToString(date);
+            String mainDateString = CalendarUtils.dateToString(date);
 
             {
                 // Widget 4x1
@@ -205,7 +205,9 @@ public class UpdateUtils {
         if (isRTL && (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
                 (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
-            subtitle = Constants.RLM + subtitle;
+            if (!TextUtils.isEmpty(subtitle)) {
+                subtitle = Constants.RLM + subtitle;
+            }
         }
 
         if (Utils.isNotifyDate()) {
@@ -243,23 +245,32 @@ public class UpdateUtils {
                         ? R.layout.custom_notification_big
                         : R.layout.custom_notification_big_ltr);
                 bcv.setTextViewText(R.id.title, title);
-                bcv.setTextViewText(R.id.body, subtitle);
+
+                if (!TextUtils.isEmpty(subtitle)) {
+                    bcv.setTextViewText(R.id.body, subtitle);
+                } else {
+                    bcv.setViewVisibility(R.id.body, View.GONE);
+                }
 
                 String holidays = Utils.getEventsTitle(events, true, true, true, isRTL);
-                if (!TextUtils.isEmpty(holidays))
+                if (!TextUtils.isEmpty(holidays)) {
                     bcv.setTextViewText(R.id.holidays, holidays);
-                else
+                } else {
                     bcv.setViewVisibility(R.id.holidays, View.GONE);
+                }
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays))
+                if (Utils.isShownOnWidgets("non_holiday_events") &&
+                        !TextUtils.isEmpty(nonHolidays)) {
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays.trim());
-                else
+                } else {
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
+                }
 
-                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat))
+                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
                     bcv.setTextViewText(R.id.owghat, owghat);
-                else
+                } else {
                     bcv.setViewVisibility(R.id.owghat, View.GONE);
+                }
 
                 builder = builder
                         .setCustomContentView(cv)
