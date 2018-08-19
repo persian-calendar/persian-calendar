@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
+import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
@@ -25,8 +26,6 @@ import calendar.DateConverter;
  * Created by ebrahim on 3/20/16.
  */
 public class SelectDayDialog extends AppCompatDialogFragment {
-    private int startingYearOnYearSpinner = 0;
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -39,13 +38,12 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                 Utils.getOrderedCalendarEntities()));
 
         binding.calendarTypeSpinner.setSelection(0);
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
-
+        UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
 
         binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
+                UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
             }
 
             @Override
@@ -58,9 +56,12 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         builder.setCustomTitle(null);
         builder.setPositiveButton(R.string.go, (dialogInterface, i) -> {
 
-            int year = startingYearOnYearSpinner + binding.yearSpinner.getSelectedItemPosition();
-            int month = binding.monthSpinner.getSelectedItemPosition() + 1;
-            int day = binding.daySpinner.getSelectedItemPosition() + 1;
+            int year = ((FormattedIntEntity)
+                    binding.yearSpinner.getSelectedItem()).getValue();
+            int month = ((FormattedIntEntity)
+                    binding.monthSpinner.getSelectedItem()).getValue();
+            int day = ((FormattedIntEntity)
+                    binding.daySpinner.getSelectedItem()).getValue();
 
             CalendarFragment calendarFragment = (CalendarFragment) getActivity()
                     .getSupportFragmentManager()
