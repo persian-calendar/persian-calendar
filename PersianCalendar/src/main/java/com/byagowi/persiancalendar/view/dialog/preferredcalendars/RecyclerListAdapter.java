@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 
 import com.byagowi.persiancalendar.R;
 
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,7 +103,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        final CheckedTextView checkedTextView;
+        final AppCompatCheckedTextView checkedTextView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);

@@ -94,7 +94,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment = null;
-        if (preference.getKey().equals(Constants.PREF_MAIN_CALENDAR_KEY)) {
+        if (preference.getKey().equals("calendars_priority")) {
             fragment = new CalendarPreferenceDialog();
         } else if (preference instanceof PrayerSelectPreference) {
             fragment = new PrayerSelectDialog();

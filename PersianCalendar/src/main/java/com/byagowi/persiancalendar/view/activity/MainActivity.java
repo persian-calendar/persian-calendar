@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         // Doesn't matter apparently
         // oneTimeClockDisablingForAndroid5LE();
+        UpdateUtils.setDeviceCalendarEvents(getApplicationContext());
         UpdateUtils.update(getApplicationContext(), false);
 
         setContentView(R.layout.activity_main);

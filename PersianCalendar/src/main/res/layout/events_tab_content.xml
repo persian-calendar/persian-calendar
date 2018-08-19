@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:divider="?attr/appDivider"
         android:dividerPadding="@dimen/divider_margin"
-        android:minHeight="250dp"
+        android:minHeight="220dp"
         android:orientation="vertical"
         android:showDividers="middle">
 

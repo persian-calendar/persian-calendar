@@ -54,14 +54,13 @@
 
         <!-- It is a custom dialog, not a ListPreference -->
         <androidx.preference.ListPreference
-            android:defaultValue="SHAMSI"
             android:entries="@array/calendar_type"
             android:entryValues="@array/calendar_values"
             android:icon="@drawable/ic_calendar_setting"
-            android:key="mainCalendarType"
+            android:key="calendars_priority"
             android:negativeButtonText="@string/cancel"
-            android:summary="@string/main_calendar_summary"
-            android:title="@string/main_calendar" />
+            android:summary="@string/calendars_priority_summary"
+            android:title="@string/calendars_priority" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"

@@ -22,8 +22,10 @@ import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
+import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.github.praytimes.Clock;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -146,7 +148,8 @@ public class UIUtils {
         }
     }
 
-    static public int fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding, long jdn) {
+    static public void fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding,
+                                             long jdn) {
         if (jdn == -1) {
             jdn = CalendarUtils.getTodayJdn();
         }
@@ -156,19 +159,24 @@ public class UIUtils {
                 jdn);
 
         // years spinner init.
-        String[] years = new String[200];
-        int startingYearOnYearSpinner = date.getYear() - years.length / 2;
-        for (int i = 0; i < years.length; ++i) {
-            years[i] = Utils.formatNumber(i + startingYearOnYearSpinner);
+        List<FormattedIntEntity> years = new ArrayList<>();
+        final int YEARS = 200;
+        int startingYearOnYearSpinner = date.getYear() - YEARS / 2;
+        for (int i = 0; i < YEARS; ++i) {
+            years.add(new FormattedIntEntity(i + startingYearOnYearSpinner,
+                    Utils.formatNumber(i + startingYearOnYearSpinner)));
         }
-        binding.yearSpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years));
-        binding.yearSpinner.setSelection(years.length / 2);
+        binding.yearSpinner.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item, years));
+        binding.yearSpinner.setSelection(YEARS / 2);
         //
 
         // month spinner init.
-        String[] months = Utils.monthsNamesOfCalendar(date).clone();
-        for (int i = 0; i < months.length; ++i) {
-            months[i] = months[i] + " / " + Utils.formatNumber(i + 1);
+        List<FormattedIntEntity> months = new ArrayList<>();
+        String[] monthsTitle = Utils.monthsNamesOfCalendar(date);
+        for (int i = 1; i <= 12; ++i) {
+            months.add(new FormattedIntEntity(i,
+                    monthsTitle[i - 1] + " / " + Utils.formatNumber(i)));
         }
         binding.monthSpinner.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item, months));
@@ -176,16 +184,13 @@ public class UIUtils {
         //
 
         // days spinner init.
-        String[] days = new String[31];
-        for (int i = 0; i < days.length; ++i) {
-            days[i] = Utils.formatNumber(i + 1);
+        List<FormattedIntEntity> days = new ArrayList<>();
+        for (int i = 1; i <= 31; ++i) {
+            days.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
         }
         binding.daySpinner.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item, days));
         binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
-        //
-
-        return startingYearOnYearSpinner;
     }
 
     public static void askForCalendarPermission(AppCompatActivity activity) {

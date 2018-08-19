@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
+import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -27,8 +28,6 @@ import calendar.CalendarType;
  */
 public class ConverterFragment extends Fragment implements
         AdapterView.OnItemSelectedListener, View.OnClickListener {
-
-    private int startingYearOnYearSpinner = 0;
 
     private FragmentConverterBinding binding;
     private long lastSelectedJdn = -1;
@@ -67,8 +66,7 @@ public class ConverterFragment extends Fragment implements
                 Utils.getOrderedCalendarEntities()));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
-        startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
-                binding.selectdayFragment, lastSelectedJdn);
+        UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment, lastSelectedJdn);
 
         binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -80,9 +78,12 @@ public class ConverterFragment extends Fragment implements
     }
 
     private void fillCalendarInfo() {
-        int year = startingYearOnYearSpinner + binding.selectdayFragment.yearSpinner.getSelectedItemPosition();
-        int month = binding.selectdayFragment.monthSpinner.getSelectedItemPosition() + 1;
-        int day = binding.selectdayFragment.daySpinner.getSelectedItemPosition() + 1;
+        int year = ((FormattedIntEntity)
+                binding.selectdayFragment.yearSpinner.getSelectedItem()).getValue();
+        int month = ((FormattedIntEntity)
+                binding.selectdayFragment.monthSpinner.getSelectedItem()).getValue();
+        int day = ((FormattedIntEntity)
+                binding.selectdayFragment.daySpinner.getSelectedItem()).getValue();
 
         try {
             binding.calendarsTabContent.firstCalendarContainer.setVisibility(View.GONE);
@@ -118,8 +119,8 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
-                        binding.selectdayFragment, lastSelectedJdn);
+                UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment,
+                        lastSelectedJdn);
                 break;
         }
     }
@@ -166,7 +167,7 @@ public class ConverterFragment extends Fragment implements
             case R.id.today:
             case R.id.today_icon:
                 lastSelectedJdn = -1;
-                startingYearOnYearSpinner = UIUtils.fillSelectdaySpinners(getContext(),
+                UIUtils.fillSelectdaySpinners(getContext(),
                         binding.selectdayFragment, lastSelectedJdn);
                 break;
         }

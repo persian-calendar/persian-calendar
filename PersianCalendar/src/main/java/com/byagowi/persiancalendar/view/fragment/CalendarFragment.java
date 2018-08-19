@@ -267,15 +267,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                Utils.readDeviceCalendarEvents(context);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(
+                        new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                                .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
+                                .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true)
+                                .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
             } else {
                 Toast.makeText(context, R.string.enable_device_calendar,
                         Toast.LENGTH_LONG).show();
             }
-
-            if (lastSelectedJdn == -1)
-                lastSelectedJdn = CalendarUtils.getTodayJdn();
-            selectDay(lastSelectedJdn);
         }
     }
 
@@ -301,10 +301,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                try {
-                    ds.setColor(Integer.parseInt(event.getColor()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                String color = event.getColor();
+                if (!TextUtils.isEmpty(color)) {
+                    try {
+                        ds.setColor(Integer.parseInt(color));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
@@ -330,7 +333,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showEvent(long jdn) {
-        List<AbstractEvent> events = Utils.getEvents(jdn);
+        List<AbstractEvent> events = Utils.getEvents(jdn,
+                CalendarUtils.readDayDeviceEvents(getContext(), jdn));
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
@@ -585,7 +589,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
                     R.layout.suggestion, android.R.id.text1);
             eventsAdapter.addAll(Utils.getAllEnabledEvents());
-            eventsAdapter.addAll(Utils.getAllEnabledAppointments());
+            eventsAdapter.addAll(CalendarUtils.getAllEnabledAppointments(context));
             mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);

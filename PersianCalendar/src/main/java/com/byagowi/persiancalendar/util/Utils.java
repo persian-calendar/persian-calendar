@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -152,8 +153,6 @@ public class Utils {
         loadLanguageResource(context);
         loadAlarms(context);
         loadEvents(context);
-        //FIXME: Shouldn't be here
-        readDeviceCalendarEvents(context);
     }
 
     static private String[] persianMonths;
@@ -622,6 +621,10 @@ public class Utils {
     static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
     static private List<AbstractEvent> allEnabledEvents;
 
+    public static List<AbstractEvent> getAllEnabledEvents() {
+        return allEnabledEvents;
+    }
+
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -793,123 +796,8 @@ public class Utils {
         Utils.allEnabledEvents = allEnabledEvents;
     }
 
-    public static List<AbstractEvent> getAllEnabledEvents() {
-        return allEnabledEvents;
-    }
-
-    public static List<DeviceCalendarEvent> getAllEnabledAppointments() {
-        return allEnabledAppointments;
-    }
-
-    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-    static private List<DeviceCalendarEvent> allEnabledAppointments;
-
-    public static void readDeviceCalendarEvents(Context context) {
-        SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
-        Utils.deviceCalendarEvents = deviceCalendarEvents;
-        List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
-        Utils.allEnabledAppointments = allEnabledAppointments;
-
-        if (!showDeviceCalendarEvents) {
-            return;
-        }
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (context instanceof AppCompatActivity) {
-                UIUtils.askForCalendarPermission((AppCompatActivity) context);
-            }
-            return;
-        }
-
-        try {
-            Cursor cursor = context.getContentResolver().query(CalendarContract.Events.CONTENT_URI,
-                    new String[]{
-                            CalendarContract.Events._ID,            // 0
-                            CalendarContract.Events.TITLE,          // 1
-                            CalendarContract.Events.DESCRIPTION,    // 2
-                            CalendarContract.Events.DTSTART,        // 3
-                            CalendarContract.Events.DTEND,          // 4
-                            CalendarContract.Events.EVENT_LOCATION, // 5
-                            CalendarContract.Events.RRULE,          // 6
-                            CalendarContract.Events.VISIBLE,        // 7
-                            CalendarContract.Events.ALL_DAY,        // 8
-                            CalendarContract.Events.DELETED,        // 9
-                            CalendarContract.Events.EVENT_COLOR     // 10
-                    }, null, null, null);
-
-            if (cursor == null) {
-                return;
-            }
-
-            while (cursor.moveToNext()) {
-                if (!cursor.getString(7).equals("1") || cursor.getString(9).equals("1"))
-                    continue;
-
-                boolean allDay = false;
-                if (cursor.getString(8).equals("1"))
-                    allDay = true;
-
-                Date startDate = new Date(cursor.getLong(3));
-                Date endDate = new Date(cursor.getLong(4));
-                Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
-                Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
-
-                CivilDate civilDate = new CivilDate(startCalendar);
-
-                int month = civilDate.getMonth();
-                int day = civilDate.getDayOfMonth();
-
-                String repeatRule = cursor.getString(6);
-                if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
-                    civilDate.setYear(-1);
-
-                List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    deviceCalendarEvents.put(month * 100 + day, list);
-                }
-
-                String title = cursor.getString(1);
-                if (allDay) {
-                    if (civilDate.getYear() == -1) {
-                        title = "\uD83C\uDF89 " + title;
-                    } else {
-                        title = "\uD83D\uDCC5 " + title;
-                    }
-                } else {
-                    title = "\uD83D\uDD53 " + title;
-                    title += " (" + UIUtils.clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
-                            startCalendar.get(Calendar.MINUTE));
-
-                    if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-                        title += "-" + UIUtils.clockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
-                                endCalendar.get(Calendar.MINUTE));
-                    }
-
-                    title += ")";
-                }
-                DeviceCalendarEvent event = new DeviceCalendarEvent(
-                        cursor.getInt(0),
-                        title,
-                        cursor.getString(2),
-                        startDate,
-                        endDate,
-                        cursor.getString(5),
-                        civilDate,
-                        cursor.getString(10)
-                );
-                list.add(event);
-                allEnabledAppointments.add(event);
-            }
-            cursor.close();
-        } catch (Exception e) {
-            // We don't like crash addition from here, just catch all of exceptions
-            Log.e(TAG, "Error on device calendar events read", e);
-        }
-    }
-
-    static public List<AbstractEvent> getEvents(long jdn) {
+    static public List<AbstractEvent> getEvents(long jdn,
+                                                SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents) {
         PersianDate day = DateConverter.jdnToPersian(jdn);
         CivilDate civil = DateConverter.jdnToCivil(jdn);
         IslamicDate islamic = DateConverter.jdnToIslamic(jdn);
@@ -937,6 +825,7 @@ public class Utils {
                 if (gregorianCalendarEvent.getDate().equals(civil))
                     result.add(gregorianCalendarEvent);
 
+        // This one is passed by caller
         List<DeviceCalendarEvent> deviceEventList =
                 deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
         if (deviceEventList != null)

@@ -65,6 +65,14 @@ public class CivilDate extends AbstractDate {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
+    public Calendar asCalendar() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        return cal;
+    }
+
     public int getDayOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }

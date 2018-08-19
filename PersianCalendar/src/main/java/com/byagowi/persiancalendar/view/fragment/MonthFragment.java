@@ -146,17 +146,32 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
             if (extras == null) return;
 
-            adapter.selectDay(-1);
-
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
-                updateTitle();
-
                 long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
+                if (jdn == -1) jdn = CalendarUtils.getTodayJdn();
+
+                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
+                    adapter.initializeMonthEvents(context);
+
+                    CalendarFragment calendarFragment = (CalendarFragment) getActivity()
+                            .getSupportFragmentManager()
+                            .findFragmentByTag(CalendarFragment.class.getName());
+
+                    if (calendarFragment != null) {
+                        calendarFragment.selectDay(jdn);
+                    }
+                } else {
+                    adapter.selectDay(-1);
+                    updateTitle();
+                }
+
                 long selectedDay = 1 + jdn - baseJdn;
                 if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
                     adapter.selectDay((int) (1 + jdn - baseJdn));
                 }
+            } else {
+                adapter.selectDay(-1);
             }
         }
     };

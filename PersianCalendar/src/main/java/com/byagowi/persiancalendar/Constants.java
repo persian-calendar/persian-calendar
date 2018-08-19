@@ -89,6 +89,7 @@ public class Constants {
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
     public static final String BROADCAST_FIELD_SELECT_DAY_JDN = "BROADCAST_FIELD_SELECT_DAY_JDN";
+    public static final String BROADCAST_FIELD_EVENT_ADD_MODIFY = "BROADCAST_FIELD_EVENT_ADD_MODIFY";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP";

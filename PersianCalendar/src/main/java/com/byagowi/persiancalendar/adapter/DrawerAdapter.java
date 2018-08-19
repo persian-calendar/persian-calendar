@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
@@ -23,7 +24,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private int selectedItem;
     private String[] drawerTitles;
     private String[] drawerSubtitles;
-    private TypedArray drawerIcon;
+    @IdRes
+    private int[] drawerIcons;
 
     @ColorInt
     private int selectedBackgroundColor;
@@ -34,7 +36,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     public DrawerAdapter(Context context) {
         drawerTitles = context.getResources().getStringArray(R.array.drawerTitles);
         drawerSubtitles = context.getResources().getStringArray(R.array.drawerSubtitles);
-        drawerIcon = context.getResources().obtainTypedArray(R.array.drawerIcons);
+        TypedArray typedArray = context.getResources().obtainTypedArray(R.array.drawerIcons);
+        drawerIcons = new int[drawerTitles.length];
+        for (int i = 0; i < drawerTitles.length; ++i) {
+            drawerIcons[i] = typedArray.getResourceId(i, 0);
+        }
+        typedArray.recycle();
 
         Resources.Theme theme = context.getTheme();
         TypedValue value = new TypedValue();
@@ -88,7 +95,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         }
 
         void bind(int position) {
-            icon.setImageResource(drawerIcon.getResourceId(position, 0));
+            icon.setImageResource(drawerIcons[position]);
             title.setText(drawerTitles[position]);
             subtitle.setText(drawerSubtitles[position]);
             subtitle.setVisibility(TextUtils.isEmpty(drawerSubtitles[position])

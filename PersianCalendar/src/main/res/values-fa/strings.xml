@@ -103,8 +103,8 @@
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
-    <string name="main_calendar">تقویم اصلی</string>
-    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
+    <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
+    <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
     <string name="week_of_year">هفتهٔ سال</string>
     <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
