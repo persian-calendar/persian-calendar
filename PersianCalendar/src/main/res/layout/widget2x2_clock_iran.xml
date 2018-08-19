@@ -4,6 +4,8 @@
     android:id="@+id/widget_layout2x2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="1dp"
+    android:layout_marginRight="1dp"
     android:layoutDirection="rtl"
     android:orientation="vertical"
     tools:context=".Widget2x2"
