@@ -1,21 +1,16 @@
 package com.byagowi.persiancalendar.util;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
@@ -59,8 +54,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RawRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
