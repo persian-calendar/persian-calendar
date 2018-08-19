@@ -17,8 +17,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
     // don't remove public ever
     public static class PreferenceFragment extends PreferenceFragmentCompat {
-        static PreferenceFragment newInstance() {
-            return new PreferenceFragment();
+        public PreferenceFragment() {
         }
 
         @Override
@@ -49,7 +48,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(
                 R.id.preference_fragment_holder,
-                PreferenceFragment.newInstance(), "TAG").commit();
+                new PreferenceFragment(), "TAG").commit();
 
         findViewById(R.id.add_widget_button).setOnClickListener(v -> finishAndSuccess());
     }
