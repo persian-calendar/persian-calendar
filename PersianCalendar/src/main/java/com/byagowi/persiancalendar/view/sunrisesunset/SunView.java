@@ -261,10 +261,10 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     public void drawMoon(Canvas canvas) {
         // This is brought from QiblaCompassView
-        float r = (height * 0.4f);
-        float radius = 0.2f;
-        float px = 0.2f;
-        float py = 0.5f;
+        float r = (height * 0.08f);
+        float radius = 1;
+        float px = width * current;
+        float py = getY((int) (width * current), segmentByPixel, (int) (height * 0.9f));
         moonPaint.reset();
         moonPaint.setColor(Color.WHITE);
         moonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
