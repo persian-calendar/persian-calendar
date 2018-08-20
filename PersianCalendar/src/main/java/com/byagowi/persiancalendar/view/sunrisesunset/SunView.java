@@ -46,6 +46,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     int dayColor;
     int daySecondColor;
     int sunColor;
+    int sunBeforeMiddayColor;
+    int sunAfterMiddayColor;
+    int sunEveningColor;
 
     int width;
     int height;
@@ -100,6 +103,10 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 dayColor = typedArray.getColor(R.styleable.SunView_SunViewDayColor, ContextCompat.getColor(context, R.color.sViewDayColor));
                 daySecondColor = typedArray.getColor(R.styleable.SunView_SunViewDaySecondColor, ContextCompat.getColor(context, R.color.sViewDaySecondColor));
                 sunColor = typedArray.getColor(R.styleable.SunView_SunViewSunColor, ContextCompat.getColor(context, R.color.sViewSunColor));
+                sunBeforeMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewBeforeMiddayColor, ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor));
+                sunAfterMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewAfterMiddayColor, ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor));
+                sunEveningColor = typedArray.getColor(R.styleable.SunView_SunViewEveningColor, ContextCompat.getColor(context, R.color.sViewSunEveningColor));
+
             } finally {
                 typedArray.recycle();
             }
@@ -114,7 +121,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mSunRaisePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSunRaisePaint.setColor(sunColor);
         mSunRaisePaint.setStyle(Paint.Style.STROKE);
-        mSunRaisePaint.setStrokeWidth(12);
+        mSunRaisePaint.setStrokeWidth(14);
         PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
         mSunRaisePaint.setPathEffect(sunRaysEffects);
 
@@ -209,9 +216,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.08f, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.05f, mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.09f, mSunRaisePaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), height * 0.05f, mSunRaisePaint);
         }
 
     }
@@ -236,6 +243,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float sunset = prayTime.get(PrayTime.SUNSET).toInt();
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
+        float midday = prayTime.get(PrayTime.DHUHR).toInt();
+        float evening = prayTime.get(PrayTime.ASR).toInt();
+
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
 
@@ -246,6 +256,19 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
             c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+        }
+
+        if (now < midday) {
+            mSunPaint.setColor(sunBeforeMiddayColor);
+            mSunRaisePaint.setColor(sunBeforeMiddayColor);
+        }
+        if (now > midday) {
+            mSunPaint.setColor(sunAfterMiddayColor);
+            mSunRaisePaint.setColor(sunAfterMiddayColor);
+        }
+        if (now > evening) {
+            mSunPaint.setColor(sunEveningColor);
+            mSunRaisePaint.setColor(sunEveningColor);
         }
 
         ValueAnimator animator = ValueAnimator.ofFloat(0, c);
