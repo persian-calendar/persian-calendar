@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textColor="?attr/colorTextPrimary"
+                android:textColor="?attr/colorAccent"
                 android:textSize="@dimen/text_size_title"
                 tools:text="Calendar" />
 
@@ -40,7 +40,7 @@
                     android:id="@+id/today_icon"
                     android:layout_width="18dp"
                     android:layout_height="match_parent"
-                    android:tint="?attr/colorTextPrimary"
+                    android:tint="?attr/colorAccent"
                     app:srcCompat="@drawable/ic_restore_modified" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -49,7 +49,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/today"
-                    android:textColor="?attr/colorTextPrimary"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="@dimen/text_size_title" />
 
             </LinearLayout>
@@ -252,7 +252,7 @@
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="8sp"
-                android:tint="?attr/colorIcon"
+                android:tint="?attr/colorAccent"
                 app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
         </LinearLayout>

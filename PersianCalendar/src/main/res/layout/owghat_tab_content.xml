@@ -19,7 +19,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:gravity="center_vertical"
-            android:textColor="?attr/colorTextPrimary"
+            android:textColor="?attr/colorAccent"
             android:textSize="@dimen/text_size_title"
             tools:text="City" />
 
@@ -309,7 +309,7 @@
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center_vertical"
-                android:tint="?attr/colorIcon"
+                android:tint="?attr/colorAccent"
                 app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
         </LinearLayout>
