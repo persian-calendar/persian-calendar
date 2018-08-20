@@ -72,12 +72,10 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
                     View sunView = tabs.get(Constants.OWGHAT_TAB).findViewById(R.id.svPlot);
                     if (sunView != null && sunView instanceof SunView) {
                         SunView sun = (SunView) sunView;
-                        if (mCurrentPosition != -1) {
-                            if (position == Constants.OWGHAT_TAB) {
-                                sun.startAnimate(false);
-                            } else {
-                                sun.clear();
-                            }
+                        if (position == Constants.OWGHAT_TAB) {
+                            sun.startAnimate(false);
+                        } else {
+                            sun.clear();
                         }
                     }
                 }

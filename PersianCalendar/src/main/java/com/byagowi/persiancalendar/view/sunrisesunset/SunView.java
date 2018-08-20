@@ -261,18 +261,22 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float px = width * current;
         float py = getY((int) (width * current), segmentByPixel, (int) (height * 0.9f));
         moonPaint.reset();
+        moonPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         moonPaint.setColor(Color.WHITE);
         moonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         moonPaintB.reset();// moon Paint Black
+        moonPaintB.setFlags(Paint.ANTI_ALIAS_FLAG);
         moonPaintB.setColor(Color.BLACK);
         moonPaintB.setStyle(Paint.Style.FILL_AND_STROKE);
         moonPaintO.reset();// moon Paint for Oval
+        moonPaintO.setFlags(Paint.ANTI_ALIAS_FLAG);
         moonPaintO.setColor(Color.WHITE);
         moonPaintO.setStyle(Paint.Style.FILL_AND_STROKE);
         moonPaintD.reset();// moon Paint for Diameter
         // draw
         moonPaintD.setColor(Color.GRAY);
         moonPaintD.setStyle(Paint.Style.STROKE);
+        moonPaintD.setFlags(Paint.ANTI_ALIAS_FLAG);
 //        if (moonPosition.getElevation() > -5) {
 //            canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
 //            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
