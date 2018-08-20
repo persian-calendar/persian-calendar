@@ -43,6 +43,7 @@ import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
@@ -81,10 +82,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private CalendarsTabContentBinding calendarsBinding;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
-    private static final int
-            CALENDARS_TAB = 0,
-            EVENT_TAB = 1,
-            OWGHAT_TAB = 2;
 
     @Nullable
     @Override
@@ -173,9 +170,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
+        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
         if (lastTab >= tabs.size()) {
-            lastTab = CALENDARS_TAB;
+            lastTab = Constants.CALENDARS_TAB;
         }
 
         mainBinding.tabContent.setCurrentItem(lastTab, false);
@@ -437,12 +434,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         owghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
         owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-        owghatBinding.svPlot.setSunriseSunsetCalculator(prayTimes);
+
+        double moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
+                coordinate.getLongitude(), 0, 0).getMoonPhase();
+        owghatBinding.svPlot.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
 
         if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
-            if (mainBinding.tabContent.getCurrentItem() == OWGHAT_TAB) {
-                owghatBinding.svPlot.startAnimate();
+            if (mainBinding.tabContent.getCurrentItem() == Constants.OWGHAT_TAB) {
+                owghatBinding.svPlot.startAnimate(true);
             }
         } else {
             owghatBinding.svPlot.setVisibility(View.GONE);
@@ -488,7 +488,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
                 if (lastSelectedJdn == CalendarUtils.getTodayJdn()) {
                     owghatBinding.svPlot.setVisibility(View.VISIBLE);
-                    owghatBinding.svPlot.startAnimate();
+                    owghatBinding.svPlot.startAnimate(true);
                 } else {
                     owghatBinding.svPlot.setVisibility(View.GONE);
                 }

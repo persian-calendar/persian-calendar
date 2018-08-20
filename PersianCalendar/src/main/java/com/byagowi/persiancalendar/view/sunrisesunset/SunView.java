@@ -21,12 +21,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.Utils;
-import com.cepmuvakkit.times.posAlgo.Horizontal;
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.github.praytimes.Clock;
-import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 
 import java.util.Calendar;
@@ -256,8 +251,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     RectF moonRect = new RectF();
     RectF moonOval = new RectF();
 
-    private Horizontal moonPosition;
-    private double moonPhase;
+    //    private Horizontal moonPosition;
+    private double moonPhase = 1;
 
     public void drawMoon(Canvas canvas) {
         // This is brought from QiblaCompassView
@@ -278,47 +273,51 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw
         moonPaintD.setColor(Color.GRAY);
         moonPaintD.setStyle(Paint.Style.STROKE);
-        if (moonPosition.getElevation() > -5) {
-            canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
-            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
-            // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
-            canvas.drawArc(moonRect, 90, 180, false, moonPaint);
-            canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
-            int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
-            moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
-            moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
-                    px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
-            canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
-            canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
+//        if (moonPosition.getElevation() > -5) {
+//            canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
+//            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
+        canvas.rotate(180, px, py);
+        int eOffset = 0;
+        // elevation Offset 0 for 0 degree; r for 90 degree
+        moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
+        canvas.drawArc(moonRect, 90, 180, false, moonPaint);
+        canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
+        int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
+        moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
+        moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
+                px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
+        canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
+        canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
 //            moonPaintD.setPathEffect(dashPath);
-            canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
-            moonPaintD.setPathEffect(null);
+        canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
+        moonPaintD.setPathEffect(null);
 //            canvas.restore();
-        }
+//        }
     }
+
     private float getY(int x, double segment, int height) {
         double cos = (Math.cos(-Math.PI + (x * segment)) + 1) / 2;
         return height - (height * (float) cos) + (height * 0.1f);
     }
 
-    public void setSunriseSunsetCalculator(Map<PrayTime, Clock> prayTime) {
+    public void setSunriseSunsetMoonPhase(Map<PrayTime, Clock> prayTime, double moonPhase) {
         this.prayTime = prayTime;
+        this.moonPhase = moonPhase;
         postInvalidate();
     }
 
     private final float FULL_DAY = new Clock(24, 0).toInt();
     private final float HALF_DAY = new Clock(12, 0).toInt();
 
-    public void startAnimate() {
+    public void startAnimate(boolean immediate) {
         if (prayTime == null)
             return;
 
         float sunset = prayTime.get(PrayTime.SUNSET).toInt();
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
-        float midday = prayTime.get(PrayTime.DHUHR).toInt();
-        float evening = prayTime.get(PrayTime.ASR).toInt();
+//        float midday = prayTime.get(PrayTime.DHUHR).toInt();
+//        float evening = prayTime.get(PrayTime.ASR).toInt();
 
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
@@ -332,37 +331,23 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
 
-
-        double ΔT = 0;
-        double altitude = 0.0;
-        Coordinate coordinate = Utils.getCoordinate(getContext());
-        if (coordinate == null) return;
-        SunMoonPosition sunMoonPosition = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
-                coordinate.getLongitude(),
-                altitude, ΔT);
-//        sunPosition = sunMoonPosition.getSunPosition();
-        moonPosition = sunMoonPosition.getMoonPosition();
-        moonPhase = sunMoonPosition.getMoonPhase();
-
-//        if (now < midday) {
-//            mSunPaint.setColor(sunBeforeMiddayColor);
-//            mSunRaisePaint.setColor(sunBeforeMiddayColor);
-//        }
-//        if (now > midday) {
-//            mSunPaint.setColor(sunAfterMiddayColor);
-//            mSunRaisePaint.setColor(sunAfterMiddayColor);
-//        }
-//        if (now > evening) {
-//            mSunPaint.setColor(sunEveningColor);
-//            mSunRaisePaint.setColor(sunEveningColor);
-//        }
         argbEvaluator = new ArgbEvaluator();
 
-        ValueAnimator animator = ValueAnimator.ofFloat(0, c);
-        animator.setDuration(1500L);
-        animator.setInterpolator(new DecelerateInterpolator());
-        animator.addUpdateListener(this);
-        animator.start();
+        if (immediate) {
+            current = c;
+            postInvalidate();
+        } else {
+            ValueAnimator animator = ValueAnimator.ofFloat(0, c);
+            animator.setDuration(1500L);
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.addUpdateListener(this);
+            animator.start();
+        }
+    }
+
+    public void clear() {
+        current = 0;
+        postInvalidate();
     }
 
     @Override

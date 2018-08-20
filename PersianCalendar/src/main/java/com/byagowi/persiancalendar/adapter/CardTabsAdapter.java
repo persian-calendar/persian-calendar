@@ -65,15 +65,24 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
             CardsViewPager pager = (CardsViewPager) container;
 
             if (fragment != null && fragment.getView() != null) {
-                mCurrentPosition = position;
                 View tab = fragment.getView();
                 pager.measureCurrentView(tab);
 
-                View sunView = tab.findViewById(R.id.svPlot);
-                if (sunView != null && sunView instanceof SunView) {
-                    SunView sun = (SunView) sunView;
-                    sun.startAnimate();
+                if (tabs.size() > 2) {
+                    View sunView = tabs.get(Constants.OWGHAT_TAB).findViewById(R.id.svPlot);
+                    if (sunView != null && sunView instanceof SunView) {
+                        SunView sun = (SunView) sunView;
+                        if (mCurrentPosition != -1) {
+                            if (position == Constants.OWGHAT_TAB) {
+                                sun.startAnimate(false);
+                            } else {
+                                sun.clear();
+                            }
+                        }
+                    }
                 }
+
+                mCurrentPosition = position;
             }
         }
 
