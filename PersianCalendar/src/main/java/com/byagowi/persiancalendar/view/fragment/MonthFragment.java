@@ -186,7 +186,17 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(setCurrentMonthReceiver);
+        if (setCurrentMonthReceiver != null) {
+            LocalBroadcastManager.getInstance(getContext())
+                    .unregisterReceiver(setCurrentMonthReceiver);
+            setCurrentMonthReceiver = null;
+        }
+
+        if (recyclerView != null) {
+            recyclerView.setAdapter(null);
+            recyclerView = null;
+        }
+
         super.onDestroy();
     }
 

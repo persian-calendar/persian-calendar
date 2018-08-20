@@ -366,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onDestroy() {
         if (binding != null) {
             binding.navigationView.setAdapter(null);
+            binding.navigationView.setLayoutManager(null);
             binding = null;
         }
         super.onDestroy();
