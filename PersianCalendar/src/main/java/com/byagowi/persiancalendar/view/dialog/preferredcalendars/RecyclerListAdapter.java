@@ -15,7 +15,9 @@ package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
  * limitations under the License.
  */
 
+import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -85,6 +89,32 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         values.remove(position);
         enabled.remove(position);
         notifyItemRemoved(position);
+
+        // Easter egg when all are swiped
+        if (titles.size() == 0) {
+            try {
+//                Context context = calendarPreferenceDialog.getContext();
+//                MediaPlayer mediaPlayer = MediaPlayer.create(context,
+//                        R.raw.bach_invention_01);
+//                if (!mediaPlayer.isPlaying()) {
+//                    mediaPlayer.start();
+//                }
+//                AppCompatImageButton imageButton = new AppCompatImageButton(context);
+//                imageButton.setImageResource(R.drawable.ic_stop);
+//                AlertDialog alertDialog = new AlertDialog.Builder(context)
+//                        .setView(imageButton).create();
+//                imageButton.setOnClickListener(v -> {
+//                    try {
+//                        mediaPlayer.stop();
+//                    } catch (Exception ignore) {
+//                    }
+//                    alertDialog.dismiss();
+//                });
+//                alertDialog.show();
+            } catch (Exception ignored) {
+            }
+            calendarPreferenceDialog.dismiss();
+        }
     }
 
     public List<String> getResult() {

@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
+import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -45,6 +46,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
@@ -256,6 +258,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
             restartActivity(PREFERENCE);
+        }
+
+        if (key.equals(PREF_NOTIFY_DATE)) {
+            if (!sharedPreferences.getBoolean(PREF_NOTIFY_DATE, true)) {
+                stopService(new Intent(this, ApplicationService.class));
+                Utils.startEitherServiceOrWorker(getApplicationContext());
+            }
         }
 
         Utils.updateStoredPreference(this);
