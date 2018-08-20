@@ -657,15 +657,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         destroySearchView();
-        changeListener = null;
-        calendarsBinding = null;
-        owghatBinding = null;
-        eventsBinding = null;
-        if (mainBinding != null) {
-            mainBinding.tabContent.setAdapter(null);
-            mainBinding.calendarPager.setAdapter(null);
-            mainBinding = null;
-        }
         super.onDestroy();
     }
 

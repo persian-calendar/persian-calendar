@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar;
 
 import android.app.Application;
-import android.os.StrictMode;
 
 import com.squareup.leakcanary.LeakCanary;
 
