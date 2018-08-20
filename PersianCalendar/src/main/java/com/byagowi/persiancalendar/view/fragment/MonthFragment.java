@@ -32,15 +32,42 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private AbstractDate typedDate;
     private int offset;
 
-    private MonthAdapter adapter;
-    private List<DayEntity> days;
-    private int weekOfYearStart;
-    private int weeksCount;
-    private int startingDayOfWeek;
+    private RecyclerView recyclerView;
     private long baseJdn;
     private int monthLength;
 
-    private void fillTheFields() {
+    static boolean isRTL = false;
+
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        isRTL = UIUtils.isRTL(getContext());
+        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
+
+        // We deliberately like to avoid DataBinding thing here, at least for now
+        AppCompatImageView prev = view.findViewById(R.id.prev);
+        AppCompatImageView next = view.findViewById(R.id.next);
+        prev.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
+        next.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_left
+                : R.drawable.ic_keyboard_arrow_right);
+        prev.setOnClickListener(this);
+        next.setOnClickListener(this);
+
+        recyclerView = view.findViewById(R.id.RecyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
+        recyclerView.setLayoutManager(layoutManager);
+        ///////
+        ///////
+        ///////
         CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
         typedDate = CalendarUtils.getTodayOfCalendar(mainCalendar);
@@ -80,47 +107,16 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
                 dayOfWeek = 0;
             }
         }
-        this.days = days;
 
         long startOfYearJdn = CalendarUtils.getJdnOfCalendar(mainCalendar, year, 1, 1);
-        weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
-        weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+        int weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
+        int weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
-        startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
-    }
-
-    static boolean isRTL = false;
-
-    @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
-        isRTL = UIUtils.isRTL(getContext());
-        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-
-        // We deliberately like to avoid DataBinding thing here, at least for now
-        AppCompatImageView prev = view.findViewById(R.id.prev);
-        AppCompatImageView next = view.findViewById(R.id.next);
-        prev.setImageResource(isRTL
-                ? R.drawable.ic_keyboard_arrow_right
-                : R.drawable.ic_keyboard_arrow_left);
-        next.setImageResource(isRTL
-                ? R.drawable.ic_keyboard_arrow_left
-                : R.drawable.ic_keyboard_arrow_right);
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
-
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
-        recyclerView.setLayoutManager(layoutManager);
-        fillTheFields();
-        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
-        recyclerView.setAdapter(adapter);
+        int startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
+        ///////
+        ///////
+        ///////
+        recyclerView.setAdapter(new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount));
         recyclerView.setItemAnimator(null);
 
         CalendarFragment calendarFragment = (CalendarFragment) getActivity()
@@ -139,12 +135,25 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        if (recyclerView != null) {
+            recyclerView.setAdapter(null);
+            recyclerView = null;
+        }
+        super.onDestroyView();
+    }
+
     private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
 
-            if (extras == null) return;
+            if (extras == null || recyclerView == null) return;
+
+            RecyclerView.Adapter baseAdapter = recyclerView.getAdapter();
+            if (baseAdapter == null || !(baseAdapter instanceof MonthAdapter)) return;
+            MonthAdapter adapter = (MonthAdapter) baseAdapter;
 
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
