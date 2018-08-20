@@ -52,7 +52,6 @@ public class TestDateCalendar {
         }
     }
 
-
     @Test
     public void practice_civil_converting_back_and_forth() {
         long startJdn = DateConverter.civilToJdn(1950, 1, 1);
