@@ -158,7 +158,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
                 long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
-                if (jdn == -1) jdn = CalendarUtils.getTodayJdn();
 
                 if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
                     adapter.initializeMonthEvents(context);
