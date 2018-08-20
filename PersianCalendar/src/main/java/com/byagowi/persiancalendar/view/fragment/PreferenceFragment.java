@@ -9,7 +9,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -36,7 +35,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import static android.app.Activity.RESULT_OK;
 import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
@@ -63,6 +65,13 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+
+        PreferenceScreen preferenceScreen = getPreferenceScreen();
+        for (int i = 0; i < preferenceScreen.getPreferenceCount(); ++i) {
+            PreferenceCategory category = (PreferenceCategory) preferenceScreen.getPreference(i);
+            category.setIconSpaceReserved(false);
+            category.setLayoutResource(R.layout.category_preference);
+        }
 
         putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));

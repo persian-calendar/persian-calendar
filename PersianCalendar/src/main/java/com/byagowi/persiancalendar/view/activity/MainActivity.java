@@ -136,15 +136,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         binding.navigationView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         binding.navigationView.setLayoutManager(new LinearLayoutManager(this));
 
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
-            int slidingDirection = +1;
+        boolean isRTL = UIUtils.isRTL(this);
 
-            {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (UIUtils.isRTL(getApplicationContext()))
-                        slidingDirection = -1;
-                }
-            }
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
+            int slidingDirection = isRTL ? -1 : +1;
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {

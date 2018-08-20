@@ -317,8 +317,8 @@ public class CalendarUtils {
                             CalendarContract.Instances.EVENT_ID,       // 0
                             CalendarContract.Instances.TITLE,          // 1
                             CalendarContract.Instances.DESCRIPTION,    // 2
-                            CalendarContract.Instances.BEGIN,        // 3
-                            CalendarContract.Instances.END,          // 4
+                            CalendarContract.Instances.BEGIN,          // 3
+                            CalendarContract.Instances.END,            // 4
                             CalendarContract.Instances.EVENT_LOCATION, // 5
                             CalendarContract.Instances.RRULE,          // 6
                             CalendarContract.Instances.VISIBLE,        // 7
