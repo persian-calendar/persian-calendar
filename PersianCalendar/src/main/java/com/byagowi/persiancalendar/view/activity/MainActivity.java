@@ -40,6 +40,7 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             DEFAULT = CALENDAR; // Default selected fragment
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
-    private DrawerAdapter adapter;
     private final Class<?>[] fragments = {
             CalendarFragment.class,
             ConverterFragment.class,
@@ -133,8 +133,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         binding.navigationView.setHasFixedSize(true);
-        adapter = new DrawerAdapter(this);
-        binding.navigationView.setAdapter(adapter);
+        binding.navigationView.setAdapter(new DrawerAdapter(this));
         binding.navigationView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         binding.navigationView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -308,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+
     @Override
     public void onBackPressed() {
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
@@ -362,6 +362,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         selectItem(PREFERENCE);
     }
 
+    @Override
+    protected void onDestroy() {
+        if (binding != null) {
+            binding.navigationView.setAdapter(null);
+            binding = null;
+        }
+        super.onDestroy();
+    }
+
     public void selectItem(int item) {
         if (item == EXIT) {
             finish();
@@ -388,7 +397,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        adapter.setSelectedItem(menuPosition);
+        RecyclerView.Adapter adapter = binding.navigationView.getAdapter();
+        if (adapter != null && adapter instanceof DrawerAdapter) {
+            DrawerAdapter drawerAdapter = (DrawerAdapter) adapter;
+            drawerAdapter.setSelectedItem(menuPosition);
+        }
 
         binding.drawer.closeDrawers();
     }
