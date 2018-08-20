@@ -63,8 +63,9 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.isWeekOfYearEnabled() ? 8 : 7);
-        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),
+                Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
         ///////
@@ -135,15 +136,6 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        if (recyclerView != null) {
-            recyclerView.setAdapter(null);
-            recyclerView = null;
-        }
-        super.onDestroyView();
-    }
-
     private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -193,6 +185,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         }
 
         if (recyclerView != null) {
+            recyclerView.setLayoutManager(null);
             recyclerView.setAdapter(null);
             recyclerView = null;
         }
