@@ -129,8 +129,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         mDayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDayPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mDayPaint.setShader(new LinearGradient(0, 0, getWidth() / 2, 0,
-                dayColor, daySecondColor, Shader.TileMode.MIRROR));
     }
 
     @Override
@@ -158,6 +156,12 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     float current = 0;
 
+    //FIXME: I am not sure why I have to create this every time...
+    private LinearGradient createShader() {
+        return new LinearGradient(getWidth() * 0.17f, 0, width / 2, 0,
+                dayColor, daySecondColor, Shader.TileMode.MIRROR);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -177,6 +181,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw fill of day
         canvas.clipRect(0, 0, width, height);
         canvas.clipRect(0, 0, width * current, height * 0.75f);
+        mDayPaint.setShader(createShader());
         canvas.drawPath(curvePath, mDayPaint);
 
         canvas.restore();
@@ -197,6 +202,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawLine(0, height * 0.75f, width, height * 0.75f, mPaint);
 
         // draw sunset and sunrise tag line indicator
+
         mPaint.setColor(taggingColor);
         mPaint.setStrokeWidth(2);
         canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
