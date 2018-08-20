@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -38,6 +39,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Paint mSunPaint;
     Paint mSunRaisePaint;
     Paint mDayPaint;
+    ArgbEvaluator argbEvaluator;
 
     int horizonColor;
     int timelineColor;
@@ -215,10 +217,20 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
+            int color = sunColor;
+//            if (current < 0.5) {
+//                color = (int) argbEvaluator.evaluate(current * 2f,
+//                        sunBeforeMiddayColor, sunColor);
+//            } else {
+//                color = (int) argbEvaluator.evaluate(current * 2f - 1f,
+//                        sunColor, sunEveningColor);
+//            }
+            mSunPaint.setColor(color);
+            mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.08f) - 6, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
+//            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
         }
 
     }
@@ -258,18 +270,19 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
 
-        if (now < midday) {
-            mSunPaint.setColor(sunBeforeMiddayColor);
-            mSunRaisePaint.setColor(sunBeforeMiddayColor);
-        }
-        if (now > midday) {
-            mSunPaint.setColor(sunAfterMiddayColor);
-            mSunRaisePaint.setColor(sunAfterMiddayColor);
-        }
-        if (now > evening) {
-            mSunPaint.setColor(sunEveningColor);
-            mSunRaisePaint.setColor(sunEveningColor);
-        }
+//        if (now < midday) {
+//            mSunPaint.setColor(sunBeforeMiddayColor);
+//            mSunRaisePaint.setColor(sunBeforeMiddayColor);
+//        }
+//        if (now > midday) {
+//            mSunPaint.setColor(sunAfterMiddayColor);
+//            mSunRaisePaint.setColor(sunAfterMiddayColor);
+//        }
+//        if (now > evening) {
+//            mSunPaint.setColor(sunEveningColor);
+//            mSunRaisePaint.setColor(sunEveningColor);
+//        }
+        argbEvaluator = new ArgbEvaluator();
 
         ValueAnimator animator = ValueAnimator.ofFloat(0, c);
         animator.setDuration(1500L);

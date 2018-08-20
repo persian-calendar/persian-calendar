@@ -15,9 +15,7 @@ package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,9 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 

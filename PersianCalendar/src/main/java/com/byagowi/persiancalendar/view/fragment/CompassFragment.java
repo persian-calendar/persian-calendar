@@ -172,9 +172,9 @@ public class CompassFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (sensor != null) {
             sensorManager.unregisterListener(compassListener);
         }
+        super.onDestroy();
     }
 }

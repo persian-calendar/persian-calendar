@@ -31,18 +31,17 @@ import calendar.CalendarType;
 public class MonthFragment extends Fragment implements View.OnClickListener {
     private AbstractDate typedDate;
     private int offset;
+    private MonthAdapter adapter;
+    private CalendarFragment calendarFragment;
 
-    private RecyclerView recyclerView;
     private long baseJdn;
     private int monthLength;
 
-    static boolean isRTL = false;
+    private static boolean isRTL = false;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         isRTL = UIUtils.isRTL(getContext());
@@ -60,7 +59,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         prev.setOnClickListener(this);
         next.setOnClickListener(this);
 
-        recyclerView = view.findViewById(R.id.RecyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
 
@@ -117,10 +116,12 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         ///////
         ///////
         ///////
-        recyclerView.setAdapter(new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount));
+        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek,
+                weekOfYearStart, weeksCount);
+        recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
-        CalendarFragment calendarFragment = (CalendarFragment) getActivity()
+        calendarFragment = (CalendarFragment) getActivity()
                 .getSupportFragmentManager()
                 .findFragmentByTag(CalendarFragment.class.getName());
 
@@ -141,11 +142,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
 
-            if (extras == null || recyclerView == null) return;
-
-            RecyclerView.Adapter baseAdapter = recyclerView.getAdapter();
-            if (baseAdapter == null || !(baseAdapter instanceof MonthAdapter)) return;
-            MonthAdapter adapter = (MonthAdapter) baseAdapter;
+            if (extras == null) return;
 
             int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
             if (value == offset) {
@@ -153,14 +150,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
                 if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
                     adapter.initializeMonthEvents(context);
-
-                    CalendarFragment calendarFragment = (CalendarFragment) getActivity()
-                            .getSupportFragmentManager()
-                            .findFragmentByTag(CalendarFragment.class.getName());
-
-                    if (calendarFragment != null) {
-                        calendarFragment.selectDay(jdn);
-                    }
+                    calendarFragment.selectDay(jdn);
                 } else {
                     adapter.selectDay(-1);
                     updateTitle();
@@ -178,27 +168,12 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        if (setCurrentMonthReceiver != null) {
-            LocalBroadcastManager.getInstance(getContext())
-                    .unregisterReceiver(setCurrentMonthReceiver);
-            setCurrentMonthReceiver = null;
-        }
-
-        if (recyclerView != null) {
-            recyclerView.setLayoutManager(null);
-            recyclerView.setAdapter(null);
-            recyclerView = null;
-        }
-
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
-        CalendarFragment calendarFragment = (CalendarFragment) getActivity()
-                .getSupportFragmentManager()
-                .findFragmentByTag(CalendarFragment.class.getName());
-
         switch (v.getId()) {
             case R.id.next:
                 calendarFragment.changeMonth(isRTL ? -1 : 1);
