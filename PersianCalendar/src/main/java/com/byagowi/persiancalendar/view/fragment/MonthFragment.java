@@ -135,6 +135,15 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        if (recyclerView != null) {
+            recyclerView.setAdapter(null);
+            recyclerView = null;
+        }
+        super.onDestroyView();
+    }
+
     private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
