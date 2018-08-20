@@ -6,11 +6,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -19,7 +21,12 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.Utils;
+import com.cepmuvakkit.times.posAlgo.Horizontal;
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.github.praytimes.Clock;
+import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 
 import java.util.Calendar;
@@ -218,7 +225,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(nightColor);
         canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
-        mPaint.setColor(daySecondColor);
+        mPaint.setColor(sunEveningColor);
         canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 10, mPaint);
 
         // draw sun
@@ -237,10 +244,59 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunPaint);
             //mPaint.clearShadowLayer();
 //            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
+        } else {
+            drawMoon(canvas);
         }
-
     }
 
+    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    RectF moonRect = new RectF();
+    RectF moonOval = new RectF();
+
+    private Horizontal moonPosition;
+    private double moonPhase;
+
+    public void drawMoon(Canvas canvas) {
+        // This is brought from QiblaCompassView
+        float r = (height * 0.4f);
+        float radius = 0.2f;
+        float px = 0.2f;
+        float py = 0.5f;
+        moonPaint.reset();
+        moonPaint.setColor(Color.WHITE);
+        moonPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        moonPaintB.reset();// moon Paint Black
+        moonPaintB.setColor(Color.BLACK);
+        moonPaintB.setStyle(Paint.Style.FILL_AND_STROKE);
+        moonPaintO.reset();// moon Paint for Oval
+        moonPaintO.setColor(Color.WHITE);
+        moonPaintO.setStyle(Paint.Style.FILL_AND_STROKE);
+        moonPaintD.reset();// moon Paint for Diameter
+        // draw
+        moonPaintD.setColor(Color.GRAY);
+        moonPaintD.setStyle(Paint.Style.STROKE);
+        if (moonPosition.getElevation() > -5) {
+            canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
+            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
+            // elevation Offset 0 for 0 degree; r for 90 degree
+            moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
+            canvas.drawArc(moonRect, 90, 180, false, moonPaint);
+            canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
+            int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
+            moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
+            moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
+                    px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
+            canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
+            canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
+//            moonPaintD.setPathEffect(dashPath);
+            canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
+            moonPaintD.setPathEffect(null);
+//            canvas.restore();
+        }
+    }
     private float getY(int x, double segment, int height) {
         double cos = (Math.cos(-Math.PI + (x * segment)) + 1) / 2;
         return height - (height * (float) cos) + (height * 0.1f);
@@ -275,6 +331,18 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else {
             c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
+
+
+        double ΔT = 0;
+        double altitude = 0.0;
+        Coordinate coordinate = Utils.getCoordinate(getContext());
+        if (coordinate == null) return;
+        SunMoonPosition sunMoonPosition = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
+                coordinate.getLongitude(),
+                altitude, ΔT);
+//        sunPosition = sunMoonPosition.getSunPosition();
+        moonPosition = sunMoonPosition.getMoonPosition();
+        moonPhase = sunMoonPosition.getMoonPhase();
 
 //        if (now < midday) {
 //            mSunPaint.setColor(sunBeforeMiddayColor);

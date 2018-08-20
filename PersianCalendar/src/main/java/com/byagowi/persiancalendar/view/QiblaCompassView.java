@@ -32,9 +32,9 @@ public class QiblaCompassView extends View {
     private String northString, eastString, southString, westString;
     private DashPathEffect dashPath;
     private float bearing;
-    private Horizontal sunPosition, moonPosition;
     private EarthHeading qiblaInfo;
     private SunMoonPosition sunMoonPosition;
+    private Horizontal sunPosition, moonPosition;
     private double longitude = 0.0;
     private double latitude = 0.0;
 
@@ -295,9 +295,7 @@ public class QiblaCompassView extends View {
             canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
             moonPaintD.setPathEffect(null);
             canvas.restore();
-
         }
-
     }
 
     Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
