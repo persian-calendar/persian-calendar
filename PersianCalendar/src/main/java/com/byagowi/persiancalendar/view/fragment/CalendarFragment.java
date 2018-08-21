@@ -76,7 +76,6 @@ import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
-import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class CalendarFragment extends Fragment implements View.OnClickListener {
     private Calendar calendar = Calendar.getInstance();
@@ -242,16 +241,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         Activity activity = getActivity();
         if (activity == null) return;
 
-        if (!Utils.isShowDeviceCalendarEvents()) {
-            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                UIUtils.askForCalendarPermission(activity);
-                return;
-            } else {
-                UIUtils.toggleShowCalendarOnPreference(activity, true);
-                ((MainActivity) activity).restartActivity();
-            }
-        }
-
         CivilDate civil = DateConverter.jdnToCivil(jdn);
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
@@ -275,19 +264,24 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Context context = getContext();
-        if (context == null) return;
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity == null) return;
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(
+                LocalBroadcastManager.getInstance(activity).sendBroadcast(
                         new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                                 .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                                 .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true)
                                 .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
             } else {
-                Toast.makeText(context, R.string.enable_device_calendar,
-                        Toast.LENGTH_LONG).show();
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    UIUtils.askForCalendarPermission(activity);
+                } else {
+                    UIUtils.toggleShowCalendarOnPreference(activity, true);
+                    activity.restartActivity();
+                }
             }
         }
     }

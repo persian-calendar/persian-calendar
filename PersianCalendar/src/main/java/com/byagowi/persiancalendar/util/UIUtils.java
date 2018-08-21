@@ -194,12 +194,9 @@ public class UIUtils {
         binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
     }
 
-    public static void askForCalendarPermission(Activity activity) {
-        if (!(activity instanceof AppCompatActivity)) return;
-        AppCompatActivity compatActivity = (AppCompatActivity) activity;
-
+    public static void askForCalendarPermission(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            compatActivity.requestPermissions(new String[]{
+            activity.requestPermissions(new String[]{
                             Manifest.permission.READ_CALENDAR
                     },
                     Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
