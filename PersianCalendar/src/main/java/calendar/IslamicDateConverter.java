@@ -1,14 +1,15 @@
 package calendar;
 
-import android.util.SparseArray;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Credits of this work goes to Saeed Rasooli and his
  * Kudos to his creative work!
- * I've tried to optimize its runtime perforamance so it is different to the way used on starcal.
+ * I've tried to optimize its runtime performance so it is different to the way used on starcal.
  */
 class IslamicDateConverter {
-    private static SparseArray<long[]> yearsMonthsInJd = new SparseArray<>();
+    private static Map<Integer, long[]> yearsMonthsInJd = new HashMap<>();
 
     private static int supportedYearsStart;
     private static long[] yearsStartJd;
