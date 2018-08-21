@@ -180,12 +180,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        if (BuildConfig.DEBUG) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                UIUtils.askforExternalStoragePermission(this);
-            }
-        }
-
         switch (getSeason()) {
             case "SPRING":
                 binding.seasonImage.setImageResource(R.drawable.spring);

@@ -210,15 +210,6 @@ public class UIUtils {
         edit.apply();
     }
 
-    public static void askforExternalStoragePermission(AppCompatActivity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    },
-                    Constants.WRITE_EXTERNAL_STORAGE);
-        }
-    }
-
     static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
         String desc = event.getDescription();
         String title = event.getTitle();
