@@ -94,7 +94,7 @@
     <color name="sViewDaySecondColor">#B2D5F1</color>
     <color name="sViewNightColor">#383C7C</color>
     <color name="sViewSunBeforeMiddayColor">#ff8800</color>
-    <color name="sViewSunAfterMiddayColor">#ff8800</color>
-    <color name="sViewSunEveningColor">#ff8800</color>
+    <color name="sViewSunAfterMiddayColor">#d06f00</color>
+    <color name="sViewSunEveningColor">#904d00</color>
 
 </resources>

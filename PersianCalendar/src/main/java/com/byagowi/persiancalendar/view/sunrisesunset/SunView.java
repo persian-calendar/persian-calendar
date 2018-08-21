@@ -125,8 +125,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mSunRaisePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSunRaisePaint.setColor(sunColor);
         mSunRaisePaint.setStyle(Paint.Style.STROKE);
-        mSunRaisePaint.setStrokeWidth(14);
-        PathEffect sunRaysEffects = new DashPathEffect(new float[]{5, 12}, 0);
+        mSunRaisePaint.setStrokeWidth(7);
+        PathEffect sunRaysEffects = new DashPathEffect(new float[]{3, 7}, 0);
         mSunRaisePaint.setPathEffect(sunRaysEffects);
 
         mDayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -158,10 +158,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     float current = 0;
 
-    //FIXME: I am not sure why I have to create this every time...
     private LinearGradient createShader() {
-        return new LinearGradient(getWidth() * 0.17f, 0, width / 2, 0,
-                dayColor, daySecondColor, Shader.TileMode.MIRROR);
+        return new LinearGradient(getWidth() * 0.79f, getHeight() / 2, getWidth() / 4, 0,
+                daySecondColor, dayColor, Shader.TileMode.MIRROR);
     }
 
     @Override
@@ -225,20 +224,22 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
-            int color = sunColor;
-//            if (current < 0.5) {
-//                color = (int) argbEvaluator.evaluate(current * 2f,
-//                        sunBeforeMiddayColor, sunColor);
-//            } else {
-//                color = (int) argbEvaluator.evaluate(current * 2f - 1f,
-//                        sunColor, sunEveningColor);
-//            }
+
+            int color;
+            if (current < 0.5) {
+                color = (int) argbEvaluator.evaluate(current + 0.43f,
+                        sunBeforeMiddayColor, sunAfterMiddayColor);
+            } else {
+                color = (int) argbEvaluator.evaluate(current + 0.001f,
+                        sunBeforeMiddayColor, sunEveningColor);
+            }
+
             mSunPaint.setColor(color);
             mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunPaint);
             //mPaint.clearShadowLayer();
-//            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunRaisePaint);
         } else {
             drawMoon(canvas);
         }
@@ -255,7 +256,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     private double moonPhase = 1;
 
     public void drawMoon(Canvas canvas) {
-        // This is brought from QiblaCompassView
         float r = (height * 0.08f);
         float radius = 1;
         float px = width * current;
@@ -277,12 +277,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         moonPaintD.setColor(Color.GRAY);
         moonPaintD.setStyle(Paint.Style.STROKE);
         moonPaintD.setFlags(Paint.ANTI_ALIAS_FLAG);
-//        if (moonPosition.getElevation() > -5) {
-//            canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
-//            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
         canvas.rotate(180, px, py);
         int eOffset = 0;
-        // elevation Offset 0 for 0 degree; r for 90 degree
         moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
         canvas.drawArc(moonRect, 90, 180, false, moonPaint);
         canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
@@ -292,11 +288,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
         canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
         canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
-//            moonPaintD.setPathEffect(dashPath);
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
         moonPaintD.setPathEffect(null);
-//            canvas.restore();
-//        }
     }
 
     private float getY(int x, double segment, int height) {
@@ -320,8 +313,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float sunset = prayTime.get(PrayTime.SUNSET).toInt();
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
-//        float midday = prayTime.get(PrayTime.DHUHR).toInt();
-//        float evening = prayTime.get(PrayTime.ASR).toInt();
 
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
@@ -332,7 +323,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else if (now <= sunset) {
             c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
-            c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+            c = (((now - sunset) / (sunset - midnight)) * 0.66f) + 0.17f + 0.66f;
         }
 
         argbEvaluator = new ArgbEvaluator();
