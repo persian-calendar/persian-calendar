@@ -38,27 +38,13 @@ import androidx.core.content.ContextCompat;
 
 public class SunView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-    Paint mPaint;
-    Paint mSunPaint;
-    Paint mSunRaisePaint;
-    Paint mDayPaint;
+    Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
 
-    int horizonColor;
-    int timelineColor;
-    int taggingColor;
-    int nightColor;
-    int dayColor;
-    int daySecondColor;
-    int sunColor;
-    int sunBeforeMiddayColor;
-    int sunAfterMiddayColor;
-    int sunEveningColor;
+    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor, sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor, middayTextColor, sunsetTextColor;
 
-    int width;
-    int height;
+    int width, height;
 
-    Path curvePath;
-    Path nightPath;
+    Path curvePath, nightPath;
     double segmentByPixel;
 
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -118,6 +104,15 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 sunBeforeMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewBeforeMiddayColor, ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor));
                 sunAfterMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewAfterMiddayColor, ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor));
                 sunEveningColor = typedArray.getColor(R.styleable.SunView_SunViewEveningColor, ContextCompat.getColor(context, R.color.sViewSunEveningColor));
+                context.getTheme().resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true);
+                int SunriseTextColor = ContextCompat.getColor(context, typedValue.resourceId);
+                sunriseTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunriseTextColor, SunriseTextColor);
+                context.getTheme().resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true);
+                int MiddayTextColor = ContextCompat.getColor(context, typedValue.resourceId);
+                middayTextColor = typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor);
+                context.getTheme().resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true);
+                int SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId);
+                sunsetTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor);
 
             } finally {
                 typedArray.recycle();
@@ -224,12 +219,12 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(dayColor);
+        mPaint.setColor(sunriseTextColor);
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
-        mPaint.setColor(nightColor);
-        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
-        mPaint.setColor(sunEveningColor);
+        mPaint.setColor(middayTextColor);
         canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 28, mPaint);
+        mPaint.setColor(sunsetTextColor);
+        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {

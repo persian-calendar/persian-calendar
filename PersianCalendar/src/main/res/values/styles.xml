@@ -64,6 +64,9 @@
         <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
         <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
         <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
+        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
+        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
+        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
     </style>
 
@@ -107,6 +110,10 @@
         <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
         <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
         <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
+        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
+        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
+        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
+
     </style>
 
     <!-- The revived old application theme. -->
