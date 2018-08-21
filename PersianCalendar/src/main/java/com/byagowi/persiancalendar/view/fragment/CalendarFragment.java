@@ -184,6 +184,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         // Easter egg to test AthanActivity
         if (coordinate != null) {
+            owghatBinding.owghatText.setOnClickListener(this);
             owghatBinding.owghatText.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
                 return true;
@@ -471,6 +472,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
                 break;
 
+            case R.id.owghat_text:
             case R.id.owghat_content:
 
                 boolean isOpenOwghatCommand = owghatBinding.sunriseLayout.getVisibility() == View.GONE;
