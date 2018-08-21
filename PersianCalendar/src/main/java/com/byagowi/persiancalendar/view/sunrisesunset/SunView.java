@@ -15,13 +15,11 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.github.praytimes.Clock;
 import com.github.praytimes.PrayTime;
@@ -337,11 +335,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             int dayLength = (int) (sunset - sunrise);
             int remaining = now > sunset || now < sunrise ? 0 : (int) (now - sunrise);
             sb.append(String.format(getContext().getString(R.string.length_of_day),
-                    UIUtils.getFormattedClock(Clock.fromInt(dayLength))));
+                    UIUtils.baseClockToString(Clock.fromInt(dayLength))));
             if (remaining != 0) {
                 sb.append(" - ");
                 sb.append(String.format(getContext().getString(R.string.remaining_daylight),
-                        UIUtils.getFormattedClock(Clock.fromInt(remaining))));
+                        UIUtils.baseClockToString(Clock.fromInt(remaining))));
             }
             additionalInfo = sb.toString();
         }
@@ -352,7 +350,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else if (now <= sunset) {
             c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
-            c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
+            c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
         }
 
         if (immediate) {

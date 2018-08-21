@@ -102,12 +102,12 @@ public class CalendarUtils {
                 Utils.formatNumber(date.getMonth()), Utils.formatNumber(date.getDayOfMonth()));
     }
 
-    static public PersianDate getPersianToday() {
-        return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
-    }
-
     static public long getTodayJdn() {
         return DateConverter.civilToJdn(new CivilDate(makeCalendarFromDate(new Date())));
+    }
+
+    static public PersianDate getPersianToday() {
+        return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
     static public IslamicDate getIslamicToday() {
@@ -232,11 +232,11 @@ public class CalendarUtils {
 //                    }
 //                } else {
 //                    title = "\uD83D\uDD53 " + title;
-//                    title += " (" + UIUtils.clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
+//                    title += " (" + UIUtils.baseClockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
 //                            startCalendar.get(Calendar.MINUTE));
 //
 //                    if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-//                        title += "-" + UIUtils.clockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
+//                        title += "-" + UIUtils.baseClockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
 //                                endCalendar.get(Calendar.MINUTE));
 //                    }
 //
@@ -359,11 +359,11 @@ public class CalendarUtils {
                     title = "\uD83D\uDCC5 " + title;
                 } else {
                     title = "\uD83D\uDD53 " + title;
-                    title += " (" + UIUtils.clockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
+                    title += " (" + UIUtils.baseClockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
                             startCalendar.get(Calendar.MINUTE));
 
                     if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-                        title += "-" + UIUtils.clockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
+                        title += "-" + UIUtils.baseClockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
                                 endCalendar.get(Calendar.MINUTE));
                     }
 
