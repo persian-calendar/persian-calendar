@@ -8,6 +8,9 @@
         <attr name="SunViewHorizonColor" format="reference" />
         <attr name="SunViewTimelineColor" format="reference" />
         <attr name="SunViewTaglineColor" format="reference" />
+        <attr name="SunViewSunriseTextColor" format="reference" />
+        <attr name="SunViewMiddayTextColor" format="reference" />
+        <attr name="SunViewSunsetTextColor" format="reference" />
         <attr name="SunViewNightColor" format="color" />
         <attr name="SunViewDayColor" format="color" />
         <attr name="SunViewDaySecondColor" format="color" />
