@@ -61,6 +61,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Path nightPath;
     double segmentByPixel;
 
+    ArgbEvaluator argbEvaluator;
+
     String additionalInfo = "";
 
     public String getAdditionalInfo() {
@@ -68,8 +70,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     }
 
     Map<PrayTime, Clock> prayTime;
-
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     public SunView(Context context) {
         super(context);
@@ -146,7 +146,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         super.onSizeChanged(w, h, oldW, oldH);
 
         width = w;
-        height = h;
+        height = h - 18;
 
         curvePath = new Path();
         curvePath.moveTo(0, height);
@@ -229,7 +229,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(nightColor);
         canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
         mPaint.setColor(sunEveningColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 10, mPaint);
+        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 28, mPaint);
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
@@ -350,6 +350,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else {
             c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
         }
+
+        argbEvaluator = new ArgbEvaluator();
 
         if (immediate) {
             current = c;
