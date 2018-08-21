@@ -100,7 +100,7 @@ public class AthanNotification extends Service {
             new Handler().postDelayed(() -> {
                 notificationManager.cancel(NOTIFICATION_ID);
                 stopSelf();
-            }, TimeUnit.SECONDS.toMillis(10));
+            }, TimeUnit.MINUTES.toMillis(5));
         }
 
 
