@@ -11,18 +11,6 @@
         android:minHeight="220dp"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/owghat_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/text_size_title"
-            tools:text="City" />
-
         <!-- sun content -->
         <com.byagowi.persiancalendar.view.sunrisesunset.SunView
             android:id="@+id/svPlot"
@@ -304,11 +292,18 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/owghat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorAccent"
+                android:textSize="@dimen/text_size_title"
+                tools:text="City" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/more_owghat"
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
-                android:layout_gravity="center_vertical"
                 android:tint="?attr/colorAccent"
                 app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
