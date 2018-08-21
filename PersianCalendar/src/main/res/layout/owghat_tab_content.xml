@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textColor="?attr/colorTextSecond"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <!-- actual content -->
         <com.google.android.flexbox.FlexboxLayout
