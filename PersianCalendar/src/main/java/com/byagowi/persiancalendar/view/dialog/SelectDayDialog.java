@@ -35,7 +35,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                Utils.getOrderedCalendarEntities()));
+                Utils.getOrderedCalendarEntities(getContext())));
 
         binding.calendarTypeSpinner.setSelection(0);
         UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
