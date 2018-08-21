@@ -337,13 +337,19 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             additionalInfo = sb.toString();
         }
 
-        float c;
+        float c = 0;
         if (now <= sunrise) {
-            c = ((now - midnight) / sunrise) * 0.17f;
+            if (sunrise != 0) {
+                c = ((now - midnight) / sunrise) * 0.17f;
+            }
         } else if (now <= sunset) {
-            c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+            if (sunset - sunrise != 0) {
+                c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
+            }
         } else {
-            c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
+            if (FULL_DAY + midnight - sunset != 0) {
+                c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
+            }
         }
 
         argbEvaluator = new ArgbEvaluator();
