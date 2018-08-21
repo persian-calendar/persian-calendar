@@ -91,7 +91,7 @@
     <color name="sViewTaglineColorDark">#c1eeeeee</color>
     <color name="sViewSunColor">#ffcc00</color>
     <color name="sViewDayColor">#74BBEF</color>
-    <color name="sViewDaySecondColor">#FF6D00</color>
+    <color name="sViewDaySecondColor">#B2D5F1</color>
     <color name="sViewNightColor">#383C7C</color>
     <color name="sViewSunBeforeMiddayColor">#ff8800</color>
     <color name="sViewSunAfterMiddayColor">#ff8800</color>

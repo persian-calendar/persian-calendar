@@ -15,6 +15,10 @@ public class Constants {
     public static final String LANG_CKB = "ckb";
     public static final String LANG_UR = "ur";
 
+    public static final int CALENDARS_TAB = 0;
+    public static final int EVENT_TAB = 1;
+    public static final int OWGHAT_TAB = 2;
+
     public static final String LAST_CHOSEN_TAB_KEY = "LastChosenTab";
 
     public static final String PREF_MAIN_CALENDAR_KEY = "mainCalendarType";
