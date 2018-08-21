@@ -101,7 +101,7 @@
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
-    <string name="date_diff_text">%s day (~%s year and %s month and %s day)</string>
+    <string name="date_diff_text">Distance: %s days (~%s years and %s months and %s days)</string>
     <string name="search_holidays">Search in events</string>
     <string name="calendars_priority">Calendars Priority</string>
     <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
@@ -196,5 +196,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="midday">Midday</string>
     <string name="sunset">Sunset</string>
     <string name="no_event">No event or appointment is found for this day.</string>
+    <string name="length_of_day">Length of day: %s</string>
+    <string name="remaining_daylight">Remaining daylight: %s</string>
 
 </resources>

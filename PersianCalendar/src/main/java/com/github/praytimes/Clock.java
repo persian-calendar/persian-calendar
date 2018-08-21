@@ -37,4 +37,8 @@ public class Clock {
     public int toInt() {
         return (hour * MINUTES_PER_HOUR + minute);
     }
+
+    public static Clock fromInt(int minutes) {
+        return new Clock(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR);
+    }
 }

@@ -220,7 +220,12 @@ public class UIUtils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    static String clockToString(int hour, int minute) {
+    public static String baseClockToString(Clock clock) {
+        return baseClockToString(clock.getHour(), clock.getMinute());
+    }
+
+
+    public static String baseClockToString(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
@@ -248,7 +253,7 @@ public class UIUtils {
             }
         }
 
-        String result = clockToString(hour, clock.getMinute());
+        String result = baseClockToString(hour, clock.getMinute());
         if (!Utils.isClockIn24()) {
             result = result + " " + timeText;
         }

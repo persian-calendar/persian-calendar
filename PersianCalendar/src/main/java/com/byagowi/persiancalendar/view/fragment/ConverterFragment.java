@@ -63,7 +63,7 @@ public class ConverterFragment extends Fragment implements
         // fill views
         binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                Utils.getOrderedCalendarEntities()));
+                Utils.getOrderedCalendarEntities(getContext())));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
         UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment, lastSelectedJdn);

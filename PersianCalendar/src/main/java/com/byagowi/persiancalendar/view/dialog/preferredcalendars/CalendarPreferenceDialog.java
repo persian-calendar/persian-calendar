@@ -38,7 +38,7 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
 
         Utils.updateStoredPreference(context);
         List<CalendarType> enabledCalendarTypes = Utils.getEnabledCalendarTypes();
-        List<CalendarTypeEntity> orderedCalendarTypes = Utils.getOrderedCalendarEntities();
+        List<CalendarTypeEntity> orderedCalendarTypes = Utils.getOrderedCalendarEntities(context);
         for (CalendarTypeEntity entity : orderedCalendarTypes) {
             values.add(entity.getType().toString());
             titles.add(entity.toString());

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -21,6 +20,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.github.praytimes.Clock;
 import com.github.praytimes.PrayTime;
 
@@ -41,7 +41,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Paint mSunPaint;
     Paint mSunRaisePaint;
     Paint mDayPaint;
-    ArgbEvaluator argbEvaluator;
 
     int horizonColor;
     int timelineColor;
@@ -60,6 +59,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Path curvePath;
     Path nightPath;
     double segmentByPixel;
+
+    String additionalInfo = "";
 
     Map<PrayTime, Clock> prayTime;
 
@@ -158,6 +159,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     float current = 0;
 
+    // FIXME: I am not sure why I have to create this every time...
     private LinearGradient createShader() {
         return new LinearGradient(getWidth() * 0.79f, getHeight() / 2, getWidth() / 4, 0,
                 daySecondColor, dayColor, Shader.TileMode.MIRROR);
@@ -215,6 +217,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.GRAY);
+        canvas.drawText(additionalInfo, width * 0.5f, height, mPaint);
         mPaint.setColor(dayColor);
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(nightColor);
@@ -256,6 +260,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     private double moonPhase = 1;
 
     public void drawMoon(Canvas canvas) {
+        // This is brought from QiblaCompassView with some modifications
         float r = (height * 0.08f);
         float radius = 1;
         float px = width * current;
@@ -279,6 +284,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         moonPaintD.setFlags(Paint.ANTI_ALIAS_FLAG);
         canvas.rotate(180, px, py);
         int eOffset = 0;
+        // elevation Offset 0 for 0 degree; r for 90 degree
         moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
         canvas.drawArc(moonRect, 90, 180, false, moonPaint);
         canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
@@ -317,13 +323,27 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
 
+        {
+            StringBuilder sb = new StringBuilder();
+            int dayLength = (int) (sunset - sunrise);
+            int remaining = now > sunset || now < sunrise ? 0 : (int) (now - sunrise);
+            sb.append(String.format(getContext().getString(R.string.length_of_day),
+                    UIUtils.baseClockToString(Clock.fromInt(dayLength))));
+            if (remaining != 0) {
+                sb.append(" - ");
+                sb.append(String.format(getContext().getString(R.string.remaining_daylight),
+                        UIUtils.baseClockToString(Clock.fromInt(remaining))));
+            }
+            additionalInfo = sb.toString();
+        }
+
         float c;
         if (now <= sunrise) {
             c = ((now - midnight) / sunrise) * 0.17f;
         } else if (now <= sunset) {
             c = (((now - sunrise) / (sunset - sunrise)) * 0.66f) + 0.17f;
         } else {
-            c = (((now - sunset) / (sunset - midnight)) * 0.66f) + 0.17f + 0.66f;
+            c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
         }
 
         argbEvaluator = new ArgbEvaluator();

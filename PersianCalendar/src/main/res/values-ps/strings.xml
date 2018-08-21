@@ -101,7 +101,7 @@
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
-    <string name="date_diff_text">%s روز (~%s سال و %s ماه و %s روز)</string>
+    <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
     <string name="main_calendar">تقویم اصلی</string>
     <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
@@ -160,5 +160,7 @@
     <string name="midday">ظهر</string>
     <string name="sunset">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
+    <string name="length_of_day">مدت روشنی روز: %s</string>
+    <string name="remaining_daylight">روشنی باقی‌مانده: %s</string>
 
 </resources>

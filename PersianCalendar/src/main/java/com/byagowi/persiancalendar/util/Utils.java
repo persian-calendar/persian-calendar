@@ -200,7 +200,6 @@ public class Utils {
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
-    static private Map<CalendarType, String> calendarTypeToTitleMap;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -255,14 +254,6 @@ public class Utils {
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
-
-        String[] values = context.getResources().getStringArray(R.array.calendar_values);
-        String[] titles = context.getResources().getStringArray(R.array.calendar_type);
-
-        calendarTypeToTitleMap = new HashMap<>();
-        for (int i = 0; i < titles.length; ++i) {
-            calendarTypeToTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
-        }
     }
 
     static public List<CalendarType> getEnabledCalendarTypes() {
@@ -285,11 +276,23 @@ public class Utils {
         return result;
     }
 
-    static public List<CalendarTypeEntity> getOrderedCalendarEntities() {
+    static public List<CalendarTypeEntity> getOrderedCalendarEntities(Context context) {
+        Utils.applyAppLanguage(context);
+
+        String[] values = context.getResources().getStringArray(R.array.calendar_values);
+        String[] titles = context.getResources().getStringArray(R.array.calendar_type);
+
+        // TODO: Can be done without Map
+        Map<CalendarType, String> typeTitleMap = new HashMap<>();
+        for (int i = 0; i < titles.length; ++i) {
+            typeTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
+        }
+
         List<CalendarTypeEntity> result = new ArrayList<>();
         for (CalendarType type : getOrderedCalendarTypes()) {
-            result.add(new CalendarTypeEntity(type, calendarTypeToTitleMap.get(type)));
+            result.add(new CalendarTypeEntity(type, typeTitleMap.get(type)));
         }
+
         return result;
     }
 
