@@ -44,6 +44,7 @@ import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 public class UIUtils {
@@ -193,13 +194,23 @@ public class UIUtils {
         binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
     }
 
-    public static void askForCalendarPermission(AppCompatActivity activity) {
+    public static void askForCalendarPermission(Activity activity) {
+        if (!(activity instanceof AppCompatActivity)) return;
+        AppCompatActivity compatActivity = (AppCompatActivity) activity;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
+            compatActivity.requestPermissions(new String[]{
                             Manifest.permission.READ_CALENDAR
                     },
                     Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
         }
+    }
+
+    public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
+        edit.apply();
     }
 
     public static void askforExternalStoragePermission(AppCompatActivity activity) {

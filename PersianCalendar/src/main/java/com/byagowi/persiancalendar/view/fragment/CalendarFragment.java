@@ -1,10 +1,13 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -59,6 +62,7 @@ import java.util.Set;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -72,6 +76,7 @@ import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class CalendarFragment extends Fragment implements View.OnClickListener {
     private Calendar calendar = Calendar.getInstance();
@@ -234,8 +239,18 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addEventOnCalendar(long jdn) {
-        Context context = getContext();
-        if (context == null) return;
+        Activity activity = getActivity();
+        if (activity == null) return;
+
+        if (!Utils.isShowDeviceCalendarEvents()) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                UIUtils.askForCalendarPermission(activity);
+                return;
+            } else {
+                UIUtils.toggleShowCalendarOnPreference(activity, true);
+                ((MainActivity) activity).restartActivity();
+            }
+        }
 
         CivilDate civil = DateConverter.jdnToCivil(jdn);
         Calendar time = Calendar.getInstance();
@@ -254,7 +269,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                             .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
         } catch (Exception e) {
-            Toast.makeText(context, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
         }
     }
 
