@@ -180,12 +180,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        if (BuildConfig.DEBUG) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                UIUtils.askforExternalStoragePermission(this);
-            }
-        }
-
         switch (getSeason()) {
             case "SPRING":
                 binding.seasonImage.setImageResource(R.drawable.spring);
@@ -256,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
-            restartActivity(PREFERENCE);
+            restartActivity();
         }
 
         if (key.equals(PREF_NOTIFY_DATE)) {
@@ -274,16 +268,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-                Utils.initUtils(this);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
+                    == PackageManager.PERMISSION_GRANTED) {
+                UIUtils.toggleShowCalendarOnPreference(this, true);
                 if (menuPosition == CALENDAR) {
-                    restartActivity(menuPosition);
+                    restartActivity();
                 }
             } else {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor edit = prefs.edit();
-                edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
-                edit.apply();
+                UIUtils.toggleShowCalendarOnPreference(this, false);
             }
         }
     }
@@ -303,10 +295,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Utils.applyAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
         if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
-            restartActivity(menuPosition);
+            restartActivity();
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -343,15 +334,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private void restartActivity(int item) {
+    public void restartActivity() {
         Intent intent = getIntent();
-        if (item == CONVERTER)
+        if (menuPosition == CONVERTER)
             intent.setAction("CONVERTER_SHORTCUT");
-        else if (item == COMPASS)
+        else if (menuPosition == COMPASS)
             intent.setAction("COMPASS_SHORTCUT");
-        else if (item == PREFERENCE)
+        else if (menuPosition == PREFERENCE)
             intent.setAction("PREFERENCE_SHORTCUT");
-        else if (item == ABOUT)
+        else if (menuPosition == ABOUT)
             intent.setAction("ABOUT_SHORTCUT");
 
         finish();

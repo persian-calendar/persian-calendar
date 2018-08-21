@@ -44,6 +44,7 @@ import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 public class UIUtils {
@@ -202,13 +203,11 @@ public class UIUtils {
         }
     }
 
-    public static void askforExternalStoragePermission(AppCompatActivity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    },
-                    Constants.WRITE_EXTERNAL_STORAGE);
-        }
+    public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
+        edit.apply();
     }
 
     static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
