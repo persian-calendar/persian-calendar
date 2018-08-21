@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.DrawerAdapter;
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         UpdateUtils.setDeviceCalendarEvents(getApplicationContext());
         UpdateUtils.update(getApplicationContext(), false);
 
-        setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar);
 
