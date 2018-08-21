@@ -101,7 +101,7 @@
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
-    <string name="date_diff_text">%s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
+    <string name="date_diff_text">فاصله: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
@@ -160,5 +160,7 @@
     <string name="midday">نیوەڕۆ</string>
     <string name="sunset">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
+    <string name="length_of_day">طول روشنایی روز: %s</string>
+    <string name="remaining_daylight">روشنایی باقی‌مانده: %s</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -16,11 +15,14 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.github.praytimes.Clock;
 import com.github.praytimes.PrayTime;
 
@@ -41,7 +43,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Paint mSunPaint;
     Paint mSunRaisePaint;
     Paint mDayPaint;
-    ArgbEvaluator argbEvaluator;
 
     int horizonColor;
     int timelineColor;
@@ -60,6 +61,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Path curvePath;
     Path nightPath;
     double segmentByPixel;
+
+    String additionalInfo = "";
 
     Map<PrayTime, Clock> prayTime;
 
@@ -158,7 +161,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     float current = 0;
 
-    //FIXME: I am not sure why I have to create this every time...
+    // FIXME: I am not sure why I have to create this every time...
     private LinearGradient createShader() {
         return new LinearGradient(getWidth() * 0.17f, 0, width / 2, 0,
                 dayColor, daySecondColor, Shader.TileMode.MIRROR);
@@ -216,6 +219,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.GRAY);
+        canvas.drawText(additionalInfo, width * 0.5f, height, mPaint);
         mPaint.setColor(dayColor);
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(nightColor);
@@ -320,11 +325,26 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         float sunset = prayTime.get(PrayTime.SUNSET).toInt();
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
         float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
+
 //        float midday = prayTime.get(PrayTime.DHUHR).toInt();
 //        float evening = prayTime.get(PrayTime.ASR).toInt();
 
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
+
+        {
+            StringBuilder sb = new StringBuilder();
+            int dayLength = (int) (sunset - sunrise);
+            int remaining = now > sunset || now < sunrise ? 0 : (int) (now - sunrise);
+            sb.append(String.format(getContext().getString(R.string.length_of_day),
+                    UIUtils.getFormattedClock(Clock.fromInt(dayLength))));
+            if (remaining != 0) {
+                sb.append(" - ");
+                sb.append(String.format(getContext().getString(R.string.remaining_daylight),
+                        UIUtils.getFormattedClock(Clock.fromInt(remaining))));
+            }
+            additionalInfo = sb.toString();
+        }
 
         float c;
         if (now <= sunrise) {
@@ -334,8 +354,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else {
             c = (((now - sunset) / (sunset - midnight)) * 0.17f) + 0.17f + 0.66f;
         }
-
-        argbEvaluator = new ArgbEvaluator();
 
         if (immediate) {
             current = c;
