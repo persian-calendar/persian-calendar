@@ -18,6 +18,14 @@
             android:layout_height="100dp"
             android:layout_margin="10dp" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/plotAdditionalInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="12sp" />
+
         <!-- actual content -->
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"

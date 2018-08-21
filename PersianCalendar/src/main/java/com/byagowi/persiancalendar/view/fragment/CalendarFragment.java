@@ -441,11 +441,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
+            owghatBinding.plotAdditionalInfo.setVisibility(View.VISIBLE);
             if (mainBinding.tabContent.getCurrentItem() == Constants.OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate(true);
+                owghatBinding.plotAdditionalInfo.setText(owghatBinding.svPlot.getAdditionalInfo());
             }
         } else {
             owghatBinding.svPlot.setVisibility(View.GONE);
+            owghatBinding.plotAdditionalInfo.setVisibility(View.GONE);
         }
     }
 
@@ -485,13 +488,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
-
-                if (lastSelectedJdn == CalendarUtils.getTodayJdn()) {
-                    owghatBinding.svPlot.setVisibility(View.VISIBLE);
-                    owghatBinding.svPlot.startAnimate(true);
-                } else {
-                    owghatBinding.svPlot.setVisibility(View.GONE);
-                }
 
                 break;
 
