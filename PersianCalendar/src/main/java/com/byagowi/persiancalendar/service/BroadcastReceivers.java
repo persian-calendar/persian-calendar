@@ -15,11 +15,9 @@ import com.byagowi.persiancalendar.util.Utils;
  * @author ebraminio
  */
 public class BroadcastReceivers extends BroadcastReceiver {
-    private Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        this.context = context;
 
         if (intent == null || intent.getAction() == null) {
             return;
