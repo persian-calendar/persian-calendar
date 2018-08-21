@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.sunrisesunset;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -62,7 +63,13 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     String additionalInfo = "";
 
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
     Map<PrayTime, Clock> prayTime;
+
+    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     public SunView(Context context) {
         super(context);
@@ -217,8 +224,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.GRAY);
-        canvas.drawText(additionalInfo, width * 0.5f, height, mPaint);
         mPaint.setColor(dayColor);
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(nightColor);
@@ -345,8 +350,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         } else {
             c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
         }
-
-        argbEvaluator = new ArgbEvaluator();
 
         if (immediate) {
             current = c;
