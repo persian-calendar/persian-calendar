@@ -61,7 +61,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Path nightPath;
     double segmentByPixel;
 
-    ArgbEvaluator argbEvaluator;
+    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
     String additionalInfo = "";
 
