@@ -490,6 +490,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     owghatBinding.plotAdditionalInfo.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 }
 
+                mainBinding.tabContent.measureCurrentView(owghatBinding.getRoot());
+
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
 
