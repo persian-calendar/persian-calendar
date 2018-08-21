@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,8 +19,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
@@ -98,12 +97,9 @@ public class AthanNotification extends Service {
 
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
 
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    notificationManager.cancel(NOTIFICATION_ID);
-                    stopSelf();
-                }
+            new Handler().postDelayed(() -> {
+                notificationManager.cancel(NOTIFICATION_ID);
+                stopSelf();
             }, TimeUnit.MINUTES.toMillis(5));
         }
 

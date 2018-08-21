@@ -7,6 +7,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -20,8 +21,6 @@ import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +30,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = AthanActivity.class.getName();
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
-    private Timer timer;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,35 +79,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
 
         binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
-
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (ringtone == null && mediaPlayer == null) {
-                    cancel();
-                    finish();
-                }
-                try {
-                    if (ringtone != null) {
-                        if (!ringtone.isPlaying()) {
-                            cancel();
-                            finish();
-                        }
-                    }
-                    if (mediaPlayer != null) {
-                        if (!mediaPlayer.isPlaying()) {
-                            cancel();
-                            finish();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    cancel();
-                    finish();
-                }
-            }
-        }, TimeUnit.SECONDS.toMillis(10), TimeUnit.SECONDS.toMillis(5));
+        handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10));
 
         try {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -119,6 +90,35 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             Log.e(TAG, "TelephonyManager handling fail", e);
         }
     }
+
+    Runnable stopTask = new Runnable() {
+        @Override
+        public void run() {
+            if (ringtone == null && mediaPlayer == null) {
+                AthanActivity.this.finish();
+                return;
+            }
+            try {
+                if (ringtone != null) {
+                    if (!ringtone.isPlaying()) {
+                        AthanActivity.this.finish();
+                        return;
+                    }
+                }
+                if (mediaPlayer != null) {
+                    if (!mediaPlayer.isPlaying()) {
+                        AthanActivity.this.finish();
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                AthanActivity.this.finish();
+                return;
+            }
+            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
+        }
+    };
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -172,7 +172,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
                 e.printStackTrace();
             }
         }
-        timer.cancel();
+        handler.removeCallbacks(stopTask);
         finish();
     }
 }

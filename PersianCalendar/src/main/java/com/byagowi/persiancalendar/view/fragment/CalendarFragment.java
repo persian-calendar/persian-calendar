@@ -184,6 +184,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         // Easter egg to test AthanActivity
         if (coordinate != null) {
+            owghatBinding.owghatText.setOnClickListener(this);
             owghatBinding.owghatText.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
                 return true;
@@ -472,6 +473,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
                 break;
 
+            case R.id.owghat_text:
             case R.id.owghat_content:
 
                 boolean isOpenOwghatCommand = owghatBinding.sunriseLayout.getVisibility() == View.GONE;
@@ -485,6 +487,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+
+                owghatBinding.plotAdditionalInfo.setVisibility(View.GONE);
+                if (!TextUtils.isEmpty(owghatBinding.plotAdditionalInfo.getText())) {
+                    owghatBinding.plotAdditionalInfo.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                }
+
+                mainBinding.tabContent.measureCurrentView(owghatBinding.getRoot());
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
