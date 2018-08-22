@@ -132,7 +132,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
 
         mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
-        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_setting);
+        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_note);
         if (coordinate != null) {
             mainBinding.tabLayout.getTabAt(2).setIcon(R.drawable.ic_access_time);
         }
