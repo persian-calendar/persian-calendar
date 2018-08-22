@@ -92,20 +92,22 @@ public class ConverterFragment extends Fragment implements
 
             CalendarType calendarType = ((CalendarTypeEntity)
                     binding.selectdayFragment.calendarTypeSpinner.getSelectedItem()).getType();
-            long jdn = CalendarUtils.getJdnOfCalendarWithException(calendarType, year, month, day);
+            if (day > CalendarUtils.getMonthLength(calendarType, year, month)) {
+                binding.calendarsTabContent.getRoot().setVisibility(View.GONE);
+                Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
+            } else {
+                long jdn = CalendarUtils.getJdnOfCalendar(calendarType, year, month, day);
 
-            UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
-                    Utils.getOrderedCalendarTypes());
-            lastSelectedJdn = jdn;
-            if (CalendarUtils.getTodayJdn() == jdn) {
-                binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
+                UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
+                        Utils.getOrderedCalendarTypes());
+                lastSelectedJdn = jdn;
+                if (CalendarUtils.getTodayJdn() == jdn) {
+                    binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
+                }
+
+                binding.calendarsTabContent.getRoot().setVisibility(View.VISIBLE);
             }
-
-            binding.calendarsTabContent.getRoot().setVisibility(View.VISIBLE);
-
-        } catch (RuntimeException e) {
-            binding.calendarsTabContent.getRoot().setVisibility(View.GONE);
-            Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
+        } catch (RuntimeException ignored) {
         }
     }
 

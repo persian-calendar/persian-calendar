@@ -1,10 +1,13 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +20,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.dialog.GPSDiagnosticDialog;
 import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
@@ -30,7 +32,9 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -65,13 +69,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
-
-        PreferenceScreen preferenceScreen = getPreferenceScreen();
-        for (int i = 0; i < preferenceScreen.getPreferenceCount(); ++i) {
-            PreferenceCategory category = (PreferenceCategory) preferenceScreen.getPreference(i);
-            category.setIconSpaceReserved(false);
-            category.setLayoutResource(R.layout.category_preference);
-        }
 
         putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
@@ -118,13 +115,36 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
             FragmentActivity activity = getActivity();
             if (activity == null) return;
 
-            if (GPSDiagnosticDialog.needsDiagnostic(activity)) {
-                // Custom Android Alert Dialog Title
-                DialogFragment frag = new GPSDiagnosticDialog();
-                frag.show(activity.getSupportFragmentManager(), "GPSDiagnosticDialog");
-            } else {
-                fragment = new GPSLocationDialog();
+            try {
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    UIUtils.askForLocationPermission(activity);
+                    return;
+                }
+
+                LocationManager gps = (LocationManager)
+                        activity.getSystemService(Context.LOCATION_SERVICE);
+
+                boolean gpsEnabled = false;
+
+                if (gps != null) {
+                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                }
+
+                if (!gpsEnabled) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.gps_internet_desc)
+                            .setPositiveButton(R.string.accept,
+                                    (dialogInterface, i) -> activity.startActivity(
+                                            new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                            .create().show();
+                    return;
+                }
+            } catch (Exception e) {
+                // Do whatever we were doing till now
             }
+
+            fragment = new GPSLocationDialog();
         } else {
             super.onDisplayPreferenceDialog(preference);
         }

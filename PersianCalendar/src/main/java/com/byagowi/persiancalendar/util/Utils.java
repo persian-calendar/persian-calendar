@@ -813,19 +813,16 @@ public class Utils {
                     result.add(islamicCalendarEvent);
 
         // Special case Imam Reza martyrdom event on Hijri as it is a holiday and so vital to have
-        if (islamic.getMonth() == 2 && islamic.getDayOfMonth() == 29) {
-            if (DateConverter.islamicToJdn(islamic.getYear(), 3, 1) -
-                    DateConverter.islamicToJdn(islamic.getYear(), 2, 29) == 1) {
+        if (islamic.getMonth() == 2 && islamic.getDayOfMonth() == 29
+                && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), 2) < 30) {
+            IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
 
-                IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
-
-                islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
-                        alternativeDate.getDayOfMonth());
-                if (islamicList != null)
-                    for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
-                        if (islamicCalendarEvent.getDate().equals(alternativeDate))
-                            result.add(islamicCalendarEvent);
-            }
+            islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
+                    alternativeDate.getDayOfMonth());
+            if (islamicList != null)
+                for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
+                    if (islamicCalendarEvent.getDate().equals(alternativeDate))
+                        result.add(islamicCalendarEvent);
         }
 
         List<GregorianCalendarEvent> gregorianList =

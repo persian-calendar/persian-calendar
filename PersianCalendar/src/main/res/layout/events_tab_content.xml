@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="?attr/colorTextSecond"
-                    android:textSize="@dimen/text_size_description" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

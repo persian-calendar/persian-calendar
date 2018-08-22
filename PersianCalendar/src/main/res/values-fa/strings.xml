@@ -26,7 +26,7 @@
     <string name="general">عمومی</string>
     <string name="widget_text_color">رنگ‌نوشته‌های ابزارک</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
-    <string name="pray_times_calculation_setting">تنظیمات محاسبهٔ اوقات شرعی و قبله‌نما</string>
+    <string name="pray_times_calculation_setting">نمایشگر خورشید، اوقات شرعی و قبله‌نما</string>
     <string name="notify_date">فعال کردن آگاه‌سازی</string>
     <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
@@ -96,7 +96,7 @@
     <string name="select">انتخاب</string>
     <string name="go">برو</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
-    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
+    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه باشد.</string>
     <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
@@ -151,7 +151,7 @@
     <string name="gprs_settings">GPRS</string>
     <string name="wifi_settings">WiFi</string>
     <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
-برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد و این پیام را نادیده بگیرید، اما در صورتی که مکان شما تغییر کرده است دوباره به این دسترسی‌ها نیاز است."</string>
+برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
     <string name="start_of_year_diff">%s روز (~%s هفته و یا %s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%s روز (~%s هفته و یا %s ماه) تا انتهای سال</string>
     <!-- Sun Info -->

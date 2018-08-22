@@ -85,8 +85,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         typedDate = CalendarUtils.getDateOfCalendar(mainCalendar, year, month, 1);
 
         baseJdn = CalendarUtils.getJdnDate(typedDate);
-        monthLength = (int) (CalendarUtils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
-                month == 12 ? 1 : month + 1, 1) - baseJdn);
+        monthLength = CalendarUtils.getMonthLength(mainCalendar, year, month);
 
         int dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
 

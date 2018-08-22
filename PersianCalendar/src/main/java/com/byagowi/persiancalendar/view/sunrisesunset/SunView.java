@@ -41,7 +41,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
 
-    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor, sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor, middayTextColor, sunsetTextColor;
+    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
+            sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
+            middayTextColor, sunsetTextColor;
 
     int width, height;
 
@@ -141,7 +143,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         curvePath = new Path();
         curvePath.moveTo(0, height);
 
-        segmentByPixel = (2 * Math.PI) / width;
+        if (width != 0) {
+            segmentByPixel = (2 * Math.PI) / width;
+        }
 
         for (int x = 0; x <= width; x++) {
             curvePath.lineTo(x, getY(x, segmentByPixel, (int) (height * 0.9f)));
@@ -155,12 +159,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     }
 
     float current = 0;
-
-    // FIXME: I am not sure why I have to create this every time...
-    private LinearGradient createShader() {
-        return new LinearGradient(getWidth() * 0.79f, getHeight() / 2, getWidth() / 4, 0,
-                daySecondColor, dayColor, Shader.TileMode.MIRROR);
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -181,7 +179,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw fill of day
         canvas.clipRect(0, 0, width, height);
         canvas.clipRect(0, 0, width * current, height * 0.75f);
-        mDayPaint.setShader(createShader());
+        mDayPaint.setShader(linearGradient);
         canvas.drawPath(curvePath, mDayPaint);
 
         canvas.restore();
@@ -222,7 +220,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw remaining time
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(30);
+        mPaint.setTextSize(25);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(taggingColor);
@@ -236,11 +234,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
             int color;
             if (current < 0.5) {
-                color = (int) argbEvaluator.evaluate(current + 0.43f,
-                        sunBeforeMiddayColor, sunAfterMiddayColor);
+                color = (int) argbEvaluator.evaluate(2 * (current - 0.17f),
+                        sunBeforeMiddayColor, sunColor);
             } else {
-                color = (int) argbEvaluator.evaluate(current + 0.001f,
-                        sunBeforeMiddayColor, sunEveningColor);
+                color = (int) argbEvaluator.evaluate( 2 * ((1 - current) - 0.17f),
+                        sunAfterMiddayColor, sunColor);
             }
 
             mSunPaint.setColor(color);
@@ -254,6 +252,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         }
     }
 
+    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0,0, 0, Shader.TileMode.MIRROR);
     Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -368,6 +367,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         }
 
         argbEvaluator = new ArgbEvaluator();
+
+        linearGradient = new LinearGradient(getWidth() * 0.17f, 0, getWidth() * 0.5f, 0,
+                dayColor, daySecondColor, Shader.TileMode.MIRROR);
 
         if (immediate) {
             current = c;

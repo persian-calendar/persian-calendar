@@ -52,15 +52,18 @@ public class CalendarUtils {
         }
     }
 
-    static public long getJdnOfCalendarWithException(CalendarType calendar, int year, int month, int day) {
+    static public int getMonthLength(CalendarType calendar, int year, int month) {
         switch (calendar) {
             case ISLAMIC:
-                return DateConverter.islamicToJdn(new IslamicDate(year, month, day));
+                return (int) (DateConverter.islamicToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
+                                DateConverter.islamicToJdn(year, month, 1));
             case GREGORIAN:
-                return DateConverter.civilToJdn(new CivilDate(year, month, day));
+                return (int) (DateConverter.civilToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
+                        DateConverter.civilToJdn(year, month, 1));
             case SHAMSI:
             default:
-                return DateConverter.persianToJdn(new PersianDate(year, month, day));
+                return (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
+                        DateConverter.persianToJdn(year, month, 1));
         }
     }
 

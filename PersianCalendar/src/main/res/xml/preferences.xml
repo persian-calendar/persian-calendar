@@ -3,6 +3,7 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
         android:title="@string/user_interface"
         settings:iconSpaceReserved="false">
 
@@ -35,6 +36,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
         android:title="@string/calendar"
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="3">
@@ -76,14 +78,14 @@
             settings:iconSpaceReserved="false" />
 
         <!--<androidx.preference.ListPreference-->
-            <!--android:defaultValue="0"-->
-            <!--android:entries="@array/islamicOffsetNames"-->
-            <!--android:entryValues="@array/islamicOffsetKeys"-->
-            <!--android:key="islamicOffset"-->
-            <!--android:negativeButtonText="@string/cancel"-->
-            <!--android:summary="@string/islamic_offset_summary"-->
-            <!--android:title="@string/islamic_offset"-->
-            <!--settings:iconSpaceReserved="false" />-->
+        <!--android:defaultValue="0"-->
+        <!--android:entries="@array/islamicOffsetNames"-->
+        <!--android:entryValues="@array/islamicOffsetKeys"-->
+        <!--android:key="islamicOffset"-->
+        <!--android:negativeButtonText="@string/cancel"-->
+        <!--android:summary="@string/islamic_offset_summary"-->
+        <!--android:title="@string/islamic_offset"-->
+        <!--settings:iconSpaceReserved="false" />-->
 
         <androidx.preference.ListPreference
             android:defaultValue="0"
@@ -109,6 +111,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
         android:title="@string/widget_notification_dashclock"
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="3">
@@ -175,6 +178,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
         android:title="@string/pray_times_calculation_setting"
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="3">
@@ -233,6 +237,7 @@
 
     <androidx.preference.PreferenceCategory
         android:key="Athan"
+        android:layout="@layout/category_preference"
         android:title="@string/athan"
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="3">

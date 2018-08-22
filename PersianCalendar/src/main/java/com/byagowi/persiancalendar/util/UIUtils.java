@@ -194,12 +194,22 @@ public class UIUtils {
         binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
     }
 
-    public static void askForCalendarPermission(AppCompatActivity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    public static void askForCalendarPermission(Activity activity) {
+        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.requestPermissions(new String[]{
                             Manifest.permission.READ_CALENDAR
                     },
                     Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    public static void askForLocationPermission(Activity activity) {
+        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            activity.requestPermissions(new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    },
+                    Constants.LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 

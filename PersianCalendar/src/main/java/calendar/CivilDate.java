@@ -37,23 +37,10 @@ public class CivilDate extends AbstractDate {
     }
 
     public void setDayOfMonth(int day) {
-        if (day < 1)
+        if (day < 1 || day > 31)
             throw new DayOutOfRangeException(
                     Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
 
-        if (month != 2 && day > daysInMonth[month])
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if (month == 2 && isLeapYear() && day > 29)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if (month == 2 && (!isLeapYear()) && day > 28)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        // TODO check for the case of leap year for February
         this.day = day;
     }
 
