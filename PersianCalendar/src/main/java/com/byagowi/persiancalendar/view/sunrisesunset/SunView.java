@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.view.sunrisesunset;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,6 +15,7 @@ import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -214,29 +214,21 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(sunriseTextColor);
-        canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
+        canvas.drawText(sunriseString, width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 22, mPaint);
+        canvas.drawText(middayString, canvas.getWidth() / 2, canvas.getHeight() - 22, mPaint);
         mPaint.setColor(sunsetTextColor);
-        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
+        canvas.drawText(sunsetString, width * 0.83f, height * 0.2f, mPaint);
 
         // draw remaining time
-        float sunset = prayTime.get(PrayTime.SUNSET).toInt();
-        float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
-        @SuppressLint("DrawAllocation") float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
-        int dayLength = (int) (sunset - sunrise);
-        int remaining = now > sunset || now < sunrise ? 0 : (int) (sunset - now);
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(taggingColor);
-        canvas.drawText(String.format(getContext().getString(R.string.length_of_day),
-                UIUtils.baseClockToString(Clock.fromInt(dayLength))), width * 0.76f, height, mPaint);
-        mPaint.setColor(taggingColor);
-        if (remaining != 0) {
-            canvas.drawText(String.format(getContext().getString(R.string.remaining_daylight),
-                    UIUtils.baseClockToString(Clock.fromInt(remaining))), width * 0.24f, height, mPaint);
+        canvas.drawText(dayLengthString, width * (isRTL ? 0.76f : 0.24f), height, mPaint);
+        if (!TextUtils.isEmpty(remainingString)) {
+            canvas.drawText(remainingString, width * (isRTL ? 0.24f : 0.76f), height, mPaint);
         }
 
         // draw sun
@@ -325,9 +317,22 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     private final float FULL_DAY = new Clock(24, 0).toInt();
     private final float HALF_DAY = new Clock(12, 0).toInt();
 
+    String dayLengthString = "";
+    String remainingString = "";
+    String sunriseString = "";
+    String middayString = "";
+    String sunsetString = "";
+    boolean isRTL = false;
+
     public void startAnimate(boolean immediate) {
-        if (prayTime == null)
+        Context context = getContext();
+        if (prayTime == null || context == null)
             return;
+
+        isRTL = UIUtils.isRTL(context);
+        sunriseString = context.getString(R.string.sunrise);
+        middayString = context.getString(R.string.midday);
+        sunsetString = context.getString(R.string.sunset);
 
         float sunset = prayTime.get(PrayTime.SUNSET).toInt();
         float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
@@ -349,6 +354,17 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             if (FULL_DAY + midnight - sunset != 0) {
                 c = (((now - sunset) / (FULL_DAY + midnight - sunset)) * 0.17f) + 0.17f + 0.66f;
             }
+        }
+
+        int dayLength = (int) (sunset - sunrise);
+        int remaining = now > sunset || now < sunrise ? 0 : (int) (sunset - now);
+        dayLengthString = String.format(context.getString(R.string.length_of_day),
+                UIUtils.baseClockToString(Clock.fromInt(dayLength)));
+        if (remaining == 0) {
+            remainingString = "";
+        } else {
+            remainingString = String.format(context.getString(R.string.remaining_daylight),
+                    UIUtils.baseClockToString(Clock.fromInt(remaining)));
         }
 
         argbEvaluator = new ArgbEvaluator();
