@@ -202,12 +202,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawLine(0, height * 0.75f, width, height * 0.75f, mPaint);
 
         // draw sunset and sunrise tag line indicator
-
         mPaint.setColor(taggingColor);
         mPaint.setStrokeWidth(2);
         canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
         canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint);
-        canvas.drawLine(canvas.getWidth() / 2, height * 0.1f, canvas.getWidth() / 2, height * 0.8f, mPaint);
+        canvas.drawLine(canvas.getWidth() / 2, height * 0.7f, canvas.getWidth() / 2, height * 0.8f, mPaint);
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -217,7 +216,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(sunriseTextColor);
         canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 28, mPaint);
+        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 22, mPaint);
         mPaint.setColor(sunsetTextColor);
         canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
 
@@ -233,11 +232,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(taggingColor);
         canvas.drawText(String.format(getContext().getString(R.string.length_of_day),
-                UIUtils.baseClockToString(Clock.fromInt(dayLength))), width * 0.83f, height, mPaint);
+                UIUtils.baseClockToString(Clock.fromInt(dayLength))), width * 0.76f, height, mPaint);
         mPaint.setColor(taggingColor);
         if (remaining != 0) {
             canvas.drawText(String.format(getContext().getString(R.string.remaining_daylight),
-                    UIUtils.baseClockToString(Clock.fromInt(remaining))), width * 0.17f, height, mPaint);
+                    UIUtils.baseClockToString(Clock.fromInt(remaining))), width * 0.24f, height, mPaint);
         }
 
         // draw sun
@@ -257,7 +256,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
             canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunRaisePaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
         } else {
             drawMoon(canvas);
         }
