@@ -326,7 +326,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         {
             StringBuilder sb = new StringBuilder();
             int dayLength = (int) (sunset - sunrise);
-            int remaining = now > sunset || now < sunrise ? 0 : (int) (now - sunrise);
+            int remaining = now > sunset || now < sunrise ? 0 : (int) (sunset - now);
             sb.append(String.format(getContext().getString(R.string.length_of_day),
                     UIUtils.baseClockToString(Clock.fromInt(dayLength))));
             if (remaining != 0) {
