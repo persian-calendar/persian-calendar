@@ -348,6 +348,9 @@
     { "holiday": false, "month": 5, "day": 28, "type": "Iran",
       "title": "کودتای ۲۸ مرداد (۱۳۳۲ ه‍.ش)" },
 
+    { "holiday": false, "month": 5, "day": 28, "type": "Iran",
+      "title": "آتش‌سوزی سینما رکس آبادان (۱۳۵۷ ه‍.ش)" },
+
     { "holiday": false, "month": 5, "day": 30, "type": "Iran",
       "title": "روز بزرگداشت علامه مجلسی" },
 
