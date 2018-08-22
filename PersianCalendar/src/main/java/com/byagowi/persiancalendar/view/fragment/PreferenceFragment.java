@@ -70,13 +70,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
 
-        PreferenceScreen preferenceScreen = getPreferenceScreen();
-        for (int i = 0; i < preferenceScreen.getPreferenceCount(); ++i) {
-            PreferenceCategory category = (PreferenceCategory) preferenceScreen.getPreference(i);
-            category.setIconSpaceReserved(false);
-            category.setLayoutResource(R.layout.category_preference);
-        }
-
         putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
