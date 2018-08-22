@@ -128,8 +128,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
-        mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
+        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
+        mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
 
         mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
         mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_setting);
@@ -148,7 +148,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         // https://stackoverflow.com/a/35461201
         mainBinding.tabLayout.addOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(mainBinding.tabContent) {
+                new TabLayout.ViewPagerOnTabSelectedListener(mainBinding.cardsViewPager) {
 
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
@@ -174,14 +174,14 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             for (View tab : tabs) {
                 tab.setRotationY(180);
             }
-            mainBinding.tabContent.setRotationY(180);
+            mainBinding.cardsViewPager.setRotationY(180);
         }
 
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
-        mainBinding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
+        mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
-        mainBinding.calendarPager.addOnPageChangeListener(changeListener);
+        mainBinding.calendarViewPager.addOnPageChangeListener(changeListener);
 
         calendarsBinding.today.setVisibility(View.GONE);
         calendarsBinding.todayIcon.setVisibility(View.GONE);
@@ -216,8 +216,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             lastTab = Constants.CALENDARS_TAB;
         }
 
-        mainBinding.tabContent.setCurrentItem(lastTab, false);
-
+        mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
+        mainBinding.tabLayout.getTabAt(lastTab).getIcon().setColorFilter(selectedColor,
+                PorterDuff.Mode.SRC_IN);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
@@ -257,7 +258,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     };
 
     void changeMonth(int position) {
-        mainBinding.calendarPager.setCurrentItem(mainBinding.calendarPager.getCurrentItem() + position, true);
+        mainBinding.calendarViewPager.setCurrentItem(
+                mainBinding.calendarViewPager.getCurrentItem() + position, true);
     }
 
     private long lastSelectedJdn = -1;
@@ -488,7 +490,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
-            if (mainBinding.tabContent.getCurrentItem() == Constants.OWGHAT_TAB) {
+            if (mainBinding.cardsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate(true);
             }
         } else {
@@ -531,7 +533,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
 
-                mainBinding.tabContent.measureCurrentView(owghatBinding.getRoot());
+                mainBinding.cardsViewPager.measureCurrentView(owghatBinding.getRoot());
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
@@ -586,7 +588,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
 
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
         selectDay(CalendarUtils.getTodayJdn());
     }
@@ -600,7 +602,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, viewPagerPosition);
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition);
 
         selectDay(jdn);
 

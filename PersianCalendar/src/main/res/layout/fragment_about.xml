@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
-        android:id="@+id/about_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -138,14 +137,14 @@
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/about_title"
+                            android:id="@+id/aboutTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextDrawer"
                             android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/help_sum"
+                            android:id="@+id/helpSummary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_help_sum"
