@@ -15,13 +15,16 @@ package com.byagowi.persiancalendar.view.dialog.preferredcalendars;
  * limitations under the License.
  */
 
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,6 +92,14 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Easter egg when all are swiped
         if (titles.size() == 0) {
             try {
+                View view = calendarPreferenceDialog.getActivity().getSupportFragmentManager()
+                        .findFragmentByTag(PreferenceFragment.class.getName())
+                        .getView();
+                ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
+                animator.setDuration(3000L);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.addUpdateListener(value -> view.setRotation((float) value.getAnimatedValue()));
+                animator.start();
 //                Context context = calendarPreferenceDialog.getContext();
 //                MediaPlayer mediaPlayer = MediaPlayer.create(context,
 //                        R.raw.bach_invention_01);
