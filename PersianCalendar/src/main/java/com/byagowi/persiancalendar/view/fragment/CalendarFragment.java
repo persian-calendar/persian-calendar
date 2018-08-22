@@ -681,6 +681,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 new SelectDayDialog().show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
+            case R.id.today:
+                bringTodayYearMonth();
+                break;
             case R.id.add_event:
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
