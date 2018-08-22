@@ -10,11 +10,6 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <!-- Android Worker library was getting this, now that it is disabled we
-         will get it so users won't noticed again when Worker is enabled -->
-    <!-- Now it is used by GPSDiagnosticDialog also so don't remove this -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <uses-feature

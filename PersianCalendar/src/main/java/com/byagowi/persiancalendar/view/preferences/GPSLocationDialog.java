@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
 
@@ -51,7 +52,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
         getLocation();
         if (lacksPermission) {
-            askForPermission();
+            UIUtils.askForLocationPermission(getActivity());
         }
 
         builder.setPositiveButton("", null);
@@ -82,14 +83,6 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             everRegisteredCallback = true;
         }
-    }
-
-    private void askForPermission() {
-        requestPermissions(new String[]{
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                },
-                Constants.LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     private LocationListener locationListener = new LocationListener() {

@@ -26,7 +26,7 @@
     <string name="general">General</string>
     <string name="widget_text_color">Widget Text Color</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
-    <string name="pray_times_calculation_setting">Pray Times Calculation Setting</string>
+    <string name="pray_times_calculation_setting">Sun View, Pray Time and Qibla Settings</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">Select a skin</string>
