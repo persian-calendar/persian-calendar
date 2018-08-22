@@ -41,26 +41,9 @@ public class PersianDate extends AbstractDate {
     }
 
     public void setDayOfMonth(int day) {
-        if (day < 1)
+        if (day < 1 || day > 31)
             throw new DayOutOfRangeException(
                     Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if (month <= 6 && day > 31)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if (month > 6 && month <= 12 && day > 30)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if (isLeapYear() && month == 12 && day > 30)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        if ((!isLeapYear()) && month == 12 && day > 29)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
         this.day = day;
     }
 

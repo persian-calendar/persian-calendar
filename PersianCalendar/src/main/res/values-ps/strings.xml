@@ -96,7 +96,7 @@
     <string name="select">انتخاب</string>
     <string name="go">برو</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه، در صورت وجود، دارید.</string>
+    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه باشد.</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
