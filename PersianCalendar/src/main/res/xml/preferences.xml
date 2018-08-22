@@ -75,15 +75,15 @@
             android:title="@string/week_of_year"
             settings:iconSpaceReserved="false" />
 
-        <androidx.preference.ListPreference
-            android:defaultValue="0"
-            android:entries="@array/islamicOffsetNames"
-            android:entryValues="@array/islamicOffsetKeys"
-            android:key="islamicOffset"
-            android:negativeButtonText="@string/cancel"
-            android:summary="@string/islamic_offset_summary"
-            android:title="@string/islamic_offset"
-            settings:iconSpaceReserved="false" />
+        <!--<androidx.preference.ListPreference-->
+            <!--android:defaultValue="0"-->
+            <!--android:entries="@array/islamicOffsetNames"-->
+            <!--android:entryValues="@array/islamicOffsetKeys"-->
+            <!--android:key="islamicOffset"-->
+            <!--android:negativeButtonText="@string/cancel"-->
+            <!--android:summary="@string/islamic_offset_summary"-->
+            <!--android:title="@string/islamic_offset"-->
+            <!--settings:iconSpaceReserved="false" />-->
 
         <androidx.preference.ListPreference
             android:defaultValue="0"

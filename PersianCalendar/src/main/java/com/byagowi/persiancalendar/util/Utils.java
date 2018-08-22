@@ -75,7 +75,6 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
@@ -101,7 +100,6 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
@@ -188,7 +186,7 @@ public class Utils {
     static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
     static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
     static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+    //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
@@ -220,7 +218,7 @@ public class Utils {
         notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN);
         selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                 DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
-        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
+//        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
@@ -346,9 +344,9 @@ public class Utils {
         return CalculationMethod.valueOf(calculationMethod);
     }
 
-    static public int getIslamicOffset() {
-        return Integer.parseInt(islamicOffset.replace("+", ""));
-    }
+//    static public int getIslamicOffset() {
+//        return Integer.parseInt(islamicOffset.replace("+", ""));
+//    }
 
     static public String getAppLanguage() {
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
@@ -813,6 +811,22 @@ public class Utils {
             for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
                 if (islamicCalendarEvent.getDate().equals(islamic))
                     result.add(islamicCalendarEvent);
+
+        // Special case Imam Reza martyrdom event on Hijri as it is a holiday and so vital to have
+        if (islamic.getMonth() == 2 && islamic.getDayOfMonth() == 29) {
+            if (DateConverter.islamicToJdn(islamic.getYear(), 3, 1) -
+                    DateConverter.islamicToJdn(islamic.getYear(), 2, 29) == 1) {
+
+                IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
+
+                islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
+                        alternativeDate.getDayOfMonth());
+                if (islamicList != null)
+                    for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
+                        if (islamicCalendarEvent.getDate().equals(alternativeDate))
+                            result.add(islamicCalendarEvent);
+            }
+        }
 
         List<GregorianCalendarEvent> gregorianList =
                 gregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());

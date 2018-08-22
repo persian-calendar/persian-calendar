@@ -111,7 +111,7 @@ public class CalendarUtils {
     }
 
     static public IslamicDate getIslamicToday() {
-        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())), Utils.getIslamicOffset());
+        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())));
     }
 
     static public CivilDate getGregorianToday() {
