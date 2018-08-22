@@ -41,7 +41,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
 
-    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor, sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor, middayTextColor, sunsetTextColor;
+    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
+            sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
+            middayTextColor, sunsetTextColor;
 
     int width, height;
 
@@ -141,7 +143,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         curvePath = new Path();
         curvePath.moveTo(0, height);
 
-        segmentByPixel = (2 * Math.PI) / width;
+        if (width != 0) {
+            segmentByPixel = (2 * Math.PI) / width;
+        }
 
         for (int x = 0; x <= width; x++) {
             curvePath.lineTo(x, getY(x, segmentByPixel, (int) (height * 0.9f)));
@@ -216,7 +220,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw remaining time
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(30);
+        mPaint.setTextSize(25);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(taggingColor);
@@ -230,11 +234,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
             int color;
             if (current < 0.5) {
-                color = (int) argbEvaluator.evaluate(current + 0.43f,
-                        sunBeforeMiddayColor, sunAfterMiddayColor);
+                color = (int) argbEvaluator.evaluate(2 * (current - 0.17f),
+                        sunBeforeMiddayColor, sunColor);
             } else {
-                color = (int) argbEvaluator.evaluate(current + 0.001f,
-                        sunBeforeMiddayColor, sunEveningColor);
+                color = (int) argbEvaluator.evaluate( 2 * ((1 - current) - 0.17f),
+                        sunAfterMiddayColor, sunColor);
             }
 
             mSunPaint.setColor(color);
