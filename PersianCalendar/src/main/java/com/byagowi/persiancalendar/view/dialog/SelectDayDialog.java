@@ -44,12 +44,12 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                 Utils.getOrderedCalendarEntities(getContext())));
 
         binding.calendarTypeSpinner.setSelection(0);
-        UIUtils.fillSelectdaySpinners(getContext(), binding, jdn);
+        UIUtils.fillSelectDaySpinners(getContext(), binding, jdn);
 
         binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                UIUtils.fillSelectdaySpinners(getContext(), binding, jdn);
+                UIUtils.fillSelectDaySpinners(getContext(), binding, jdn);
             }
 
             @Override
