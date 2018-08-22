@@ -4,7 +4,6 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@drawable/ic_search"
         android:orderInCategory="100"
         android:title="@string/search_holidays"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
@@ -13,23 +12,24 @@
 
     <item
         android:id="@+id/empty"
+        android:orderInCategory="101"
         android:title="@string/more"
         app:showAsAction="ifRoom">
 
-            <item
-                android:id="@+id/add_event"
-                android:orderInCategory="100"
-                android:title="@string/add_event" />
+        <item
+            android:id="@+id/add_event"
+            android:orderInCategory="100"
+            android:title="@string/add_event" />
 
-            <item
-                android:id="@+id/today"
-                android:orderInCategory="100"
-                android:title="@string/today" />
+        <item
+            android:id="@+id/today"
+            android:orderInCategory="100"
+            android:title="@string/today" />
 
-            <item
-                android:id="@+id/go_to"
-                android:orderInCategory="100"
-                android:title="@string/goto_date" />
+        <item
+            android:id="@+id/go_to"
+            android:orderInCategory="100"
+            android:title="@string/goto_date" />
 
     </item>
 </menu>
