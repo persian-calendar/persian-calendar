@@ -188,7 +188,7 @@ public class Utils {
     static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
     static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
     static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+//    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
@@ -220,7 +220,7 @@ public class Utils {
         notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN);
         selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                 DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
-        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
+//        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
@@ -346,9 +346,9 @@ public class Utils {
         return CalculationMethod.valueOf(calculationMethod);
     }
 
-    static public int getIslamicOffset() {
-        return Integer.parseInt(islamicOffset.replace("+", ""));
-    }
+//    static public int getIslamicOffset() {
+//        return Integer.parseInt(islamicOffset.replace("+", ""));
+//    }
 
     static public String getAppLanguage() {
         // If is empty for whatever reason (pref dialog bug, etc), return Persian at least

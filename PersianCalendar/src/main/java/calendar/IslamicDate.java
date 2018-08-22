@@ -17,7 +17,7 @@ public class IslamicDate extends AbstractDate {
     }
 
     public IslamicDate(Calendar calendar) {
-        IslamicDate islamicDate = DateConverter.civilToIslamic(new CivilDate(calendar), 0);
+        IslamicDate islamicDate = DateConverter.civilToIslamic(new CivilDate(calendar));
         setDayOfMonth(islamicDate.getDayOfMonth());
         setYear(islamicDate.getYear());
         setMonth(islamicDate.getMonth());
