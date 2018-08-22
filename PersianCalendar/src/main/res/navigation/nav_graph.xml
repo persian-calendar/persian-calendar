@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainActivity">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.byagowi.persiancalendar.view.activity.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.byagowi.persiancalendar.view.fragment.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" ></fragment>
+    <fragment
+        android:id="@+id/compassFragment"
+        android:name="com.byagowi.persiancalendar.view.fragment.CompassFragment"
+        android:label="fragment_compass"
+        tools:layout="@layout/fragment_compass" ></fragment>
+    <fragment
+        android:id="@+id/converterFragment"
+        android:name="com.byagowi.persiancalendar.view.fragment.ConverterFragment"
+        android:label="fragment_converter"
+        tools:layout="@layout/fragment_converter"></fragment>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.byagowi.persiancalendar.view.fragment.CalendarFragment"
+        android:label="CalendarFragment"
+        tools:layout="@layout/fragment_calendar"></fragment>
+    <fragment
+        android:id="@+id/preferenceFragment"
+        android:name="com.byagowi.persiancalendar.view.fragment.PreferenceFragment"
+        android:label="PreferenceFragment" />
+</navigation>

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: "androidx.navigation.safeargs"
+
 
 android {
     compileSdkVersion 28
@@ -51,6 +53,9 @@ dependencies {
     implementation "androidx.preference:preference:$androidXVersion"
     implementation "androidx.recyclerview:recyclerview:$androidXVersion"
     implementation "androidx.cardview:cardview:$androidXVersion"
+    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha05"
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha05"
+
     implementation 'com.google.android:flexbox:1.1.0-beta1'
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
 

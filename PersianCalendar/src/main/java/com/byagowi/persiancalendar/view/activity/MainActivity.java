@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -24,11 +23,7 @@ import com.byagowi.persiancalendar.util.TypeFaceUtil;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
-import com.byagowi.persiancalendar.view.fragment.CompassFragment;
-import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.github.praytimes.Coordinate;
 
 import androidx.annotation.NonNull;
@@ -37,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.CivilDate;
@@ -65,15 +60,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             ABOUT = 4,
             EXIT = 5,
             DEFAULT = CALENDAR; // Default selected fragment
-    private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
-    private final Class<?>[] fragments = {
-            CalendarFragment.class,
-            ConverterFragment.class,
-            CompassFragment.class,
-            PreferenceFragment.class,
-            AboutFragment.class
-    };
     private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
 
     // https://stackoverflow.com/a/3410200
@@ -362,19 +349,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Utils.initUtils(this);
                 UpdateUtils.update(getApplicationContext(), true);
             }
-
-            try {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(
-                                R.id.fragment_holder,
-                                (Fragment) fragments[item].newInstance(),
-                                fragments[item].getName()
-                        ).commit();
-                menuPosition = item;
-            } catch (Exception e) {
-                Log.e(TAG, item + " is selected as an index", e);
+            switch (item) {
+                case DEFAULT:
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.calendarFragment);
+                    break;
+                case CONVERTER:
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.converterFragment);
+                    break;
+                case COMPASS:
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.compassFragment);
+                    break;
+                case PREFERENCE:
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.preferenceFragment);
+                    break;
+                case ABOUT:
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.aboutFragment);
+                    break;
             }
+            menuPosition = item;
         }
 
         RecyclerView.Adapter adapter = binding.navigationView.getAdapter();
@@ -385,4 +377,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         binding.drawer.closeDrawers();
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp();
+    }
+
 }

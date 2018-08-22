@@ -121,9 +121,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
-        calendarFragment = (CalendarFragment) getActivity()
-                .getSupportFragmentManager()
-                .findFragmentByTag(CalendarFragment.class.getName());
+        calendarFragment = (CalendarFragment) getParentFragment();
 
         if (calendarFragment.firstTime && offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.firstTime = false;
