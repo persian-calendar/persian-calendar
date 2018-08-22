@@ -453,11 +453,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
             if (mainBinding.tabContent.getCurrentItem() == Constants.OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate(true);
-                owghatBinding.plotAdditionalInfo.setText(owghatBinding.svPlot.getAdditionalInfo());
             }
         } else {
             owghatBinding.svPlot.setVisibility(View.GONE);
-            owghatBinding.plotAdditionalInfo.setVisibility(View.GONE);
         }
     }
 
@@ -495,11 +493,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-
-                owghatBinding.plotAdditionalInfo.setVisibility(View.GONE);
-                if (!TextUtils.isEmpty(owghatBinding.plotAdditionalInfo.getText())) {
-                    owghatBinding.plotAdditionalInfo.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                }
 
                 mainBinding.tabContent.measureCurrentView(owghatBinding.getRoot());
 

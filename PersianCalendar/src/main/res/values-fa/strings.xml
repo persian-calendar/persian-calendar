@@ -159,8 +159,8 @@
     <string name="midday">ظهر</string>
     <string name="sunset">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
-    <string name="length_of_day">مدت روشنی روز: %s</string>
-    <string name="remaining_daylight">روشنی باقی‌مانده: %s</string>
+    <string name="length_of_day">طول روز: %s</string>
+    <string name="remaining_daylight">باقی‌مانده: %s</string>
     <string name="more">بیشتر</string>
 
 </resources>
