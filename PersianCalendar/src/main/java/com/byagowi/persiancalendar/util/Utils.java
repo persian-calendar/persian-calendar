@@ -75,7 +75,6 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
@@ -101,7 +100,6 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
@@ -188,7 +186,7 @@ public class Utils {
     static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
     static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
     static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-//    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+    //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
@@ -821,8 +819,8 @@ public class Utils {
 
                 IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
 
-                islamicList =
-                        islamicCalendarEvents.get(2 * 100 + alternativeDate.getDayOfMonth());
+                islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
+                        alternativeDate.getDayOfMonth());
                 if (islamicList != null)
                     for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
                         if (islamicCalendarEvent.getDate().equals(alternativeDate))
