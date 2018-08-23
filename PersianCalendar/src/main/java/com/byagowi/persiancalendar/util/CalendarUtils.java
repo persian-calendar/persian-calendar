@@ -333,6 +333,7 @@ public class CalendarUtils {
                 return;
             }
 
+            int i = 0;
             while (cursor.moveToNext()) {
                 if (!cursor.getString(7).equals("1"))
                     continue;
@@ -384,6 +385,9 @@ public class CalendarUtils {
                 );
                 list.add(event);
                 allEnabledAppointments.add(event);
+
+                // Don't go more than 1k events on any case
+                if (++i == 1000) break;
             }
             cursor.close();
         } catch (Exception e) {
