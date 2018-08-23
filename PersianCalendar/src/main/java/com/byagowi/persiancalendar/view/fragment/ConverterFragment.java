@@ -66,7 +66,7 @@ public class ConverterFragment extends Fragment implements
                 Utils.getOrderedCalendarEntities(getContext())));
 
         binding.selectdayFragment.calendarTypeSpinner.setSelection(0);
-        UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment, lastSelectedJdn);
+        UIUtils.fillSelectDaySpinners(getContext(), binding.selectdayFragment, lastSelectedJdn);
 
         binding.selectdayFragment.calendarTypeSpinner.setOnItemSelectedListener(this);
 
@@ -121,7 +121,7 @@ public class ConverterFragment extends Fragment implements
                 break;
 
             case R.id.calendarTypeSpinner:
-                UIUtils.fillSelectdaySpinners(getContext(), binding.selectdayFragment,
+                UIUtils.fillSelectDaySpinners(getContext(), binding.selectdayFragment,
                         lastSelectedJdn);
                 break;
         }
@@ -169,7 +169,7 @@ public class ConverterFragment extends Fragment implements
             case R.id.today:
             case R.id.today_icon:
                 lastSelectedJdn = -1;
-                UIUtils.fillSelectdaySpinners(getContext(),
+                UIUtils.fillSelectDaySpinners(getContext(),
                         binding.selectdayFragment, lastSelectedJdn);
                 break;
         }

@@ -149,7 +149,7 @@ public class UIUtils {
         }
     }
 
-    static public void fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding,
+    static public void fillSelectDaySpinners(Context context, SelectdayFragmentBinding binding,
                                              long jdn) {
         if (jdn == -1) {
             jdn = CalendarUtils.getTodayJdn();

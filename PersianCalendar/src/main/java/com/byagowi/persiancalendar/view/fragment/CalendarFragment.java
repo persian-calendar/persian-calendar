@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +21,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +54,7 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +67,7 @@ import java.util.Set;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -123,28 +128,60 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.tabContent.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
-        mainBinding.tabLayout.setupWithViewPager(mainBinding.tabContent);
+        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
+        mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
 
         mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
-        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_setting);
+        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_note);
         if (coordinate != null) {
             mainBinding.tabLayout.getTabAt(2).setIcon(R.drawable.ic_access_time);
         }
+
+        Resources.Theme theme = context.getTheme();
+        TypedValue value = new TypedValue();
+
+        theme.resolveAttribute(R.attr.colorAccent, value, true);
+        int selectedColor = ContextCompat.getColor(context, value.resourceId);
+
+        theme.resolveAttribute(R.attr.colorTextSecond, value, true);
+        int unselectedColor = ContextCompat.getColor(context, value.resourceId);
+
+        // https://stackoverflow.com/a/35461201
+        mainBinding.tabLayout.addOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(mainBinding.cardsViewPager) {
+
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        tab.getIcon().setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        super.onTabUnselected(tab);
+                        tab.getIcon().setColorFilter(unselectedColor, PorterDuff.Mode.SRC_IN);
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                        super.onTabReselected(tab);
+                    }
+                }
+        );
 
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
         if (isRTL) {
             for (View tab : tabs) {
                 tab.setRotationY(180);
             }
-            mainBinding.tabContent.setRotationY(180);
+            mainBinding.cardsViewPager.setRotationY(180);
         }
 
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
-        mainBinding.calendarPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
+        mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
-        mainBinding.calendarPager.addOnPageChangeListener(changeListener);
+        mainBinding.calendarViewPager.addOnPageChangeListener(changeListener);
 
         calendarsBinding.today.setVisibility(View.GONE);
         calendarsBinding.todayIcon.setVisibility(View.GONE);
@@ -179,8 +216,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             lastTab = Constants.CALENDARS_TAB;
         }
 
-        mainBinding.tabContent.setCurrentItem(lastTab, false);
-
+        mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
+        mainBinding.tabLayout.getTabAt(lastTab).getIcon().setColorFilter(selectedColor,
+                PorterDuff.Mode.SRC_IN);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
@@ -220,7 +258,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     };
 
     void changeMonth(int position) {
-        mainBinding.calendarPager.setCurrentItem(mainBinding.calendarPager.getCurrentItem() + position, true);
+        mainBinding.calendarViewPager.setCurrentItem(
+                mainBinding.calendarViewPager.getCurrentItem() + position, true);
     }
 
     private long lastSelectedJdn = -1;
@@ -451,7 +490,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         if (isToday) {
             owghatBinding.svPlot.setVisibility(View.VISIBLE);
-            if (mainBinding.tabContent.getCurrentItem() == Constants.OWGHAT_TAB) {
+            if (mainBinding.cardsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
                 owghatBinding.svPlot.startAnimate(true);
             }
         } else {
@@ -494,7 +533,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
                 owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
 
-                mainBinding.tabContent.measureCurrentView(owghatBinding.getRoot());
+                mainBinding.cardsViewPager.measureCurrentView(owghatBinding.getRoot());
 
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
@@ -549,7 +588,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
 
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, 0);
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
         selectDay(CalendarUtils.getTodayJdn());
     }
@@ -563,7 +602,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         viewPagerPosition =
                 (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
-        CalendarAdapter.gotoOffset(mainBinding.calendarPager, viewPagerPosition);
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition);
 
         selectDay(jdn);
 
@@ -670,7 +709,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                new SelectDayDialog().show(getChildFragmentManager(),
+                new SelectDayDialog(lastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
             case R.id.today:

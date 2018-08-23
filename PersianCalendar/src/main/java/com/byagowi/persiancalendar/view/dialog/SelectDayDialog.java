@@ -26,6 +26,12 @@ import calendar.DateConverter;
  * Created by ebrahim on 3/20/16.
  */
 public class SelectDayDialog extends AppCompatDialogFragment {
+
+    long jdn;
+    public SelectDayDialog(long jdn) {
+        this.jdn = jdn;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -38,12 +44,12 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                 Utils.getOrderedCalendarEntities(getContext())));
 
         binding.calendarTypeSpinner.setSelection(0);
-        UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
+        UIUtils.fillSelectDaySpinners(getContext(), binding, jdn);
 
         binding.calendarTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                UIUtils.fillSelectdaySpinners(getContext(), binding, -1);
+                UIUtils.fillSelectDaySpinners(getContext(), binding, jdn);
             }
 
             @Override
