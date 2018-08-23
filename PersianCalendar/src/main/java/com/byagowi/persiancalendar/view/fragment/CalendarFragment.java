@@ -484,8 +484,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
 
-        double moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
-                coordinate.getLongitude(), 0, 0).getMoonPhase();
+        double moonPhase = 1;
+        try {
+            moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
+                    coordinate.getLongitude(), 0, 0).getMoonPhase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         owghatBinding.svPlot.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
 
         if (isToday) {
