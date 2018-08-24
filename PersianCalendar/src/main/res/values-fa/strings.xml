@@ -163,4 +163,18 @@
     <string name="remaining_daylight">باقی‌مانده: %s</string>
     <string name="more">بیشتر</string>
 
+    <string name="zodiac">برج فلکی:</string>
+    <string name="capricorn">بُرج جَدْی (بزغاله، ♑)</string>
+    <string name="aquarius">بُرج دلو (آبریز، ♒)</string>
+    <string name="pisces">بُرج حوت (ماهی، ♓)</string>
+    <string name="aries">بُرج حَمَل (بره، ♈)</string>
+    <string name="taurus">بُرج ثَور (گاو، یونیکد: ♉)</string>
+    <string name="gemini">بُرج جَوزا (دوپیکر، یونیکد: ♊)</string>
+    <string name="cancer">بُرج سَرَطان (خرچنگ، ♋️)</string>
+    <string name="leo">بُرج اسد (شیر، ♌)</string>
+    <string name="virgo">بُرج سُنبُله (خوشه، ♍)</string>
+    <string name="libra">بُرج میزان(♎) (ترازو)</string>
+    <string name="scorpio">برج عقرب (کژدم، ♏)</string>
+    <string name="sagittarius">بُرج قَوس (کمان، ♐)</string>
+
 </resources>
