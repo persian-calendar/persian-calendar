@@ -31,6 +31,11 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.github.praytimes.Coordinate;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,8 +49,12 @@ import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
+import static com.byagowi.persiancalendar.Constants.LANG_FA;
+import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
+import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
@@ -222,13 +231,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
         if (key.equals(PREF_APP_LANGUAGE)) {
-            boolean persianDigits;
+            boolean persianDigits, changeToAfghanistanHolidays = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
                     persianDigits = false;
                     break;
+                case LANG_FA:
+                    persianDigits = true;
+                    break;
                 case LANG_UR:
                     persianDigits = false;
+                    break;
+                case LANG_FA_AF:
+                    persianDigits = true;
+                    changeToAfghanistanHolidays = true;
+                    break;
+                case LANG_PS:
+                    persianDigits = true;
+                    changeToAfghanistanHolidays = true;
                     break;
                 default:
                     persianDigits = true;
@@ -236,6 +256,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
+            // Enable Afghanistan holidays when language changed
+            if (changeToAfghanistanHolidays) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES,
+                            new HashSet<>(Collections.singletonList("afghanistan_holidays")));
+                }
+            }
             editor.apply();
         }
 

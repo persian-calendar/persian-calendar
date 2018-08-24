@@ -56,14 +56,20 @@ public final class DateConverter {
         return islamicToJdn(islamic.getYear(), islamic.getMonth(), islamic.getDayOfMonth());
     }
 
+    public static boolean useUmmAlQura = false;
+
     public static long islamicToJdn(int year, int month, int day) {
+        long tableResult = useUmmAlQura
+                ? UmmAlQuraConverter.hijriToJd(year, month, day)
+                : IslamicDateConverter.hijriToJd(year, month, day);
+
+        if (tableResult != -1)
+            return tableResult;
+
         // NMONTH is the number of months between julian day number 1 and
         // the year 1405 A.H. which started immediatly after lunar
         // conjunction number 1048 which occured on September 1984 25d
         // 3h 10m UT.
-        long tableResult = IslamicDateConverter.hijriToJd(year, month, day);
-        if (tableResult != -1)
-            return tableResult;
 
         if (year < 0)
             year++;
@@ -96,7 +102,10 @@ public final class DateConverter {
     }
 
     public static IslamicDate jdnToIslamic(long jd) {
-        int[] tableResult = IslamicDateConverter.jdToHijri(jd);
+        int[] tableResult = useUmmAlQura
+                ? UmmAlQuraConverter.jdToHijri(jd)
+                : IslamicDateConverter.jdToHijri(jd);
+
         if (tableResult != null) {
             return new IslamicDate(tableResult[0], tableResult[1], tableResult[2]);
         }
