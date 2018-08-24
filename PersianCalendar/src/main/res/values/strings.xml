@@ -199,18 +199,31 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="remaining_daylight">Remaining: %s</string>
     <string name="more">More</string>
 
-    <string name="zodiac">Zodiac:</string>
-    <string name="capricorn">Capricorn</string>
-    <string name="aquarius">Aquarius</string>
-    <string name="pisces">Pisces</string>
-    <string name="aries">Aries</string>
-    <string name="taurus">Taurus</string>
-    <string name="gemini">Gemini</string>
-    <string name="cancer">Cancer</string>
-    <string name="leo">Leo</string>
-    <string name="virgo">Virgo</string>
-    <string name="libra">Libra</string>
-    <string name="scorpio">Scorpio</string>
-    <string name="sagittarius">Sagittarius</string>
+    <string name="zodiac">Zodiac</string>
+    <string name="capricorn">♑ Capricorn</string>
+    <string name="aquarius">♒ Aquarius</string>
+    <string name="pisces">♓ Pisces</string>
+    <string name="aries">♈ Aries</string>
+    <string name="taurus">♉ Taurus</string>
+    <string name="gemini">♊ Gemini</string>
+    <string name="cancer">♋ Cancer</string>
+    <string name="leo">♌ Leo</string>
+    <string name="virgo">♍ Virgo</string>
+    <string name="libra">♎ Libra</string>
+    <string name="scorpio">♏ Scorpio</string>
+    <string name="sagittarius">♐ Sagittarius</string>
+    <string name="year_name">Year name</string>
+    <string name="year1">Monkey</string>
+    <string name="year2">Rooster</string>
+    <string name="year3">Dog</string>
+    <string name="year4">Pig</string>
+    <string name="year5">Rat</string>
+    <string name="year6">Ox</string>
+    <string name="year7">Tiger</string>
+    <string name="year8">Rabbit</string>
+    <string name="year9">Dragon</string>
+    <string name="year10">Snake</string>
+    <string name="year11">Horse</string>
+    <string name="year12">Sheep</string>
 
 </resources>
