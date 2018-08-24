@@ -40,29 +40,29 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Activity localActivity = getActivity();
-        if (localActivity == null) return null;
+        Activity activity = getActivity();
+        if (activity == null) return null;
 
         FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
                 container, false);
 
-        UIUtils.setActivityTitleAndSubtitle(localActivity, getString(R.string.about), "");
+        UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.about), "");
 
         // version
-        String[] version = programVersion(localActivity).split("-");
+        String[] version = programVersion(activity).split("-");
         version[0] = Utils.formatNumber(version[0]);
         binding.version.setText(String.format(getString(R.string.version), TextUtils.join("\n", version)));
 
         // licenses
         binding.licenses.setOnClickListener(arg -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(localActivity);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(getResources().getString(R.string.about_license_title));
-            TextView licenseTextView = new TextView(localActivity);
-            licenseTextView.setText(Utils.readRawResource(localActivity, R.raw.credits));
+            TextView licenseTextView = new TextView(activity);
+            licenseTextView.setText(Utils.readRawResource(activity, R.raw.credits));
             licenseTextView.setPadding(20, 20, 20, 20);
             licenseTextView.setTypeface(Typeface.MONOSPACE);
             Linkify.addLinks(licenseTextView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
-            ScrollView scrollView = new ScrollView(localActivity);
+            ScrollView scrollView = new ScrollView(activity);
             scrollView.addView(licenseTextView);
             builder.setView(scrollView);
             builder.setCancelable(true);
@@ -94,19 +94,19 @@ public class AboutFragment extends Fragment {
                                 Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
             } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(localActivity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
             }
         });
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        Drawable developerIcon = ContextCompat.getDrawable(localActivity, R.drawable.ic_developer);
-        Drawable designerIcon = ContextCompat.getDrawable(localActivity, R.drawable.ic_designer);
-        Resources.Theme theme = localActivity.getTheme();
+        Drawable developerIcon = ContextCompat.getDrawable(activity, R.drawable.ic_developer);
+        Drawable designerIcon = ContextCompat.getDrawable(activity, R.drawable.ic_designer);
+        Resources.Theme theme = activity.getTheme();
         TypedValue color = new TypedValue();
         theme.resolveAttribute(R.attr.colorDrawerIcon, color, true);
 
         for (String line : getString(R.string.about_developers_list).trim().split("\n")) {
-            Chip chip = new Chip(localActivity);
+            Chip chip = new Chip(activity);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -114,7 +114,7 @@ public class AboutFragment extends Fragment {
         }
 
         for (String line : getString(R.string.about_designers_list).trim().split("\n")) {
-            Chip chip = new Chip(localActivity);
+            Chip chip = new Chip(activity);
             chip.setText(line);
             chip.setChipIcon(designerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -122,7 +122,7 @@ public class AboutFragment extends Fragment {
         }
 
         for (String line : getString(R.string.about_contributors_list).trim().split("\n")) {
-            Chip chip = new Chip(localActivity);
+            Chip chip = new Chip(activity);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);

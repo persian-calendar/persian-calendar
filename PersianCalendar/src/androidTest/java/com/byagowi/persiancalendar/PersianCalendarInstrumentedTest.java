@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import androidx.test.InstrumentationRegistry;
+import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -22,6 +23,7 @@ import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -38,12 +40,15 @@ public class PersianCalendarInstrumentedTest {
     }
 
     @Test
-    public void test_if_date_copy_works() throws ExecutionException, InterruptedException {
+    public void initial_test() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.byagowi.persiancalendar", appContext.getPackageName());
+    }
 
+    @Test
+    public void test_if_date_copy_works() throws ExecutionException, InterruptedException {
         FutureTask<ClipboardManager> futureResult = new FutureTask<>(() -> (ClipboardManager)
                 getInstrumentation().getTargetContext().getApplicationContext()
                         .getSystemService(Context.CLIPBOARD_SERVICE));
@@ -55,5 +60,19 @@ public class PersianCalendarInstrumentedTest {
         onView(withId(R.id.first_calendar_date)).perform(click());
         assertEquals(CalendarUtils.dateToString(CalendarUtils.getPersianToday()),
                 clipboardManager.getPrimaryClip().getItemAt(0).getText());
+    }
+
+    @Test
+    public void open_all_parts_of_the_app() {
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withText(R.string.date_converter)).perform(click());
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withText(R.string.compass)).perform(click());
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withText(R.string.settings)).perform(click());
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withText(R.string.about)).perform(click());
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withText(R.string.exit)).perform(click());
     }
 }
