@@ -192,7 +192,7 @@ public class UIUtils {
                 monthName = R.string.sagittarius; // this never should happen
 
             binding.zodiac.setText(String.format("%s: %s\n%s: %s",
-                    context.getString(R.string.year),
+                    context.getString(R.string.year_name),
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
                     context.getString(monthName)));

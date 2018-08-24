@@ -212,6 +212,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="libra">♎ Libra</string>
     <string name="scorpio">♏ Scorpio</string>
     <string name="sagittarius">♐ Sagittarius</string>
+    <string name="year_name">Year name</string>
     <string name="year1">Monkey</string>
     <string name="year2">Rooster</string>
     <string name="year3">Dog</string>
