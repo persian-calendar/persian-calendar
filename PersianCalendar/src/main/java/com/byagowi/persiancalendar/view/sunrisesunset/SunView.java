@@ -236,11 +236,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                     sunBeforeMiddayColor, sunAfterMiddayColor);
 
             mSunPaint.setColor(color);
-            mSunRaisePaint.setColor(color);
+            //mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
+            //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
         } else {
             drawMoon(canvas);
         }
