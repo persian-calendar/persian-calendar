@@ -199,18 +199,30 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="remaining_daylight">Remaining: %s</string>
     <string name="more">More</string>
 
-    <string name="zodiac">Zodiac:</string>
-    <string name="capricorn">Capricorn</string>
-    <string name="aquarius">Aquarius</string>
-    <string name="pisces">Pisces</string>
-    <string name="aries">Aries</string>
-    <string name="taurus">Taurus</string>
-    <string name="gemini">Gemini</string>
-    <string name="cancer">Cancer</string>
-    <string name="leo">Leo</string>
-    <string name="virgo">Virgo</string>
-    <string name="libra">Libra</string>
-    <string name="scorpio">Scorpio</string>
-    <string name="sagittarius">Sagittarius</string>
+    <string name="zodiac">Zodiac</string>
+    <string name="capricorn">♑ Capricorn</string>
+    <string name="aquarius">♒ Aquarius</string>
+    <string name="pisces">♓ Pisces</string>
+    <string name="aries">♈ Aries</string>
+    <string name="taurus">♉ Taurus</string>
+    <string name="gemini">♊ Gemini</string>
+    <string name="cancer">♋ Cancer</string>
+    <string name="leo">♌ Leo</string>
+    <string name="virgo">♍ Virgo</string>
+    <string name="libra">♎ Libra</string>
+    <string name="scorpio">♏ Scorpio</string>
+    <string name="sagittarius">♐ Sagittarius</string>
+    <string name="year1">میمون</string>
+    <string name="year2">خروس</string>
+    <string name="year3">سگ</string>
+    <string name="year4">خوک</string>
+    <string name="year5">موش</string>
+    <string name="year6">گاو</string>
+    <string name="year7">ببر</string>
+    <string name="year8">خرگوش</string>
+    <string name="year9">اژدها</string>
+    <string name="year10">مار</string>
+    <string name="year11">اسب</string>
+    <string name="year12">گوسفند</string>
 
 </resources>

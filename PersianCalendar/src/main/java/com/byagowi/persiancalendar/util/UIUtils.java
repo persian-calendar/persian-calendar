@@ -57,6 +57,13 @@ public class UIUtils {
         }
     }
 
+    final private static int[] YEARS_NAME = {
+            R.string.year1, R.string.year2, R.string.year3,
+            R.string.year4, R.string.year5, R.string.year6,
+            R.string.year7, R.string.year8, R.string.year9,
+            R.string.year10, R.string.year11, R.string.year12
+    };
+
     public static void fillCalendarsCard(Context context, long jdn,
                                          CalendarsTabContentBinding binding,
                                          CalendarType calendarType,
@@ -146,6 +153,49 @@ public class UIUtils {
                             Utils.formatNumber((int) (endOfYearJdn - jdn)),
                             Utils.formatNumber(weeksCount - currentWeek),
                             Utils.formatNumber(12 - mainDate.getMonth())));
+        }
+
+        // Based on Mehdi's work
+        {
+            CivilDate civilDate = DateConverter.jdnToCivil(jdn);
+            int year = civilDate.getYear();
+            int month = civilDate.getMonth();
+            int day = civilDate.getDayOfMonth();
+
+            @StringRes
+            int monthName;
+            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19))
+                monthName = R.string.capricorn;
+            else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17))
+                monthName = R.string.aquarius;
+            else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19))
+                monthName = R.string.pisces;
+            else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19))
+                monthName = R.string.aries;
+            else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20))
+                monthName = R.string.taurus;
+            else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20))
+                monthName = R.string.gemini;
+            else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22))
+                monthName = R.string.cancer;
+            else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22))
+                monthName = R.string.leo;
+            else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22))
+                monthName = R.string.virgo;
+            else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22))
+                monthName = R.string.libra;
+            else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21))
+                monthName = R.string.scorpio;
+            else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21))
+                monthName = R.string.sagittarius;
+            else
+                monthName = R.string.sagittarius; // this never should happen
+
+            binding.zodiac.setText(String.format("%s: %s\n%s: %s",
+                    context.getString(R.string.year),
+                    context.getString(YEARS_NAME[year % 12]),
+                    context.getString(R.string.zodiac),
+                    context.getString(monthName)));
         }
     }
 

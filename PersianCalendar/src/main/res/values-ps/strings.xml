@@ -163,4 +163,30 @@
     <string name="remaining_daylight">باقی‌مانده: %s</string>
     <string name="more">بیشتر</string>
 
+    <string name="zodiac">برج فلکی</string>
+    <string name="capricorn">♑ جَدْی (بزغاله)</string>
+    <string name="aquarius">♒ دلو (آبریز)</string>
+    <string name="pisces">♓ حوت (ماهی)</string>
+    <string name="aries">♈ حَمَل (بره)</string>
+    <string name="taurus">♉ ثَور (گاو)</string>
+    <string name="gemini">♊ جَوزا (دوپیکر)</string>
+    <string name="cancer">♋ سَرَطان (خرچنگ️)</string>
+    <string name="leo">♌ اسد (شیر)</string>
+    <string name="virgo">♍ سُنبُله (خوشه)</string>
+    <string name="libra">♎ میزان (ترازو)</string>
+    <string name="scorpio">♏ عقرب (کژدم)</string>
+    <string name="sagittarius">♐ قَوس (کمان)</string>
+    <string name="year1">میمون</string>
+    <string name="year2">خروس</string>
+    <string name="year3">سگ</string>
+    <string name="year4">خوک</string>
+    <string name="year5">موش</string>
+    <string name="year6">گاو</string>
+    <string name="year7">ببر</string>
+    <string name="year8">خرگوش</string>
+    <string name="year9">اژدها</string>
+    <string name="year10">مار</string>
+    <string name="year11">اسب</string>
+    <string name="year12">گوسفند</string>
+
 </resources>
