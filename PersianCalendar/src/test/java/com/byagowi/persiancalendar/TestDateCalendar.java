@@ -683,9 +683,27 @@ public class TestDateCalendar {
         };
 
         for (int[][] test : tests2) {
-            assertEquals(DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]),
-                    DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
+            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+
+            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
+            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2])
+                    .equals(DateConverter.jdnToIslamic(jdn)));
         }
+
+        DateConverter.useUmmAlQura = true;
+        int tests3[][][] = {
+                {{2015, 3, 14}, {1436, 5, 23}},
+                {{1999, 4, 1}, {1419, 12, 15}},
+                {{1989, 2, 25}, {1409, 7, 19}}
+        };
+        for (int[][] test : tests3) {
+            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+
+            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
+            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2]).equals(
+                    DateConverter.jdnToIslamic(jdn)));
+        }
+        DateConverter.useUmmAlQura = false;
 
 //        int i = -1;
 //        long last = 0;
@@ -722,6 +740,18 @@ public class TestDateCalendar {
             long result = DateConverter.islamicToJdn(DateConverter.jdnToIslamic(jdn));
             assertEquals(jdn, result);
         }
+    }
+
+    @Test
+    public void practice_ummalqara_converting_back_and_forth() {
+        DateConverter.useUmmAlQura = true;
+        long startJdn = DateConverter.civilToJdn(1950, 1, 1);
+        long endJdn = DateConverter.civilToJdn(2050, 1, 1);
+        for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
+            long result = DateConverter.islamicToJdn(DateConverter.jdnToIslamic(jdn));
+            assertEquals(jdn, result);
+        }
+        DateConverter.useUmmAlQura = false;
     }
 
     @Test

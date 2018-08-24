@@ -10,6 +10,9 @@ public class Constants {
     public static final int WRITE_EXTERNAL_STORAGE = 76;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
+    public static final String LANG_FA = "fa";
+    public static final String LANG_FA_AF = "fa-AF";
+    public static final String LANG_PS = "ps";
     public static final String LANG_EN = "en";
     public static final String LANG_EN_US = "en-US";
     public static final String LANG_CKB = "ckb";

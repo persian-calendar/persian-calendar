@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -89,6 +90,10 @@ import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
+import static com.byagowi.persiancalendar.Constants.LANG_FA;
+import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
+import static com.byagowi.persiancalendar.Constants.LANG_PS;
+import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LOAD_APP_ID;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
@@ -246,7 +251,7 @@ public class Utils {
         weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"));
         // WeekEnds, 6 means Friday
         weekEnds = new boolean[7];
-        for (String s : prefs.getStringSet("WeekEnds", new HashSet<>(Arrays.asList("6"))))
+        for (String s : prefs.getStringSet("WeekEnds", new HashSet<>(Collections.singletonList("6"))))
             weekEnds[Integer.parseInt(s)] = true;
 
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
@@ -349,7 +354,6 @@ public class Utils {
 //    }
 
     static public String getAppLanguage() {
-        // If is empty for whatever reason (pref dialog bug, etc), return Persian at least
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
 
@@ -624,7 +628,7 @@ public class Utils {
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
         if (enabledTypes.isEmpty())
-            enabledTypes = new HashSet<>(Arrays.asList("iran_holidays"));
+            enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
 
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
@@ -633,6 +637,18 @@ public class Utils {
         boolean iranAncient = enabledTypes.contains("iran_ancient");
         boolean iranOthers = enabledTypes.contains("iran_others");
         boolean international = enabledTypes.contains("international");
+
+        if (!iranHolidays) {
+            if (afghanistanHolidays) {
+                DateConverter.useUmmAlQura = true;
+            }
+            switch (getAppLanguage()) {
+                case LANG_FA_AF:
+                case LANG_PS:
+                case LANG_UR:
+                    DateConverter.useUmmAlQura = true;
+            }
+        }
 
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
