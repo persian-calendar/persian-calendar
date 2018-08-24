@@ -57,6 +57,7 @@ public class UIUtils {
         }
     }
 
+    @StringRes
     final private static int[] YEARS_NAME = {
             R.string.year1, R.string.year2, R.string.year3,
             R.string.year4, R.string.year5, R.string.year6,
