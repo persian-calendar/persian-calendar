@@ -212,17 +212,17 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="libra">♎ Libra</string>
     <string name="scorpio">♏ Scorpio</string>
     <string name="sagittarius">♐ Sagittarius</string>
-    <string name="year1">میمون</string>
-    <string name="year2">خروس</string>
-    <string name="year3">سگ</string>
-    <string name="year4">خوک</string>
-    <string name="year5">موش</string>
-    <string name="year6">گاو</string>
-    <string name="year7">ببر</string>
-    <string name="year8">خرگوش</string>
-    <string name="year9">اژدها</string>
-    <string name="year10">مار</string>
-    <string name="year11">اسب</string>
-    <string name="year12">گوسفند</string>
+    <string name="year1">Monkey</string>
+    <string name="year2">Rooster</string>
+    <string name="year3">Dog</string>
+    <string name="year4">Pig</string>
+    <string name="year5">Rat</string>
+    <string name="year6">Ox</string>
+    <string name="year7">Tiger</string>
+    <string name="year8">Rabbit</string>
+    <string name="year9">Dragon</string>
+    <string name="year10">Snake</string>
+    <string name="year11">Horse</string>
+    <string name="year12">Sheep</string>
 
 </resources>
