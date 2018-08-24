@@ -232,14 +232,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
 
-            int color;
-            if (current < 0.5) {
-                color = (int) argbEvaluator.evaluate(2 * (current - 0.17f),
-                        sunBeforeMiddayColor, sunColor);
-            } else {
-                color = (int) argbEvaluator.evaluate( 2 * ((1 - current) - 0.17f),
-                        sunAfterMiddayColor, sunColor);
-            }
+            int color = (int) argbEvaluator.evaluate(current,
+                    sunBeforeMiddayColor, sunAfterMiddayColor);
 
             mSunPaint.setColor(color);
             mSunRaisePaint.setColor(color);
@@ -252,7 +246,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         }
     }
 
-    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0,0, 0, Shader.TileMode.MIRROR);
+    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
     Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
