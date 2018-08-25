@@ -12,8 +12,6 @@ import android.view.SurfaceHolder;
 import com.byagowi.persiancalendar.R;
 
 import net.androgames.level.Level;
-import net.androgames.level.config.DisplayType;
-import net.androgames.level.config.Viscosity;
 import net.androgames.level.orientation.Orientation;
 
 import java.text.DecimalFormat;
@@ -154,8 +152,7 @@ public class LevelPainter implements Runnable {
     /**
      * Ajustement de la vitesse
      */
-    private Viscosity viscosity;
-    private double viscosityValue;
+    private double viscosityValue = 1;
 
     /**
      * Format des angles
@@ -178,7 +175,7 @@ public class LevelPainter implements Runnable {
      * Config angles
      */
     private boolean showAngle;
-    private DisplayType angleType;
+//    private DisplayType angleType;
 
     /**
      * Locked
@@ -195,11 +192,13 @@ public class LevelPainter implements Runnable {
     private final Handler handler;
     private long frameRate;
 
+    private Level level;
+
     public LevelPainter(SurfaceHolder surfaceHolder, Context context,
                         Handler handler, int width, int height,
-                        boolean showAngle, DisplayType angleType,
-                        Viscosity viscosity, boolean lockEnabled,
-                        boolean ecoMode) {
+                        boolean showAngle, boolean lockEnabled,
+                        boolean ecoMode, Level level) {
+        this.level = level;
 
         // get handles to some important objects
         this.surfaceHolder = surfaceHolder;
@@ -218,22 +217,18 @@ public class LevelPainter implements Runnable {
         this.marker2D = context.getResources().getDrawable(R.drawable.marker_2d);
         this.display = context.getResources().getDrawable(R.drawable.display);
 
-        // vitesse de la bulle
-        this.viscosity = viscosity;
-
         // config
         this.showAngle = showAngle;
-        this.displayFormat = new DecimalFormat(angleType.getDisplayFormat());
+        this.displayFormat = new DecimalFormat("00.0");
         this.displayFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
-        this.displayBackgroundText = angleType.getDisplayBackgroundText();
-        this.angleType = angleType;
+        this.displayBackgroundText = "88.8";
 
         // colors
         this.backgroundColor = context.getResources().getColor(R.color.silver);
 
         // strings
 //        this.infoText = context.getString(R.string.calibrate_info);
-        this.lockText = context.getString(R.string.lock_info);
+//        this.lockText = context.getString(R.string.lock_info);
 
         // typeface
         Typeface lcd = Typeface.createFromAsset(context.getAssets(), FONT_LCD);
@@ -428,23 +423,23 @@ public class LevelPainter implements Runnable {
         switch (orientation) {
             case LANDING:
 //	    		canvas.drawText(infoText, middleX, infoY, infoPaint);
-                if (lockEnabled) {
-                    display.setBounds(lockRect);
-                    display.draw(canvas);
-                    canvas.drawText(
-                            LOCKED_BACKGROUND,
-                            middleX,
-                            lockRect.centerY() + lockHeight / 2,
-                            lockBackgroundPaint);
-                    canvas.drawText(lockText, middleX, lockRect.bottom + displayGap, infoPaint);
-                    if (locked) {
-                        canvas.drawText(
-                                LOCKED,
-                                middleX,
-                                lockRect.centerY() + lockHeight / 2,
-                                lockForegroundPaint);
-                    }
-                }
+//                if (lockEnabled) {
+//                    display.setBounds(lockRect);
+//                    display.draw(canvas);
+//                    canvas.drawText(
+//                            LOCKED_BACKGROUND,
+//                            middleX,
+//                            lockRect.centerY() + lockHeight / 2,
+//                            lockBackgroundPaint);
+//                    canvas.drawText(lockText, middleX, lockRect.bottom + displayGap, infoPaint);
+//                    if (locked) {
+//                        canvas.drawText(
+//                                LOCKED,
+//                                middleX,
+//                                lockRect.centerY() + lockHeight / 2,
+//                                lockForegroundPaint);
+//                    }
+//                }
                 if (showAngle) {
                     display.setBounds(
                             displayRect.left - (displayRect.width() + displayGap) / 2,
@@ -604,7 +599,7 @@ public class LevelPainter implements Runnable {
                         break;
                 }
 
-                viscosityValue = levelWidth * viscosity.getCoeff();
+                viscosityValue = levelWidth;
 
                 minLevelX = middleX - levelWidth / 2;
                 maxLevelX = middleX + levelWidth / 2;
@@ -682,22 +677,12 @@ public class LevelPainter implements Runnable {
                     }
                     break;
             }
-            switch (angleType) {
-                case INCLINATION:
-                    angle1 = 100 * angle1 / 45;
-                    angle2 = 100 * angle2 / 45;
-                    break;
-                case ROOF_PITCH:
-                    angle1 = 12 * (float) Math.tan(Math.toRadians(angle1));
-                    angle2 = 12 * (float) Math.tan(Math.toRadians(angle2));
-                    break;
-            }
             // correction des angles affiches
-            if (angle1 > angleType.getMax()) {
-                angle1 = angleType.getMax();
+            if (angle1 > 99.9f) {
+                angle1 = 99.9f;
             }
-            if (angle2 > angleType.getMax()) {
-                angle2 = angleType.getMax();
+            if (angle2 > 99.9f) {
+                angle2 = 99.9f;
             }
             // correction des angles aberrants
             // pour ne pas que la bulle sorte de l'ecran
@@ -738,7 +723,7 @@ public class LevelPainter implements Runnable {
                     || (orientation == Orientation.LEFT
                     && lockRect.contains(middleX - (middleY - touchY), canvasHeight - (middleY - (touchX - middleX))))) {
                 locked = !locked;
-                Level.getProvider().setLocked(locked);
+                level.getProvider().setLocked(locked);
             }
         }
     }

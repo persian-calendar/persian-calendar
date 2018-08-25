@@ -9,8 +9,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import net.androgames.level.config.DisplayType;
-import net.androgames.level.config.Viscosity;
+import net.androgames.level.Level;
 import net.androgames.level.orientation.Orientation;
 import net.androgames.level.painter.LevelPainter;
 
@@ -61,13 +60,12 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback, On
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        if (painter == null) {
-            painter = new LevelPainter(holder, getContext(), new Handler(), getWidth(), getHeight(),
+        Context context = getContext();
+        if (painter == null && context instanceof Level) {
+            painter = new LevelPainter(holder, context, new Handler(), getWidth(), getHeight(),
                     true,
-                    DisplayType.valueOf("ANGLE"),
-                    Viscosity.valueOf("MEDIUM"),
                     false,
-                    false);
+                    false, (Level) context);
         }
     }
 

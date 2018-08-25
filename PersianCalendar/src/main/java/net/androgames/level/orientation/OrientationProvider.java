@@ -13,6 +13,7 @@ import android.view.Surface;
 import net.androgames.level.Level;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -92,17 +93,11 @@ public final class OrientationProvider implements SensorEventListener {
     private final float[] outR = new float[16];
     private final float[] LOC = new float[3];
 
-    private static OrientationProvider provider;
+    private Level level;
 
-    private OrientationProvider() {
-        this.displayOrientation = Level.getContext().getWindowManager().getDefaultDisplay().getRotation();
-    }
-
-    public static OrientationProvider getInstance() {
-        if (provider == null) {
-            provider = new OrientationProvider();
-        }
-        return provider;
+    public OrientationProvider(Level level) {
+        this.level = level;
+        this.displayOrientation = level.getWindowManager().getDefaultDisplay().getRotation();
     }
 
     /**
@@ -126,9 +121,7 @@ public final class OrientationProvider implements SensorEventListener {
     }
 
     private List<Integer> getRequiredSensors() {
-        return Arrays.asList(
-                Integer.valueOf(Sensor.TYPE_ACCELEROMETER)
-        );
+        return Collections.singletonList(Sensor.TYPE_ACCELEROMETER);
     }
 
     /**
@@ -136,14 +129,14 @@ public final class OrientationProvider implements SensorEventListener {
      */
     public boolean isSupported() {
         if (supported == null) {
-            if (Level.getContext() != null) {
-                sensorManager = (SensorManager) Level.getContext().getSystemService(Context.SENSOR_SERVICE);
+            if (level != null) {
+                sensorManager = (SensorManager) level.getSystemService(Context.SENSOR_SERVICE);
                 boolean supported = true;
                 for (int sensorType : getRequiredSensors()) {
                     List<Sensor> sensors = sensorManager.getSensorList(sensorType);
                     supported = (sensors.size() > 0) && supported;
                 }
-                this.supported = Boolean.valueOf(supported);
+                this.supported = supported;
                 return supported;
             }
         }
@@ -154,10 +147,10 @@ public final class OrientationProvider implements SensorEventListener {
     /**
      * Registers a listener and start listening
      *
-     * @param accelerometerListener callback for accelerometer events
+     * @param orientationListener callback for accelerometer events
      */
     public void startListening(OrientationListener orientationListener) {
-        final Activity context = Level.getContext();
+        final Activity context = level;
         // load calibration
         calibrating = false;
         Arrays.fill(calibratedPitch, 0);
@@ -281,7 +274,7 @@ public final class OrientationProvider implements SensorEventListener {
 
         if (calibrating) {
             calibrating = false;
-            Editor editor = Level.getContext().getPreferences(Context.MODE_PRIVATE).edit();
+            Editor editor = level.getPreferences(Context.MODE_PRIVATE).edit();
             editor.putFloat(SAVED_PITCH + orientation.toString(), pitch);
             editor.putFloat(SAVED_ROLL + orientation.toString(), roll);
             editor.putFloat(SAVED_BALANCE + orientation.toString(), balance);
@@ -312,7 +305,7 @@ public final class OrientationProvider implements SensorEventListener {
     public final void resetCalibration() {
         boolean success = false;
         try {
-            success = Level.getContext().getPreferences(
+            success = level.getPreferences(
                     Context.MODE_PRIVATE).edit().clear().commit();
         } catch (Exception e) {
         }
@@ -327,20 +320,9 @@ public final class OrientationProvider implements SensorEventListener {
     }
 
 
-    /**
-     * Tell the provider to save the calibration
-     * The calibration is actually saved on the next
-     * sensor change event
-     */
-    public final void saveCalibration() {
-        calibrating = true;
-    }
-
-
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
-
 
     /**
      * Return the minimal sensor step

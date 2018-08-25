@@ -1,17 +1,9 @@
 package net.androgames.level;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.R;
@@ -42,11 +34,6 @@ import net.androgames.level.view.LevelView;
  */
 public class Level extends Activity implements OrientationListener {
 
-    private static Level CONTEXT;
-
-    private static final int DIALOG_CALIBRATE_ID = 1;
-    private static final int TOAST_DURATION = 10000;
-
     private OrientationProvider provider;
 
     private LevelView view;
@@ -65,57 +52,26 @@ public class Level extends Activity implements OrientationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        CONTEXT = this;
         view = findViewById(R.id.level);
-        view.setOnLongClickListener(v -> {
-            new AlertDialog.Builder(this).setTitle(R.string.calibrate_title)
-                    .setIcon(null)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.calibrate, (dialog12, id12) -> provider.saveCalibration())
-                    .setNegativeButton(R.string.cancel, null)
-                    .setNeutralButton(R.string.reset, (dialog1, id1) -> provider.resetCalibration())
-                    .setMessage(R.string.calibrate_message)
-                    .create().show();
-            return true;
-        });
         // sound
         soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
         bipSoundID = soundPool.load(this, R.raw.bip, 1);
         bipRate = getResources().getInteger(R.integer.bip_rate);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    /* Handles item selections */
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.calibrate:
-                showDialog(DIALOG_CALIBRATE_ID);
-                return true;
+        provider = new OrientationProvider(this);
+        if (provider.isSupported()) {
+            provider.startListening(this);
         }
-        return false;
+    }
+
+    public OrientationProvider getProvider() {
+        return provider;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("Level", "Level resumed");
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        provider = OrientationProvider.getInstance();
-        // chargement des effets sonores
-//        soundEnabled = prefs.getBoolean(LevelPreferences.KEY_SOUND, false);
-        // orientation manager
-        if (provider.isSupported()) {
+        if (provider.isSupported() && !provider.isListening()) {
             provider.startListening(this);
-        } else {
-//            Toast.makeText(this, getText(R.string.not_supported), TOAST_DURATION).show();
         }
     }
 
@@ -163,13 +119,4 @@ public class Level extends Activity implements OrientationListener {
 //                        R.string.calibrate_saved : R.string.calibrate_failed,
 //                Level.TOAST_DURATION).show();
     }
-
-    public static Level getContext() {
-        return CONTEXT;
-    }
-
-    public static OrientationProvider getProvider() {
-        return getContext().provider;
-    }
-
 }

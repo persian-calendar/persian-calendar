@@ -38,7 +38,7 @@ public enum Orientation {
         return rotation;
     }
 
-    private Orientation(int reverse, int rotation) {
+    Orientation(int reverse, int rotation) {
         this.reverse = reverse;
         this.rotation = rotation;
     }
