@@ -41,7 +41,6 @@
     <string name="location_help">If none of them, specify it below</string>
     <string name="showing_iran_time">Widgets and notifications in Iran TimeZone</string>
     <string name="iran_time">Iran Time</string>
-    <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass">Compass</string>
     <string name="compass_not_found">Compass sensor not found</string>
     <string name="month_names">Month Names</string>
@@ -225,5 +224,27 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year10">Snake</string>
     <string name="year11">Horse</string>
     <string name="year12">Sheep</string>
+
+    <string name="name">Bubble</string>
+    <string name="reset">Reset</string>
+    <string name="not_supported">Orientation not supported</string>
+    <string name="save">Save</string>
+    <string name="ok">Ok</string>
+    <string name="calibrate">Calibrate</string>
+    <string name="calibrate_info">press MENU to calibrate...</string>
+    <string name="calibrate_title">Calibrate your phone</string>
+    <string name="calibrate_message">Put any side (including the back) of your Android device on a flat horizontal surface and press the Calibrate button.\n\nOr reset the calibration for all the phone sides.</string>
+    <string name="calibrate_again_title">You must re-calibrate</string>
+    <string name="calibrate_again_message">The sensor change requires re-calibration of the phone.</string>
+    <string name="calibrate_saved">Custom calibration saved !</string>
+    <string name="calibrate_failed">Calibration failed !</string>
+    <string name="calibrate_restored">Original calibration restored !</string>
+    <string name="angle">Angle</string>
+    <string name="lock_info">tap to lock level orientation</string>
+    <string name="inclination">Inclination</string>
+    <string name="roof_pitch">Roof pitch</string>
+    <string name="roof_pitch_summary">Inches of rise per foot of run\n3 &#126; 14°</string>
+    <string name="angle_summary">Angle in degrees</string>
+    <string name="inclination_summary">Inclination in percents\n100&#37; &#126; 45°</string>
 
 </resources>

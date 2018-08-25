@@ -41,7 +41,6 @@
     <string name="location_help">ئەگەر تێیدا نەبوو، لە ژێرەوە دیاریی بکە</string>
     <string name="showing_iran_time">نیشاندانی ویجیتەکان و ئاگادارییەکان بە کاتی ئێران</string>
     <string name="iran_time">کاتی ئێران</string>
-    <string name="qibla_compass">جەمسەرنوێن/ڕووگەنوێن</string>
     <string name="compass">جەمسەرنوێن</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
     <string name="month_names">ناوی مانگەکان</string>

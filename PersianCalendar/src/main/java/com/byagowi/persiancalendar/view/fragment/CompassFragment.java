@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -23,6 +24,8 @@ import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
+
+import net.androgames.level.Level;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -50,12 +53,8 @@ public class CompassFragment extends Fragment {
 
         Context context = getContext();
         Coordinate coordinate = Utils.getCoordinate(getContext());
-        if (coordinate == null) {
-            UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass), "");
-        } else {
-            UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.qibla_compass),
-                    Utils.getCityName(context, true));
-        }
+        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass),
+                Utils.getCityName(context, true));
 
         compassListener = new SensorEventListener() {
             /*
@@ -111,6 +110,12 @@ public class CompassFragment extends Fragment {
                 Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
             }
         }
+
+        binding.compassView.setOnLongClickListener(v -> {
+            getActivity().startActivity(new Intent(getContext(), Level.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            return true;
+        });
         return binding.getRoot();
     }
 

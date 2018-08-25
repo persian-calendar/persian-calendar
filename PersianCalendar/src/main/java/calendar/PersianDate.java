@@ -32,14 +32,17 @@ public class PersianDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
+    @Override
     public PersianDate clone() {
         return new PersianDate(getYear(), getMonth(), getDayOfMonth());
     }
 
+    @Override
     public int getDayOfMonth() {
         return day;
     }
 
+    @Override
     public void setDayOfMonth(int day) {
         if (day < 1 || day > 31)
             throw new DayOutOfRangeException(
@@ -47,10 +50,12 @@ public class PersianDate extends AbstractDate {
         this.day = day;
     }
 
+    @Override
     public int getMonth() {
         return month;
     }
 
+    @Override
     public void setMonth(int month) {
         if (month < 1 || month > 12)
             throw new MonthOutOfRangeException(
@@ -63,14 +68,17 @@ public class PersianDate extends AbstractDate {
         this.month = month;
     }
 
+    @Override
     public int getWeekOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getYear() {
         return year;
     }
 
+    @Override
     public void setYear(int year) {
         if (year == 0)
             throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
@@ -78,22 +86,27 @@ public class PersianDate extends AbstractDate {
         this.year = year;
     }
 
+    @Override
     public void rollDay(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollMonth(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollYear(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public String getEvent() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getDayOfWeek() {
         CivilDate civilDate = DateConverter.persianToCivil(this);
         Calendar cal = Calendar.getInstance();
@@ -105,10 +118,12 @@ public class PersianDate extends AbstractDate {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
+    @Override
     public int getDayOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getWeekOfMonth(int firstDayOfWeek) {
         int dowOfFirstDayOfMonth = (new PersianDate(year, month, 1)).getDayOfWeek();
         int dayCountInFirstWeek = (7 - dowOfFirstDayOfMonth) + firstDayOfWeek;
@@ -140,6 +155,7 @@ public class PersianDate extends AbstractDate {
         return 0;
     }
 
+    @Override
     public boolean isLeapYear() {
         int y;
         if (year > 0)

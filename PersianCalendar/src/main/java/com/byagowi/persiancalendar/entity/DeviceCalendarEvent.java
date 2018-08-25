@@ -30,6 +30,7 @@ public class DeviceCalendarEvent extends AbstractEvent {
         return id;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
