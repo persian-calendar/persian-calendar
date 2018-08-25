@@ -68,6 +68,8 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
+        <item name="android:itemBackground">@color/dark_background</item>
+        <item name="android:textColor">@color/dark_text_normal</item>
     </style>
 
     <!-- Base application theme. -->
@@ -114,6 +116,8 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
+        <item name="android:itemBackground">@color/light_background</item>
+        <item name="android:textColor">@color/light_text_normal</item>
     </style>
 
     <!-- The revived old application theme. -->
@@ -152,6 +156,16 @@
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+
+        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
+        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
+        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
+        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
+        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
+        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
+
+        <item name="android:itemBackground">@color/light_background</item>
+        <item name="android:textColor">@color/light_text_normal</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
