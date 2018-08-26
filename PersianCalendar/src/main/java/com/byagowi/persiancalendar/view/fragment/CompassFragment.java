@@ -48,6 +48,7 @@ public class CompassFragment extends Fragment {
     private SensorEventListener compassListener;
     private float orientation = 0;
     private FragmentCompassBinding binding;
+    private boolean sensorNotFound = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class CompassFragment extends Fragment {
                 }
             } else {
                 Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+                sensorNotFound = true;
             }
         }
 
@@ -181,7 +183,7 @@ public class CompassFragment extends Fragment {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.help:
-                if (Utils.getCoordinate(activity) == null) {
+                if (sensorNotFound) {
                     Toast.makeText(activity, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
                 } else {
                     // Compass Calibrate Dialog
