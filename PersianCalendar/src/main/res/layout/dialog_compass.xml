@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="?attr/colorBackground"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="?attr/colorTextDrawer"
+        android:textStyle="bold"
+        android:text="@string/calibrate_compass_title"
+        android:textSize="25sp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:gravity="center"
+        android:id="@+id/calibration_view"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/calibrate_compass_summary"
+        android:textSize="17sp" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/dont_show_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/dont_show_again_dialog"
+        android:textSize="13sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_ok"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="?attr/colorTextDrawer"
+        android:text="@string/understood"/>
+
+</LinearLayout>
