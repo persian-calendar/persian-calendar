@@ -32,10 +32,12 @@ public class CivilDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
+    @Override
     public int getDayOfMonth() {
         return day;
     }
 
+    @Override
     public void setDayOfMonth(int day) {
         if (day < 1 || day > 31)
             throw new DayOutOfRangeException(
@@ -44,6 +46,7 @@ public class CivilDate extends AbstractDate {
         this.day = day;
     }
 
+    @Override
     public int getDayOfWeek() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -60,18 +63,22 @@ public class CivilDate extends AbstractDate {
         return cal;
     }
 
+    @Override
     public int getDayOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public String getEvent() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getMonth() {
         return month;
     }
 
+    @Override
     public void setMonth(int month) {
         if (month < 1 || month > 12)
             throw new MonthOutOfRangeException(
@@ -84,6 +91,7 @@ public class CivilDate extends AbstractDate {
         this.month = month;
     }
 
+    @Override
     public int getWeekOfMonth(int firstDayOfWeek) {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(firstDayOfWeek);
@@ -93,14 +101,17 @@ public class CivilDate extends AbstractDate {
         return cal.get(Calendar.WEEK_OF_MONTH);
     }
 
+    @Override
     public int getWeekOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getYear() {
         return year;
     }
 
+    @Override
     public void setYear(int year) {
         if (year == 0)
             throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
@@ -108,6 +119,7 @@ public class CivilDate extends AbstractDate {
         this.year = year;
     }
 
+    @Override
     public boolean isLeapYear() {
         if (year % 400 == 0)
             return true;
@@ -118,14 +130,17 @@ public class CivilDate extends AbstractDate {
         return (year % 4 == 0);
     }
 
+    @Override
     public void rollDay(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollMonth(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollYear(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }

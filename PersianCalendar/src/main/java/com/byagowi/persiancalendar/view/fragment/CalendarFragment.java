@@ -415,22 +415,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-        if (CalendarUtils.getPersianToday().getYear() > Utils.getMaxSupportedYear()) {
-            String title = getString(R.string.shouldBeUpdated);
-            SpannableString ss = new SpannableString(title);
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.byagowi.persiancalendar")));
-                    } catch (ActivityNotFoundException e) { // Should be ActivityNotFoundException but we don't care really
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.byagowi.p+ersiancalendar")));
-                    }
-                }
-            };
-            ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            messageToShow.append(ss);
-        }
 
         Context context = getContext();
         if (context == null) return;

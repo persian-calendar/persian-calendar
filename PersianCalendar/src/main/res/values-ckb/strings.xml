@@ -41,7 +41,6 @@
     <string name="location_help">ئەگەر تێیدا نەبوو، لە ژێرەوە دیاریی بکە</string>
     <string name="showing_iran_time">نیشاندانی ویجیتەکان و ئاگادارییەکان بە کاتی ئێران</string>
     <string name="iran_time">کاتی ئێران</string>
-    <string name="qibla_compass">جەمسەرنوێن/ڕووگەنوێن</string>
     <string name="compass">جەمسەرنوێن</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
     <string name="month_names">ناوی مانگەکان</string>
@@ -96,7 +95,6 @@
     <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
-    <string name="shouldBeUpdated">ڕۆژژمێری کۆچیی مانگی ڕەنگە دروست نەبێ، لەوانەیە پێویست بێ بەرنامەکە بەڕۆژ بکەنەوە ئەگەر ھەبێ.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
@@ -162,20 +160,19 @@
     <string name="length_of_day">طول روز: %s</string>
     <string name="remaining_daylight">باقی‌مانده: %s</string>
     <string name="more">زیاتر</string>
-
     <string name="zodiac">برج فلکی</string>
-    <string name="capricorn">♑ جَدْی (بزغاله)</string>
-    <string name="aquarius">♒ دلو (آبریز)</string>
-    <string name="pisces">♓ حوت (ماهی)</string>
-    <string name="aries">♈ حَمَل (بره)</string>
-    <string name="taurus">♉ ثَور (گاو)</string>
-    <string name="gemini">♊ جَوزا (دوپیکر)</string>
-    <string name="cancer">♋ سَرَطان (خرچنگ️)</string>
-    <string name="leo">♌ اسد (شیر)</string>
-    <string name="virgo">♍ سُنبُله (خوشه)</string>
-    <string name="libra">♎ میزان (ترازو)</string>
-    <string name="scorpio">♏ عقرب (کژدم)</string>
-    <string name="sagittarius">♐ قَوس (کمان)</string>
+    <string name="capricorn">جَدْی (بزغاله)</string>
+    <string name="aquarius">دلو (آبریز)</string>
+    <string name="pisces">حوت (ماهی)</string>
+    <string name="aries">حَمَل (بره)</string>
+    <string name="taurus">ثَور (گاو)</string>
+    <string name="gemini">جَوزا (دوپیکر)</string>
+    <string name="cancer">سَرَطان (خرچنگ️)</string>
+    <string name="leo">اسد (شیر)</string>
+    <string name="virgo">سُنبُله (خوشه)</string>
+    <string name="libra">میزان (ترازو)</string>
+    <string name="scorpio">عقرب (کژدم)</string>
+    <string name="sagittarius">سفقَوس (کمان)</string>
     <string name="year_name">نام سال</string>
     <string name="year1">میمون</string>
     <string name="year2">خروس</string>
@@ -183,11 +180,12 @@
     <string name="year4">خوک</string>
     <string name="year5">موش</string>
     <string name="year6">گاو</string>
-    <string name="year7">ببر</string>
+    <string name="year7">پلنگ</string>
     <string name="year8">خرگوش</string>
     <string name="year9">اژدها</string>
     <string name="year10">مار</string>
     <string name="year11">اسب</string>
     <string name="year12">گوسفند</string>
+    <string name="level">تراز</string>
 
 </resources>

@@ -99,5 +99,6 @@ public abstract class AbstractDate {
 
     public abstract boolean isLeapYear();
 
+    @Override
     public abstract AbstractDate clone();
 }

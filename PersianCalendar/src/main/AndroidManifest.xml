@@ -149,6 +149,12 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <activity
+            android:hardwareAccelerated="true"
+            android:name="net.androgames.level.Level"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 </manifest>

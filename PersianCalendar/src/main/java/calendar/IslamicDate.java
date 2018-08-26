@@ -31,10 +31,12 @@ public class IslamicDate extends AbstractDate {
         setDayOfMonth(day);
     }
 
+    @Override
     public int getDayOfMonth() {
         return day;
     }
 
+    @Override
     public void setDayOfMonth(int day) {
         // TODO This check is not very exact! But it's not worth of it
         // to compute the number of days in this month exactly
@@ -45,6 +47,7 @@ public class IslamicDate extends AbstractDate {
         this.day = day;
     }
 
+    @Override
     public int getDayOfWeek() {
         CivilDate civilDate = DateConverter.islamicToCivil(this);
         Calendar cal = Calendar.getInstance();
@@ -54,10 +57,12 @@ public class IslamicDate extends AbstractDate {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
+    @Override
     public int getMonth() {
         return month;
     }
 
+    @Override
     public void setMonth(int month) {
         if (month < 1 || month > 12)
             throw new MonthOutOfRangeException(
@@ -70,14 +75,17 @@ public class IslamicDate extends AbstractDate {
         this.month = month;
     }
 
+    @Override
     public int getWeekOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getYear() {
         return year;
     }
 
+    @Override
     public void setYear(int year) {
         if (year == 0)
             throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
@@ -85,26 +93,32 @@ public class IslamicDate extends AbstractDate {
         this.year = year;
     }
 
+    @Override
     public void rollDay(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollMonth(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public void rollYear(int amount, boolean up) {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public String getEvent() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getDayOfYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
 
+    @Override
     public int getWeekOfMonth(int firstDayOfWeek) {
 
         int dowOfFirstDayOfMonth = (new IslamicDate(getYear(), getMonth(), 1)).getDayOfWeek();
@@ -137,6 +151,7 @@ public class IslamicDate extends AbstractDate {
         return 0;
     }
 
+    @Override
     public boolean isLeapYear() {
         throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
     }
