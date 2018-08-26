@@ -1,9 +1,6 @@
 package net.androgames.level.orientation;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,9 +8,8 @@ import android.hardware.SensorManager;
 import android.view.Surface;
 
 import net.androgames.level.Level;
+import net.androgames.level.view.LevelView;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /*
@@ -39,34 +35,13 @@ public final class OrientationProvider implements SensorEventListener {
 
     private static final int MIN_VALUES = 20;
 
-    /**
-     * Calibration
-     */
-    private static final String SAVED_PITCH = "pitch.";
-    private static final String SAVED_ROLL = "roll.";
-    private static final String SAVED_BALANCE = "balance.";
-
     private Sensor sensor;
     private SensorManager sensorManager;
-    private OrientationListener listener;
-
-    /**
-     * indicates whether or not Accelerometer Sensor is supported
-     */
-    private Boolean supported;
 
     /**
      * indicates whether or not Accelerometer Sensor is running
      */
     private boolean running = false;
-
-    /**
-     * Calibration
-     */
-    private final float[] calibratedPitch = new float[5];
-    private final float[] calibratedRoll = new float[5];
-    private final float[] calibratedBalance = new float[5];
-    private boolean calibrating = false;
 
     /**
      * Orientation
@@ -94,9 +69,11 @@ public final class OrientationProvider implements SensorEventListener {
     private final float[] LOC = new float[3];
 
     private Level level;
+    private LevelView view;
 
-    public OrientationProvider(Level level) {
+    public OrientationProvider(Level level, LevelView view) {
         this.level = level;
+        this.view = view;
         this.displayOrientation = level.getWindowManager().getDefaultDisplay().getRotation();
     }
 
@@ -120,64 +97,19 @@ public final class OrientationProvider implements SensorEventListener {
         }
     }
 
-    private List<Integer> getRequiredSensors() {
-        return Collections.singletonList(Sensor.TYPE_ACCELEROMETER);
-    }
-
-    /**
-     * Returns true if at least one Accelerometer sensor is available
-     */
-    public boolean isSupported() {
-        if (supported == null) {
-            if (level != null) {
-                sensorManager = (SensorManager) level.getSystemService(Context.SENSOR_SERVICE);
-                boolean supported = true;
-                for (int sensorType : getRequiredSensors()) {
-                    List<Sensor> sensors = sensorManager.getSensorList(sensorType);
-                    supported = (sensors.size() > 0) && supported;
-                }
-                this.supported = supported;
-                return supported;
-            }
-        }
-        return supported;
-    }
-
-
     /**
      * Registers a listener and start listening
-     *
-     * @param orientationListener callback for accelerometer events
      */
-    public void startListening(OrientationListener orientationListener) {
-        final Activity context = level;
-        // load calibration
-        calibrating = false;
-        Arrays.fill(calibratedPitch, 0);
-        Arrays.fill(calibratedRoll, 0);
-        Arrays.fill(calibratedBalance, 0);
-        SharedPreferences prefs = context.getPreferences(Context.MODE_PRIVATE);
-        for (Orientation orientation : Orientation.values()) {
-            calibratedPitch[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_PITCH + orientation.toString(), 0);
-            calibratedRoll[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_ROLL + orientation.toString(), 0);
-            calibratedBalance[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_BALANCE + orientation.toString(), 0);
-        }
+    public void startListening() {
         // register listener and start listening
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        running = true;
-        for (int sensorType : getRequiredSensors()) {
-            List<Sensor> sensors = sensorManager.getSensorList(sensorType);
-            if (sensors.size() > 0) {
-                sensor = sensors.get(0);
-                running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL) && running;
-            }
-        }
-        if (running) {
-            listener = orientationListener;
-        }
+        sensorManager = (SensorManager) level.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager == null) return;
+
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if (sensors.size() == 0) return;
+
+        sensor = sensors.get(0);
+        running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -272,33 +204,7 @@ public final class OrientationProvider implements SensorEventListener {
             }
         }
 
-        if (calibrating) {
-            calibrating = false;
-            Editor editor = level.getPreferences(Context.MODE_PRIVATE).edit();
-            editor.putFloat(SAVED_PITCH + orientation.toString(), pitch);
-            editor.putFloat(SAVED_ROLL + orientation.toString(), roll);
-            editor.putFloat(SAVED_BALANCE + orientation.toString(), balance);
-            final boolean success = editor.commit();
-            if (success) {
-                calibratedPitch[orientation.ordinal()] = pitch;
-                calibratedRoll[orientation.ordinal()] = roll;
-                calibratedBalance[orientation.ordinal()] = balance;
-            }
-//            listener.onCalibrationSaved(success);
-            pitch = 0;
-            roll = 0;
-            balance = 0;
-        } else {
-            pitch -= calibratedPitch[orientation.ordinal()];
-            roll -= calibratedRoll[orientation.ordinal()];
-            balance -= calibratedBalance[orientation.ordinal()];
-        }
-
         // propagation of the orientation
-        listener.onOrientationChanged(orientation, pitch, roll, balance);
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
+        view.onOrientationChanged(orientation, pitch, roll, balance);
     }
 }

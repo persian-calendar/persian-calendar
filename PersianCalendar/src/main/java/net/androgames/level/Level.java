@@ -1,15 +1,13 @@
 package net.androgames.level;
 
 import android.app.Activity;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.R;
 
 import net.androgames.level.orientation.Orientation;
-import net.androgames.level.orientation.OrientationListener;
 import net.androgames.level.orientation.OrientationProvider;
 import net.androgames.level.view.LevelView;
 
@@ -32,91 +30,35 @@ import net.androgames.level.view.LevelView;
  *  You should have received a copy of the GNU General Public License
  *  along with Level. If not, see <http://www.gnu.org/licenses/>
  */
-public class Level extends Activity implements OrientationListener {
+public class Level extends Activity {
 
     private OrientationProvider provider;
-
     private LevelView view;
-
-    /**
-     * Gestion du son
-     */
-    private SoundPool soundPool;
-    private boolean soundEnabled;
-    private int bipSoundID;
-    private int bipRate;
-    private long lastBip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        view = findViewById(R.id.level);
-        // sound
-        soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
-        bipSoundID = soundPool.load(this, R.raw.bip, 1);
-        bipRate = getResources().getInteger(R.integer.bip_rate);
-        provider = new OrientationProvider(this);
-        if (provider.isSupported()) {
-            provider.startListening(this);
-        }
-    }
-
-    public OrientationProvider getProvider() {
-        return provider;
+        view = new LevelView(this);
+        addContentView(view, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        provider = new OrientationProvider(this, view);
+        provider.startListening();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (provider.isSupported() && !provider.isListening()) {
-            provider.startListening(this);
+        if (!provider.isListening()) {
+            provider.startListening();
         }
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (provider.isListening()) {
             provider.stopListening();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (soundPool != null) {
-            soundPool.release();
-        }
-        super.onDestroy();
-    }
-
-    @Override
-    public void onOrientationChanged(Orientation orientation, float pitch, float roll, float balance) {
-//        if (soundEnabled
-//                && orientation.isLevel(pitch, roll, balance, provider.getSensibility())
-//                && System.currentTimeMillis() - lastBip > bipRate) {
-//            AudioManager mgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//            float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_RING);
-//            float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_RING);
-//            float volume = streamVolumeCurrent / streamVolumeMax;
-//            lastBip = System.currentTimeMillis();
-//            soundPool.play(bipSoundID, volume, volume, 1, 0, 1);
-//        }
-        view.onOrientationChanged(orientation, pitch, roll, balance);
-    }
-
-    @Override
-    public void onCalibrationReset(boolean success) {
-//        Toast.makeText(this, success ?
-//                        R.string.calibrate_restored : R.string.calibrate_failed,
-//                Level.TOAST_DURATION).show();
-    }
-
-    @Override
-    public void onCalibrationSaved(boolean success) {
-//        Toast.makeText(this, success ?
-//                        R.string.calibrate_saved : R.string.calibrate_failed,
-//                Level.TOAST_DURATION).show();
+        super.onPause();
     }
 }

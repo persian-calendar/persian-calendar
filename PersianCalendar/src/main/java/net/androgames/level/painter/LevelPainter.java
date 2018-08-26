@@ -11,7 +11,6 @@ import android.view.SurfaceHolder;
 
 import com.byagowi.persiancalendar.R;
 
-import net.androgames.level.Level;
 import net.androgames.level.orientation.Orientation;
 
 import java.text.DecimalFormat;
@@ -192,13 +191,10 @@ public class LevelPainter implements Runnable {
     private final Handler handler;
     private long frameRate;
 
-    private Level level;
-
     public LevelPainter(SurfaceHolder surfaceHolder, Context context,
-                        Handler handler, int width, int height,
+                        Handler handler,
                         boolean showAngle, boolean lockEnabled,
-                        boolean ecoMode, Level level) {
-        this.level = level;
+                        boolean ecoMode) {
 
         // get handles to some important objects
         this.surfaceHolder = surfaceHolder;
@@ -494,23 +490,23 @@ public class LevelPainter implements Runnable {
             default:
                 canvas.rotate(orientation.getRotation(), middleX, middleY);
 //	    		canvas.drawText(infoText, middleX, infoY, infoPaint);
-                if (lockEnabled) {
-                    display.setBounds(lockRect);
-                    display.draw(canvas);
-                    canvas.drawText(
-                            LOCKED_BACKGROUND,
-                            middleX,
-                            lockRect.centerY() + lockHeight / 2,
-                            lockBackgroundPaint);
-                    canvas.drawText(lockText, middleX, lockRect.bottom + displayGap, infoPaint);
-                    if (locked) {
-                        canvas.drawText(
-                                LOCKED,
-                                middleX,
-                                lockRect.centerY() + lockHeight / 2,
-                                lockForegroundPaint);
-                    }
-                }
+//                if (lockEnabled) {
+//                    display.setBounds(lockRect);
+//                    display.draw(canvas);
+//                    canvas.drawText(
+//                            LOCKED_BACKGROUND,
+//                            middleX,
+//                            lockRect.centerY() + lockHeight / 2,
+//                            lockBackgroundPaint);
+//                    canvas.drawText(lockText, middleX, lockRect.bottom + displayGap, infoPaint);
+//                    if (locked) {
+//                        canvas.drawText(
+//                                LOCKED,
+//                                middleX,
+//                                lockRect.centerY() + lockHeight / 2,
+//                                lockForegroundPaint);
+//                    }
+//                }
                 if (showAngle) {
                     display.setBounds(displayRect);
                     display.draw(canvas);
@@ -711,21 +707,4 @@ public class LevelPainter implements Runnable {
             }
         }
     }
-
-    public void onTouch(int touchX, int touchY) {
-        if (lockEnabled) {
-            if (((orientation == Orientation.TOP || orientation == Orientation.LANDING)
-                    && lockRect.contains(touchX, touchY))
-                    || (orientation == Orientation.BOTTOM
-                    && lockRect.contains(touchX, canvasHeight - touchY))
-                    || (orientation == Orientation.RIGHT
-                    && lockRect.contains(middleX - (middleY - touchY), middleY - (touchX - middleX)))
-                    || (orientation == Orientation.LEFT
-                    && lockRect.contains(middleX - (middleY - touchY), canvasHeight - (middleY - (touchX - middleX))))) {
-                locked = !locked;
-                level.getProvider().setLocked(locked);
-            }
-        }
-    }
-
 }

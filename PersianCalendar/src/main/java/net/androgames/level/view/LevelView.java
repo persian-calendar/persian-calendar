@@ -3,13 +3,9 @@ package net.androgames.level.view;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnTouchListener;
 
-import net.androgames.level.Level;
 import net.androgames.level.orientation.Orientation;
 import net.androgames.level.painter.LevelPainter;
 
@@ -32,15 +28,14 @@ import net.androgames.level.painter.LevelPainter;
  *  You should have received a copy of the GNU General Public License
  *  along with Level. If not, see <http://www.gnu.org/licenses/>
  */
-public class LevelView extends SurfaceView implements SurfaceHolder.Callback, OnTouchListener {
+public class LevelView extends SurfaceView implements SurfaceHolder.Callback {
 
     private LevelPainter painter;
 
-    public LevelView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public LevelView(Context context) {
+        super(context);
         getHolder().addCallback(this);
         setFocusable(true);
-        setOnTouchListener(this);
     }
 
     @Override
@@ -59,13 +54,12 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback, On
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         Context context = getContext();
-        if (painter == null && context instanceof Level) {
-            painter = new LevelPainter(holder, context, new Handler(), getWidth(), getHeight(),
+        if (painter == null) {
+            painter = new LevelPainter(holder, context, new Handler(),
                     true,
                     false,
-                    false, (Level) context);
+                    false);
         }
     }
 
@@ -85,13 +79,4 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback, On
             painter.onOrientationChanged(orientation, pitch, roll, balance);
         }
     }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN && painter != null) {
-            painter.onTouch((int) event.getX(), (int) event.getY());
-        }
-        return true;
-    }
-
 }
