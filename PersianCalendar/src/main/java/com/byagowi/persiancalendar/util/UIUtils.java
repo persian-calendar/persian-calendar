@@ -164,39 +164,53 @@ public class UIUtils {
             int day = civilDate.getDayOfMonth();
 
             @StringRes
-            int monthName;
-            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19))
+            int monthName, monthEmoji;
+            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19)) {
                 monthName = R.string.capricorn;
-            else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17))
+                monthEmoji = R.string.capricorn_emoji;
+            } else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17)) {
                 monthName = R.string.aquarius;
-            else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19))
+                monthEmoji = R.string.aquarius_emoji;
+            } else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19)) {
                 monthName = R.string.pisces;
-            else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19))
+                monthEmoji = R.string.pisces_emoji;
+            } else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19)) {
                 monthName = R.string.aries;
-            else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20))
+                monthEmoji = R.string.aries_emoji;
+            } else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20)) {
                 monthName = R.string.taurus;
-            else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20))
+                monthEmoji = R.string.taurus_emoji;
+            } else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20)) {
                 monthName = R.string.gemini;
-            else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22))
+                monthEmoji = R.string.gemini_emoji;
+            } else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22)) {
                 monthName = R.string.cancer;
-            else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22))
+                monthEmoji = R.string.cancer_emoji;
+            } else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22)) {
                 monthName = R.string.leo;
-            else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22))
+                monthEmoji = R.string.leo_emoji;
+            } else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22)) {
                 monthName = R.string.virgo;
-            else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22))
+                monthEmoji = R.string.virgo_emoji;
+            } else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22)) {
                 monthName = R.string.libra;
-            else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21))
+                monthEmoji = R.string.libra_emoji;
+            } else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21)) {
                 monthName = R.string.scorpio;
-            else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21))
+                monthEmoji = R.string.scorpio_emoji;
+            } else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21)) {
                 monthName = R.string.sagittarius;
-            else
+                monthEmoji = R.string.sagittarius_emoji;
+            } else {
                 monthName = R.string.sagittarius; // this never should happen
+                monthEmoji = R.string.sagittarius_emoji;
+            }
 
-            binding.zodiac.setText(String.format("%s: %s\n%s: %s",
+            binding.zodiac.setText(String.format("%s: %s\n%s: %s %s",
                     context.getString(R.string.year_name),
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
-                    context.getString(monthName)));
+                    context.getString(monthEmoji), context.getString(monthName)));
         }
     }
 

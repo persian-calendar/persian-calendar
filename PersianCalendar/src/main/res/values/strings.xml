@@ -41,7 +41,6 @@
     <string name="location_help">If none of them, specify it below</string>
     <string name="showing_iran_time">Widgets and notifications in Iran TimeZone</string>
     <string name="iran_time">Iran Time</string>
-    <string name="qibla_compass">Compass/Qibla</string>
     <string name="compass">Compass</string>
     <string name="compass_not_found">Compass sensor not found</string>
     <string name="month_names">Month Names</string>
@@ -96,7 +95,6 @@
     <string name="select">Select</string>
     <string name="go">Go</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
-    <string name="shouldBeUpdated">Hijri calendar is not tuned correctly. Consider an update for the app, if available.</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="user_interface">User interface</string>
@@ -198,20 +196,31 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="length_of_day">Daytime: %s</string>
     <string name="remaining_daylight">Remaining: %s</string>
     <string name="more">More</string>
-
+    <string name="capricorn_emoji" translatable="false">♑</string>
+    <string name="aquarius_emoji" translatable="false">♒</string>
+    <string name="pisces_emoji" translatable="false">♓</string>
+    <string name="aries_emoji" translatable="false">♈</string>
+    <string name="taurus_emoji" translatable="false">♉</string>
+    <string name="gemini_emoji" translatable="false">♊</string>
+    <string name="cancer_emoji" translatable="false">♋</string>
+    <string name="leo_emoji" translatable="false">♌</string>
+    <string name="virgo_emoji" translatable="false">♍</string>
+    <string name="libra_emoji" translatable="false">♎</string>
+    <string name="scorpio_emoji" translatable="false">♏</string>
+    <string name="sagittarius_emoji" translatable="false">♐</string>
     <string name="zodiac">Zodiac</string>
-    <string name="capricorn">♑ Capricorn</string>
-    <string name="aquarius">♒ Aquarius</string>
-    <string name="pisces">♓ Pisces</string>
-    <string name="aries">♈ Aries</string>
-    <string name="taurus">♉ Taurus</string>
-    <string name="gemini">♊ Gemini</string>
-    <string name="cancer">♋ Cancer</string>
-    <string name="leo">♌ Leo</string>
-    <string name="virgo">♍ Virgo</string>
-    <string name="libra">♎ Libra</string>
-    <string name="scorpio">♏ Scorpio</string>
-    <string name="sagittarius">♐ Sagittarius</string>
+    <string name="capricorn">Capricorn</string>
+    <string name="aquarius">Aquarius</string>
+    <string name="pisces">Pisces</string>
+    <string name="aries">Aries</string>
+    <string name="taurus">Taurus</string>
+    <string name="gemini">Gemini</string>
+    <string name="cancer">Cancer</string>
+    <string name="leo">Leo</string>
+    <string name="virgo">Virgo</string>
+    <string name="libra">Libra</string>
+    <string name="scorpio">Scorpio</string>
+    <string name="sagittarius">Sagittarius</string>
     <string name="year_name">Year name</string>
     <string name="year1">Monkey</string>
     <string name="year2">Rooster</string>
@@ -225,5 +234,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year10">Snake</string>
     <string name="year11">Horse</string>
     <string name="year12">Sheep</string>
+    <string name="level">Level</string>
 
 </resources>

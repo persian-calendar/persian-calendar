@@ -41,7 +41,6 @@
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
     <string name="showing_iran_time">نمایش ابزارک‌ها، نوار آگاه‌سازی و برنامه به وقت ایران در همه جا</string>
     <string name="iran_time">ایرانی وقت</string>
-    <string name="qibla_compass">قطب نما/قبلہ نما</string>
     <string name="compass">قطب نما</string>
     <string name="compass_not_found">کمپاس نہیں ملا</string>
     <string name="month_names">مہینوں کے نام</string>
@@ -96,7 +95,6 @@
     <string name="select">انتخاب</string>
     <string name="go">جائیں</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
-    <string name="shouldBeUpdated">تقویم قمری ممکن است صحیح نباشد، احتمالاً نیاز به به‌روزرسانی این برنامه باشد.</string>
     <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="user_interface">رابط کاربری</string>
@@ -162,20 +160,19 @@
     <string name="length_of_day">طول روز: %s</string>
     <string name="remaining_daylight">باقی‌مانده: %s</string>
     <string name="more">بیشتر</string>
-
     <string name="zodiac">برج فلکی</string>
-    <string name="capricorn">♑ جَدْی (بزغاله)</string>
-    <string name="aquarius">♒ دلو (آبریز)</string>
-    <string name="pisces">♓ حوت (ماهی)</string>
-    <string name="aries">♈ حَمَل (بره)</string>
-    <string name="taurus">♉ ثَور (گاو)</string>
-    <string name="gemini">♊ جَوزا (دوپیکر)</string>
-    <string name="cancer">♋ سَرَطان (خرچنگ️)</string>
-    <string name="leo">♌ اسد (شیر)</string>
-    <string name="virgo">♍ سُنبُله (خوشه)</string>
-    <string name="libra">♎ میزان (ترازو)</string>
-    <string name="scorpio">♏ عقرب (کژدم)</string>
-    <string name="sagittarius">♐ قَوس (کمان)</string>
+    <string name="capricorn">جَدْی (بزغاله)</string>
+    <string name="aquarius">دلو (آبریز)</string>
+    <string name="pisces">حوت (ماهی)</string>
+    <string name="aries">حَمَل (بره)</string>
+    <string name="taurus">ثَور (گاو)</string>
+    <string name="gemini">جَوزا (دوپیکر)</string>
+    <string name="cancer">سَرَطان (خرچنگ️)</string>
+    <string name="leo">اسد (شیر)</string>
+    <string name="virgo">سُنبُله (خوشه)</string>
+    <string name="libra">میزان (ترازو)</string>
+    <string name="scorpio">عقرب (کژدم)</string>
+    <string name="sagittarius">سفقَوس (کمان)</string>
     <string name="year_name">نام سال</string>
     <string name="year1">میمون</string>
     <string name="year2">خروس</string>
@@ -183,11 +180,12 @@
     <string name="year4">خوک</string>
     <string name="year5">موش</string>
     <string name="year6">گاو</string>
-    <string name="year7">ببر</string>
+    <string name="year7">پلنگ</string>
     <string name="year8">خرگوش</string>
     <string name="year9">اژدها</string>
     <string name="year10">مار</string>
     <string name="year11">اسب</string>
     <string name="year12">گوسفند</string>
+    <string name="level">تراز</string>
 
 </resources>

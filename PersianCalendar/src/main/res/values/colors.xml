@@ -103,4 +103,33 @@
     <color name="sViewMiddayTextColorDark">#ff9c2b</color>
     <color name="sViewSunsetTextColorDark">#a36621</color>
 
+
+    <!-- General colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="silver">#FF888888</color>
+    <color name="black_reflect">#FF666666</color>
+    <color name="translucent">#00FFFFFF</color>
+    <!-- Level -->
+    <color name="level_liquid_reflect">#FFE9DF00</color>
+    <color name="level_border_reflect">@color/black_reflect</color>
+    <color name="level_liquid_dark">#FFB1C800</color>
+    <color name="level_border">@color/black</color>
+    <!-- Markers -->
+    <color name="marker_stroke">#DD222222</color>
+    <color name="marker_reflect">@color/black_reflect</color>
+    <color name="marker_dark">@color/black</color>
+    <!-- Bubble -->
+    <color name="bubble_center">@color/white</color>
+    <color name="bubble_border">@color/level_liquid_dark</color>
+    <!-- LCD -->
+    <color name="lcd_front">#FF00FF00</color>
+    <color name="lcd_back">#44FFFFFF</color>
+    <!-- LOCK -->
+    <color name="lock_front">#FFFF0000</color>
+    <color name="lock_back">#44FFFFFF</color>
+    <!-- Display -->
+    <color name="display_border">#FF333333</color>
+    <color name="display_dark">@color/black</color>
+    <color name="display_reflect">@color/black_reflect</color>
 </resources>
