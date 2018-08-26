@@ -224,8 +224,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year10">Snake</string>
     <string name="year11">Horse</string>
     <string name="year12">Sheep</string>
-
-    <string name="not_supported">Orientation not supported</string>
-    <string name="angle">Angle</string>
+    <string name="level">Level</string>
 
 </resources>

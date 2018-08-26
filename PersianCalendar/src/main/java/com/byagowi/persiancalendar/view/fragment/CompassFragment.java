@@ -111,11 +111,6 @@ public class CompassFragment extends Fragment {
             }
         }
 
-        binding.compassView.setOnLongClickListener(v -> {
-            getActivity().startActivity(new Intent(getContext(), Level.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            return true;
-        });
         return binding.getRoot();
     }
 
@@ -168,6 +163,10 @@ public class CompassFragment extends Fragment {
             case R.id.stop:
                 stop = !stop;
                 item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
+                break;
+            case R.id.level:
+                getActivity().startActivity(new Intent(getContext(), Level.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             default:
                 break;

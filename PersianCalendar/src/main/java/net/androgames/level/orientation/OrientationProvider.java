@@ -284,7 +284,7 @@ public final class OrientationProvider implements SensorEventListener {
                 calibratedRoll[orientation.ordinal()] = roll;
                 calibratedBalance[orientation.ordinal()] = balance;
             }
-            listener.onCalibrationSaved(success);
+//            listener.onCalibrationSaved(success);
             pitch = 0;
             roll = 0;
             balance = 0;
@@ -298,44 +298,7 @@ public final class OrientationProvider implements SensorEventListener {
         listener.onOrientationChanged(orientation, pitch, roll, balance);
     }
 
-    /**
-     * Tell the provider to restore the calibration
-     * to the default factory values
-     */
-    public final void resetCalibration() {
-        boolean success = false;
-        try {
-            success = level.getPreferences(
-                    Context.MODE_PRIVATE).edit().clear().commit();
-        } catch (Exception e) {
-        }
-        if (success) {
-            Arrays.fill(calibratedPitch, 0);
-            Arrays.fill(calibratedRoll, 0);
-            Arrays.fill(calibratedBalance, 0);
-        }
-        if (listener != null) {
-            listener.onCalibrationReset(success);
-        }
-    }
-
-
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
-
-    /**
-     * Return the minimal sensor step
-     *
-     * @return the minimal sensor step
-     * 0 if not yet known
-     */
-    public float getSensibility() {
-        if (refValues >= MIN_VALUES) {
-            return minStep;
-        } else {
-            return 0;
-        }
-    }
-
 }

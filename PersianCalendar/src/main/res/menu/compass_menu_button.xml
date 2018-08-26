@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/level"
+        android:icon="@drawable/ic_level"
+        android:orderInCategory="100"
+        android:title="@string/level"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/stop"
         android:icon="@drawable/ic_stop"
         android:orderInCategory="100"
