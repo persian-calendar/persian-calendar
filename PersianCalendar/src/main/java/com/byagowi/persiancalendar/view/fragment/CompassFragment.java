@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -23,12 +24,14 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.dialog.CompassDialog;
 import com.github.praytimes.Coordinate;
 
 import net.androgames.level.Level;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -106,6 +109,17 @@ public class CompassFragment extends Fragment {
             if (sensor != null) {
                 sensorManager.registerListener(compassListener, sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
+                if (coordinate == null) {
+                    Toast.makeText(context, getString(R.string.set_location), Toast.LENGTH_SHORT).show();
+                } else {
+                    //Compass Calibrate Dialog
+                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    boolean dontShowDialog = sharedPref.getBoolean("DONT_SHOW_DIALOG", false);
+                    if (!dontShowDialog) {
+                        DialogFragment frag = new CompassDialog();
+                        frag.show(getActivity().getSupportFragmentManager(), "CompassDialog");
+                    }
+                }
             } else {
                 Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
             }
