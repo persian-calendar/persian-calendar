@@ -56,7 +56,7 @@ public class CalendarUtils {
         switch (calendar) {
             case ISLAMIC:
                 return (int) (DateConverter.islamicToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                                DateConverter.islamicToJdn(year, month, 1));
+                        DateConverter.islamicToJdn(year, month, 1));
             case GREGORIAN:
                 return (int) (DateConverter.civilToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
                         DateConverter.civilToJdn(year, month, 1));
