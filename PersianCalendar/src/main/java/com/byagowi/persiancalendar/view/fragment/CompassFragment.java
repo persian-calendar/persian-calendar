@@ -181,30 +181,33 @@ public class CompassFragment extends Fragment {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.help:
-                // Compass Calibrate Dialog
-                LinearLayout ll = new LinearLayout(activity);
-                ll.setPadding(16, 16, 16, 16);
-                ll.setOrientation(LinearLayout.VERTICAL);
-                AppCompatImageView iv = new AppCompatImageView(activity);
-                ll.addView(iv);
-                TextView tv = new TextView(activity);
-                tv.setText(R.string.calibrate_compass_summary);
-                ll.addView(tv);
+                if (Utils.getCoordinate(activity) == null) {
+                    Toast.makeText(activity, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+                } else {
+                    // Compass Calibrate Dialog
+                    LinearLayout ll = new LinearLayout(activity);
+                    ll.setPadding(16, 16, 16, 16);
+                    ll.setOrientation(LinearLayout.VERTICAL);
+                    AppCompatImageView iv = new AppCompatImageView(activity);
+                    ll.addView(iv);
+                    TextView tv = new TextView(activity);
+                    tv.setText(R.string.calibrate_compass_summary);
+                    ll.addView(tv);
 
-                AnimationDrawable animation = new AnimationDrawable();
-                animation.setOneShot(false);
-                animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
-                animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
-                iv.setBackgroundDrawable(animation);
+                    AnimationDrawable animation = new AnimationDrawable();
+                    animation.setOneShot(false);
+                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
+                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
+                    iv.setBackgroundDrawable(animation);
 
-                AlertDialog frag = new AlertDialog.Builder(activity)
-                        .setView(ll)
-                        .setCancelable(true)
-                        .create();
-                frag.show();
+                    AlertDialog frag = new AlertDialog.Builder(activity)
+                            .setView(ll)
+                            .setCancelable(true)
+                            .create();
+                    frag.show();
 
-                animation.start();
-
+                    animation.start();
+                }
             default:
                 break;
         }
