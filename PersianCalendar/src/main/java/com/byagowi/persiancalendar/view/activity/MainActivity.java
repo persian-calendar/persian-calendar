@@ -10,13 +10,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.DrawerAdapter;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
@@ -30,8 +30,8 @@ import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.github.praytimes.Coordinate;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,12 +39,11 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
@@ -65,7 +64,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CALENDAR = 0,
             CONVERTER = 1,
@@ -139,11 +138,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         }
 
-        binding.navigationView.setHasFixedSize(true);
-        binding.navigationView.setAdapter(new DrawerAdapter(this));
-        binding.navigationView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        binding.navigationView.setLayoutManager(new LinearLayoutManager(this));
-
         boolean isRTL = UIUtils.isRTL(this);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
@@ -187,21 +181,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
+        binding.navigation.setNavigationItemSelectedListener(this);
+        AppCompatImageView seasonImage = binding.navigation
+                .getHeaderView(0).findViewById(R.id.season_image);
         switch (getSeason()) {
             case "SPRING":
-                binding.seasonImage.setImageResource(R.drawable.spring);
+                seasonImage.setImageResource(R.drawable.spring);
                 break;
 
             case "SUMMER":
-                binding.seasonImage.setImageResource(R.drawable.summer);
+                seasonImage.setImageResource(R.drawable.summer);
                 break;
 
             case "FALL":
-                binding.seasonImage.setImageResource(R.drawable.fall);
+                seasonImage.setImageResource(R.drawable.fall);
                 break;
 
             case "WINTER":
-                binding.seasonImage.setImageResource(R.drawable.winter);
+                seasonImage.setImageResource(R.drawable.winter);
                 break;
         }
 
@@ -383,9 +380,36 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void selectItem(int item) {
-        if (item == EXIT) {
+        onNavigationItemSelected(binding.navigation.getMenu().getItem(item));
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.exit) {
             finish();
-            return;
+            return true;
+        }
+
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+
+        int item = -1;
+        switch (menuItem.getItemId()) {
+            case R.id.calendar:
+                item = CALENDAR;
+                break;
+            case R.id.converter:
+                item = CONVERTER;
+                break;
+            case R.id.compass:
+                item = COMPASS;
+                break;
+            case R.id.settings:
+                item = PREFERENCE;
+                break;
+            case R.id.about:
+                item = ABOUT;
+                break;
         }
 
         if (menuPosition != item) {
@@ -408,12 +432,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
         }
 
-        RecyclerView.Adapter adapter = binding.navigationView.getAdapter();
-        if (adapter != null && adapter instanceof DrawerAdapter) {
-            DrawerAdapter drawerAdapter = (DrawerAdapter) adapter;
-            drawerAdapter.setSelectedItem(menuPosition);
-        }
-
         binding.drawer.closeDrawers();
+        return true;
     }
 }

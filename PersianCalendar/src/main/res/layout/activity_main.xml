@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer"
@@ -27,29 +29,16 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="@dimen/drawer_width"
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_gravity="start|left"
             android:background="?attr/colorDrawerBackground"
-            android:orientation="vertical"
-            android:scrollbars="vertical">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/season_image"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/drawer_header_height"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="5dp"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/navigation_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            app:itemTextColor="@drawable/drawer_item_color"
+            app:headerLayout="@layout/navigation_header"
+            app:itemIconTint="?attr/colorAccent"
+            app:menu="@menu/navigation_items" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
