@@ -187,11 +187,7 @@
     <string name="year11">اسب</string>
     <string name="year12">گوسفند</string>
     <string name="level">تراز</string>
-    <string name="calibrate_compass_title">کالیبره کردن قطب‌نما…</string>
-    <string name="calibrate_compass_summary">"قطب‌نما باید کالیبره شود.
-        از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط مانند تصویر متحرک به جلو و عقب بچرخانید."</string>
-    <string name="dont_show_again_dialog">لطفا دوباره نشان داده نشود.</string>
-    <string name="understood">فهمیدم</string>
-    <string name="set_location">لطفا جهت تعیین قبله ابتدا موقعیت خود را در بخش تنظیمات تنظیم کنید…</string>
+    <string name="calibrate_compass_summary">از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط مانند تصویر متحرک به جلو و عقب بچرخانید.</string>
+    <string name="set_location">لطفاً جهت تعیین قبله ابتدا موقعیت خود را در بخش تنظیمات تنظیم کنید…</string>
 
 </resources>
