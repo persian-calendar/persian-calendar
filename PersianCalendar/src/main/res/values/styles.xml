@@ -202,16 +202,17 @@
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
         <item name="tabBackground">?attr/colorCard</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="tabIconTint">?attr/colorTextSecond</item>
-        <item name="tabTextColor">?attr/colorTextSecond</item>
-        <item name="tabSelectedTextColor">?attr/colorTextPrimary</item>
+        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
         <item name="tabTextAppearance">@style/customTabTextAppearance</item>
     </style>
 
     <style name="customTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
+        <!--<item name="textAllCaps">false</item>-->
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
