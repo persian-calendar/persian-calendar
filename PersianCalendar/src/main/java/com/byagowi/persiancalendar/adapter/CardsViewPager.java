@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.duolingo.open.rtlviewpager.RtlViewPager;
+
 import androidx.viewpager.widget.ViewPager;
 
 // https://stackoverflow.com/a/47774679
-public class CardsViewPager extends ViewPager {
+public class CardsViewPager extends RtlViewPager {
     private View mCurrentView;
 
     public CardsViewPager(Context context) {

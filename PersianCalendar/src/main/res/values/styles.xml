@@ -207,6 +207,12 @@
         <item name="tabIconTint">?attr/colorTextSecond</item>
         <item name="tabTextColor">?attr/colorTextSecond</item>
         <item name="tabSelectedTextColor">?attr/colorTextPrimary</item>
+        <item name="tabTextAppearance">@style/customTabTextAppearance</item>
+    </style>
+
+    <style name="customTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
 </resources>

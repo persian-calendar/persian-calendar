@@ -37,10 +37,17 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
     }
 
     private List<View> tabs;
+    private List<String> titles;
 
-    public CardTabsAdapter(FragmentManager fm, List<View> tabs) {
+    public CardTabsAdapter(FragmentManager fm, List<View> tabs, List<String> titles) {
         super(fm);
         this.tabs = tabs;
+        this.titles = titles;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles.get(position);
     }
 
     @Override
