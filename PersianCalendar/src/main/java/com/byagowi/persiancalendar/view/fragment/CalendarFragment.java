@@ -126,54 +126,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs));
+        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs, titles));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
-
-        mainBinding.tabLayout.getTabAt(0).setIcon(R.drawable.ic_event);
-        mainBinding.tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_note);
-        if (coordinate != null) {
-            mainBinding.tabLayout.getTabAt(2).setIcon(R.drawable.ic_access_time);
-        }
-
-        Resources.Theme theme = context.getTheme();
-        TypedValue value = new TypedValue();
-
-        theme.resolveAttribute(R.attr.colorAccent, value, true);
-        int selectedColor = ContextCompat.getColor(context, value.resourceId);
-
-        theme.resolveAttribute(R.attr.colorTextSecond, value, true);
-        int unselectedColor = ContextCompat.getColor(context, value.resourceId);
-
-        // https://stackoverflow.com/a/35461201
-        mainBinding.tabLayout.addOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(mainBinding.cardsViewPager) {
-
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-//                        tab.getIcon().setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN);
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                        super.onTabUnselected(tab);
-//                        tab.getIcon().setColorFilter(unselectedColor, PorterDuff.Mode.SRC_IN);
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        super.onTabReselected(tab);
-                    }
-                }
-        );
-
-        // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
-//        if (isRTL) {
-//            for (View tab : tabs) {
-//                tab.setRotationY(180);
-//            }
-//            mainBinding.cardsViewPager.setRotationY(180);
-//        }
 
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
@@ -215,8 +169,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
-        mainBinding.tabLayout.getTabAt(lastTab).getIcon().setColorFilter(selectedColor,
-                PorterDuff.Mode.SRC_IN);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
