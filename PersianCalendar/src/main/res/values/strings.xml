@@ -235,11 +235,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year11">Horse</string>
     <string name="year12">Sheep</string>
     <string name="level">Level</string>
-    <string name="calibrate_compass_title">Calibrating compass…</string>
-    <string name="calibrate_compass_summary">"The compass needs to be calibrated.
-        Move away from any magnetic objects, Tilt and rotate the device back and forth on every axis as shown in the animation."</string>
-    <string name="dont_show_again_dialog">Please do not show again.</string>
-    <string name="understood">I understood</string>
-    <string name="set_location">Please first set location in the Settings for find Qibla…</string>
+    <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis as shown above.</string>
+    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the Settings</string>
 
 </resources>
