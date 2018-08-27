@@ -99,7 +99,7 @@
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="user_interface">ڕووکار</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
-    <string name="date_diff_text">فاصله: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
+    <string name="date_diff_text">مەودا: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
@@ -148,8 +148,8 @@
     <string name="gps_settings">GPS</string>
     <string name="gprs_settings">GPRS</string>
     <string name="wifi_settings">WiFi</string>
-    <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی شوێنەکەت، GPS و ئینتەرنێتی ئامرازەکە چالاک بکه.
-بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ دیسان ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
+    <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
+بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
     <string name="start_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) لە سەرەتای ساڵەوە</string>
     <string name="end_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
@@ -157,35 +157,37 @@
     <string name="midday">نیوەڕۆ</string>
     <string name="sunset">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
-    <string name="length_of_day">طول روز: %s</string>
-    <string name="remaining_daylight">باقی‌مانده: %s</string>
+    <string name="length_of_day">ڕۆژگار: %s</string>
+    <string name="remaining_daylight">ماوەوە: %s</string>
     <string name="more">زیاتر</string>
-    <string name="zodiac">برج فلکی</string>
-    <string name="capricorn">جَدْی (بزغاله)</string>
-    <string name="aquarius">دلو (آبریز)</string>
-    <string name="pisces">حوت (ماهی)</string>
-    <string name="aries">حَمَل (بره)</string>
-    <string name="taurus">ثَور (گاو)</string>
-    <string name="gemini">جَوزا (دوپیکر)</string>
-    <string name="cancer">سَرَطان (خرچنگ️)</string>
-    <string name="leo">اسد (شیر)</string>
-    <string name="virgo">سُنبُله (خوشه)</string>
-    <string name="libra">میزان (ترازو)</string>
-    <string name="scorpio">عقرب (کژدم)</string>
-    <string name="sagittarius">سفقَوس (کمان)</string>
-    <string name="year_name">نام سال</string>
-    <string name="year1">میمون</string>
-    <string name="year2">خروس</string>
-    <string name="year3">سگ</string>
-    <string name="year4">خوک</string>
-    <string name="year5">موش</string>
-    <string name="year6">گاو</string>
-    <string name="year7">پلنگ</string>
-    <string name="year8">خرگوش</string>
-    <string name="year9">اژدها</string>
+    <string name="zodiac">کەلوو</string>
+    <string name="capricorn">گیسک</string>
+    <string name="aquarius">دۆڵچە</string>
+    <string name="pisces">نەھەنگ</string>
+    <string name="aries">بەرخ</string>
+    <string name="taurus">گا</string>
+    <string name="gemini">جمک</string>
+    <string name="cancer">قرژاڵ</string>
+    <string name="leo">شێر</string>
+    <string name="virgo">ھۆشە</string>
+    <string name="libra">تەرازوو</string>
+    <string name="scorpio">دووپشک</string>
+    <string name="sagittarius">کەوان</string>
+    <string name="year_name">ناوی ساڵ</string>
+    <string name="year1">مەیموون</string>
+    <string name="year2">کەڵەشێر</string>
+    <string name="year3">سەگ</string>
+    <string name="year4">خووگ</string>
+    <string name="year5">مشک</string>
+    <string name="year6">گا</string>
+    <string name="year7">پڵنگ</string>
+    <string name="year8">کەروێشک</string>
+    <string name="year9">ئەژدەھا</string>
     <string name="year10">مار</string>
-    <string name="year11">اسب</string>
-    <string name="year12">گوسفند</string>
-    <string name="level">تراز</string>
+    <string name="year11">ئەسپ</string>
+    <string name="year12">پەز</string>
+    <string name="level">تەراز</string>
+    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط مانند تصویر بالا به جلو و عقب بچرخانید.</string>
+    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
 
 </resources>

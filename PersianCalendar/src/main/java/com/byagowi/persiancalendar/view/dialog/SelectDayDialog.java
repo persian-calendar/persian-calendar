@@ -28,6 +28,7 @@ import calendar.DateConverter;
 public class SelectDayDialog extends AppCompatDialogFragment {
 
     long jdn;
+
     public SelectDayDialog(long jdn) {
         this.jdn = jdn;
     }
@@ -57,43 +58,41 @@ public class SelectDayDialog extends AppCompatDialogFragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(binding.getRoot());
-        builder.setCustomTitle(null);
-        builder.setPositiveButton(R.string.go, (dialogInterface, i) -> {
+        return new AlertDialog.Builder(getActivity())
+                .setView(binding.getRoot())
+                .setCustomTitle(null)
+                .setPositiveButton(R.string.go, (dialogInterface, i) -> {
 
-            int year = ((FormattedIntEntity)
-                    binding.yearSpinner.getSelectedItem()).getValue();
-            int month = ((FormattedIntEntity)
-                    binding.monthSpinner.getSelectedItem()).getValue();
-            int day = ((FormattedIntEntity)
-                    binding.daySpinner.getSelectedItem()).getValue();
+                    int year = ((FormattedIntEntity)
+                            binding.yearSpinner.getSelectedItem()).getValue();
+                    int month = ((FormattedIntEntity)
+                            binding.monthSpinner.getSelectedItem()).getValue();
+                    int day = ((FormattedIntEntity)
+                            binding.daySpinner.getSelectedItem()).getValue();
 
-            CalendarFragment calendarFragment = (CalendarFragment) getActivity()
-                    .getSupportFragmentManager()
-                    .findFragmentByTag(CalendarFragment.class.getName());
+                    CalendarFragment calendarFragment = (CalendarFragment) getActivity()
+                            .getSupportFragmentManager()
+                            .findFragmentByTag(CalendarFragment.class.getName());
 
-            try {
-                switch (((CalendarTypeEntity)
-                        binding.calendarTypeSpinner.getSelectedItem()).getType()) {
-                    case GREGORIAN:
-                        calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
-                        break;
+                    try {
+                        switch (((CalendarTypeEntity)
+                                binding.calendarTypeSpinner.getSelectedItem()).getType()) {
+                            case GREGORIAN:
+                                calendarFragment.bringDate(DateConverter.civilToJdn(year, month, day));
+                                break;
 
-                    case ISLAMIC:
-                        calendarFragment.bringDate(DateConverter.islamicToJdn(year, month, day));
-                        break;
+                            case ISLAMIC:
+                                calendarFragment.bringDate(DateConverter.islamicToJdn(year, month, day));
+                                break;
 
-                    case SHAMSI:
-                        calendarFragment.bringDate(DateConverter.persianToJdn(year, month, day));
-                        break;
-                }
-            } catch (RuntimeException e) {
-                Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
-                Log.e("SelectDayDialog", "", e);
-            }
-        });
-
-        return builder.create();
+                            case SHAMSI:
+                                calendarFragment.bringDate(DateConverter.persianToJdn(year, month, day));
+                                break;
+                        }
+                    } catch (RuntimeException e) {
+                        Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
+                        Log.e("SelectDayDialog", "", e);
+                    }
+                }).create();
     }
 }

@@ -99,33 +99,6 @@
         <item>+2</item>
     </string-array>
 
-    <string-array name="drawerTitles">
-        <item>Calendar</item>
-        <item>Calendar Converter</item>
-        <item>Compass</item>
-        <item>Settings</item>
-        <item>About</item>
-        <item>Exit</item>
-    </string-array>
-
-    <string-array name="drawerIcons" translatable="false">
-        <item>@drawable/ic_date_range</item>
-        <item>@drawable/ic_swap_vertical_circle</item>
-        <item>@drawable/ic_explore</item>
-        <item>@drawable/ic_settings</item>
-        <item>@drawable/ic_info</item>
-        <item>@drawable/ic_cancel</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>and Qibla, if location is set in the Settings</item>
-        <item></item>
-        <item></item>
-        <item></item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های اسلامی در ایران</item>

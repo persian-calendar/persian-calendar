@@ -39,24 +39,6 @@
         <item>٢+</item>
     </string-array>
 
-    <string-array name="drawerTitles">
-        <item>ڕۆژژمێر</item>
-        <item>بگۆڕی ڕێککەوت</item>
-        <item>جەمسەرنوێن</item>
-        <item>ڕێکخستن</item>
-        <item>لەبارە</item>
-        <item>دەرچوون</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>و ڕووگەنوێن، ئەگەر لە ڕێکخستندا شوێن دیاری کرابێ</item>
-        <item></item>
-        <item></item>
-        <item></item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>پشوودانەکانی ئێران</item>
         <item>بۆنە ئیسلامییەکانی ئێران</item>

@@ -39,24 +39,6 @@
         <item>۲+</item>
     </string-array>
 
-    <string-array name="drawerTitles">
-        <item>تقویم</item>
-        <item>تبدیل تاریخ</item>
-        <item>قطب‌نما</item>
-        <item>تنظیمات</item>
-        <item>درباره</item>
-        <item>خروج</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>و قبله‌نما، در صورت تنظیم موقعیت در تنظیمات</item>
-        <item></item>
-        <item></item>
-        <item></item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های اسلامی در ایران</item>
