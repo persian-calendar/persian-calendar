@@ -151,13 +151,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
-                        tab.getIcon().setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN);
+//                        tab.getIcon().setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN);
                     }
 
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
                         super.onTabUnselected(tab);
-                        tab.getIcon().setColorFilter(unselectedColor, PorterDuff.Mode.SRC_IN);
+//                        tab.getIcon().setColorFilter(unselectedColor, PorterDuff.Mode.SRC_IN);
                     }
 
                     @Override
@@ -168,12 +168,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         );
 
         // https://stackoverflow.com/a/49455239 but obviously a hack we will try to remove
-        if (isRTL) {
-            for (View tab : tabs) {
-                tab.setRotationY(180);
-            }
-            mainBinding.cardsViewPager.setRotationY(180);
-        }
+//        if (isRTL) {
+//            for (View tab : tabs) {
+//                tab.setRotationY(180);
+//            }
+//            mainBinding.cardsViewPager.setRotationY(180);
+//        }
 
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
