@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,21 +18,24 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.dialog.CompassDialog;
 import com.github.praytimes.Coordinate;
 
 import net.androgames.level.Level;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Compass/Qibla activity
@@ -45,6 +48,7 @@ public class CompassFragment extends Fragment {
     private SensorEventListener compassListener;
     private float orientation = 0;
     private FragmentCompassBinding binding;
+    private boolean sensorNotFound = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,17 +115,10 @@ public class CompassFragment extends Fragment {
                         SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
                     Toast.makeText(context, getString(R.string.set_location), Toast.LENGTH_SHORT).show();
-                } else {
-                    //Compass Calibrate Dialog
-                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    boolean dontShowDialog = sharedPref.getBoolean("DONT_SHOW_DIALOG", false);
-                    if (!dontShowDialog) {
-                        DialogFragment frag = new CompassDialog();
-                        frag.show(getActivity().getSupportFragmentManager(), "CompassDialog");
-                    }
                 }
             } else {
                 Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+                sensorNotFound = true;
             }
         }
 
@@ -166,22 +163,53 @@ public class CompassFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.compass_menu_button, menu);
+        inflater.inflate(R.menu.compass_menu_buttons, menu);
     }
 
     public boolean stop = false;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return false;
+
         switch (item.getItemId()) {
             case R.id.stop:
                 stop = !stop;
                 item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
                 break;
             case R.id.level:
-                getActivity().startActivity(new Intent(getContext(), Level.class)
+                activity.startActivity(new Intent(activity, Level.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
+            case R.id.help:
+                if (sensorNotFound) {
+                    Toast.makeText(activity, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+                } else {
+                    // Compass Calibrate Dialog
+                    LinearLayout ll = new LinearLayout(activity);
+                    ll.setPadding(16, 16, 16, 16);
+                    ll.setOrientation(LinearLayout.VERTICAL);
+                    AppCompatImageView iv = new AppCompatImageView(activity);
+                    ll.addView(iv);
+                    TextView tv = new TextView(activity);
+                    tv.setText(R.string.calibrate_compass_summary);
+                    ll.addView(tv);
+
+                    AnimationDrawable animation = new AnimationDrawable();
+                    animation.setOneShot(false);
+                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
+                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
+                    iv.setBackgroundDrawable(animation);
+
+                    AlertDialog frag = new AlertDialog.Builder(activity)
+                            .setView(ll)
+                            .setCancelable(true)
+                            .create();
+                    frag.show();
+
+                    animation.start();
+                }
             default:
                 break;
         }
