@@ -16,6 +16,8 @@ import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -86,10 +88,6 @@ public class ConverterFragment extends Fragment implements
                 binding.selectdayFragment.daySpinner.getSelectedItem()).getValue();
 
         try {
-            binding.calendarsTabContent.firstCalendarContainer.setVisibility(View.GONE);
-            binding.calendarsTabContent.secondCalendarContainer.setVisibility(View.VISIBLE);
-            binding.calendarsTabContent.thirdCalendarContainer.setVisibility(View.VISIBLE);
-
             CalendarType calendarType = ((CalendarTypeEntity)
                     binding.selectdayFragment.calendarTypeSpinner.getSelectedItem()).getType();
             if (day > CalendarUtils.getMonthLength(calendarType, year, month)) {
@@ -97,9 +95,11 @@ public class ConverterFragment extends Fragment implements
                 Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
             } else {
                 long jdn = CalendarUtils.getJdnOfCalendar(calendarType, year, month, day);
+                List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
+                orderedCalendarTypes.remove(calendarType);
 
                 UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
-                        Utils.getOrderedCalendarTypes());
+                        orderedCalendarTypes);
                 lastSelectedJdn = jdn;
                 if (CalendarUtils.getTodayJdn() == jdn) {
                     binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
