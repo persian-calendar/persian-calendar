@@ -31,14 +31,6 @@
         <item>عشا</item>
     </string-array>
 
-    <string-array name="islamicOffsetNames">
-        <item>2-</item>
-        <item>1-</item>
-        <item>0</item>
-        <item>1+</item>
-        <item>2+</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>ایرانی تعطیلات</item>
         <item>ایران میں اسلامی تقریبات</item>

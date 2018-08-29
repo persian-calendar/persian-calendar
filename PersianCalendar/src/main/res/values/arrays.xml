@@ -83,22 +83,6 @@
         <item>ISHA</item>
     </string-array>
 
-    <string-array name="islamicOffsetNames">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
-    <string-array name="islamicOffsetKeys" translatable="false">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های اسلامی در ایران</item>

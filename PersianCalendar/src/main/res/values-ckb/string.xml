@@ -4,10 +4,6 @@
     <string name="compass_long_label">ڕووگەنوێن/جەمسەرنوێن</string>
     <string name="compass_short_label">جەمسەرنوێن</string>
 
-    <string name="preference_disabled_message">ناوبڕەکان ناچالاکن!</string>
-    <string name="preference_long_label">ڕێکخستن</string>
-    <string name="preference_short_label">ڕێکخستن</string>
-
     <string name="converter_disabled_message">ناوبڕەکان ناچالاکن!</string>
     <string name="converter_long_label">بگۆڕی ڕێککەوت</string>
     <string name="converter_short_label">بگۆڕ</string>
