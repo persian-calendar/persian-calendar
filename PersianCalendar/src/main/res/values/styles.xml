@@ -156,7 +156,6 @@
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">3dp</item>
-        <item name="tabIndicatorFullWidth">false</item>
         <item name="tabBackground">?attr/colorCard</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="tabIconTint">?attr/colorTextSecond</item>
