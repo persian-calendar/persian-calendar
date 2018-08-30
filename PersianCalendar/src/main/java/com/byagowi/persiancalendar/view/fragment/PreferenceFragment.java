@@ -120,24 +120,24 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                     return;
                 }
 
-                LocationManager gps = (LocationManager)
-                        activity.getSystemService(Context.LOCATION_SERVICE);
-
-                boolean gpsEnabled = false;
-
-                if (gps != null) {
-                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                }
-
-                if (!gpsEnabled) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.gps_internet_desc)
-                            .setPositiveButton(R.string.accept,
-                                    (dialogInterface, i) -> activity.startActivity(
-                                            new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                            .create().show();
-                    return;
-                }
+//                LocationManager gps = (LocationManager)
+//                        activity.getSystemService(Context.LOCATION_SERVICE);
+//
+//                boolean gpsEnabled = false;
+//
+//                if (gps != null) {
+//                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
+//                }
+//
+//                if (!gpsEnabled) {
+//                    new AlertDialog.Builder(getContext())
+//                            .setMessage(R.string.gps_internet_desc)
+//                            .setPositiveButton(R.string.accept,
+//                                    (dialogInterface, i) -> activity.startActivity(
+//                                            new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+//                            .create().show();
+//                    return;
+//                }
             } catch (Exception e) {
                 // Do whatever we were doing till now
             }
