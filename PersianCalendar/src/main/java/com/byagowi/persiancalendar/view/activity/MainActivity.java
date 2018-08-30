@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
-        TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/NotoNaskhArabic-Regular.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
+        TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", Constants.FONT_PATH); // font from assets: "assets/fonts/Roboto-Regular.ttf
 
         Utils.startEitherServiceOrWorker(this);
 
