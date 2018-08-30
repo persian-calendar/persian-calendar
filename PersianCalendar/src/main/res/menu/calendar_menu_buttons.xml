@@ -10,7 +10,6 @@
 
 
     <item
-        android:id="@+id/empty"
         android:title="@string/more"
         app:showAsAction="ifRoom">
 

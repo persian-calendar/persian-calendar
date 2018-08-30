@@ -1,13 +1,12 @@
 package net.androgames.level;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.byagowi.persiancalendar.R;
-
-import net.androgames.level.orientation.Orientation;
 import net.androgames.level.orientation.OrientationProvider;
 import net.androgames.level.view.LevelView;
 
@@ -38,6 +37,24 @@ public class Level extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // https://stackoverflow.com/a/20017878
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_180:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+            case Surface.ROTATION_270:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case Surface.ROTATION_0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case Surface.ROTATION_90:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+        }
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         view = new LevelView(this);
         addContentView(view, new ViewGroup.LayoutParams(

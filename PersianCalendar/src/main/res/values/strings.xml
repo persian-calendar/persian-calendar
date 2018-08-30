@@ -17,13 +17,8 @@
     <string name="clock_in_24">Clock in 24 hour</string>
     <string name="about">About</string>
     <string name="gpl_logo">GPL Logo</string>
-    <string name="widget_text_colors">Widget Text Colors</string>
-    <string name="clock">Clock</string>
-    <string name="date">Date</string>
     <string name="date_converter">Date Converter</string>
-    <string name="logo">Logo</string>
     <string name="widget_notification_dashclock">Widget, notification bar and DashClock</string>
-    <string name="general">General</string>
     <string name="widget_text_color">Widget Text Color</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
     <string name="pray_times_calculation_setting">Sun View, Pray Time and Qibla Settings</string>
@@ -43,23 +38,13 @@
     <string name="iran_time">Iran Time</string>
     <string name="compass">Compass</string>
     <string name="compass_not_found">Compass sensor not found</string>
-    <string name="month_names">Month Names</string>
-    <string name="calendar_font">Calendar Font</string>
-    <string name="application_language">Application Language</string>
     <string name="language">Language</string>
-    <string name="calendar_language">Calendar Language</string>
-    <string name="calendar_language_summary">The language to show the month and day names in</string>
     <string name="version">Version %s</string>
-    <string name="calendar_font_summary">Change the font for the calendar</string>
     <string name="athan">Athan</string>
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
     <string name="athan_alarm">Athan Alarm</string>
-    <string name="athan_sound">Athan Sound</string>
-    <string name="match_system">Match System</string>
     <string name="athan_volume_summary">Set the volume for the alarm</string>
     <string name="athan_volume">Athan Volume</string>
-    <string name="tap_to_stop_athan">Tap to stop</string>
-    <string name="playing_athan">Playing Athan</string>
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <string name="athan_gap">Athan Gap</string>
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be triggered (in minutes)</string>
@@ -87,12 +72,9 @@
     <string name="select_day">Select day</string>
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
-    <string name="islamic_offset">Islamic offset</string>
-    <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="stop">Stop</string>
     <string name="goto_date">Go to date</string>
-    <string name="select">Select</string>
     <string name="go">Go</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
@@ -175,15 +157,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="about_sendMail">E-Mail</string>
     <string name="about_noClient">No email client is installed</string>
     <string name="about_developers">Developers</string>
-    <string name="about_contributors">Contributors</string>
     <string name="about_support_developers">Developer Support</string>
     <string name="about_email_sum">Send personal email to the author of the app</string>
-    <string name="internet_location_enable">Turn on the Internet connection and location sensor, please.</string>
-    <string name="location_enable">Turn on the location sensor, please.</string>
-    <string name="internet_enable">Turn on the Internet connection, please.</string>
-    <string name="gps_settings">GPS</string>
-    <string name="gprs_settings">GPRS</string>
-    <string name="wifi_settings">WiFi</string>
     <string name="gps_internet_desc">"Enable device's GPS and Internet connection to find your location, please.
 The app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again."</string>
     <string name="start_of_year_diff">%s days (~%s weeks or %s months) from start of the year</string>
@@ -235,7 +210,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year11">Horse</string>
     <string name="year12">Sheep</string>
     <string name="level">Level</string>
-    <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis as shown above.</string>
-    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the Settings</string>
+    <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
+    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
 
 </resources>

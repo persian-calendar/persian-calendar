@@ -121,52 +121,6 @@
     </style>
 
     <!-- The revived old application theme. -->
-    <style name="ClassicTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--item name="colorPrimary">@color/classic_primary</item-->>
-        <item name="colorPrimaryDark">@color/classic_primary_dark</item>
-        <item name="colorAccent">@color/classic_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/classic_primary_dark
-        </item>
-        <!-- Customize your theme here. -->
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-
-        <item name="colorCard">@color/classic_card_background</item>
-        <item name="colorBackground">@color/classic_background</item>
-        <item name="colorTextPrimary">@color/classic_text_primary</item>
-        <item name="colorIcon">@color/classic_icon</item>
-        <item name="colorTextNormal">@color/classic_text_normal</item>
-        <item name="colorTextSecond">@color/classic_text_second</item>
-        <item name="colorTextHoliday">@color/classic_text_holiday</item>
-        <item name="colorHoliday">@color/classic_holiday</item>
-        <item name="colorTextDrawer">@color/classic_text_drawer</item>
-        <item name="colorTextDay">@color/classic_text_day</item>
-        <item name="colorTextDayName">@color/classic_text_day_name</item>
-        <item name="colorTextAthan">@color/classic_text_athan</item>
-        <item name="colorDivider">@color/classic_divider</item>
-        <item name="colorCurrentDay">@color/classic_current_day</item>
-        <item name="colorSelectDay">@color/classic_select_day</item>
-        <item name="colorDrawerBackground">@color/classic_drawer_background</item>
-        <item name="colorDrawerSelect">@color/classic_drawer_select</item>
-        <item name="colorDrawerIcon">@color/classic_icon_drawer</item>
-        <item name="colorMonthSwitch">@color/classic_month_switch</item>
-
-        <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
-        <item name="circleSelect">@drawable/circle_select_light</item>
-        <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">serif</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
-
-        <item name="android:itemBackground">@color/light_background</item>
-        <item name="android:textColor">@color/light_text_normal</item>
-    </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
         <item name="android:windowFullscreen">true</item>
@@ -205,13 +159,13 @@
         <item name="tabBackground">?attr/colorCard</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="tabIconTint">?attr/colorTextSecond</item>
-        <item name="tabTextColor">?attr/colorTextSecond</item>
-        <item name="tabSelectedTextColor">?attr/colorTextPrimary</item>
+        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
         <item name="tabTextAppearance">@style/customTabTextAppearance</item>
     </style>
 
     <style name="customTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
+        <!--<item name="textAllCaps">false</item>-->
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 

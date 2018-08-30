@@ -31,14 +31,6 @@
         <item>خەوتنان</item>
     </string-array>
 
-    <string-array name="islamicOffsetNames">
-        <item>٢-</item>
-        <item>١-</item>
-        <item>٠</item>
-        <item>١+</item>
-        <item>٢+</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>پشوودانەکانی ئێران</item>
         <item>بۆنە ئیسلامییەکانی ئێران</item>

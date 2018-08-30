@@ -56,32 +56,6 @@
     <color name="light_icon_drawer">#00897b</color>
 
 
-    <color name="classic_primary">#FFFFFF</color>
-    <color name="classic_primary_dark">#191919</color>
-    <color name="classic_accent">#587994</color>
-
-    <color name="classic_text_normal">#232323</color>
-    <color name="classic_text_second">#737373</color>
-    <color name="classic_text_primary">#587994</color>
-    <color name="classic_text_drawer">#737373</color>
-    <color name="classic_text_holiday">#BD2F2E</color>
-    <color name="classic_holiday">#6E97B9</color>
-    <color name="classic_text_day">#737373</color>
-    <color name="classic_text_day_name">#6E97B9</color>
-    <color name="classic_month_switch">#6E97B9</color>
-    <color name="classic_text_athan">#ffffff</color>
-
-    <color name="classic_divider">#e0e0e0</color>
-    <color name="classic_background">#f4f4f4</color>
-    <color name="classic_card_background">#fafafa</color>
-    <color name="classic_current_day">#6E97B9</color>
-    <color name="classic_select_day">#eff2f1</color>
-    <color name="classic_drawer_background">#f4f4f4</color>
-    <color name="classic_drawer_select">#eeeeee</color>
-
-    <color name="classic_icon">#587994</color>
-    <color name="classic_icon_drawer">#587994</color>
-
     <!-- Custom view SunView default colors -->
     <color name="sViewHorizonColorLight">#32000000</color>
     <color name="sViewTimelineColorLight">#32000000</color>

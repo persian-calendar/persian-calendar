@@ -2,10 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	
 	<!-- Effets sonores -->
-	<integer name="bip_rate">500</integer>
-	
-	<!-- Rates -->
+
+    <!-- Rates -->
 	<integer name="frame_rate">60</integer>
-	<integer name="sensor_rate">10</integer>
-	
+
 </resources>

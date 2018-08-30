@@ -17,13 +17,8 @@
     <string name="clock_in_24">24 گھنٹے</string>
     <string name="about">تعارف</string>
     <string name="gpl_logo">نشان پروانهٔ جامع همگانی گنو</string>
-    <string name="widget_text_colors">وڈگیٹ کے متن کا رنگ</string>
-    <string name="clock">گھڑی</string>
-    <string name="date">تاریخ</string>
     <string name="date_converter">تبدیلی تاریخ</string>
-    <string name="logo">لوگو</string>
     <string name="widget_notification_dashclock">وڈگیٹ، اطلاع نامے اور ڈیش کلاک</string>
-    <string name="general">عمومی</string>
     <string name="widget_text_color">رنگ‌نوشته‌های ابزارک</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
     <string name="pray_times_calculation_setting">نمایشگر خورشید، اوقات شرعی و قبله‌نما</string>
@@ -43,23 +38,13 @@
     <string name="iran_time">ایرانی وقت</string>
     <string name="compass">قطب نما</string>
     <string name="compass_not_found">کمپاس نہیں ملا</string>
-    <string name="month_names">مہینوں کے نام</string>
-    <string name="calendar_font">تقویم کا فانٹ</string>
-    <string name="application_language">اطلاقیہ کی زبان</string>
     <string name="language">زبان</string>
-    <string name="calendar_language">تقویم کی زبان</string>
-    <string name="calendar_language_summary">زبانی که ماه‌ها و روزها به آن نمایش داده می‌شوند</string>
     <string name="version">نسخہ %s</string>
-    <string name="calendar_font_summary">تقویم کے فانٹ کی تبدیلی</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">ان نمازوں کے لیے اذان کو فعال کریں</string>
     <string name="athan_alarm">اذانیں</string>
-    <string name="athan_sound">اذان کی آواز</string>
-    <string name="match_system">تطبیق با سامانه</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">آواز کا والیوم</string>
-    <string name="tap_to_stop_athan">اذان بند کرنے کے لیے تھپتھپائیں</string>
-    <string name="playing_athan">در حال پخش اذان</string>
     <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیتتان را وارد کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
@@ -87,12 +72,9 @@
     <string name="select_day">انتخاب روز</string>
     <string name="date_exception">تاریخ وارد شده اشتباه است!</string>
     <string name="in_city_time">به افق</string>
-    <string name="islamic_offset">تنظیم تقویم اسلامی</string>
-    <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
     <string name="date_copied_clipboard">کلپ بورڈ پر نقل کر دیا گیا</string>
     <string name="stop">توقف کریں</string>
     <string name="goto_date">اس تاریخ پر جائیں</string>
-    <string name="select">انتخاب</string>
     <string name="go">جائیں</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
@@ -101,8 +83,6 @@
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>
-    <string name="main_calendar">تقویم اصلی</string>
-    <string name="main_calendar_summary">تنظیم تقویم اصلی برنامه در قسمت‌های مختلف</string>
     <string name="week_of_year">هفتهٔ سال</string>
     <string name="week_of_year_summary">نمایش هفتهٔ سال در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
@@ -139,15 +119,8 @@
     <string name="about_sendMail">رایانامه</string>
     <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
     <string name="about_developers">توسعه‌دهندگان</string>
-    <string name="about_contributors">همکاران</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامه شخصی برای نویسنده برنامه</string>
-    <string name="internet_location_enable">لطفاً اینترنت و موقعیت‌یاب را روشن نمایید!</string>
-    <string name="location_enable">لطفاً موقعیت‌یاب را روشن نمایید!</string>
-    <string name="internet_enable">لطفاً اینترنت را روشن نمایید!</string>
-    <string name="gps_settings">GPS</string>
-    <string name="gprs_settings">GPRS</string>
-    <string name="wifi_settings">WiFi</string>
     <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
 برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
     <string name="start_of_year_diff">%s روز (~%s هفته و یا %s ماه) از ابتدای سال</string>
@@ -187,7 +160,7 @@
     <string name="year11">اسب</string>
     <string name="year12">گوسفند</string>
     <string name="level">تراز</string>
-    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط مانند تصویر بالا به جلو و عقب بچرخانید.</string>
+    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط به جلو و عقب بچرخانید.</string>
     <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
 
 </resources>

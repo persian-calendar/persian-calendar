@@ -17,13 +17,8 @@
     <string name="clock_in_24">کاتژمێر بە ٢٤ کاتکۆ</string>
     <string name="about">لەبارە</string>
     <string name="gpl_logo">لۆگۆی GPL</string>
-    <string name="widget_text_colors">ڕەنگی دەقی ویجیت</string>
-    <string name="clock">کاتژمێر</string>
-    <string name="date">ڕێککەوت</string>
     <string name="date_converter">بگۆڕی ڕێککەوت</string>
-    <string name="logo">لۆگۆ</string>
     <string name="widget_notification_dashclock">ویجیت، ئاگاداری و دەشکڵۆک</string>
-    <string name="general">گشتی</string>
     <string name="widget_text_color">ڕەنگی دەقی ویجیت</string>
     <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
     <string name="pray_times_calculation_setting">حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
@@ -43,23 +38,13 @@
     <string name="iran_time">کاتی ئێران</string>
     <string name="compass">جەمسەرنوێن</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
-    <string name="month_names">ناوی مانگەکان</string>
-    <string name="calendar_font">فۆنتی ڕۆژژمێر</string>
-    <string name="application_language">زمانی بەرنامە</string>
     <string name="language">زمان</string>
-    <string name="calendar_language">زمانی ڕۆژژمێر</string>
-    <string name="calendar_language_summary">زمانی نیشاندانی مانگەکان و ڕۆژەکان</string>
     <string name="version">وەشان %s</string>
-    <string name="calendar_font_summary">گۆڕینی فۆنتی ڕۆژژمێر</string>
     <string name="athan">بانگ</string>
     <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
     <string name="athan_alarm">بانگەکان</string>
-    <string name="athan_sound">دەنگی بانگ</string>
-    <string name="match_system">بەرابەرکردن لەگەڵ سیستم</string>
     <string name="athan_volume_summary">ڕێکخستنی قەبارەی دەنگی بانگ</string>
     <string name="athan_volume">قەبارەی دەنگ</string>
-    <string name="tap_to_stop_athan">بۆ ڕاگرتنی بانگ زەرەبەیەک لێ‌بدەن</string>
-    <string name="playing_athan">بڵاوکردنەوەی بانگ</string>
     <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یا پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
     <string name="athan_gap">مەودای بانگ</string>
     <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا</string>
@@ -87,12 +72,9 @@
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
     <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
     <string name="in_city_time">بە ئاسۆی</string>
-    <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
-    <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
     <string name="date_copied_clipboard">لە کلیپبۆرددا کۆپی کرا</string>
     <string name="stop">ڕاگرتن</string>
     <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>
-    <string name="select">ھەڵبژاردن</string>
     <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
@@ -101,8 +83,8 @@
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">مەودا: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>
-    <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
-    <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
+    <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
+    <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
     <string name="week_of_year">ژمارەی حەفتە</string>
     <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ</string>
     <string name="accept">باشە</string>
@@ -138,16 +120,9 @@
     <string name="about_sendMail">ئیمەیل</string>
     <string name="about_noClient">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە!</string>
     <string name="about_developers">پەرەپێدەران</string>
-    <string name="about_contributors">بەشداران</string>
     <string name="about_support_developers">پشتیوانی لە پەرەپێدەر</string>
     <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەری بەرنامە</string>
     <string name="about_report_bug_sum">"ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ."</string>
-    <string name="internet_location_enable">تکایە ئینتەرنێت و شوێن چالاک بکە!</string>
-    <string name="location_enable">تکایەظ شوێن چالاک بکه!</string>
-    <string name="internet_enable">تکایە ئینتەرنێت چالاک بکە!</string>
-    <string name="gps_settings">GPS</string>
-    <string name="gprs_settings">GPRS</string>
-    <string name="wifi_settings">WiFi</string>
     <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
 بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
     <string name="start_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) لە سەرەتای ساڵەوە</string>
@@ -187,7 +162,7 @@
     <string name="year11">ئەسپ</string>
     <string name="year12">پەز</string>
     <string name="level">تەراز</string>
-    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی هر خط مانند تصویر بالا به جلو و عقب بچرخانید.</string>
-    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
+    <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، سەر و خوار بە ئامرازکە بکەن و لە گشت تەوەرەکاندا بیھێنن و بیبەن.</string>
+    <string name="set_location">بۆ نیشاندانی شوێنی خۆر، مانگ و ئاراستەی ڕووگە لە بەشی ڕێکخستندا شوێنەکەتان ڕێک بخەن.</string>
 
 </resources>

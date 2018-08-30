@@ -150,10 +150,7 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:hardwareAccelerated="true"
-            android:name="net.androgames.level.Level"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name="net.androgames.level.Level" />
 
     </application>
 

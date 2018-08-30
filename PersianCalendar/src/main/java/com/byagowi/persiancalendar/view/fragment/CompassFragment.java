@@ -190,17 +190,17 @@ public class CompassFragment extends Fragment {
                     LinearLayout ll = new LinearLayout(activity);
                     ll.setPadding(16, 16, 16, 16);
                     ll.setOrientation(LinearLayout.VERTICAL);
-                    AppCompatImageView iv = new AppCompatImageView(activity);
-                    ll.addView(iv);
+//                    AppCompatImageView iv = new AppCompatImageView(activity);
+//                    ll.addView(iv);
                     TextView tv = new TextView(activity);
                     tv.setText(R.string.calibrate_compass_summary);
                     ll.addView(tv);
 
-                    AnimationDrawable animation = new AnimationDrawable();
-                    animation.setOneShot(false);
-                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
-                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
-                    iv.setBackgroundDrawable(animation);
+//                    AnimationDrawable animation = new AnimationDrawable();
+//                    animation.setOneShot(false);
+//                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
+//                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
+//                    iv.setBackgroundDrawable(animation);
 
                     AlertDialog frag = new AlertDialog.Builder(activity)
                             .setView(ll)
@@ -208,7 +208,7 @@ public class CompassFragment extends Fragment {
                             .create();
                     frag.show();
 
-                    animation.start();
+//                    animation.start();
                 }
             default:
                 break;
