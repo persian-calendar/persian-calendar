@@ -76,16 +76,23 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         FragmentActivity activity = getActivity();
         if (activity == null) return;
 
-        LocationManager gps = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            LocationManager gps = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
-        if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            new AlertDialog.Builder(activity)
-                    .setMessage(R.string.gps_internet_desc)
-                    .setPositiveButton(R.string.accept,
-                            (dialogInterface, i) -> activity.startActivity(
-                                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                    .create().show();
+            if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                new AlertDialog.Builder(activity)
+                        .setMessage(R.string.gps_internet_desc)
+                        .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                            try {
+                                activity.startActivity(
+                                        new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            } catch (Exception ignore) {
+                            }
+                        }).create().show();
+            }
+        } catch (Exception ignore) {
         }
+
     }
 
     private Runnable checkGPSProviderCallback = this::checkGPSProvider;
