@@ -1,1 +1,1 @@
-include ':PersianCalendar'
+include ':checks', ':PersianCalendar'

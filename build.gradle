@@ -5,8 +5,17 @@ buildscript {
         google()
         jcenter()
     }
+
+    ext {
+        junitVersion = '4.12'
+        gradlePluginVersion = '3.3.0-alpha06'
+        // Bump below on changin above
+        // If the Gradle plugin version is X.Y.Z, then the Lint library version is X+23.Y.Z.
+        lintVersion = '26.3.0-alpha06'
+    }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha06'
+        classpath "com.android.tools.build:gradle:$gradlePluginVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

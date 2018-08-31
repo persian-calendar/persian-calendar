@@ -1,0 +1,19 @@
+apply plugin: 'java-library'
+
+dependencies {
+    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "com.android.tools.lint:lint:$lintVersion"
+    testCompile "com.android.tools.lint:lint-tests:$lintVersion"
+    testCompile "com.android.tools:testutils:$lintVersion"
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+jar {
+    manifest {
+        attributes("Lint-Registry-v2": "com.byagowi.persiancalendar.checks.ProjectIssueRegistry")
+    }
+}
