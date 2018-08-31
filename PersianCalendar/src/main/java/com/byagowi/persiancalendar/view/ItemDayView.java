@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.View;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.util.Utils;
 
 public class ItemDayView extends View {
@@ -64,7 +65,9 @@ public class ItemDayView extends View {
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
-        resource.textPaint.getTextBounds(text, 0, text.length(), bounds);
+        resource.textPaint.getTextBounds(
+                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ"),
+                0, text.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);
