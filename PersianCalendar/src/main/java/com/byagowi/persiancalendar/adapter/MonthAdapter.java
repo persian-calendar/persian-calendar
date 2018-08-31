@@ -105,10 +105,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
     }
 
-    private boolean isPositionHeader(int position) {
-        return position < 7;
-    }
-
     private static CalendarFragment getCalendarFragment(View view) {
         Context ctx = view.getContext();
         if (ctx != null && ctx instanceof FragmentActivity) {
@@ -121,8 +117,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         ViewHolder(ItemDayView itemView) {
             super(itemView);
-
-            // We deliberately like to avoid DataBinding thing here, at least for now
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
@@ -177,7 +171,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
             if (totalDays < position - 6 - startingDayOfWeek) {
                 setEmpty();
-            } else if (isPositionHeader(position)) {
+            } else if (position < 7) {
                 itemDayView.setNonDayOfMonthItem(
                         Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)),
                         daysPaintResources.weekDaysInitialTextSize);
