@@ -645,6 +645,7 @@ public class Utils {
                 case LANG_FA_AF:
                 case LANG_PS:
                 case LANG_UR:
+                case LANG_EN_US:
                     DateConverter.useUmmAlQura = true;
             }
         }

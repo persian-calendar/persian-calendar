@@ -53,7 +53,6 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
 
         textView = new TextView(context);
         textView.setPadding(32, 32, 32, 32);
-        textView.setTextSize(20);
         textView.setText(R.string.pleasewaitgps);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);

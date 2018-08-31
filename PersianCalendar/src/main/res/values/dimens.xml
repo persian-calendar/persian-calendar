@@ -4,8 +4,6 @@
     <dimen name="card_padding">16dp</dimen>
     <dimen name="view_padding">16dp</dimen>
     <dimen name="converter_padding">8dp</dimen>
-    <dimen name="divider_margin">5dp</dimen>
-    <dimen name="divider_margin2">44dp</dimen>
     <dimen name="icon_margin">16dp</dimen>
     <dimen name="icon_size">28dp</dimen>
     <dimen name="padding_item">8dp</dimen>
@@ -21,7 +19,6 @@
     <dimen name="text_size_note">14sp</dimen>
 
     <dimen name="day_item_size">40sp</dimen>
-    <dimen name="day_item_select_size">38sp</dimen>
     <dimen name="day_item_appointment_y_offset">6sp</dimen>
     <dimen name="day_item_event_y_offset">8sp</dimen>
     <dimen name="day_item_event_bar_width">8sp</dimen>
