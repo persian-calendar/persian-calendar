@@ -26,22 +26,23 @@ import calendar.DateConverter;
  * Created by ebrahim on 3/20/16.
  */
 public class SelectDayDialog extends AppCompatDialogFragment {
-
-    long jdn = -1;
-
-    public void setJdn(long jdn) {
-        this.jdn = jdn;
-    }
+    private static String BUNDLE_KEY = "jdn";
 
     public static SelectDayDialog newInstance(long jdn) {
+        Bundle args = new Bundle();
+        args.putLong(BUNDLE_KEY, jdn);
+
         SelectDayDialog fragment = new SelectDayDialog();
-        fragment.setJdn(jdn);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        Bundle args = getArguments();
+        long jdn = args.getLong(BUNDLE_KEY, -1);
 
         SelectdayFragmentBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.selectday_fragment, null, false);
