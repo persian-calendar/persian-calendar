@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.TypeFaceUtil;
+import com.byagowi.persiancalendar.util.TypeFaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
-        TypeFaceUtil.overrideFont(getApplicationContext(), "SERIF", Constants.FONT_PATH); // font from assets: "assets/fonts/Roboto-Regular.ttf
+
+        TypeFaceUtils.overrideFont("SERIF",
+                TypeFaceUtils.getAppFont(getApplicationContext()));
 
         Utils.startEitherServiceOrWorker(this);
 
