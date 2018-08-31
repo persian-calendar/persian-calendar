@@ -455,6 +455,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 calendarsBinding.thirdCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
 
+                mainBinding.cardsViewPager.measureCurrentView(calendarsBinding.getRoot());
+
                 break;
 
             case R.id.owghat_text:
