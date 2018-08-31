@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.view.View;
 
 import com.byagowi.persiancalendar.util.Utils;
@@ -13,6 +14,8 @@ public class ItemDayView extends View {
         super(context);
         this.resource = resource;
     }
+
+    Rect bounds = new Rect();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -61,7 +64,8 @@ public class ItemDayView extends View {
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
-        int yPos = (int) ((height / 2) - ((resource.textPaint.descent() + resource.textPaint.ascent()) / 2));
+        resource.textPaint.getTextBounds(text, 0, text.length(), bounds);
+        int yPos = (height + bounds.height()) / 2;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);
     }
