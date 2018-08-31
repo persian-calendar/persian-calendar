@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
 import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
@@ -117,25 +115,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     UIUtils.askForLocationPermission(activity);
-                    return;
-                }
-
-                LocationManager gps = (LocationManager)
-                        activity.getSystemService(Context.LOCATION_SERVICE);
-
-                boolean gpsEnabled = false;
-
-                if (gps != null) {
-                    gpsEnabled = gps.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                }
-
-                if (!gpsEnabled) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.gps_internet_desc)
-                            .setPositiveButton(R.string.accept,
-                                    (dialogInterface, i) -> activity.startActivity(
-                                            new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                            .create().show();
                     return;
                 }
             } catch (Exception e) {

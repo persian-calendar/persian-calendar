@@ -11,6 +11,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -23,10 +25,12 @@ import com.github.praytimes.Coordinate;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -36,6 +40,10 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     private LocationManager locationManager;
     private Context context;
     private TextView textView;
+    private Handler handler = new Handler();
+    private String latitude;
+    private String longitude;
+    private String cityName;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
@@ -55,10 +63,39 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             UIUtils.askForLocationPermission(getActivity());
         }
 
+        handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30));
+
         builder.setPositiveButton("", null);
         builder.setNegativeButton("", null);
         builder.setView(textView);
     }
+
+    private void checkGPSProvider() {
+        if (latitude != null && longitude != null) return;
+
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+
+        try {
+            LocationManager gps = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+
+            if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                new AlertDialog.Builder(activity)
+                        .setMessage(R.string.gps_internet_desc)
+                        .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                            try {
+                                activity.startActivity(
+                                        new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            } catch (Exception ignore) {
+                            }
+                        }).create().show();
+            }
+        } catch (Exception ignore) {
+        }
+
+    }
+
+    private Runnable checkGPSProviderCallback = this::checkGPSProvider;
 
     private boolean lacksPermission = false;
     private boolean everRegisteredCallback = false;
@@ -105,10 +142,6 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
     };
 
-    private String latitude;
-    private String longitude;
-    private String cityName;
-
     private void showLocation(Location location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());
         longitude = String.format(Locale.ENGLISH, "%f", location.getLongitude());
@@ -147,14 +180,23 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             }
             editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY);
             editor.apply();
+
+            LocalBroadcastManager.getInstance(context)
+                    .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
         }
 
         if (everRegisteredCallback && locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+        handler.removeCallbacks(checkGPSProviderCallback);
+    }
+
+    @Override
+    public void onPause() {
+        onDialogClosed(false);
+        dismiss();
+        super.onPause();
     }
 
     @Override

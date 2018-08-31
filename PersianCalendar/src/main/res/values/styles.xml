@@ -21,8 +21,6 @@
     <attr name="colorDrawerSelect" format="reference" />
     <attr name="colorDrawerIcon" format="reference" />
 
-    <attr name="circleCurrentDay" format="reference" />
-    <attr name="circleSelect" format="reference" />
     <attr name="appDivider" format="reference" />
 
     <!-- Base application theme. -->
@@ -56,8 +54,6 @@
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
-        <item name="circleCurrentDay">@drawable/circle_current_day_dark</item>
-        <item name="circleSelect">@drawable/circle_select_dark</item>
         <item name="appDivider">@drawable/app_divider_dark</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
 
@@ -103,8 +99,6 @@
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
         <item name="colorMonthSwitch">@color/light_month_switch</item>
 
-        <item name="circleCurrentDay">@drawable/circle_current_day_light</item>
-        <item name="circleSelect">@drawable/circle_select_light</item>
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>

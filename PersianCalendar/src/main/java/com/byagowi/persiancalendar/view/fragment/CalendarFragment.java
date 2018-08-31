@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -19,7 +17,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +49,6 @@ import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
 import com.github.praytimes.PrayTime;
 import com.github.praytimes.PrayTimesCalculator;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +61,6 @@ import java.util.Set;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -454,6 +449,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 calendarsBinding.secondCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.thirdCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
                 calendarsBinding.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
+
+                mainBinding.cardsViewPager.measureCurrentView(calendarsBinding.getRoot());
 
                 break;
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Duolingo
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,6 +49,7 @@ public class RtlViewPager extends ViewPager {
     public RtlViewPager(Context context) {
         super(context);
     }
+
     public RtlViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -149,7 +150,7 @@ public class RtlViewPager extends ViewPager {
         }
 
         // The `CREATOR` field is used to create the parcelable from a parcel, even though it is never referenced directly.
-        public static final Parcelable.Creator<SavedState> CREATOR  = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in, ClassLoader loader) {
                 return new SavedState(in, loader);
