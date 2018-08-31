@@ -59,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="?attr/appDivider"
-            android:dividerPadding="@dimen/divider_margin2"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/padding_item"
