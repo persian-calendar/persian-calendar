@@ -15,7 +15,7 @@ public class ItemDayView extends View {
         this.resource = resource;
     }
 
-    Rect bounds = new Rect();
+    private Rect bounds = new Rect();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -100,11 +100,11 @@ public class ItemDayView extends View {
     }
 
     private String text = "";
-    boolean today, selected, hasEvent, hasAppointment, holiday;
+    private boolean today, selected, hasEvent, hasAppointment, holiday;
     private int textSize;
     private long jdn = -1;
     private int dayOfMonth = -1;
-    boolean isNumber;
+    private boolean isNumber;
 
     public long getJdn() {
         return jdn;

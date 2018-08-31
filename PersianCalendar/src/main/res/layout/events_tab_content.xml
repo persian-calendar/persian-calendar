@@ -4,66 +4,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="?attr/appDivider"
-        android:dividerPadding="@dimen/divider_margin"
         android:minHeight="220dp"
         android:orientation="vertical"
-        android:showDividers="middle">
+        android:padding="@dimen/card_padding">
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/no_event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/card_padding">
+            android:text="@string/no_event"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="@dimen/text_size_description" />
 
-            <LinearLayout
-                android:id="@+id/eventContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/holiday_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextHoliday"
+            android:textSize="@dimen/text_size_description" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/no_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_event"
-                    android:textColor="?attr/colorTextSecond"
-                    android:textSize="@dimen/text_size_description" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/device_event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/holiday_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorTextHoliday"
-                    android:textSize="@dimen/text_size_description" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/device_event_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorTextNormal"
-                    android:textSize="@dimen/text_size_description" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/event_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorTextNormal"
-                    android:textSize="@dimen/text_size_description" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/event_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="?attr/colorTextSecond"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/event_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="12sp" />
 
     </LinearLayout>
+
 
 </layout>

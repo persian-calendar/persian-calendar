@@ -204,7 +204,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStrokeWidth(2);
         canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
         canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint);
-        canvas.drawLine(canvas.getWidth() / 2, height * 0.7f, canvas.getWidth() / 2, height * 0.8f, mPaint);
+        canvas.drawLine(getWidth() / 2, height * 0.7f, getWidth() / 2, height * 0.8f, mPaint);
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -214,7 +214,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(sunriseTextColor);
         canvas.drawText(sunriseString, width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(middayString, canvas.getWidth() / 2, canvas.getHeight() - 22, mPaint);
+        canvas.drawText(middayString, width / 2, height - 22, mPaint);
         mPaint.setColor(sunsetTextColor);
         canvas.drawText(sunsetString, width * 0.83f, height * 0.2f, mPaint);
 

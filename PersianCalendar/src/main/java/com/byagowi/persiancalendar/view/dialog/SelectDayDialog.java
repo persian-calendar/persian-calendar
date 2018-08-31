@@ -27,10 +27,16 @@ import calendar.DateConverter;
  */
 public class SelectDayDialog extends AppCompatDialogFragment {
 
-    long jdn;
+    long jdn = -1;
 
-    public SelectDayDialog(long jdn) {
+    public void setJdn(long jdn) {
         this.jdn = jdn;
+    }
+
+    public static SelectDayDialog newInstance(long jdn) {
+        SelectDayDialog fragment = new SelectDayDialog();
+        fragment.setJdn(jdn);
+        return fragment;
     }
 
     @Override

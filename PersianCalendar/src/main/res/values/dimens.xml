@@ -21,7 +21,6 @@
     <dimen name="text_size_note">14sp</dimen>
 
     <dimen name="day_item_size">40sp</dimen>
-    <dimen name="day_item_select_size">38sp</dimen>
     <dimen name="day_item_appointment_y_offset">6sp</dimen>
     <dimen name="day_item_event_y_offset">8sp</dimen>
     <dimen name="day_item_event_bar_width">8sp</dimen>

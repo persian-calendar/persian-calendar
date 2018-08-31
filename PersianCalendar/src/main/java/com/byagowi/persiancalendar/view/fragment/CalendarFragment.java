@@ -645,7 +645,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                new SelectDayDialog(lastSelectedJdn).show(getChildFragmentManager(),
+                SelectDayDialog.newInstance(lastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
             case R.id.today:
