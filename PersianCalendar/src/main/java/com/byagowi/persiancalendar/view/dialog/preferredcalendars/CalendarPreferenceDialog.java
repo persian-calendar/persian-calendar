@@ -57,6 +57,7 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
         builder.setView(recyclerView);
+        builder.setTitle(R.string.calendars_priority);
         builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
         });
         builder.setPositiveButton(R.string.accept, (dialogInterface, i) -> {
