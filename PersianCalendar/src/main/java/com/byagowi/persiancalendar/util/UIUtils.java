@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.github.praytimes.Clock;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -239,26 +240,26 @@ public class UIUtils {
                     context.getString(monthEmoji), context.getString(monthName)));
 
             switch (week) {
-                case 0:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrOne));
+                case Calendar.SATURDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrOne));
                     break;
-                case 1:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrTwo));
+                case Calendar.SUNDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrTwo));
                     break;
-                case 2:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrThree));
+                case Calendar.MONDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrThree));
                     break;
-                case 3:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFour));
+                case Calendar.TUESDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFour));
                     break;
-                case 4:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFive));
+                case Calendar.WEDNESDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFive));
                     break;
-                case 5:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSix));
+                case Calendar.THURSDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSix));
                     break;
-                case 6:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSeven));
+                case Calendar.FRIDAY:
+                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSeven));
                     break;
                 default:
                     break;
