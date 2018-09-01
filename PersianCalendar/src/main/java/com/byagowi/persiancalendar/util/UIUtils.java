@@ -241,25 +241,25 @@ public class UIUtils {
 
             switch (week) {
                 case Calendar.SATURDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrOne));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrOne));
                     break;
                 case Calendar.SUNDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrTwo));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrTwo));
                     break;
                 case Calendar.MONDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrThree));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrThree));
                     break;
                 case Calendar.TUESDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFour));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFour));
                     break;
                 case Calendar.WEDNESDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFive));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFive));
                     break;
                 case Calendar.THURSDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSix));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSix));
                     break;
                 case Calendar.FRIDAY:
-                    owghatBinding.todayZekr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSeven));
+                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSeven));
                     break;
                 default:
                     break;
