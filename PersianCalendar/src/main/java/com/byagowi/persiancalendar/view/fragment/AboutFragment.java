@@ -30,8 +30,7 @@ import com.google.android.material.chip.Chip;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
@@ -98,9 +97,8 @@ public class AboutFragment extends Fragment {
             }
         });
 
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        Drawable developerIcon = ContextCompat.getDrawable(activity, R.drawable.ic_developer);
-        Drawable designerIcon = ContextCompat.getDrawable(activity, R.drawable.ic_designer);
+        Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);
+        Drawable designerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_designer);
         Resources.Theme theme = activity.getTheme();
         TypedValue color = new TypedValue();
         theme.resolveAttribute(R.attr.colorDrawerIcon, color, true);

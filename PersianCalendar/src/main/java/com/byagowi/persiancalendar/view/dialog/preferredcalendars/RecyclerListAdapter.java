@@ -39,10 +39,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private final List<String> titles;
     private final List<String> values;
     private final List<Boolean> enabled;
-    CalendarPreferenceDialog calendarPreferenceDialog;
+    private final CalendarPreferenceDialog calendarPreferenceDialog;
 
-    public RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
-                               List<String> titles, List<String> values, List<Boolean> enabled) {
+    RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
+                        List<String> titles, List<String> values, List<Boolean> enabled) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
         this.titles = new ArrayList<>(titles);
         this.values = new ArrayList<>(values);

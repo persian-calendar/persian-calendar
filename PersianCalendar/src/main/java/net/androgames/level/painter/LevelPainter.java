@@ -590,7 +590,7 @@ public class LevelPainter implements Runnable {
                     case BOTTOM:    // bottom
                     case LEFT:        // left
                     case RIGHT:    // right
-                        levelWidth = (int) (width - 2 * displayGap);
+                        levelWidth = width - 2 * displayGap;
                         levelHeight = (int) (levelWidth * LEVEL_ASPECT_RATIO);
                         break;
                 }

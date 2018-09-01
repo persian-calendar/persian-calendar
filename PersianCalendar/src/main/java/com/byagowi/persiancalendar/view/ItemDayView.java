@@ -23,14 +23,15 @@ public class ItemDayView extends View {
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
+        int radius = Math.min(width, height) / 2;
 
         if (selected) {
-            canvas.drawCircle(width / 2, height / 2, height / 2 - 5,
+            canvas.drawCircle(width / 2, height / 2, radius - 5,
                     resource.selectedPaint);
         }
 
         if (today) {
-            canvas.drawCircle(width / 2, height / 2, height / 2 - 5,
+            canvas.drawCircle(width / 2, height / 2, radius - 5,
                     resource.todayPaint);
         }
 
@@ -65,9 +66,9 @@ public class ItemDayView extends View {
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
-        resource.textPaint.getTextBounds(
-                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ"),
-                0, text.length(), bounds);
+        String textToMeasure =
+                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
+        resource.textPaint.getTextBounds(textToMeasure, 0, textToMeasure.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);

@@ -26,7 +26,7 @@
     <dimen name="day_item_today_indicator_thickness">1dp</dimen>
     <dimen name="day_item_week_number_text_size">12sp</dimen>
     <dimen name="day_item_week_days_initial_text_size">20sp</dimen>
-    <dimen name="day_item_arabic_digits_text_size">20sp</dimen>
+    <dimen name="day_item_arabic_digits_text_size">18sp</dimen>
     <dimen name="day_item_persian_digits_text_size">25sp</dimen>
 
     <!-- analogous to compat's listPreferredItemPaddingLeft/Right -->
