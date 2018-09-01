@@ -89,7 +89,9 @@ public class UIUtils {
         binding.firstCalendarDateLinear.setText(CalendarUtils.toLinearDate(firstCalendar));
         binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
         binding.firstCalendarDateDay.setTypeface(calendarFont);
-        binding.firstCalendarDate.setText(CalendarUtils.getMonthName(firstCalendar) + "\n" + Utils.formatNumber(firstCalendar.getYear()));
+        binding.firstCalendarDate.setText(String.format("%s\n%s",
+                CalendarUtils.getMonthName(firstCalendar),
+                Utils.formatNumber(firstCalendar.getYear())));
         binding.firstCalendarDate.setTypeface(calendarFont);
         if (applyLineMultiplier) binding.firstCalendarDate.setLineSpacing(0, .6f);
 
@@ -99,7 +101,9 @@ public class UIUtils {
             binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
             binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
             binding.secondCalendarDateDay.setTypeface(calendarFont);
-            binding.secondCalendarDate.setText(CalendarUtils.getMonthName(secondCalendar) + "\n" + Utils.formatNumber(secondCalendar.getYear()));
+            binding.secondCalendarDate.setText(String.format("%s\n%s",
+                    CalendarUtils.getMonthName(secondCalendar),
+                    Utils.formatNumber(secondCalendar.getYear())));
             binding.secondCalendarDate.setTypeface(calendarFont);
             if (applyLineMultiplier) binding.secondCalendarDate.setLineSpacing(0, .6f);
         }
@@ -110,7 +114,9 @@ public class UIUtils {
             binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
             binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
             binding.thirdCalendarDateDay.setTypeface(calendarFont);
-            binding.thirdCalendarDate.setText(CalendarUtils.getMonthName(thirdCalendar) + "\n" + Utils.formatNumber(thirdCalendar.getYear()));
+            binding.thirdCalendarDate.setText(String.format("%s\n%s",
+                    CalendarUtils.getMonthName(thirdCalendar),
+                    Utils.formatNumber(thirdCalendar.getYear())));
             binding.thirdCalendarDate.setTypeface(calendarFont);
             if (applyLineMultiplier) binding.thirdCalendarDate.setLineSpacing(0, .6f);
         }
@@ -121,7 +127,9 @@ public class UIUtils {
             binding.today.setVisibility(View.GONE);
             binding.todayIcon.setVisibility(View.GONE);
             if (Utils.isIranTime()) {
-                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
+                binding.weekDayName.setText(String.format("%s (%s)",
+                        binding.weekDayName.getText(),
+                        context.getString(R.string.iran_time)));
             }
             binding.today.setVisibility(View.GONE);
             binding.todayIcon.setVisibility(View.GONE);
