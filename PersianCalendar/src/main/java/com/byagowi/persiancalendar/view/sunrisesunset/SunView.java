@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.github.praytimes.Clock;
 import com.github.praytimes.PrayTime;
@@ -43,7 +45,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
             sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
-            middayTextColor, sunsetTextColor;
+            middayTextColor, sunsetTextColor, colorTextSecond;
 
     int width, height;
 
@@ -83,15 +85,16 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
             TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
 
             try {
-                context.getTheme().resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true);
                 int HorizonColor = ContextCompat.getColor(context, typedValue.resourceId);
                 horizonColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true);
                 int TimelineColor = ContextCompat.getColor(context, typedValue.resourceId);
                 timelineColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
                 int taglineColor = ContextCompat.getColor(context, typedValue.resourceId);
                 taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor);
                 nightColor = typedArray.getColor(R.styleable.SunView_SunViewNightColor, ContextCompat.getColor(context, R.color.sViewNightColor));
@@ -101,22 +104,25 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 sunBeforeMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewBeforeMiddayColor, ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor));
                 sunAfterMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewAfterMiddayColor, ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor));
                 sunEveningColor = typedArray.getColor(R.styleable.SunView_SunViewEveningColor, ContextCompat.getColor(context, R.color.sViewSunEveningColor));
-                context.getTheme().resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true);
                 int SunriseTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 sunriseTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunriseTextColor, SunriseTextColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true);
                 int MiddayTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 middayTextColor = typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true);
                 int SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 sunsetTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor);
 
+                theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
+                colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
             } finally {
                 typedArray.recycle();
             }
         }
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setTypeface(TypefaceUtils.getAppFont(context));
 
         mSunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSunPaint.setColor(sunColor);
@@ -214,7 +220,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(sunriseTextColor);
         canvas.drawText(sunriseString, width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(middayString, width / 2, height - 22, mPaint);
+        canvas.drawText(middayString, width / 2, height - 8, mPaint);
         mPaint.setColor(sunsetTextColor);
         canvas.drawText(sunsetString, width * 0.83f, height * 0.2f, mPaint);
 
@@ -223,10 +229,10 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setTextSize(25);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(taggingColor);
-        canvas.drawText(dayLengthString, width * (isRTL ? 0.76f : 0.24f), height, mPaint);
+        mPaint.setColor(colorTextSecond);
+        canvas.drawText(dayLengthString, width * (isRTL ? 0.70f : 0.30f), height - 8, mPaint);
         if (!TextUtils.isEmpty(remainingString)) {
-            canvas.drawText(remainingString, width * (isRTL ? 0.24f : 0.76f), height, mPaint);
+            canvas.drawText(remainingString, width * (isRTL ? 0.30f : 0.70f), height - 8, mPaint);
         }
 
         // draw sun

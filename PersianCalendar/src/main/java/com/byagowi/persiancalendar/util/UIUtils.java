@@ -81,8 +81,8 @@ public class UIUtils {
             thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(2), jdn);
         }
 
-        boolean applyLineMultiplier = !TypeFaceUtils.isCustomFontEnabled();
-        Typeface calendarFont = TypeFaceUtils.getCalendarFragmentFont(context);
+        boolean applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled();
+        Typeface calendarFont = TypefaceUtils.getCalendarFragmentFont(context);
 
         binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
 
