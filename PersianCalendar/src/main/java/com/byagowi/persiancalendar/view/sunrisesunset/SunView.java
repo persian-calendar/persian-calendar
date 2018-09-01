@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 /**
@@ -43,9 +44,10 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
 
+    @ColorInt
     int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
             sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
-            middayTextColor, sunsetTextColor, colorTextSecond;
+            middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
 
     int width, height;
 
@@ -114,6 +116,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 int SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 sunsetTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor);
 
+                theme.resolveAttribute(R.attr.colorTextNormal, typedValue, true);
+                colorTextNormal = ContextCompat.getColor(context, typedValue.resourceId);
                 theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
                 colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
             } finally {
@@ -238,6 +242,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
 
+            @ColorInt
             int color = (int) argbEvaluator.evaluate(current,
                     sunBeforeMiddayColor, sunAfterMiddayColor);
 
