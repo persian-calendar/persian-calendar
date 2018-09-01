@@ -1,6 +1,6 @@
 // copyedited from https://code.google.com/p/android-salat-times/source/browse/src/com/cepmuvakkit/times/view/QiblaCompassView.java
 // licensed under GPLv3
-package com.byagowi.persiancalendar.view;
+package com.cepmuvakkit.times.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;

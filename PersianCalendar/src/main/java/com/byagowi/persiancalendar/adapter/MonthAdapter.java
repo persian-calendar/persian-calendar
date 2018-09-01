@@ -11,9 +11,9 @@ import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.DaysPaintResources;
-import com.byagowi.persiancalendar.view.ItemDayView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
+import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
 
 import java.util.List;
 
