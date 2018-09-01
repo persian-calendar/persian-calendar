@@ -184,7 +184,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     public boolean firstTime = true;
 
-    ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
+    private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
             Context context = getContext();

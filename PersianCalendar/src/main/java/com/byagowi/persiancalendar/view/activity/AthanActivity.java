@@ -78,7 +78,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         root.setOnClickListener(this);
         root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
 
-        binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
+        binding.place.setText(String.format("%s %s",
+                getString(R.string.in_city_time),
+                Utils.getCityName(this, true)));
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10));
 
         try {

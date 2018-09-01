@@ -34,71 +34,35 @@ public class CityEntity {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-
     public String getCountryEn() {
         return countryEn;
-    }
-
-    public void setCountryEn(String countryEn) {
-        this.countryEn = countryEn;
     }
 
     public String getCountryFa() {
         return countryFa;
     }
 
-    public void setCountryFa(String countryFa) {
-        this.countryFa = countryFa;
-    }
-
     public String getCountryCkb() {
         return countryCkb;
-    }
-
-    public void setCountryCkb(String countryFa) {
-        this.countryCkb = countryCkb;
     }
 
     public String getEn() {
         return en;
     }
 
-    public void setEn(String en) {
-        this.en = en;
-    }
-
     public String getFa() {
         return fa;
-    }
-
-    public void setFa(String fa) {
-        this.fa = fa;
     }
 
     public String getCkb() {
         return ckb;
     }
 
-    public void setCkb(String fa) {
-        this.ckb = ckb;
-    }
-
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public Coordinate getCoordinate() {
         return coordinate;
-    }
-
-    public void setLatitude(Coordinate coordinate) {
-        this.coordinate = coordinate;
     }
 }

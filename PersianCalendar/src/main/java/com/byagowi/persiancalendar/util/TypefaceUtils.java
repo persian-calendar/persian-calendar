@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.Constants;
 import java.lang.reflect.Field;
 
 // https://gist.github.com/artem-zinnatullin/7749076
-public class TypeFaceUtils {
+public class TypefaceUtils {
 
     /**
      * Using reflection to override default typeface

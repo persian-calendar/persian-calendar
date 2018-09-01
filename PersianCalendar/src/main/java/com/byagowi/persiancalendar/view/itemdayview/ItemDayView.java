@@ -1,8 +1,9 @@
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar.view.itemdayview;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.Constants;
@@ -14,6 +15,23 @@ public class ItemDayView extends View {
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
         this.resource = resource;
+    }
+
+    // These constructors shouldn't be used
+    // as the first one reuses resource retrieval across the days
+    public ItemDayView(Context context) {
+        super(context);
+        resource = new DaysPaintResources(context);
+    }
+
+    public ItemDayView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        resource = new DaysPaintResources(context);
+    }
+
+    public ItemDayView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        resource = new DaysPaintResources(context);
     }
 
     private Rect bounds = new Rect();

@@ -1,6 +1,6 @@
 // copyedited from https://code.google.com/p/android-salat-times/source/browse/src/com/cepmuvakkit/times/view/QiblaCompassView.java
 // licensed under GPLv3
-package com.byagowi.persiancalendar.view;
+package com.cepmuvakkit.times.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -148,8 +148,8 @@ public class QiblaCompassView extends View {
         return longitude != 0.0 && latitude != 0.0;
     }
 
-    Path mPath = new Path();
-    Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Path mPath = new Path();
+    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public void drawTrueNorthArrow(Canvas canvas, float drawnAngle) {
         trueNorthArrowPaint.reset();
@@ -172,8 +172,8 @@ public class QiblaCompassView extends View {
         canvas.restore();
     }
 
-    Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-    Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public void drawDial(Canvas canvas) {
         // over here
@@ -234,7 +234,7 @@ public class QiblaCompassView extends View {
 
     }
 
-    Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public void drawSun(Canvas canvas) {
         sunPaint.reset();
@@ -256,12 +256,12 @@ public class QiblaCompassView extends View {
 
     }
 
-    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    RectF moonRect = new RectF();
-    RectF moonOval = new RectF();
+    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private RectF moonRect = new RectF();
+    private RectF moonOval = new RectF();
 
     public void drawMoon(Canvas canvas) {
         moonPaint.reset();
@@ -298,8 +298,8 @@ public class QiblaCompassView extends View {
         }
     }
 
-    Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
+    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public void drawQibla(Canvas canvas) {
 

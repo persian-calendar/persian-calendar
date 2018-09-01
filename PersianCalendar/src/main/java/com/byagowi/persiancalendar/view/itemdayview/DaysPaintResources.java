@@ -1,16 +1,12 @@
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar.view.itemdayview;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.util.TypedValue;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.TypeFaceUtils;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.util.TypefaceUtils;
 
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
@@ -70,6 +66,6 @@ public class DaysPaintResources {
         arabicDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size);
         persianDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size);
 
-        textPaint.setTypeface(TypeFaceUtils.getCalendarFragmentFont(context));
+        textPaint.setTypeface(TypefaceUtils.getCalendarFragmentFont(context));
     }
 }
