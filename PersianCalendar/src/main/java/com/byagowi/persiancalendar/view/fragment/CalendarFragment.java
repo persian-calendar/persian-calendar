@@ -214,7 +214,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar(),
+        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, owghatBinding, Utils.getMainCalendar(),
                 Utils.getEnabledCalendarTypes());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
