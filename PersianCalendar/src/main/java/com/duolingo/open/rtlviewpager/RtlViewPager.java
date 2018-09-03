@@ -37,7 +37,7 @@ import androidx.viewpager.widget.ViewPager;
  * orders paged views according to the layout direction of the view.  In left to right mode, the
  * first view is at the left side of the carousel, and in right to left mode it is at the right
  * side.
- *
+ * <p>
  * It accomplishes this by wrapping the provided <code>PagerAdapter</code> and any provided
  * <code>OnPageChangeListener</code>s so that clients can be agnostic to layout direction and
  * modifications are kept internal to <code>RtlViewPager</code>.
