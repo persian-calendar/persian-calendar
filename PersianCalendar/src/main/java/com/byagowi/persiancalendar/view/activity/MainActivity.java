@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -39,7 +40,6 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         binding.navigation.setNavigationItemSelectedListener(this);
-        AppCompatImageView seasonImage = binding.navigation
+        ImageView seasonImage = binding.navigation
                 .getHeaderView(0).findViewById(R.id.season_image);
         switch (getSeason()) {
             case "SPRING":

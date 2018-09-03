@@ -9,7 +9,7 @@
         android:orientation="vertical"
         tools:background="@drawable/fajr">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/athan_name"
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:textStyle="bold"
             tools:text="اذان صبح" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/place"
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"

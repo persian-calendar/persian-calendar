@@ -5,7 +5,7 @@
     android:background="?attr/colorPrimary"
     android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/prev"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
@@ -23,7 +23,7 @@
         android:paddingBottom="@dimen/grid_calendar_padding_bottom"
         android:scrollbars="vertical" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/next"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
