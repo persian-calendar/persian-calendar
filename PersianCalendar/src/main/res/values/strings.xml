@@ -212,14 +212,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="level">Level</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
-    <string name="todaydhikr">This day Dhikr</string>
-    <string name="dhikrOne" translatable="false">يا رَبَّ العَالَمِين</string>
-    <string name="dhikrTwo" translatable="false">يا ذَا الجَلاَلِ وَ الإِکرَام</string>
-    <string name="dhikrThree" translatable="false">يا قَاضِي الحَاجَات</string>
-    <string name="dhikrFour" translatable="false">يا اَرحَمَ الرَّاحِمِين</string>
-    <string name="dhikrFive" translatable="false">يا حَي يا قَيوم</string>
-    <string name="dhikrSix" translatable="false">لاَ إِلَه إِلاَّ اللهُ المَلِکُ الحَقُّ المُبِين</string>
-    <string name="dhikrSeven" translatable="false">َاَللَّهُمَّ صَلِّ عَلَي مُحَمَّدٍ وَ آلِ مُحَمَّدٍ وَ عَجِّل فَرَجَهُم</string>
-    <string name="moonInScorpio">The moons in Scorpio</string>
+    <string name="moonInScorpio">Moon is in Scorpio</string>
 
 </resources>

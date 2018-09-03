@@ -10,15 +10,6 @@
         android:background="?attr/selectableItemBackground"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/todayDhikr"
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/text_size_title" />
-
         <!-- sun content -->
         <com.byagowi.persiancalendar.view.sunrisesunset.SunView
             android:id="@+id/svPlot"

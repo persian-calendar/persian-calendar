@@ -179,19 +179,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             });
         }
 
-        PersianDate todayPersian = CalendarUtils.getPersianToday();
-        IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
-        int perMonth = todayPersian.getMonth();
-        int perDay = todayPersian.getDayOfMonth() + 1;
-        int islDay = todayIslamic.getDayOfMonth() + 1;
-        double moonScorpio = (((islDay * 12.2) + perDay) / 30) + perMonth;
-        int moonInScorpio = (int) moonScorpio;
-        if (moonInScorpio == 8)
-            calendarsBinding.mooninscorpio.setText(R.string.moonInScorpio);
-            calendarsBinding.mooninscorpio.setTextColor(Color.RED);
-
         return mainBinding.getRoot();
-
     }
 
     public boolean firstTime = true;
@@ -226,7 +214,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, owghatBinding, Utils.getMainCalendar(),
+        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar(),
                 Utils.getEnabledCalendarTypes());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);

@@ -244,7 +244,7 @@
                 android:textSize="@dimen/text_size_description" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mooninscorpio"
+                android:id="@+id/moon_in_scorpio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

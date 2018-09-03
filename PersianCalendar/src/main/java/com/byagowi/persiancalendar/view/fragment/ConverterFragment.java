@@ -98,7 +98,7 @@ public class ConverterFragment extends Fragment implements
                 List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
                 orderedCalendarTypes.remove(calendarType);
 
-                UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, null, calendarType,
+                UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
                         orderedCalendarTypes);
                 lastSelectedJdn = jdn;
                 if (CalendarUtils.getTodayJdn() == jdn) {
