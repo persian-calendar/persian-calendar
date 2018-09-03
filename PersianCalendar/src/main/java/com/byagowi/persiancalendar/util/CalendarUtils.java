@@ -395,4 +395,14 @@ public class CalendarUtils {
             Log.e("", "Error on device calendar events read", e);
         }
     }
+
+    // Based on Mehdi's work
+    public static boolean monthInScorpio(long jdn) {
+        PersianDate persianDate = DateConverter.jdnToPersian(jdn);
+        IslamicDate islamicDate = DateConverter.jdnToIslamic(jdn);
+        int res = (int) (((((float) (islamicDate.getDayOfMonth() + 1) * 12.2f) +
+                (persianDate.getDayOfMonth() + 1)) / 30.f) + persianDate.getMonth());
+        if (res > 12) res -= 12;
+        return res == 8;
+    }
 }

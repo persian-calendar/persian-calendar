@@ -1,9 +1,15 @@
 package com.byagowi.persiancalendar;
 
+import com.byagowi.persiancalendar.util.CalendarUtils;
+
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import calendar.DateConverter;
 import calendar.IslamicDate;
+import calendar.PersianDate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -761,6 +767,58 @@ public class TestDateCalendar {
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
             long result = DateConverter.persianToJdn(DateConverter.jdnToPersian(jdn));
             assertEquals(jdn, result);
+        }
+    }
+
+    @Test
+    public void practice_month_in_scorpio() {
+        int[][] postiveDays = {
+                {1397, 1, 14},
+                {1397, 1, 15},
+                {1397, 2, 10},
+                {1397, 2, 11},
+                {1397, 2, 12},
+                {1397, 3, 6},
+                {1397, 3, 7},
+                {1397, 3, 8},
+                {1397, 4, 2},
+                {1397, 4, 3},
+                {1397, 4, 30},
+                {1397, 4, 31},
+                {1397, 5, 26},
+                {1397, 5, 27},
+                {1397, 6, 22},
+                {1397, 6, 23},
+                {1397, 7, 18},
+                {1397, 7, 19},
+                {1397, 7, 20},
+                {1397, 8, 16},
+                {1397, 8, 17},
+                {1397, 9, 12},
+                {1397, 9, 13},
+                {1397, 9, 14},
+                {1397, 10, 10},
+                {1397, 10, 11},
+                {1397, 11, 8},
+                {1397, 11, 9},
+                {1397, 12, 6},
+                {1397, 12, 7}
+        };
+        List<Long> positiveJdn = new ArrayList<>();
+        for (int[] day : postiveDays) {
+            positiveJdn.add(DateConverter.persianToJdn(day[0], day[1], day[2]));
+        }
+        long startOfYear = DateConverter.persianToJdn(1397, 1, 1);
+        for (int i = 0; i < 366; ++i) {
+            long jdn = startOfYear + i;
+            PersianDate persian = DateConverter.jdnToPersian(jdn);
+            int year = persian.getYear();
+            int month = persian.getMonth();
+            int day = persian.getDayOfMonth();
+
+            assertEquals(String.format("%d %d %d", year, month, day),
+                    positiveJdn.contains(jdn),
+                    CalendarUtils.monthInScorpio(jdn));
         }
     }
 }
