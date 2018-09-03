@@ -220,4 +220,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="dhikrFive" translatable="false">يا حَي يا قَيوم</string>
     <string name="dhikrSix" translatable="false">لاَ إِلَه إِلاَّ اللهُ المَلِکُ الحَقُّ المُبِين</string>
     <string name="dhikrSeven" translatable="false">َاَللَّهُمَّ صَلِّ عَلَي مُحَمَّدٍ وَ آلِ مُحَمَّدٍ وَ عَجِّل فَرَجَهُم</string>
+    <string name="moonInScorpio">The moons in Scorpio</string>
+
 </resources>

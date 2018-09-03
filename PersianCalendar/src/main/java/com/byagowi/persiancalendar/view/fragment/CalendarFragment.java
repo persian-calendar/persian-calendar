@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -177,6 +178,17 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 return true;
             });
         }
+
+        PersianDate todayPersian = CalendarUtils.getPersianToday();
+        IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
+        int perMonth = todayPersian.getMonth();
+        int perDay = todayPersian.getDayOfMonth() + 1;
+        int islDay = todayIslamic.getDayOfMonth() + 1;
+        double moonScorpio = (((islDay * 12.2) + perDay) / 30) + perMonth;
+        int moonInScorpio = (int) moonScorpio;
+        if (moonInScorpio == 8)
+            calendarsBinding.mooninscorpio.setText(R.string.moonInScorpio);
+            calendarsBinding.mooninscorpio.setTextColor(Color.RED);
 
         return mainBinding.getRoot();
 
