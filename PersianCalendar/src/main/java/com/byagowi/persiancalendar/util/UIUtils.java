@@ -242,8 +242,8 @@ public class UIUtils {
             IslamicDate islamicDate = DateConverter.jdnToIslamic(jdn);
             int perDay = persianDate.getDayOfMonth() + 1;
             int islDay = islamicDate.getDayOfMonth() + 1;
-            if (Math.floor(((((float) islDay * 12.2) + perDay) / 30) + persianDate.getMonth()) == 8)
-                binding.moonInScorpio.setText(R.string.moonInScorpio);
+            if (Math.floor(((((float) islDay * 12.2) + perDay) / 30.f) + persianDate.getMonth()) == 8)
+                binding.moonInScorpio.setVisibility(View.VISIBLE);
             else
                 binding.moonInScorpio.setVisibility(View.GONE);
         }
