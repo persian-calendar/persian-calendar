@@ -238,18 +238,19 @@
                 android:id="@+id/zodiac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_margin"
                 android:gravity="center"
                 android:textColor="?attr/colorTextNormal"
-                android:layout_marginTop="@dimen/card_margin"
                 android:textSize="@dimen/text_size_description" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mooninscorpio"
+                android:id="@+id/moon_in_scorpio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
                 android:layout_marginTop="@dimen/card_margin"
+                android:gravity="center"
+                android:text="@string/moonInScorpio"
+                android:textColor="?attr/colorTextNormal"
                 android:textSize="@dimen/text_size_description" />
 
         </LinearLayout>

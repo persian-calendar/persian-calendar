@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.util;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
-import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;
 import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
@@ -29,7 +27,6 @@ import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.github.praytimes.Clock;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,6 +38,8 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.IslamicDate;
+import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -61,7 +60,6 @@ public class UIUtils {
         }
     }
 
-
     @StringRes
     final private static int[] YEARS_NAME = {
             R.string.year1, R.string.year2, R.string.year3,
@@ -70,9 +68,8 @@ public class UIUtils {
             R.string.year10, R.string.year11, R.string.year12
     };
 
-    @SuppressLint("SetTextI18n")
     public static void fillCalendarsCard(Context context, long jdn,
-                                         CalendarsTabContentBinding binding, OwghatTabContentBinding owghatBinding,
+                                         CalendarsTabContentBinding binding,
                                          CalendarType calendarType,
                                          List<CalendarType> calendars) {
         AbstractDate firstCalendar,
@@ -188,7 +185,6 @@ public class UIUtils {
             int year = civilDate.getYear();
             int month = civilDate.getMonth();
             int day = civilDate.getDayOfMonth();
-            int week = civilDate.getDayOfWeek();
 
             @StringRes
             int monthName, monthEmoji;
@@ -238,33 +234,18 @@ public class UIUtils {
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
                     context.getString(monthEmoji), context.getString(monthName)));
+        }
 
-            switch (week) {
-                case Calendar.SATURDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrOne));
-                    break;
-                case Calendar.SUNDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrTwo));
-                    break;
-                case Calendar.MONDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrThree));
-                    break;
-                case Calendar.TUESDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFour));
-                    break;
-                case Calendar.WEDNESDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrFive));
-                    break;
-                case Calendar.THURSDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSix));
-                    break;
-                case Calendar.FRIDAY:
-                    owghatBinding.todayDhikr.setText(context.getString(R.string.todaydhikr) + " : " + context.getString(R.string.dhikrSeven));
-                    break;
-                default:
-                    break;
-            }
-
+        // Mehdi's work
+        {
+            PersianDate persianDate = DateConverter.jdnToPersian(jdn);
+            IslamicDate islamicDate = DateConverter.jdnToIslamic(jdn);
+            int perDay = persianDate.getDayOfMonth() + 1;
+            int islDay = islamicDate.getDayOfMonth() + 1;
+            if (Math.floor(((((float) islDay * 12.2) + perDay) / 30.f) + persianDate.getMonth()) == 8)
+                binding.moonInScorpio.setVisibility(View.VISIBLE);
+            else
+                binding.moonInScorpio.setVisibility(View.GONE);
         }
     }
 
