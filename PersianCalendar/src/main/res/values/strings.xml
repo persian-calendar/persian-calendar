@@ -212,5 +212,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="level">Level</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
+    <string name="moonInScorpio">Moon is in Scorpio</string>
 
 </resources>

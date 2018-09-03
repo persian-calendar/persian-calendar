@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -38,6 +39,8 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.IslamicDate;
+import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -232,6 +235,18 @@ public class UIUtils {
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
                     context.getString(monthEmoji), context.getString(monthName)));
+        }
+
+        // Mehdi's work
+        {
+            PersianDate persianDate = DateConverter.jdnToPersian(jdn);
+            IslamicDate islamicDate = DateConverter.jdnToIslamic(jdn);
+            int perDay = persianDate.getDayOfMonth() + 1;
+            int islDay = islamicDate.getDayOfMonth() + 1;
+            if (Math.floor(((((float) islDay * 12.2) + perDay) / 30) + persianDate.getMonth()) == 8)
+                binding.moonInScorpio.setText(R.string.moonInScorpio);
+            else
+                binding.moonInScorpio.setVisibility(View.GONE);
         }
     }
 

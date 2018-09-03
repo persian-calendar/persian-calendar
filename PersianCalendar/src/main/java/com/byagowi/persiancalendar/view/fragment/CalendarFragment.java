@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -179,7 +180,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         }
 
         return mainBinding.getRoot();
-
     }
 
     public boolean firstTime = true;
