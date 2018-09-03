@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -20,7 +21,6 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -48,8 +48,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
         // We deliberately like to avoid DataBinding thing here, at least for now
-        AppCompatImageView prev = view.findViewById(R.id.prev);
-        AppCompatImageView next = view.findViewById(R.id.next);
+        ImageView prev = view.findViewById(R.id.prev);
+        ImageView next = view.findViewById(R.id.next);
         prev.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_right
                 : R.drawable.ic_keyboard_arrow_left);
