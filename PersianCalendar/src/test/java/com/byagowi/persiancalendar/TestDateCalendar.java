@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import calendar.CalendarType;
 import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
@@ -820,5 +821,21 @@ public class TestDateCalendar {
                     positiveJdn.contains(jdn),
                     CalendarUtils.monthInScorpio(jdn));
         }
+    }
+
+    @Test
+    public void test_getMonthLength() {
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 1));
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 2));
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 3));
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 4));
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 5));
+        assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 6));
+        assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 7));
+        assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 8));
+        assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 9));
+        assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 10));
+        assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 11));
+        assertEquals(29, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 12));
     }
 }
