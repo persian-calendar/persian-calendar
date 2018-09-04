@@ -152,11 +152,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         calendarsBinding.thirdCalendarDateLinear.setVisibility(View.GONE);
         calendarsBinding.diffDateContainer.setVisibility(View.GONE);
 
-        String cityName = Utils.getCityName(context, false);
-        if (!TextUtils.isEmpty(cityName)) {
-            owghatBinding.owghatText.setText(cityName);
-        }
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
         if (lastTab >= tabs.size()) {
@@ -169,8 +164,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
-        // Easter egg to test AthanActivity
         if (coordinate != null) {
+            String cityName = Utils.getCityName(context, false);
+            if (!TextUtils.isEmpty(cityName)) {
+                owghatBinding.owghatText.setText(cityName);
+            }
+
+            // Easter egg to test AthanActivity
             owghatBinding.owghatText.setOnClickListener(this);
             owghatBinding.owghatText.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
