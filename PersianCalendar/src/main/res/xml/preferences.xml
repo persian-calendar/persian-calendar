@@ -72,6 +72,13 @@
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
+            android:key="astronomicalFeatures"
+            android:summary="@string/astronomical_info_summary"
+            android:title="@string/astronomical_info"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
             android:key="showWeekOfYearNumber"
             android:summary="@string/week_of_year_summary"
             android:title="@string/week_of_year"

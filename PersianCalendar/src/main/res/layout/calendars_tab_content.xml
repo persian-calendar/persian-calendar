@@ -236,26 +236,26 @@
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />
 
-            <TextView
-                android:id="@+id/zodiac"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/card_margin"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description" />
-
-            <TextView
-                android:id="@+id/moon_in_scorpio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/card_margin"
-                android:gravity="center"
-                android:text="@string/moonInScorpio"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description" />
-
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/zodiac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_margin"
+            android:gravity="center"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
+
+        <TextView
+            android:id="@+id/moon_in_scorpio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/card_margin"
+            android:gravity="center"
+            android:text="@string/moonInScorpio"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
 
         <ImageView
             android:id="@+id/more_calendar"
