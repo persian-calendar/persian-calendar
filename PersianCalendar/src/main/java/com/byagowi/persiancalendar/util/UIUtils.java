@@ -180,7 +180,7 @@ public class UIUtils {
         }
 
         // Based on Mehdi's work
-        {
+        if (Utils.isAstronomicalFeaturesEnabled()) {
             CivilDate civilDate = DateConverter.jdnToCivil(jdn);
             int year = civilDate.getYear();
             int month = civilDate.getMonth();
@@ -234,14 +234,14 @@ public class UIUtils {
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
                     context.getString(monthEmoji), context.getString(monthName)));
-        }
 
-        // Mehdi's work
-        {
-//            if (CalendarUtils.monthInScorpio(jdn))
-//                binding.moonInScorpio.setVisibility(View.VISIBLE);
-//            else
+            if (CalendarUtils.monthInScorpio(jdn))
+                binding.moonInScorpio.setVisibility(View.VISIBLE);
+            else
                 binding.moonInScorpio.setVisibility(View.GONE);
+        } else {
+            binding.zodiac.setVisibility(View.GONE);
+            binding.moonInScorpio.setVisibility(View.GONE);
         }
     }
 

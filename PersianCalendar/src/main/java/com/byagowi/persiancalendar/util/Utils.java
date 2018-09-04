@@ -202,6 +202,7 @@ public class Utils {
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
+    static private boolean astronomicalFeaturesEnabled;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -256,6 +257,11 @@ public class Utils {
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
+        astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
+    }
+
+    static public boolean isAstronomicalFeaturesEnabled() {
+        return astronomicalFeaturesEnabled;
     }
 
     static public List<CalendarType> getEnabledCalendarTypes() {
