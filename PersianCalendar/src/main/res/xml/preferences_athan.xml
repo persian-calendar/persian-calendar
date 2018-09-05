@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceScreen
+        android:key="Athan"
+        android:layout="@layout/category_preference"
+        android:title="@string/athan"
+        settings:iconSpaceReserved="false"
+        settings:initialExpandedChildrenCount="3">
+
+        <com.byagowi.persiancalendar.view.preferences.AthanNumericPreference
+            android:inputType="numberSigned"
+            android:key="AthanGap"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_gap_summary"
+            android:title="@string/athan_gap"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
+            android:key="AthanAlarm"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/athan_alarm_summary"
+            android:title="@string/athan_alarm"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="NotificationAthan"
+            android:summary="@string/enable_notification_athan"
+            android:title="@string/notification_athan"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:key="pref_key_ringtone"
+            android:summary="@string/custom_athan_summary"
+            android:title="@string/custom_athan"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:key="pref_key_ringtone_default"
+            android:summary="@string/default_athan_summary"
+            android:title="@string/default_athan"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:dependency="NotificationAthan"
+            android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_volume_summary"
+            android:title="@string/athan_volume"
+            settings:iconSpaceReserved="false" />
+
+    </androidx.preference.PreferenceScreen>
+
+</androidx.preference.PreferenceScreen>

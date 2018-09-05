@@ -215,5 +215,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="moonInScorpio">Moon is in Scorpio</string>
     <string name="astronomical_info">Astronomical Information</string>
     <string name="astronomical_info_summary">Show additional information like constellation, years names and moon in scorpio</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_location">Location</string>
+    <string name="pref_header_athan">Athan</string>
 
 </resources>
