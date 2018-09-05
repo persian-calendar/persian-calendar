@@ -1,13 +1,21 @@
 package com.byagowi.persiancalendar;
 
 import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.github.praytimes.CalculationMethod;
+import com.github.praytimes.Clock;
+import com.github.praytimes.Coordinate;
+import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimesCalculator;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import calendar.CalendarType;
+import calendar.CivilDate;
 import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
@@ -837,5 +845,19 @@ public class TestDateCalendar {
         assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 10));
         assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 11));
         assertEquals(29, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 12));
+    }
+
+    @Test
+    public void test_praytimes() {
+        Map<PrayTime, Clock> prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
+                .calculate(new CivilDate(2018, 9, 5).asCalendar().getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 9).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 21).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
     }
 }
