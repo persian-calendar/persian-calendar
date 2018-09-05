@@ -214,6 +214,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
     <string name="moonInScorpio">Moon is in Scorpio</string>
     <string name="astronomical_info">Astronomical Information</string>
-    <string name="astronomical_info_summary">Show additional information like constellation, years names and month in scorpio</string>
+    <string name="astronomical_info_summary">Show additional information like constellation, years names and moon in scorpio</string>
 
 </resources>
