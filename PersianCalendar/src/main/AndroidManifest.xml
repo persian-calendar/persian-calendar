@@ -151,6 +151,7 @@
         </service>
 
         <activity android:name="net.androgames.level.Level" />
+        <activity android:name=".view.activity.SettingsActivity" />
 
     </application>
 

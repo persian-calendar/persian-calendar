@@ -1,0 +1,32 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.byagowi.persiancalendar.view.activity.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_settings_general"
+        android:title="@string/pref_header_general">
+        <extra
+            android:name="settings"
+            android:value="prefs_general" />
+    </header>
+
+    <header
+        android:fragment="com.byagowi.persiancalendar.view.activity.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_settings_location"
+        android:title="@string/pref_header_location" >
+        <extra
+            android:name="settings"
+            android:value="prefs_location" />
+    </header>
+
+    <header
+        android:fragment="com.byagowi.persiancalendar.view.activity.SettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_settings_athan"
+        android:title="@string/pref_header_athan" >
+        <extra
+            android:name="settings"
+            android:value="prefs_athan" />
+    </header>
+
+</preference-headers>
