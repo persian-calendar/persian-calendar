@@ -101,7 +101,10 @@ public final class DateConverter {
             return jdnToJulian(jdn);
     }
 
+    public static int islamicOffset = 0;
+
     public static IslamicDate jdnToIslamic(long jd) {
+        jd += islamicOffset;
         int[] tableResult = useUmmAlQura
                 ? UmmAlQuraConverter.jdToHijri(jd)
                 : IslamicDateConverter.jdToHijri(jd);

@@ -28,7 +28,7 @@ public class Constants {
     public static final String PREF_OTHER_CALENDARS_KEY = "otherCalendarTypes";
     public static final String PREF_KEY_ATHAN = "Athan";
     public static final String PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod";
-    public static final String PREF_ISLAMIC_OFFSET = "islamicOffset";
+    public static final String PREF_ISLAMIC_OFFSET = "islamic_offset";
     public static final String PREF_LATITUDE = "Latitude";
     public static final String PREF_LONGITUDE = "Longitude";
     public static final String PREF_SELECTED_LOCATION = "Location";

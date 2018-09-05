@@ -64,4 +64,12 @@
         <item>شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
     </string-array>
 
+    <string-array name="islamicOffsetNames">
+        <item>٢-</item>
+        <item>١-</item>
+        <item>٠</item>
+        <item>١+</item>
+        <item>٢+</item>
+    </string-array>
+
 </resources>

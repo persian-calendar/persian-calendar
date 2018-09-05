@@ -76,6 +76,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
@@ -104,6 +105,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
+import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
 import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
 import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
@@ -223,7 +225,6 @@ public class Utils {
         notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN);
         selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                 DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
-//        islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
         // so switched to "Tehran" method as default calculation algorithm
         calculationMethod = prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD);
@@ -258,6 +259,17 @@ public class Utils {
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
+
+    }
+
+    static public int getIslamicOffset(Context context) {
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            return Integer.parseInt(prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
+                    .replace("+", ""));
+        } catch (Exception ignore) {
+            return 0;
+        }
     }
 
     static public boolean isAstronomicalFeaturesEnabled() {
@@ -353,10 +365,6 @@ public class Utils {
     static public CalculationMethod getCalculationMethod() {
         return CalculationMethod.valueOf(calculationMethod);
     }
-
-//    static public int getIslamicOffset() {
-//        return Integer.parseInt(islamicOffset.replace("+", ""));
-//    }
 
     static public String getAppLanguage() {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
@@ -651,10 +659,13 @@ public class Utils {
                 case LANG_FA_AF:
                 case LANG_PS:
                 case LANG_UR:
+                case LANG_CKB:
                 case LANG_EN_US:
                     DateConverter.useUmmAlQura = true;
             }
         }
+        // Now that we are configuring converter's algorithm above, lets set the offset also
+        DateConverter.islamicOffset = Utils.getIslamicOffset(context);
 
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();

@@ -167,5 +167,7 @@
     <string name="moonInScorpio">ایام قمر در عقرب</string>
     <string name="astronomical_info">اطلاعات اخترشناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
+    <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
+    <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
 
 </resources>

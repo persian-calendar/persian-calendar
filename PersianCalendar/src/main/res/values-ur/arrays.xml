@@ -64,4 +64,12 @@
         <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
     </string-array>
 
+    <string-array name="islamicOffsetNames">
+        <item>2-</item>
+        <item>1-</item>
+        <item>0</item>
+        <item>1+</item>
+        <item>2+</item>
+    </string-array>
+
 </resources>
