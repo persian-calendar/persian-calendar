@@ -62,7 +62,7 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
         binding.daySpinner.setOnItemSelectedListener(this);
     }
 
-    public long getJdnFromView() {
+    public long getDayJdnFromView() {
         int year = ((FormattedIntEntity) binding.yearSpinner.getSelectedItem()).getValue();
         int month = ((FormattedIntEntity) binding.monthSpinner.getSelectedItem()).getValue();
         int day = ((FormattedIntEntity) binding.daySpinner.getSelectedItem()).getValue();
@@ -87,7 +87,7 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
         return -1;
     }
 
-    public void setJdnOnView(long jdn) {
+    public void setDayJdnOnView(long jdn) {
         this.jdn = jdn;
 
         Context context = getContext();
@@ -138,8 +138,8 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if (adapterView.getId() == R.id.calendarTypeSpinner) setJdnOnView(jdn);
-        else jdn = getJdnFromView();
+        if (adapterView.getId() == R.id.calendarTypeSpinner) setDayJdnOnView(jdn);
+        else jdn = getDayJdnFromView();
 
         selectedDayListener.onSelectedDayChanged(jdn);
     }

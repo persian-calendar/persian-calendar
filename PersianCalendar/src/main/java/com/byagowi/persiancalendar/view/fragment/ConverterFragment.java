@@ -32,7 +32,7 @@ public class ConverterFragment extends Fragment {
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
         binding.calendarsView.setOnTodayButtonClickListener(
-                () -> binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn()));
+                () -> binding.selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
 
         binding.selectDayView.setOnSelectedDayChangedListener(jdn -> {
             CalendarType selectedCalendarType = binding.selectDayView.getSelectedCalendarType();
@@ -40,7 +40,7 @@ public class ConverterFragment extends Fragment {
             orderedCalendarTypes.remove(selectedCalendarType);
             binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
         });
-        binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn());
+        binding.selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn());
 
         return binding.getRoot();
     }

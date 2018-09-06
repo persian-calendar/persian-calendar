@@ -31,7 +31,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         long jdn = args.getLong(BUNDLE_KEY, -1);
 
         SelectDayView selectDayView = new SelectDayView(getContext());
-        selectDayView.setJdnOnView(jdn);
+        selectDayView.setDayJdnOnView(jdn);
 
         return new AlertDialog.Builder(getActivity())
                 .setView(selectDayView)
@@ -41,7 +41,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
                             .getSupportFragmentManager()
                             .findFragmentByTag(CalendarFragment.class.getName());
 
-                    long resultJdn = selectDayView.getJdnFromView();
+                    long resultJdn = selectDayView.getDayJdnFromView();
                     if (resultJdn != -1) calendarFragment.bringDate(resultJdn);
                 }).create();
     }
