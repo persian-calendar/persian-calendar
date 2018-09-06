@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
+import com.byagowi.persiancalendar.view.fragment.SettingsFragment;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
 
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             CalendarFragment.class,
             ConverterFragment.class,
             CompassFragment.class,
-            PreferenceFragment.class,
+            SettingsFragment.class,
             AboutFragment.class
     };
     private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
