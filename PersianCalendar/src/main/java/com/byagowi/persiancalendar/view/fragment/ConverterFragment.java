@@ -26,12 +26,13 @@ public class ConverterFragment extends Fragment {
 
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
 
-        FragmentConverterBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
-                false);
+        FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_converter, container, false);
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
-        binding.calendarsView.setOnTodayButtonClickListener(() -> binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn()));
+        binding.calendarsView.setOnTodayButtonClickListener(
+                () -> binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn()));
 
         binding.selectDayView.setOnSelectedDayChangedListener(jdn -> {
             CalendarType selectedCalendarType = binding.selectDayView.getSelectedCalendarType();

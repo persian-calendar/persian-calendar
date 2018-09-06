@@ -397,7 +397,7 @@ public class CalendarUtils {
     }
 
     // Based on Mehdi's work
-    public static boolean monthInScorpio(PersianDate persianDate, IslamicDate islamicDate) {
+    public static boolean isMoonInScorpio(PersianDate persianDate, IslamicDate islamicDate) {
         int res = (int) (((((float) (islamicDate.getDayOfMonth() + 1) * 12.2f) +
                 (persianDate.getDayOfMonth() + 1)) / 30.f) + persianDate.getMonth());
         if (res > 12) res -= 12;

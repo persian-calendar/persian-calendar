@@ -209,14 +209,11 @@
         </com.google.android.flexbox.FlexboxLayout>
 
         <LinearLayout
-            android:id="@+id/diff_date_container"
+            android:id="@+id/extra_information_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_item"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
-            android:paddingTop="@dimen/padding_item">
+            android:padding="@dimen/padding_item">
 
             <TextView
                 android:id="@+id/diff_date"
@@ -236,33 +233,32 @@
                 android:textSize="@dimen/text_size_description"
                 tools:text="@string/date_diff_text" />
 
+            <TextView
+                android:id="@+id/zodiac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/padding_item"
+                android:textColor="?attr/colorTextNormal"
+                android:textSize="@dimen/text_size_description" />
+
+            <TextView
+                android:id="@+id/moon_in_scorpio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/moonInScorpio"
+                android:textColor="?attr/colorTextNormal"
+                android:textSize="@dimen/text_size_description" />
+
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/zodiac"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/card_margin"
-            android:gravity="center"
-            android:textColor="?attr/colorTextNormal"
-            android:textSize="@dimen/text_size_description" />
-
-        <TextView
-            android:id="@+id/moon_in_scorpio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/card_margin"
-            android:gravity="center"
-            android:text="@string/moonInScorpio"
-            android:textColor="?attr/colorTextNormal"
-            android:textSize="@dimen/text_size_description" />
 
         <ImageView
             android:id="@+id/more_calendar"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_gravity="center"
-            android:layout_margin="8sp"
+            android:paddingBottom="@dimen/padding_item"
             android:tint="?attr/colorAccent"
             app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 

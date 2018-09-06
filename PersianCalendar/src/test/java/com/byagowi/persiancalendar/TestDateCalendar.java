@@ -10,7 +10,6 @@ import com.github.praytimes.PrayTimesCalculator;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -780,7 +779,7 @@ public class TestDateCalendar {
     }
 
     @Test
-    public void practice_month_in_scorpio() {
+    public void practice_moon_in_scorpio() {
         int[][] postiveDays = {
                 {1397, 1, 14},
                 {1397, 1, 15},
@@ -827,7 +826,7 @@ public class TestDateCalendar {
 
             assertEquals(String.format("%d %d %d", year, month, day),
                     positiveJdn.contains(jdn),
-                    CalendarUtils.monthInScorpio(persian, DateConverter.jdnToIslamic(jdn)));
+                    CalendarUtils.isMoonInScorpio(persian, DateConverter.jdnToIslamic(jdn)));
         }
     }
 

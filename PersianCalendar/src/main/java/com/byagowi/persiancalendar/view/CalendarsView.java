@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.view;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -68,7 +67,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.firstCalendarDateLinear.setVisibility(View.GONE);
         binding.secondCalendarDateLinear.setVisibility(View.GONE);
         binding.thirdCalendarDateLinear.setVisibility(View.GONE);
-        binding.diffDateContainer.setVisibility(View.GONE);
+        binding.extraInformationContainer.setVisibility(View.GONE);
 
         boolean applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled();
         Typeface calendarFont = TypefaceUtils.getCalendarFragmentFont(context);
@@ -124,7 +123,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.firstCalendarDateLinear.setVisibility(expand ? View.VISIBLE : View.GONE);
         binding.secondCalendarDateLinear.setVisibility(expand ? View.VISIBLE : View.GONE);
         binding.thirdCalendarDateLinear.setVisibility(expand ? View.VISIBLE : View.GONE);
-        binding.diffDateContainer.setVisibility(expand ? View.VISIBLE : View.GONE);
+        binding.extraInformationContainer.setVisibility(expand ? View.VISIBLE : View.GONE);
 
         calendarsViewExpandListener.onCalendarsViewExpand();
     }
@@ -317,7 +316,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]),
                     context.getString(ZODIAC_MONTHS[persianDate.getMonth()])));
 
-            if (CalendarUtils.monthInScorpio(persianDate, DateConverter.jdnToIslamic(jdn)))
+            if (CalendarUtils.isMoonInScorpio(persianDate, DateConverter.jdnToIslamic(jdn)))
                 binding.moonInScorpio.setVisibility(View.VISIBLE);
             else
                 binding.moonInScorpio.setVisibility(View.GONE);
