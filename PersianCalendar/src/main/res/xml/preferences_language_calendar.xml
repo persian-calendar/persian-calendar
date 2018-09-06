@@ -2,38 +2,31 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto">
 
-    <androidx.preference.PreferenceCategory
-        android:layout="@layout/category_preference"
-        android:title="@string/user_interface"
-        settings:iconSpaceReserved="false">
+    <androidx.preference.ListPreference
+        android:defaultValue="fa"
+        android:entries="@array/languageNames"
+        android:entryValues="@array/languageKeys"
+        android:key="AppLanguage"
+        android:negativeButtonText="@string/cancel"
+        android:title="@string/language"
+        settings:iconSpaceReserved="false" />
 
-        <androidx.preference.ListPreference
-            android:defaultValue="fa"
-            android:entries="@array/languageNames"
-            android:entryValues="@array/languageKeys"
-            android:key="AppLanguage"
-            android:negativeButtonText="@string/cancel"
-            android:title="@string/language"
-            settings:iconSpaceReserved="false" />
+    <androidx.preference.ListPreference
+        android:defaultValue="LightTheme"
+        android:entries="@array/themeNames"
+        android:entryValues="@array/themeKeys"
+        android:key="Theme"
+        android:negativeButtonText="@string/cancel"
+        android:summary="@string/select_skin"
+        android:title="@string/skin"
+        settings:iconSpaceReserved="false" />
 
-        <androidx.preference.ListPreference
-            android:defaultValue="LightTheme"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeKeys"
-            android:key="Theme"
-            android:negativeButtonText="@string/cancel"
-            android:summary="@string/select_skin"
-            android:title="@string/skin"
-            settings:iconSpaceReserved="false" />
-
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="PersianDigits"
-            android:summary="@string/enable_persian_digits"
-            android:title="@string/persian_digits"
-            settings:iconSpaceReserved="false" />
-
-    </androidx.preference.PreferenceCategory>
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="PersianDigits"
+        android:summary="@string/enable_persian_digits"
+        android:title="@string/persian_digits"
+        settings:iconSpaceReserved="false" />
 
     <androidx.preference.PreferenceCategory
         android:layout="@layout/category_preference"
