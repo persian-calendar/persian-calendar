@@ -38,8 +38,7 @@
     <androidx.preference.PreferenceCategory
         android:layout="@layout/category_preference"
         android:title="@string/calendar"
-        settings:iconSpaceReserved="false"
-        settings:initialExpandedChildrenCount="3">
+        settings:iconSpaceReserved="false">
 
         <androidx.preference.MultiSelectListPreference
             android:defaultValue="@array/default_holidays"

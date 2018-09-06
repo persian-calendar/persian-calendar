@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 import com.byagowi.persiancalendar.view.fragment.SettingsFragment;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
