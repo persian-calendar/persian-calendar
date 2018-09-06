@@ -16,7 +16,9 @@ android {
 
     buildTypes {
         debug {
-            versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" + "git rev-parse --short HEAD".execute().text.trim()
+            versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" +
+                    "git rev-list HEAD --count".execute().text.trim() + "-" +
+                    "git rev-parse --short HEAD".execute().text.trim()
         }
         release {
             minifyEnabled true
