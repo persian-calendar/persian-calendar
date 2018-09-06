@@ -25,20 +25,21 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.DateConverter;
 
-public class SelectDayView extends FrameLayout implements AdapterView.OnItemSelectedListener {
+public class SpinnersSelectDayView extends FrameLayout implements AdapterView.OnItemSelectedListener,
+        SelectDayView {
     SelectDayViewBinding binding;
 
-    public SelectDayView(Context context) {
+    public SpinnersSelectDayView(Context context) {
         super(context);
         init();
     }
 
-    public SelectDayView(Context context, AttributeSet attrs) {
+    public SpinnersSelectDayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public SelectDayView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SpinnersSelectDayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -153,13 +154,10 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
         return ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType();
     }
 
-    public interface OnSelectedDayChangedListener {
-        void onSelectedDayChanged(long jdn);
-    }
-
     private OnSelectedDayChangedListener selectedDayListener = jdn -> {
     };
 
+    @Override
     public void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener) {
         selectedDayListener = listener;
     }

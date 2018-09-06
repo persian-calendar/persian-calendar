@@ -10,6 +10,8 @@ import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.SelectDayView;
+import com.byagowi.persiancalendar.view.SpinnersSelectDayView;
 
 import java.util.List;
 
@@ -28,19 +30,20 @@ public class ConverterFragment extends Fragment {
 
         FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_converter, container, false);
+        SelectDayView selectDayView = binding.selectDayView;
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
         binding.calendarsView.setOnTodayButtonClickListener(
-                () -> binding.selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
+                () -> selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
 
-        binding.selectDayView.setOnSelectedDayChangedListener(jdn -> {
-            CalendarType selectedCalendarType = binding.selectDayView.getSelectedCalendarType();
+        selectDayView.setOnSelectedDayChangedListener(jdn -> {
+            CalendarType selectedCalendarType = selectDayView.getSelectedCalendarType();
             List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
             orderedCalendarTypes.remove(selectedCalendarType);
             binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
         });
-        binding.selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn());
+        selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn());
 
         return binding.getRoot();
     }

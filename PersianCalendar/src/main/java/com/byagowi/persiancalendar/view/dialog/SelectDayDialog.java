@@ -2,9 +2,11 @@ package com.byagowi.persiancalendar.view.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.view.SelectDayView;
+import com.byagowi.persiancalendar.view.SpinnersSelectDayView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
 import androidx.appcompat.app.AlertDialog;
@@ -30,11 +32,11 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Bundle args = getArguments();
         long jdn = args.getLong(BUNDLE_KEY, -1);
 
-        SelectDayView selectDayView = new SelectDayView(getContext());
+        SelectDayView selectDayView = new SpinnersSelectDayView(getContext());
         selectDayView.setDayJdnOnView(jdn);
 
         return new AlertDialog.Builder(getActivity())
-                .setView(selectDayView)
+                .setView((View) selectDayView)
                 .setCustomTitle(null)
                 .setPositiveButton(R.string.go, (dialogInterface, i) -> {
                     CalendarFragment calendarFragment = (CalendarFragment) getActivity()
