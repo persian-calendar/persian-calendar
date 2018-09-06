@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -78,22 +79,26 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.moreCalendar.setVisibility(View.GONE);
     }
 
-    public interface Action {
-        void fire();
+    public interface OnCalendarsViewExpandListener {
+        void onCalendarsViewExpand();
     }
 
-    private Action emptyAction = () -> {
+    private OnCalendarsViewExpandListener calendarsViewExpandListener = () -> {
     };
 
-    private Action onExpanded = emptyAction;
-    private Action onTodayClicked = emptyAction;
-
-    public void setOnExpanded(Action onExpanded) {
-        this.onExpanded = onExpanded;
+    public void setOnCalendarsViewExpandListener(OnCalendarsViewExpandListener listener) {
+        calendarsViewExpandListener = listener;
     }
 
-    public void setOnTodayClicked(Action onTodayClicked) {
-        this.onTodayClicked = onTodayClicked;
+    public interface OnTodayButtonClickListener {
+        void onTodayButtonClick();
+    }
+
+    private OnTodayButtonClickListener todayButtonClickListener = () -> {
+    };
+
+    public void setOnTodayButtonClickListener(OnTodayButtonClickListener listener) {
+        todayButtonClickListener = listener;
     }
 
     public void expand(boolean expand) {
@@ -105,7 +110,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.thirdCalendarDateLinear.setVisibility(expand ? View.VISIBLE : View.GONE);
         binding.diffDateContainer.setVisibility(expand ? View.VISIBLE : View.GONE);
 
-        onExpanded.fire();
+        calendarsViewExpandListener.onCalendarsViewExpand();
     }
 
     @Override
@@ -116,7 +121,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.today:
             case R.id.today_icon:
-                onTodayClicked.fire();
+                todayButtonClickListener.onTodayButtonClick();
                 break;
 
             case R.id.calendars_tab_content:
@@ -161,6 +166,22 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             R.string.year4, R.string.year5, R.string.year6,
             R.string.year7, R.string.year8, R.string.year9,
             R.string.year10, R.string.year11, R.string.year12
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS = {
+            R.string.capricorn, R.string.aquarius, R.string.pisces,
+            R.string.aries, R.string.taurus, R.string.gemini,
+            R.string.cancer, R.string.leo, R.string.virgo,
+            R.string.libra, R.string.scorpio, R.string.sagittarius
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS_EMOJI = {
+            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji,
+            R.string.aries_emoji, R.string.taurus_emoji, R.string.gemini_emoji,
+            R.string.cancer_emoji, R.string.leo_emoji, R.string.virgo_emoji,
+            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji
     };
 
     public void fillCalendarsCard(long jdn,
@@ -283,54 +304,43 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             int month = civilDate.getMonth();
             int day = civilDate.getDayOfMonth();
 
-            @StringRes
-            int monthName, monthEmoji;
-            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19)) {
-                monthName = R.string.capricorn;
-                monthEmoji = R.string.capricorn_emoji;
-            } else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17)) {
-                monthName = R.string.aquarius;
-                monthEmoji = R.string.aquarius_emoji;
-            } else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19)) {
-                monthName = R.string.pisces;
-                monthEmoji = R.string.pisces_emoji;
-            } else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19)) {
-                monthName = R.string.aries;
-                monthEmoji = R.string.aries_emoji;
-            } else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20)) {
-                monthName = R.string.taurus;
-                monthEmoji = R.string.taurus_emoji;
-            } else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20)) {
-                monthName = R.string.gemini;
-                monthEmoji = R.string.gemini_emoji;
-            } else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22)) {
-                monthName = R.string.cancer;
-                monthEmoji = R.string.cancer_emoji;
-            } else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22)) {
-                monthName = R.string.leo;
-                monthEmoji = R.string.leo_emoji;
-            } else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22)) {
-                monthName = R.string.virgo;
-                monthEmoji = R.string.virgo_emoji;
-            } else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22)) {
-                monthName = R.string.libra;
-                monthEmoji = R.string.libra_emoji;
-            } else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21)) {
-                monthName = R.string.scorpio;
-                monthEmoji = R.string.scorpio_emoji;
-            } else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21)) {
-                monthName = R.string.sagittarius;
-                monthEmoji = R.string.sagittarius_emoji;
-            } else {
-                monthName = R.string.sagittarius; // this never should happen
-                monthEmoji = R.string.sagittarius_emoji;
+            int zodiacMonth = -1;
+            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19))
+                zodiacMonth = 0;
+            else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17))
+                zodiacMonth = 1;
+            else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19))
+                zodiacMonth = 2;
+            else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19))
+                zodiacMonth = 3;
+            else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20))
+                zodiacMonth = 4;
+            else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20))
+                zodiacMonth = 5;
+            else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22))
+                zodiacMonth = 6;
+            else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22))
+                zodiacMonth = 7;
+            else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22))
+                zodiacMonth = 8;
+            else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22))
+                zodiacMonth = 9;
+            else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21))
+                zodiacMonth = 10;
+            else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21))
+                zodiacMonth = 11;
+
+            if (zodiacMonth == -1) {
+                zodiacMonth = 0;
+                Log.e("CalendarsView", "Something went on Zodiac calculation");
             }
 
             binding.zodiac.setText(String.format("%s: %s\n%s: %s %s",
                     context.getString(R.string.year_name),
                     context.getString(YEARS_NAME[year % 12]),
                     context.getString(R.string.zodiac),
-                    context.getString(monthEmoji), context.getString(monthName)));
+                    context.getString(ZODIAC_MONTHS_EMOJI[zodiacMonth]),
+                    context.getString(ZODIAC_MONTHS[zodiacMonth])));
 
             if (CalendarUtils.monthInScorpio(jdn))
                 binding.moonInScorpio.setVisibility(View.VISIBLE);

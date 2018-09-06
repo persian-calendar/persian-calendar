@@ -31,9 +31,9 @@ public class ConverterFragment extends Fragment {
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
-        binding.calendarsView.setOnTodayClicked(() -> binding.selectDayView.setJdn(CalendarUtils.getTodayJdn()));
+        binding.calendarsView.setOnTodayButtonClickListener(() -> binding.selectDayView.setJdn(CalendarUtils.getTodayJdn()));
 
-        binding.selectDayView.setOnDaySelected(jdn -> {
+        binding.selectDayView.setOnSelectedDayChangedListener(jdn -> {
             CalendarType selectedCalendarType = binding.selectDayView.getSelectedCalendarType();
             List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
             orderedCalendarTypes.remove(selectedCalendarType);

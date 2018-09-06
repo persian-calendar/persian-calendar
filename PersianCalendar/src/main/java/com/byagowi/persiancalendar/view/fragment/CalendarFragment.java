@@ -107,8 +107,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         titles.add(getString(R.string.calendar));
         calendarsView = new CalendarsView(context);
-        calendarsView.setOnExpanded(() -> mainBinding.cardsViewPager.measureCurrentView(calendarsView));
-        calendarsView.setOnTodayClicked(this::bringTodayYearMonth);
+        calendarsView.setOnCalendarsViewExpandListener(() -> mainBinding.cardsViewPager.measureCurrentView(calendarsView));
+        calendarsView.setOnTodayButtonClickListener(this::bringTodayYearMonth);
         tabs.add(calendarsView);
 
         titles.add(getString(R.string.events));

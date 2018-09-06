@@ -141,7 +141,7 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
         if (adapterView.getId() == R.id.calendarTypeSpinner) setJdn(jdn);
         else jdn = getJdn();
 
-        onDaySelected.fire(jdn);
+        selectedDayListener.onSelectedDayChanged(jdn);
     }
 
     @Override
@@ -153,16 +153,14 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
         return ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType();
     }
 
-    public interface ActionWithLong {
-        void fire(long jdn);
+    public interface OnSelectedDayChangedListener {
+        void onSelectedDayChanged(long jdn);
     }
 
-    private ActionWithLong emptyAction = jdn -> {
+    private OnSelectedDayChangedListener selectedDayListener = jdn -> {
     };
 
-    private ActionWithLong onDaySelected = emptyAction;
-
-    public void setOnDaySelected(ActionWithLong onDaySelected) {
-        this.onDaySelected = onDaySelected;
+    public void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener) {
+        selectedDayListener = listener;
     }
 }
