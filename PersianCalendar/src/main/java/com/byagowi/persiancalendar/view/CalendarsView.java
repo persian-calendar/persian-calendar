@@ -23,27 +23,28 @@ import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.DateConverter;
+import calendar.PersianDate;
 
 public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
     public CalendarsView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public CalendarsView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public CalendarsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
     CalendarsViewBinding binding;
 
-    public void init() {
+    public void init(Context context) {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.calendars_view, this,
                 true);
@@ -68,6 +69,21 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.secondCalendarDateLinear.setVisibility(View.GONE);
         binding.thirdCalendarDateLinear.setVisibility(View.GONE);
         binding.diffDateContainer.setVisibility(View.GONE);
+
+        boolean applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled();
+        Typeface calendarFont = TypefaceUtils.getCalendarFragmentFont(context);
+
+        binding.firstCalendarDate.setTypeface(calendarFont);
+        binding.firstCalendarDateDay.setTypeface(calendarFont);
+        if (applyLineMultiplier) binding.firstCalendarDate.setLineSpacing(0, .6f);
+
+        binding.secondCalendarDate.setTypeface(calendarFont);
+        binding.secondCalendarDateDay.setTypeface(calendarFont);
+        if (applyLineMultiplier) binding.secondCalendarDate.setLineSpacing(0, .6f);
+
+        binding.thirdCalendarDate.setTypeface(calendarFont);
+        binding.thirdCalendarDateDay.setTypeface(calendarFont);
+        if (applyLineMultiplier) binding.thirdCalendarDate.setLineSpacing(0, .6f);
     }
 
     public void showTodayIcon() {
@@ -162,70 +178,66 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
     @StringRes
     final private static int[] YEARS_NAME = {
+            R.string.year10, R.string.year11, R.string.year12,
             R.string.year1, R.string.year2, R.string.year3,
             R.string.year4, R.string.year5, R.string.year6,
-            R.string.year7, R.string.year8, R.string.year9,
-            R.string.year10, R.string.year11, R.string.year12
+            R.string.year7, R.string.year8, R.string.year9
     };
 
     @StringRes
     final private static int[] ZODIAC_MONTHS = {
-            R.string.capricorn, R.string.aquarius, R.string.pisces,
+            R.string.empty,
             R.string.aries, R.string.taurus, R.string.gemini,
             R.string.cancer, R.string.leo, R.string.virgo,
-            R.string.libra, R.string.scorpio, R.string.sagittarius
+            R.string.libra, R.string.scorpio, R.string.sagittarius,
+            R.string.capricorn, R.string.aquarius, R.string.pisces
     };
 
     @StringRes
     final private static int[] ZODIAC_MONTHS_EMOJI = {
-            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji,
+            R.string.empty,
             R.string.aries_emoji, R.string.taurus_emoji, R.string.gemini_emoji,
             R.string.cancer_emoji, R.string.leo_emoji, R.string.virgo_emoji,
-            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji
+            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji,
+            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji
     };
 
-    public void fillCalendarsCard(long jdn,
-                                  CalendarType calendarType,
-                                  List<CalendarType> calendars) {
+    public void showCalendars(long jdn,
+                              CalendarType chosenCalendarType,
+                              List<CalendarType> calendarsToShow) {
         Context context = getContext();
         if (context == null) return;
+        // There should be one at least, if not, nvm
+        if (calendarsToShow.size() == 0) return;
 
         AbstractDate firstCalendar,
                 secondCalendar = null,
                 thirdCalendar = null;
-        firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(0), jdn);
-        if (calendars.size() > 1) {
-            secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(1), jdn);
+        firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarsToShow.get(0), jdn);
+        if (calendarsToShow.size() > 1) {
+            secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarsToShow.get(1), jdn);
         }
-        if (calendars.size() > 2) {
-            thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(2), jdn);
+        if (calendarsToShow.size() > 2) {
+            thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendarsToShow.get(2), jdn);
         }
-
-        boolean applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled();
-        Typeface calendarFont = TypefaceUtils.getCalendarFragmentFont(context);
 
         binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
 
         binding.firstCalendarDateLinear.setText(CalendarUtils.toLinearDate(firstCalendar));
         binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
-        binding.firstCalendarDateDay.setTypeface(calendarFont);
         binding.firstCalendarDate.setText(String.format("%s\n%s",
                 CalendarUtils.getMonthName(firstCalendar),
                 Utils.formatNumber(firstCalendar.getYear())));
-        binding.firstCalendarDate.setTypeface(calendarFont);
-        if (applyLineMultiplier) binding.firstCalendarDate.setLineSpacing(0, .6f);
 
         if (secondCalendar == null) {
             binding.secondCalendarContainer.setVisibility(View.GONE);
         } else {
             binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
             binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
-            binding.secondCalendarDateDay.setTypeface(calendarFont);
+
             binding.secondCalendarDate.setText(String.format("%s\n%s",
                     CalendarUtils.getMonthName(secondCalendar),
                     Utils.formatNumber(secondCalendar.getYear())));
-            binding.secondCalendarDate.setTypeface(calendarFont);
-            if (applyLineMultiplier) binding.secondCalendarDate.setLineSpacing(0, .6f);
         }
 
         if (thirdCalendar == null) {
@@ -233,12 +245,10 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         } else {
             binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
             binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
-            binding.thirdCalendarDateDay.setTypeface(calendarFont);
+
             binding.thirdCalendarDate.setText(String.format("%s\n%s",
                     CalendarUtils.getMonthName(thirdCalendar),
                     Utils.formatNumber(thirdCalendar.getYear())));
-            binding.thirdCalendarDate.setTypeface(calendarFont);
-            if (applyLineMultiplier) binding.thirdCalendarDate.setLineSpacing(0, .6f);
         }
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
@@ -276,11 +286,11 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         }
 
         {
-            AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(calendarType, jdn);
-            AbstractDate startOfYear = CalendarUtils.getDateOfCalendar(calendarType,
+            AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(chosenCalendarType, jdn);
+            AbstractDate startOfYear = CalendarUtils.getDateOfCalendar(chosenCalendarType,
                     mainDate.getYear(), 1, 1);
             AbstractDate startOfNextYear = CalendarUtils.getDateOfCalendar(
-                    calendarType, mainDate.getYear() + 1, 1, 1);
+                    chosenCalendarType, mainDate.getYear() + 1, 1, 1);
             long startOfYearJdn = CalendarUtils.getJdnDate(startOfYear);
             long endOfYearJdn = CalendarUtils.getJdnDate(startOfNextYear) - 1;
             int currentWeek = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
@@ -299,50 +309,15 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
         // Based on Mehdi's work
         if (Utils.isAstronomicalFeaturesEnabled()) {
-            CivilDate civilDate = DateConverter.jdnToCivil(jdn);
-            int year = civilDate.getYear();
-            int month = civilDate.getMonth();
-            int day = civilDate.getDayOfMonth();
-
-            int zodiacMonth = -1;
-            if ((month == 12 && day >= 22 && day <= 31) || (month == 1 && day >= 1 && day <= 19))
-                zodiacMonth = 0;
-            else if ((month == 1 && day >= 20 && day <= 31) || (month == 2 && day >= 1 && day <= 17))
-                zodiacMonth = 1;
-            else if ((month == 2 && day >= 18 && day <= 29) || (month == 3 && day >= 1 && day <= 19))
-                zodiacMonth = 2;
-            else if ((month == 3 && day >= 20 && day <= 31) || (month == 4 && day >= 1 && day <= 19))
-                zodiacMonth = 3;
-            else if ((month == 4 && day >= 20 && day <= 30) || (month == 5 && day >= 1 && day <= 20))
-                zodiacMonth = 4;
-            else if ((month == 5 && day >= 21 && day <= 31) || (month == 6 && day >= 1 && day <= 20))
-                zodiacMonth = 5;
-            else if ((month == 6 && day >= 21 && day <= 30) || (month == 7 && day >= 1 && day <= 22))
-                zodiacMonth = 6;
-            else if ((month == 7 && day >= 23 && day <= 31) || (month == 8 && day >= 1 && day <= 22))
-                zodiacMonth = 7;
-            else if ((month == 8 && day >= 23 && day <= 31) || (month == 9 && day >= 1 && day <= 22))
-                zodiacMonth = 8;
-            else if ((month == 9 && day >= 23 && day <= 30) || (month == 10 && day >= 1 && day <= 22))
-                zodiacMonth = 9;
-            else if ((month == 10 && day >= 23 && day <= 31) || (month == 11 && day >= 1 && day <= 21))
-                zodiacMonth = 10;
-            else if ((month == 11 && day >= 22 && day <= 30) || (month == 12 && day >= 1 && day <= 21))
-                zodiacMonth = 11;
-
-            if (zodiacMonth == -1) {
-                zodiacMonth = 0;
-                Log.e("CalendarsView", "Something went on Zodiac calculation");
-            }
-
+            PersianDate persianDate = DateConverter.jdnToPersian(jdn);
             binding.zodiac.setText(String.format("%s: %s\n%s: %s %s",
                     context.getString(R.string.year_name),
-                    context.getString(YEARS_NAME[year % 12]),
+                    context.getString(YEARS_NAME[persianDate.getYear() % 12]),
                     context.getString(R.string.zodiac),
-                    context.getString(ZODIAC_MONTHS_EMOJI[zodiacMonth]),
-                    context.getString(ZODIAC_MONTHS[zodiacMonth])));
+                    context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]),
+                    context.getString(ZODIAC_MONTHS[persianDate.getMonth()])));
 
-            if (CalendarUtils.monthInScorpio(jdn))
+            if (CalendarUtils.monthInScorpio(persianDate, DateConverter.jdnToIslamic(jdn)))
                 binding.moonInScorpio.setVisibility(View.VISIBLE);
             else
                 binding.moonInScorpio.setVisibility(View.GONE);

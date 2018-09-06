@@ -31,15 +31,15 @@ public class ConverterFragment extends Fragment {
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
-        binding.calendarsView.setOnTodayButtonClickListener(() -> binding.selectDayView.setJdn(CalendarUtils.getTodayJdn()));
+        binding.calendarsView.setOnTodayButtonClickListener(() -> binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn()));
 
         binding.selectDayView.setOnSelectedDayChangedListener(jdn -> {
             CalendarType selectedCalendarType = binding.selectDayView.getSelectedCalendarType();
             List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
             orderedCalendarTypes.remove(selectedCalendarType);
-            binding.calendarsView.fillCalendarsCard(jdn, selectedCalendarType, orderedCalendarTypes);
+            binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
         });
-        binding.selectDayView.setJdn(CalendarUtils.getTodayJdn());
+        binding.selectDayView.setJdnOnView(CalendarUtils.getTodayJdn());
 
         return binding.getRoot();
     }

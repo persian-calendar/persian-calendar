@@ -827,7 +827,7 @@ public class TestDateCalendar {
 
             assertEquals(String.format("%d %d %d", year, month, day),
                     positiveJdn.contains(jdn),
-                    CalendarUtils.monthInScorpio(jdn));
+                    CalendarUtils.monthInScorpio(persian, DateConverter.jdnToIslamic(jdn)));
         }
     }
 

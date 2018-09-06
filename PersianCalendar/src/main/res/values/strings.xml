@@ -217,5 +217,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="astronomical_info_summary">Show additional information like constellation, years names and moon in scorpio</string>
     <string name="islamic_offset">Islamic offset</string>
     <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
+    <string name="empty" translatable="false" />
 
 </resources>
