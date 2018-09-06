@@ -57,6 +57,7 @@ public final class DateConverter {
     }
 
     public static boolean useUmmAlQura = false;
+    public static int islamicOffset = 0;
 
     public static long islamicToJdn(int year, int month, int day) {
         long tableResult = useUmmAlQura
@@ -64,7 +65,7 @@ public final class DateConverter {
                 : IslamicDateConverter.hijriToJd(year, month, day);
 
         if (tableResult != -1)
-            return tableResult;
+            return tableResult - islamicOffset;
 
         // NMONTH is the number of months between julian day number 1 and
         // the year 1405 A.H. which started immediatly after lunar
@@ -76,7 +77,7 @@ public final class DateConverter {
 
         long k = month + year * 12 - NMONTHS; // nunber of months since 1/1/1405
 
-        return floor(visibility(k + 1048) + day + 0.5);
+        return floor(visibility(k + 1048) + day + 0.5) - islamicOffset;
     }
 
     public static PersianDate islamicToPersian(IslamicDate islamic) {
@@ -100,8 +101,6 @@ public final class DateConverter {
         } else
             return jdnToJulian(jdn);
     }
-
-    public static int islamicOffset = 0;
 
     public static IslamicDate jdnToIslamic(long jd) {
         jd += islamicOffset;
