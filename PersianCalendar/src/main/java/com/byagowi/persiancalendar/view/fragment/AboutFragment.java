@@ -21,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -73,6 +74,14 @@ public class AboutFragment extends Fragment {
         // help
         binding.aboutTitle.setText(String.format(getString(R.string.about_help_subtitle),
                 Utils.formatNumber(Utils.getMaxSupportedYear())));
+        switch (Utils.getAppLanguage()) {
+            case Constants.LANG_FA:
+            case Constants.LANG_FA_AF:
+            case Constants.LANG_EN: // en. unlike en-US, is for Iranians as indicated also on UI
+                break;
+            default:
+                binding.helpCard.setVisibility(View.GONE);
+        }
 
         // report bug
         binding.reportBug.setOnClickListener(arg -> {

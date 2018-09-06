@@ -102,6 +102,7 @@
 
             <LinearLayout
                 style="@style/AboutCard"
+                android:id="@+id/help_card"
                 android:background="?attr/colorCard">
 
                 <TextView
