@@ -29,8 +29,8 @@ public class SettingsFragment extends Fragment {
         FragmentSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),
                 R.layout.fragment_settings, container, false);
 
-        binding.viewpager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), 3));
-        binding.tabs.setupWithViewPager(binding.viewpager);
+        binding.viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), 3));
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
 
         return binding.getRoot();
     }
