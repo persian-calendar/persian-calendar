@@ -43,9 +43,13 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         Uri customAthanUri = Utils.getCustomAthanUri(this);
         if (customAthanUri != null) {
-            ringtone = RingtoneManager.getRingtone(this, customAthanUri);
-            ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            ringtone.play();
+            try {
+                ringtone = RingtoneManager.getRingtone(this, customAthanUri);
+                ringtone.setStreamType(AudioManager.STREAM_ALARM);
+                ringtone.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             MediaPlayer player = new MediaPlayer();
             try {

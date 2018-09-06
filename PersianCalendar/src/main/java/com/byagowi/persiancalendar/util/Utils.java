@@ -1180,10 +1180,14 @@ public class Utils {
         boolean alreadyRan = false;
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager != null) {
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (ApplicationService.class.getName().equals(service.service.getClassName())) {
-                    alreadyRan = true;
+            try {
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (ApplicationService.class.getName().equals(service.service.getClassName())) {
+                        alreadyRan = true;
+                    }
                 }
+            } catch(Exception e) {
+                Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e);
             }
         }
 
@@ -1194,7 +1198,7 @@ public class Utils {
 
                 context.startService(new Intent(context, ApplicationService.class));
             } catch (Exception e) {
-                Log.e(TAG, "startEitherServiceOrWorker fail", e);
+                Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e);
             }
         }
 //        }
