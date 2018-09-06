@@ -18,10 +18,8 @@
     <string name="about">لەبارە</string>
     <string name="gpl_logo">لۆگۆی GPL</string>
     <string name="date_converter">بگۆڕی ڕێککەوت</string>
-    <string name="widget_notification_dashclock">ویجیت، ئاگاداری و دەشکڵۆک</string>
     <string name="widget_text_color">ڕەنگی دەقی ویجیت</string>
     <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
-    <string name="pray_times_calculation_setting">حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
     <string name="notify_date">ئاگاداریی ڕێککەوت</string>
     <string name="enable_notify">ئاگاداریی ھەمیشەیی بۆ گشت جۆرەکانی ڕێککەوت</string>
     <string name="select_skin">ھەڵبژاردنی پێستە</string>
@@ -79,7 +77,6 @@
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
-    <string name="user_interface">ڕووکار</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
     <string name="date_diff_text">مەودا: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
     <string name="search_holidays">گەڕان لە بۆنەکاندا</string>

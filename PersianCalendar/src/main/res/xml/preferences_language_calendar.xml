@@ -107,6 +107,13 @@
             android:title="@string/islamic_offset"
             settings:iconSpaceReserved="false" />
 
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="WidgetIn24"
+            android:summary="@string/showing_clock_in_24"
+            android:title="@string/clock_in_24"
+            settings:iconSpaceReserved="false" />
+
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

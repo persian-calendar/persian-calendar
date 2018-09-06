@@ -18,10 +18,8 @@
     <string name="about">په باره کی</string>
     <string name="gpl_logo">د گنو عمومی مجوز لوگو</string>
     <string name="date_converter">د نیټه مبدل</string>
-    <string name="widget_notification_dashclock">ویجت، د مطلع سازی نوار او دش کلاک</string>
     <string name="widget_text_color">د ویجت د لیکل رنگ</string>
     <string name="select_widgets_text_color">د ویجت دودیز رنگونه ټاکنه</string>
-    <string name="pray_times_calculation_setting">د شرعی اوقات محاسبه او قبله نما غوراوي</string>
     <string name="notify_date">د نیټه یادښت توانول</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">د پروگرام رنگ غوراوي</string>
@@ -79,7 +77,6 @@
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
-    <string name="user_interface">رابط کاربری</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
     <string name="search_holidays">جستجو در مناسبت‌ها</string>

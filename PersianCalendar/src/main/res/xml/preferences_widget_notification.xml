@@ -20,28 +20,6 @@
         android:title="@string/clock_on_widget"
         settings:iconSpaceReserved="false" />
 
-    <!--<androidx.preference.SwitchPreferenceCompat-->
-    <!--android:defaultValue="true"-->
-    <!--android:key="WidgetIn24"-->
-    <!--android:summary="@string/showing_clock_in_24"-->
-    <!--android:title="@string/clock_in_24"-->
-    <!--settings:iconSpaceReserved="false" />-->
-
-    <androidx.preference.SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:key="NotifyDate"
-        android:summary="@string/enable_notify"
-        android:title="@string/notify_date"
-        settings:iconSpaceReserved="false" />
-
-    <androidx.preference.SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:dependency="NotifyDate"
-        android:key="NotifyDateLockScreen"
-        android:summary="@string/notify_date_lock_screen_summary"
-        android:title="@string/notify_date_lock_screen"
-        settings:iconSpaceReserved="false" />
-
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="IranTime"
@@ -59,6 +37,21 @@
         android:positiveButtonText="@string/accept"
         android:summary="@string/compact_widget_summary"
         android:title="@string/compact_widget"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="NotifyDate"
+        android:summary="@string/enable_notify"
+        android:title="@string/notify_date"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:dependency="NotifyDate"
+        android:key="NotifyDateLockScreen"
+        android:summary="@string/notify_date_lock_screen_summary"
+        android:title="@string/notify_date_lock_screen"
         settings:iconSpaceReserved="false" />
 
 </androidx.preference.PreferenceScreen>

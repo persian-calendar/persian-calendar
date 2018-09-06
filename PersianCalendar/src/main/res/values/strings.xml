@@ -18,10 +18,8 @@
     <string name="about">About</string>
     <string name="gpl_logo">GPL Logo</string>
     <string name="date_converter">Date Converter</string>
-    <string name="widget_notification_dashclock">Widget, notification bar and DashClock</string>
     <string name="widget_text_color">Widget Text Color</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
-    <string name="pray_times_calculation_setting">Sun View, Pray Time and Qibla Settings</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="select_skin">Select a skin</string>
@@ -79,7 +77,6 @@
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
-    <string name="user_interface">User interface</string>
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
     <string name="date_diff_text">Distance: %s days (~%s years and %s months and %s days)</string>
     <string name="search_holidays">Search in events</string>
