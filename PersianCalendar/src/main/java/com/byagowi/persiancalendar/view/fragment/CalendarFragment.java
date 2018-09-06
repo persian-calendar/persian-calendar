@@ -30,7 +30,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
-import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
+import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -40,11 +40,11 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         init();
     }
 
-    CalendarsTabContentBinding binding;
+    CalendarsViewBinding binding;
 
     public void init() {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.calendars_tab_content, this,
+                R.layout.calendars_view, this,
                 true);
         binding.today.setVisibility(View.GONE);
         binding.todayIcon.setVisibility(View.GONE);
@@ -82,10 +82,11 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         void fire();
     }
 
-    private Action onExpanded = () -> {
+    private Action emptyAction = () -> {
     };
-    private Action onTodayClicked = () -> {
-    };
+
+    private Action onExpanded = emptyAction;
+    private Action onTodayClicked = emptyAction;
 
     public void setOnExpanded(Action onExpanded) {
         this.onExpanded = onExpanded;

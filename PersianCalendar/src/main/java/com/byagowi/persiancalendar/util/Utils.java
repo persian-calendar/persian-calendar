@@ -1186,7 +1186,7 @@ public class Utils {
                         alreadyRan = true;
                     }
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e);
             }
         }

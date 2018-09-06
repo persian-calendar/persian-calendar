@@ -7,39 +7,25 @@ import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
-import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
-import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.github.praytimes.Clock;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import calendar.AbstractDate;
-import calendar.CalendarType;
-import calendar.CivilDate;
-import calendar.DateConverter;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -58,51 +44,6 @@ public class UIUtils {
             supportActionBar.setTitle(title);
             supportActionBar.setSubtitle(subtitle);
         }
-    }
-
-    static public void fillSelectDaySpinners(Context context, SelectdayFragmentBinding binding,
-                                             long jdn) {
-        if (jdn == -1) {
-            jdn = CalendarUtils.getTodayJdn();
-        }
-
-        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
-                ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType(),
-                jdn);
-
-        // years spinner init.
-        List<FormattedIntEntity> years = new ArrayList<>();
-        final int YEARS = 200;
-        int startingYearOnYearSpinner = date.getYear() - YEARS / 2;
-        for (int i = 0; i < YEARS; ++i) {
-            years.add(new FormattedIntEntity(i + startingYearOnYearSpinner,
-                    Utils.formatNumber(i + startingYearOnYearSpinner)));
-        }
-        binding.yearSpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, years));
-        binding.yearSpinner.setSelection(YEARS / 2);
-        //
-
-        // month spinner init.
-        List<FormattedIntEntity> months = new ArrayList<>();
-        String[] monthsTitle = Utils.monthsNamesOfCalendar(date);
-        for (int i = 1; i <= 12; ++i) {
-            months.add(new FormattedIntEntity(i,
-                    monthsTitle[i - 1] + " / " + Utils.formatNumber(i)));
-        }
-        binding.monthSpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, months));
-        binding.monthSpinner.setSelection(date.getMonth() - 1);
-        //
-
-        // days spinner init.
-        List<FormattedIntEntity> days = new ArrayList<>();
-        for (int i = 1; i <= 31; ++i) {
-            days.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
-        }
-        binding.daySpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, days));
-        binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
     }
 
     public static void askForCalendarPermission(Activity activity) {

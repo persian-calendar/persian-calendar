@@ -11,9 +11,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/selectday_fragment"
-                layout="@layout/selectday_fragment" />
+            <com.byagowi.persiancalendar.view.SelectDayView
+                android:id="@+id/select_day_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
