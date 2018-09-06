@@ -28,8 +28,7 @@ import calendar.CalendarType;
  *
  * @author ebraminio
  */
-public class ConverterFragment extends Fragment implements
-        AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class ConverterFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentConverterBinding binding;
     private long lastSelectedJdn = -1;
@@ -44,23 +43,12 @@ public class ConverterFragment extends Fragment implements
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_converter, container,
                 false);
 
-        // Always on
-        binding.calendarsTabContent.moreCalendar.setVisibility(View.GONE);
-
-        binding.calendarsTabContent.today.setVisibility(View.GONE);
-        binding.calendarsTabContent.todayIcon.setVisibility(View.GONE);
-        binding.calendarsTabContent.today.setOnClickListener(this);
-        binding.calendarsTabContent.todayIcon.setOnClickListener(this);
-
-        binding.calendarsTabContent.firstCalendarDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.firstCalendarDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.firstCalendarDate.setOnClickListener(this);
-        binding.calendarsTabContent.secondCalendarDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.secondCalendarDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.secondCalendarDate.setOnClickListener(this);
-        binding.calendarsTabContent.thirdCalendarDateLinear.setOnClickListener(this);
-        binding.calendarsTabContent.thirdCalendarDateDay.setOnClickListener(this);
-        binding.calendarsTabContent.thirdCalendarDate.setOnClickListener(this);
+        binding.calendarsView.expand(true);
+        binding.calendarsView.hideMoreIcon();
+        binding.calendarsView.setOnTodayClicked(() -> {
+            lastSelectedJdn = -1;
+            UIUtils.fillSelectDaySpinners(getContext(), binding.selectdayFragment, lastSelectedJdn);
+        });
 
         // fill views
         binding.selectdayFragment.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
@@ -91,21 +79,20 @@ public class ConverterFragment extends Fragment implements
             CalendarType calendarType = ((CalendarTypeEntity)
                     binding.selectdayFragment.calendarTypeSpinner.getSelectedItem()).getType();
             if (day > CalendarUtils.getMonthLength(calendarType, year, month)) {
-                binding.calendarsTabContent.getRoot().setVisibility(View.GONE);
+                binding.calendarsView.setVisibility(View.GONE);
                 Toast.makeText(getContext(), getString(R.string.date_exception), Toast.LENGTH_SHORT).show();
             } else {
                 long jdn = CalendarUtils.getJdnOfCalendar(calendarType, year, month, day);
                 List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
                 orderedCalendarTypes.remove(calendarType);
 
-                UIUtils.fillCalendarsCard(getContext(), jdn, binding.calendarsTabContent, calendarType,
-                        orderedCalendarTypes);
+                binding.calendarsView.fillCalendarsCard(jdn, calendarType, orderedCalendarTypes);
                 lastSelectedJdn = jdn;
-                if (CalendarUtils.getTodayJdn() == jdn) {
-                    binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
-                }
+//                if (CalendarUtils.getTodayJdn() == jdn) {
+//                    binding.calendarsTabContent.diffDateContainer.setVisibility(View.VISIBLE);
+//                }
 
-                binding.calendarsTabContent.getRoot().setVisibility(View.VISIBLE);
+                binding.calendarsView.setVisibility(View.VISIBLE);
             }
         } catch (RuntimeException ignored) {
         }
@@ -130,48 +117,5 @@ public class ConverterFragment extends Fragment implements
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-
-            case R.id.first_calendar_date:
-            case R.id.first_calendar_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.firstCalendarDateDay.getText() + " " +
-                        binding.calendarsTabContent.firstCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.first_calendar_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.firstCalendarDateLinear.getText());
-                break;
-
-            case R.id.second_calendar_date:
-            case R.id.second_calendar_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.secondCalendarDateDay.getText() + " " +
-                        binding.calendarsTabContent.secondCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.second_calendar_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.secondCalendarDateLinear.getText());
-                break;
-
-            case R.id.third_calendar_date:
-            case R.id.third_calendar_date_day:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.thirdCalendarDateDay.getText() + " " +
-                        binding.calendarsTabContent.thirdCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.third_calendar_date_linear:
-                UIUtils.copyToClipboard(getContext(), binding.calendarsTabContent.thirdCalendarDateLinear.getText());
-                break;
-
-            case R.id.today:
-            case R.id.today_icon:
-                lastSelectedJdn = -1;
-                UIUtils.fillSelectDaySpinners(getContext(),
-                        binding.selectdayFragment, lastSelectedJdn);
-                break;
-        }
     }
 }

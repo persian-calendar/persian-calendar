@@ -21,9 +21,10 @@
                 android:layout_margin="@dimen/card_margin"
                 app:cardBackgroundColor="?attr/colorCard">
 
-                <include
-                    android:id="@+id/calendars_tab_content"
-                    layout="@layout/calendars_tab_content" />
+                <com.byagowi.persiancalendar.view.CalendarsView
+                    android:id="@+id/calendars_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </androidx.cardview.widget.CardView>
 

@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.CalendarsView;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
@@ -81,7 +82,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private PrayTimesCalculator prayTimesCalculator;
     private int viewPagerPosition;
     private FragmentCalendarBinding mainBinding;
-    private CalendarsTabContentBinding calendarsBinding;
+    private CalendarsView calendarsView;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
 
@@ -106,8 +107,10 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         List<View> tabs = new ArrayList<>();
 
         titles.add(getString(R.string.calendar));
-        calendarsBinding = DataBindingUtil.inflate(inflater, R.layout.calendars_tab_content, container, false);
-        tabs.add(calendarsBinding.getRoot());
+        calendarsView = new CalendarsView(context);
+        calendarsView.setOnExpanded(() -> mainBinding.cardsViewPager.measureCurrentView(calendarsView));
+        calendarsView.setOnTodayClicked(this::bringTodayYearMonth);
+        tabs.add(calendarsView);
 
         titles.add(getString(R.string.events));
         eventsBinding = DataBindingUtil.inflate(inflater, R.layout.events_tab_content, container, false);
@@ -129,28 +132,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
         mainBinding.calendarViewPager.addOnPageChangeListener(changeListener);
-
-        calendarsBinding.today.setVisibility(View.GONE);
-        calendarsBinding.todayIcon.setVisibility(View.GONE);
-        calendarsBinding.today.setOnClickListener(this);
-        calendarsBinding.todayIcon.setOnClickListener(this);
-
-        calendarsBinding.firstCalendarDateLinear.setOnClickListener(this);
-        calendarsBinding.firstCalendarDateDay.setOnClickListener(this);
-        calendarsBinding.firstCalendarDate.setOnClickListener(this);
-        calendarsBinding.secondCalendarDateLinear.setOnClickListener(this);
-        calendarsBinding.secondCalendarDateDay.setOnClickListener(this);
-        calendarsBinding.secondCalendarDate.setOnClickListener(this);
-        calendarsBinding.thirdCalendarDateLinear.setOnClickListener(this);
-        calendarsBinding.thirdCalendarDateDay.setOnClickListener(this);
-        calendarsBinding.thirdCalendarDate.setOnClickListener(this);
-
-        calendarsBinding.getRoot().setOnClickListener(this);
-
-        calendarsBinding.firstCalendarDateLinear.setVisibility(View.GONE);
-        calendarsBinding.secondCalendarDateLinear.setVisibility(View.GONE);
-        calendarsBinding.thirdCalendarDateLinear.setVisibility(View.GONE);
-        calendarsBinding.diffDateContainer.setVisibility(View.GONE);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
@@ -195,8 +176,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                                     CalendarAdapter.positionToOffset(position))
                             .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
-            calendarsBinding.today.setVisibility(View.VISIBLE);
-            calendarsBinding.todayIcon.setVisibility(View.VISIBLE);
+            calendarsView.showTodayIcon();
         }
 
     };
@@ -213,7 +193,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         lastSelectedJdn = jdn;
-        UIUtils.fillCalendarsCard(context, jdn, calendarsBinding, Utils.getMainCalendar(),
+        calendarsView.fillCalendarsCard(jdn, Utils.getMainCalendar(),
                 Utils.getEnabledCalendarTypes());
         boolean isToday = CalendarUtils.getTodayJdn() == jdn;
         setOwghat(jdn, isToday);
@@ -437,22 +417,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (context == null) return;
 
         switch (v.getId()) {
-
-            case R.id.calendars_tab_content:
-                boolean isOpenCalendarCommand = calendarsBinding.firstCalendarDateLinear.getVisibility() != View.VISIBLE;
-
-                calendarsBinding.moreCalendar.setImageResource(isOpenCalendarCommand
-                        ? R.drawable.ic_keyboard_arrow_up
-                        : R.drawable.ic_keyboard_arrow_down);
-                calendarsBinding.firstCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                calendarsBinding.secondCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                calendarsBinding.thirdCalendarDateLinear.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-                calendarsBinding.diffDateContainer.setVisibility(isOpenCalendarCommand ? View.VISIBLE : View.GONE);
-
-                mainBinding.cardsViewPager.measureCurrentView(calendarsBinding.getRoot());
-
-                break;
-
             case R.id.owghat_text:
             case R.id.owghat_content:
 
@@ -473,41 +437,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 if (lastSelectedJdn == -1)
                     lastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                break;
-
-            case R.id.today:
-            case R.id.today_icon:
-                bringTodayYearMonth();
-                break;
-
-            case R.id.first_calendar_date:
-            case R.id.first_calendar_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.firstCalendarDateDay.getText() + " " +
-                        calendarsBinding.firstCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.first_calendar_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.firstCalendarDateLinear.getText());
-                break;
-
-            case R.id.second_calendar_date:
-            case R.id.second_calendar_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.secondCalendarDateDay.getText() + " " +
-                        calendarsBinding.secondCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.second_calendar_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.secondCalendarDateLinear.getText());
-                break;
-
-            case R.id.third_calendar_date:
-            case R.id.third_calendar_date_day:
-                UIUtils.copyToClipboard(context, calendarsBinding.thirdCalendarDateDay.getText() + " " +
-                        calendarsBinding.thirdCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
-            case R.id.third_calendar_date_linear:
-                UIUtils.copyToClipboard(context, calendarsBinding.thirdCalendarDateLinear.getText());
                 break;
         }
     }
