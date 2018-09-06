@@ -218,5 +218,11 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="islamic_offset">Islamic offset</string>
     <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
     <string name="empty" translatable="false" />
+    <string name="pref_header_language_calendar">"Language
+        and Calendar"</string>
+    <string name="pref_header_widget_location">"Widget
+        and Notification"</string>
+    <string name="pref_header_location_athan">"Location
+        and Athan"</string>
 
 </resources>
