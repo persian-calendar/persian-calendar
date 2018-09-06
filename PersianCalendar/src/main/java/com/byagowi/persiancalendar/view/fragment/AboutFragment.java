@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,8 +113,26 @@ public class AboutFragment extends Fragment {
         TypedValue color = new TypedValue();
         theme.resolveAttribute(R.attr.colorDrawerIcon, color, true);
 
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(8, 8, 8, 8);
+
+        View.OnClickListener chipClick = view -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/" +
+                                ((Chip) view).getText().toString()
+                                        .split("@")[1].split("\\)")[0])));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
         for (String line : getString(R.string.about_developers_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
+            chip.setOnClickListener(chipClick);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -122,6 +141,7 @@ public class AboutFragment extends Fragment {
 
         for (String line : getString(R.string.about_designers_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
             chip.setText(line);
             chip.setChipIcon(designerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -130,6 +150,8 @@ public class AboutFragment extends Fragment {
 
         for (String line : getString(R.string.about_contributors_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
+            chip.setOnClickListener(chipClick);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);

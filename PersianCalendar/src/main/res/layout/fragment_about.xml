@@ -101,8 +101,8 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/AboutCard"
                 android:id="@+id/help_card"
+                style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
                 <TextView
@@ -268,12 +268,13 @@
                     android:text="@string/about_developers"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <com.google.android.material.chip.ChipGroup
+                <LinearLayout
                     android:id="@+id/developers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
                     android:layoutDirection="ltr"
+                    android:orientation="vertical"
                     android:padding="5dp"
                     android:textColor="?attr/colorTextDrawer" />
 
