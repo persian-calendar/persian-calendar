@@ -132,8 +132,8 @@
     <string name="midday">نیوەڕۆ</string>
     <string name="sunset">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
-    <string name="length_of_day">ڕۆژگار: %s</string>
-    <string name="remaining_daylight">ماوەوە: %s</string>
+    <string name="length_of_day">ڕۆژگار: %sک %sخ</string>
+    <string name="remaining_daylight">ماوەوە: %sک %sخ</string>
     <string name="more">زیاتر</string>
     <string name="zodiac">کەلوو</string>
     <string name="capricorn">گیسک</string>

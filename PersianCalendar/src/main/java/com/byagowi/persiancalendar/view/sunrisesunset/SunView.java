@@ -25,6 +25,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
+import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Clock;
 import com.github.praytimes.PrayTime;
 
@@ -360,15 +361,17 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             }
         }
 
-        int dayLength = (int) (sunset - sunrise);
-        int remaining = now > sunset || now < sunrise ? 0 : (int) (sunset - now);
+        Clock dayLength = Clock.fromInt((int) (sunset - sunrise));
+        Clock remaining = Clock.fromInt(now > sunset || now < sunrise ? 0 : (int) (sunset - now));
         dayLengthString = String.format(context.getString(R.string.length_of_day),
-                UIUtils.baseClockToString(Clock.fromInt(dayLength)));
-        if (remaining == 0) {
+                Utils.formatNumber(dayLength.getHour()),
+                Utils.formatNumber(dayLength.getMinute()));
+        if (remaining.toInt() == 0) {
             remainingString = "";
         } else {
             remainingString = String.format(context.getString(R.string.remaining_daylight),
-                    UIUtils.baseClockToString(Clock.fromInt(remaining)));
+                    Utils.formatNumber(remaining.getHour()),
+                    Utils.formatNumber(remaining.getMinute()));
         }
 
         argbEvaluator = new ArgbEvaluator();

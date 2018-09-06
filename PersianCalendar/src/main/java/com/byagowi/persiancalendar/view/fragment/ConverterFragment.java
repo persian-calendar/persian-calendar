@@ -10,8 +10,7 @@ import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.SelectDayView;
-import com.byagowi.persiancalendar.view.SpinnersSelectDayView;
+import com.byagowi.persiancalendar.view.selectdayview.SelectDayView;
 
 import java.util.List;
 

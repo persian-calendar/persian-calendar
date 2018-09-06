@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.SelectDayView;
-import com.byagowi.persiancalendar.view.SpinnersSelectDayView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.selectdayview.SelectDayView;
+import com.byagowi.persiancalendar.view.selectdayview.SpinnersSelectDayView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;

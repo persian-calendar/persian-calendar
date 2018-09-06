@@ -168,8 +168,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="midday">Midday</string>
     <string name="sunset">Sunset</string>
     <string name="no_event">No event or appointment is found for this day.</string>
-    <string name="length_of_day">Daytime: %s</string>
-    <string name="remaining_daylight">Remaining: %s</string>
+    <string name="length_of_day">Daytime: %sh %sm</string>
+    <string name="remaining_daylight">Remaining: %sh %sm</string>
     <string name="more">More</string>
     <string name="capricorn_emoji" translatable="false">♑</string>
     <string name="aquarius_emoji" translatable="false">♒</string>
