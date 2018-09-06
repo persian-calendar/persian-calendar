@@ -139,8 +139,9 @@ public class SelectDayView extends FrameLayout implements AdapterView.OnItemSele
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (adapterView.getId() == R.id.calendarTypeSpinner) setJdn(jdn);
+        else jdn = getJdn();
 
-        onDaySelected.fire(getJdn());
+        onDaySelected.fire(jdn);
     }
 
     @Override
