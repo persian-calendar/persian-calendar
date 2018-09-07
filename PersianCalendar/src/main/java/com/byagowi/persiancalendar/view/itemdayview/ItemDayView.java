@@ -58,9 +58,9 @@ public class ItemDayView extends View {
             color = holiday
                     ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
                     : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
-            if (today && !selected) {
-                color = resource.colorTextToday;
-            }
+//            if (today && !selected) {
+//                color = resource.colorTextToday;
+//            }
         } else {
             color = resource.colorTextDayName;
         }
