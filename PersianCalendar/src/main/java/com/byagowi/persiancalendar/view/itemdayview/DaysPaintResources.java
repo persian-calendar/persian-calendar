@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.itemdayview;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.TypedValue;
 
@@ -20,6 +21,8 @@ public class DaysPaintResources {
     final public int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
 
     final public Paint textPaint, linePaint, selectedPaint, todayPaint;
+
+    final public boolean boldForToday;
 
     public DaysPaintResources(Context context) {
         Resources.Theme theme = context.getTheme();
@@ -51,6 +54,10 @@ public class DaysPaintResources {
 
         theme.resolveAttribute(R.attr.colorSelectDay, value, true);
         colorSelectDay = ContextCompat.getColor(context, value.resourceId);
+
+        // Dirty hack, but for now
+        theme.resolveAttribute(R.attr.boldForToday, value, true);
+        boldForToday = ContextCompat.getColor(context, value.resourceId) == Color.WHITE;
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

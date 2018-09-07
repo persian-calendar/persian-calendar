@@ -30,6 +30,7 @@
     <attr name="menuIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
+    <attr name="boldForToday" format="reference" />
 
     <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
@@ -86,6 +87,7 @@
         <item name="menuIconColor">@color/dark_menu_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="boldForToday">@color/black</item>
     </style>
 
     <!-- Base application theme. -->
@@ -144,6 +146,7 @@
         <item name="menuIconColor">@color/light_menu_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/light_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="boldForToday">@color/black</item>
     </style>
 
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -201,6 +204,7 @@
         <item name="menuIconColor">@color/blue_menu_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/blue_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="boldForToday">@color/black</item>
     </style>
 
     <style name="ClassicTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -258,6 +262,7 @@
         <item name="menuIconColor">@color/classic_menu_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/classic_text_normal</item>
         <item name="colorTextDaySelected">@color/classic_text_normal</item>
+        <item name="boldForToday">@color/white</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">

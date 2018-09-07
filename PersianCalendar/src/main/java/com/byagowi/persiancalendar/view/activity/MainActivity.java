@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
             snackbarView.setBackgroundColor(Color.WHITE);
+            snackbarView.setOnClickListener(v -> snackbar.dismiss());
             snackbar.setAction("Settings", view -> {
                 menuPosition = PREFERENCE;
                 SharedPreferences.Editor edit = prefs.edit();
