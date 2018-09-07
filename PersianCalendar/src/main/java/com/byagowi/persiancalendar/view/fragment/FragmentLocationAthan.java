@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
 import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
 import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
@@ -94,9 +93,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment = null;
-        if (preference.getKey().equals("calendars_priority")) {
-            fragment = new CalendarPreferenceDialog();
-        } else if (preference instanceof PrayerSelectPreference) {
+        if (preference instanceof PrayerSelectPreference) {
             fragment = new PrayerSelectDialog();
         } else if (preference instanceof AthanVolumePreference) {
             fragment = new AthanVolumeDialog();
