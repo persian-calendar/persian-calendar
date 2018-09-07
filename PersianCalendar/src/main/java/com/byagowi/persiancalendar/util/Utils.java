@@ -457,12 +457,10 @@ public class Utils {
     }
 
     static public String getWeekDayName(AbstractDate date) {
-        if (date instanceof IslamicDate)
-            date = DateConverter.islamicToCivil((IslamicDate) date);
-        else if (date instanceof PersianDate)
-            date = DateConverter.persianToCivil((PersianDate) date);
-
-        return weekDays[date.getDayOfWeek() % 7];
+        CivilDate civilDate = date instanceof CivilDate
+                ? (CivilDate) date
+                : DateConverter.jdnToCivil(CalendarUtils.getJdnDate(date));
+        return weekDays[civilDate.getDayOfWeek() % 7];
     }
 
     static public int getDayIconResource(int day) {

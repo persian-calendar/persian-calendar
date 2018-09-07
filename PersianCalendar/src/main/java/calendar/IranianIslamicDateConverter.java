@@ -8,7 +8,7 @@ import java.util.Map;
  * Kudos to his creative work!
  * I've tried to optimize its runtime performance so it is different to the way used on starcal.
  */
-class IslamicDateConverter {
+class IranianIslamicDateConverter {
     private static Map<Integer, long[]> yearsMonthsInJd = new HashMap<>();
 
     private static int supportedYearsStart;

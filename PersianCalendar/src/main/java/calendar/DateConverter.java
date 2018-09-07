@@ -16,10 +16,6 @@ package calendar;
 
 public final class DateConverter {
 
-    public static IslamicDate civilToIslamic(CivilDate civil) {
-        return jdnToIslamic(civilToJdn(civil));
-    }
-
     public static long civilToJdn(CivilDate civil) {
         return civilToJdn(civil.getYear(), civil.getMonth(), civil.getDayOfMonth());
     }
@@ -38,16 +34,8 @@ public final class DateConverter {
 
     }
 
-    public static PersianDate civilToPersian(CivilDate civil) {
-        return jdnToPersian(civilToJdn(civil));
-    }
-
     private static long floor(double d) {
         return (long) Math.floor(d);
-    }
-
-    public static CivilDate islamicToCivil(IslamicDate islamic) {
-        return jdnToCivil(islamicToJdn(islamic));
     }
 
     private static int NMONTHS = (1405 * 12 + 1);
@@ -62,7 +50,7 @@ public final class DateConverter {
     public static long islamicToJdn(int year, int month, int day) {
         long tableResult = useUmmAlQura
                 ? UmmAlQuraConverter.hijriToJd(year, month, day)
-                : IslamicDateConverter.hijriToJd(year, month, day);
+                : IranianIslamicDateConverter.hijriToJd(year, month, day);
 
         if (tableResult != -1)
             return tableResult - islamicOffset;
@@ -78,10 +66,6 @@ public final class DateConverter {
         long k = month + year * 12 - NMONTHS; // nunber of months since 1/1/1405
 
         return floor(visibility(k + 1048) + day + 0.5) - islamicOffset;
-    }
-
-    public static PersianDate islamicToPersian(IslamicDate islamic) {
-        return jdnToPersian(islamicToJdn(islamic));
     }
 
     public static CivilDate jdnToCivil(long jdn) {
@@ -106,7 +90,7 @@ public final class DateConverter {
         jd += islamicOffset;
         int[] tableResult = useUmmAlQura
                 ? UmmAlQuraConverter.jdToHijri(jd)
-                : IslamicDateConverter.jdToHijri(jd);
+                : IranianIslamicDateConverter.jdToHijri(jd);
 
         if (tableResult != null) {
             return new IslamicDate(tableResult[0], tableResult[1], tableResult[2]);
@@ -196,14 +180,6 @@ public final class DateConverter {
     private static long julianToJdn(long lYear, long lMonth, long lDay) {
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
                 + ((275 * lMonth) / 9) + lDay + 1729777;
-    }
-
-    public static CivilDate persianToCivil(PersianDate persian) {
-        return jdnToCivil(persianToJdn(persian));
-    }
-
-    public static IslamicDate persianToIslamic(PersianDate persian) {
-        return jdnToIslamic(persianToJdn(persian));
     }
 
     public static long persianToJdn(PersianDate persian) {

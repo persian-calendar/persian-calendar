@@ -69,17 +69,12 @@ public class SpinnersSelectDayView extends FrameLayout implements AdapterView.On
         int day = ((FormattedIntEntity) binding.daySpinner.getSelectedItem()).getValue();
 
         try {
-            switch (getSelectedCalendarType()) {
-                case GREGORIAN:
-                    return DateConverter.civilToJdn(year, month, day);
+            CalendarType selectedCalendarType = getSelectedCalendarType();
+            if (day > CalendarUtils.getMonthLength(selectedCalendarType, year, month))
+                throw new Exception("Not a valid day");
 
-                case ISLAMIC:
-                    return DateConverter.islamicToJdn(year, month, day);
-
-                case SHAMSI:
-                    return DateConverter.persianToJdn(year, month, day);
-            }
-        } catch (RuntimeException e) {
+            return CalendarUtils.getJdnOfCalendar(selectedCalendarType, year, month, day);
+        } catch (Exception e) {
             Toast.makeText(getContext(), getContext().getString(R.string.date_exception),
                     Toast.LENGTH_SHORT).show();
             Log.e("SelectDayDialog", "", e);

@@ -37,10 +37,15 @@ public class ConverterFragment extends Fragment {
                 () -> selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
 
         selectDayView.setOnSelectedDayChangedListener(jdn -> {
-            CalendarType selectedCalendarType = selectDayView.getSelectedCalendarType();
-            List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
-            orderedCalendarTypes.remove(selectedCalendarType);
-            binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
+            if (jdn == -1) {
+                binding.calendarsView.setVisibility(View.GONE);
+            } else {
+                binding.calendarsView.setVisibility(View.VISIBLE);
+                CalendarType selectedCalendarType = selectDayView.getSelectedCalendarType();
+                List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
+                orderedCalendarTypes.remove(selectedCalendarType);
+                binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
+            }
         });
         selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn());
 

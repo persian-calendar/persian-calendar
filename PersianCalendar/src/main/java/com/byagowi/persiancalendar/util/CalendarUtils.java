@@ -105,20 +105,20 @@ public class CalendarUtils {
                 Utils.formatNumber(date.getMonth()), Utils.formatNumber(date.getDayOfMonth()));
     }
 
+    static public CivilDate getGregorianToday() {
+        return new CivilDate(makeCalendarFromDate(new Date()));
+    }
+
     static public long getTodayJdn() {
-        return DateConverter.civilToJdn(new CivilDate(makeCalendarFromDate(new Date())));
+        return DateConverter.civilToJdn(getGregorianToday());
     }
 
     static public PersianDate getPersianToday() {
-        return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
+        return DateConverter.jdnToPersian(getTodayJdn());
     }
 
     static public IslamicDate getIslamicToday() {
-        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())));
-    }
-
-    static public CivilDate getGregorianToday() {
-        return new CivilDate(makeCalendarFromDate(new Date()));
+        return DateConverter.jdnToIslamic(getTodayJdn());
     }
 
     static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
