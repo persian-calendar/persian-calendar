@@ -55,9 +55,10 @@ public class ItemDayView extends View {
 
         int color;
         if (isNumber) {
+            boolean changeNumberColor = selected && !resource.applyClassicSpecificImprovements;
             color = holiday
-                    ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
-                    : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
+                    ? (changeNumberColor ? resource.colorHolidaySelected : resource.colorHoliday)
+                    : (changeNumberColor ? resource.colorTextDaySelected : resource.colorTextDay);
 //            if (today && !selected) {
 //                color = resource.colorTextToday;
 //            }

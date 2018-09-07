@@ -104,7 +104,7 @@
     <color name="classic_drawer_background">#f4f4f4</color>
     <color name="classic_drawer_select">#eeeeee</color>
     <color name="classic_icon">#587994</color>
-    <color name="classic_icon_drawer">#587994</color>
+    <color name="classic_icon_drawer">#757575</color>
     <color name="classic_menu_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->
