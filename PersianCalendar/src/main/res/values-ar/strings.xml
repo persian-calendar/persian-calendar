@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">التقويم الفاسي</string>
+    <string name="app_name">التقويم الفارسي</string>
     <string name="cancel">إلغاء</string>
     <string name="widget_name">التقويم الفارسي</string>
     <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
@@ -18,10 +18,8 @@
     <string name="about">عن التطبيق</string>
     <string name="gpl_logo">شعار GPL</string>
     <string name="date_converter">محول التاريخ</string>
-    <string name="widget_notification_dashclock">المُصغر (ودجت), التنبيه وساعة داش</string>
     <string name="widget_text_color">لون النص في المُصغر (ودجت)</string>
     <string name="select_widgets_text_color">إختيار لونٍ للنص في  المُصغر (ودجت)</string>
-    <string name="pray_times_calculation_setting">إعدادات حساب أوقات الصلاة والقبلة</string>
     <string name="notify_date">تاريخ اليوم في تنبيه</string>
     <string name="enable_notify">إظهار تواريخ اليوم في  تنبيهٍ دائمي</string>
     <string name="select_skin">إختيار لون التطبيق</string>
@@ -79,7 +77,6 @@
     <string name="pleasewaitgps">جارٍ البحث يرجى الانتظار ...تأكد أن الـGPS فعال. إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى..</string>
     <string name="notify_date_lock_screen">إظهار التنبيه في شاشة القفل</string>
     <string name="notify_date_lock_screen_summary">فقط إذا كان قفل الشاشة مَحميّاً</string>
-    <string name="user_interface">واجهة المستخدم</string>
     <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطَل إذهب إلى الإعدادات</string>
     <string name="date_diff_text">البعد: %s يوماً (~%s سنة و %s شهر و %s يوم)</string>
     <string name="search_holidays">البحث عن العُطَل</string>
