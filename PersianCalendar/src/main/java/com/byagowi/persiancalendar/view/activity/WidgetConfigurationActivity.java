@@ -21,7 +21,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            addPreferencesFromResource(R.xml.widget_preferences);
+            addPreferencesFromResource(R.xml.preferences_widget_notification);
         }
     }
 
