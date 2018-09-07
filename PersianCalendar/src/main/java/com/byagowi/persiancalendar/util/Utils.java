@@ -88,9 +88,11 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
+import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
+import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
@@ -1021,23 +1023,26 @@ public class Utils {
     static private void loadLanguageResource(Context context) {
         @RawRes int messagesFile;
         switch (language) {
-            case "fa-AF":
+            case LANG_FA_AF:
                 messagesFile = R.raw.messages_fa_af;
                 break;
-            case "ps":
+            case LANG_PS:
                 messagesFile = R.raw.messages_ps;
                 break;
-            case "ckb":
+            case LANG_AR:
+                messagesFile = R.raw.messages_ar;
+                break;
+            case LANG_CKB:
                 messagesFile = R.raw.messages_ckb;
                 break;
-            case "ur":
+            case LANG_UR:
                 messagesFile = R.raw.messages_ur;
                 break;
-            case "en-US":
+            case LANG_EN_US:
                 messagesFile = R.raw.messages_en;
                 break;
-            case "en":
-            case "fa":
+            case LANG_EN:
+            case LANG_FA:
             default:
                 messagesFile = R.raw.messages_fa;
                 break;
@@ -1067,7 +1072,11 @@ public class Utils {
             JSONArray weekDaysArray = messages.getJSONArray("WeekDays");
             for (int i = 0; i < 7; ++i) {
                 weekDays[i] = weekDaysArray.getString(i);
-                weekDaysInitials[i] = weekDays[i].substring(0, 1);
+                if (language.equals(LANG_AR)) {
+                    weekDaysInitials[i] = weekDays[i].substring(2, 3);
+                } else {
+                    weekDaysInitials[i] = weekDays[i].substring(0, 1);
+                }
             }
 
         } catch (JSONException e) {

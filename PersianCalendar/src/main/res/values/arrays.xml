@@ -55,6 +55,7 @@
         <item>دری</item>
         <item>پښتو</item>
         <item>کوردی</item>
+        <item>العربية</item>
         <item>اردو</item>
         <item>English (Iran)</item>
         <item>English</item>
@@ -65,6 +66,7 @@
         <item>fa-AF</item>
         <item>ps</item>
         <item>ckb</item>
+        <item>ar</item>
         <item>ur</item>
         <item>en</item>
         <item>en-US</item>
@@ -162,7 +164,7 @@
         <item>owghat_location</item>
     </string-array>
 
-    <string-array name="what_to_show_default">
+    <string-array name="what_to_show_default" translatable="false">
         <item>other_calendars</item>
         <item>non_holiday_events</item>
         <item>owghat</item>

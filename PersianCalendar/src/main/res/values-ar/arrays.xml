@@ -7,13 +7,6 @@
         <item>أزرق</item>
     </string-array>
 
-    <string-array name="themeKeys" translatable="false">
-        <item>LightTheme</item>
-        <item>DarkTheme</item>
-        <item>ClassicTheme</item> <!-- Its UI name is Modern however -->
-        <item>BlueTheme</item>
-    </string-array>
-
     <string-array name="prayMethodsNames">
         <item>الاثني عشرية الشيعية، جامعة ليوا، قم</item>
         <item>رابطة العالم الإسلامي</item>
@@ -22,16 +15,6 @@
         <item>جامعة أم القرى, المكة المكرمة</item>
         <item>جامعة العلوم الإسلامية, كراتشي</item>
         <item>قسم الجيوفيزياء ، جامعة طهران</item>
-    </string-array>
-
-    <string-array name="prayMethodsKeys" translatable="false">
-        <item>Jafari</item>
-        <item>MWL</item>
-        <item>ISNA</item>
-        <item>Egypt</item>
-        <item>Makkah</item>
-        <item>Karachi</item>
-        <item>Tehran</item>
     </string-array>
 
     <string-array name="colorNames">
@@ -50,42 +33,12 @@
         <item>#ff202020</item>
     </string-array>
 
-    <string-array name="languageNames" translatable="false">
-        <item>فارسی</item>
-		<item>العربية</item>
-        <item>دری</item>
-        <item>پښتو</item>
-        <item>کوردی</item>
-        <item>اردو</item>
-        <item>English (Iran)</item>
-        <item>English</item>
-    </string-array>
-
-    <string-array name="languageKeys" translatable="false">
-        <item>ar</item>
-        <item>fa</item>
-        <item>fa-AF</item>
-        <item>ps</item>
-        <item>ckb</item>
-        <item>ur</item>
-        <item>en</item>
-        <item>en-US</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>الفجر</item>
         <item>الظهر</item>
         <item>العصر</item>
         <item>المغرب</item>
         <item>العِشاء</item>
-    </string-array>
-
-    <string-array name="prayerTimeKeys" translatable="false">
-        <item>FAJR</item>
-        <item>DHUHR</item>
-        <item>ASR</item>
-        <item>MAGHRIB</item>
-        <item>ISHA</item>
     </string-array>
 
     <string-array name="holidays_types">
@@ -96,20 +49,6 @@
         <item>المناسبات الدولية والعالمية</item>
         <item>عُطل أفعانستان</item>
         <item>المناسبات الأخرى (أفعانستان)</item>
-    </string-array>
-
-    <string-array name="holidays_values" translatable="false">
-        <item>iran_holidays</item>
-        <item>iran_islamic</item>
-        <item>iran_ancient</item>
-        <item>iran_others</item>
-        <item>international</item>
-        <item>afghanistan_holidays</item>
-        <item>afghanistan_others</item>
-    </string-array>
-
-    <string-array name="default_holidays" translatable="false">
-        <item>iran_holidays</item>
     </string-array>
 
     <string-array name="calendar_type">
@@ -135,21 +74,6 @@
         <item>الجمعة</item>
     </string-array>
 
-    <string-array name="week_days_value" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-    </string-array>
-
-    <!-- Which means Friday -->
-    <string-array name="default_weekends" translatable="false">
-        <item>6</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item> 1x4 و 2x2 التقويمات الأخرى على مصغر (ودجت)</item>
         <item>بدون العُطل على مصغر (ودجت) 2x2 مع التنبه</item>
@@ -157,29 +81,7 @@
         <item>مكان أوقات الصلوات على مصغر (ودجت)2x2 مع التنبيه (إذا تم الإعداد مسبقاً)</item>
     </string-array>
 
-    <string-array name="what_to_show_keys" translatable="false">
-        <item>other_calendars</item>
-        <item>non_holiday_events</item>
-        <item>owghat</item>
-        <item>owghat_location</item>
-    </string-array>
-
-    <string-array name="what_to_show_default">
-        <item>other_calendars</item>
-        <item>non_holiday_events</item>
-        <item>owghat</item>
-        <item>owghat_location</item>
-    </string-array>
-
     <string-array name="islamicOffsetNames">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
-    <string-array name="islamicOffsetKeys" translatable="false">
         <item>-2</item>
         <item>-1</item>
         <item>0</item>
