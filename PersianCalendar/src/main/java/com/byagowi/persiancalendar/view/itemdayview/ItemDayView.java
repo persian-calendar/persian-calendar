@@ -58,14 +58,17 @@ public class ItemDayView extends View {
             color = holiday
                     ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
                     : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
+            if (today && !selected) {
+                color = resource.colorTextToday;
+            }
         } else {
-            color = resource.colorDayName;
+            color = resource.colorTextDayName;
         }
 
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor(selected ? color : resource.colorSelectDay);
+        resource.linePaint.setColor(selected ? color : resource.colorEventLine);
 
         if (hasEvent) {
             canvas.drawLine(width / 2 - resource.halfEventBarWidth,

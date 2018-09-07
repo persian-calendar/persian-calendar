@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 public class DaysPaintResources {
     @ColorInt
     final public int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
-            colorTextDaySelected, colorDayName, colorSelectDay;
+            colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
 
     final public int halfEventBarWidth, appointmentYOffset, eventYOffset;
     final public int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
@@ -40,8 +40,14 @@ public class DaysPaintResources {
         theme.resolveAttribute(R.attr.colorTextDaySelected, value, true);
         colorTextDaySelected = ContextCompat.getColor(context, value.resourceId);
 
+        theme.resolveAttribute(R.attr.colorTextToday, value, true);
+        colorTextToday = ContextCompat.getColor(context, value.resourceId);
+
         theme.resolveAttribute(R.attr.colorTextDayName, value, true);
-        colorDayName = ContextCompat.getColor(context, value.resourceId);
+        colorTextDayName = ContextCompat.getColor(context, value.resourceId);
+
+        theme.resolveAttribute(R.attr.colorEventLine, value, true);
+        colorEventLine = ContextCompat.getColor(context, value.resourceId);
 
         theme.resolveAttribute(R.attr.colorSelectDay, value, true);
         colorSelectDay = ContextCompat.getColor(context, value.resourceId);
