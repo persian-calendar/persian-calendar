@@ -86,9 +86,7 @@ public class ItemDayView extends View {
 
         if (resource.applyClassicSpecificImprovements) {
             resource.textPaint.setFakeBoldText(today);
-            if (isNumber) {
-                resource.textPaint.setTextSize(textSize * .8f);
-            }
+            resource.textPaint.setTextSize(textSize * .8f);
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;

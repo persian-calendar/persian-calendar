@@ -42,7 +42,7 @@
             android:layout_gravity="start|left"
             android:background="?attr/colorDrawerBackground"
             app:headerLayout="@layout/navigation_header"
-            app:itemIconTint="?attr/colorAccent"
+            app:itemIconTint="?attr/colorDrawerIcon"
             app:itemTextColor="?attr/colorTextNormal"
             app:menu="@menu/navigation_items" />
 

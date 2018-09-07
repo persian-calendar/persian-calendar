@@ -209,7 +209,7 @@
     <style name="ClassicTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/classic_primary</item>
         <item name="colorPrimaryDark">@color/classic_primary_dark</item>
-        <item name="colorAccent">@color/classic_primary_dark</item>
+        <item name="colorAccent">@color/classic_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/classic_primary_dark
         </item>
