@@ -55,10 +55,9 @@ public class ItemDayView extends View {
 
         int color;
         if (isNumber) {
-            boolean changeNumberColor = selected && !resource.applyClassicSpecificImprovements;
             color = holiday
-                    ? (changeNumberColor ? resource.colorHolidaySelected : resource.colorHoliday)
-                    : (changeNumberColor ? resource.colorTextDaySelected : resource.colorTextDay);
+                    ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
+                    : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
 //            if (today && !selected) {
 //                color = resource.colorTextToday;
 //            }
@@ -69,7 +68,8 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor(selected ? color : resource.colorEventLine);
+        resource.linePaint.setColor((selected && !resource.applyClassicSpecificImprovements)
+                ? color : resource.colorEventLine);
 
         if (hasEvent) {
             canvas.drawLine(width / 2 - resource.halfEventBarWidth,
