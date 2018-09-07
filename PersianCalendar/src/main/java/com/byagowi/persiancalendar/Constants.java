@@ -53,6 +53,8 @@ public class Constants {
     public static final String PREF_THEME = "Theme";
     public static final String PREF_HOLIDAY_TYPES = "holiday_types";
 
+    public static final String CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE";
+
     public static final String DEFAULT_CITY = "CUSTOM";
     public static final String DEFAULT_PRAY_TIME_METHOD = "Tehran";
     public static final String DEFAULT_ISLAMIC_OFFSET = "0";

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +33,7 @@ import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -207,6 +209,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
         }
 
+        if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
+                && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
+            Snackbar snackbar = Snackbar.make(binding.coordinator, "Change app language?",
+                    10000);
+            View snackbarView = snackbar.getView();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+            snackbarView.setBackgroundColor(Color.WHITE);
+            snackbar.setAction("Settings", view -> {
+                menuPosition = PREFERENCE;
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
+                edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
+                edit.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+                edit.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+                edit.apply();
+                restartActivity();
+            });
+            snackbar.show();
+
+            // Show this snackbar only once
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true);
+            edit.apply();
+        }
+
         creationDate = CalendarUtils.getGregorianToday();
         Utils.applyAppLanguage(this);
     }
@@ -235,9 +264,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(PREF_APP_LANGUAGE)) {
             boolean persianDigits;
             boolean changeToAfghanistanHolidays = false;
-            boolean changeToAfghanitsnEvents = false;
+            boolean changeToAfghanistanEvents = false;
             boolean changeToIslamicCalendar = false;
             boolean changeToGregorianCalendar = false;
+            boolean changeToPersianCalendar = false;
+            boolean changetoIranEvents = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
                     persianDigits = false;
@@ -245,15 +276,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     break;
                 case LANG_FA:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
+                    changetoIranEvents = true;
                     break;
                 case LANG_UR:
                     persianDigits = false;
-                    changeToAfghanitsnEvents = true;
+                    changeToAfghanistanEvents = true;
                     changeToGregorianCalendar = true;
                     break;
                 case LANG_AR:
                     persianDigits = true;
-                    changeToAfghanitsnEvents = true;
+                    changeToAfghanistanEvents = true;
                     changeToIslamicCalendar = true;
                     break;
                 case LANG_FA_AF:
@@ -282,18 +315,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
             }
             // Enable International holidays (for now) when language changed to Arabic or Urdu
-            if (changeToAfghanitsnEvents) {
-                Set<String> currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
-
-                if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
-                    editor.putStringSet(PREF_HOLIDAY_TYPES,
-                            new HashSet<>(Collections.singletonList("international")));
-                }
-            }
-            // Enable Afghanistan events (for now) when language changed to Arabic or Urdu
-            if (changeToAfghanitsnEvents) {
+            if (changeToAfghanistanEvents) {
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
@@ -306,10 +328,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (changeToGregorianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
-            }
-            if (changeToIslamicCalendar) {
+            } else if (changeToIslamicCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI");
+            } else if (changeToPersianCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
             }
             editor.apply();
         }

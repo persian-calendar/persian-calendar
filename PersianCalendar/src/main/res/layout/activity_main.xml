@@ -20,11 +20,18 @@
                 android:background="?attr/colorPrimary"
                 android:theme="?attr/toolbarTheme" />
 
-            <FrameLayout
-                android:id="@+id/fragment_holder"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorBackground" />
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:id="@+id/fragment_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorBackground" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         </LinearLayout>
 
