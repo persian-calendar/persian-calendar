@@ -22,7 +22,7 @@ public class DaysPaintResources {
 
     final public Paint textPaint, linePaint, selectedPaint, todayPaint;
 
-    final public boolean boldForToday;
+    final public boolean applyClassicSpecificImprovements;
 
     public DaysPaintResources(Context context) {
         Resources.Theme theme = context.getTheme();
@@ -56,8 +56,8 @@ public class DaysPaintResources {
         colorSelectDay = ContextCompat.getColor(context, value.resourceId);
 
         // Dirty hack, but for now
-        theme.resolveAttribute(R.attr.boldForToday, value, true);
-        boldForToday = ContextCompat.getColor(context, value.resourceId) == Color.WHITE;
+        theme.resolveAttribute(R.attr.applyClassicSpecificImprovements, value, true);
+        applyClassicSpecificImprovements = ContextCompat.getColor(context, value.resourceId) == Color.WHITE;
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

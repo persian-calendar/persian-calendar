@@ -84,8 +84,12 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset, resource.linePaint);
         }
 
-        // Don't merge the two boolean
-        if (resource.boldForToday) resource.textPaint.setFakeBoldText(today);
+        if (resource.applyClassicSpecificImprovements) {
+            resource.textPaint.setFakeBoldText(today);
+            if (isNumber) {
+                resource.textPaint.setTextSize(textSize * .8f);
+            }
+        }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
         String textToMeasure =
