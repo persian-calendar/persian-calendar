@@ -92,8 +92,8 @@
     <color name="classic_holiday">#E51C23</color>
     <color name="classic_text_day">#737373</color>
     <color name="classic_text_today">#4DB6AC</color>
-    <color name="classic_text_day_name">#9EA9AB</color>
-    <color name="classic_month_switch">#6E97B9</color>
+    <color name="classic_text_day_name">#424242</color>
+    <color name="classic_month_switch">#4DB6AC</color>
     <color name="classic_text_athan">#ffffff</color>
     <color name="classic_divider">#e0e0e0</color>
     <color name="classic_background">#f4f4f4</color>
