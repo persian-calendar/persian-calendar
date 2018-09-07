@@ -1073,7 +1073,7 @@ public class Utils {
             for (int i = 0; i < 7; ++i) {
                 weekDays[i] = weekDaysArray.getString(i);
                 if (language.equals(LANG_AR)) {
-                    weekDaysInitials[i] = weekDays[i].substring(2, 3);
+                    weekDaysInitials[i] = weekDays[i].substring(2, 4);
                 } else {
                     weekDaysInitials[i] = weekDays[i].substring(0, 1);
                 }

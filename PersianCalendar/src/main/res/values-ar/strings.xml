@@ -131,8 +131,8 @@
     <string name="midday">الظهر</string>
     <string name="sunset">الغروب</string>
     <string name="no_event">تعذّر العثور على أحداث  أو مناسبات أو عُطَل لليوم</string>
-    <string name="length_of_day">النهار: %s</string>
-    <string name="remaining_daylight">الوقت المتبقي: %s</string>
+    <string name="length_of_day">النهار: %sس %sد</string>
+    <string name="remaining_daylight">الوقت المتبقي: %sس %sدs</string>
     <string name="more">المزيد</string>
     <string name="zodiac">الأبراج الفلكية</string>
     <string name="capricorn">جدي</string>
