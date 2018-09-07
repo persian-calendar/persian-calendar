@@ -10,7 +10,7 @@ import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 /**
  * Created by ebraminio on 2/21/16.
  */
-public class AthanNumericDialog extends EditTextPreferenceDialogFragmentCompat {
+public class NumericDialog extends EditTextPreferenceDialogFragmentCompat {
 
     @Override
     protected void onBindDialogView(View view) {

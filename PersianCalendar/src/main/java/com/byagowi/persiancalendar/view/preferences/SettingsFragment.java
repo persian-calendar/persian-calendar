@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.fragment;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +13,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-
 public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -39,9 +37,9 @@ public class SettingsFragment extends Fragment {
     class ViewPagerAdapter extends FragmentPagerAdapter {
         int pageCount;
 
-        ViewPagerAdapter(FragmentManager manager, int _pageCount) {
+        ViewPagerAdapter(FragmentManager manager, int pageCount) {
             super(manager);
-            pageCount = _pageCount;
+            this.pageCount = pageCount;
         }
 
         @Override
@@ -49,7 +47,7 @@ public class SettingsFragment extends Fragment {
             Fragment fragment = new Fragment();
             switch (position) {
                 case 0:
-                    fragment = new FragmentLanguageCalendar();
+                    fragment = new FragmentInterfaceCalendar();
                     break;
                 case 1:
                     fragment = new FragmentWidgetNotification();
@@ -72,7 +70,7 @@ public class SettingsFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getResources().getString(R.string.pref_header_language_calendar);
+                    return getResources().getString(R.string.pref_header_interface_calendar);
 
                 case 1:
                     return getResources().getString(R.string.pref_header_widget_location);

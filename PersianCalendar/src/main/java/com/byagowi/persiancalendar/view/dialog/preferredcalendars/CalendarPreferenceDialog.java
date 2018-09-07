@@ -48,7 +48,7 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
         RecyclerListAdapter adapter = new RecyclerListAdapter(this,
                 titles, values, enabled);
 
-        RecyclerView recyclerView = new RecyclerView(getContext());
+        RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -61,10 +61,7 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
         builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
         });
         builder.setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-            Context ctx = getContext();
-            if (ctx == null) return;
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor edit = prefs.edit();
             List<String> ordering = adapter.getResult();
             if (ordering.size() != 0) {

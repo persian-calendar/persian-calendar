@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.fragment;
+package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -19,17 +19,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
-import com.byagowi.persiancalendar.view.preferences.AthanNumericDialog;
-import com.byagowi.persiancalendar.view.preferences.AthanNumericPreference;
-import com.byagowi.persiancalendar.view.preferences.AthanVolumeDialog;
-import com.byagowi.persiancalendar.view.preferences.AthanVolumePreference;
-import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
-import com.byagowi.persiancalendar.view.preferences.GPSLocationPreference;
-import com.byagowi.persiancalendar.view.preferences.LocationPreference;
-import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
-import com.byagowi.persiancalendar.view.preferences.PrayerSelectDialog;
-import com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
@@ -44,34 +33,29 @@ import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_NAME;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
-/**
- * Preference activity
- *
- * @author ebraminio
- */
-public class FragmentLanguageCalendar extends PreferenceFragmentCompat {
+public class FragmentLocationAthan extends PreferenceFragmentCompat {
     private Preference categoryAthan;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
-        addPreferencesFromResource(R.xml.preferences_language_calendar);
+        addPreferencesFromResource(R.xml.preferences_location_athan);
 
-        //categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
-        //updateAthanPreferencesState();
+        categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
+        updateAthanPreferencesState();
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
 
-        //putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
-        //        .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
+        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
     private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //updateAthanPreferencesState();
+            updateAthanPreferencesState();
         }
     };
 
@@ -94,16 +78,14 @@ public class FragmentLanguageCalendar extends PreferenceFragmentCompat {
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment = null;
-        if (preference.getKey().equals("calendars_priority")) {
-            fragment = new CalendarPreferenceDialog();
-        } else if (preference instanceof PrayerSelectPreference) {
+        if (preference instanceof PrayerSelectPreference) {
             fragment = new PrayerSelectDialog();
         } else if (preference instanceof AthanVolumePreference) {
             fragment = new AthanVolumeDialog();
         } else if (preference instanceof LocationPreference) {
             fragment = new LocationPreferenceDialog();
-        } else if (preference instanceof AthanNumericPreference) {
-            fragment = new AthanNumericDialog();
+        } else if (preference instanceof NumericPreference) {
+            fragment = new NumericDialog();
         } else if (preference instanceof GPSLocationPreference) {
             //check whether gps provider and network providers are enabled or not
             FragmentActivity activity = getActivity();

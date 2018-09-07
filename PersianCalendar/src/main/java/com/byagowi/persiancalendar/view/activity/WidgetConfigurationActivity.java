@@ -8,23 +8,11 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.preferences.FragmentWidgetNotification;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
 
 public class WidgetConfigurationActivity extends AppCompatActivity {
-
-    // don't remove public ever
-    public static class PreferenceFragment extends PreferenceFragmentCompat {
-        public PreferenceFragment() {
-        }
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            addPreferencesFromResource(R.xml.preferences_widget_notification);
-        }
-    }
-
     protected void finishAndSuccess() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -46,7 +34,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(
                 R.id.preference_fragment_holder,
-                new PreferenceFragment(), "TAG").commit();
+                new FragmentWidgetNotification(), "TAG").commit();
 
         findViewById(R.id.add_widget_button).setOnClickListener(v -> finishAndSuccess());
     }
