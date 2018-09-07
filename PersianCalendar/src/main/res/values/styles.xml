@@ -32,7 +32,6 @@
     <attr name="colorTextDaySelected" format="reference" />
     <attr name="boldForToday" format="reference" />
 
-    <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
@@ -263,12 +262,6 @@
         <item name="coloredTabIndicatorColor">@color/classic_text_normal</item>
         <item name="colorTextDaySelected">@color/classic_text_normal</item>
         <item name="boldForToday">@color/white</item>
-
-        <item name="android:actionBarStyle">@style/ClassicActionBarStyle</item>
-    </style>
-
-    <style name="ClassicActionBarStyle" parent="Base.Widget.AppCompat.Light.ActionBar">
-        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">

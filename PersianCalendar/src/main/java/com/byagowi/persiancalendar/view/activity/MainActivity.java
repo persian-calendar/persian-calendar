@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
             snackbarView.setBackgroundColor(Color.WHITE);
             snackbarView.setOnClickListener(v -> snackbar.dismiss());
-            snackbar.setAction("Settings", view -> {
+            snackbar.setAction("English", view -> {
                 menuPosition = PREFERENCE;
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
