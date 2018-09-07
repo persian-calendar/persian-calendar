@@ -3,6 +3,8 @@
     <string-array name="themeNames">
         <item>روشن</item>
         <item>تاریک</item>
+        <item>مدرن</item>
+        <item>آبی</item>
     </string-array>
 
     <string-array name="prayMethodsNames">

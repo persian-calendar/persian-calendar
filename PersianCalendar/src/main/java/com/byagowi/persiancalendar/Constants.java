@@ -71,6 +71,7 @@ public class Constants {
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
+    public static final String BLUE_THEME = "BlueTheme";
     public static final String CLASSIC_THEME = "ClassicTheme";
 
     public static final String FAJR = "fajr";

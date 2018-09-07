@@ -6,7 +6,6 @@
     <color name="dark_primary">#272727</color>
     <color name="dark_primary_dark">#272727</color>
     <color name="dark_accent">#64ffda</color>
-
     <color name="dark_text_normal">#ffffff</color>
     <color name="dark_text_second">#cfcfcf</color>
     <color name="dark_text_primary">#009688</color>
@@ -17,7 +16,6 @@
     <color name="dark_text_day_name">#9e9e9e</color>
     <color name="dark_month_switch">#1de9b6</color>
     <color name="dark_text_athan">#ffffff</color>
-
     <color name="dark_divider">#272727</color>
     <color name="dark_background">#272727</color>
     <color name="dark_card_background">#202020</color>
@@ -25,14 +23,13 @@
     <color name="dark_select_day">#e0e0e0</color>
     <color name="dark_drawer_background">#212121</color>
     <color name="dark_drawer_select">#282828</color>
-
     <color name="dark_icon">#00bfa5</color>
     <color name="dark_icon_drawer">#00bfa5</color>
+    <color name="dark_menu_icon_color">#88ffffff</color>
 
     <color name="light_primary">#00695c</color>
     <color name="light_primary_dark">#004d40</color>
     <color name="light_accent">#00796b</color>
-
     <color name="light_text_normal">#232323</color>
     <color name="light_text_second">#737373</color>
     <color name="light_text_primary">#00796b</color>
@@ -43,7 +40,6 @@
     <color name="light_text_day_name">#b2dfdb</color>
     <color name="light_month_switch">#ff7043</color>
     <color name="light_text_athan">#ffffff</color>
-
     <color name="light_divider">#e0e0e0</color>
     <color name="light_background">#f4f4f4</color>
     <color name="light_card_background">#fafafa</color>
@@ -51,10 +47,57 @@
     <color name="light_select_day">#eff2f1</color>
     <color name="light_drawer_background">#f4f4f4</color>
     <color name="light_drawer_select">#eeeeee</color>
-
     <color name="light_icon">#00897b</color>
     <color name="light_icon_drawer">#00897b</color>
+    <color name="light_menu_icon_color">#88ffffff</color>
 
+    <color name="blue_primary">#176DC8</color>
+    <color name="blue_primary_dark">#000000</color>
+    <color name="blue_accent">#176DC8</color>
+    <color name="blue_text_normal">#232323</color>
+    <color name="blue_text_second">#737373</color>
+    <color name="blue_text_primary">#176DC8</color>
+    <color name="blue_text_drawer">#737373</color>
+    <color name="blue_text_holiday">#d84315</color>
+    <color name="blue_holiday">#ff8a65</color>
+    <color name="blue_text_day">#ffffff</color>
+    <color name="blue_text_day_name">#b2dfdb</color>
+    <color name="blue_month_switch">#ff7043</color>
+    <color name="blue_text_athan">#ffffff</color>
+    <color name="blue_divider">#e0e0e0</color>
+    <color name="blue_background">#f4f4f4</color>
+    <color name="blue_card_background">#fafafa</color>
+    <color name="blue_current_day">#ff7043</color>
+    <color name="blue_select_day">#eff2f1</color>
+    <color name="blue_drawer_background">#f4f4f4</color>
+    <color name="blue_drawer_select">#eeeeee</color>
+    <color name="blue_icon">#0D47A1</color>
+    <color name="blue_icon_drawer">#0D47A1</color>
+    <color name="blue_menu_icon_color">#88ffffff</color>
+
+    <color name="classic_primary">#FFFFFF</color>
+    <color name="classic_primary_dark">#191919</color>
+    <color name="classic_accent">#587994</color>
+    <color name="classic_text_normal">#232323</color>
+    <color name="classic_text_second">#737373</color>
+    <color name="classic_text_primary">#587994</color>
+    <color name="classic_text_drawer">#737373</color>
+    <color name="classic_text_holiday">#E51C23</color>
+    <color name="classic_holiday">#E51C23</color>
+    <color name="classic_text_day">#737373</color>
+    <color name="classic_text_day_name">#9EA9AB</color>
+    <color name="classic_month_switch">#6E97B9</color>
+    <color name="classic_text_athan">#ffffff</color>
+    <color name="classic_divider">#e0e0e0</color>
+    <color name="classic_background">#f4f4f4</color>
+    <color name="classic_card_background">#fafafa</color>
+    <color name="classic_current_day">#42AFBF</color>
+    <color name="classic_select_day">#000000</color>
+    <color name="classic_drawer_background">#f4f4f4</color>
+    <color name="classic_drawer_select">#eeeeee</color>
+    <color name="classic_icon">#587994</color>
+    <color name="classic_icon_drawer">#587994</color>
+    <color name="classic_menu_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->
     <color name="sViewHorizonColorLight">#32000000</color>

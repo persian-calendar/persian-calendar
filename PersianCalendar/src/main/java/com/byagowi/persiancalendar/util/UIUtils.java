@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
+import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
@@ -179,9 +181,12 @@ public class UIUtils {
             case DARK_THEME:
                 activity.setTheme(R.style.DarkTheme);
                 return;
-//            case CLASSIC_THEME:
-//                setTheme(R.style.ClassicTheme);
-//                return;
+            case CLASSIC_THEME:
+                activity.setTheme(R.style.ClassicTheme);
+                return;
+            case BLUE_THEME:
+                activity.setTheme(R.style.BlueTheme);
+                return;
             default:
             case LIGHT_THEME:
                 activity.setTheme(R.style.LightTheme);

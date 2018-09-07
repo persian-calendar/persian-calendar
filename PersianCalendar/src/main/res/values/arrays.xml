@@ -3,12 +3,15 @@
     <string-array name="themeNames">
         <item>Light</item>
         <item>Dark</item>
+        <item>Modern</item>
+        <item>Blue</item>
     </string-array>
 
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
-        <item>ClassicTheme</item>
+        <item>ClassicTheme</item> <!-- Its UI name is Modern however -->
+        <item>BlueTheme</item>
     </string-array>
 
     <string-array name="prayMethodsNames">

@@ -55,11 +55,9 @@ public class ItemDayView extends View {
 
         int color;
         if (isNumber) {
-            if (selected) {
-                color = holiday ? resource.colorTextHoliday : resource.colorPrimary;
-            } else {
-                color = holiday ? resource.colorHoliday : resource.colorTextDay;
-            }
+            color = holiday
+                    ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
+                    : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
         } else {
             color = resource.colorDayName;
         }
