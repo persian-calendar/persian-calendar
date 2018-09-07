@@ -845,7 +845,7 @@ public class Utils {
 
         // Special case Imam Reza martyrdom event on Hijri as it is a holiday and so vital to have
         if (islamic.getMonth() == 2 && islamic.getDayOfMonth() == 29
-                && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), 2) < 30) {
+                && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), 2) == 29) {
             IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
 
             islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +

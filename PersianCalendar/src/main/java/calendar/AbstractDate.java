@@ -1,9 +1,5 @@
 package calendar;
 
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
 /**
  * Abstract class representing a date. Instances of this class should be
  * mutable. Varios getters and setters are provided so that date manipulation is
@@ -13,7 +9,25 @@ import java.util.TimeZone;
  * @author ebraminio
  */
 public abstract class AbstractDate {
-    public abstract int getYear();
-    public abstract int getMonth();
-    public abstract int getDayOfMonth();
+    private int year;
+    private int month;
+    private int day;
+
+    public AbstractDate(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDayOfMonth() {
+        return day;
+    }
 }

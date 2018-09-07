@@ -849,7 +849,7 @@ public class TestDateCalendar {
     @Test
     public void test_praytimes() {
         Map<PrayTime, Clock> prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
-                .calculate(new CivilDate(2018, 9, 5).asCalendar().getTime(),
+                .calculate(new CivilDate(2018, 9, 5).toCalendar().getTime(),
                         new Coordinate(43, -80),
                         -5d, true);
         assertEquals(new Clock(5, 9).toInt(), prayTimes.get(PrayTime.FAJR).toInt());

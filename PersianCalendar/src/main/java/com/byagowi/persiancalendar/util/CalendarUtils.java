@@ -106,7 +106,7 @@ public class CalendarUtils {
     }
 
     static public CivilDate getGregorianToday() {
-        return new CivilDate(makeCalendarFromDate(new Date()));
+        return CivilDate.fromCalendar(makeCalendarFromDate(new Date()));
     }
 
     static public long getTodayJdn() {
@@ -281,7 +281,7 @@ public class CalendarUtils {
         if (jdn == -1) {
             jdn = getTodayJdn();
         }
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).asCalendar();
+        Calendar startingDate = DateConverter.jdnToCivil(jdn).toCalendar();
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, DAY_IN_MILLIS);
@@ -289,7 +289,7 @@ public class CalendarUtils {
     }
 
     public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(Context context, long jdn) {
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).asCalendar();
+        Calendar startingDate = DateConverter.jdnToCivil(jdn).toCalendar();
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, 32L * DAY_IN_MILLIS);
@@ -347,7 +347,7 @@ public class CalendarUtils {
                 Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
                 Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
 
-                CivilDate civilDate = new CivilDate(startCalendar);
+                CivilDate civilDate = CivilDate.fromCalendar(startCalendar);
 
                 int month = civilDate.getMonth();
                 int day = civilDate.getDayOfMonth();

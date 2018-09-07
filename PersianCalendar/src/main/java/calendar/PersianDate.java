@@ -2,32 +2,17 @@ package calendar;
 
 /**
  * @author Amir
- * @author ebraminio (implementing isLeapYear)
+ * @author ebraminio
  */
 
 public class PersianDate extends AbstractDate {
-    private int year;
-    private int month;
-    private int day;
-
     public PersianDate(int year, int month, int day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+        super(year, month, day);
     }
 
-    @Override
-    public int getDayOfMonth() {
-        return day;
-    }
-
-    @Override
-    public int getMonth() {
-        return month;
-    }
-
-    @Override
-    public int getYear() {
-        return year;
+    public boolean equals(PersianDate persianDate) {
+        return getDayOfMonth() == persianDate.getDayOfMonth()
+                && getMonth() == persianDate.getMonth()
+                && (getYear() == -1 || getYear() == persianDate.getYear());
     }
 }
