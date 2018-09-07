@@ -47,6 +47,7 @@ import androidx.fragment.app.Fragment;
 import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
@@ -54,7 +55,9 @@ import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
+import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
@@ -230,16 +233,28 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
         if (key.equals(PREF_APP_LANGUAGE)) {
-            boolean persianDigits, changeToAfghanistanHolidays = false;
+            boolean persianDigits;
+            boolean changeToAfghanistanHolidays = false;
+            boolean changeToAfghanitsnEvents = false;
+            boolean changeToIslamicCalendar = false;
+            boolean changeToGregorianCalendar = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
                     persianDigits = false;
+                    changeToGregorianCalendar = true;
                     break;
                 case LANG_FA:
                     persianDigits = true;
                     break;
                 case LANG_UR:
                     persianDigits = false;
+                    changeToAfghanitsnEvents = true;
+                    changeToGregorianCalendar = true;
+                    break;
+                case LANG_AR:
+                    persianDigits = true;
+                    changeToAfghanitsnEvents = true;
+                    changeToIslamicCalendar = true;
                     break;
                 case LANG_FA_AF:
                     persianDigits = true;
@@ -265,6 +280,36 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
                 }
+            }
+            // Enable International holidays (for now) when language changed to Arabic or Urdu
+            if (changeToAfghanitsnEvents) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES,
+                            new HashSet<>(Collections.singletonList("international")));
+                }
+            }
+            // Enable Afghanistan events (for now) when language changed to Arabic or Urdu
+            if (changeToAfghanitsnEvents) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES,
+                            new HashSet<>(Collections.singletonList("afghanistan_others")));
+                }
+            }
+            if (changeToGregorianCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+            }
+            if (changeToIslamicCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI");
             }
             editor.apply();
         }

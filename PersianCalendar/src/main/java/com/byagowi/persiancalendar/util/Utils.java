@@ -215,7 +215,7 @@ public class Utils {
         preferredDigits = prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)
                 ? PERSIAN_DIGITS
                 : ARABIC_DIGITS;
-        if (language.equals("ckb") && preferredDigits == PERSIAN_DIGITS)
+        if ((language.equals(LANG_AR) || language.equals(LANG_CKB)) && preferredDigits == PERSIAN_DIGITS)
             preferredDigits = ARABIC_INDIC_DIGITS;
 
         clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
@@ -659,6 +659,7 @@ public class Utils {
                 case LANG_FA_AF:
                 case LANG_PS:
                 case LANG_UR:
+                case LANG_AR:
                 case LANG_CKB:
                 case LANG_EN_US:
                     DateConverter.useUmmAlQura = true;

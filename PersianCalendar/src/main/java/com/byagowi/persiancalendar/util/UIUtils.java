@@ -32,6 +32,8 @@ import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
 import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.LANG_AR;
+import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
@@ -105,14 +107,10 @@ public class UIUtils {
         int hour = clock.getHour();
         if (!Utils.isClockIn24()) {
             if (hour >= 12) {
-                timeText = Utils.getAppLanguage().equals("ckb")
-                        ? PM_IN_CKB
-                        : PM_IN_PERSIAN;
+                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = Utils.getAppLanguage().equals("ckb")
-                        ? AM_IN_CKB
-                        : AM_IN_PERSIAN;
+                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? AM_IN_CKB : AM_IN_PERSIAN;
             }
         }
 
