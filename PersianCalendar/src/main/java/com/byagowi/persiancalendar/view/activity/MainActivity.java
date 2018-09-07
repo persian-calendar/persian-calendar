@@ -325,6 +325,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             new HashSet<>(Collections.singletonList("afghanistan_others")));
                 }
             }
+            if (changetoIranEvents) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays.isEmpty()) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES,
+                            new HashSet<>(Collections.singletonList("iran_holidays")));
+                }
+            }
             if (changeToGregorianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
