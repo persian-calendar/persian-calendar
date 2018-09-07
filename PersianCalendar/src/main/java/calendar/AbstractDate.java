@@ -1,9 +1,7 @@
 package calendar;
 
 /**
- * Abstract class representing a date. Instances of this class should be
- * mutable. Varios getters and setters are provided so that date manipulation is
- * as convenient as possible.
+ * Abstract class representing a date.
  *
  * @author Amir
  * @author ebraminio
