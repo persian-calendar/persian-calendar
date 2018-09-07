@@ -100,7 +100,7 @@
     <color name="classic_card_background">#fafafa</color>
     <color name="classic_current_day">#42AFBF</color>
     <color name="classic_select_day">#F5F5F5</color>
-    <color name="classic_event_line">#F5F5F5</color>
+    <color name="classic_event_line">#4CB5DE</color>
     <color name="classic_drawer_background">#f4f4f4</color>
     <color name="classic_drawer_select">#eeeeee</color>
     <color name="classic_icon">#587994</color>
