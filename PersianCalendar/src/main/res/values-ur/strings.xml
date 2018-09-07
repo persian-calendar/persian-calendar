@@ -21,7 +21,7 @@
     <string name="widget_text_color">رنگ‌نوشته‌های ابزارک</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
     <string name="notify_date">اطلاع نامہ فعال کریں</string>
-    <string name="enable_notify">آگاه‌سازی همیشگی از تاریخ‌ها</string>
+    <string name="enable_notify">اعلان همیشگی برای تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوشاک</string>
     <string name="skin">پوشاک</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
@@ -32,7 +32,7 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">مقام</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
-    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار آگاه‌سازی و برنامه به وقت ایران در همه جا</string>
+    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار اعلان و برنامه به وقت ایران در همه جا</string>
     <string name="iran_time">ایرانی وقت</string>
     <string name="compass">قطب نما</string>
     <string name="compass_not_found">کمپاس نہیں ملا</string>
@@ -75,7 +75,7 @@
     <string name="goto_date">اس تاریخ پر جائیں</string>
     <string name="go">جائیں</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
-    <string name="notify_date_lock_screen">نمایش آگاه‌سازی در قفل صفحه</string>
+    <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
