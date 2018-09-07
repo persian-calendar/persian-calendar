@@ -63,10 +63,10 @@
     <string name="today">ئەمڕۆ</string>
     <string name="select_type_date">ھەڵبژاردنی جۆری ڕێککەوت</string>
     <string name="year">ساڵ</string>
-    <string name="mount">مانگ</string>
+    <string name="month">مانگ</string>
     <string name="day">ڕۆژ</string>
     <string name="select_year">ھەڵبژاردنی ساڵ</string>
-    <string name="select_mount">ھەڵبژاردنی مانگ</string>
+    <string name="select_month">ھەڵبژاردنی مانگ</string>
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
     <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
     <string name="in_city_time">بە ئاسۆی</string>

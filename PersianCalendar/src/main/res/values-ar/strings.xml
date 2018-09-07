@@ -63,10 +63,10 @@
     <string name="today">اليوم</string>
     <string name="select_type_date">إختيار نوع التاريخ</string>
     <string name="year">السنة</string>
-    <string name="mount">الشهر</string>
+    <string name="month">الشهر</string>
     <string name="day">اليوم</string>
     <string name="select_year">إختيار السنة</string>
-    <string name="select_mount">إختيار السنة</string>
+    <string name="select_month">إختيار السنة</string>
     <string name="select_day">إختيار اليوم</string>
     <string name="date_exception">التاريخ الذي أدخلته غير صالح!</string>
     <string name="in_city_time">بتوقيت</string>

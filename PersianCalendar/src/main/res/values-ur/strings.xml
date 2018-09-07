@@ -63,10 +63,10 @@
     <string name="today">آج</string>
     <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
     <string name="year">سنہ</string>
-    <string name="mount">مہینہ</string>
+    <string name="month">مہینہ</string>
     <string name="day">دن</string>
     <string name="select_year">انتخاب سنہ</string>
-    <string name="select_mount">انتخاب ماه</string>
+    <string name="select_month">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
     <string name="date_exception">تاریخ وارد شده اشتباه است!</string>
     <string name="in_city_time">به افق</string>

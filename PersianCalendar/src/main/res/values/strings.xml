@@ -63,10 +63,10 @@
     <string name="today">Today</string>
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>
-    <string name="mount">Month</string>
+    <string name="month">Month</string>
     <string name="day">Day</string>
     <string name="select_year">Select year</string>
-    <string name="select_mount">Select month</string>
+    <string name="select_month">Select month</string>
     <string name="select_day">Select day</string>
     <string name="date_exception">The date you entered was not valid!</string>
     <string name="in_city_time">in</string>
