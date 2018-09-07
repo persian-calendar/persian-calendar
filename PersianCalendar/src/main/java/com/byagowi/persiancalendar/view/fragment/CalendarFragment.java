@@ -233,7 +233,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             if (Utils.isShowDeviceCalendarEvents()) {
                 LocalBroadcastManager.getInstance(activity).sendBroadcast(
                         new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                                .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
+                                .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                                        calculateViewPagerPositionFromJdn(lastSelectedJdn))
                                 .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true)
                                 .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
             } else {
@@ -460,11 +461,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         Context context = getContext();
         if (context == null) return;
 
-        CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
-        viewPagerPosition =
-                (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
+        viewPagerPosition = calculateViewPagerPositionFromJdn(jdn);
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition);
 
         selectDay(jdn);
@@ -473,6 +470,13 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
+    }
+
+    public int calculateViewPagerPositionFromJdn(long jdn) {
+        CalendarType mainCalendar = Utils.getMainCalendar();
+        AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
+        return (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
     }
 
     private SearchView mSearchView;

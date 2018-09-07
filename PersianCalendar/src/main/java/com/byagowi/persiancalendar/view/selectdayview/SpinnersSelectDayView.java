@@ -23,7 +23,6 @@ import java.util.List;
 import androidx.databinding.DataBindingUtil;
 import calendar.AbstractDate;
 import calendar.CalendarType;
-import calendar.DateConverter;
 
 public class SpinnersSelectDayView extends FrameLayout implements AdapterView.OnItemSelectedListener,
         SelectDayView {
