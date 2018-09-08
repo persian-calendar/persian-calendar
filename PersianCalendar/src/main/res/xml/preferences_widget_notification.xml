@@ -34,8 +34,8 @@
         android:key="what_to_show"
         android:negativeButtonText="@string/cancel"
         android:positiveButtonText="@string/accept"
-        android:summary="@string/compact_widget_summary"
-        android:title="@string/compact_widget"
+        android:summary="@string/customize_widget_summary"
+        android:title="@string/customize_widget"
         settings:iconSpaceReserved="false" />
 
     <androidx.preference.SwitchPreferenceCompat

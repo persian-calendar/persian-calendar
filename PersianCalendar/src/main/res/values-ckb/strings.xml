@@ -94,8 +94,8 @@
     <string name="show_device_calendar_events">ڕووداوەکانی ڕۆژژمێری ئامراز</string>
     <string name="add_event">زیادکردنی ڕووداو</string>
     <string name="device_calendar_does_not_support">ڕۆژژمێری ئامراز لەم کردەوەیە پشتیوانی ناکات</string>
-    <string name="compact_widget_summary">چ شتگەلێک لە ویجیتەکان و ئاگاداریدا نیشان بدرێ</string>
-    <string name="compact_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
+    <string name="customize_widget_summary">چ شتگەلێک لە ویجیتەکان و ئاگاداریدا نیشان بدرێ</string>
+    <string name="customize_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
     <string name="add">زیادکردن</string>
     <string name="which_one_to_show">کامەیان نیشان بدرێ؟</string>
     <string name="notification_athan">ئاگاداریی بانگ</string>

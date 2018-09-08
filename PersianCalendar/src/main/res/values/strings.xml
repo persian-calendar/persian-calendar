@@ -186,9 +186,9 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="showing_clock_on_widget">Show the clock on widget</string>
     <string name="iran_time">Iran Time</string>
     <string name="showing_iran_time">Widgets and notifications in Iran TimeZone</string>
-    <string name="compact_widget">Widget Customization</string>
+    <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which one to show</string>
-    <string name="compact_widget_summary">What to show from notification and widges to make them more compact</string>
+    <string name="customize_widget_summary">What to show from notification and widges to make them more compact</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>

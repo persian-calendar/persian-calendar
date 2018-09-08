@@ -94,8 +94,8 @@
     <string name="show_device_calendar_events">الأحداث الخاصة</string>
     <string name="add_event">إضافة حدث جديد</string>
     <string name="device_calendar_does_not_support">تطبيق تقويم الجهاز لا يدعم هذه عملية</string>
-    <string name="compact_widget_summary">إختيار ماذا سيظهر في التنبيهات والمصغر (ودجت)</string>
-    <string name="compact_widget">تخصيص المصغر (ودجت)</string>
+    <string name="customize_widget_summary">إختيار ماذا سيظهر في التنبيهات والمصغر (ودجت)</string>
+    <string name="customize_widget">تخصيص المصغر (ودجت)</string>
     <string name="add">إضافة</string>
     <string name="which_one_to_show">أيهم أظهر</string>
     <string name="notification_athan">تنبيه الأذان</string>
