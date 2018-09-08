@@ -219,7 +219,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(30);
+        mPaint.setTextSize(25);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(sunriseTextColor);
