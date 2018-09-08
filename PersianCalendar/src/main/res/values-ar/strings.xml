@@ -31,7 +31,7 @@
     <string name="gps_location">تحديد المكان باستخدام الـ GPS أو  الشبكة</string>
     <string name="gps_location_help">لا تحتاج إلى الإعدادات الأخرى إذا كان هذا الخيار مفعل</string>
     <string name="location">المكان</string>
-    <string name="location_help">إذا لم يكن موجوداً, حدد المعلومات الآتية</string>
+    <string name="location_help">إذا لم يكن موجوداً، حدد المعلومات الآتية</string>
     <string name="showing_iran_time">إظهار المصغر (ودجت) والتنبيهات بتوقيت إيران</string>
     <string name="iran_time">توقيت إيران</string>
     <string name="compass">البوصلة</string>
@@ -43,7 +43,7 @@
     <string name="athan_alarm">تنبيهات الأذان</string>
     <string name="athan_volume_summary">التحكم بمستوى صوت الأذان</string>
     <string name="athan_volume">صوت الأذان</string>
-    <string name="athan_disabled_summary">لتفعيل منبه الأذان, حدد المكان أو أدخل الإحداثيات</string>
+    <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات</string>
     <string name="athan_gap">تقديم الأذان</string>
     <string name="athan_gap_summary">تقديم الأذان (بالدقائق)</string>
     <string name="closeDrawer">إغلاق</string>
@@ -81,7 +81,7 @@
     <string name="date_diff_text">البعد: %s يوماً (~%s سنة و %s شهر و %s يوم)</string>
     <string name="search_holidays">البحث عن العُطَل</string>
     <string name="calendars_priority">التقويم الرئيسي</string>
-    <string name="calendars_priority_summary">تغيير التقوبم الرئيسي, ترتيب وإخفاء التقاويم</string>
+    <string name="calendars_priority_summary">تغيير التقویم الرئيسي، ترتيب وإخفاء التقاويم</string>
     <string name="week_of_year">رقم الأسبوع</string>
     <string name="week_of_year_summary">إظهار رقم الأسبوع</string>
     <string name="accept">موافق</string>
@@ -120,7 +120,7 @@
     <string name="about_support_developers">دعم المطورين</string>
     <string name="about_email_sum">إرسال بريد إلكتروني لمطور التطبيق</string>
     <string name="about_report_bug_sum">"للإبلاغ عن الأخطاء وطلب ميزات جديدة يرجى إستخدام خدمة Github “يتطلب حساباً خاصاُ في Github”."</string>
-    <string name="gps_internet_desc">"يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان. التطبيق يحتاج إلى هذا مرة واحدة, ولكن إذا ام تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد."</string>
+    <string name="gps_internet_desc">"يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان. التطبيق يحتاج إلى هذا مرة واحدة، ولكن إذا ام تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد."</string>
     <string name="start_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) من بداية السنة</string>
     <string name="end_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) إلى آخر السنة</string>
     <!-- Sun Info -->
@@ -158,11 +158,11 @@
     <string name="year11">الحصان</string>
     <string name="year12">الخروف</string>
     <string name="level">المستوى</string>
-    <string name="calibrate_compass_summary">لتحسين دقة مستشعر البوصلة أبعد الجهاز عن الأجسام المغناطيسية, وحرك الجهاز بكل الإتجاهات.</string>
-    <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة, حدد مكانك من الإعدادات</string>
+    <string name="calibrate_compass_summary">لتحسين دقة مستشعر البوصلة أبعد الجهاز عن الأجسام المغناطيسية، وحرك الجهاز بكل الإتجاهات.</string>
+    <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة، حدد مكانك من الإعدادات</string>
     <string name="moonInScorpio">القمر في العقرب</string>
     <string name="astronomical_info">معلومات فلكية</string>
-    <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الكوكبة, أسماء الأعوام, القمر في العقرب) </string>
+    <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الكوكبة، أسماء الأعوام، القمر في العقرب) </string>
     <string name="islamic_offset">تعديل التاريخ الهجري</string>
     <string name="islamic_offset_summary">تصحيح التاريخ الهجري يدوياً</string>
     <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
