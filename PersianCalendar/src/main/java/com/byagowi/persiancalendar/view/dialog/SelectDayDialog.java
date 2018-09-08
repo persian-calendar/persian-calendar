@@ -32,18 +32,18 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Bundle args = getArguments();
         long jdn = args.getLong(BUNDLE_KEY, -1);
 
-        DayPickerView selectDayView = new SimpleDayPickerView(getContext());
-        selectDayView.setDayJdnOnView(jdn);
+        DayPickerView dayPickerView = new SimpleDayPickerView(getContext());
+        dayPickerView.setDayJdnOnView(jdn);
 
         return new AlertDialog.Builder(getActivity())
-                .setView((View) selectDayView)
+                .setView((View) dayPickerView)
                 .setCustomTitle(null)
                 .setPositiveButton(R.string.go, (dialogInterface, i) -> {
                     CalendarFragment calendarFragment = (CalendarFragment) getActivity()
                             .getSupportFragmentManager()
                             .findFragmentByTag(CalendarFragment.class.getName());
 
-                    long resultJdn = selectDayView.getDayJdnFromView();
+                    long resultJdn = dayPickerView.getDayJdnFromView();
                     if (resultJdn != -1) calendarFragment.bringDate(resultJdn);
                 }).create();
     }

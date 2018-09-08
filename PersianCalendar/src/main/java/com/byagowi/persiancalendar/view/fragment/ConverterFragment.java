@@ -29,25 +29,25 @@ public class ConverterFragment extends Fragment {
 
         FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_converter, container, false);
-        DayPickerView selectDayView = binding.selectDayView;
+        DayPickerView dayPickerView = binding.dayPickerView;
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
         binding.calendarsView.setOnTodayButtonClickListener(
-                () -> selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
+                () -> dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
 
-        selectDayView.setOnSelectedDayChangedListener(jdn -> {
+        dayPickerView.setOnSelectedDayChangedListener(jdn -> {
             if (jdn == -1) {
                 binding.calendarsView.setVisibility(View.GONE);
             } else {
                 binding.calendarsView.setVisibility(View.VISIBLE);
-                CalendarType selectedCalendarType = selectDayView.getSelectedCalendarType();
+                CalendarType selectedCalendarType = dayPickerView.getSelectedCalendarType();
                 List<CalendarType> orderedCalendarTypes = Utils.getOrderedCalendarTypes();
                 orderedCalendarTypes.remove(selectedCalendarType);
                 binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
             }
         });
-        selectDayView.setDayJdnOnView(CalendarUtils.getTodayJdn());
+        dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn());
 
         return binding.getRoot();
     }

@@ -12,7 +12,7 @@
             android:orientation="vertical">
 
             <com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView
-                android:id="@+id/select_day_view"
+                android:id="@+id/day_picker_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
