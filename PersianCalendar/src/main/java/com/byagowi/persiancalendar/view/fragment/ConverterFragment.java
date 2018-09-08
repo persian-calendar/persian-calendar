@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.selectdayview.SelectDayView;
+import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ConverterFragment extends Fragment {
 
         FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_converter, container, false);
-        SelectDayView selectDayView = binding.selectDayView;
+        DayPickerView selectDayView = binding.selectDayView;
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();

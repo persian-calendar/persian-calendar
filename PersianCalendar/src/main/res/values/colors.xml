@@ -78,12 +78,12 @@
     <color name="blue_drawer_background">#f4f4f4</color>
     <color name="blue_drawer_select">#eeeeee</color>
     <color name="blue_icon">#0D47A1</color>
-    <color name="blue_icon_drawer">#0D47A1</color>
+    <color name="blue_icon_drawer">#232323</color>
     <color name="blue_menu_icon_color">#88ffffff</color>
 
     <color name="classic_primary">#FFFFFF</color>
     <color name="classic_primary_dark">#191919</color>
-    <color name="classic_accent">#4DB6AC</color>
+    <color name="classic_accent">#00695C</color>
     <color name="classic_text_normal">#232323</color>
     <color name="classic_text_second">#737373</color>
     <color name="classic_text_primary">#587994</color>
@@ -91,9 +91,9 @@
     <color name="classic_text_holiday">#E51C23</color>
     <color name="classic_holiday">#E51C23</color>
     <color name="classic_text_day">#737373</color>
-    <color name="classic_text_today">#4DB6AC</color>
+    <color name="classic_text_today">#00695C</color>
     <color name="classic_text_day_name">#424242</color>
-    <color name="classic_month_switch">#4DB6AC</color>
+    <color name="classic_month_switch">#00695C</color>
     <color name="classic_text_athan">#ffffff</color>
     <color name="classic_divider">#e0e0e0</color>
     <color name="classic_background">#f4f4f4</color>

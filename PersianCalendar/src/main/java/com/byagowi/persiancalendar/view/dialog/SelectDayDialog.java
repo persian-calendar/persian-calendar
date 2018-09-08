@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
+import com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
-import com.byagowi.persiancalendar.view.selectdayview.SelectDayView;
-import com.byagowi.persiancalendar.view.selectdayview.SpinnersSelectDayView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -32,7 +32,7 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         Bundle args = getArguments();
         long jdn = args.getLong(BUNDLE_KEY, -1);
 
-        SelectDayView selectDayView = new SpinnersSelectDayView(getContext());
+        DayPickerView selectDayView = new SimpleDayPickerView(getContext());
         selectDayView.setDayJdnOnView(jdn);
 
         return new AlertDialog.Builder(getActivity())

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.selectdayview;
+package com.byagowi.persiancalendar.view.daypickerview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.SelectDayViewBinding;
+import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.util.CalendarUtils;
@@ -24,21 +24,21 @@ import androidx.databinding.DataBindingUtil;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 
-public class SpinnersSelectDayView extends FrameLayout implements AdapterView.OnItemSelectedListener,
-        SelectDayView {
-    SelectDayViewBinding binding;
+public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
+        DayPickerView {
+    SimpleDayPickerViewBinding binding;
 
-    public SpinnersSelectDayView(Context context) {
+    public SimpleDayPickerView(Context context) {
         super(context);
         init();
     }
 
-    public SpinnersSelectDayView(Context context, AttributeSet attrs) {
+    public SimpleDayPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public SpinnersSelectDayView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleDayPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -47,7 +47,7 @@ public class SpinnersSelectDayView extends FrameLayout implements AdapterView.On
 
     private void init() {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.select_day_view, this,
+                R.layout.simple_day_picker_view, this,
                 true);
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),

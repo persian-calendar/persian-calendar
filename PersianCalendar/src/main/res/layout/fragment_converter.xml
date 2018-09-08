@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.byagowi.persiancalendar.view.selectdayview.SpinnersSelectDayView
+            <com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView
                 android:id="@+id/select_day_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

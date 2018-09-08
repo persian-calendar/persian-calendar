@@ -1,8 +1,8 @@
-package com.byagowi.persiancalendar.view.selectdayview;
+package com.byagowi.persiancalendar.view.daypickerview;
 
 import calendar.CalendarType;
 
-public interface SelectDayView {
+public interface DayPickerView {
     void setDayJdnOnView(long jdn);
 
     long getDayJdnFromView();
