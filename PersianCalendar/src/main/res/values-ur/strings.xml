@@ -79,7 +79,6 @@
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
-    <string name="search_holidays">جستجو در مناسبت‌ها</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
     <string name="week_of_year">هفتهٔ سال</string>
@@ -103,7 +102,6 @@
     <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
     <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
-    <string name="custom_athan_summary">انتخاب صدای اذان انتخابی</string>
     <string name="custom_athan">انتخاب اذان</string>
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
@@ -112,7 +110,7 @@
     <string name="about_license_title">مجوزهای برنامه</string>
     <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
     <string name="about_license_dialog_close">بستن</string>
-    <string name="about_help_title">راهنما</string>
+    <string name="help">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
     <string name="about_sendMail">رایانامه</string>
@@ -170,5 +168,6 @@
     <string name="pref_header_widget_location">ویجت و اعلان</string>
     <string name="pref_header_location_athan">موقعیت و اذان</string>
     <string name="pref_interface">رابط</string>
+    <string name="resume">ادامه</string>
 
 </resources>

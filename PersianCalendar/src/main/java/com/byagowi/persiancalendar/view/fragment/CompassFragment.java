@@ -175,6 +175,7 @@ public class CompassFragment extends Fragment {
             case R.id.stop:
                 stop = !stop;
                 item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
+                item.setTitle(stop ? R.string.resume : R.string.stop);
                 break;
             case R.id.level:
                 activity.startActivity(new Intent(activity, Level.class)

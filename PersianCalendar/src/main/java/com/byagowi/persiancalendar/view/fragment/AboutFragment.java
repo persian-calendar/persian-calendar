@@ -95,7 +95,7 @@ public class AboutFragment extends Fragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "ebrahim@gnu.org", null));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
             try {
                 emailIntent.putExtra(Intent.EXTRA_TEXT,
