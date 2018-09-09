@@ -170,4 +170,7 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
 
+    <!-- New additions, to be categorized, keep the section on your translation -->
+    <string name="empty" />
+
 </resources>

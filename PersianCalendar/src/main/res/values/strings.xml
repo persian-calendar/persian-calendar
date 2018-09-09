@@ -247,6 +247,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="about_developers">Developers</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
-    <string name="empty" translatable="false" />
+    <string name="empty" />
 
 </resources>

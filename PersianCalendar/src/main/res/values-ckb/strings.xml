@@ -170,4 +170,7 @@
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
 
+    <!-- New additions, to be categorized, keep the section on your translation -->
+    <string name="empty" />
+
 </resources>

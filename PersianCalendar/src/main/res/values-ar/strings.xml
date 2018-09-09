@@ -203,6 +203,6 @@
     <string name="about_developers">المطوّرون</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
-    <string name="empty" translatable="false" />
+    <string name="empty" />
 
 </resources>
