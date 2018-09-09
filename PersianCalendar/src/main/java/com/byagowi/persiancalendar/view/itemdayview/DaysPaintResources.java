@@ -8,8 +8,10 @@ import android.util.TypedValue;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
+import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
 public class DaysPaintResources {
@@ -22,7 +24,8 @@ public class DaysPaintResources {
 
     final public Paint textPaint, linePaint, selectedPaint, todayPaint;
 
-    final public boolean applyClassicSpecificImprovements;
+    @StyleRes
+    final public int style;
 
     public DaysPaintResources(Context context) {
         Resources.Theme theme = context.getTheme();
@@ -55,9 +58,7 @@ public class DaysPaintResources {
         theme.resolveAttribute(R.attr.colorSelectDay, value, true);
         colorSelectDay = ContextCompat.getColor(context, value.resourceId);
 
-        // Dirty hack, but for now
-        theme.resolveAttribute(R.attr.applyClassicSpecificImprovements, value, true);
-        applyClassicSpecificImprovements = ContextCompat.getColor(context, value.resourceId) == Color.WHITE;
+        style = Utils.getAppTheme();
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

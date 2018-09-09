@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -172,21 +173,21 @@ public class UIUtils {
         }
     }
 
-    public static void setTheme(AppCompatActivity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        switch (prefs.getString(PREF_THEME, LIGHT_THEME)) {
+    @StyleRes
+    public static int getThemeFromName(String name) {
+        switch (name) {
             case DARK_THEME:
-                activity.setTheme(R.style.DarkTheme);
-                return;
+                return R.style.DarkTheme;
+
             case CLASSIC_THEME:
-                activity.setTheme(R.style.ClassicTheme);
-                return;
+                return R.style.ClassicTheme;
+
             case BLUE_THEME:
-                activity.setTheme(R.style.BlueTheme);
-                return;
+                return R.style.BlueTheme;
+
             default:
             case LIGHT_THEME:
-                activity.setTheme(R.style.LightTheme);
+                return R.style.LightTheme;
         }
     }
 

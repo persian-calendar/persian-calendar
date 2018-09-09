@@ -55,6 +55,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.RawRes;
+import androidx.annotation.StyleRes;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
@@ -96,6 +97,7 @@ import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.LOAD_APP_ID;
 import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
@@ -120,6 +122,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
+import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
@@ -207,6 +210,8 @@ public class Utils {
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets;
     static private boolean astronomicalFeaturesEnabled;
+    @StyleRes
+    static private int appTheme = R.style.LightTheme;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -261,7 +266,17 @@ public class Utils {
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
+        try {
+            appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
+        } catch (Exception e) {
+            e.printStackTrace();
+            appTheme = R.style.LightTheme;
+        }
+    }
 
+    @StyleRes
+    public static int getAppTheme() {
+        return appTheme;
     }
 
     static public int getIslamicOffset(Context context) {

@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
 
 public class ItemDayView extends View {
@@ -68,7 +69,7 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor((selected && !resource.applyClassicSpecificImprovements)
+        resource.linePaint.setColor((selected && resource.style != R.style.ClassicTheme)
                 ? color : resource.colorEventLine);
 
         if (hasEvent) {
@@ -85,7 +86,7 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset, resource.linePaint);
         }
 
-        if (resource.applyClassicSpecificImprovements) {
+        if (resource.style == R.style.ClassicTheme) {
             resource.textPaint.setFakeBoldText(today);
             resource.textPaint.setTextSize(textSize * .8f);
         }
