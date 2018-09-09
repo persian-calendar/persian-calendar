@@ -503,13 +503,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
 
             try {
+                Fragment fragment = (Fragment) fragments[item].newInstance();
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(
-                                R.id.fragment_holder,
-                                (Fragment) fragments[item].newInstance(),
-                                fragments[item].getName()
-                        ).commit();
+                        .replace(R.id.fragment_holder, fragment, fragments[item].getName())
+                        .commit();
                 menuPosition = item;
             } catch (Exception e) {
                 Log.e(TAG, item + " is selected as an index", e);
