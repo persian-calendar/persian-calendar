@@ -517,18 +517,20 @@ public class Utils {
             for (String countryCode : iteratorToIterable(countries.keys())) {
                 JSONObject country = countries.getJSONObject(countryCode);
 
-                String countryEn = country.getString("en");
-                String countryFa = country.getString("fa");
-                String countryCkb = country.getString("ckb");
+                String countryEn = country.getString(LANG_EN);
+                String countryFa = country.getString(LANG_FA);
+                String countryCkb = country.getString(LANG_CKB);
+                String countryAr = country.getString(LANG_AR);
 
                 JSONObject cities = country.getJSONObject("cities");
 
                 for (String key : iteratorToIterable(cities.keys())) {
                     JSONObject city = cities.getJSONObject(key);
 
-                    String en = city.getString("en");
-                    String fa = city.getString("fa");
-                    String ckb = city.getString("ckb");
+                    String en = city.getString(LANG_EN);
+                    String fa = city.getString(LANG_FA);
+                    String ckb = city.getString(LANG_CKB);
+                    String ar = city.getString(LANG_AR);
 
                     Coordinate coordinate = new Coordinate(
                             city.getDouble("latitude"),
@@ -536,8 +538,8 @@ public class Utils {
                             0 // city.getDouble("elevation")
                     );
 
-                    result.add(new CityEntity(key, en, fa, ckb, countryCode,
-                            countryEn, countryFa, countryCkb, coordinate));
+                    result.add(new CityEntity(key, en, fa, ckb, ar, countryCode,
+                            countryEn, countryFa, countryCkb, countryAr, coordinate));
                 }
             }
         } catch (JSONException e) {
@@ -562,6 +564,8 @@ public class Utils {
             switch (language) {
                 case LANG_EN:
                     return l.getEn().compareTo(r.getEn());
+                case LANG_AR:
+                    return l.getAr().compareTo(r.getAr());
                 case LANG_CKB:
                     return prepareForArabicSort(l.getCkb())
                             .compareTo(prepareForArabicSort(r.getCkb()));

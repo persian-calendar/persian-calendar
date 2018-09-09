@@ -64,6 +64,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                     city = cityEntity.getCkb();
                     country = cityEntity.getCountryCkb();
                     break;
+                case Constants.LANG_AR:
+                    city = cityEntity.getAr();
+                    country = cityEntity.getCountryAr();
+                    break;
                 default:
                     city = cityEntity.getFa();
                     country = cityEntity.getCountryFa();
