@@ -2,12 +2,9 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto">
 
-    <androidx.preference.ListPreference
+    <androidx.preference.Preference
         android:defaultValue="#ffffffff"
-        android:entries="@array/colorNames"
-        android:entryValues="@array/colorKeys"
         android:key="SelectedWidgetTextColor"
-        android:negativeButtonText="@string/cancel"
         android:summary="@string/select_widgets_text_color"
         android:title="@string/widget_text_color"
         settings:iconSpaceReserved="false" />

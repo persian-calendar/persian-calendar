@@ -17,14 +17,6 @@
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>White</item>
-        <item>Red</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Black</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>Morning</item>
         <item>Dhohr</item>

@@ -17,14 +17,6 @@
         <item>ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>سپی</item>
-        <item>سوور</item>
-        <item>کەسک</item>
-        <item>زەرد</item>
-        <item>ڕەش</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>بەیانی</item>
         <item>نیوەڕۆ</item>

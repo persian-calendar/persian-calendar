@@ -17,14 +17,6 @@
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>سفید</item>
-        <item>سرخ</item>
-        <item>سبز</item>
-        <item>زرد</item>
-        <item>سیاه</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>صبح</item>
         <item>ظهر</item>

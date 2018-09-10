@@ -17,14 +17,6 @@
         <item>انجمن جیوفیزیک، یونیورسٹی</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>سفید</item>
-        <item>سرخ</item>
-        <item>سبز</item>
-        <item>سیاه</item>
-        <item>زرد</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>فجر</item>
         <item>ظہر</item>

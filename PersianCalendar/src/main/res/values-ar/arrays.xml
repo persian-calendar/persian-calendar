@@ -17,14 +17,6 @@
         <item>قسم الجيوفيزياء ، جامعة طهران</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>أبيض</item>
-        <item>أحمر</item>
-        <item>أخضر</item>
-        <item>أصفر</item>
-        <item>أسود</item>
-    </string-array>
-
     <string-array name="colorKeys" translatable="false">
         <item>#ffffffff</item>
         <item>#ffe65100</item>
