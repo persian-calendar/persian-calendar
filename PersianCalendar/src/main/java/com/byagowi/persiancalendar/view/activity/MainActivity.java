@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -214,15 +215,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
                 && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
-            Snackbar snackbar = Snackbar.make(binding.coordinator, "Change app language?",
+            Snackbar snackbar = Snackbar.make(binding.coordinator, "✖  Change app language?",
                     10000);
             View snackbarView = snackbar.getView();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
-            snackbarView.setBackgroundColor(Color.WHITE);
+            TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+            text.setTextColor(Color.WHITE);
+
             snackbarView.setOnClickListener(v -> snackbar.dismiss());
-            snackbar.setAction("English", view -> {
+            snackbar.setAction("Settings / English", view -> {
                 menuPosition = PREFERENCE;
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 edit.apply();
                 restartActivity();
             });
+            snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
             snackbar.show();
 
             // Show this snackbar only once
