@@ -47,10 +47,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
+import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(PREF_APP_LANGUAGE)) {
             boolean persianDigits;
             boolean changeToAfghanistanHolidays = false;
-            boolean changeToAfghanistanEvents = false;
             boolean changeToIslamicCalendar = false;
             boolean changeToGregorianCalendar = false;
             boolean changeToPersianCalendar = false;
@@ -282,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     persianDigits = false;
                     changeToGregorianCalendar = true;
                     break;
+                case LANG_EN_IR:
                 case LANG_FA:
                     persianDigits = true;
                     changeToPersianCalendar = true;
@@ -289,29 +289,27 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     break;
                 case LANG_UR:
                     persianDigits = false;
-                    changeToAfghanistanEvents = true;
                     changeToGregorianCalendar = true;
                     break;
                 case LANG_AR:
                     persianDigits = true;
-                    changeToAfghanistanEvents = true;
                     changeToIslamicCalendar = true;
                     break;
                 case LANG_FA_AF:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
                     changeToAfghanistanHolidays = true;
                     break;
                 case LANG_PS:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
                     changeToAfghanistanHolidays = true;
                     break;
-                default:
-                    persianDigits = true;
             }
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
-            // Enable Afghanistan holidays when language changed
+            // Enable Afghanistan holidays when Dari or Pashto is set
             if (changeToAfghanistanHolidays) {
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -322,22 +320,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
                 }
             }
-            // Enable International holidays (for now) when language changed to Arabic or Urdu
-            if (changeToAfghanistanEvents) {
-                Set<String> currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
-
-                if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
-                    editor.putStringSet(PREF_HOLIDAY_TYPES,
-                            new HashSet<>(Collections.singletonList("afghanistan_others")));
-                }
-            }
             if (changetoIranEvents) {
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-                if (currentHolidays.isEmpty()) {
+                if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("iran_holidays")));
                 }

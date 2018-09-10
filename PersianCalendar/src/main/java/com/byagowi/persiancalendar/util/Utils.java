@@ -90,7 +90,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
-import static com.byagowi.persiancalendar.Constants.LANG_EN;
+import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
@@ -531,20 +531,20 @@ public class Utils {
             for (String countryCode : iteratorToIterable(countries.keys())) {
                 JSONObject country = countries.getJSONObject(countryCode);
 
-                String countryEn = country.getString(LANG_EN);
-                String countryFa = country.getString(LANG_FA);
-                String countryCkb = country.getString(LANG_CKB);
-                String countryAr = country.getString(LANG_AR);
+                String countryEn = country.getString("en");
+                String countryFa = country.getString("fa");
+                String countryCkb = country.getString("ckb");
+                String countryAr = country.getString("ar");
 
                 JSONObject cities = country.getJSONObject("cities");
 
                 for (String key : iteratorToIterable(cities.keys())) {
                     JSONObject city = cities.getJSONObject(key);
 
-                    String en = city.getString(LANG_EN);
-                    String fa = city.getString(LANG_FA);
-                    String ckb = city.getString(LANG_CKB);
-                    String ar = city.getString(LANG_AR);
+                    String en = city.getString("en");
+                    String fa = city.getString("fa");
+                    String ckb = city.getString("ckb");
+                    String ar = city.getString("ar");
 
                     Coordinate coordinate = new Coordinate(
                             city.getDouble("latitude"),
@@ -576,7 +576,7 @@ public class Utils {
             int compare = r.getCountryCode().compareTo(l.getCountryCode());
             if (compare != 0) return compare;
             switch (language) {
-                case LANG_EN:
+                case LANG_EN_IR:
                     return l.getEn().compareTo(r.getEn());
                 case LANG_AR:
                     return l.getAr().compareTo(r.getAr());
@@ -627,7 +627,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityEntity cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
-            if (language.equals(LANG_EN))
+            if (language.equals(LANG_EN_IR))
                 return cityEntity.getEn();
             else if (language.equals(LANG_CKB))
                 return cityEntity.getCkb();
@@ -1079,7 +1079,7 @@ public class Utils {
             case LANG_EN_US:
                 messagesFile = R.raw.messages_en;
                 break;
-            case LANG_EN:
+            case LANG_EN_IR:
             case LANG_FA:
             default:
                 messagesFile = R.raw.messages_fa;

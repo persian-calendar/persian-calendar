@@ -56,7 +56,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         void bind(CityEntity cityEntity) {
             String city, country;
             switch (Utils.getAppLanguage()) {
-                case Constants.LANG_EN:
+                case Constants.LANG_EN_IR:
                     city = cityEntity.getEn();
                     country = cityEntity.getCountryEn();
                     break;

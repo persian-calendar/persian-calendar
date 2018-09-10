@@ -78,7 +78,7 @@ public class AboutFragment extends Fragment {
         switch (Utils.getAppLanguage()) {
             case Constants.LANG_FA:
             case Constants.LANG_FA_AF:
-            case Constants.LANG_EN: // en. unlike en-US, is for Iranians as indicated also on UI
+            case Constants.LANG_EN_IR: // en. unlike en-US, is for Iranians as indicated also on UI
                 break;
             default:
                 binding.helpCard.setVisibility(View.GONE);
