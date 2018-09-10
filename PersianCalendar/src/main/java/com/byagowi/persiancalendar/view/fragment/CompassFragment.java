@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,20 +18,19 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.Level;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.StringRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -112,15 +112,27 @@ public class CompassFragment extends Fragment {
                 sensorManager.registerListener(compassListener, sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
-                    Toast.makeText(context, getString(R.string.set_location), Toast.LENGTH_SHORT).show();
+                    createAndShowSnackbar(container, R.string.set_location);
                 }
             } else {
-                Toast.makeText(context, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
+                createAndShowSnackbar(container, R.string.compass_not_found);
                 sensorNotFound = true;
             }
         }
 
         return binding.getRoot();
+    }
+
+    private void createAndShowSnackbar(View view, @StringRes int msg) {
+        Snackbar snackbar = Snackbar.make(view, msg, 5000);
+
+        View snackbarView = snackbar.getView();
+        snackbarView.setOnClickListener(v -> snackbar.dismiss());
+
+        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        text.setTextColor(Color.WHITE);
+
+        snackbar.show();
     }
 
     @Override
@@ -182,33 +194,8 @@ public class CompassFragment extends Fragment {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.help:
-                if (sensorNotFound) {
-                    Toast.makeText(activity, getString(R.string.compass_not_found), Toast.LENGTH_SHORT).show();
-                } else {
-                    // Compass Calibrate Dialog
-                    LinearLayout ll = new LinearLayout(activity);
-                    ll.setPadding(16, 16, 16, 16);
-                    ll.setOrientation(LinearLayout.VERTICAL);
-//                    AppCompatImageView iv = new AppCompatImageView(activity);
-//                    ll.addView(iv);
-                    TextView tv = new TextView(activity);
-                    tv.setText(R.string.calibrate_compass_summary);
-                    ll.addView(tv);
-
-//                    AnimationDrawable animation = new AnimationDrawable();
-//                    animation.setOneShot(false);
-//                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help), 1000);
-//                    animation.addFrame(getResources().getDrawable(R.drawable.compass_help_bw), 1000);
-//                    iv.setBackgroundDrawable(animation);
-
-                    AlertDialog frag = new AlertDialog.Builder(activity)
-                            .setView(ll)
-                            .setCancelable(true)
-                            .create();
-                    frag.show();
-
-//                    animation.start();
-                }
+                createAndShowSnackbar(getView(), sensorNotFound
+                        ? R.string.compass_not_found : R.string.calibrate_compass_summary);
             default:
                 break;
         }
