@@ -519,6 +519,25 @@ public class Utils {
                 .replaceAll("ە", "هی");
     }
 
+    static private List<String> irCodeOrder = Arrays.asList("zz", "ir", "af", "iq");
+    static private List<String> afCodeOrder = Arrays.asList("zz", "af", "ir", "iq");
+    static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
+
+    static private int getCountryCodeOrder(String countryCode) {
+        switch (language) {
+            case LANG_FA_AF:
+            case LANG_PS:
+                return afCodeOrder.indexOf(countryCode);
+
+            case LANG_AR:
+                return arCodeOrder.indexOf(countryCode);
+
+            case LANG_FA:
+            default:
+                return irCodeOrder.indexOf(countryCode);
+        }
+    }
+
     static private <T> Iterable<T> iteratorToIterable(final Iterator<T> iterator) {
         return () -> iterator;
     }
@@ -573,9 +592,13 @@ public class Utils {
             if (r.getKey().equals(DEFAULT_CITY)) {
                 return 1;
             }
-            int compare = r.getCountryCode().compareTo(l.getCountryCode());
+
+            int compare = getCountryCodeOrder(l.getCountryCode()) -
+                    getCountryCodeOrder(r.getCountryCode());
             if (compare != 0) return compare;
+
             switch (language) {
+                case LANG_EN_US:
                 case LANG_EN_IR:
                     return l.getEn().compareTo(r.getEn());
                 case LANG_AR:
