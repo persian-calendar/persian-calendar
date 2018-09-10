@@ -270,22 +270,26 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
         if (key.equals(PREF_APP_LANGUAGE)) {
-            boolean persianDigits;
+            boolean persianDigits = false;
             boolean changeToAfghanistanHolidays = false;
             boolean changeToIslamicCalendar = false;
             boolean changeToGregorianCalendar = false;
             boolean changeToPersianCalendar = false;
-            boolean changetoIranEvents = false;
+            boolean changeToIranEvents = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
                     persianDigits = false;
                     changeToGregorianCalendar = true;
                     break;
-                case LANG_EN_IR:
                 case LANG_FA:
                     persianDigits = true;
                     changeToPersianCalendar = true;
-                    changetoIranEvents = true;
+                    changeToIranEvents = true;
+                    break;
+                case LANG_EN_IR:
+                    persianDigits = false;
+                    changeToPersianCalendar = true;
+                    changeToIranEvents = true;
                     break;
                 case LANG_UR:
                     persianDigits = false;
@@ -305,6 +309,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     changeToPersianCalendar = true;
                     changeToAfghanistanHolidays = true;
                     break;
+                default:
+                    persianDigits = true;
             }
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -320,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
                 }
             }
-            if (changetoIranEvents) {
+            if (changeToIranEvents) {
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
