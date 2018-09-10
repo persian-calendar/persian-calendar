@@ -9,8 +9,10 @@ public enum CalculationMethod {
     Egypt("Egyptian General Authority of Survey", deg(19.5), deg(17.5)),
     Makkah("Umm Al-Qura University, Makkah", deg(18.5), min(90)),
     Karachi("University of Islamic Sciences, Karachi", deg(18), min(18)),
-    Tehran("Institute of Geophysics, University of Tehran", deg(17.7), deg(14), deg(4.5), MidnightType.Jafari),
-    Jafari("Shia Ithna-Ashari, Leva Institute, Qum", deg(16), deg(14), deg(4), MidnightType.Jafari);
+    Tehran("Institute of Geophysics, University of Tehran", deg(17.7), deg(14), deg(4.5),
+            MidnightType.Jafari),
+    Jafari("Shia Ithna-Ashari, Leva Institute, Qum", deg(16), deg(14), deg(4),
+            MidnightType.Jafari);
 
     private final String name;
     private final MinuteOrAngleDouble fajr;

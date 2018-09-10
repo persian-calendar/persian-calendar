@@ -846,6 +846,7 @@ public class TestDateCalendar {
 
     @Test
     public void test_praytimes() {
+        // http://praytimes.org/code/v2/js/examples/monthly.htm
         Map<PrayTime, Clock> prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
                 .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
                         new Coordinate(43, -80),
