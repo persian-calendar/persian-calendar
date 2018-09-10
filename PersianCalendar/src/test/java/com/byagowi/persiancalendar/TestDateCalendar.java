@@ -902,7 +902,6 @@ public class TestDateCalendar {
         assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
         assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
         assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
-        // FIXME: This should be fixed and enabled
         assertEquals(new Clock(21, 27).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
 
         prayTimes = new PrayTimesCalculator(CalculationMethod.Jafari)
