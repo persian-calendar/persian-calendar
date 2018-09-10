@@ -50,7 +50,7 @@ public class CivilDate extends AbstractDate {
             l = (j / 11);
             int month = (int) (j + 2 - 12 * l);
             int year = (int) (100 * (n - 49) + i + l);
-            return new int[] {year, month, day};
+            return new int[]{year, month, day};
         } else
             return julianFromJdn(jdn);
     }

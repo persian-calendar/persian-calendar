@@ -74,6 +74,7 @@ public class AboutFragment extends Fragment {
 
         // help
         binding.aboutTitle.setText(String.format(getString(R.string.about_help_subtitle),
+                Utils.formatNumber(Utils.getMaxSupportedYear() - 1),
                 Utils.formatNumber(Utils.getMaxSupportedYear())));
         switch (Utils.getAppLanguage()) {
             case Constants.LANG_FA:
