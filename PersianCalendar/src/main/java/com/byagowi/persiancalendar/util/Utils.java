@@ -907,7 +907,8 @@ public class Utils {
                 deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
         if (deviceEventList != null)
             for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
-                if (holidayAwareEqualCheck(deviceCalendarEvent.getCivilDate(), civil))
+                // holidayAwareEqualCheck is not needed as they won't have -1 on year field
+                if (deviceCalendarEvent.getCivilDate().equals(civil))
                     result.add(deviceCalendarEvent);
 
         return result;
