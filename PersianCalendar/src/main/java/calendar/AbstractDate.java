@@ -8,9 +8,20 @@ package calendar;
  */
 public abstract class AbstractDate {
     // Things needed to be implemented by subclasses
-    public abstract long toJdn();
-    protected abstract int[] fromJdn(long jdn);
     public abstract CalendarType getType();
+
+    public abstract long toJdn();
+
+    protected abstract int[] fromJdn(long jdn);
+
+    /* What JDN means?
+     *
+     * From https://en.wikipedia.org/wiki/Julian_day:
+     * Julian day is the continuous count of days since the beginning of the
+     * Julian Period and is used primarily by astronomers, and in software for
+     * easily calculating elapsed days between two events (e.g. food production
+     * date and sell by date).
+     */
 
     // Concrete things
     final private int year;

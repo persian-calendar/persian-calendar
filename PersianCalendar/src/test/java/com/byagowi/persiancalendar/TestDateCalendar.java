@@ -847,7 +847,9 @@ public class TestDateCalendar {
     @Test
     public void test_praytimes() {
         // http://praytimes.org/code/v2/js/examples/monthly.htm
-        Map<PrayTime, Clock> prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
+        Map<PrayTime, Clock> prayTimes;
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
                 .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
                         new Coordinate(43, -80),
                         -5d, true);
@@ -857,5 +859,72 @@ public class TestDateCalendar {
         assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
         assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
         assertEquals(new Clock(21, 21).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.ISNA)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 27).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 9).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.Egypt)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 0).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 24).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.Makkah)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 6).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 18).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.Karachi)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 9).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(19, 48).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        // FIXME: This should be fixed and enabled
+        // assertEquals(new Clock(21, 27).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.Jafari)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 21).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(20, 5).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 3).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+
+        prayTimes = new PrayTimesCalculator(CalculationMethod.Tehran)
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
+                        new Coordinate(43, -80),
+                        -5d, true);
+        assertEquals(new Clock(5, 11).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
+        assertEquals(new Clock(6, 49).toInt(), prayTimes.get(PrayTime.SUNRISE).toInt());
+        assertEquals(new Clock(13, 19).toInt(), prayTimes.get(PrayTime.DHUHR).toInt());
+        assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
+        assertEquals(new Clock(20, 8).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
+        assertEquals(new Clock(21, 3).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
     }
 }
