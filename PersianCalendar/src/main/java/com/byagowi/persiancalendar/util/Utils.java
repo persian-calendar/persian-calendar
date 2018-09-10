@@ -59,7 +59,6 @@ import androidx.annotation.StyleRes;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -476,8 +475,8 @@ public class Utils {
     static public String getWeekDayName(AbstractDate date) {
         CivilDate civilDate = date instanceof CivilDate
                 ? (CivilDate) date
-                : DateConverter.jdnToCivil(CalendarUtils.getJdnDate(date));
-        return weekDays[civilDate.getDayOfWeek() % 7];
+                : new CivilDate(date.toJdn());
+        return weekDays[CalendarUtils.civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7];
     }
 
     static public int getDayIconResource(int day) {
@@ -672,7 +671,7 @@ public class Utils {
 
         if (!iranHolidays) {
             if (afghanistanHolidays) {
-                DateConverter.useUmmAlQura = true;
+                IslamicDate.useUmmAlQura = true;
             }
             switch (getAppLanguage()) {
                 case LANG_FA_AF:
@@ -681,11 +680,11 @@ public class Utils {
                 case LANG_AR:
                 case LANG_CKB:
                 case LANG_EN_US:
-                    DateConverter.useUmmAlQura = true;
+                    IslamicDate.useUmmAlQura = true;
             }
         }
         // Now that we are configuring converter's algorithm above, lets set the offset also
-        DateConverter.islamicOffset = Utils.getIslamicOffset(context);
+        IslamicDate.islamicOffset = Utils.getIslamicOffset(context);
 
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
@@ -843,26 +842,44 @@ public class Utils {
         Utils.allEnabledEvents = allEnabledEvents;
     }
 
+    private static boolean holidayAwareEqualCheck(CivilDate event, CivilDate date) {
+        return event.getDayOfMonth() == date.getDayOfMonth()
+                && event.getMonth() == date.getMonth()
+                && (event.getYear() == -1 || event.getYear() == date.getYear());
+    }
+
+    private static boolean holidayAwareEqualCheck(IslamicDate event, IslamicDate date) {
+        return event.getDayOfMonth() == date.getDayOfMonth()
+                && event.getMonth() == date.getMonth()
+                && (event.getYear() == -1 || event.getYear() == date.getYear());
+    }
+
+    private static boolean holidayAwareEqualCheck(PersianDate event, PersianDate date) {
+        return event.getDayOfMonth() == date.getDayOfMonth()
+                && event.getMonth() == date.getMonth()
+                && (event.getYear() == -1 || event.getYear() == date.getYear());
+    }
+
     static public List<AbstractEvent> getEvents(long jdn,
                                                 SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents) {
-        PersianDate day = DateConverter.jdnToPersian(jdn);
-        CivilDate civil = DateConverter.jdnToCivil(jdn);
-        IslamicDate islamic = DateConverter.jdnToIslamic(jdn);
+        PersianDate persian = new PersianDate(jdn);
+        CivilDate civil = new CivilDate(jdn);
+        IslamicDate islamic = new IslamicDate(jdn);
 
         List<AbstractEvent> result = new ArrayList<>();
 
         List<PersianCalendarEvent> persianList =
-                persianCalendarEvents.get(day.getMonth() * 100 + day.getDayOfMonth());
+                persianCalendarEvents.get(persian.getMonth() * 100 + persian.getDayOfMonth());
         if (persianList != null)
             for (PersianCalendarEvent persianCalendarEvent : persianList)
-                if (persianCalendarEvent.getDate().equals(day))
+                if (holidayAwareEqualCheck(persianCalendarEvent.getDate(), persian))
                     result.add(persianCalendarEvent);
 
         List<IslamicCalendarEvent> islamicList =
                 islamicCalendarEvents.get(islamic.getMonth() * 100 + islamic.getDayOfMonth());
         if (islamicList != null)
             for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
-                if (islamicCalendarEvent.getDate().equals(islamic))
+                if (holidayAwareEqualCheck(islamicCalendarEvent.getDate(), islamic))
                     result.add(islamicCalendarEvent);
 
         // Special case Imam Reza martyrdom event on Hijri as it is a holiday and so vital to have
@@ -874,7 +891,7 @@ public class Utils {
                     alternativeDate.getDayOfMonth());
             if (islamicList != null)
                 for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
-                    if (islamicCalendarEvent.getDate().equals(alternativeDate))
+                    if (holidayAwareEqualCheck(islamicCalendarEvent.getDate(), alternativeDate))
                         result.add(islamicCalendarEvent);
         }
 
@@ -882,7 +899,7 @@ public class Utils {
                 gregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
         if (gregorianList != null)
             for (GregorianCalendarEvent gregorianCalendarEvent : gregorianList)
-                if (gregorianCalendarEvent.getDate().equals(civil))
+                if (holidayAwareEqualCheck(gregorianCalendarEvent.getDate(), civil))
                     result.add(gregorianCalendarEvent);
 
         // This one is passed by caller
@@ -890,7 +907,7 @@ public class Utils {
                 deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
         if (deviceEventList != null)
             for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
-                if (deviceCalendarEvent.getCivilDate().equals(civil))
+                if (holidayAwareEqualCheck(deviceCalendarEvent.getCivilDate(), civil))
                     result.add(deviceCalendarEvent);
 
         return result;

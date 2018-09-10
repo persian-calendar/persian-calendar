@@ -2,7 +2,6 @@ package net.androgames.level.view;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 

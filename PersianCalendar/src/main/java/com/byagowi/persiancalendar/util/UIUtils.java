@@ -38,7 +38,6 @@ import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
-import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 public class UIUtils {
     static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {

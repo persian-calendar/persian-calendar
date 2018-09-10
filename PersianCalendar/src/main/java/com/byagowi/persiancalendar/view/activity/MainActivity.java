@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private static CivilDate creationDate;
+    private static long creationDateJdn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             edit.apply();
         }
 
-        creationDate = CalendarUtils.getGregorianToday();
+        creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
     }
 
@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         Utils.applyAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
-        if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
+        if (creationDateJdn != CalendarUtils.getTodayJdn()) {
             restartActivity();
         }
     }

@@ -23,7 +23,6 @@ import androidx.core.app.ActivityCompat;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -43,51 +42,39 @@ public class CalendarUtils {
     static public long getJdnOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
-                return DateConverter.islamicToJdn(year, month, day);
+                return new IslamicDate(year, month, day).toJdn();
             case GREGORIAN:
-                return DateConverter.civilToJdn(year, month, day);
+                return new CivilDate(year, month, day).toJdn();
             case SHAMSI:
             default:
-                return DateConverter.persianToJdn(year, month, day);
+                return new PersianDate(year, month, day).toJdn();
         }
     }
 
     static public int getMonthLength(CalendarType calendar, int year, int month) {
         switch (calendar) {
             case ISLAMIC:
-                return (int) (DateConverter.islamicToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.islamicToJdn(year, month, 1));
+                return (int) (new IslamicDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new IslamicDate(year, month, 1).toJdn());
             case GREGORIAN:
-                return (int) (DateConverter.civilToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.civilToJdn(year, month, 1));
+                return (int) (new CivilDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new CivilDate(year, month, 1).toJdn());
             case SHAMSI:
             default:
-                return (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.persianToJdn(year, month, 1));
+                return (int) (new PersianDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new PersianDate(year, month, 1).toJdn());
         }
     }
 
     static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
-                return DateConverter.jdnToIslamic(jdn);
+                return new IslamicDate(jdn);
             case GREGORIAN:
-                return DateConverter.jdnToCivil(jdn);
+                return new CivilDate(jdn);
             case SHAMSI:
             default:
-                return DateConverter.jdnToPersian(jdn);
-        }
-    }
-
-    static public long getJdnDate(AbstractDate date) {
-        if (date instanceof PersianDate) {
-            return DateConverter.persianToJdn((PersianDate) date);
-        } else if (date instanceof IslamicDate) {
-            return DateConverter.islamicToJdn((IslamicDate) date);
-        } else if (date instanceof CivilDate) {
-            return DateConverter.civilToJdn((CivilDate) date);
-        } else {
-            return 0;
+                return new PersianDate(jdn);
         }
     }
 
@@ -106,19 +93,19 @@ public class CalendarUtils {
     }
 
     static public CivilDate getGregorianToday() {
-        return CivilDate.fromCalendar(makeCalendarFromDate(new Date()));
+        return calendarToCivilDate(makeCalendarFromDate(new Date()));
     }
 
     static public long getTodayJdn() {
-        return DateConverter.civilToJdn(getGregorianToday());
+        return getGregorianToday().toJdn();
     }
 
     static public PersianDate getPersianToday() {
-        return DateConverter.jdnToPersian(getTodayJdn());
+        return new PersianDate(getTodayJdn());
     }
 
     static public IslamicDate getIslamicToday() {
-        return DateConverter.jdnToIslamic(getTodayJdn());
+        return new IslamicDate(getTodayJdn());
     }
 
     static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
@@ -142,7 +129,7 @@ public class CalendarUtils {
     }
 
     static public int getDayOfWeekFromJdn(long jdn) {
-        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
+        return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
     }
 
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
@@ -281,7 +268,7 @@ public class CalendarUtils {
         if (jdn == -1) {
             jdn = getTodayJdn();
         }
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).toCalendar();
+        Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, DAY_IN_MILLIS);
@@ -289,7 +276,7 @@ public class CalendarUtils {
     }
 
     public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(Context context, long jdn) {
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).toCalendar();
+        Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, 32L * DAY_IN_MILLIS);
@@ -347,7 +334,7 @@ public class CalendarUtils {
                 Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
                 Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
 
-                CivilDate civilDate = CivilDate.fromCalendar(startCalendar);
+                CivilDate civilDate = calendarToCivilDate(startCalendar);
 
                 int month = civilDate.getMonth();
                 int day = civilDate.getDayOfMonth();
@@ -402,5 +389,20 @@ public class CalendarUtils {
                 (persianDate.getDayOfMonth() + 1)) / 30.f) + persianDate.getMonth());
         if (res > 12) res -= 12;
         return res == 8;
+    }
+
+    // Extra helpers
+    public static Calendar civilDateToCalendar(CivilDate civilDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, civilDate.getYear());
+        cal.set(Calendar.MONTH, civilDate.getMonth() - 1);
+        cal.set(Calendar.DAY_OF_MONTH, civilDate.getDayOfMonth());
+        return cal;
+    }
+
+    private static CivilDate calendarToCivilDate(Calendar calendar) {
+        return new CivilDate(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
     }
 }

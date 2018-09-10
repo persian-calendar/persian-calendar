@@ -68,7 +68,6 @@ import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -203,7 +202,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         Activity activity = getActivity();
         if (activity == null) return;
 
-        CivilDate civil = DateConverter.jdnToCivil(jdn);
+        CivilDate civil = new CivilDate(jdn);
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
 
@@ -373,7 +372,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
-        CivilDate civilDate = DateConverter.jdnToCivil(jdn);
+        CivilDate civilDate = new CivilDate(jdn);
         calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         Date date = calendar.getTime();
 
@@ -513,7 +512,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                         year = todayPersian.getYear() +
                                 (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
                     }
-                    bringDate(DateConverter.persianToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                    bringDate(new PersianDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 } else if (ev instanceof IslamicCalendarEvent) {
                     IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
                     IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
@@ -522,7 +521,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                         year = todayIslamic.getYear() +
                                 (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
                     }
-                    bringDate(DateConverter.islamicToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                    bringDate(new IslamicDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 } else if (ev instanceof GregorianCalendarEvent) {
                     CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((GregorianCalendarEvent) ev).getDate();
@@ -531,7 +530,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                         year = todayCivil.getYear() +
                                 (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
                     }
-                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                    bringDate(new CivilDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 } else if (ev instanceof DeviceCalendarEvent) {
                     CivilDate todayCivil = CalendarUtils.getGregorianToday();
                     CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
@@ -540,7 +539,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
                         year = todayCivil.getYear() +
                                 (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
                     }
-                    bringDate(DateConverter.civilToJdn(year, date.getMonth(), date.getDayOfMonth()));
+                    bringDate(new CivilDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 }
                 mSearchView.onActionViewCollapsed();
             });

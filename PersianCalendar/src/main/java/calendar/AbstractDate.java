@@ -7,14 +7,27 @@ package calendar;
  * @author ebraminio
  */
 public abstract class AbstractDate {
-    private int year;
-    private int month;
-    private int day;
+    // Things needed to be implemented by subclasses
+    public abstract long toJdn();
+    protected abstract int[] fromJdn(long jdn);
+    public abstract CalendarType getType();
 
-    public AbstractDate(int year, int month, int day) {
+    // Concrete things
+    final private int year;
+    final private int month;
+    final private int dayOfMonth;
+
+    public AbstractDate(int year, int month, int dayOfMonth) {
         this.year = year;
         this.month = month;
-        this.day = day;
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public AbstractDate(long jdn) {
+        int[] result = fromJdn(jdn);
+        this.year = result[0];
+        this.month = result[1];
+        this.dayOfMonth = result[2];
     }
 
     public int getYear() {
@@ -26,6 +39,18 @@ public abstract class AbstractDate {
     }
 
     public int getDayOfMonth() {
-        return day;
+        return dayOfMonth;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AbstractDate) {
+            AbstractDate date = (AbstractDate) obj;
+            return getType() == date.getType() &&
+                    getYear() == date.getYear() &&
+                    getMonth() == date.getMonth() &&
+                    getDayOfMonth() == date.getDayOfMonth();
+        }
+        return false;
     }
 }

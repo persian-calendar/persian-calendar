@@ -18,7 +18,7 @@ import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import calendar.DateConverter;
+import calendar.CivilDate;
 import calendar.IslamicDate;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
@@ -89,26 +89,26 @@ public class PersianCalendarInstrumentedTest {
         };
 
         for (int[][] test : tests2) {
-            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+            long jdn = new CivilDate(test[0][0], test[0][1], test[0][2]).toJdn();
+            IslamicDate islamicDate = new IslamicDate(test[1][0], test[1][1], test[1][2]);
 
-            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
-            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2])
-                    .equals(DateConverter.jdnToIslamic(jdn)));
+            assertEquals(jdn, islamicDate.toJdn());
+            assertTrue(islamicDate.equals(new IslamicDate(jdn)));
         }
 
-        DateConverter.useUmmAlQura = true;
+        IslamicDate.useUmmAlQura = true;
         int tests3[][][] = {
                 {{2015, 3, 14}, {1436, 5, 23}},
                 {{1999, 4, 1}, {1419, 12, 15}},
                 {{1989, 2, 25}, {1409, 7, 19}}
         };
         for (int[][] test : tests3) {
-            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+            long jdn = new CivilDate(test[0][0], test[0][1], test[0][2]).toJdn();
+            IslamicDate islamicDate = new IslamicDate(test[1][0], test[1][1], test[1][2]);
 
-            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
-            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2]).equals(
-                    DateConverter.jdnToIslamic(jdn)));
+            assertEquals(jdn, islamicDate.toJdn());
+            assertTrue(islamicDate.equals(new IslamicDate(jdn)));
         }
-        DateConverter.useUmmAlQura = false;
+        IslamicDate.useUmmAlQura = false;
     }
 }

@@ -24,7 +24,7 @@
 // Copied from below link but modified to suit our need
 // https://github.com/msarhan/ummalqura-calendar/blob/master/src/main/java/com/github/msarhan/ummalqura/calendar/text/UmmalquraFormatData_en.java
 
-package calendar;
+package calendar.islamic;
 
 public class UmmAlQuraConverter {
 
@@ -211,11 +211,11 @@ public class UmmAlQuraConverter {
         return hDateInfo;
     }
 
-    public static long hijriToJd(int hYear, int hMonth, int hDay) {
+    public static long toJdn(int hYear, int hMonth, int hDay) {
         return h2d(hYear, hMonth, hDay);
     }
 
-    public static int[] jdToHijri(long jdn) {
+    public static int[] fromJdn(long jdn) {
         return d2h((int) jdn);
     }
 

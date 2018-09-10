@@ -21,7 +21,7 @@ import androidx.databinding.DataBindingUtil;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
+import calendar.IslamicDate;
 import calendar.PersianDate;
 
 public class CalendarsView extends FrameLayout implements View.OnClickListener {
@@ -269,7 +269,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             binding.diffDate.setVisibility(View.VISIBLE);
 
             CivilDate civilBase = new CivilDate(2000, 1, 1);
-            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
+            CivilDate civilOffset = new CivilDate(diffDays + civilBase.toJdn());
             int yearDiff = civilOffset.getYear() - 2000;
             int monthDiff = civilOffset.getMonth() - 1;
             int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
@@ -290,8 +290,8 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     mainDate.getYear(), 1, 1);
             AbstractDate startOfNextYear = CalendarUtils.getDateOfCalendar(
                     chosenCalendarType, mainDate.getYear() + 1, 1, 1);
-            long startOfYearJdn = CalendarUtils.getJdnDate(startOfYear);
-            long endOfYearJdn = CalendarUtils.getJdnDate(startOfNextYear) - 1;
+            long startOfYearJdn = startOfYear.toJdn();
+            long endOfYearJdn = startOfNextYear.toJdn() - 1;
             int currentWeek = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
             int weeksCount = CalendarUtils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
 
@@ -308,7 +308,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
         // Based on Mehdi's work
         if (Utils.isAstronomicalFeaturesEnabled()) {
-            PersianDate persianDate = DateConverter.jdnToPersian(jdn);
+            PersianDate persianDate = new PersianDate(jdn);
             binding.zodiac.setText(String.format("%s: %s\n%s: %s %s",
                     context.getString(R.string.year_name),
                     context.getString(YEARS_NAME[persianDate.getYear() % 12]),
@@ -316,7 +316,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]),
                     context.getString(ZODIAC_MONTHS[persianDate.getMonth()])));
 
-            if (CalendarUtils.isMoonInScorpio(persianDate, DateConverter.jdnToIslamic(jdn)))
+            if (CalendarUtils.isMoonInScorpio(persianDate, new IslamicDate(jdn)))
                 binding.moonInScorpio.setVisibility(View.VISIBLE);
             else
                 binding.moonInScorpio.setVisibility(View.GONE);

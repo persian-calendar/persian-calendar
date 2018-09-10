@@ -54,7 +54,7 @@ public class UpdateUtils {
         Calendar calendar = CalendarUtils.makeCalendarFromDate(new Date());
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);
-        long jdn = CalendarUtils.getJdnDate(date);
+        long jdn = date.toJdn();
 
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),

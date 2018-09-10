@@ -15,7 +15,6 @@ import java.util.Map;
 
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
@@ -33,15 +32,15 @@ public class TestDateCalendar {
         };
         for (int[] test : tests) {
             IslamicDate reference = new IslamicDate(test[1], test[2], test[3]);
-            assertEquals(test[0], DateConverter.islamicToJdn(reference));
+            assertEquals(test[0], reference.toJdn());
+            IslamicDate converted = new IslamicDate(test[0]);
 
-            assertEquals(test[1], DateConverter.jdnToIslamic(test[0]).getYear());
-            assertEquals(test[2], DateConverter.jdnToIslamic(test[0]).getMonth());
-            assertEquals(test[3], DateConverter.jdnToIslamic(test[0]).getDayOfMonth());
+            assertEquals(test[1], converted.getYear());
+            assertEquals(test[2], converted.getMonth());
+            assertEquals(test[3], converted.getDayOfMonth());
 
-            assertEquals(test[0], DateConverter.islamicToJdn(DateConverter.jdnToIslamic(test[0])));
-            assertTrue(reference.equals(
-                    DateConverter.jdnToIslamic(DateConverter.islamicToJdn(reference))));
+            assertEquals(test[0], converted.toJdn());
+            assertTrue(reference.equals(new IslamicDate(reference.toJdn())));
         }
 
         int tests2[][][] = {
@@ -697,27 +696,27 @@ public class TestDateCalendar {
         };
 
         for (int[][] test : tests2) {
-            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+            long jdn = new CivilDate(test[0][0], test[0][1], test[0][2]).toJdn();
+            IslamicDate islamicDate = new IslamicDate(test[1][0], test[1][1], test[1][2]);
 
-            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
-            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2])
-                    .equals(DateConverter.jdnToIslamic(jdn)));
+            assertEquals(jdn, islamicDate.toJdn());
+            assertTrue(islamicDate.equals(new IslamicDate(jdn)));
         }
 
-        DateConverter.useUmmAlQura = true;
+        IslamicDate.useUmmAlQura = true;
         int tests3[][][] = {
                 {{2015, 3, 14}, {1436, 5, 23}},
                 {{1999, 4, 1}, {1419, 12, 15}},
                 {{1989, 2, 25}, {1409, 7, 19}}
         };
         for (int[][] test : tests3) {
-            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+            long jdn = new CivilDate(test[0][0], test[0][1], test[0][2]).toJdn();
+            IslamicDate islamicDate = new IslamicDate(test[1][0], test[1][1], test[1][2]);
 
-            assertEquals(jdn, DateConverter.islamicToJdn(test[1][0], test[1][1], test[1][2]));
-            assertTrue(new IslamicDate(test[1][0], test[1][1], test[1][2]).equals(
-                    DateConverter.jdnToIslamic(jdn)));
+            assertEquals(jdn, islamicDate.toJdn());
+            assertTrue(islamicDate.equals(new IslamicDate(jdn)));
         }
-        DateConverter.useUmmAlQura = false;
+        IslamicDate.useUmmAlQura = false;
 
 //        int i = -1;
 //        long last = 0;
@@ -726,7 +725,7 @@ public class TestDateCalendar {
 //                System.out.print(test[1][0]);
 //                System.out.print(", ");
 //            }
-//            long jdn = DateConverter.civilToJdn(test[0][0], test[0][1], test[0][2]);
+//            long jdn = DateConverter.toJdn(test[0][0], test[0][1], test[0][2]);
 //            System.out.print(jdn - last);
 //            last = jdn;
 //            System.out.print(", ");
@@ -738,43 +737,42 @@ public class TestDateCalendar {
 
     @Test
     public void practice_persian_converting_back_and_forth() {
-        long startJdn = DateConverter.civilToJdn(1950, 1, 1);
-        long endJdn = DateConverter.civilToJdn(2050, 1, 1);
+        long startJdn = new CivilDate(1950, 1, 1).toJdn();
+        long endJdn = new CivilDate(2050, 1, 1).toJdn();
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
-            long result = DateConverter.civilToJdn(DateConverter.jdnToCivil(jdn));
+            long result = new CivilDate(jdn).toJdn();
             assertEquals(jdn, result);
         }
     }
 
     @Test
     public void practice_islamic_converting_back_and_forth() {
-        long startJdn = DateConverter.civilToJdn(1950, 1, 1);
-        long endJdn = DateConverter.civilToJdn(2050, 1, 1);
+        long startJdn = new CivilDate(1950, 1, 1).toJdn();
+        long endJdn = new CivilDate(2050, 1, 1).toJdn();
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
-            long result = DateConverter.islamicToJdn(DateConverter.jdnToIslamic(jdn));
+            long result = new IslamicDate(jdn).toJdn();
             assertEquals(jdn, result);
         }
     }
 
     @Test
     public void practice_ummalqara_converting_back_and_forth() {
-        DateConverter.useUmmAlQura = true;
-        long startJdn = DateConverter.civilToJdn(1950, 1, 1);
-        long endJdn = DateConverter.civilToJdn(2050, 1, 1);
+        IslamicDate.useUmmAlQura = true;
+        long startJdn = new CivilDate(1950, 1, 1).toJdn();
+        long endJdn = new CivilDate(2050, 1, 1).toJdn();
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
-            long result = DateConverter.islamicToJdn(DateConverter.jdnToIslamic(jdn));
+            long result = new IslamicDate(jdn).toJdn();
             assertEquals(jdn, result);
         }
-        DateConverter.useUmmAlQura = false;
+        IslamicDate.useUmmAlQura = false;
     }
 
     @Test
     public void practice_civil_converting_back_and_forth() {
-        long startJdn = DateConverter.civilToJdn(1950, 1, 1);
-        long endJdn = DateConverter.civilToJdn(2050, 1, 1);
+        long startJdn = new CivilDate(1950, 1, 1).toJdn();
+        long endJdn = new CivilDate(2050, 1, 1).toJdn();
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {
-            long result = DateConverter.persianToJdn(DateConverter.jdnToPersian(jdn));
-            assertEquals(jdn, result);
+            assertEquals(jdn, new PersianDate(jdn).toJdn());
         }
     }
 
@@ -814,19 +812,19 @@ public class TestDateCalendar {
         };
         List<Long> positiveJdn = new ArrayList<>();
         for (int[] day : postiveDays) {
-            positiveJdn.add(DateConverter.persianToJdn(day[0], day[1], day[2]));
+            positiveJdn.add(new PersianDate(day[0], day[1], day[2]).toJdn());
         }
-        long startOfYear = DateConverter.persianToJdn(1397, 1, 1);
+        long startOfYear = new PersianDate(1397, 1, 1).toJdn();
         for (int i = 0; i < 366; ++i) {
             long jdn = startOfYear + i;
-            PersianDate persian = DateConverter.jdnToPersian(jdn);
+            PersianDate persian = new PersianDate(jdn);
             int year = persian.getYear();
             int month = persian.getMonth();
             int day = persian.getDayOfMonth();
 
             assertEquals(String.format("%d %d %d", year, month, day),
                     positiveJdn.contains(jdn),
-                    CalendarUtils.isMoonInScorpio(persian, DateConverter.jdnToIslamic(jdn)));
+                    CalendarUtils.isMoonInScorpio(persian, new IslamicDate(jdn)));
         }
     }
 
@@ -849,7 +847,7 @@ public class TestDateCalendar {
     @Test
     public void test_praytimes() {
         Map<PrayTime, Clock> prayTimes = new PrayTimesCalculator(CalculationMethod.MWL)
-                .calculate(new CivilDate(2018, 9, 5).toCalendar().getTime(),
+                .calculate(CalendarUtils.civilDateToCalendar(new CivilDate(2018, 9, 5)).getTime(),
                         new Coordinate(43, -80),
                         -5d, true);
         assertEquals(new Clock(5, 9).toInt(), prayTimes.get(PrayTime.FAJR).toInt());
