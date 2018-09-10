@@ -382,5 +382,103 @@
         "elevation": 576.629
       }
     }
+  },
+  "iq": {
+    "en": "Iraq",
+    "fa": "عراق",
+    "ckb": "عێراق",
+    "ar": "العراق",
+    "cities": {
+      "KARBALA": {
+        "en": "Karbala",
+        "fa": "کربلا",
+        "ckb": "کەربەلا",
+        "ar": "كربلاء",
+        "latitude": 32.60,
+        "longitude": 44.01,
+        "elevation": 34.00
+      },
+      "NAJAF": {
+        "en": "Najaf",
+        "fa": "نجف",
+        "ckb": "نەجەف",
+        "ar": "النجف",
+        "latitude": 32.03,
+        "longitude": 44.33,
+        "elevation": 46.00
+      },
+      "BAGHDAD": {
+        "en": "Baghdad",
+        "fa": "بغداد",
+        "ckb": "بەغدا",
+        "ar": "بغداد",
+        "latitude": 33.31,
+        "longitude": 44.36,
+        "elevation": 38.00
+      },
+      "BASRAH": {
+        "en": "Basrah",
+        "fa": "بصره",
+        "ckb": "بەسرە",
+        "ar": "البصرة",
+        "latitude": 30.50,
+        "longitude": 47.78,
+        "elevation": 5.00
+      },
+      "TIKRIT": {
+        "en": "Tikrit",
+        "fa": "تکریت",
+        "ckb": "سەڵاحەدین",
+        "ar": "تكريت",
+        "latitude": 34.61,
+        "longitude": 43.65,
+        "elevation": 114.00
+      },
+      "KIRKUK": {
+        "en": "Kirkuk",
+        "fa": "کرکوک",
+        "ckb": "كەركووك",
+        "ar": "كركوك",
+        "latitude": 35.46,
+        "longitude": 44.38,
+        "elevation": 341.00
+      },
+      "SULAYMANIYAH": {
+        "en": "Sulaymaniyah",
+        "fa": "سلمانیه",
+        "ckb": "سلێمانی",
+        "ar": "السليمانية",
+        "latitude": 35.55,
+        "longitude": 45.43,
+        "elevation": 837.00
+      },
+      "ERBIL": {
+        "en": "Erbil",
+        "fa": "اربیل",
+        "ckb": "هەولێر",
+        "ar": "أربيل",
+        "latitude": 36.20,
+        "longitude": 44.01,
+        "elevation": 412.00
+      },
+      "DUHOK": {
+        "en": "Duhok",
+        "fa": "دهوک",
+        "ckb": "دهوك",
+        "ar": "دهۆك",
+        "latitude": 36.86,
+        "longitude": 42.94,
+        "elevation": 532.00
+      },
+      "MOSUL": {
+        "en": "Mosul",
+        "fa": "موصل",
+        "ckb": "مووسڵ",
+        "ar": "الموصل",
+        "latitude": 35.55,
+        "longitude": 45.43,
+        "elevation": 837.00
+      }
+    }
   }
 }
