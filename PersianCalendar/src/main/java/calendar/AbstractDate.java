@@ -14,7 +14,7 @@ public abstract class AbstractDate {
 
     protected abstract int[] fromJdn(long jdn);
 
-    /* What JDN means?
+    /* What JDN (Julian Day Number) means?
      *
      * From https://en.wikipedia.org/wiki/Julian_day:
      * Julian day is the continuous count of days since the beginning of the
