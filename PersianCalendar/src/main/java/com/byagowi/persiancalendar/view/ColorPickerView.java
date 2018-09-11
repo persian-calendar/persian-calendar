@@ -30,6 +30,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -53,9 +54,10 @@ public class ColorPickerView extends LinearLayout {
 
     private View resultViewer;
     private SeekBar redSeekbar, greenSeekbar, blueSeekbar;
+    private LinearLayout colorsToPick;
 
     private void init() {
-        setOrientation(HORIZONTAL);
+        setOrientation(VERTICAL);
 
         Context context = getContext();
         if (context == null) return;
@@ -121,8 +123,6 @@ public class ColorPickerView extends LinearLayout {
         seekBars.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
-        addView(seekBars);
-
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.addView(resultViewer);
         frameLayout.setLayoutParams(new LayoutParams(seekBars.getMeasuredHeight(),
@@ -130,7 +130,54 @@ public class ColorPickerView extends LinearLayout {
         frameLayout.setBackgroundColor(Color.LTGRAY);
         int framePadding = (int) density;
         frameLayout.setPadding(framePadding, framePadding, framePadding, framePadding);
-        addView(frameLayout);
+
+        LinearLayout widgetMain = new LinearLayout(context);
+        widgetMain.addView(seekBars);
+        widgetMain.addView(frameLayout);
+
+        colorsToPick = new LinearLayout(context);
+        colorsToPick.setGravity(Gravity.CENTER);
+        colorsToPick.setOrientation(HORIZONTAL);
+
+        addView(widgetMain);
+        addView(colorsToPick);
+    }
+
+    public void setColorsToPick(/*@ColorInt*/ int[] colors) {
+        colorsToPick.removeAllViews();
+
+        Context context = getContext();
+        if (context == null) return;
+
+        float density = context.getResources().getDisplayMetrics().density;
+
+        for (int color : colors) {
+            View view = new View(context);
+            view.setBackgroundColor(color);
+            view.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT));
+
+            FrameLayout frameLayout = new FrameLayout(context);
+            int rectSize = (int) (40 * density);
+            int margin = (int) (5 * density);
+            LayoutParams layoutParams = new LayoutParams(rectSize, rectSize);
+            layoutParams.setMargins(margin, margin * 2, margin, margin);
+            frameLayout.setBackgroundColor(Color.LTGRAY);
+            frameLayout.setLayoutParams(layoutParams);
+            frameLayout.addView(view);
+            int framePadding = (int) density;
+            frameLayout.setPadding(framePadding, framePadding, framePadding, framePadding);
+
+            // Don't replace, no Java8 assumption for this class for now
+            frameLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setPickedColor(color);
+                }
+            });
+
+            colorsToPick.addView(frameLayout);
+        }
     }
 
     private void showColor() {
@@ -138,13 +185,20 @@ public class ColorPickerView extends LinearLayout {
                 redSeekbar.getProgress(), greenSeekbar.getProgress(), blueSeekbar.getProgress()));
     }
 
-    public void setPickedColor(int color) {
-        redSeekbar.setProgress(Color.red(color));
-        greenSeekbar.setProgress(Color.blue(color));
-        blueSeekbar.setProgress(Color.green(color));
+    public void setPickedColor(/*@ColorInt*/ int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            redSeekbar.setProgress(Color.red(color), true);
+            greenSeekbar.setProgress(Color.green(color), true);
+            blueSeekbar.setProgress(Color.blue(color), true);
+        } else {
+            redSeekbar.setProgress(Color.red(color));
+            greenSeekbar.setProgress(Color.green(color));
+            blueSeekbar.setProgress(Color.blue(color));
+        }
         showColor();
     }
 
+    /*@ColorInt*/
     public int getPickerColor() {
         return Color.argb(0xFF,
                 redSeekbar.getProgress(), greenSeekbar.getProgress(), blueSeekbar.getProgress());

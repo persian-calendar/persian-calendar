@@ -32,6 +32,8 @@ public class FragmentWidgetNotification extends PreferenceFragmentCompat {
 
             ColorPickerView colorPickerView = new ColorPickerView(context);
             try {
+                colorPickerView.setColorsToPick(
+                        new int[]{0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020});
                 colorPickerView.setPickedColor(Color.parseColor(prefs.getString(
                         PREF_SELECTED_WIDGET_TEXT_COLOR,
                         DEFAULT_SELECTED_WIDGET_TEXT_COLOR)));
