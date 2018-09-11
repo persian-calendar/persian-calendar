@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorTextHoliday"
+            android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
 
         <TextView
@@ -35,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
 
         <TextView

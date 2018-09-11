@@ -216,30 +216,12 @@
             android:padding="@dimen/padding_item">
 
             <TextView
-                android:id="@+id/diff_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-            <TextView
-                android:id="@+id/start_and_end_of_year_diff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-            <TextView
                 android:id="@+id/zodiac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="@dimen/padding_item"
                 android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
                 android:textSize="@dimen/text_size_description" />
 
             <TextView
@@ -249,7 +231,28 @@
                 android:gravity="center"
                 android:text="@string/moonInScorpio"
                 android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
                 android:textSize="@dimen/text_size_description" />
+
+            <TextView
+                android:id="@+id/diff_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_description"
+                tools:text="@string/date_diff_text" />
+
+            <TextView
+                android:id="@+id/start_and_end_of_year_diff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_description"
+                tools:text="@string/date_diff_text" />
 
         </LinearLayout>
 
