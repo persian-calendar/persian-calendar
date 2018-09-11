@@ -123,9 +123,9 @@
     <color name="sViewSunEveningColor">#904d00</color>
     <color name="sViewSunriseTextColorLight">#FF9800</color>
     <color name="sViewMiddayTextColorLight">#BF380C</color>
-    <color name="sViewSunsetTextColorLight">#B71C1C</color>
+    <color name="sViewSunsetTextColorLight">#FFC107</color>
     <color name="sViewSunriseTextColorDark">#FF9800</color>
-    <color name="sViewMiddayTextColorDark">#BF380C</color>
+    <color name="sViewMiddayTextColorDark">#FFC107</color>
     <color name="sViewSunsetTextColorDark">#B71C1C</color>
 
 

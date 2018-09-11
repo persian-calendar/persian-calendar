@@ -9,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -131,6 +132,7 @@ public class CompassFragment extends Fragment {
 
         TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
         text.setTextColor(Color.WHITE);
+        text.setMaxLines(5);
 
         snackbar.show();
     }
