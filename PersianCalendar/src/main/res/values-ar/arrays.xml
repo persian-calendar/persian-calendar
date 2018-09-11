@@ -17,14 +17,6 @@
         <item>قسم الجيوفيزياء ، جامعة طهران</item>
     </string-array>
 
-    <string-array name="colorKeys" translatable="false">
-        <item>#ffffffff</item>
-        <item>#ffe65100</item>
-        <item>#ff00796b</item>
-        <item>#fffef200</item>
-        <item>#ff202020</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>الفجر</item>
         <item>الظهر</item>
