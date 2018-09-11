@@ -55,11 +55,11 @@ public class ColorPickerView extends LinearLayout {
         init();
     }
 
-    private TextView resultViewer;
+    private TextView colorResultView;
     private SeekBar redSeekbar, greenSeekbar, blueSeekbar;
     private LinearLayout colorsToPick;
 
-    private boolean enableShowColor = false;
+    private boolean colorCodeVisibility = false;
 
     private void init() {
         setOrientation(VERTICAL);
@@ -71,12 +71,14 @@ public class ColorPickerView extends LinearLayout {
         int padding = (int) (density * 10);
         setPadding(padding, padding, padding, padding);
 
-        resultViewer = new TextView(context);
+        colorResultView = new TextView(context);
+        colorResultView.setTextIsSelectable(true);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            resultViewer.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+            colorResultView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         }
-        resultViewer.setOnClickListener(view -> {
-            enableShowColor = !enableShowColor;
+        colorResultView.setOnClickListener(view -> {
+            colorCodeVisibility = !colorCodeVisibility;
             showColor();
         });
 
@@ -136,7 +138,7 @@ public class ColorPickerView extends LinearLayout {
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.addView(resultViewer);
+        frameLayout.addView(colorResultView);
         frameLayout.setLayoutParams(new LayoutParams(seekBars.getMeasuredHeight(),
                 LayoutParams.MATCH_PARENT));
         frameLayout.setBackgroundColor(Color.LTGRAY);
@@ -189,11 +191,11 @@ public class ColorPickerView extends LinearLayout {
     private void showColor() {
         int color = Color.argb(0xFF, redSeekbar.getProgress(),
                 greenSeekbar.getProgress(), blueSeekbar.getProgress());
-        resultViewer.setBackgroundColor(color);
-        resultViewer.setText(enableShowColor
+        colorResultView.setBackgroundColor(color);
+        colorResultView.setText(colorCodeVisibility
                 ? String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF & color)
                 : "");
-        resultViewer.setTextColor(color ^ 0xFFFFFF);
+        colorResultView.setTextColor(color ^ 0xFFFFFF);
     }
 
     public void setPickedColor(/*@ColorInt*/ int color) {
