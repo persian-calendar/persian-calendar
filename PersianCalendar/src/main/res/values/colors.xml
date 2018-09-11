@@ -121,12 +121,12 @@
     <color name="sViewSunBeforeMiddayColor">#FFF9C4</color>
     <color name="sViewSunAfterMiddayColor">#FF9100</color>
     <color name="sViewSunEveningColor">#904d00</color>
-    <color name="sViewSunriseTextColorLight">#fbb463</color>
-    <color name="sViewMiddayTextColorLight">#ff9c2b</color>
-    <color name="sViewSunsetTextColorLight">#a36621</color>
-    <color name="sViewSunriseTextColorDark">#fbb463</color>
-    <color name="sViewMiddayTextColorDark">#ff9c2b</color>
-    <color name="sViewSunsetTextColorDark">#a36621</color>
+    <color name="sViewSunriseTextColorLight">#FF9800</color>
+    <color name="sViewMiddayTextColorLight">#BF380C</color>
+    <color name="sViewSunsetTextColorLight">#B71C1C</color>
+    <color name="sViewSunriseTextColorDark">#FF9800</color>
+    <color name="sViewMiddayTextColorDark">#BF380C</color>
+    <color name="sViewSunsetTextColorDark">#B71C1C</color>
 
 
     <!-- General colors -->
