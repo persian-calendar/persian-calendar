@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
@@ -113,10 +114,10 @@ public class CompassFragment extends Fragment {
                 sensorManager.registerListener(compassListener, sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
-                    createAndShowSnackbar(container, R.string.set_location);
+                    createAndShowSnackbar(container, R.string.set_location, Snackbar.LENGTH_LONG);
                 }
             } else {
-                createAndShowSnackbar(container, R.string.compass_not_found);
+                Toast.makeText(context, R.string.compass_not_found, Toast.LENGTH_LONG).show();
                 sensorNotFound = true;
             }
         }
@@ -124,8 +125,8 @@ public class CompassFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void createAndShowSnackbar(View view, @StringRes int msg) {
-        Snackbar snackbar = Snackbar.make(view, msg, 5000);
+    private void createAndShowSnackbar(View view, @StringRes int msg, int duration) {
+        Snackbar snackbar = Snackbar.make(view, msg, duration);
 
         View snackbarView = snackbar.getView();
         snackbarView.setOnClickListener(v -> snackbar.dismiss());
@@ -197,7 +198,8 @@ public class CompassFragment extends Fragment {
                 break;
             case R.id.help:
                 createAndShowSnackbar(getView(), sensorNotFound
-                        ? R.string.compass_not_found : R.string.calibrate_compass_summary);
+                        ? R.string.compass_not_found : R.string.calibrate_compass_summary,
+                        5000);
             default:
                 break;
         }
