@@ -48,7 +48,7 @@ public class FragmentWidgetNotification extends PreferenceFragmentCompat {
                         try {
                             SharedPreferences.Editor edit = prefs.edit();
                             edit.putString(PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                    String.format(Locale.US, "#%06X",
+                                    String.format(Locale.ENGLISH, "#%06X",
                                             0xFFFFFF & colorPickerView.getPickerColor()));
                             edit.apply();
                         } catch (Exception e) {
