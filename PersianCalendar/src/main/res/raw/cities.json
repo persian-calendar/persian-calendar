@@ -455,7 +455,7 @@
       "ERBIL": {
         "en": "Erbil",
         "fa": "اربیل",
-        "ckb": "هەولێر",
+        "ckb": "ھەولێر",
         "ar": "أربيل",
         "latitude": 36.20,
         "longitude": 44.01,
@@ -464,8 +464,8 @@
       "DUHOK": {
         "en": "Duhok",
         "fa": "دهوک",
-        "ckb": "دهوک",
-        "ar": "دهۆك",
+        "ckb": "دھۆک",
+        "ar": "دهوك",
         "latitude": 36.86,
         "longitude": 42.94,
         "elevation": 532.00
