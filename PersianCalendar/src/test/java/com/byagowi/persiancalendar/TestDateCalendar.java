@@ -737,6 +737,8 @@ public class TestDateCalendar {
 
     @Test
     public void practice_persian_converting_back_and_forth() {
+        assertEquals(2, new PersianDate(475, 1, 1).toJdn());
+
         long startJdn = new CivilDate(1950, 1, 1).toJdn();
         long endJdn = new CivilDate(2050, 1, 1).toJdn();
         for (long jdn = startJdn; jdn <= endJdn; ++jdn) {

@@ -30,7 +30,7 @@ public class PersianDate extends AbstractDate {
 
     @Override
     protected int[] fromJdn(long jdn) {
-        long depoch = jdn - toJdn(475, 1, 1);
+        long depoch = jdn - 2121446; // or toJdn(475, 1, 1);
         long cycle = depoch / 1029983;
         long cyear = depoch % 1029983;
         long ycycle;
