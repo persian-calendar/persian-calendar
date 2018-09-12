@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -17,6 +18,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -95,16 +97,41 @@ public class AboutFragment extends Fragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-            try {
-                emailIntent.putExtra(Intent.EXTRA_TEXT,
-                        String.format("\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
-                                Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
-            }
+            //Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
+            //emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+            //try {
+            //    emailIntent.putExtra(Intent.EXTRA_TEXT,
+            //            String.format("\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
+            //                    Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
+            //    startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
+            //} catch (android.content.ActivityNotFoundException ex) {
+            //    Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+            //}
+
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            View rootView = layoutInflater.inflate(R.layout.input_dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+            alertDialogBuilder.setView(rootView);
+            alertDialogBuilder.setTitle(R.string.about_email_sum);
+            final EditText inputText = rootView .findViewById(R.id.inputText);
+
+            alertDialogBuilder.setCancelable(false)
+                    .setPositiveButton(R.string.about_sendMail_dialog, (dialog, id) -> {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                        try {
+                            emailIntent.putExtra(Intent.EXTRA_TEXT,
+                                    String.format(inputText.getText() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
+                                            Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
+                            startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel,
+                            (dialog, id) -> dialog.cancel());
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
         });
 
         Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);

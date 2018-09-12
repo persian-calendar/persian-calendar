@@ -152,6 +152,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
     <string name="about_mailto" translatable="false">ebrahim@gnu.org</string>
     <string name="about_sendMail">E-Mail</string>
+    <string name="about_sendMail_dialog">Send E-Mail</string>
+    <string name="about_sendMail_hint">Please write your message here...</string>
     <string name="about_noClient">No email client is installed</string>
     <string name="about_developers">Developers</string>
     <string name="about_support_developers">Developer Support</string>
