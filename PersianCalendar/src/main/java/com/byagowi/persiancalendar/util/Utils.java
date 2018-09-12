@@ -55,6 +55,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StyleRes;
 import calendar.AbstractDate;
@@ -886,7 +887,7 @@ public class Utils {
     }
 
     static public List<AbstractEvent> getEvents(long jdn,
-                                                SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents) {
+                                                @Nullable SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents) {
         PersianDate persian = new PersianDate(jdn);
         CivilDate civil = new CivilDate(jdn);
         IslamicDate islamic = new IslamicDate(jdn);

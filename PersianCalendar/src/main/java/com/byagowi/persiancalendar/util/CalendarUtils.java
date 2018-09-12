@@ -348,21 +348,24 @@ public class CalendarUtils {
 
     static public String getA11yDaySummary(Context context, long jdn,
                                            @Nullable SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
-                                           boolean withZodiac) {
+                                           boolean withZodiac, boolean withOtherCalendars) {
         String result = CalendarUtils.dayTitleSummary(CalendarUtils.getDateFromJdnOfCalendar(
                 Utils.getMainCalendar(), jdn));
 
-        String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
-        if (!TextUtils.isEmpty(otherCalendars)) {
-            result += Utils.getSpacedComma();
-            result += "برابر با";
-            result += " ";
-            result += otherCalendars;
+        if (withOtherCalendars) {
+            String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
+            if (!TextUtils.isEmpty(otherCalendars)) {
+                result += Utils.getSpacedComma();
+                result += "برابر با";
+                result += " ";
+                result += otherCalendars;
+            }
         }
 
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
         String holidays = Utils.getEventsTitle(events, true, true, true, false);
         if (!TextUtils.isEmpty(holidays)) {
+            result += Utils.getSpacedComma();
             result += "تعطیل به مناسبت";
             result += Utils.getSpacedComma();
             result += holidays;

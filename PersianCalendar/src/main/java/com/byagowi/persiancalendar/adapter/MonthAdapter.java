@@ -28,6 +28,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
+    private Context context;
     private boolean isTalkBackEnabled;
     private final ViewGroup.LayoutParams layoutParams;
     private final DaysPaintResources daysPaintResources;
@@ -45,6 +46,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
+        this.context = context;
         isTalkBackEnabled = Utils.isTalkBackEnabled(context);
         initializeMonthEvents(context);
         isArabicDigit = Utils.isArabicDigitSelected();
@@ -193,8 +195,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                             day.getJdn(), position - 6 - startingDayOfWeek);
 
                     if (isTalkBackEnabled) {
-                        itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(null,
-                                day.getJdn(), monthEvents, false));
+                        itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
+                                day.getJdn(), monthEvents, false, false));
                     }
 
                     itemDayView.setVisibility(View.VISIBLE);

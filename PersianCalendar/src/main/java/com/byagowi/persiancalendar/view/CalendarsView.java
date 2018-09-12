@@ -278,6 +278,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             binding.startAndEndOfYearDiff.setText(String.format("%s\n%s", startOfYearText, endOfYearText));
         }
 
-        binding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn, null, true));
+        binding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,
+                null, true, true));
     }
 }
