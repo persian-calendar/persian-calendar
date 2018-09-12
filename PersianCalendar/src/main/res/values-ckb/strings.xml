@@ -169,6 +169,8 @@
     <string name="pref_header_location_athan">شوێن و بانگ</string>
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
+    <string name="previous_month">مانگی پاشەوە</string>
+    <string name="next_month">مانگی پێشەوە</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />

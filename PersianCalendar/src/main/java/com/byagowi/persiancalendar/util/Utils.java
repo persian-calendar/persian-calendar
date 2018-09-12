@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.accessibility.AccessibilityManager;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -62,6 +63,7 @@ import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.Constants.ALARMS_BASE_ID;
 import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
 import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
@@ -202,7 +204,7 @@ public class Utils {
     static private Coordinate coordinate;
     static private CalendarType mainCalendar;
     static private CalendarType[] otherCalendars;
-    static private String comma;
+    static private String spacedComma;
     static private boolean showWeekOfYear;
     static private int weekStartOffset;
     static private boolean[] weekEnds;
@@ -252,7 +254,7 @@ public class Utils {
             mainCalendar = CalendarType.SHAMSI;
             otherCalendars = new CalendarType[]{CalendarType.GREGORIAN, CalendarType.ISLAMIC};
         }
-        comma = language.equals(LANG_EN_US) ? "," : "،";
+        spacedComma = language.equals(LANG_EN_US) ? ", " : "، ";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
         weekStartOffset = Integer.parseInt(prefs.getString("WeekStart", "0"));
@@ -459,8 +461,8 @@ public class Utils {
         return String.valueOf(result);
     }
 
-    static public String getComma() {
-        return comma;
+    static public String getSpacedComma() {
+        return spacedComma;
     }
 
     static public String[] monthsNamesOfCalendar(AbstractDate date) {
@@ -663,7 +665,7 @@ public class Utils {
 
         if (fallbackToCoord)
             if (coordinate != null)
-                return formatCoordinate(context, coordinate, comma + " ");
+                return formatCoordinate(context, coordinate, spacedComma);
 
         return "";
     }
@@ -926,15 +928,27 @@ public class Utils {
                     result.add(gregorianCalendarEvent);
 
         // This one is passed by caller
-        List<DeviceCalendarEvent> deviceEventList =
-                deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
-        if (deviceEventList != null)
-            for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
-                // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-                if (deviceCalendarEvent.getCivilDate().equals(civil))
-                    result.add(deviceCalendarEvent);
+        if (deviceCalendarEvents != null) {
+            List<DeviceCalendarEvent> deviceEventList =
+                    deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
+            if (deviceEventList != null)
+                for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
+                    // holidayAwareEqualCheck is not needed as they won't have -1 on year field
+                    if (deviceCalendarEvent.getCivilDate().equals(civil))
+                        result.add(deviceCalendarEvent);
+        }
 
         return result;
+    }
+
+    // As we are limited to two languages for this anyway
+    static public String getHolidayTranslation() {
+        switch (language) {
+            case LANG_CKB:
+                return "پشوودان";
+            default:
+                return "تعطیل";
+        }
     }
 
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
@@ -948,6 +962,9 @@ public class Utils {
                 String title = event.getTitle();
                 if (insertRLM) {
                     title = Constants.RLM + title;
+                }
+                if (holiday && !compact) {
+                    title += " (" + getHolidayTranslation() + ")";
                 }
                 if (event instanceof DeviceCalendarEvent) {
                     if (!showDeviceCalendarEvents)
@@ -989,7 +1006,7 @@ public class Utils {
 
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
             Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
-            // convert comma separated string to a set
+            // convert spacedComma separated string to a set
             Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
             // in the past IMSAK was used but now we figured out FAJR was what we wanted
             if (alarmTimesSet.remove("IMSAK"))
@@ -1277,7 +1294,7 @@ public class Utils {
         boolean first = true;
         for (CalendarType type : otherCalendars) {
             if (!first) {
-                result.append(comma);
+                result.append(spacedComma);
                 result.append(" ");
             }
             result.append(CalendarUtils.dateToString(
@@ -1285,5 +1302,10 @@ public class Utils {
             first = false;
         }
         return result.toString();
+    }
+
+    public static boolean isTalkBackEnabled(Context context) {
+        AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
+        return a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 }

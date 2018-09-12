@@ -172,5 +172,7 @@
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+    <string name="previous_month">ماه قبل</string>
+    <string name="next_month">ماه بعد</string>
 
 </resources>

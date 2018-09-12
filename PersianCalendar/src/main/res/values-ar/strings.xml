@@ -14,6 +14,8 @@
     <string name="more">المزيد</string>
 
     <!--Navigation drawers-->
+    <string name="previous_month">Next Month</string>
+    <string name="next_month">Previous Month</string>
     <string name="calendar">التقويم</string>
     <string name="date_converter">محول التاريخ</string>
     <string name="compass">البوصلة</string>

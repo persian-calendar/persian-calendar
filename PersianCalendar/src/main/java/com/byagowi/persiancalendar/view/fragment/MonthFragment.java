@@ -48,16 +48,17 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
         // We deliberately like to avoid DataBinding thing here, at least for now
-        ImageView prev = view.findViewById(R.id.prev);
         ImageView next = view.findViewById(R.id.next);
-        prev.setImageResource(isRTL
-                ? R.drawable.ic_keyboard_arrow_right
-                : R.drawable.ic_keyboard_arrow_left);
         next.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_left
                 : R.drawable.ic_keyboard_arrow_right);
-        prev.setOnClickListener(this);
         next.setOnClickListener(this);
+
+        ImageView prev = view.findViewById(R.id.prev);
+        prev.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
+        prev.setOnClickListener(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
@@ -115,8 +116,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         ///////
         ///////
         ///////
-        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek,
-                weekOfYearStart, weeksCount);
+        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 

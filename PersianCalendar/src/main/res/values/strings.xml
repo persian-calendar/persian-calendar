@@ -69,6 +69,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="exit">Exit</string>
 
     <!--Calendar-->
+    <string name="previous_month">Next Month</string>
+    <string name="next_month">Previous Month</string>
     <string name="add_event">Add event</string>
     <string name="device_calendar_does_not_support">Device calendar does not support the action</string>
     <string name="today">Today</string>

@@ -149,7 +149,7 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 += Utils.getComma() + " " + subtitle;
+                    text2 += Utils.getSpacedComma() + subtitle;
                 }
 
                 remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
@@ -230,6 +230,15 @@ public class UpdateUtils {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
+                }
+            }
+
+            if (Utils.isTalkBackEnabled(context)) {
+                title = CalendarUtils.getA11yDaySummary(context, jdn, deviceCalendarEvents, true);
+                subtitle = "";
+                if (!TextUtils.isEmpty(owghat)) {
+                    title += Utils.getSpacedComma();
+                    title += owghat;
                 }
             }
 

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -16,6 +17,11 @@ public class ItemDayView extends View {
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
         this.resource = resource;
+        init();
+    }
+
+    private void init() {
+        // empty, for now
     }
 
     // These constructors shouldn't be used
@@ -23,16 +29,19 @@ public class ItemDayView extends View {
     public ItemDayView(Context context) {
         super(context);
         resource = new DaysPaintResources(context);
+        init();
     }
 
     public ItemDayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         resource = new DaysPaintResources(context);
+        init();
     }
 
     public ItemDayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         resource = new DaysPaintResources(context);
+        init();
     }
 
     private Rect bounds = new Rect();
@@ -103,7 +112,6 @@ public class ItemDayView extends View {
     private void setAll(String text, boolean isToday, boolean isSelected,
                         boolean hasEvent, boolean hasAppointment, boolean isHoliday,
                         int textSize, long jdn, int dayOfMonth, boolean isNumber) {
-        setContentDescription(text);
         this.text = text;
         this.today = isToday;
         this.selected = isSelected;
@@ -120,7 +128,8 @@ public class ItemDayView extends View {
     public void setDayOfMonthItem(boolean isToday, boolean isSelected,
                                   boolean hasEvent, boolean hasAppointment, boolean isHoliday,
                                   int textSize, long jdn, int dayOfMonth) {
-        setAll(Utils.formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
+        String dayOfMonthString = Utils.formatNumber(dayOfMonth);
+        setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
                 isHoliday, textSize, jdn, dayOfMonth, true);
     }
 

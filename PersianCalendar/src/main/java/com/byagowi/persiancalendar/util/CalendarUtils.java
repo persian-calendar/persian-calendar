@@ -7,9 +7,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import calendar.AbstractDate;
 import calendar.CalendarType;
@@ -123,7 +128,7 @@ public class CalendarUtils {
     }
 
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getComma() + " " + dateToString(date);
+        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + dateToString(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -297,5 +302,88 @@ public class CalendarUtils {
         return new CivilDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+
+    @StringRes
+    final private static int[] YEARS_NAME = {
+            R.string.year10, R.string.year11, R.string.year12,
+            R.string.year1, R.string.year2, R.string.year3,
+            R.string.year4, R.string.year5, R.string.year6,
+            R.string.year7, R.string.year8, R.string.year9
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS = {
+            R.string.empty,
+            R.string.aries, R.string.taurus, R.string.gemini,
+            R.string.cancer, R.string.leo, R.string.virgo,
+            R.string.libra, R.string.scorpio, R.string.sagittarius,
+            R.string.capricorn, R.string.aquarius, R.string.pisces
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS_EMOJI = {
+            R.string.empty,
+            R.string.aries_emoji, R.string.taurus_emoji, R.string.gemini_emoji,
+            R.string.cancer_emoji, R.string.leo_emoji, R.string.virgo_emoji,
+            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji,
+            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji
+    };
+
+    // Based on Mehdi's work
+    static public String getZodiacInfo(Context context, long jdn) {
+        PersianDate persianDate = new PersianDate(jdn);
+        IslamicDate islamicDate = new IslamicDate(jdn);
+        return Utils.isAstronomicalFeaturesEnabled() ?
+                String.format("%s: %s\n%s: %s %s\n%s",
+                        context.getString(R.string.year_name),
+                        context.getString(YEARS_NAME[persianDate.getYear() % 12]),
+                        context.getString(R.string.zodiac),
+                        context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]),
+                        context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
+                        CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
+                                ? "" : context.getString(R.string.moonInScorpio)).trim() : "";
+    }
+
+    static public String getA11yDaySummary(Context context, long jdn,
+                                           @Nullable SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
+                                           boolean withZodiac) {
+        String result = CalendarUtils.dayTitleSummary(CalendarUtils.getDateFromJdnOfCalendar(
+                Utils.getMainCalendar(), jdn));
+
+        String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
+        if (!TextUtils.isEmpty(otherCalendars)) {
+            result += Utils.getSpacedComma();
+            result += "برابر با";
+            result += " ";
+            result += otherCalendars;
+        }
+
+        List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
+        String holidays = Utils.getEventsTitle(events, true, true, true, false);
+        if (!TextUtils.isEmpty(holidays)) {
+            result += "تعطیل به مناسبت";
+            result += Utils.getSpacedComma();
+            result += holidays;
+        }
+
+        String nonHolidays = Utils.getEventsTitle(events, false, true, true, false);
+        if (!TextUtils.isEmpty(nonHolidays)) {
+            result += Utils.getSpacedComma();
+            result += "رویدادها";
+            result += Utils.getSpacedComma();
+            result += nonHolidays;
+        }
+
+        if (withZodiac && context != null) {
+            String zodiac = getZodiacInfo(context, jdn);
+            if (!TextUtils.isEmpty(zodiac)) {
+                result += Utils.getSpacedComma();
+                result += zodiac;
+            }
+        }
+
+        return result;
     }
 }

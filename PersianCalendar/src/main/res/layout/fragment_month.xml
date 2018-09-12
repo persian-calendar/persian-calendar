@@ -12,6 +12,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/previous_month"
         android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 
@@ -30,6 +31,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/next_month"
         android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 
