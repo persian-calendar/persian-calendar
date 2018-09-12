@@ -26,6 +26,8 @@ import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;
 
+import static com.byagowi.persiancalendar.Constants.LANG_CKB;
+
 public class CalendarUtils {
     static public AbstractDate getDateOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
@@ -138,8 +140,14 @@ public class CalendarUtils {
     }
 
     static public String dateToString(AbstractDate date) {
-        return Utils.formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
-                Utils.formatNumber(date.getYear());
+        switch (Utils.getAppLanguage()) {
+            case LANG_CKB:
+                return Utils.formatNumber(date.getDayOfMonth()) + "ی " + getMonthName(date) + ' ' +
+                        Utils.formatNumber(date.getYear());
+            default:
+                return Utils.formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
+                        Utils.formatNumber(date.getYear());
+        }
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {
