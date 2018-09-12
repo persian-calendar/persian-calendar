@@ -162,16 +162,6 @@ public class UIUtils {
         }
     }
 
-    static public void copyToClipboard(Context context, CharSequence text) {
-        ClipboardManager clipboardService =
-                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-
-        if (clipboardService != null) {
-            clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
-            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @StyleRes
     public static int getThemeFromName(String name) {
         switch (name) {

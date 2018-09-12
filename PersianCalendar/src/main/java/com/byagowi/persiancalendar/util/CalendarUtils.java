@@ -140,14 +140,9 @@ public class CalendarUtils {
     }
 
     static public String dateToString(AbstractDate date) {
-        switch (Utils.getAppLanguage()) {
-            case LANG_CKB:
-                return Utils.formatNumber(date.getDayOfMonth()) + "ی " + getMonthName(date) + "ی " +
-                        Utils.formatNumber(date.getYear());
-            default:
-                return Utils.formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
-                        Utils.formatNumber(date.getYear());
-        }
+        return String.format(Utils.getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
+                Utils.formatNumber(date.getDayOfMonth()), getMonthName(date),
+                Utils.formatNumber(date.getYear()));
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {

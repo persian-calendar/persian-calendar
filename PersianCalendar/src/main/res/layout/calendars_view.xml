@@ -79,6 +79,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/first_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
@@ -124,6 +125,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/second_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
@@ -169,6 +171,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/third_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"

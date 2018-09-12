@@ -1,11 +1,14 @@
 package com.byagowi.persiancalendar.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
@@ -53,14 +56,11 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.todayIcon.setOnClickListener(this);
 
         binding.firstCalendarDateLinear.setOnClickListener(this);
-        binding.firstCalendarDateDay.setOnClickListener(this);
-        binding.firstCalendarDate.setOnClickListener(this);
+        binding.firstCalendarDateContainer.setOnClickListener(this);
         binding.secondCalendarDateLinear.setOnClickListener(this);
-        binding.secondCalendarDateDay.setOnClickListener(this);
-        binding.secondCalendarDate.setOnClickListener(this);
+        binding.secondCalendarDateContainer.setOnClickListener(this);
         binding.thirdCalendarDateLinear.setOnClickListener(this);
-        binding.thirdCalendarDateDay.setOnClickListener(this);
-        binding.thirdCalendarDate.setOnClickListener(this);
+        binding.thirdCalendarDateContainer.setOnClickListener(this);
 
         binding.getRoot().setOnClickListener(this);
 
@@ -143,34 +143,20 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                 expand(binding.firstCalendarDateLinear.getVisibility() != View.VISIBLE);
                 break;
 
-            case R.id.first_calendar_date:
-            case R.id.first_calendar_date_day:
-                UIUtils.copyToClipboard(context, binding.firstCalendarDateDay.getText() + " " +
-                        binding.firstCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
+            case R.id.first_calendar_date_container:
             case R.id.first_calendar_date_linear:
-                UIUtils.copyToClipboard(context, binding.firstCalendarDateLinear.getText());
-                break;
-
-            case R.id.second_calendar_date:
-            case R.id.second_calendar_date_day:
-                UIUtils.copyToClipboard(context, binding.secondCalendarDateDay.getText() + " " +
-                        binding.secondCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
+            case R.id.second_calendar_date_container:
             case R.id.second_calendar_date_linear:
-                UIUtils.copyToClipboard(context, binding.secondCalendarDateLinear.getText());
-                break;
-
-            case R.id.third_calendar_date:
-            case R.id.third_calendar_date_day:
-                UIUtils.copyToClipboard(context, binding.thirdCalendarDateDay.getText() + " " +
-                        binding.thirdCalendarDate.getText().toString().replace("\n", " "));
-                break;
-
+            case R.id.third_calendar_date_container:
             case R.id.third_calendar_date_linear:
-                UIUtils.copyToClipboard(context, binding.thirdCalendarDateLinear.getText());
+                ClipboardManager clipboardService =
+                        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                CharSequence text = view.getContentDescription();
+
+                if (clipboardService != null && text != null) {
+                    clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
+                    Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -222,7 +208,12 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
         binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
 
-        binding.firstCalendarDateLinear.setText(CalendarUtils.toLinearDate(firstCalendar));
+        String firstCalendarLinear = CalendarUtils.toLinearDate(firstCalendar);
+        binding.firstCalendarDateLinear.setText(firstCalendarLinear);
+        binding.firstCalendarDateLinear.setContentDescription(firstCalendarLinear);
+
+        binding.firstCalendarDateContainer.setContentDescription(
+                CalendarUtils.dateToString(firstCalendar));
         binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
         binding.firstCalendarDate.setText(String.format("%s\n%s",
                 CalendarUtils.getMonthName(firstCalendar),
@@ -231,9 +222,13 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         if (secondCalendar == null) {
             binding.secondCalendarContainer.setVisibility(View.GONE);
         } else {
-            binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
-            binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
+            String secondCalendarLinear = CalendarUtils.toLinearDate(secondCalendar);
+            binding.secondCalendarDateLinear.setText(secondCalendarLinear);
+            binding.secondCalendarDateLinear.setContentDescription(secondCalendarLinear);
 
+            binding.secondCalendarDateContainer.setContentDescription(
+                    CalendarUtils.dateToString(secondCalendar));
+            binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
             binding.secondCalendarDate.setText(String.format("%s\n%s",
                     CalendarUtils.getMonthName(secondCalendar),
                     Utils.formatNumber(secondCalendar.getYear())));
@@ -242,9 +237,13 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         if (thirdCalendar == null) {
             binding.thirdCalendarContainer.setVisibility(View.GONE);
         } else {
-            binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
-            binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
+            String thirdCalendarLinear = CalendarUtils.toLinearDate(thirdCalendar);
+            binding.thirdCalendarDateLinear.setText(thirdCalendarLinear);
+            binding.thirdCalendarDateLinear.setContentDescription(thirdCalendarLinear);
 
+            binding.thirdCalendarDateContainer.setContentDescription(
+                    CalendarUtils.dateToString(thirdCalendar));
+            binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
             binding.thirdCalendarDate.setText(String.format("%s\n%s",
                     CalendarUtils.getMonthName(thirdCalendar),
                     Utils.formatNumber(thirdCalendar.getYear())));
