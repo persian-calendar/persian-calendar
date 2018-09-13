@@ -277,8 +277,7 @@ public class Utils {
         }
 
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
-        talkBackEnabled = BuildConfig.DEBUG ||
-                (a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled());
+        talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
     private static boolean talkBackEnabled = false;
