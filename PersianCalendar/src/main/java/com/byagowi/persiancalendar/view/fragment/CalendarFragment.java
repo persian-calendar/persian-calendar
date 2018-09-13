@@ -303,6 +303,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
+        StringBuilder contentDescription = new StringBuilder();
 
         eventsBinding.holidayTitle.setVisibility(View.GONE);
         eventsBinding.deviceEventTitle.setVisibility(View.GONE);
@@ -313,30 +314,40 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.holidayTitle.setText(holidays);
-            eventsBinding.holidayTitle.setContentDescription(
-                    getString(R.string.holiday_reason) + Utils.getSpacedComma() + holidays);
+            String holidayContent = getString(R.string.holiday_reason) + "\n" + holidays;
+            eventsBinding.holidayTitle.setContentDescription(holidayContent);
+            contentDescription.append(holidayContent);
             eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.deviceEventTitle.setText(deviceEvents);
+            contentDescription.append("\n");
+            contentDescription.append(getString(R.string.show_device_calendar_events));
+            contentDescription.append("\n");
+            contentDescription.append(deviceEvents);
             eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
             eventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
         }
 
+
         if (!TextUtils.isEmpty(nonHolidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.eventTitle.setText(nonHolidays);
+            contentDescription.append("\n");
+            contentDescription.append(getString(R.string.events));
+            contentDescription.append("\n");
+            contentDescription.append(nonHolidays);
 
             eventsBinding.eventTitle.setVisibility(View.VISIBLE);
         }
 
-        SpannableStringBuilder messageToShow = new SpannableStringBuilder();
-
         Context context = getContext();
         if (context == null) return;
+
+        SpannableStringBuilder messageToShow = new SpannableStringBuilder();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -355,6 +366,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             messageToShow.append(ss);
+
+            contentDescription.append("\n");
+            contentDescription.append(title);
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
@@ -363,6 +377,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
             eventsBinding.eventMessage.setVisibility(View.VISIBLE);
         }
+
+        eventsBinding.getRoot().setContentDescription(contentDescription);
     }
 
     private void setOwghat(long jdn, boolean isToday) {

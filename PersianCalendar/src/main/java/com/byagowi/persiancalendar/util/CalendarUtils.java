@@ -356,21 +356,21 @@ public class CalendarUtils {
 
         if (isToday) {
             result.append(context.getString(R.string.today));
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
         }
 
         AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
                 Utils.getMainCalendar(), jdn);
 
         if (withTitle) {
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(CalendarUtils.dayTitleSummary(mainDate));
         }
 
         if (withOtherCalendars) {
             String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
             if (!TextUtils.isEmpty(otherCalendars)) {
-                result.append(Utils.getSpacedComma());
+                result.append("\n");
                 result.append(context.getString(R.string.equivalent_to));
                 result.append(" ");
                 result.append(otherCalendars);
@@ -380,17 +380,17 @@ public class CalendarUtils {
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
         String holidays = Utils.getEventsTitle(events, true, true, true, false);
         if (!TextUtils.isEmpty(holidays)) {
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(context.getString(R.string.holiday_reason));
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(holidays);
         }
 
         String nonHolidays = Utils.getEventsTitle(events, false, true, true, false);
         if (!TextUtils.isEmpty(nonHolidays)) {
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(context.getString(R.string.events));
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(nonHolidays);
         }
 
@@ -398,7 +398,7 @@ public class CalendarUtils {
             long startOfYearJdn = CalendarUtils.getJdnOfCalendar(Utils.getMainCalendar(),
                     mainDate.getYear(), 1, 1);
             int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
-            result.append(Utils.getSpacedComma());
+            result.append("\n");
             result.append(String.format(context.getString(R.string.nth_week_of_year),
                     Utils.formatNumber(weekOfYearStart)));
         }
@@ -406,7 +406,7 @@ public class CalendarUtils {
         if (withZodiac) {
             String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
-                result.append(Utils.getSpacedComma());
+                result.append("\n");
                 result.append(zodiac);
             }
         }
