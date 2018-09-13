@@ -222,7 +222,7 @@
         <item name="colorHoliday">@color/classic_holiday</item>
         <item name="colorHolidaySelected">@color/classic_holiday</item>
         <item name="colorTextDrawer">@color/classic_text_drawer</item>
-        <item name="colorTextDay">@color/black</item>
+        <item name="colorTextDay">@color/classic_text_day</item>
         <item name="colorTextToday">@color/classic_text_today</item>
         <item name="colorTextDayName">@color/classic_text_day_name</item>
         <item name="colorTextAthan">@color/classic_text_athan</item>
