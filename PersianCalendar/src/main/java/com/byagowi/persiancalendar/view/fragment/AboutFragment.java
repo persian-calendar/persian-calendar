@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.DialogEmailBinding;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -100,38 +100,24 @@ public class AboutFragment extends Fragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            @SuppressLint("InflateParams") View rootView = layoutInflater.inflate(R.layout.dialog_email, null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-            alertDialogBuilder.setView(rootView);
-            final TextView lengthText = rootView .findViewById(R.id.lengthText);
-            final EditText inputText = rootView .findViewById(R.id.inputText);
-            alertDialogBuilder.setCancelable(false)
-                    .setPositiveButton(R.string.about_sendMail_dialog, (dialog, id) -> {
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
+            DialogEmailBinding emailBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_email,
+                    container, false);
+            new AlertDialog.Builder(getActivity())
+                    .setView(emailBinding.getRoot())
+                    .setTitle(R.string.about_email_sum)
+                    .setPositiveButton(R.string.resume, (dialog, id) -> {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_sendMail), null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                         try {
                             emailIntent.putExtra(Intent.EXTRA_TEXT,
-                                    String.format(inputText.getText() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
+                                    String.format(emailBinding.inputText.getText() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
                                             Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
                             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
                         } catch (android.content.ActivityNotFoundException ex) {
                             Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .setNegativeButton(R.string.cancel,
-                            (dialog, id) -> dialog.cancel());
-            AlertDialog alert = alertDialogBuilder.create();
-            alert.show();
-
-            inputText.addTextChangedListener(new TextWatcher(){
-                public void afterTextChanged(Editable s) {
-                    lengthText.setText(Utils.formatNumber(String.valueOf(s.toString().length())));
-                }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-                public void onTextChanged(CharSequence s, int start, int before, int count){}
-            });
-
+                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
         });
 
         Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);

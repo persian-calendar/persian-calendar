@@ -1,67 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/card_margin"
-        android:padding="20dp">
-        <LinearLayout
-            android:id="@+id/main"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:weightSum="2">
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:layout_weight="1"
-                android:background="?attr/colorDrawerIcon"/>
-            <TextView
-                android:gravity="bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="?attr/colorTextDrawer"
-                android:text="@string/about_sendMail" />
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:layout_marginRight="5dp"
-                android:background="?attr/colorDrawerIcon"
-                android:layout_marginEnd="5dp" />
-        </LinearLayout>
-        <LinearLayout
+        android:layout_height="wrap_content"
+        app:counterEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="@drawable/border">
-            <EditText
-                android:id="@+id/inputText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/card_margin"
-                android:gravity="top"
-                android:ems="10"
-                android:hint="@string/about_sendMail_hint"
-                android:inputType="textMultiLine"
-                android:background="@null"
-                android:minLines="5" />
-            <TextView
-                android:id="@+id/lengthText"
-                android:gravity="bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="?attr/colorTextDrawer" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:layout_marginTop="@dimen/card_margin"
+            android:ems="10"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:minLines="5" />
 
-</LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</layout>
