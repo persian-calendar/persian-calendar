@@ -16,11 +16,6 @@ public class ItemDayView extends View {
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
         this.resource = resource;
-        init();
-    }
-
-    private void init() {
-        // empty, for now
     }
 
     // These constructors shouldn't be used
@@ -28,19 +23,16 @@ public class ItemDayView extends View {
     public ItemDayView(Context context) {
         super(context);
         resource = new DaysPaintResources(context);
-        init();
     }
 
     public ItemDayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         resource = new DaysPaintResources(context);
-        init();
     }
 
     public ItemDayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         resource = new DaysPaintResources(context);
-        init();
     }
 
     private Rect bounds = new Rect();
