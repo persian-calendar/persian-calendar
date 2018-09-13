@@ -206,7 +206,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                             day.getJdn(), position - 6 - startingDayOfWeek);
 
                     itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
-                            day.getJdn(), monthEvents,
+                            day.getJdn(), day.isToday(), monthEvents,
                             true, false, true));
 
                     itemDayView.setVisibility(View.VISIBLE);

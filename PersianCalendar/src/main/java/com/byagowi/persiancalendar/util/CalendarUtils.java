@@ -346,7 +346,7 @@ public class CalendarUtils {
                                 ? context.getString(R.string.moonInScorpio) : "").trim() : "";
     }
 
-    static public String getA11yDaySummary(Context context, long jdn,
+    static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
                                            SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                            boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
         // It has some expensive calculations, lets not do that when not needed
@@ -354,7 +354,10 @@ public class CalendarUtils {
 
         StringBuilder result = new StringBuilder();
 
-        result.append(context.getString(R.string.today));
+        if (isToday) {
+            result.append(context.getString(R.string.today));
+            result.append(Utils.getSpacedComma());
+        }
 
         AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
                 Utils.getMainCalendar(), jdn);

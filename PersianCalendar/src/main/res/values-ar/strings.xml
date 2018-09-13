@@ -25,7 +25,7 @@
     <string name="add_event">إضافة حدث جديد</string>
     <string name="device_calendar_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
     <string name="today">اليوم</string>
-    <string name="return_to_today">بازگشت به امروز</string>
+    <string name="return_to_today">رجوع الي اليوم</string>
     <string name="goto_date">الذهاب إلى تاريخٍ معين</string>
     <string name="go">إذهب</string>
 

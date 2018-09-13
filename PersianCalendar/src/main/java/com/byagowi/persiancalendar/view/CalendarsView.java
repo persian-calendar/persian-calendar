@@ -279,6 +279,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         }
 
         binding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,
+                diffDays == 0,
                 null, true, true, true));
     }
 }
