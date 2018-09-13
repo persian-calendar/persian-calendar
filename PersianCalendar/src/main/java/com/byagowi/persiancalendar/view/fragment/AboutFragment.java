@@ -106,7 +106,8 @@ public class AboutFragment extends Fragment {
                     .setView(emailBinding.getRoot())
                     .setTitle(R.string.about_email_sum)
                     .setPositiveButton(R.string.resume, (dialog, id) -> {
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_sendMail), null));
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts
+                                ("mailto", "ebrahim@gnu.org", null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                         try {
                             emailIntent.putExtra(Intent.EXTRA_TEXT,
