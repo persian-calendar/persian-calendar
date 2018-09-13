@@ -235,7 +235,8 @@ public class UpdateUtils {
 
             // Don't remove this condition checking ever
             if (Utils.isTalkBackEnabled()) {
-                subtitle = CalendarUtils.getA11yDaySummary(context, jdn, true,
+                // Don't use isToday, per a feedback
+                subtitle = CalendarUtils.getA11yDaySummary(context, jdn, false,
                         deviceCalendarEvents,
                         true, true, false);
             }
