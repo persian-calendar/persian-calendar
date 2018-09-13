@@ -332,17 +332,18 @@ public class CalendarUtils {
 
     // Based on Mehdi's work
     static public String getZodiacInfo(Context context, long jdn, boolean withEmoji) {
+        if (!Utils.isAstronomicalFeaturesEnabled()) return "";
+
         PersianDate persianDate = new PersianDate(jdn);
         IslamicDate islamicDate = new IslamicDate(jdn);
-        return Utils.isAstronomicalFeaturesEnabled() ?
-                String.format("%s: %s\n%s: %s %s\n%s",
-                        context.getString(R.string.year_name),
-                        context.getString(YEARS_NAME[persianDate.getYear() % 12]),
-                        context.getString(R.string.zodiac),
-                        withEmoji ? context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]) : "",
-                        context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
-                        CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
-                                ? context.getString(R.string.moonInScorpio) : "").trim() : "";
+        return String.format("%s: %s\n%s: %s %s\n%s",
+                context.getString(R.string.year_name),
+                context.getString(YEARS_NAME[persianDate.getYear() % 12]),
+                context.getString(R.string.zodiac),
+                withEmoji ? context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]) : "",
+                context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
+                CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
+                        ? context.getString(R.string.moonInScorpio) : "").trim();
     }
 
     static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
@@ -406,7 +407,7 @@ public class CalendarUtils {
                     Utils.formatNumber(weekOfYearStart)));
         }
 
-        if (withZodiac && Utils.isAstronomicalFeaturesEnabled()) {
+        if (withZodiac) {
             String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
                 result.append("\n");

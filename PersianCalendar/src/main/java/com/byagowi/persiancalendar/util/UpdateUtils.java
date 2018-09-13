@@ -198,7 +198,8 @@ public class UpdateUtils {
                 }
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 = text2 + "\n" + subtitle;
+                    text2 = text2 + "\n" + subtitle + "\n" +
+                            CalendarUtils.getZodiacInfo(context, jdn, true);
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
