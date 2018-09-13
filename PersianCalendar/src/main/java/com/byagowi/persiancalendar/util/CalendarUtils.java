@@ -371,6 +371,7 @@ public class CalendarUtils {
             String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
             if (!TextUtils.isEmpty(otherCalendars)) {
                 result.append("\n");
+                result.append("\n");
                 result.append(context.getString(R.string.equivalent_to));
                 result.append(" ");
                 result.append(otherCalendars);
@@ -381,6 +382,7 @@ public class CalendarUtils {
         String holidays = Utils.getEventsTitle(events, true, true, true, false);
         if (!TextUtils.isEmpty(holidays)) {
             result.append("\n");
+            result.append("\n");
             result.append(context.getString(R.string.holiday_reason));
             result.append("\n");
             result.append(holidays);
@@ -388,6 +390,7 @@ public class CalendarUtils {
 
         String nonHolidays = Utils.getEventsTitle(events, false, true, true, false);
         if (!TextUtils.isEmpty(nonHolidays)) {
+            result.append("\n");
             result.append("\n");
             result.append(context.getString(R.string.events));
             result.append("\n");
@@ -399,6 +402,7 @@ public class CalendarUtils {
                     mainDate.getYear(), 1, 1);
             int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
             result.append("\n");
+            result.append("\n");
             result.append(String.format(context.getString(R.string.nth_week_of_year),
                     Utils.formatNumber(weekOfYearStart)));
         }
@@ -406,6 +410,7 @@ public class CalendarUtils {
         if (withZodiac) {
             String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
+                result.append("\n");
                 result.append("\n");
                 result.append(zodiac);
             }

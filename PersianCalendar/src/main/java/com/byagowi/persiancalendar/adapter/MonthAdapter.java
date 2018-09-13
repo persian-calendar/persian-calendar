@@ -186,9 +186,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     itemDayView.setContentDescription(String.format(
                             context.getString(R.string.week_days_name_column),
                             Utils.getWeekDayName(Utils.fixDayOfWeek(position))));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        itemDayView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-                    }
                 }
 
                 itemDayView.setVisibility(View.VISIBLE);
@@ -207,7 +204,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
                     itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
                             day.getJdn(), day.isToday(), monthEvents,
-                            true, false, true));
+                            day.isToday(), false, true));
 
                     itemDayView.setVisibility(View.VISIBLE);
                 } else {
