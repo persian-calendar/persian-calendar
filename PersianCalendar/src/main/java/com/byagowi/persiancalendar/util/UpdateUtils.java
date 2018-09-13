@@ -176,6 +176,11 @@ public class UpdateUtils {
                 String holidays = Utils.getEventsTitle(events, true, true, true, isRTL);
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                    if (Utils.isTalkBackEnabled()) {
+                        remoteViews2.setContentDescription(R.id.holiday_2x2,
+                                context.getString(R.string.holiday_reason) + " " +
+                                        holidays);
+                    }
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
                 } else {
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
