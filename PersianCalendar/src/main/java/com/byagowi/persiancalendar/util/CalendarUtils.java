@@ -406,7 +406,7 @@ public class CalendarUtils {
                     Utils.formatNumber(weekOfYearStart)));
         }
 
-        if (withZodiac) {
+        if (withZodiac && Utils.isAstronomicalFeaturesEnabled()) {
             String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
                 result.append("\n");
