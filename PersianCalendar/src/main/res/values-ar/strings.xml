@@ -25,7 +25,7 @@
     <string name="add_event">إضافة حدث جديد</string>
     <string name="device_calendar_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
     <string name="today">اليوم</string>
-    <string name="return_to_today">رجوع الي اليوم</string>
+    <string name="return_to_today">الرجوع إلى اليوم</string>
     <string name="goto_date">الذهاب إلى تاريخٍ معين</string>
     <string name="go">إذهب</string>
 
@@ -204,12 +204,12 @@
     <string name="about_developers">المطوّرون</string>
 
     <!--TalkBack, a11y-->
-    <string name="previous_month">Next Month</string>
-    <string name="next_month">Previous Month</string>
-    <string name="week_days_name_column">%s column in days table</string>
-    <string name="equivalent_to">Equivalent to</string>
-    <string name="holiday_reason">Holiday because of</string>
-    <string name="nth_week_of_year">%s week of year</string>
+    <string name="previous_month">الشهر السابق</string>
+    <string name="next_month">الشهر القادم</string>
+    <string name="week_days_name_column">العَمود %s في جدول الأيام</string>
+    <string name="equivalent_to">ما يُعادل</string>
+    <string name="holiday_reason">عُطلة لأن</string>
+    <string name="nth_week_of_year">الأسبوع %s من السنة</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
