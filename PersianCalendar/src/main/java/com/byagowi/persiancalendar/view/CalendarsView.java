@@ -222,8 +222,10 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     Utils.formatNumber(thirdCalendar.getYear())));
         }
 
-        binding.zodiac.setText(CalendarUtils.getZodiacInfo(context, jdn, true));
-        binding.zodiac.setVisibility(TextUtils.isEmpty(binding.zodiac.getText()) ? View.GONE : View.GONE);
+        if (Utils.isAstronomicalFeaturesEnabled()) {
+            binding.zodiac.setText(CalendarUtils.getZodiacInfo(context, jdn, true));
+        }
+        binding.zodiac.setVisibility(TextUtils.isEmpty(binding.zodiac.getText()) ? View.GONE : View.VISIBLE);
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 
