@@ -182,7 +182,8 @@ public class UpdateUtils {
                 }
 
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
+                if (Utils.isShownOnWidgets("non_holiday_events") &&
+                        !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
@@ -225,9 +226,11 @@ public class UpdateUtils {
         if (Utils.isNotifyDate()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
+                NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID),
+                        context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager)
+                        context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
                 }
@@ -239,9 +242,14 @@ public class UpdateUtils {
                 subtitle = CalendarUtils.getA11yDaySummary(context, jdn, false,
                         deviceCalendarEvents,
                         true, true, false);
+                if (!TextUtils.isEmpty(owghat)) {
+                    subtitle += Utils.getSpacedComma();
+                    subtitle += owghat;
+                }
             }
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
+            NotificationCompat.Builder builder = new NotificationCompat
+                    .Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(Utils.getDayIconResource(date.getDayOfMonth()))
                     .setOngoing(true)
@@ -254,7 +262,8 @@ public class UpdateUtils {
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
+            if (!Utils.isTalkBackEnabled() &&
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
                         ? R.layout.custom_notification
                         : R.layout.custom_notification_ltr);
