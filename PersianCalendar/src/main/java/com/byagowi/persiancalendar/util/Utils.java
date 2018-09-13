@@ -16,7 +16,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.accessibility.AccessibilityManager;
 
-import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
@@ -1287,10 +1286,7 @@ public class Utils {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (CalendarType type : otherCalendars) {
-            if (!first) {
-                result.append(spacedComma);
-                result.append(" ");
-            }
+            if (!first) result.append(getSpacedComma());
             result.append(CalendarUtils.dateToString(
                     CalendarUtils.getDateFromJdnOfCalendar(type, jdn)));
             first = false;

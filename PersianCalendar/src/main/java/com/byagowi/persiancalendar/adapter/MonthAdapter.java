@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
