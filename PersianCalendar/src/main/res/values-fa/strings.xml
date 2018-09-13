@@ -61,6 +61,7 @@
     <string name="events">مناسبت‌ها</string>
     <string name="events_summary">چه نوع مناسبت‌هایی در تقویم نمایش داده شود</string>
     <string name="today">امروز</string>
+    <string name="return_to_today">بازگشت به امروز</string>
     <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
     <string name="year">سال</string>
     <string name="month">ماه</string>
@@ -170,9 +171,15 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
 
-    <!-- New additions, to be categorized, keep the section on your translation -->
-    <string name="empty" />
+    <!--TalkBack, a11y-->
     <string name="previous_month">ماه قبل</string>
     <string name="next_month">ماه بعد</string>
+    <string name="week_days_name_column">ستون %s در جدول روزها</string>
+    <string name="equivalent_to">برابر با</string>
+    <string name="holiday_reason">تعطیل به مناسبت</string>
+    <string name="nth_week_of_year">هفتهٔ %s سال</string>
+
+    <!-- New additions, to be categorized, keep the section on your translation -->
+    <string name="empty" />
 
 </resources>

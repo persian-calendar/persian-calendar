@@ -332,7 +332,7 @@ public class CalendarUtils {
     };
 
     // Based on Mehdi's work
-    static public String getZodiacInfo(Context context, long jdn) {
+    static public String getZodiacInfo(Context context, long jdn, boolean withEmoji) {
         PersianDate persianDate = new PersianDate(jdn);
         IslamicDate islamicDate = new IslamicDate(jdn);
         return Utils.isAstronomicalFeaturesEnabled() ?
@@ -340,53 +340,74 @@ public class CalendarUtils {
                         context.getString(R.string.year_name),
                         context.getString(YEARS_NAME[persianDate.getYear() % 12]),
                         context.getString(R.string.zodiac),
-                        context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]),
+                        withEmoji ? context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]) : "",
                         context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
                         CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
-                                ? "" : context.getString(R.string.moonInScorpio)).trim() : "";
+                                ? context.getString(R.string.moonInScorpio) : "").trim() : "";
     }
 
     static public String getA11yDaySummary(Context context, long jdn,
-                                           @Nullable SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
-                                           boolean withZodiac, boolean withOtherCalendars) {
-        String result = CalendarUtils.dayTitleSummary(CalendarUtils.getDateFromJdnOfCalendar(
-                Utils.getMainCalendar(), jdn));
+                                           SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
+                                           boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
+        // It has some expensive calculations, lets not do that when not needed
+        if (!Utils.isTalkBackEnabled()) return "";
+
+        StringBuilder result = new StringBuilder();
+
+        result.append(context.getString(R.string.today));
+
+        AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
+                Utils.getMainCalendar(), jdn);
+
+        if (withTitle) {
+            result.append(Utils.getSpacedComma());
+            result.append(CalendarUtils.dayTitleSummary(mainDate));
+        }
 
         if (withOtherCalendars) {
             String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
             if (!TextUtils.isEmpty(otherCalendars)) {
-                result += Utils.getSpacedComma();
-                result += "برابر با";
-                result += " ";
-                result += otherCalendars;
+                result.append(Utils.getSpacedComma());
+                result.append(context.getString(R.string.equivalent_to));
+                result.append(" ");
+                result.append(otherCalendars);
             }
         }
 
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
         String holidays = Utils.getEventsTitle(events, true, true, true, false);
         if (!TextUtils.isEmpty(holidays)) {
-            result += Utils.getSpacedComma();
-            result += "تعطیل به مناسبت";
-            result += Utils.getSpacedComma();
-            result += holidays;
+            result.append(Utils.getSpacedComma());
+            result.append(context.getString(R.string.holiday_reason));
+            result.append(Utils.getSpacedComma());
+            result.append(holidays);
         }
 
         String nonHolidays = Utils.getEventsTitle(events, false, true, true, false);
         if (!TextUtils.isEmpty(nonHolidays)) {
-            result += Utils.getSpacedComma();
-            result += "رویدادها";
-            result += Utils.getSpacedComma();
-            result += nonHolidays;
+            result.append(Utils.getSpacedComma());
+            result.append(context.getString(R.string.events));
+            result.append(Utils.getSpacedComma());
+            result.append(nonHolidays);
         }
 
-        if (withZodiac && context != null) {
-            String zodiac = getZodiacInfo(context, jdn);
+        if (Utils.isWeekOfYearEnabled()) {
+            long startOfYearJdn = CalendarUtils.getJdnOfCalendar(Utils.getMainCalendar(),
+                    mainDate.getYear(), 1, 1);
+            int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
+            result.append(Utils.getSpacedComma());
+            result.append(String.format(context.getString(R.string.nth_week_of_year),
+                    Utils.formatNumber(weekOfYearStart)));
+        }
+
+        if (withZodiac) {
+            String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
-                result += Utils.getSpacedComma();
-                result += zodiac;
+                result.append(Utils.getSpacedComma());
+                result.append(zodiac);
             }
         }
 
-        return result;
+        return result.toString();
     }
 }

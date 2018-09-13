@@ -16,6 +16,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.accessibility.AccessibilityManager;
 
+import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
@@ -274,14 +275,20 @@ public class Utils {
             e.printStackTrace();
             appTheme = R.style.LightTheme;
         }
+
+        AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
+        talkBackEnabled = BuildConfig.DEBUG ||
+                (a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled());
     }
+
+    private static boolean talkBackEnabled = false;
 
     @StyleRes
     public static int getAppTheme() {
         return appTheme;
     }
 
-    static public int getIslamicOffset(Context context) {
+    private static int getIslamicOffset(Context context) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return Integer.parseInt(prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
@@ -298,7 +305,7 @@ public class Utils {
     static public List<CalendarType> getEnabledCalendarTypes() {
         List<CalendarType> result = new ArrayList<>();
         result.add(getMainCalendar());
-        result.addAll(Arrays.asList(getOtherCalendars()));
+        result.addAll(Arrays.asList(otherCalendars));
         return result;
     }
 
@@ -400,10 +407,6 @@ public class Utils {
 
     static public CalendarType getMainCalendar() {
         return mainCalendar;
-    }
-
-    static public CalendarType[] getOtherCalendars() {
-        return otherCalendars;
     }
 
     static private Map<PrayTime, Clock> prayTimes;
@@ -942,16 +945,6 @@ public class Utils {
         return result;
     }
 
-    // As we are limited to two languages for this anyway
-    static public String getHolidayTranslation() {
-        switch (language) {
-            case LANG_CKB:
-                return "پشوودان";
-            default:
-                return "تعطیل";
-        }
-    }
-
     static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
                                         boolean compact, boolean showDeviceCalendarEvents,
                                         boolean insertRLM) {
@@ -963,9 +956,6 @@ public class Utils {
                 String title = event.getTitle();
                 if (insertRLM) {
                     title = Constants.RLM + title;
-                }
-                if (holiday && !compact) {
-                    title += " (" + getHolidayTranslation() + ")";
                 }
                 if (event instanceof DeviceCalendarEvent) {
                     if (!showDeviceCalendarEvents)
@@ -1167,6 +1157,10 @@ public class Utils {
         return weekDaysInitials[position % 7];
     }
 
+    public static String getWeekDayName(int position) {
+        return weekDays[position % 7];
+    }
+
     //
     //
     //
@@ -1305,8 +1299,7 @@ public class Utils {
         return result.toString();
     }
 
-    public static boolean isTalkBackEnabled(Context context) {
-        AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
-        return a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
+    public static boolean isTalkBackEnabled() {
+        return talkBackEnabled;
     }
 }

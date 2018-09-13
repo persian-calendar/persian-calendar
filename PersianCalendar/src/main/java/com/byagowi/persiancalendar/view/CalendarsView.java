@@ -222,7 +222,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     Utils.formatNumber(thirdCalendar.getYear())));
         }
 
-        binding.zodiac.setText(CalendarUtils.getZodiacInfo(context, jdn));
+        binding.zodiac.setText(CalendarUtils.getZodiacInfo(context, jdn, true));
         binding.zodiac.setVisibility(TextUtils.isEmpty(binding.zodiac.getText()) ? View.GONE : View.GONE);
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
@@ -279,6 +279,6 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         }
 
         binding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,
-                null, true, true));
+                null, true, true, true));
     }
 }

@@ -39,7 +39,7 @@
                     android:id="@+id/today_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="بازگشت به امروز"
+                    android:contentDescription="@string/return_to_today"
                     android:orientation="horizontal">
 
                     <ImageView

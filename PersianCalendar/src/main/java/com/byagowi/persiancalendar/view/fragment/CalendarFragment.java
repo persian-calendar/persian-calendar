@@ -313,6 +313,8 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         if (!TextUtils.isEmpty(holidays)) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             eventsBinding.holidayTitle.setText(holidays);
+            eventsBinding.holidayTitle.setContentDescription(
+                    getString(R.string.holiday_reason) + Utils.getSpacedComma() + holidays);
             eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
         }
 

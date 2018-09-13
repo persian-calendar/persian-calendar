@@ -233,14 +233,10 @@ public class UpdateUtils {
                 }
             }
 
-            if (Utils.isTalkBackEnabled(context)) {
-                title = CalendarUtils.getA11yDaySummary(context, jdn, deviceCalendarEvents,
-                        true, true);
-                subtitle = "";
-                if (!TextUtils.isEmpty(owghat)) {
-                    title += Utils.getSpacedComma();
-                    title += owghat;
-                }
+            // Don't remove this condition checking ever
+            if (Utils.isTalkBackEnabled()) {
+                subtitle = CalendarUtils.getA11yDaySummary(context, jdn, deviceCalendarEvents,
+                        true, true, false);
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))

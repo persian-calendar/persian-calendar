@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -198,7 +197,7 @@ public class CompassFragment extends Fragment {
                 break;
             case R.id.help:
                 createAndShowSnackbar(getView(), sensorNotFound
-                        ? R.string.compass_not_found : R.string.calibrate_compass_summary,
+                                ? R.string.compass_not_found : R.string.calibrate_compass_summary,
                         5000);
             default:
                 break;
