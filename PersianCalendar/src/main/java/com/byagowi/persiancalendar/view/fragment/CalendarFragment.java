@@ -189,7 +189,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     public void selectDay(long jdn) {
         lastSelectedJdn = jdn;
         calendarsView.showCalendars(jdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
-        mainBinding.getRoot().setContentDescription(calendarsView.getContentDescription());
         setOwghat(jdn, CalendarUtils.getTodayJdn() == jdn);
         showEvent(jdn);
     }
@@ -404,8 +403,6 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         owghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
         owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
         owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
-        mainBinding.tabLayout.getTabAt(2)
-                .setContentDescription(owghatBinding.getRoot().getContentDescription());
 
         double moonPhase = 1;
         try {
