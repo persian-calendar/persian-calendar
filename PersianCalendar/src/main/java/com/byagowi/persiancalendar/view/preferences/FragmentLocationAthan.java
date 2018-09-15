@@ -35,6 +35,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 public class FragmentLocationAthan extends PreferenceFragmentCompat {
     private Preference categoryAthan;
+    private Context context;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -45,10 +46,11 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
         updateAthanPreferencesState();
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(preferenceUpdateReceiver,
+        context = getContext();
+        LocalBroadcastManager.getInstance(context).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
 
-        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(getContext())
+        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
@@ -61,12 +63,12 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
     @Override
     public void onDestroyView() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(preferenceUpdateReceiver);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(preferenceUpdateReceiver);
         super.onDestroyView();
     }
 
     private void updateAthanPreferencesState() {
-        boolean locationEmpty = Utils.getCoordinate(getContext()) == null;
+        boolean locationEmpty = Utils.getCoordinate(context) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
             categoryAthan.setSummary(R.string.athan_disabled_summary);
@@ -129,7 +131,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                                 Settings.System.DEFAULT_NOTIFICATION_URI);
-                Uri customAthanUri = Utils.getCustomAthanUri(getContext());
+                Uri customAthanUri = Utils.getCustomAthanUri(context);
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri);
                 }
@@ -137,11 +139,11 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                 return true;
             case "pref_key_ringtone_default":
                 SharedPreferences.Editor editor = PreferenceManager
-                        .getDefaultSharedPreferences(getContext()).edit();
+                        .getDefaultSharedPreferences(context).edit();
                 editor.remove(PREF_ATHAN_URI);
                 editor.remove(PREF_ATHAN_NAME);
                 editor.apply();
-                Toast.makeText(getContext(), R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.returned_to_default, Toast.LENGTH_SHORT).show();
                 putAthanNameOnSummary(getDefaultAthanName());
                 return true;
             default:
@@ -153,7 +155,6 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Context context = getContext();
                 Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 if (uri != null) {
                     SharedPreferences.Editor editor = PreferenceManager
@@ -178,7 +179,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     }
 
     private String getDefaultAthanName() {
-        return getContext().getString(R.string.default_athan_name);
+        return context.getString(R.string.default_athan_name);
     }
 
     private void putAthanNameOnSummary(String athanName) {
