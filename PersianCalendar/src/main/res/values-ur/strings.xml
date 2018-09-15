@@ -171,6 +171,9 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
 
+    <string name="location_access">Location Access</string>
+    <string name="phone_location_required">This part of the app needs location permission otherwise you have to enter your latitude and longitude manually.</string>
+
     <!--Talkback, a11y-->
     <string name="previous_month">ماه قبل</string>
     <string name="next_month">ماه بعد</string>

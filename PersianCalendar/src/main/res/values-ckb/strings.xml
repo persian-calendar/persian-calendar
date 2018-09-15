@@ -171,6 +171,9 @@
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
 
+    <string name="location_access">دسترسی به موقعیت مکانی</string>
+    <string name="phone_location_required">این قسمت از برنامه نیازمند گرفتن دسترسی مکان است، در غیر است می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
+
     <!--TalkBack, a11y-->
     <string name="previous_month">مانگی پاشەوە</string>
     <string name="next_month">مانگی پێشەوە</string>

@@ -36,7 +36,6 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 public class FragmentLocationAthan extends PreferenceFragmentCompat {
     private Preference categoryAthan;
-    private Context context;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -47,7 +46,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);
         updateAthanPreferencesState();
 
-        context = getContext();
+        Context context = getContext();
+        if (context == null) return;
+
         LocalBroadcastManager.getInstance(context).registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
 
@@ -64,11 +65,16 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
     @Override
     public void onDestroyView() {
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(preferenceUpdateReceiver);
+        Context context = getContext();
+        if (context != null)
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(preferenceUpdateReceiver);
         super.onDestroyView();
     }
 
     private void updateAthanPreferencesState() {
+        Context context = getContext();
+        if (context == null) return;
+
         boolean locationEmpty = Utils.getCoordinate(context) == null;
         categoryAthan.setEnabled(!locationEmpty);
         if (locationEmpty) {
@@ -97,7 +103,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             try {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(activity)
                             .setTitle(R.string.location_access)
                             .setMessage(R.string.phone_location_required)
                             .setPositiveButton(R.string.resume, (dialog, id) -> UIUtils.askForLocationPermission(activity))
@@ -128,6 +134,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
+        Context context = getContext();
+        if (context == null) return true;
+
         switch (preference.getKey()) {
             case "pref_key_ringtone":
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
@@ -158,6 +167,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Context context = getContext();
+        if (context == null) return;
+
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -184,6 +196,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     }
 
     private String getDefaultAthanName() {
+        Context context = getContext();
+        if (context == null) return "";
+
         return context.getString(R.string.default_athan_name);
     }
 

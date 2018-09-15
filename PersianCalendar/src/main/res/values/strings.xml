@@ -40,7 +40,7 @@ Aysha Aminnejad (@aysha319)"</string>
 
 تضمینی در صحت کارکرد برنامه وجود ندارد، فقط سعی شده برنامه‌ای مفید ارائه شود. مشهور است که هیچ برنامه، نرم‌افزار و الگوریتمی بی‌نقص نیست و ممکن است نیاز باشد خروجی برنامه را با منابع دیگر بررسی کنید. ممکن است به دلیل حجم کم حافظهٔ دستگاه، برنامه قادر به به‌روزرسانی شمارهٔ روز ماه در نوار اعلان نباشد و روز عقب‌تری را نشان دهد. پیشنهاد می‌شود سایر برنامه‌های دستگاه را که حافظهٔ اضافی گرفته‌اند حذف کنید یا گزینهٔ نوار اعلان برنامه را غیر فعال کنید و یا برنامهٔ دیگری را بیازمایید.
 
-انتخاب طراحی برنامه این بوده که اذان فقط شامل چهار الله اکبر اول باشد. اذان‌های متنوع باعث افزایش حجم می‌شود و امکان انتخاب اذان از گوشی باعث پیچیدگی و نیز بیشتر شدن دسترسی‌های برنامه می‌شود؛ به همین دلیل حداقل تا این نسخه از برنامه امکان آن وجود ندارد.
+انتخاب طراحی برنامه این بوده که اذان فقط شامل چهار الله اکبر اول باشد ولی به راحتی می‌توانید صدای اذان مورد نظر خود را در تنظیمات از بین صداهای موجود در دستگاه‌تان انتحاب کنید.
 
 این تقویم به صورت شخصی، بدون هیچ منفعت مالی و با کمک افراد و کتابخانه‌های نرم‌افزاری‌ای که در زیر ذکر شده است، به امید اینکه مفید باشد، طراحی شده‌است و با مجوز جی‌پی‌ال نسخهٔ ۳ انتشار یافته است.
 
@@ -231,8 +231,8 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
 
-    <string name="location_access">Location access</string>
-    <string name="phone_location_required">You first need to give location permission, if choose Deny location access our location cannot be determined and you must enter your latitude and longitude manually.</string>
+    <string name="location_access">Location Access</string>
+    <string name="phone_location_required">This part of the app needs location permission, if you choose deny you have to enter your latitude and longitude manually.</string>
 
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>

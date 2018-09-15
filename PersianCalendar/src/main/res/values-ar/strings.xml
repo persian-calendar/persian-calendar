@@ -187,6 +187,9 @@
 
     <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات اللازمة</string>
 
+    <string name="location_access">Location Access</string>
+    <string name="phone_location_required">This part of the app needs location permission otherwise you have to enter your latitude and longitude manually.</string>
+
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>
     <string name="version">الإصدار %s</string>
