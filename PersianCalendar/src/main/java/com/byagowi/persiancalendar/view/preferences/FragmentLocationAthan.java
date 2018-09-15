@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
@@ -96,7 +97,11 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             try {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    UIUtils.askForLocationPermission(activity);
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.location_access)
+                            .setMessage(R.string.phone_location_required)
+                            .setPositiveButton(R.string.resume, (dialog, id) -> UIUtils.askForLocationPermission(activity))
+                            .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
                     return;
                 }
             } catch (Exception e) {
