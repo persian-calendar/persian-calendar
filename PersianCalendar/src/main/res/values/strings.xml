@@ -231,6 +231,9 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
 
+    <string name="location_access">Location access</string>
+    <string name="phone_location_required">You first need to give location permission, if choose Deny location access our location cannot be determined and you must enter your latitude and longitude manually.</string>
+
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
     <string name="version">Version %s</string>
