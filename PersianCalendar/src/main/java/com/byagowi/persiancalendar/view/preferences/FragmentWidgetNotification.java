@@ -31,15 +31,14 @@ public class FragmentWidgetNotification extends PreferenceFragmentCompat {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             ColorPickerView colorPickerView = new ColorPickerView(context);
-            try {
-                colorPickerView.setColorsToPick(
-                        new int[]{0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020});
-                colorPickerView.setPickedColor(Color.parseColor(prefs.getString(
-                        PREF_SELECTED_WIDGET_TEXT_COLOR,
-                        DEFAULT_SELECTED_WIDGET_TEXT_COLOR)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            colorPickerView.setColorsToPick(
+                    new int[]{0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020});
+            colorPickerView.setPickedColor(Color.parseColor(prefs.getString(
+                    PREF_SELECTED_WIDGET_TEXT_COLOR,
+                    DEFAULT_SELECTED_WIDGET_TEXT_COLOR)));
+
+            int padding = (int) (context.getResources().getDisplayMetrics().density * 10);
+            colorPickerView.setPadding(padding, padding, padding, padding);
 
             new AlertDialog.Builder(context)
                     .setTitle(R.string.widget_text_color)

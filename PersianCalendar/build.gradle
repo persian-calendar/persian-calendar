@@ -44,8 +44,9 @@ android {
 
 ext {
     versions = [
-            dagger    : '2.16',
             androidX  : '1.0.0-rc02',
+            dagger    : '2.16',
+            junit     : '4.12',
             leakCanary: '1.6.1'
     ]
 }
@@ -69,8 +70,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$versions.dagger"
     annotationProcessor "com.google.dagger:dagger-android-processor:$versions.dagger"
     implementation "com.google.dagger:dagger-android-support:$versions.dagger"
-
-    testImplementation 'junit:junit:4.12'
+    
+    testImplementation "junit:junit:$versions.junit"
 
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test:rules:1.1.0-alpha4'
