@@ -67,10 +67,6 @@ public class ColorPickerView extends LinearLayout {
         Context context = getContext();
         if (context == null) return;
 
-        float density = context.getResources().getDisplayMetrics().density;
-        int padding = (int) (density * 10);
-        setPadding(padding, padding, padding, padding);
-
         colorResultView = new TextView(context);
         colorResultView.setTextIsSelectable(true);
 
@@ -86,6 +82,7 @@ public class ColorPickerView extends LinearLayout {
         greenSeekbar = new SeekBar(context);
         blueSeekbar = new SeekBar(context);
 
+        float density = context.getResources().getDisplayMetrics().density;
         int seekbarPadding = (int) density * 8;
         int currentSidePad = redSeekbar.getPaddingLeft();
         redSeekbar.setPadding(currentSidePad, seekbarPadding, currentSidePad, seekbarPadding);
