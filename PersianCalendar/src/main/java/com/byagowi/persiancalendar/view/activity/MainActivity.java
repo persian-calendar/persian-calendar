@@ -17,8 +17,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.MainApplication;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.service.ApplicationService;
@@ -40,6 +42,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +51,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
@@ -71,7 +76,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends DaggerAppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CALENDAR = 0,
             CONVERTER = 1,
@@ -117,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private static long creationDateJdn;
 
+    @Inject
+    MainApplication.TestingTT test;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -127,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
+
+        Toast.makeText(this, "" + test.getA(), Toast.LENGTH_SHORT).show();
 
         TypefaceUtils.overrideFont("SERIF",
                 TypefaceUtils.getAppFont(getApplicationContext()));
