@@ -23,6 +23,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
@@ -48,20 +49,28 @@ public class UIUtils {
 
     public static void askForCalendarPermission(Activity activity) {
         if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.READ_CALENDAR
-                    },
-                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
+            new AlertDialog.Builder(activity)
+                .setTitle(R.string.calendar_access)
+                .setMessage(R.string.phone_calendar_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.READ_CALENDAR
+                        },
+                        Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
         }
     }
 
     public static void askForLocationPermission(Activity activity) {
         if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },
-                    Constants.LOCATION_PERMISSION_REQUEST_CODE);
+            new AlertDialog.Builder(activity)
+                .setTitle(R.string.location_access)
+                .setMessage(R.string.phone_location_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        },
+                        Constants.LOCATION_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
         }
     }
 

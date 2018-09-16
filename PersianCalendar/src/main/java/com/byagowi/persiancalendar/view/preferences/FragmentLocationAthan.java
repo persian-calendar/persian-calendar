@@ -95,18 +95,14 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             try {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.location_access)
-                            .setMessage(R.string.phone_location_required)
-                            .setPositiveButton(R.string.resume, (dialog, id) -> UIUtils.askForLocationPermission(activity))
-                            .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
-                    return;
+                        UIUtils.askForLocationPermission(activity);
+                } else {
+                    fragment = new GPSLocationDialog();
                 }
             } catch (Exception e) {
                 // Do whatever we were doing till now
             }
 
-            fragment = new GPSLocationDialog();
         } else {
             super.onDisplayPreferenceDialog(preference);
         }

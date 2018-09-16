@@ -171,7 +171,9 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
     <string name="location_access">دسترسی به موقعیت مکانی</string>
-    <string name="phone_location_required">ابتدا باید مجوز دسترسی به  موقعیت را بدهید، اگر اجازه دسترسی به موقعیت فعلی خود را ندهید برنامه طول و عرض موقعیت جغرافیایی را به طور خودکار نمی تواند تعیین کند و باید به صورت دستی وارد نمایید.</string>
+    <string name="phone_location_required">ابتدا باید مجوز دسترسی به موقعیت را بدهید، اگر اجازه دسترسی به موقعیت فعلی خود را ندهید برنامه طول و عرض موقعیت جغرافیایی را به طور خودکار نمی تواند تعیین کند و باید به صورت دستی وارد نمایید.</string>
+    <string name="calendar_access">دسترسی به تقویم گوگل</string>
+    <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم گوگل را بدهید، اگر اجازه دسترسی به تقویم گوگل دهید برنامه می تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
 
     <!--TalkBack, a11y-->
     <string name="previous_month">ماه قبل</string>
