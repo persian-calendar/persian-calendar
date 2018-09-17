@@ -200,21 +200,25 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         CivilDate civil = new CivilDate(jdn);
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
-
-        try {
-            startActivityForResult(
-                    new Intent(Intent.ACTION_INSERT)
-                            .setData(CalendarContract.Events.CONTENT_URI)
-                            .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
-                                    CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
-                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                    time.getTimeInMillis())
-                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                    time.getTimeInMillis())
-                            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
-                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
-        } catch (Exception e) {
-            Toast.makeText(activity, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            UIUtils.askForCalendarPermission(activity);
+        } else {
+            try {
+                startActivityForResult(
+                        new Intent(Intent.ACTION_INSERT)
+                                .setData(CalendarContract.Events.CONTENT_URI)
+                                .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
+                                        CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                        time.getTimeInMillis())
+                                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                                        time.getTimeInMillis())
+                                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
+                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+            } catch (Exception e) {
+                Toast.makeText(activity, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

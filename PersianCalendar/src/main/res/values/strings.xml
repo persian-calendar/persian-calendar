@@ -231,8 +231,11 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
 
+    <!--Permissions-->
     <string name="location_access">Location Access</string>
     <string name="phone_location_required">This part of the app needs location permission, if you choose deny you have to enter your latitude and longitude manually.</string>
+    <string name="calendar_access">Calendar Access</string>
+    <string name="phone_calendar_required">This part of the app needs calendar permission, if you allow it your personal events will be shown on the calendar.</string>
 
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
