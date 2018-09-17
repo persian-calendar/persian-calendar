@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -207,15 +207,18 @@ public class UIUtils {
 
     private static long latestToastShowTime = -1;
     private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
+    private static AudioManager audioManager = null;
 
     public static void showToastWithClick(Context context, @StringRes int resId) {
+        if (audioManager == null) {
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        }
+
         long now = System.currentTimeMillis();
         if (now - latestToastShowTime > twoSeconds) {
             Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
-            if (!Utils.isTalkBackEnabled()) {
-                Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                if (uri != null) RingtoneManager.getRingtone(context, uri).play();
-            }
+            // https://stackoverflow.com/a/29423018
+            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
             latestToastShowTime = now;
         }
     }
