@@ -48,8 +48,9 @@ public class UIUtils {
     }
 
     public static void askForCalendarPermission(Activity activity) {
-        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            new AlertDialog.Builder(activity)
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+
+        new AlertDialog.Builder(activity)
                 .setTitle(R.string.calendar_access)
                 .setMessage(R.string.phone_calendar_required)
                 .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
@@ -57,12 +58,12 @@ public class UIUtils {
                         },
                         Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
-        }
     }
 
     public static void askForLocationPermission(Activity activity) {
-        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            new AlertDialog.Builder(activity)
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+
+        new AlertDialog.Builder(activity)
                 .setTitle(R.string.location_access)
                 .setMessage(R.string.phone_location_required)
                 .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
@@ -71,7 +72,6 @@ public class UIUtils {
                         },
                         Constants.LOCATION_PERMISSION_REQUEST_CODE))
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
-        }
     }
 
     public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
