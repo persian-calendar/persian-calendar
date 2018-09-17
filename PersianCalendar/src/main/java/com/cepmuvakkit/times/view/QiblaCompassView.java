@@ -325,10 +325,9 @@ public class QiblaCompassView extends View {
     }
 
     boolean isNearToDegree(float angle, float compareTo) {
-        return compareTo != -1 &&
-                (angle - compareTo > 180 ?
-                        360 - Math.abs(angle - compareTo) < 3.f :
-                        Math.abs(angle - compareTo) < 3.f);
+        return angle - compareTo > 180 ?
+                360 - Math.abs(angle - compareTo) < 3.f :
+                Math.abs(angle - compareTo) < 3.f;
 
     }
 
@@ -347,7 +346,7 @@ public class QiblaCompassView extends View {
             isCurrentlyNorth = false;
         }
 
-        if (latitude != 0 && longitude != 0 && qiblaInfo != null) {
+        if (isLongLatAvailable() && qiblaInfo != null) {
             if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
                 if (!isCurrentlyQibla) {
                     UIUtils.showToastWithClick(getContext(), R.string.qibla);
