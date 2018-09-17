@@ -165,6 +165,7 @@ public class Utils {
     static private String[] weekDays;
     static private String[] weekDaysInitials;
 
+    @Nullable
     static public Coordinate getCoordinate(Context context) {
         CityEntity cityEntity = getCityFromPreference(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

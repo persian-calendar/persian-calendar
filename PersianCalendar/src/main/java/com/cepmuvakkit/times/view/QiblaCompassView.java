@@ -13,8 +13,10 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
@@ -22,6 +24,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
@@ -67,6 +70,9 @@ public class QiblaCompassView extends View {
         moonPosition = sunMoonPosition.getMoonPosition();
     }
 
+    @ColorInt
+    int qiblaColor;
+
     public void initCompassView() {
         setFocusable(true);
         initAstronomicParameters();
@@ -80,11 +86,13 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
+        qiblaColor = ContextCompat.getColor(getContext(), R.color.qibla_color);
+        dashedPaint.setColor(qiblaColor);
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
         textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
         textPaint.setTextSize(20);
+
     }
 
     @Override
@@ -125,7 +133,7 @@ public class QiblaCompassView extends View {
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
+        textPaint.setColor(qiblaColor);
         canvas.rotate(-bearing, px, py);// Attach and Detach capability lies
         canvas.save();
         drawDial(canvas);
@@ -302,7 +310,6 @@ public class QiblaCompassView extends View {
     private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public void drawQibla(Canvas canvas) {
-
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);
         qiblaPaint.reset();
         qiblaPaint.setColor(Color.GREEN);
@@ -318,8 +325,37 @@ public class QiblaCompassView extends View {
 
     }
 
-    public void setBearing(float _bearing) {
-        bearing = _bearing;
+    boolean isNearToDegree(float angle, float compareTo) {
+        return compareTo != -1 &&
+                (angle - compareTo > 180 ?
+                        360 - Math.abs(angle - compareTo) < 3.f :
+                        Math.abs(angle - compareTo) < 3.f);
+
+    }
+
+    boolean isCurrentlyNorth = true; // deliberately
+    boolean isCurrentlyQibla = true; // deliberately
+
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
+
+        if (isNearToDegree(bearing, 0)) {
+            if (!isCurrentlyNorth) {
+                UIUtils.toastWithClick(getContext(), "North");
+                isCurrentlyNorth = true;
+            }
+        } else {
+            isCurrentlyNorth = false;
+        }
+
+        if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
+            if (!isCurrentlyQibla) {
+                UIUtils.toastWithClick(getContext(), "Qibla");
+                isCurrentlyQibla = true;
+            }
+        } else {
+            isCurrentlyQibla = false;
+        }
     }
 
     public void setLatitude(double latitude) {

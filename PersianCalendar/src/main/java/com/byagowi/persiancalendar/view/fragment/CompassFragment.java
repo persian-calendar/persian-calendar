@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.cepmuvakkit.times.posAlgo.EarthPosition;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -59,6 +60,7 @@ public class CompassFragment extends Fragment {
 
         Context context = getContext();
         Coordinate coordinate = Utils.getCoordinate(getContext());
+
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass),
                 Utils.getCityName(context, true));
 
@@ -81,6 +83,7 @@ public class CompassFragment extends Fragment {
                 // 0=North, 90=East, 180=South, 270=West
                 float angle = event.values[0] + orientation;
                 if (stop) angle = 0;
+
                 azimuth = lowPass(angle, azimuth);
                 binding.compassView.setBearing(azimuth);
                 binding.compassView.invalidate();

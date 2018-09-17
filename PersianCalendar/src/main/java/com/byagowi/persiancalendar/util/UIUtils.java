@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -200,5 +202,11 @@ public class UIUtils {
 
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    public static void toastWithClick(Context context, String text) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        RingtoneManager.getRingtone(context,
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).play();
     }
 }
