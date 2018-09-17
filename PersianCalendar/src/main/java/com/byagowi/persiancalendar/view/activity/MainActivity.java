@@ -49,6 +49,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
@@ -65,6 +67,8 @@ import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 
 /**
  * Program activity for android
@@ -339,12 +343,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (changeToGregorianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+                editor.putString(PREF_WEEK_START, "1");
+                editor.putStringSet(PREF_WEEK_ENDS, new HashSet<>(Collections.singletonList("1")));
             } else if (changeToIslamicCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
             } else if (changeToPersianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
             }
             editor.apply();
         }
