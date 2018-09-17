@@ -82,6 +82,7 @@ public class CompassFragment extends Fragment {
                 // 0=North, 90=East, 180=South, 270=West
                 float angle = event.values[0] + orientation;
                 if (stop) angle = 0;
+                else binding.compassView.isOnDirectionAction();
 
                 azimuth = lowPass(angle, azimuth);
                 binding.compassView.setBearing(azimuth);

@@ -321,7 +321,6 @@ public class QiblaCompassView extends View {
         canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - radius - kaaba.getHeight() / 2,
                 qiblaPaint);
         canvas.restore();
-
     }
 
     static public boolean isNearToDegree(float angle, float compareTo) {
@@ -338,7 +337,9 @@ public class QiblaCompassView extends View {
 
     public void setBearing(float bearing) {
         this.bearing = bearing;
+    }
 
+    public void isOnDirectionAction() {
         // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
