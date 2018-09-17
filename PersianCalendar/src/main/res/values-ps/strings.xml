@@ -188,6 +188,9 @@
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
     <string name="north">شمال</string>
+    <string name="east">شرق</string>
+    <string name="south">جنوب</string>
+    <string name="west">غرب</string>
     <string name="qibla">قبله</string>
 
 </resources>

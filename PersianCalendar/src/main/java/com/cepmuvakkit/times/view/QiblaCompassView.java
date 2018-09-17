@@ -324,19 +324,22 @@ public class QiblaCompassView extends View {
 
     }
 
-    boolean isNearToDegree(float angle, float compareTo) {
-        return angle - compareTo > 180 ?
-                360 - Math.abs(angle - compareTo) < 3.f :
-                Math.abs(angle - compareTo) < 3.f;
-
+    static public boolean isNearToDegree(float angle, float compareTo) {
+        float difference = Math.abs(angle - compareTo);
+        return difference > 180 ? 360 - difference < 3.f : difference < 3.f;
     }
 
-    boolean isCurrentlyNorth = true; // deliberately
-    boolean isCurrentlyQibla = true; // deliberately
+    // deliberately true
+    boolean isCurrentlyNorth = true;
+    boolean isCurrentlyEast = true;
+    boolean isCurrentlyWest = true;
+    boolean isCurrentlySouth = true;
+    boolean isCurrentlyQibla = true;
 
     public void setBearing(float bearing) {
         this.bearing = bearing;
 
+        // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
                 UIUtils.showToastWithClick(getContext(), R.string.north);
@@ -344,6 +347,33 @@ public class QiblaCompassView extends View {
             }
         } else {
             isCurrentlyNorth = false;
+        }
+
+        if (isNearToDegree(bearing, 90)) {
+            if (!isCurrentlyEast) {
+                UIUtils.showToastWithClick(getContext(), R.string.east);
+                isCurrentlyEast = true;
+            }
+        } else {
+            isCurrentlyEast = false;
+        }
+
+        if (isNearToDegree(bearing, 180)) {
+            if (!isCurrentlySouth) {
+                UIUtils.showToastWithClick(getContext(), R.string.south);
+                isCurrentlySouth = true;
+            }
+        } else {
+            isCurrentlySouth = false;
+        }
+
+        if (isNearToDegree(bearing, 270)) {
+            if (!isCurrentlyWest) {
+                UIUtils.showToastWithClick(getContext(), R.string.west);
+                isCurrentlyWest = true;
+            }
+        } else {
+            isCurrentlyWest = false;
         }
 
         if (isLongLatAvailable() && qiblaInfo != null) {
