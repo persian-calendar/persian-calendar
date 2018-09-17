@@ -13,7 +13,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;

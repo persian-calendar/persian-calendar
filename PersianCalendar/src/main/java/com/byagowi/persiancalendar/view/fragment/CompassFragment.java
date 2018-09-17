@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.cepmuvakkit.times.posAlgo.EarthPosition;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.snackbar.Snackbar;
 
