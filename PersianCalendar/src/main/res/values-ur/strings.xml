@@ -187,5 +187,7 @@
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+    <string name="north">شمال</string>
+    <string name="qibla">قبله</string>
 
 </resources>

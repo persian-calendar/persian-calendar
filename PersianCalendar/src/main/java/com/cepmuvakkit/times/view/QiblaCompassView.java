@@ -340,20 +340,22 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
-                UIUtils.toastWithClick(getContext(), "North");
+                UIUtils.showToastWithClick(getContext(), R.string.north);
                 isCurrentlyNorth = true;
             }
         } else {
             isCurrentlyNorth = false;
         }
 
-        if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
-            if (!isCurrentlyQibla) {
-                UIUtils.toastWithClick(getContext(), "Qibla");
-                isCurrentlyQibla = true;
+        if (latitude != 0 && longitude != 0 && qiblaInfo != null) {
+            if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
+                if (!isCurrentlyQibla) {
+                    UIUtils.showToastWithClick(getContext(), R.string.qibla);
+                    isCurrentlyQibla = true;
+                }
+            } else {
+                isCurrentlyQibla = false;
             }
-        } else {
-            isCurrentlyQibla = false;
         }
     }
 

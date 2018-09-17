@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
+
 import net.androgames.level.orientation.Orientation;
 import net.androgames.level.painter.LevelPainter;
 
@@ -79,9 +82,9 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback {
         if (painter != null) {
             painter.onOrientationChanged(orientation, pitch, roll, balance);
 
-            if (orientation.isLevel(pitch, roll, balance, 4f)) {
+            if (orientation.isLevel(pitch, roll, balance, .8f)) {
                 if (!isAlreadyLevel) {
-//                    UIUtils.toastWithClick(getContext(), getContext().getString(R.string.level));
+                    UIUtils.showToastWithClick(getContext(), R.string.level);
                     isAlreadyLevel = true;
                 }
             } else {

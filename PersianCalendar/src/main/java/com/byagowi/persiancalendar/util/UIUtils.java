@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.github.praytimes.Clock;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
@@ -204,9 +205,18 @@ public class UIUtils {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
-    public static void toastWithClick(Context context, String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-        RingtoneManager.getRingtone(context,
-                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).play();
+    private static long latestToastShowTime = -1;
+    private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
+
+    public static void showToastWithClick(Context context, @StringRes int resId) {
+        long now = System.currentTimeMillis();
+        if (now - latestToastShowTime > twoSeconds) {
+            Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+            if (!Utils.isTalkBackEnabled()) {
+                Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                if (uri != null) RingtoneManager.getRingtone(context, uri).play();
+            }
+            latestToastShowTime = now;
+        }
     }
 }
