@@ -84,7 +84,7 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback {
 
             if (orientation.isLevel(pitch, roll, balance, .8f)) {
                 if (!isAlreadyLevel) {
-                    UIUtils.showToastWithClick(getContext(), R.string.level);
+                    UIUtils.a11yShowToastWithClick(getContext(), R.string.level);
                     isAlreadyLevel = true;
                 }
             } else {

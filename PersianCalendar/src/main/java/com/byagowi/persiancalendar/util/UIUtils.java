@@ -209,7 +209,9 @@ public class UIUtils {
     private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
     private static AudioManager audioManager = null;
 
-    public static void showToastWithClick(Context context, @StringRes int resId) {
+    public static void a11yShowToastWithClick(Context context, @StringRes int resId) {
+        if (!Utils.isTalkBackEnabled()) return;
+
         if (audioManager == null) {
             audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         }
