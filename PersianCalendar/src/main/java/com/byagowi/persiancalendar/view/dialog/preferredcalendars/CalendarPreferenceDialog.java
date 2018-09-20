@@ -45,13 +45,12 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
             enabled.add(enabledCalendarTypes.contains(entity.getType()));
         }
 
-        RecyclerListAdapter adapter = new RecyclerListAdapter(this,
-                titles, values, enabled);
-
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        RecyclerListAdapter adapter = new RecyclerListAdapter(this,
+                titles, values, enabled);
+        recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
