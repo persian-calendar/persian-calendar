@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
+        android:title="@string/location"
+        settings:iconSpaceReserved="false"
+        settings:initialExpandedChildrenCount="2">
+
+        <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
+            android:key="dummy"
+            android:summary="@string/gps_location_help"
+            android:title="@string/gps_location"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.LocationPreference
+            android:key="Location"
+            android:summary="@string/location_help"
+            android:title="@string/location"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+            android:defaultValue="0"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:key="Latitude"
+            android:negativeButtonText="@string/cancel"
+            android:title="@string/latitude"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+            android:defaultValue="0"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:key="Longitude"
+            android:negativeButtonText="@string/cancel"
+            android:title="@string/longitude"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+            android:defaultValue="0"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:key="Altitude"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/altitude_praytime"
+            android:title="@string/altitude"
+            settings:iconSpaceReserved="false" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:key="Athan"
+        android:layout="@layout/category_preference"
+        android:title="@string/athan"
+        settings:iconSpaceReserved="false">
+
+        <androidx.preference.ListPreference
+            android:defaultValue="Tehran"
+            android:entries="@array/prayMethodsNames"
+            android:entryValues="@array/prayMethodsKeys"
+            android:key="SelectedPrayTimeMethod"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/pray_methods_calculation"
+            android:title="@string/pray_methods"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+            android:inputType="numberSigned"
+            android:key="AthanGap"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_gap_summary"
+            android:title="@string/athan_gap"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
+            android:key="AthanAlarm"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/athan_alarm_summary"
+            android:title="@string/athan_alarm"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="NotificationAthan"
+            android:summary="@string/enable_notification_athan"
+            android:title="@string/notification_athan"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:key="pref_key_ringtone"
+            android:title="@string/custom_athan"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.Preference
+            android:dependency="NotificationAthan"
+            android:key="pref_key_ringtone_default"
+            android:summary="@string/default_athan_summary"
+            android:title="@string/default_athan"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+            android:dependency="NotificationAthan"
+            android:key="AthanVolume"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/athan_volume_summary"
+            android:title="@string/athan_volume"
+            settings:iconSpaceReserved="false" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

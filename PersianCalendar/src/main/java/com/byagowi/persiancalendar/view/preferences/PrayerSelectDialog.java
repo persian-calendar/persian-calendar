@@ -9,7 +9,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class PrayerSelectDialog extends PreferenceDialogFragmentCompat {
 
-    Set<String> prayers;
+    private Set<String> prayers;
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {

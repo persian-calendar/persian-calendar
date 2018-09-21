@@ -3,6 +3,8 @@
     <string-array name="themeNames">
         <item>ڕووناک</item>
         <item>تاریک</item>
+        <item>نۆژەن</item>
+        <item>شین</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -13,14 +15,6 @@
         <item>زانستگای ئوممەلقورا، مەککە</item>
         <item>زانستگای زانستە ئیسلامییەکان، کەراچی</item>
         <item>ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</item>
-    </string-array>
-
-    <string-array name="colorNames">
-        <item>سپی</item>
-        <item>سوور</item>
-        <item>کەسک</item>
-        <item>زەرد</item>
-        <item>ڕەش</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
@@ -62,6 +56,14 @@
         <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>
         <item>کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
         <item>شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>٢-</item>
+        <item>١-</item>
+        <item>٠</item>
+        <item>١+</item>
+        <item>٢+</item>
     </string-array>
 
 </resources>

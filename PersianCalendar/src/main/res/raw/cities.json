@@ -3,11 +3,13 @@
     "en": "",
     "fa": "",
     "ckb": "",
+    "ar": "",
     "cities": {
       "CUSTOM": {
         "en": "None",
         "fa": "هیچ کدام",
         "ckb": "ھیچیان",
+        "ar": "لا تختار",
         "latitude": 0,
         "longitude": 0,
         "elevation": 0
@@ -18,11 +20,13 @@
     "en": "Iran",
     "fa": "ایران",
     "ckb": "ئێران",
+    "ar": "إيران",
     "cities": {
       "AHVAZ": {
         "en": "Ahvaz",
         "fa": "اهواز",
         "ckb": "ئەھواز",
+        "ar": "أهواز",
         "latitude": 31.52,
         "longitude": 48.68,
         "elevation": 23.872
@@ -31,6 +35,7 @@
         "en": "Alborz",
         "fa": "البرز",
         "ckb": "ئەلبورز",
+        "ar": "البرز",
         "latitude": 35.82,
         "longitude": 50.97,
         "elevation": 1313.733
@@ -39,6 +44,7 @@
         "en": "Arak",
         "fa": "اراک",
         "ckb": "ئەراک",
+        "ar": "اراك",
         "latitude": 34.08,
         "longitude": 49.7,
         "elevation": 1743.402
@@ -47,6 +53,7 @@
         "en": "Ardabil",
         "fa": "اردبیل",
         "ckb": "ئەردەوێڵ",
+        "ar": "أردبيل",
         "latitude": 38.25,
         "longitude": 48.28,
         "elevation": 1350
@@ -55,6 +62,7 @@
         "en": "Bandar Abbas",
         "fa": "بندرعباس",
         "ckb": "بەندەرعەبباس",
+        "ar": "بندر عباس",
         "latitude": 27.18,
         "longitude": 56.27,
         "elevation": 9
@@ -63,6 +71,7 @@
         "en": "Birjand",
         "fa": "بیرجند",
         "ckb": "بیرجەند",
+        "ar": "بيرجند",
         "latitude": 32.88,
         "longitude": 59.22,
         "elevation": 1476.299
@@ -71,6 +80,7 @@
         "en": "Bojnurd",
         "fa": "بجنورد",
         "ckb": "بوژنوورت",
+        "ar": "بوجنورد",
         "latitude": 37.47,
         "longitude": 57.33,
         "elevation": 1070.864
@@ -79,6 +89,7 @@
         "en": "Bushehr",
         "fa": "بوشهر",
         "ckb": "بووشەھر",
+        "ar": "بوشهر",
         "latitude": 28.96,
         "longitude": 50.84,
         "elevation": 12.883
@@ -87,6 +98,7 @@
         "en": "Esfehan",
         "fa": "اصفهان",
         "ckb": "ئەسفەھان",
+        "ar": "أصفهان",
         "latitude": 32.65,
         "longitude": 51.67,
         "elevation": 1574.144
@@ -95,6 +107,7 @@
         "en": "Ghazvin",
         "fa": "قزوین",
         "ckb": "قەزوین",
+        "ar": "قزوين",
         "latitude": 36.45,
         "longitude": 50,
         "elevation": 1834.857
@@ -103,6 +116,7 @@
         "en": "Qom",
         "fa": "قم",
         "ckb": "قوم",
+        "ar": "قم",
         "latitude": 34.65,
         "longitude": 50.95,
         "elevation": 906
@@ -111,6 +125,7 @@
         "en": "Gorgan",
         "fa": "گرگان",
         "ckb": "گورگان",
+        "ar": "جرجان",
         "latitude": 36.83,
         "longitude": 54.48,
         "elevation": 120.605
@@ -119,6 +134,7 @@
         "en": "Hamedan",
         "fa": "همدان",
         "ckb": "ھەمەدان",
+        "ar": "همدان",
         "latitude": 34.77,
         "longitude": 48.58,
         "elevation": 1902.787
@@ -127,6 +143,7 @@
         "en": "Ilam",
         "fa": "ایلام",
         "ckb": "ئیلام",
+        "ar": "إيلام",
         "latitude": 33.63,
         "longitude": 46.42,
         "elevation": 1382.518
@@ -135,6 +152,7 @@
         "en": "Kerman",
         "fa": "کرمان",
         "ckb": "کرمان",
+        "ar": "كرمان",
         "latitude": 30.28,
         "longitude": 57.06,
         "elevation": 1760.289
@@ -143,6 +161,7 @@
         "en": "Kermanshah",
         "fa": "کرمانشاه",
         "ckb": "کرماشان",
+        "ar": "كرمنشاه",
         "latitude": 34.32,
         "longitude": 47.06,
         "elevation": 1368.254
@@ -151,6 +170,7 @@
         "en": "Khoram Abad",
         "fa": "خرم‌آباد",
         "ckb": "خوڕەماوا",
+        "ar": "خرم آباد",
         "latitude": 33.48,
         "longitude": 48.35,
         "elevation": 1179.239
@@ -159,6 +179,7 @@
         "en": "Mashhad",
         "fa": "مشهد",
         "ckb": "مەشھەد",
+        "ar": "مشهد",
         "latitude": 34.3,
         "longitude": 59.57,
         "elevation": 939.205
@@ -167,6 +188,7 @@
         "en": "Orumiyeh",
         "fa": "ارومیه",
         "ckb": "ورمێ",
+        "ar": "ارومية",
         "latitude": 37.33,
         "longitude": 45.05,
         "elevation": 1942.324
@@ -175,6 +197,7 @@
         "en": "Rasht",
         "fa": "رشت",
         "ckb": "ڕەشت",
+        "ar": "رشت",
         "latitude": 37.3,
         "longitude": 49.63,
         "elevation": -8.209
@@ -183,6 +206,7 @@
         "en": "Sanandaj",
         "fa": "سنندج",
         "ckb": "سنە",
+        "ar": "سنندج",
         "latitude": 35.3,
         "longitude": 47.02,
         "elevation": 1439.104
@@ -191,6 +215,7 @@
         "en": "Sari",
         "fa": "ساری",
         "ckb": "ساری",
+        "ar": "ساري",
         "latitude": 36.55,
         "longitude": 53.1,
         "elevation": 51.106
@@ -199,6 +224,7 @@
         "en": "Semnan",
         "fa": "سمنان",
         "ckb": "سمنان",
+        "ar": "سمنان",
         "latitude": 35.57,
         "longitude": 53.38,
         "elevation": 1145.160
@@ -207,6 +233,7 @@
         "en": "Shahr-e-kord",
         "fa": "شهرکرد",
         "ckb": "شاری کورد",
+        "ar": "شهركرد",
         "latitude": 32.32,
         "longitude": 50.85,
         "elevation": 2047.091
@@ -215,6 +242,7 @@
         "en": "Shiraz",
         "fa": "شیراز",
         "ckb": "شیراز",
+        "ar": "شیراز",
         "latitude": 29.62,
         "longitude": 52.53,
         "elevation": 1549.642
@@ -223,6 +251,7 @@
         "en": "Tabriz",
         "fa": "تبریز",
         "ckb": "تەورێز",
+        "ar": "تبريز",
         "latitude": 38.08,
         "longitude": 46.3,
         "elevation": 1395.315
@@ -231,6 +260,7 @@
         "en": "Tehran",
         "fa": "تهران",
         "ckb": "تاران",
+        "ar": "طهران",
         "latitude": 35.68,
         "longitude": 51.42,
         "elevation": 1149.266
@@ -239,6 +269,7 @@
         "en": "Yasuj",
         "fa": "یاسوج",
         "ckb": "یاسووج",
+        "ar": "ياسوج",
         "latitude": 30.82,
         "longitude": 51.68,
         "elevation": 2957.312
@@ -247,6 +278,7 @@
         "en": "Yazd",
         "fa": "یزد",
         "ckb": "یەزد",
+        "ar": "يزد",
         "latitude": 31.9,
         "longitude": 54.37,
         "elevation": 1211.690
@@ -255,6 +287,7 @@
         "en": "Zahedan",
         "fa": "زاهدان",
         "ckb": "زاھدان",
+        "ar": "زاهدان",
         "latitude": 29.5,
         "longitude": 60.85,
         "elevation": 1387.511
@@ -263,6 +296,7 @@
         "en": "Zanjan",
         "fa": "زنجان",
         "ckb": "زەنگان",
+        "ar": "زنجان",
         "latitude": 36.67,
         "longitude": 48.48,
         "elevation": 1649.065
@@ -273,11 +307,13 @@
     "en": "Afghanistan",
     "fa": "افغانستان",
     "ckb": "ئەفغانستان",
+    "ar": "أفغانستان",
     "cities": {
       "BALKH": {
         "en": "Balkh",
         "fa": "بلخ",
         "ckb": "بەلخ",
+        "ar": "بلخ",
         "latitude": 36.7,
         "longitude": 67.11,
         "elevation": 370.751
@@ -286,6 +322,7 @@
         "en": "Bamyan",
         "fa": "بامیان",
         "ckb": "بامیان",
+        "ar": "باميان",
         "latitude": 34.81,
         "longitude": 67.81,
         "elevation": 2531.299
@@ -294,6 +331,7 @@
         "en": "Ghazni",
         "fa": "غزنی",
         "ckb": "غەزنی",
+        "ar": "غزني",
         "latitude": 33.55,
         "longitude": 68.41,
         "elevation": 2190.846
@@ -302,6 +340,7 @@
         "en": "Helmand",
         "fa": "هلمند",
         "ckb": "ھێلمەند",
+        "ar": "هلمند",
         "latitude": 31.58,
         "longitude": 64.36,
         "elevation": 778.969
@@ -310,6 +349,7 @@
         "en": "Herat",
         "fa": "هرات",
         "ckb": "ھەرات",
+        "ar": "هرات",
         "latitude": 34.34,
         "longitude": 62.2,
         "elevation": 922
@@ -318,6 +358,7 @@
         "en": "Kabul",
         "fa": "کابل",
         "ckb": "کابول",
+        "ar": "كابل",
         "latitude": 34.53,
         "longitude": 69.16,
         "elevation": 1797.550
@@ -326,6 +367,7 @@
         "en": "Kandahar",
         "fa": "قندهار",
         "ckb": "قەندەھار",
+        "ar": "قندهار",
         "latitude": 31.61,
         "longitude": 65.71,
         "elevation": 1003.473
@@ -334,9 +376,108 @@
         "en": "Nangarhar",
         "fa": "ننگرهار",
         "ckb": "نەنگەرھار",
+        "ar": "ننجرهار",
         "latitude": 34.43,
         "longitude": 70.44,
         "elevation": 576.629
+      }
+    }
+  },
+  "iq": {
+    "en": "Iraq",
+    "fa": "عراق",
+    "ckb": "عێراق",
+    "ar": "العراق",
+    "cities": {
+      "KARBALA": {
+        "en": "Karbala",
+        "fa": "کربلا",
+        "ckb": "کەربەلا",
+        "ar": "كربلاء",
+        "latitude": 32.60,
+        "longitude": 44.01,
+        "elevation": 34.00
+      },
+      "NAJAF": {
+        "en": "Najaf",
+        "fa": "نجف",
+        "ckb": "نەجەف",
+        "ar": "النجف",
+        "latitude": 32.03,
+        "longitude": 44.33,
+        "elevation": 46.00
+      },
+      "BAGHDAD": {
+        "en": "Baghdad",
+        "fa": "بغداد",
+        "ckb": "بەغدا",
+        "ar": "بغداد",
+        "latitude": 33.31,
+        "longitude": 44.36,
+        "elevation": 38.00
+      },
+      "BASRAH": {
+        "en": "Basrah",
+        "fa": "بصره",
+        "ckb": "بەسرە",
+        "ar": "البصرة",
+        "latitude": 30.50,
+        "longitude": 47.78,
+        "elevation": 5.00
+      },
+      "TIKRIT": {
+        "en": "Tikrit",
+        "fa": "تکریت",
+        "ckb": "سەڵاحەدین",
+        "ar": "تكريت",
+        "latitude": 34.61,
+        "longitude": 43.65,
+        "elevation": 114.00
+      },
+      "KIRKUK": {
+        "en": "Kirkuk",
+        "fa": "کرکوک",
+        "ckb": "کەرکووک",
+        "ar": "كركوك",
+        "latitude": 35.46,
+        "longitude": 44.38,
+        "elevation": 341.00
+      },
+      "SULAYMANIYAH": {
+        "en": "Sulaymaniyah",
+        "fa": "سلمانیه",
+        "ckb": "سلێمانی",
+        "ar": "السليمانية",
+        "latitude": 35.55,
+        "longitude": 45.43,
+        "elevation": 837.00
+      },
+      "ERBIL": {
+        "en": "Erbil",
+        "fa": "اربیل",
+        "ckb": "ھەولێر",
+        "ar": "أربيل",
+        "latitude": 36.20,
+        "longitude": 44.01,
+        "elevation": 412.00
+      },
+      "DUHOK": {
+        "en": "Duhok",
+        "fa": "دهوک",
+        "ckb": "دھۆک",
+        "ar": "دهوك",
+        "latitude": 36.86,
+        "longitude": 42.94,
+        "elevation": 532.00
+      },
+      "MOSUL": {
+        "en": "Mosul",
+        "fa": "موصل",
+        "ckb": "مووسڵ",
+        "ar": "الموصل",
+        "latitude": 35.55,
+        "longitude": 45.43,
+        "elevation": 837.00
       }
     }
   }

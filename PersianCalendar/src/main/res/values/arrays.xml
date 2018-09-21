@@ -3,12 +3,15 @@
     <string-array name="themeNames">
         <item>Light</item>
         <item>Dark</item>
+        <item>Modern</item>
+        <item>Blue</item>
     </string-array>
 
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
-        <item>ClassicTheme</item>
+        <item>ClassicTheme</item> <!-- Its UI name is Modern however -->
+        <item>BlueTheme</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -31,27 +34,12 @@
         <item>Tehran</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>White</item>
-        <item>Red</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Black</item>
-    </string-array>
-
-    <string-array name="colorKeys" translatable="false">
-        <item>#ffffffff</item>
-        <item>#ffe65100</item>
-        <item>#ff00796b</item>
-        <item>#fffef200</item>
-        <item>#ff202020</item>
-    </string-array>
-
     <string-array name="languageNames" translatable="false">
         <item>فارسی</item>
         <item>دری</item>
         <item>پښتو</item>
         <item>کوردی</item>
+        <item>العربية</item>
         <item>اردو</item>
         <item>English (Iran)</item>
         <item>English</item>
@@ -62,6 +50,7 @@
         <item>fa-AF</item>
         <item>ps</item>
         <item>ckb</item>
+        <item>ar</item>
         <item>ur</item>
         <item>en</item>
         <item>en-US</item>
@@ -159,11 +148,27 @@
         <item>owghat_location</item>
     </string-array>
 
-    <string-array name="what_to_show_default">
+    <string-array name="what_to_show_default" translatable="false">
         <item>other_calendars</item>
         <item>non_holiday_events</item>
         <item>owghat</item>
         <item>owghat_location</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+    </string-array>
+
+    <string-array name="islamicOffsetKeys" translatable="false">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
     </string-array>
 
 </resources>

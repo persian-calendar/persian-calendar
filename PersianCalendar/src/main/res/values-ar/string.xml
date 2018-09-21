@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="compass_disabled_message">الاختصارات معطلة!</string>
+    <string name="compass_long_label">القبلة/البوصلة</string>
+    <string name="compass_short_label">البوصلة</string>
+
+    <string name="converter_disabled_message">الاختصارات معطلة!</string>
+    <string name="converter_long_label">محول التاريخ</string>
+    <string name="converter_short_label">محول</string>
+</resources>

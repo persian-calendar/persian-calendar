@@ -1,4 +1,4 @@
-package calendar;
+package calendar.islamic;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
  * Kudos to his creative work!
  * I've tried to optimize its runtime performance so it is different to the way used on starcal.
  */
-class IslamicDateConverter {
+public class IranianIslamicDateConverter {
     private static Map<Integer, long[]> yearsMonthsInJd = new HashMap<>();
 
     private static int supportedYearsStart;
@@ -104,7 +104,7 @@ class IslamicDateConverter {
         jdSupportEnd = jd;
     }
 
-    static long hijriToJd(int year, int month, int day) {
+    public static long toJdn(int year, int month, int day) {
         if (yearsMonthsInJd == null || yearsMonthsInJd.get(year) == null)
             return -1;
 
@@ -122,7 +122,7 @@ class IslamicDateConverter {
         return i;
     }
 
-    static int[] jdToHijri(long jd) {
+    public static int[] fromJdn(long jd) {
         if (jd < jdSupportStart || jd >= jdSupportEnd || yearsStartJd == null)
             return null;
 

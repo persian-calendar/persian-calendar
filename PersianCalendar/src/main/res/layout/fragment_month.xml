@@ -5,13 +5,14 @@
     android:background="?attr/colorPrimary"
     android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/prev"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/previous_month"
         android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 
@@ -23,13 +24,14 @@
         android:paddingBottom="@dimen/grid_calendar_padding_bottom"
         android:scrollbars="vertical" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/next"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/next_month"
         android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 

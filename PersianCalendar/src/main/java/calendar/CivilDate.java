@@ -1,158 +1,78 @@
 package calendar;
 
-import java.util.Calendar;
-
 /**
  * @author Amir
  * @author ebraminio
  */
 
 public class CivilDate extends AbstractDate {
-    private static final int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    private int year;
-    private int month;
-    private int day;
 
-    public CivilDate() {
-        this(Calendar.getInstance());
+    public CivilDate(int year, int month, int dayOfMonth) {
+        super(year, month, dayOfMonth);
     }
 
-    public CivilDate(Calendar calendar) {
-        this.year = calendar.get(Calendar.YEAR);
-        this.month = calendar.get(Calendar.MONTH) + 1;
-        this.day = calendar.get(Calendar.DAY_OF_MONTH);
-    }
-
-    public CivilDate(int year, int month, int day) {
-        this();
-        setYear(year);
-        // Initialize day, so that we get no exceptions when setting month
-        this.day = 1;
-        setMonth(month);
-        setDayOfMonth(day);
+    public CivilDate(long jdn) {
+        super(jdn);
     }
 
     @Override
-    public int getDayOfMonth() {
-        return day;
+    public CalendarType getType() {
+        return CalendarType.GREGORIAN;
+    }
+
+    // Converters
+    @Override
+    public long toJdn() {
+        long lYear = getYear(), lMonth = getMonth(), lDay = getDayOfMonth();
+
+        if ((lYear > 1582)
+                || ((lYear == 1582) && (lMonth > 10))
+                || ((lYear == 1582) && (lMonth == 10) && (lDay > 14))) {
+
+            return ((1461 * (lYear + 4800 + ((lMonth - 14) / 12))) / 4)
+                    + ((367 * (lMonth - 2 - 12 * (((lMonth - 14) / 12)))) / 12)
+                    - ((3 * (((lYear + 4900 + ((lMonth - 14) / 12)) / 100))) / 4)
+                    + lDay - 32075;
+        } else
+            return julianToJdn(lYear, lMonth, lDay);
     }
 
     @Override
-    public void setDayOfMonth(int day) {
-        if (day < 1 || day > 31)
-            throw new DayOutOfRangeException(
-                    Constants.DAY + " " + day + " " + Constants.IS_OUT_OF_RANGE);
-
-        this.day = day;
+    protected int[] fromJdn(long jdn) {
+        if (jdn > 2299160) {
+            long l = jdn + 68569;
+            long n = ((4 * l) / 146097);
+            l = l - ((146097 * n + 3) / 4);
+            long i = ((4000 * (l + 1)) / 1461001);
+            l = l - ((1461 * i) / 4) + 31;
+            long j = ((80 * l) / 2447);
+            int day = (int) (l - ((2447 * j) / 80));
+            l = (j / 11);
+            int month = (int) (j + 2 - 12 * l);
+            int year = (int) (100 * (n - 49) + i + l);
+            return new int[]{year, month, day};
+        } else
+            return julianFromJdn(jdn);
     }
 
-    @Override
-    public int getDayOfWeek() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        return cal.get(Calendar.DAY_OF_WEEK);
+    // TODO Is it correct to return a CivilDate as a JulianDate?
+    private static int[] julianFromJdn(long jdn) {
+        long j = jdn + 1402;
+        long k = ((j - 1) / 1461);
+        long l = j - 1461 * k;
+        long n = ((l - 1) / 365) - (l / 1461);
+        long i = l - 365 * n + 30;
+        j = ((80 * i) / 2447);
+        int day = (int) (i - ((2447 * j) / 80));
+        i = (j / 11);
+        int month = (int) (j + 2 - 12 * i);
+        int year = (int) (4 * k + n + i - 4716);
+
+        return new int[]{year, month, day};
     }
 
-    public Calendar asCalendar() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        return cal;
-    }
-
-    @Override
-    public int getDayOfYear() {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    @Override
-    public String getEvent() {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    @Override
-    public int getMonth() {
-        return month;
-    }
-
-    @Override
-    public void setMonth(int month) {
-        if (month < 1 || month > 12)
-            throw new MonthOutOfRangeException(
-                    Constants.MONTH + " " + month + " " + Constants.IS_OUT_OF_RANGE);
-
-        // Set the day again, so that exceptions are thrown if the
-        // day is out of range
-        setDayOfMonth(getDayOfMonth());
-
-        this.month = month;
-    }
-
-    @Override
-    public int getWeekOfMonth(int firstDayOfWeek) {
-        Calendar cal = Calendar.getInstance();
-        cal.setFirstDayOfWeek(firstDayOfWeek);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        return cal.get(Calendar.WEEK_OF_MONTH);
-    }
-
-    @Override
-    public int getWeekOfYear() {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    @Override
-    public int getYear() {
-        return year;
-    }
-
-    @Override
-    public void setYear(int year) {
-        if (year == 0)
-            throw new YearOutOfRangeException(Constants.YEAR_0_IS_INVALID);
-
-        this.year = year;
-    }
-
-    @Override
-    public boolean isLeapYear() {
-        if (year % 400 == 0)
-            return true;
-
-        else if (year % 100 == 0)
-            return false;
-
-        return (year % 4 == 0);
-    }
-
-    @Override
-    public void rollDay(int amount, boolean up) {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    @Override
-    public void rollMonth(int amount, boolean up) {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    @Override
-    public void rollYear(int amount, boolean up) {
-        throw new RuntimeException(Constants.NOT_IMPLEMENTED_YET);
-    }
-
-    public boolean equals(CivilDate civilDate) {
-        return getDayOfMonth() == civilDate.getDayOfMonth()
-                && getMonth() == civilDate.getMonth()
-                && (getYear() == civilDate.getYear() || getYear() == -1);
-    }
-
-    @Override
-    public CivilDate clone() {
-        return new CivilDate(getYear(), getMonth(), getDayOfMonth());
+    private static long julianToJdn(long lYear, long lMonth, long lDay) {
+        return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
+                + ((275 * lMonth) / 9) + lDay + 1729777;
     }
 }

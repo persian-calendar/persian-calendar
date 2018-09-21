@@ -24,11 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    public static final float ALPHA_FULL = 1.0f;
+    private static final float ALPHA_FULL = 1.0f;
 
     private final RecyclerListAdapter mAdapter;
 
-    public SimpleItemTouchHelperCallback(RecyclerListAdapter adapter) {
+    SimpleItemTouchHelperCallback(RecyclerListAdapter adapter) {
         mAdapter = adapter;
     }
 

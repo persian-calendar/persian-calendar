@@ -43,9 +43,13 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
 
         Uri customAthanUri = Utils.getCustomAthanUri(this);
         if (customAthanUri != null) {
-            ringtone = RingtoneManager.getRingtone(this, customAthanUri);
-            ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            ringtone.play();
+            try {
+                ringtone = RingtoneManager.getRingtone(this, customAthanUri);
+                ringtone.setStreamType(AudioManager.STREAM_ALARM);
+                ringtone.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             MediaPlayer player = new MediaPlayer();
             try {
@@ -78,7 +82,9 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         root.setOnClickListener(this);
         root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
 
-        binding.place.setText(getString(R.string.in_city_time) + " " + Utils.getCityName(this, true));
+        binding.place.setText(String.format("%s %s",
+                getString(R.string.in_city_time),
+                Utils.getCityName(this, true)));
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10));
 
         try {

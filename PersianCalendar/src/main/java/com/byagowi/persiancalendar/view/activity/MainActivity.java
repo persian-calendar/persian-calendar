@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,13 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.TypeFaceUtils;
+import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -28,9 +31,10 @@ import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
+import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,25 +43,32 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import calendar.CivilDate;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
+import static com.byagowi.persiancalendar.Constants.LANG_AR;
+import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
+import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
+import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 
 /**
  * Program activity for android
@@ -79,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             CalendarFragment.class,
             ConverterFragment.class,
             CompassFragment.class,
-            PreferenceFragment.class,
+            SettingsFragment.class,
             AboutFragment.class
     };
     private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
@@ -108,18 +119,21 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private static CivilDate creationDate;
+    private static long creationDateJdn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        UIUtils.setTheme(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
+
         Utils.applyAppLanguage(this);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
 
-        TypeFaceUtils.overrideFont("SERIF",
-                TypeFaceUtils.getAppFont(getApplicationContext()));
+        TypefaceUtils.overrideFont("SERIF",
+                TypefaceUtils.getAppFont(getApplicationContext()));
 
         Utils.startEitherServiceOrWorker(this);
 
@@ -174,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             selectItem(DEFAULT);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         if (Utils.isShowDeviceCalendarEvents()) {
@@ -184,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         binding.navigation.setNavigationItemSelectedListener(this);
-        AppCompatImageView seasonImage = binding.navigation
+        ImageView seasonImage = binding.navigation
                 .getHeaderView(0).findViewById(R.id.season_image);
         switch (getSeason()) {
             case "SPRING":
@@ -204,7 +217,38 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 break;
         }
 
-        creationDate = CalendarUtils.getGregorianToday();
+        if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
+                && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
+            Snackbar snackbar = Snackbar.make(binding.coordinator, "✖  Change app language?",
+                    10000);
+            View snackbarView = snackbar.getView();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+            TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+            text.setTextColor(Color.WHITE);
+
+            snackbarView.setOnClickListener(v -> snackbar.dismiss());
+            snackbar.setAction("Settings", view -> {
+                menuPosition = PREFERENCE;
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
+                edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
+                edit.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+                edit.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+                edit.apply();
+                restartActivity();
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
+            snackbar.show();
+
+            // Show this snackbar only once
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true);
+            edit.apply();
+        }
+
+        creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
     }
 
@@ -230,23 +274,43 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         settingHasChanged = true;
         if (key.equals(PREF_APP_LANGUAGE)) {
-            boolean persianDigits, changeToAfghanistanHolidays = false;
+            boolean persianDigits = false;
+            boolean changeToAfghanistanHolidays = false;
+            boolean changeToIslamicCalendar = false;
+            boolean changeToGregorianCalendar = false;
+            boolean changeToPersianCalendar = false;
+            boolean changeToIranEvents = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
                     persianDigits = false;
+                    changeToGregorianCalendar = true;
                     break;
                 case LANG_FA:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
+                    changeToIranEvents = true;
+                    break;
+                case LANG_EN_IR:
+                    persianDigits = false;
+                    changeToPersianCalendar = true;
+                    changeToIranEvents = true;
                     break;
                 case LANG_UR:
                     persianDigits = false;
+                    changeToGregorianCalendar = true;
+                    break;
+                case LANG_AR:
+                    persianDigits = true;
+                    changeToIslamicCalendar = true;
                     break;
                 case LANG_FA_AF:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
                     changeToAfghanistanHolidays = true;
                     break;
                 case LANG_PS:
                     persianDigits = true;
+                    changeToPersianCalendar = true;
                     changeToAfghanistanHolidays = true;
                     break;
                 default:
@@ -255,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(PREF_PERSIAN_DIGITS, persianDigits);
-            // Enable Afghanistan holidays when language changed
+            // Enable Afghanistan holidays when Dari or Pashto is set
             if (changeToAfghanistanHolidays) {
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -265,6 +329,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
                 }
+            }
+            if (changeToIranEvents) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES,
+                            new HashSet<>(Collections.singletonList("iran_holidays")));
+                }
+            }
+            if (changeToGregorianCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+                editor.putString(PREF_WEEK_START, "1");
+                editor.putStringSet(PREF_WEEK_ENDS, new HashSet<>(Collections.singletonList("1")));
+            } else if (changeToIslamicCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
+            } else if (changeToPersianCalendar) {
+                editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI");
+                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
             }
             editor.apply();
         }
@@ -322,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onResume();
         Utils.applyAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
-        if (!creationDate.equals(CalendarUtils.getGregorianToday())) {
+        if (creationDateJdn != CalendarUtils.getTodayJdn()) {
             restartActivity();
         }
     }
@@ -421,13 +511,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
 
             try {
+                Fragment fragment = (Fragment) fragments[item].newInstance();
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(
-                                R.id.fragment_holder,
-                                (Fragment) fragments[item].newInstance(),
-                                fragments[item].getName()
-                        ).commit();
+                        .replace(R.id.fragment_holder, fragment, fragments[item].getName())
+                        .commit();
                 menuPosition = item;
             } catch (Exception e) {
                 Log.e(TAG, item + " is selected as an index", e);

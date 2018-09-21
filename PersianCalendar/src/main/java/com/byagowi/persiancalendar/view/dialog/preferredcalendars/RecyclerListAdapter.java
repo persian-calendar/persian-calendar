@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,10 +38,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private final List<String> titles;
     private final List<String> values;
     private final List<Boolean> enabled;
-    CalendarPreferenceDialog calendarPreferenceDialog;
+    private final CalendarPreferenceDialog calendarPreferenceDialog;
 
-    public RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
-                               List<String> titles, List<String> values, List<Boolean> enabled) {
+    RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
+                        List<String> titles, List<String> values, List<Boolean> enabled) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
         this.titles = new ArrayList<>(titles);
         this.values = new ArrayList<>(values);
@@ -92,9 +91,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Easter egg when all are swiped
         if (titles.size() == 0) {
             try {
-                View view = calendarPreferenceDialog.getActivity().getSupportFragmentManager()
-                        .findFragmentByTag(PreferenceFragment.class.getName())
-                        .getView();
+                View view = calendarPreferenceDialog.getActivity().findViewById(R.id.drawer);
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
                 animator.setDuration(3000L);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());

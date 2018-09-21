@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themeNames">
+        <item>فاتح</item>
+        <item>داكن</item>
+        <item>حديث</item>
+        <item>أزرق</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames">
+        <item>الاثني عشرية الشيعية، جامعة ليوا، قم</item>
+        <item>رابطة العالم الإسلامي</item>
+        <item>الجمعية الإسلامية لأمريكا الشمالية</item>
+        <item>الهيئة المصرية العامة للمساحة</item>
+        <item>جامعة أم القرى، المكة المكرمة</item>
+        <item>جامعة العلوم الإسلامية، كراتشي</item>
+        <item>قسم الجيوفيزياء ، جامعة طهران</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>الفجر</item>
+        <item>الظهر</item>
+        <item>العصر</item>
+        <item>المغرب</item>
+        <item>العِشاء</item>
+    </string-array>
+
+    <string-array name="holidays_types">
+        <item>عُطل إيران</item>
+        <item>المناسبات الإسلامية (إيران)</item>
+        <item>المناسبات القومية (إيران)</item>
+        <item>المناسبات الأخرى (إيران)</item>
+        <item>المناسبات الدولية والعالمية</item>
+        <item>عُطل أفعانستان</item>
+        <item>المناسبات الأخرى (أفعانستان)</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>التقويم الهجري الشمسي (الفارسي)</item>
+        <item>التقويم الهجري القمري (الإسلامي)</item>
+        <item>التقويم الميلادي</item>
+    </string-array>
+
+    <!-- Should be matched with CalendarType -->
+    <string-array name="calendar_values" translatable="false">
+        <item>SHAMSI</item>
+        <item>ISLAMIC</item>
+        <item>GREGORIAN</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>السبت</item>
+        <item>الأحد</item>
+        <item>الاثنين</item>
+        <item>الثلاثاء</item>
+        <item>الأربعاء</item>
+        <item>الخميس</item>
+        <item>الجمعة</item>
+    </string-array>
+
+    <string-array name="what_to_show">
+        <item>التقاويم الأخرى على مصغر 1×4 أو 2×2</item>
+        <item>المناسبات (غير العُطل) على مصغر 2×2 والتنبه</item>
+        <item>أوقات الصلوات على مصغر 2×2 (إذا تم تحديد المكان)</item>
+        <item>مكان أوقات الصلوات على مصغر 2×2  والتنبيه (إذا تم تحديد المكان)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+    </string-array>
+
+</resources>
+

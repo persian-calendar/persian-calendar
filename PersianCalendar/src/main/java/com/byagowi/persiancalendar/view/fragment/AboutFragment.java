@@ -17,11 +17,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.DialogEmailBinding;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -72,7 +75,16 @@ public class AboutFragment extends Fragment {
 
         // help
         binding.aboutTitle.setText(String.format(getString(R.string.about_help_subtitle),
+                Utils.formatNumber(Utils.getMaxSupportedYear() - 1),
                 Utils.formatNumber(Utils.getMaxSupportedYear())));
+        switch (Utils.getAppLanguage()) {
+            case Constants.LANG_FA:
+            case Constants.LANG_FA_AF:
+            case Constants.LANG_EN_IR: // en. unlike en-US, is for Iranians as indicated also on UI
+                break;
+            default:
+                binding.helpCard.setVisibility(View.GONE);
+        }
 
         // report bug
         binding.reportBug.setOnClickListener(arg -> {
@@ -85,16 +97,25 @@ public class AboutFragment extends Fragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.about_mailto), null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-            try {
-                emailIntent.putExtra(Intent.EXTRA_TEXT,
-                        String.format("\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
-                                Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
-            }
+            DialogEmailBinding emailBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_email,
+                    container, false);
+            new AlertDialog.Builder(getActivity())
+                    .setView(emailBinding.getRoot())
+                    .setTitle(R.string.about_email_sum)
+                    .setPositiveButton(R.string.continue_button, (dialog, id) -> {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts
+                                ("mailto", "ebrahim@gnu.org", null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                        try {
+                            emailIntent.putExtra(Intent.EXTRA_TEXT,
+                                    String.format(emailBinding.inputText.getText() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
+                                            Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
+                            startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
         });
 
         Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);
@@ -103,8 +124,26 @@ public class AboutFragment extends Fragment {
         TypedValue color = new TypedValue();
         theme.resolveAttribute(R.attr.colorDrawerIcon, color, true);
 
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(8, 8, 8, 8);
+
+        View.OnClickListener chipClick = view -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/" +
+                                ((Chip) view).getText().toString()
+                                        .split("@")[1].split("\\)")[0])));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
         for (String line : getString(R.string.about_developers_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
+            chip.setOnClickListener(chipClick);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -113,6 +152,7 @@ public class AboutFragment extends Fragment {
 
         for (String line : getString(R.string.about_designers_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
             chip.setText(line);
             chip.setChipIcon(designerIcon);
             chip.setChipIconTintResource(color.resourceId);
@@ -121,6 +161,8 @@ public class AboutFragment extends Fragment {
 
         for (String line : getString(R.string.about_contributors_list).trim().split("\n")) {
             Chip chip = new Chip(activity);
+            chip.setLayoutParams(layoutParams);
+            chip.setOnClickListener(chipClick);
             chip.setText(line);
             chip.setChipIcon(developerIcon);
             chip.setChipIconTintResource(color.resourceId);

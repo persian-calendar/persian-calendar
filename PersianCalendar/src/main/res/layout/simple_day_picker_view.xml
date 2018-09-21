@@ -8,7 +8,7 @@
         android:orientation="vertical"
         android:padding="@dimen/view_padding">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/calendarTypeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/converter_padding">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/converterLabelYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/converterLabelDay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -92,11 +92,11 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/converterLabelMonth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/mount"
+                    android:text="@string/month"
                     android:textColor="?attr/colorTextSecond"
                     android:textSize="@dimen/text_size_description" />
 
@@ -104,7 +104,7 @@
                     android:id="@+id/monthSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:prompt="@string/select_mount"
+                    android:prompt="@string/select_month"
                     android:spinnerMode="dialog"
                     android:textColor="?attr/colorTextNormal"
                     android:textSize="@dimen/text_size_description" />

@@ -1,28 +1,30 @@
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar.view.itemdayview;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.util.TypedValue;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.TypeFaceUtils;
+import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
 public class DaysPaintResources {
     @ColorInt
-    final public int colorHoliday, colorTextHoliday, colorTextDay, colorPrimary, colorDayName, colorSelectDay;
+    final public int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
+            colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
 
     final public int halfEventBarWidth, appointmentYOffset, eventYOffset;
     final public int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
 
     final public Paint textPaint, linePaint, selectedPaint, todayPaint;
+
+    @StyleRes
+    final public int style;
 
     public DaysPaintResources(Context context) {
         Resources.Theme theme = context.getTheme();
@@ -31,20 +33,31 @@ public class DaysPaintResources {
         theme.resolveAttribute(R.attr.colorHoliday, value, true);
         colorHoliday = ContextCompat.getColor(context, value.resourceId);
 
+        theme.resolveAttribute(R.attr.colorHolidaySelected, value, true);
+        colorHolidaySelected = ContextCompat.getColor(context, value.resourceId);
+
         theme.resolveAttribute(R.attr.colorTextHoliday, value, true);
         colorTextHoliday = ContextCompat.getColor(context, value.resourceId);
 
         theme.resolveAttribute(R.attr.colorTextDay, value, true);
         colorTextDay = ContextCompat.getColor(context, value.resourceId);
 
-        theme.resolveAttribute(R.attr.colorPrimary, value, true);
-        colorPrimary = ContextCompat.getColor(context, value.resourceId);
+        theme.resolveAttribute(R.attr.colorTextDaySelected, value, true);
+        colorTextDaySelected = ContextCompat.getColor(context, value.resourceId);
+
+        theme.resolveAttribute(R.attr.colorTextToday, value, true);
+        colorTextToday = ContextCompat.getColor(context, value.resourceId);
 
         theme.resolveAttribute(R.attr.colorTextDayName, value, true);
-        colorDayName = ContextCompat.getColor(context, value.resourceId);
+        colorTextDayName = ContextCompat.getColor(context, value.resourceId);
+
+        theme.resolveAttribute(R.attr.colorEventLine, value, true);
+        colorEventLine = ContextCompat.getColor(context, value.resourceId);
 
         theme.resolveAttribute(R.attr.colorSelectDay, value, true);
         colorSelectDay = ContextCompat.getColor(context, value.resourceId);
+
+        style = Utils.getAppTheme();
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -70,6 +83,6 @@ public class DaysPaintResources {
         arabicDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size);
         persianDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size);
 
-        textPaint.setTypeface(TypeFaceUtils.getCalendarFragmentFont(context));
+        textPaint.setTypeface(TypefaceUtils.getCalendarFragmentFont(context));
     }
 }

@@ -15,7 +15,7 @@
         android:onClick="@{model.callback}"
         android:padding="@dimen/card_padding">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/padding_item"
@@ -23,7 +23,7 @@
             android:text="@{model.city}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{model.country}"

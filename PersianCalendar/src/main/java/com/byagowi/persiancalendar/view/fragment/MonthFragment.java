@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -20,7 +21,6 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -48,16 +48,17 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
 
         // We deliberately like to avoid DataBinding thing here, at least for now
-        AppCompatImageView prev = view.findViewById(R.id.prev);
-        AppCompatImageView next = view.findViewById(R.id.next);
-        prev.setImageResource(isRTL
-                ? R.drawable.ic_keyboard_arrow_right
-                : R.drawable.ic_keyboard_arrow_left);
+        ImageView next = view.findViewById(R.id.next);
         next.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_left
                 : R.drawable.ic_keyboard_arrow_right);
-        prev.setOnClickListener(this);
         next.setOnClickListener(this);
+
+        ImageView prev = view.findViewById(R.id.prev);
+        prev.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
+        prev.setOnClickListener(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
@@ -84,7 +85,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         month += 1;
         typedDate = CalendarUtils.getDateOfCalendar(mainCalendar, year, month, 1);
 
-        baseJdn = CalendarUtils.getJdnDate(typedDate);
+        baseJdn = typedDate.toJdn();
         monthLength = CalendarUtils.getMonthLength(mainCalendar, year, month);
 
         int dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
@@ -115,8 +116,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         ///////
         ///////
         ///////
-        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek,
-                weekOfYearStart, weeksCount);
+        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 

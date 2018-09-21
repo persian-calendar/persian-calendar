@@ -6,7 +6,6 @@
     <color name="dark_primary">#272727</color>
     <color name="dark_primary_dark">#272727</color>
     <color name="dark_accent">#64ffda</color>
-
     <color name="dark_text_normal">#ffffff</color>
     <color name="dark_text_second">#cfcfcf</color>
     <color name="dark_text_primary">#009688</color>
@@ -14,25 +13,25 @@
     <color name="dark_text_holiday">#ef6c00</color>
     <color name="dark_holiday">#e65100</color>
     <color name="dark_text_day">#ffffff</color>
+    <color name="dark_text_today">#ffffff</color>
     <color name="dark_text_day_name">#9e9e9e</color>
     <color name="dark_month_switch">#1de9b6</color>
     <color name="dark_text_athan">#ffffff</color>
-
     <color name="dark_divider">#272727</color>
     <color name="dark_background">#272727</color>
     <color name="dark_card_background">#202020</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
+    <color name="dark_event_line">#e0e0e0</color>
     <color name="dark_drawer_background">#212121</color>
     <color name="dark_drawer_select">#282828</color>
-
     <color name="dark_icon">#00bfa5</color>
     <color name="dark_icon_drawer">#00bfa5</color>
+    <color name="dark_menu_icon_color">#88ffffff</color>
 
     <color name="light_primary">#00695c</color>
     <color name="light_primary_dark">#004d40</color>
     <color name="light_accent">#00796b</color>
-
     <color name="light_text_normal">#232323</color>
     <color name="light_text_second">#737373</color>
     <color name="light_text_primary">#00796b</color>
@@ -40,21 +39,73 @@
     <color name="light_text_holiday">#d84315</color>
     <color name="light_holiday">#ff8a65</color>
     <color name="light_text_day">#ffffff</color>
+    <color name="light_text_today">#ffffff</color>
     <color name="light_text_day_name">#b2dfdb</color>
     <color name="light_month_switch">#ff7043</color>
     <color name="light_text_athan">#ffffff</color>
-
     <color name="light_divider">#e0e0e0</color>
     <color name="light_background">#f4f4f4</color>
     <color name="light_card_background">#fafafa</color>
     <color name="light_current_day">#ff7043</color>
     <color name="light_select_day">#eff2f1</color>
+    <color name="light_event_line">#eff2f1</color>
     <color name="light_drawer_background">#f4f4f4</color>
     <color name="light_drawer_select">#eeeeee</color>
-
     <color name="light_icon">#00897b</color>
     <color name="light_icon_drawer">#00897b</color>
+    <color name="light_menu_icon_color">#88ffffff</color>
 
+    <color name="blue_primary">#0D47A1</color>
+    <color name="blue_primary_dark">#000000</color>
+    <color name="blue_accent">#0D47A1</color>
+    <color name="blue_text_normal">#232323</color>
+    <color name="blue_text_second">#737373</color>
+    <color name="blue_text_primary">#0D47A1</color>
+    <color name="blue_text_drawer">#737373</color>
+    <color name="blue_text_holiday">#d84315</color>
+    <color name="blue_holiday">#ff8a65</color>
+    <color name="blue_text_day">#ffffff</color>
+    <color name="blue_text_today">#ffffff</color>
+    <color name="blue_text_day_name">#b2dfdb</color>
+    <color name="blue_month_switch">#ff7043</color>
+    <color name="blue_text_athan">#ffffff</color>
+    <color name="blue_divider">#e0e0e0</color>
+    <color name="blue_background">#f4f4f4</color>
+    <color name="blue_card_background">#fafafa</color>
+    <color name="blue_current_day">#ff7043</color>
+    <color name="blue_select_day">#F5F5F5</color>
+    <color name="blue_event_line">#eff2f1</color>
+    <color name="blue_drawer_background">#f4f4f4</color>
+    <color name="blue_drawer_select">#eeeeee</color>
+    <color name="blue_icon">#0D47A1</color>
+    <color name="blue_icon_drawer">#232323</color>
+    <color name="blue_menu_icon_color">#88ffffff</color>
+
+    <color name="classic_primary">#FFFFFF</color>
+    <color name="classic_primary_dark">#191919</color>
+    <color name="classic_accent">#00695C</color>
+    <color name="classic_text_normal">#232323</color>
+    <color name="classic_text_second">#737373</color>
+    <color name="classic_text_primary">#587994</color>
+    <color name="classic_text_drawer">#737373</color>
+    <color name="classic_text_holiday">#E51C23</color>
+    <color name="classic_holiday">#E51C23</color>
+    <color name="classic_text_day">#000000</color>
+    <color name="classic_text_today">#00695C</color>
+    <color name="classic_text_day_name">#424242</color>
+    <color name="classic_month_switch">#00695C</color>
+    <color name="classic_text_athan">#ffffff</color>
+    <color name="classic_divider">#e0e0e0</color>
+    <color name="classic_background">#f4f4f4</color>
+    <color name="classic_card_background">#fafafa</color>
+    <color name="classic_current_day">#42AFBF</color>
+    <color name="classic_select_day">#F5F5F5</color>
+    <color name="classic_event_line">#4CB5DE</color>
+    <color name="classic_drawer_background">#f4f4f4</color>
+    <color name="classic_drawer_select">#eeeeee</color>
+    <color name="classic_icon">#587994</color>
+    <color name="classic_icon_drawer">#00695C</color>
+    <color name="classic_menu_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->
     <color name="sViewHorizonColorLight">#32000000</color>
@@ -70,12 +121,12 @@
     <color name="sViewSunBeforeMiddayColor">#FFF9C4</color>
     <color name="sViewSunAfterMiddayColor">#FF9100</color>
     <color name="sViewSunEveningColor">#904d00</color>
-    <color name="sViewSunriseTextColorLight">#fbb463</color>
-    <color name="sViewMiddayTextColorLight">#ff9c2b</color>
-    <color name="sViewSunsetTextColorLight">#a36621</color>
-    <color name="sViewSunriseTextColorDark">#fbb463</color>
-    <color name="sViewMiddayTextColorDark">#ff9c2b</color>
-    <color name="sViewSunsetTextColorDark">#a36621</color>
+    <color name="sViewSunriseTextColorLight">#FF9800</color>
+    <color name="sViewMiddayTextColorLight">#FFC107</color>
+    <color name="sViewSunsetTextColorLight">#B71C1C</color>
+    <color name="sViewSunriseTextColorDark">#FF9800</color>
+    <color name="sViewMiddayTextColorDark">#FFC107</color>
+    <color name="sViewSunsetTextColorDark">#B71C1C</color>
 
 
     <!-- General colors -->

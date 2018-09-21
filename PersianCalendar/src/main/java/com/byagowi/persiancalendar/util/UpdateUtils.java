@@ -54,7 +54,7 @@ public class UpdateUtils {
         Calendar calendar = CalendarUtils.makeCalendarFromDate(new Date());
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);
-        long jdn = CalendarUtils.getJdnDate(date);
+        long jdn = date.toJdn();
 
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
@@ -149,7 +149,7 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 += Utils.getComma() + " " + subtitle;
+                    text2 += Utils.getSpacedComma() + subtitle;
                 }
 
                 remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
@@ -176,13 +176,19 @@ public class UpdateUtils {
                 String holidays = Utils.getEventsTitle(events, true, true, true, isRTL);
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
+                    if (Utils.isTalkBackEnabled()) {
+                        remoteViews2.setContentDescription(R.id.holiday_2x2,
+                                context.getString(R.string.holiday_reason) + " " +
+                                        holidays);
+                    }
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
                 } else {
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.GONE);
                 }
 
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
-                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
+                if (Utils.isShownOnWidgets("non_holiday_events") &&
+                        !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
@@ -197,7 +203,8 @@ public class UpdateUtils {
                 }
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 = text2 + "\n" + subtitle;
+                    text2 = text2 + "\n" + subtitle + "\n" +
+                            CalendarUtils.getZodiacInfo(context, jdn, true);
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
@@ -225,15 +232,30 @@ public class UpdateUtils {
         if (Utils.isNotifyDate()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID), context.getString(R.string.app_name), importance);
+                NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID),
+                        context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager)
+                        context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
                 }
             }
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(NOTIFICATION_ID))
+            // Don't remove this condition checking ever
+            if (Utils.isTalkBackEnabled()) {
+                // Don't use isToday, per a feedback
+                subtitle = CalendarUtils.getA11yDaySummary(context, jdn, false,
+                        deviceCalendarEvents,
+                        true, true, false);
+                if (!TextUtils.isEmpty(owghat)) {
+                    subtitle += Utils.getSpacedComma();
+                    subtitle += owghat;
+                }
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat
+                    .Builder(context, String.valueOf(NOTIFICATION_ID))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setSmallIcon(Utils.getDayIconResource(date.getDayOfMonth()))
                     .setOngoing(true)
@@ -246,7 +268,8 @@ public class UpdateUtils {
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG) {
+            if (!Utils.isTalkBackEnabled() &&
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
                         ? R.layout.custom_notification
                         : R.layout.custom_notification_ltr);

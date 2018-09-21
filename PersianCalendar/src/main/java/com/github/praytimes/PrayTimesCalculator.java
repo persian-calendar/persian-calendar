@@ -52,8 +52,8 @@ public class PrayTimesCalculator {
     // Calculation Logic
     //
     //
-    Map<PrayTime, Clock> calculate(Date date, Coordinate coordinate,
-                                   Double timeZone, Boolean dst) {
+    public Map<PrayTime, Clock> calculate(Date date, Coordinate coordinate,
+                                          Double timeZone, Boolean dst) {
         _coordinate = coordinate;
         _timeZone = timeZone != null ? timeZone : getTimeZone(date);
         _dst = dst != null ? dst : getDst(date);

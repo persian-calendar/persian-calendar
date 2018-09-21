@@ -20,7 +20,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/week_day_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -35,21 +35,30 @@
                 android:layout_gravity="right|end"
                 android:gravity="end|right|center_vertical">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/today_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:tint="?attr/colorAccent"
-                    app:srcCompat="@drawable/ic_restore_modified" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/today"
+                <LinearLayout
+                    android:id="@+id/today_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/today"
-                    android:textColor="?attr/colorAccent"
-                    android:textSize="@dimen/text_size_title" />
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/return_to_today"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:tint="?attr/colorAccent"
+                        app:srcCompat="@drawable/ic_restore_modified" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/today"
+                        android:textColor="?attr/colorAccent"
+                        android:textSize="@dimen/text_size_title" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -77,12 +86,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/first_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
                     android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/first_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +102,7 @@
                         android:textSize="32sp"
                         tools:text="a" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/first_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,7 +113,7 @@
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/first_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,12 +132,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/second_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
                     android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/second_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -137,7 +148,7 @@
                         android:textSize="32sp"
                         tools:text="a" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/second_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,7 +159,7 @@
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/second_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,12 +178,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/third_calendar_date_container"
                     android:layout_width="@dimen/owghatSize"
                     android:layout_height="wrap_content"
                     android:gravity="top|center_horizontal|fill_vertical"
                     android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/third_calendar_date_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -182,7 +194,7 @@
                         android:textSize="32sp"
                         tools:text="a" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <TextView
                         android:id="@+id/third_calendar_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -193,7 +205,7 @@
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/third_calendar_date_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -207,59 +219,51 @@
         </com.google.android.flexbox.FlexboxLayout>
 
         <LinearLayout
-            android:id="@+id/diff_date_container"
+            android:id="@+id/extra_information_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_item"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
-            android:paddingTop="@dimen/padding_item">
+            android:padding="@dimen/padding_item">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/diff_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/start_and_end_of_year_diff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/zodiac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="?attr/colorTextNormal"
-                android:layout_marginTop="@dimen/card_margin"
+                android:textIsSelectable="true"
                 android:textSize="@dimen/text_size_description" />
 
+            <TextView
+                android:id="@+id/diff_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_description"
+                tools:text="@string/date_diff_text" />
+
+            <TextView
+                android:id="@+id/start_and_end_of_year_diff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/text_size_description"
+                tools:text="@string/date_diff_text" />
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/more_calendar"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8sp"
-                android:tint="?attr/colorAccent"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/more_calendar"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/padding_item"
+            android:tint="?attr/colorAccent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
     </LinearLayout>
 

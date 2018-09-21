@@ -7,9 +7,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 
 import java.util.ArrayList;
@@ -19,13 +22,15 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import calendar.AbstractDate;
 import calendar.CalendarType;
 import calendar.CivilDate;
-import calendar.DateConverter;
 import calendar.IslamicDate;
 import calendar.PersianDate;
+
+import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 
 public class CalendarUtils {
     static public AbstractDate getDateOfCalendar(CalendarType calendar, int year, int month, int day) {
@@ -43,51 +48,39 @@ public class CalendarUtils {
     static public long getJdnOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
-                return DateConverter.islamicToJdn(year, month, day);
+                return new IslamicDate(year, month, day).toJdn();
             case GREGORIAN:
-                return DateConverter.civilToJdn(year, month, day);
+                return new CivilDate(year, month, day).toJdn();
             case SHAMSI:
             default:
-                return DateConverter.persianToJdn(year, month, day);
+                return new PersianDate(year, month, day).toJdn();
         }
     }
 
     static public int getMonthLength(CalendarType calendar, int year, int month) {
         switch (calendar) {
             case ISLAMIC:
-                return (int) (DateConverter.islamicToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.islamicToJdn(year, month, 1));
+                return (int) (new IslamicDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new IslamicDate(year, month, 1).toJdn());
             case GREGORIAN:
-                return (int) (DateConverter.civilToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.civilToJdn(year, month, 1));
+                return (int) (new CivilDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new CivilDate(year, month, 1).toJdn());
             case SHAMSI:
             default:
-                return (int) (DateConverter.persianToJdn(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1) -
-                        DateConverter.persianToJdn(year, month, 1));
+                return (int) (new PersianDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
+                        new PersianDate(year, month, 1).toJdn());
         }
     }
 
     static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
-                return DateConverter.jdnToIslamic(jdn);
+                return new IslamicDate(jdn);
             case GREGORIAN:
-                return DateConverter.jdnToCivil(jdn);
+                return new CivilDate(jdn);
             case SHAMSI:
             default:
-                return DateConverter.jdnToPersian(jdn);
-        }
-    }
-
-    static public long getJdnDate(AbstractDate date) {
-        if (date instanceof PersianDate) {
-            return DateConverter.persianToJdn((PersianDate) date);
-        } else if (date instanceof IslamicDate) {
-            return DateConverter.islamicToJdn((IslamicDate) date);
-        } else if (date instanceof CivilDate) {
-            return DateConverter.civilToJdn((CivilDate) date);
-        } else {
-            return 0;
+                return new PersianDate(jdn);
         }
     }
 
@@ -105,20 +98,20 @@ public class CalendarUtils {
                 Utils.formatNumber(date.getMonth()), Utils.formatNumber(date.getDayOfMonth()));
     }
 
+    static public CivilDate getGregorianToday() {
+        return calendarToCivilDate(makeCalendarFromDate(new Date()));
+    }
+
     static public long getTodayJdn() {
-        return DateConverter.civilToJdn(new CivilDate(makeCalendarFromDate(new Date())));
+        return getGregorianToday().toJdn();
     }
 
     static public PersianDate getPersianToday() {
-        return DateConverter.civilToPersian(new CivilDate(makeCalendarFromDate(new Date())));
+        return new PersianDate(getTodayJdn());
     }
 
     static public IslamicDate getIslamicToday() {
-        return DateConverter.civilToIslamic(new CivilDate(makeCalendarFromDate(new Date())));
-    }
-
-    static public CivilDate getGregorianToday() {
-        return new CivilDate(makeCalendarFromDate(new Date()));
+        return new IslamicDate(getTodayJdn());
     }
 
     static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
@@ -134,7 +127,7 @@ public class CalendarUtils {
     }
 
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getComma() + " " + dateToString(date);
+        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + dateToString(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -142,7 +135,7 @@ public class CalendarUtils {
     }
 
     static public int getDayOfWeekFromJdn(long jdn) {
-        return DateConverter.jdnToCivil(jdn).getDayOfWeek() % 7;
+        return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
     }
 
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
@@ -151,119 +144,10 @@ public class CalendarUtils {
     }
 
     static public String dateToString(AbstractDate date) {
-        return Utils.formatNumber(date.getDayOfMonth()) + ' ' + getMonthName(date) + ' ' +
-                Utils.formatNumber(date.getYear());
+        return String.format(Utils.getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
+                Utils.formatNumber(date.getDayOfMonth()), getMonthName(date),
+                Utils.formatNumber(date.getYear()));
     }
-
-//    static private SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents;
-//    static private List<DeviceCalendarEvent> allEnabledAppointments;
-//
-//    public static void readDeviceCalendarEvents(Context context) {
-//
-//        SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
-//        List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
-//
-//        readDeviceEvents(context, deviceCalendarEvents, allEnabledAppointments);
-//        if (true) return;
-//
-//        if (!showDeviceCalendarEvents) {
-//            return;
-//        }
-//
-//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            if (context instanceof AppCompatActivity) {
-//                UIUtils.askForCalendarPermission((AppCompatActivity) context);
-//            }
-//            return;
-//        }
-//
-//        try {
-//            Cursor cursor = context.getContentResolver().query(CalendarContract.Events.CONTENT_URI,
-//                    new String[]{
-//                            CalendarContract.Events._ID,            // 0
-//                            CalendarContract.Events.TITLE,          // 1
-//                            CalendarContract.Events.DESCRIPTION,    // 2
-//                            CalendarContract.Events.DTSTART,        // 3
-//                            CalendarContract.Events.DTEND,          // 4
-//                            CalendarContract.Events.EVENT_LOCATION, // 5
-//                            CalendarContract.Events.RRULE,          // 6
-//                            CalendarContract.Events.VISIBLE,        // 7
-//                            CalendarContract.Events.ALL_DAY,        // 8
-//                            CalendarContract.Events.DELETED,        // 9
-//                            CalendarContract.Events.EVENT_COLOR     // 10
-//                    }, null, null, null);
-//
-//            if (cursor == null) {
-//                return;
-//            }
-//
-//            while (cursor.moveToNext()) {
-//                if (!cursor.getString(7).equals("1") || cursor.getString(9).equals("1"))
-//                    continue;
-//
-//                boolean allDay = false;
-//                if (cursor.getString(8).equals("1"))
-//                    allDay = true;
-//
-//                Date startDate = new Date(cursor.getLong(3));
-//                Date endDate = new Date(cursor.getLong(4));
-//                Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
-//                Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
-//
-//                CivilDate civilDate = new CivilDate(startCalendar);
-//
-//                int month = civilDate.getMonth();
-//                int day = civilDate.getDayOfMonth();
-//
-//                String repeatRule = cursor.getString(6);
-//                if (repeatRule != null && repeatRule.contains("FREQ=YEARLY"))
-//                    civilDate.setYear(-1);
-//
-//                List<DeviceCalendarEvent> list = deviceCalendarEvents.get(month * 100 + day);
-//                if (list == null) {
-//                    list = new ArrayList<>();
-//                    deviceCalendarEvents.put(month * 100 + day, list);
-//                }
-//
-//                String title = cursor.getString(1);
-//                if (allDay) {
-//                    if (civilDate.getYear() == -1) {
-//                        title = "\uD83C\uDF89 " + title;
-//                    } else {
-//                        title = "\uD83D\uDCC5 " + title;
-//                    }
-//                } else {
-//                    title = "\uD83D\uDD53 " + title;
-//                    title += " (" + UIUtils.baseClockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
-//                            startCalendar.get(Calendar.MINUTE));
-//
-//                    if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-//                        title += "-" + UIUtils.baseClockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
-//                                endCalendar.get(Calendar.MINUTE));
-//                    }
-//
-//                    title += ")";
-//                }
-//                DeviceCalendarEvent event = new DeviceCalendarEvent(
-//                        cursor.getInt(0),
-//                        title,
-//                        cursor.getString(2),
-//                        startDate,
-//                        endDate,
-//                        cursor.getString(5),
-//                        civilDate,
-//                        cursor.getString(10)
-//                );
-//                list.add(event);
-//                allEnabledAppointments.add(event);
-//            }
-//            cursor.close();
-//        } catch (Exception e) {
-//            // We don't like crash addition from here, just catch all of exceptions
-//            Log.e(TAG, "Error on device calendar events read", e);
-//        }
-//    }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {
         Calendar startingDate = Calendar.getInstance();
@@ -281,7 +165,7 @@ public class CalendarUtils {
         if (jdn == -1) {
             jdn = getTodayJdn();
         }
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).asCalendar();
+        Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, DAY_IN_MILLIS);
@@ -289,7 +173,7 @@ public class CalendarUtils {
     }
 
     public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(Context context, long jdn) {
-        Calendar startingDate = DateConverter.jdnToCivil(jdn).asCalendar();
+        Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
         readDeviceEvents(context, deviceCalendarEvent, allEnabledAppointments, startingDate, 32L * DAY_IN_MILLIS);
@@ -347,7 +231,7 @@ public class CalendarUtils {
                 Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
                 Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
 
-                CivilDate civilDate = new CivilDate(startCalendar);
+                CivilDate civilDate = calendarToCivilDate(startCalendar);
 
                 int month = civilDate.getMonth();
                 int day = civilDate.getDayOfMonth();
@@ -394,5 +278,144 @@ public class CalendarUtils {
             // We don't like crash addition from here, just catch all of exceptions
             Log.e("", "Error on device calendar events read", e);
         }
+    }
+
+    // Based on Mehdi's work
+    public static boolean isMoonInScorpio(PersianDate persianDate, IslamicDate islamicDate) {
+        int res = (int) (((((float) (islamicDate.getDayOfMonth() + 1) * 12.2f) +
+                (persianDate.getDayOfMonth() + 1)) / 30.f) + persianDate.getMonth());
+        if (res > 12) res -= 12;
+        return res == 8;
+    }
+
+    // Extra helpers
+    public static Calendar civilDateToCalendar(CivilDate civilDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, civilDate.getYear());
+        cal.set(Calendar.MONTH, civilDate.getMonth() - 1);
+        cal.set(Calendar.DAY_OF_MONTH, civilDate.getDayOfMonth());
+        return cal;
+    }
+
+    private static CivilDate calendarToCivilDate(Calendar calendar) {
+        return new CivilDate(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+
+    @StringRes
+    final private static int[] YEARS_NAME = {
+            R.string.year10, R.string.year11, R.string.year12,
+            R.string.year1, R.string.year2, R.string.year3,
+            R.string.year4, R.string.year5, R.string.year6,
+            R.string.year7, R.string.year8, R.string.year9
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS = {
+            R.string.empty,
+            R.string.aries, R.string.taurus, R.string.gemini,
+            R.string.cancer, R.string.leo, R.string.virgo,
+            R.string.libra, R.string.scorpio, R.string.sagittarius,
+            R.string.capricorn, R.string.aquarius, R.string.pisces
+    };
+
+    @StringRes
+    final private static int[] ZODIAC_MONTHS_EMOJI = {
+            R.string.empty,
+            R.string.aries_emoji, R.string.taurus_emoji, R.string.gemini_emoji,
+            R.string.cancer_emoji, R.string.leo_emoji, R.string.virgo_emoji,
+            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji,
+            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji
+    };
+
+    // Based on Mehdi's work
+    static public String getZodiacInfo(Context context, long jdn, boolean withEmoji) {
+        if (!Utils.isAstronomicalFeaturesEnabled()) return "";
+
+        PersianDate persianDate = new PersianDate(jdn);
+        IslamicDate islamicDate = new IslamicDate(jdn);
+        return String.format("%s: %s\n%s: %s %s\n%s",
+                context.getString(R.string.year_name),
+                context.getString(YEARS_NAME[persianDate.getYear() % 12]),
+                context.getString(R.string.zodiac),
+                withEmoji ? context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]) : "",
+                context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
+                CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
+                        ? context.getString(R.string.moonInScorpio) : "").trim();
+    }
+
+    static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
+                                           SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
+                                           boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
+        // It has some expensive calculations, lets not do that when not needed
+        if (!Utils.isTalkBackEnabled()) return "";
+
+        StringBuilder result = new StringBuilder();
+
+        if (isToday) {
+            result.append(context.getString(R.string.today));
+            result.append("\n");
+        }
+
+        AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
+                Utils.getMainCalendar(), jdn);
+
+        if (withTitle) {
+            result.append("\n");
+            result.append(CalendarUtils.dayTitleSummary(mainDate));
+        }
+
+        if (withOtherCalendars) {
+            String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
+            if (!TextUtils.isEmpty(otherCalendars)) {
+                result.append("\n");
+                result.append("\n");
+                result.append(context.getString(R.string.equivalent_to));
+                result.append(" ");
+                result.append(otherCalendars);
+            }
+        }
+
+        List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
+        String holidays = Utils.getEventsTitle(events, true, true, true, false);
+        if (!TextUtils.isEmpty(holidays)) {
+            result.append("\n");
+            result.append("\n");
+            result.append(context.getString(R.string.holiday_reason));
+            result.append("\n");
+            result.append(holidays);
+        }
+
+        String nonHolidays = Utils.getEventsTitle(events, false, true, true, false);
+        if (!TextUtils.isEmpty(nonHolidays)) {
+            result.append("\n");
+            result.append("\n");
+            result.append(context.getString(R.string.events));
+            result.append("\n");
+            result.append(nonHolidays);
+        }
+
+        if (Utils.isWeekOfYearEnabled()) {
+            long startOfYearJdn = CalendarUtils.getJdnOfCalendar(Utils.getMainCalendar(),
+                    mainDate.getYear(), 1, 1);
+            int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
+            result.append("\n");
+            result.append("\n");
+            result.append(String.format(context.getString(R.string.nth_week_of_year),
+                    Utils.formatNumber(weekOfYearStart)));
+        }
+
+        if (withZodiac) {
+            String zodiac = getZodiacInfo(context, jdn, false);
+            if (!TextUtils.isEmpty(zodiac)) {
+                result.append("\n");
+                result.append("\n");
+                result.append(zodiac);
+            }
+        }
+
+        return result.toString();
     }
 }

@@ -3,6 +3,8 @@
     <string-array name="themeNames">
         <item>روښان</item>
         <item>تور</item>
+        <item>مدرن</item>
+        <item>آبی</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -13,14 +15,6 @@
         <item>دانشگاه ام القری،‌ مکه</item>
         <item>دانشگاه علوم اسلامی،‌ کراچی</item>
         <item>انجمن ژئوفیزیک، دانشگاه تهران</item>
-    </string-array>
-
-    <string-array name="colorNames">
-        <item>White</item>
-        <item>Red</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Black</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
@@ -62,6 +56,14 @@
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>
         <item>اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
         <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>۲-</item>
+        <item>۱-</item>
+        <item>۰</item>
+        <item>۱+</item>
+        <item>۲+</item>
     </string-array>
 
 </resources>

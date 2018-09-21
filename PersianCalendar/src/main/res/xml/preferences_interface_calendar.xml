@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
+        android:title="@string/pref_interface"
+        settings:iconSpaceReserved="false">
+
+        <androidx.preference.ListPreference
+            android:defaultValue="fa"
+            android:entries="@array/languageNames"
+            android:entryValues="@array/languageKeys"
+            android:key="AppLanguage"
+            android:negativeButtonText="@string/cancel"
+            android:title="@string/language"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="LightTheme"
+            android:entries="@array/themeNames"
+            android:entryValues="@array/themeKeys"
+            android:key="Theme"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/select_skin"
+            android:title="@string/skin"
+            settings:iconSpaceReserved="false" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="PersianDigits"
+        android:summary="@string/enable_persian_digits"
+        android:title="@string/persian_digits"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.PreferenceCategory
+        android:layout="@layout/category_preference"
+        android:title="@string/calendar"
+        settings:iconSpaceReserved="false">
+
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/default_holidays"
+            android:dialogTitle="@string/events"
+            android:entries="@array/holidays_types"
+            android:entryValues="@array/holidays_values"
+            android:key="holiday_types"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/events_summary"
+            android:title="@string/events"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="showDeviceCalendarEvents"
+            android:summary="@string/show_device_calendar_events_summary"
+            android:title="@string/show_device_calendar_events"
+            settings:iconSpaceReserved="false" />
+
+        <!-- It is a custom dialog, not a ListPreference -->
+        <androidx.preference.Preference
+            android:key="calendars_priority"
+            android:summary="@string/calendars_priority_summary"
+            android:title="@string/calendars_priority"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="astronomicalFeatures"
+            android:summary="@string/astronomical_info_summary"
+            android:title="@string/astronomical_info"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="showWeekOfYearNumber"
+            android:summary="@string/week_of_year_summary"
+            android:title="@string/week_of_year"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:key="WeekStart"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/week_start_summary"
+            android:title="@string/week_start"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.MultiSelectListPreference
+            android:defaultValue="@array/default_weekends"
+            android:entries="@array/week_days"
+            android:entryValues="@array/week_days_value"
+            android:key="WeekEnds"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
+            android:summary="@string/week_ends_summary"
+            android:title="@string/week_ends"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/islamicOffsetNames"
+            android:entryValues="@array/islamicOffsetKeys"
+            android:key="islamic_offset"
+            android:negativeButtonText="@string/cancel"
+            android:summary="@string/islamic_offset_summary"
+            android:title="@string/islamic_offset"
+            settings:iconSpaceReserved="false" />
+
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="WidgetIn24"
+            android:summary="@string/showing_clock_in_24"
+            android:title="@string/clock_in_24"
+            settings:iconSpaceReserved="false" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

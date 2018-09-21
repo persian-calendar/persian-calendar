@@ -11,9 +11,9 @@ import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.DaysPaintResources;
-import com.byagowi.persiancalendar.view.ItemDayView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
+import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
 
 import java.util.List;
 
@@ -28,6 +28,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
+    private Context context;
     private final ViewGroup.LayoutParams layoutParams;
     private final DaysPaintResources daysPaintResources;
 
@@ -44,6 +45,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
+        this.context = context;
         initializeMonthEvents(context);
         isArabicDigit = Utils.isArabicDigitSelected();
 
@@ -157,9 +159,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 if (position % 8 == 0) {
                     int row = position / 8;
                     if (row > 0 && row <= weeksCount) {
-                        itemDayView.setNonDayOfMonthItem(
-                                Utils.formatNumber(weekOfYearStart + row - 1),
+                        String weekNumber = Utils.formatNumber(weekOfYearStart + row - 1);
+                        itemDayView.setNonDayOfMonthItem(weekNumber,
                                 daysPaintResources.weekNumberTextSize);
+                        if (Utils.isTalkBackEnabled()) {
+                            itemDayView.setContentDescription(
+                                    String.format(context.getString(R.string.nth_week_of_year), weekNumber));
+                        }
 
                         itemDayView.setVisibility(View.VISIBLE);
                     } else setEmpty();
@@ -175,6 +181,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 itemDayView.setNonDayOfMonthItem(
                         Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)),
                         daysPaintResources.weekDaysInitialTextSize);
+                if (Utils.isTalkBackEnabled()) {
+                    itemDayView.setContentDescription(String.format(
+                            context.getString(R.string.week_days_name_column),
+                            Utils.getWeekDayName(Utils.fixDayOfWeek(position))));
+                }
 
                 itemDayView.setVisibility(View.VISIBLE);
             } else {
@@ -189,6 +200,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                                     ? daysPaintResources.arabicDigitsTextSize
                                     : daysPaintResources.persianDigitsTextSize,
                             day.getJdn(), position - 6 - startingDayOfWeek);
+
+                    itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
+                            day.getJdn(), day.isToday(), monthEvents,
+                            day.isToday(), false, true));
 
                     itemDayView.setVisibility(View.VISIBLE);
                 } else {

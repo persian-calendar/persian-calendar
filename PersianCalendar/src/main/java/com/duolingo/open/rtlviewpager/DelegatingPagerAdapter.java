@@ -35,7 +35,11 @@ public class DelegatingPagerAdapter extends PagerAdapter {
     }
 
     public void destroyItem(ViewGroup container, int position, Object object) {
-        mDelegate.destroyItem(container, position, object);
+        try {
+            mDelegate.destroyItem(container, position, object);
+        } catch (Exception ignore) {
+            // don't crash at least on weird cases
+        }
     }
 
     public void setPrimaryItem(ViewGroup container, int position, Object object) {

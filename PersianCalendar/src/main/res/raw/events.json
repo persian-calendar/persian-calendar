@@ -633,6 +633,9 @@
     { "holiday": false, "month": 2, "day": 10, "type": "Iran",
       "title": "آغاز عملیات بیت المقدس (۱۳۶۱ ه‍.ش)" },
 
+    { "holiday": false, "month": 2, "day": 11, "type": "Iran",
+      "title": "روز جهانی کارگر (۱ مه)" },
+
     { "holiday": false, "month": 2, "day": 19, "type": "Iran",
       "title": "روز اسناد ملی و میراث مکتوب" },
 

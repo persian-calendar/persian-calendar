@@ -12,21 +12,21 @@ import androidx.preference.EditTextPreference;
 /**
  * Created by ebraminio on 2/16/16.
  */
-public class AthanNumericPreference extends EditTextPreference {
+public class NumericPreference extends EditTextPreference {
 
-    public AthanNumericPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NumericPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public AthanNumericPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NumericPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public AthanNumericPreference(Context context, AttributeSet attrs) {
+    public NumericPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AthanNumericPreference(Context context) {
+    public NumericPreference(Context context) {
         super(context);
     }
 
