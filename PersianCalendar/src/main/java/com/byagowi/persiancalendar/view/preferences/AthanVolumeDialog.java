@@ -25,8 +25,6 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
 
     @Override
     protected View onCreateDialogView(Context context) {
-        View view = super.onCreateDialogView(context);
-
         final AthanVolumePreference athanPref = (AthanVolumePreference) getPreference();
 
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -56,7 +54,8 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             }
         }
 
-        SeekBar seekBar = view.findViewById(R.id.sbVolumeSlider);
+        SeekBar seekBar = new SeekBar(context);
+        seekBar.setMax(7);
 
         volume = athanPref.getVolume();
         seekBar.setProgress(volume);
@@ -90,7 +89,7 @@ public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
             }
         });
 
-        return view;
+        return seekBar;
     }
 
     @Override

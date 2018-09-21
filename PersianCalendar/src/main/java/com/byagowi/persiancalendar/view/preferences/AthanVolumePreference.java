@@ -11,7 +11,6 @@ public class AthanVolumePreference extends DialogPreference {
 
     public AthanVolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setDialogLayoutResource(R.layout.preference_volume);
         setDialogIcon(null);
     }
 
