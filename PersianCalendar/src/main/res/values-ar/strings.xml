@@ -7,11 +7,12 @@
     <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
     <string name="closeDrawer">إغلاق</string>
     <string name="openDrawer">فتح</string>
-    <string name="cancel">إلغاء</string>
     <string name="accept">موافق</string>
     <string name="add">إضافة</string>
     <string name="help">مساعدة</string>
     <string name="more">المزيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="continue_button">تشغيل</string>
 
     <!--Navigation drawers-->
     <string name="calendar">التقويم</string>
@@ -102,6 +103,12 @@
     <string name="resume">تشغيل</string>
     <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة، حدد مكانك من الإعدادات > المكان والأذان</string>
 
+    <string name="north">الشمال</string>
+    <string name="east">الشرق</string>
+    <string name="south">الجنوب</string>
+    <string name="west">الغرب</string>
+    <string name="qibla">القبلة</string>
+
     <!-- Settings -->
     <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
     <string name="pref_header_widget_location">المُصغر والتنبيهات</string>
@@ -187,8 +194,11 @@
 
     <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات اللازمة</string>
 
-    <string name="location_access">Location Access</string>
-    <string name="phone_location_required">This part of the app needs location permission otherwise you have to enter your latitude and longitude manually.</string>
+    <!--Permissions-->
+    <string name="location_access">الوصول للموقع</string>
+    <string name="phone_location_required">يحتاج هذا الجزء من التطبيق إذن الوصول للموقع الجغرافي وإلا يجب عليك إدخال خط الطول وخط العرض يدويًا</string>
+    <string name="calendar_access">الوصول إلى التقويم</string>
+    <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم</string>
 
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>

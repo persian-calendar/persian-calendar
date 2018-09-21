@@ -1,5 +1,9 @@
 package com.byagowi.persiancalendar;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Constants {
 
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
@@ -52,6 +56,8 @@ public class Constants {
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
     public static final String PREF_HOLIDAY_TYPES = "holiday_types";
+    public static final String PREF_WEEK_START = "WeekStart";
+    public static final String PREF_WEEK_ENDS = "WeekEnds";
 
     public static final String CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE";
 
@@ -71,6 +77,9 @@ public class Constants {
     public static final boolean DEFAULT_NOTIFICATION_ATHAN = false;
     public static final boolean DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true;
     public static final int DEFAULT_ATHAN_VOLUME = 1;
+    public static final String DEFAULT_WEEK_START = "0";
+    // WeekEnds, 6 means Friday
+    public static final Set<String> DEFAULT_WEEK_ENDS = new HashSet<>(Collections.singletonList("6"));
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";

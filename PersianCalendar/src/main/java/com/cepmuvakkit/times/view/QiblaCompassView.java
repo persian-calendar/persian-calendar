@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
@@ -22,6 +23,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
@@ -67,6 +69,9 @@ public class QiblaCompassView extends View {
         moonPosition = sunMoonPosition.getMoonPosition();
     }
 
+    @ColorInt
+    int qiblaColor;
+
     public void initCompassView() {
         setFocusable(true);
         initAstronomicParameters();
@@ -80,11 +85,13 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
+        qiblaColor = ContextCompat.getColor(getContext(), R.color.qibla_color);
+        dashedPaint.setColor(qiblaColor);
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
         textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
         textPaint.setTextSize(20);
+
     }
 
     @Override
@@ -125,7 +132,7 @@ public class QiblaCompassView extends View {
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
+        textPaint.setColor(qiblaColor);
         canvas.rotate(-bearing, px, py);// Attach and Detach capability lies
         canvas.save();
         drawDial(canvas);
@@ -302,7 +309,6 @@ public class QiblaCompassView extends View {
     private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public void drawQibla(Canvas canvas) {
-
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);
         qiblaPaint.reset();
         qiblaPaint.setColor(Color.GREEN);
@@ -315,11 +321,75 @@ public class QiblaCompassView extends View {
         canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - radius - kaaba.getHeight() / 2,
                 qiblaPaint);
         canvas.restore();
-
     }
 
-    public void setBearing(float _bearing) {
-        bearing = _bearing;
+    static public boolean isNearToDegree(float angle, float compareTo) {
+        float difference = Math.abs(angle - compareTo);
+        return difference > 180 ? 360 - difference < 3.f : difference < 3.f;
+    }
+
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
+    }
+
+    // deliberately true
+    boolean isCurrentlyNorth = true;
+    boolean isCurrentlyEast = true;
+    boolean isCurrentlyWest = true;
+    boolean isCurrentlySouth = true;
+    boolean isCurrentlyQibla = true;
+
+    public void isOnDirectionAction() {
+        Context context = getContext();
+        if (context == null) return;
+
+        // 0=North, 90=East, 180=South, 270=West
+        if (isNearToDegree(bearing, 0)) {
+            if (!isCurrentlyNorth) {
+                UIUtils.a11yShowToastWithClick(context, R.string.north);
+                isCurrentlyNorth = true;
+            }
+        } else {
+            isCurrentlyNorth = false;
+        }
+
+        if (isNearToDegree(bearing, 90)) {
+            if (!isCurrentlyEast) {
+                UIUtils.a11yShowToastWithClick(context, R.string.east);
+                isCurrentlyEast = true;
+            }
+        } else {
+            isCurrentlyEast = false;
+        }
+
+        if (isNearToDegree(bearing, 180)) {
+            if (!isCurrentlySouth) {
+                UIUtils.a11yShowToastWithClick(context, R.string.south);
+                isCurrentlySouth = true;
+            }
+        } else {
+            isCurrentlySouth = false;
+        }
+
+        if (isNearToDegree(bearing, 270)) {
+            if (!isCurrentlyWest) {
+                UIUtils.a11yShowToastWithClick(context, R.string.west);
+                isCurrentlyWest = true;
+            }
+        } else {
+            isCurrentlyWest = false;
+        }
+
+        if (isLongLatAvailable() && qiblaInfo != null) {
+            if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
+                if (!isCurrentlyQibla) {
+                    UIUtils.a11yShowToastWithClick(context, R.string.qibla);
+                    isCurrentlyQibla = true;
+                }
+            } else {
+                isCurrentlyQibla = false;
+            }
+        }
     }
 
     public void setLatitude(double latitude) {

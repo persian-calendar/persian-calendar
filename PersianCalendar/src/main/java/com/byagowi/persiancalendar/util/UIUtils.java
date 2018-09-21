@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -18,11 +20,13 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.github.praytimes.Clock;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
@@ -47,22 +51,30 @@ public class UIUtils {
     }
 
     public static void askForCalendarPermission(Activity activity) {
-        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.READ_CALENDAR
-                    },
-                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
-        }
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.calendar_access)
+                .setMessage(R.string.phone_calendar_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.READ_CALENDAR
+                        },
+                        Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
     public static void askForLocationPermission(Activity activity) {
-        if (activity != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },
-                    Constants.LOCATION_PERMISSION_REQUEST_CODE);
-        }
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.location_access)
+                .setMessage(R.string.phone_location_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        },
+                        Constants.LOCATION_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
     public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
@@ -191,5 +203,25 @@ public class UIUtils {
 
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    private static long latestToastShowTime = -1;
+    private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
+    private static AudioManager audioManager = null;
+
+    public static void a11yShowToastWithClick(Context context, @StringRes int resId) {
+        if (!Utils.isTalkBackEnabled()) return;
+
+        if (audioManager == null) {
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        }
+
+        long now = System.currentTimeMillis();
+        if (now - latestToastShowTime > twoSeconds) {
+            Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+            // https://stackoverflow.com/a/29423018
+            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
+            latestToastShowTime = now;
+        }
     }
 }

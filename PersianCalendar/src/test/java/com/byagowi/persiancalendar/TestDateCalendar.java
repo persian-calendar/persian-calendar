@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.cepmuvakkit.times.view.QiblaCompassView;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
@@ -19,6 +20,7 @@ import calendar.IslamicDate;
 import calendar.PersianDate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestDateCalendar {
@@ -925,5 +927,27 @@ public class TestDateCalendar {
         assertEquals(new Clock(16, 57).toInt(), prayTimes.get(PrayTime.ASR).toInt());
         assertEquals(new Clock(20, 8).toInt(), prayTimes.get(PrayTime.MAGHRIB).toInt());
         assertEquals(new Clock(21, 3).toInt(), prayTimes.get(PrayTime.ISHA).toInt());
+    }
+
+    @Test
+    public void test_isNearToDegree() {
+        assertTrue(QiblaCompassView.isNearToDegree(360, 1));
+        assertTrue(QiblaCompassView.isNearToDegree(1, 360));
+
+        assertTrue(QiblaCompassView.isNearToDegree(2, 360));
+        assertFalse(QiblaCompassView.isNearToDegree(3, 360));
+
+        assertTrue(QiblaCompassView.isNearToDegree(360, 2));
+        assertFalse(QiblaCompassView.isNearToDegree(360, 3));
+
+        assertTrue(QiblaCompassView.isNearToDegree(180, 181));
+        assertTrue(QiblaCompassView.isNearToDegree(180, 182));
+        assertFalse(QiblaCompassView.isNearToDegree(180, 183));
+        assertFalse(QiblaCompassView.isNearToDegree(180, 184));
+
+        assertTrue(QiblaCompassView.isNearToDegree(181, 180));
+        assertTrue(QiblaCompassView.isNearToDegree(182, 180));
+        assertFalse(QiblaCompassView.isNearToDegree(183, 180));
+        assertFalse(QiblaCompassView.isNearToDegree(184, 180));
     }
 }

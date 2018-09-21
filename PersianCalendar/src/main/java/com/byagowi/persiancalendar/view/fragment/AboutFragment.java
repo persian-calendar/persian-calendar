@@ -102,7 +102,7 @@ public class AboutFragment extends Fragment {
             new AlertDialog.Builder(getActivity())
                     .setView(emailBinding.getRoot())
                     .setTitle(R.string.about_email_sum)
-                    .setPositiveButton(R.string.resume, (dialog, id) -> {
+                    .setPositiveButton(R.string.continue_button, (dialog, id) -> {
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts
                                 ("mailto", "ebrahim@gnu.org", null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));

@@ -59,6 +59,7 @@ public class CompassFragment extends Fragment {
 
         Context context = getContext();
         Coordinate coordinate = Utils.getCoordinate(getContext());
+
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass),
                 Utils.getCityName(context, true));
 
@@ -81,6 +82,8 @@ public class CompassFragment extends Fragment {
                 // 0=North, 90=East, 180=South, 270=West
                 float angle = event.values[0] + orientation;
                 if (stop) angle = 0;
+                else binding.compassView.isOnDirectionAction();
+
                 azimuth = lowPass(angle, azimuth);
                 binding.compassView.setBearing(azimuth);
                 binding.compassView.invalidate();
