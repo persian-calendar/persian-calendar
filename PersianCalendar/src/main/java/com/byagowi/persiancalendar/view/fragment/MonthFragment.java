@@ -56,7 +56,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        MonthMainLayout view = (MonthMainLayout) inflater.inflate(R.layout.fragment_month, container, false);
         isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
@@ -143,6 +143,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }
+
+        view.setCalendarFragment(calendarFragment);
 
         LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity()).registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));

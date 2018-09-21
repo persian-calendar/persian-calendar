@@ -505,6 +505,10 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
     }
 
+    public void a11yBringPrevNextDay(boolean isNext) {
+        bringDate(lastSelectedJdn + (isNext ? 1 : -1));
+    }
+
     private int calculateViewPagerPositionFromJdn(long jdn) {
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);

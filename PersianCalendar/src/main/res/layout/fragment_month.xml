@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.byagowi.persiancalendar.view.fragment.MonthMainLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/grid_calendar_height"
+    android:id="@+id/monthMainLayout"
     android:background="?attr/colorPrimary"
     android:orientation="horizontal">
 
@@ -35,4 +36,4 @@
         android:gravity="center"
         android:tint="?attr/colorMonthSwitch" />
 
-</LinearLayout>
+</com.byagowi.persiancalendar.view.fragment.MonthMainLayout>
