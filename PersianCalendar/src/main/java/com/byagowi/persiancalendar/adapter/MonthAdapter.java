@@ -6,19 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
 import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
@@ -39,21 +38,24 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         }
     }
 
-    public MonthAdapter(Context context, List<DayEntity> days,
+    CalendarFragmentDependency calendarFragmentDependency;
+
+    public MonthAdapter(CalendarFragmentDependency calendarFragmentDependency, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
+        this.calendarFragmentDependency = calendarFragmentDependency;
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
         totalDays = days.size();
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
-        this.context = context;
+        this.context = calendarFragmentDependency.getCalendarFragment().getContext();
         initializeMonthEvents(context);
         isArabicDigit = Utils.isArabicDigitSelected();
 
         layoutParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 context.getResources().getDimensionPixelSize(R.dimen.day_item_size));
-        daysPaintResources = new DaysPaintResources(context);
+        this.daysPaintResources = calendarFragmentDependency.getDaysPaintResources();
     }
 
     private int selectedDay = -1;
@@ -109,15 +111,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
     }
 
-    private static CalendarFragment getCalendarFragment(View view) {
-        Context ctx = view.getContext();
-        if (ctx instanceof FragmentActivity) {
-            return (CalendarFragment) ((FragmentActivity) ctx).getSupportFragmentManager()
-                    .findFragmentByTag(CalendarFragment.class.getName());
-        }
-        return null;
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         ViewHolder(ItemDayView itemView) {
             super(itemView);
@@ -131,10 +124,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             long jdn = itemDayView.getJdn();
             if (jdn == -1) return;
 
-            CalendarFragment calendarFragment = getCalendarFragment(v);
-            if (calendarFragment != null) {
-                calendarFragment.selectDay(jdn);
-            }
+            calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
             MonthAdapter.this.selectDay(itemDayView.getDayOfMonth());
         }
 
@@ -146,11 +136,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             long jdn = itemDayView.getJdn();
             if (jdn == -1) return false;
 
-            CalendarFragment calendarFragment = getCalendarFragment(v);
-            if (calendarFragment != null) {
-                calendarFragment.addEventOnCalendar(jdn);
-            }
-
+            calendarFragmentDependency.getCalendarFragment().addEventOnCalendar(jdn);
             return false;
         }
 

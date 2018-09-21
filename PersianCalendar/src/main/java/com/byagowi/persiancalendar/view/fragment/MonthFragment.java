@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
+import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -21,32 +24,40 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
 import calendar.CalendarType;
+import dagger.android.support.DaggerFragment;
 
-public class MonthFragment extends Fragment implements View.OnClickListener {
+public class MonthFragment extends DaggerFragment implements View.OnClickListener {
     private AbstractDate typedDate;
     private int offset;
     private MonthAdapter adapter;
-    private CalendarFragment calendarFragment;
 
     private long baseJdn;
     private int monthLength;
 
     private static boolean isRTL = false;
 
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
+    @Inject
+    CalendarFragmentDependency calendarFragmentDependency;
+
+    @Inject
+    MonthFragmentDependency monthFragmentDependency;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_month, container, false);
-        isRTL = UIUtils.isRTL(getContext());
+        isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
@@ -67,7 +78,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         recyclerView.setHasFixedSize(true);
 
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),
+        recyclerView.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
                 Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
@@ -119,25 +130,21 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         ///////
         ///////
         ///////
-        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek, weekOfYearStart, weeksCount);
+        CalendarFragment calendarFragment = calendarFragmentDependency.getCalendarFragment();
+
+        adapter = new MonthAdapter(calendarFragmentDependency, days,
+                startingDayOfWeek, weekOfYearStart, weeksCount);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
-        FragmentActivity activity = getActivity();
-//        if (activity == null) throw new AssertionError();
-
-        calendarFragment = (CalendarFragment) activity
-                .getSupportFragmentManager()
-                .findFragmentByTag(CalendarFragment.class.getName());
-
-        if (calendarFragment != null && calendarFragment.firstTime &&
+        if (calendarFragment.firstTime &&
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.firstTime = false;
             calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }
 
-        LocalBroadcastManager.getInstance(activity).registerReceiver(setCurrentMonthReceiver,
+        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity()).registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
         return view;
@@ -156,7 +163,7 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
                 if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
                     adapter.initializeMonthEvents(context);
-                    calendarFragment.selectDay(jdn);
+                    calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
                 } else {
                     adapter.selectDay(-1);
                     updateTitle();
@@ -174,9 +181,8 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        Context context = getContext();
-        if (context != null)
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(setCurrentMonthReceiver);
+        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity())
+                .unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
 
@@ -184,17 +190,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                calendarFragment.changeMonth(isRTL ? -1 : 1);
+                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? -1 : 1);
                 break;
 
             case R.id.prev:
-                calendarFragment.changeMonth(isRTL ? 1 : -1);
+                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? 1 : -1);
                 break;
         }
     }
 
     private void updateTitle() {
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(typedDate),
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(
+                CalendarUtils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }
 }

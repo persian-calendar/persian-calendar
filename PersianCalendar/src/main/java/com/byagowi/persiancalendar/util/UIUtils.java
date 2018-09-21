@@ -25,9 +25,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
@@ -41,15 +39,6 @@ import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class UIUtils {
-    static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
-        //noinspection ConstantConditions
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(title);
-            supportActionBar.setSubtitle(subtitle);
-        }
-    }
-
     public static void askForCalendarPermission(Activity activity) {
         if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
 

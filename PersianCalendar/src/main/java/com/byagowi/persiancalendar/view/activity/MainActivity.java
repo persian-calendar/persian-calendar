@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
@@ -40,13 +42,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
@@ -75,7 +80,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends DaggerAppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final int CALENDAR = 0,
             CONVERTER = 1,
@@ -120,6 +125,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 //    }
 
     private static long creationDateJdn;
+
+    @Inject
+    AppDependency appDependency; // same object from App
+
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,6 +260,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             edit.putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true);
             edit.apply();
         }
+
+        actionBar = getSupportActionBar();
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
@@ -523,5 +538,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         binding.drawer.closeDrawers();
         return true;
+    }
+
+    public void setTitleAndSubtitle(String title, String subtitle) {
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
     }
 }

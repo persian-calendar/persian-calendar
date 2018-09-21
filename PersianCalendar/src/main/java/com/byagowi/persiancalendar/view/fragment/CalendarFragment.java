@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +32,8 @@ import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -58,13 +59,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
@@ -72,11 +73,12 @@ import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;
+import dagger.android.support.DaggerFragment;
 
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
-public class CalendarFragment extends Fragment implements View.OnClickListener {
+public class CalendarFragment extends DaggerFragment implements View.OnClickListener {
     private Calendar calendar = Calendar.getInstance();
     private Coordinate coordinate;
     private PrayTimesCalculator prayTimesCalculator;
@@ -85,6 +87,12 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private CalendarsView calendarsView;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
+
+    @Inject
+    AppDependency appDependency; // same object from App
+
+    @Inject
+    MainActivityDependency mainActivityDependency; // same object from MainActivity
 
     @Nullable
     @Override
@@ -142,7 +150,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         if (coordinate != null) {
@@ -196,8 +204,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addEventOnCalendar(long jdn) {
-        Activity activity = getActivity();
-        if (activity == null) return;
+        MainActivity activity = mainActivityDependency.getMainActivity();
 
         CivilDate civil = new CivilDate(jdn);
         Calendar time = Calendar.getInstance();
@@ -226,8 +233,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        MainActivity activity = (MainActivity) getActivity();
-        if (activity == null) return;
+        MainActivity activity = mainActivityDependency.getMainActivity();
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
@@ -366,10 +372,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View textView) {
-                    FragmentActivity activity = getActivity();
-                    if (activity != null) {
-                        ((MainActivity) activity).bringPreferences();
-                    }
+                    mainActivityDependency.getMainActivity().bringPreferences();
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
