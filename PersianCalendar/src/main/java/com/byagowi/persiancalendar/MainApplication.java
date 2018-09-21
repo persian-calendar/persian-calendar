@@ -1,112 +1,133 @@
 package com.byagowi.persiancalendar;
 
+import android.app.Activity;
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import javax.inject.Inject;
 import javax.inject.Scope;
 import javax.inject.Singleton;
 
-import dagger.BindsInstance;
 import dagger.Component;
 import dagger.Module;
-import dagger.Provides;
+import dagger.android.AndroidInjectionModule;
 import dagger.android.AndroidInjector;
 import dagger.android.ContributesAndroidInjector;
-import dagger.android.support.AndroidSupportInjectionModule;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
 import dagger.android.support.DaggerApplication;
 
-public class MainApplication extends DaggerApplication {
+public class MainApplication extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
+        DaggerMainApplication_AppComponent.create().inject(this);
         ReleaseDebugDifference.mainApplication(this);
         Utils.initUtils(getApplicationContext());
     }
 
+    @Inject
+    AppDependency appDependency;
+
+    @Inject
+    DispatchingAndroidInjector<Activity> activityInjector;
+
     @Override
-    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder().create(this).build();
+    public AndroidInjector<Activity> activityInjector() {
+        return activityInjector;
     }
 
-    public static class TestingTT {
-        static private int a = 100;
-
-        TestingTT() {
-            a += 100;
-        }
-
-        public int getA() {
-            return a;
-        }
+    // AppModule.java
+    @Module(includes = AndroidInjectionModule.class)
+    static abstract class AppModule {
+        @PerActivity
+        @ContributesAndroidInjector(modules = MainActivityModule.class)
+        abstract MainActivity mainActivityInjector();
     }
 
+    // AppComponent.java
+    @Singleton
+    @Component(modules = AppModule.class)
+    interface AppComponent {
+        void inject(MainApplication app);
+    }
+
+
+    // MainActivityModule.java
+    @Module
+    static public abstract class MainActivityModule {
+        @PerFragment
+        @ContributesAndroidInjector(modules = MainFragmentModule.class)
+        abstract CalendarFragment mainFragmentInjector();
+    }
+
+    // MainFragmentModule.java
+    @Module
+    static public abstract class MainFragmentModule {
+        @PerChildFragment
+        @ContributesAndroidInjector(modules = MainChildFragmentModule.class)
+        abstract MonthFragment mainChildFragmentInjector();
+    }
+
+    // MainChildFragmentModule.java
+    @Module
+    static public abstract class MainChildFragmentModule {
+    }
+
+    // PerActivity.java
     @Scope
-    @Documented
-    @Retention(value = RetentionPolicy.RUNTIME)
-    public @interface MyActivityScope {
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PerActivity {
     }
-}
 
-@Module
-abstract class ActivitiesBindingModule {
-    @MainApplication.MyActivityScope
-    @ContributesAndroidInjector(modules = {MainActivityModule.class})
-    abstract MainActivity mainActivity();
-}
-
-@Singleton
-@Component(modules = {
-        AndroidSupportInjectionModule.class,
-        AppModule.class,
-        ActivitiesBindingModule.class
-})
-interface AppComponent extends AndroidInjector<MainApplication> {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        Builder create(Application app);
-
-        AppComponent build();
+    // PerFragment.java
+    @Scope
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PerFragment {
     }
-}
 
-@Module
-class AppModule {
-    @Provides
+    // PerChildFragment.java
+    @Scope
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PerChildFragment {
+    }
+
+    // AppDependency.java
     @Singleton
-    SharedPreferences provideSharedPreference(Application app) {
-        return PreferenceManager.getDefaultSharedPreferences(app);
+    static public final class AppDependency {
+        @Inject
+        AppDependency() {
+        }
     }
 
-    @Provides
-    @Singleton
-    MainApplication.TestingTT providesDatabase(Application app) {
-//        Room.databaseBuilder(app, AppDatabase:: class.java, "book-db")
-//            .
-//
-//        allowMainThreadQueries().
-//
-//                build()
-        return new MainApplication.TestingTT();
+    // ActivityDependency.java
+    @PerActivity
+    static public final class ActivityDependency {
+        @Inject
+        ActivityDependency() {
+        }
     }
-}
 
-@Module
-abstract class MainActivityModule {
-//    @Module
-//    companion object
-//
-//    {
-//        @JvmStatic
-//        @Provides
-//        fun provideABCKey (preference:SharedPreferences):Any = 32
-//    }
+    // FragmentDependency.java
+    @PerFragment
+    static public final class FragmentDependency {
+        @Inject
+        FragmentDependency() {
+        }
+    }
+
+    // ChildFragmentDependency.java
+    @PerChildFragment
+    static public final class ChildFragmentDependency {
+        @Inject
+        ChildFragmentDependency() {
+        }
+    }
 }

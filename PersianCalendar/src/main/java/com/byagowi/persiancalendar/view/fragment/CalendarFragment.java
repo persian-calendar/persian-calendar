@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.MainApplication;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
@@ -58,12 +59,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
@@ -72,11 +74,12 @@ import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;
+import dagger.android.support.DaggerFragment;
 
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
-public class CalendarFragment extends Fragment implements View.OnClickListener {
+public class CalendarFragment extends DaggerFragment implements View.OnClickListener {
     private Calendar calendar = Calendar.getInstance();
     private Coordinate coordinate;
     private PrayTimesCalculator prayTimesCalculator;
@@ -85,6 +88,15 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     private CalendarsView calendarsView;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
+
+    @Inject
+    MainApplication.AppDependency appDependency; // same object from App
+
+    @Inject
+    MainApplication.ActivityDependency activityDependency; // same object from MainActivity
+
+    @Inject
+    MainApplication.FragmentDependency fragmentDependency;
 
     @Nullable
     @Override

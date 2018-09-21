@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.MainApplication;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.entity.DayEntity;
@@ -20,6 +21,8 @@ import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,9 +44,23 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     private static boolean isRTL = false;
 
+    @Inject
+    MainApplication.AppDependency appDependency; // same object from App
+
+    @Inject
+    MainApplication.ActivityDependency activityDependency; // same object from MainActivity
+
+    @Inject
+    MainApplication.FragmentDependency fragmentDependency; // same object from MainFragment
+
+    @Inject
+    MainApplication.ChildFragmentDependency childFragmentDependency;
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        AndroidInjection.inject(this);
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         isRTL = UIUtils.isRTL(getContext());

@@ -80,10 +80,10 @@ dependencies {
   // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
   // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
 
-  annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
   implementation("com.google.dagger:dagger-android:$daggerVersion")
-  annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
   implementation("com.google.dagger:dagger-android-support:$daggerVersion")
+  annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
+  annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
 
   debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
   debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")

@@ -17,7 +17,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.MainApplication;
@@ -46,7 +45,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -127,7 +125,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     private static long creationDateJdn;
 
     @Inject
-    MainApplication.TestingTT test;
+    MainApplication.AppDependency appDependency; // same object from App
+
+    @Inject
+    MainApplication.ActivityDependency activityDependency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +140,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         Utils.initUtils(this);
-
-        Toast.makeText(this, "" + test.getA(), Toast.LENGTH_SHORT).show();
 
         TypefaceUtils.overrideFont("SERIF",
                 TypefaceUtils.getAppFont(getApplicationContext()));
