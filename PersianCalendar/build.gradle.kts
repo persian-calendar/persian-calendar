@@ -4,6 +4,24 @@ plugins {
   id("com.android.application")
 }
 
+// https://stackoverflow.com/a/52441962
+fun String.runCommand(workingDir: File = File("."),
+                      timeoutAmount: Long = 60,
+                      timeoutUnit: TimeUnit = TimeUnit.MINUTES): String? {
+  return try {
+    ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
+        .directory(workingDir)
+        .redirectOutput(ProcessBuilder.Redirect.PIPE)
+        .redirectError(ProcessBuilder.Redirect.PIPE)
+        .start().apply {
+          waitFor(timeoutAmount, timeoutUnit)
+        }.inputStream.bufferedReader().readText()
+  } catch (e: java.io.IOException) {
+    e.printStackTrace()
+    null
+  }
+}
+
 android {
   compileSdkVersion(28)
 
@@ -17,36 +35,33 @@ android {
     vectorDrawables.useSupportLibrary = true
   }
 
-//    buildTypes {
-//        debug {
-//            versionNameSuffix "-" + "git rev-parse --abbrev-ref HEAD".execute().text.trim() + "-" +
-//                    "git rev-list HEAD --count".execute().text.trim() + "-" +
-//                    "git rev-parse --short HEAD".execute().text.trim()
-//        }
-//        release {
-//            minifyEnabled true
-//            shrinkResources true
-//            // Maybe proguard-android-optimize.txt in future
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
-//    }
+  buildTypes {
+    getByName("debug") {
+      setVersionNameSuffix("-" + listOf(
+          "git rev-parse --abbrev-ref HEAD".runCommand()?.trim(),
+          "git rev-list HEAD --count".runCommand()?.trim(),
+          "git rev-parse --short HEAD".runCommand()?.trim()
+      ).joinToString("-"))
+    }
+    getByName("release") {
+      isMinifyEnabled = true
+      isShrinkResources = true
+      // Maybe proguard-android-optimize.txt in future
+      setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
+    }
+  }
 
-//    lintOptions {
-//        abortOnError false
-//    }
-//
-//    compileOptions {
-//        sourceCompatibility 1.8
-//        targetCompatibility 1.8
-//    }
-//
+  compileOptions {
+    setSourceCompatibility(1.8)
+    setTargetCompatibility(1.8)
+  }
+
   dataBinding {
     isEnabled = true
   }
 }
 
 dependencies {
-
   val androidXVersion = "1.0.0-rc02"
   val leakCanaryVersion = "1.6.1"
   val junitVersion = "4.12"
