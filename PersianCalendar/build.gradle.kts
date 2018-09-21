@@ -37,11 +37,11 @@ android {
 
   buildTypes {
     getByName("debug") {
-      setVersionNameSuffix("-" + listOf(
+      versionNameSuffix = "-" + listOf(
           "git rev-parse --abbrev-ref HEAD".runCommand()?.trim(),
           "git rev-list HEAD --count".runCommand()?.trim(),
           "git rev-parse --short HEAD".runCommand()?.trim()
-      ).joinToString("-"))
+      ).joinToString("-")
     }
     getByName("release") {
       isMinifyEnabled = true
@@ -52,8 +52,8 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(1.8)
-    setTargetCompatibility(1.8)
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 
   dataBinding {
