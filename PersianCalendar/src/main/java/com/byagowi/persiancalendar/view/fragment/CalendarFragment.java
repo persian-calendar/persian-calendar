@@ -58,11 +58,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
@@ -87,7 +89,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(
-            LayoutInflater inflater,
+            @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
@@ -160,7 +162,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         return mainBinding.getRoot();
     }
 
-    public boolean firstTime = true;
+    boolean firstTime = true;
 
     private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
@@ -255,7 +257,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View textView) {
+            public void onClick(@NonNull View textView) {
                 try {
                     startActivityForResult(new Intent(Intent.ACTION_VIEW)
                                     .setData(ContentUris.withAppendedId(
@@ -267,7 +269,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void updateDrawState(TextPaint ds) {
+            public void updateDrawState(@NonNull TextPaint ds) {
                 super.updateDrawState(ds);
                 String color = event.getColor();
                 if (!TextUtils.isEmpty(color)) {
@@ -363,8 +365,11 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
             SpannableString ss = new SpannableString(title);
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
-                public void onClick(View textView) {
-                    ((MainActivity) getActivity()).bringPreferences();
+                public void onClick(@NonNull View textView) {
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        ((MainActivity) activity).bringPreferences();
+                    }
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -482,13 +487,22 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
         selectDay(jdn);
 
+        if (Utils.isTalkBackEnabled()) {
+            long todayJdn = CalendarUtils.getTodayJdn();
+            if (jdn != todayJdn) {
+                Toast.makeText(context, CalendarUtils.getA11yDaySummary(context, jdn,
+                        false, null, true,
+                        true, true), Toast.LENGTH_SHORT).show();
+            }
+        }
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
     }
 
-    public int calculateViewPagerPositionFromJdn(long jdn) {
+    private int calculateViewPagerPositionFromJdn(long jdn) {
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
@@ -610,7 +624,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    public int getViewPagerPosition() {
+    int getViewPagerPosition() {
         return viewPagerPosition;
     }
 

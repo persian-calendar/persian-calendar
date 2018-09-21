@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.util.Utils;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -120,10 +121,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             bundle.putString("key", preference.getKey());
             fragment.setArguments(bundle);
             fragment.setTargetFragment(this, 0);
-            try {
-                fragment.show(getFragmentManager(), fragment.getClass().getName());
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            FragmentManager fragmentManager = getFragmentManager();
+            if (fragmentManager != null) {
+                fragment.show(fragmentManager, fragment.getClass().getName());
             }
         }
     }

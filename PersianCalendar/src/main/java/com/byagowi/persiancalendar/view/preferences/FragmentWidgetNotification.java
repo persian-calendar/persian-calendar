@@ -26,8 +26,8 @@ public class FragmentWidgetNotification extends PreferenceFragmentCompat {
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        if (preference.getKey().equals(PREF_SELECTED_WIDGET_TEXT_COLOR)) {
-            Context context = getContext();
+        Context context = getContext();
+        if (context != null && preference.getKey().equals(PREF_SELECTED_WIDGET_TEXT_COLOR)) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             ColorPickerView colorPickerView = new ColorPickerView(context);

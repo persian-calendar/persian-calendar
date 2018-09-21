@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.viewmodel.LocationAdapterViewModel;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +29,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     }
 
     @Override
-    public LocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LocationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemCityNameBinding binding =
                 DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                         R.layout.list_item_city_name, parent, false);
@@ -36,7 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(cities.get(position));
     }
 

@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.view.sunrisesunset.SunView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,7 +32,8 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
 
         @Nullable
         @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        public View onCreateView(@NonNull LayoutInflater inflater,
+                                 @Nullable ViewGroup container, Bundle savedInstanceState) {
             return view;
         }
     }
@@ -64,20 +66,20 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
 
     // https://stackoverflow.com/a/47774679
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         super.setPrimaryItem(container, position, object);
 
         if (position != mCurrentPosition && container instanceof CardsViewPager) {
             Fragment fragment = (Fragment) object;
             CardsViewPager pager = (CardsViewPager) container;
 
-            if (fragment != null && fragment.getView() != null) {
+            if (fragment.getView() != null) {
                 View tab = fragment.getView();
                 pager.measureCurrentView(tab);
 
                 if (tabs.size() > 2) {
                     View sunView = tabs.get(Constants.OWGHAT_TAB).findViewById(R.id.svPlot);
-                    if (sunView != null && sunView instanceof SunView) {
+                    if (sunView instanceof SunView) {
                         SunView sun = (SunView) sunView;
                         if (position == Constants.OWGHAT_TAB) {
                             sun.startAnimate(false);

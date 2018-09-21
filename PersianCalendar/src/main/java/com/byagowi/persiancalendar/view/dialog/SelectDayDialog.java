@@ -9,8 +9,10 @@ import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 import com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Created by ebrahim on 3/20/16.
@@ -27,24 +29,29 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        long jdn = args.getLong(BUNDLE_KEY, -1);
+        long jdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
 
         DayPickerView dayPickerView = new SimpleDayPickerView(getContext());
         dayPickerView.setDayJdnOnView(jdn);
+        FragmentActivity activity = getActivity();
+//        if (activity == null) throw new AssertionError();
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(activity)
                 .setView((View) dayPickerView)
                 .setCustomTitle(null)
                 .setPositiveButton(R.string.go, (dialogInterface, i) -> {
-                    CalendarFragment calendarFragment = (CalendarFragment) getActivity()
+                    CalendarFragment calendarFragment = (CalendarFragment) activity
                             .getSupportFragmentManager()
                             .findFragmentByTag(CalendarFragment.class.getName());
 
-                    long resultJdn = dayPickerView.getDayJdnFromView();
-                    if (resultJdn != -1) calendarFragment.bringDate(resultJdn);
+                    if (calendarFragment != null) {
+                        long resultJdn = dayPickerView.getDayJdnFromView();
+                        if (resultJdn != -1) calendarFragment.bringDate(resultJdn);
+                    }
                 }).create();
     }
 }

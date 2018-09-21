@@ -6,8 +6,8 @@ package com.byagowi.persiancalendar.entity;
  * @author ebraminio
  */
 abstract public class AbstractEvent {
-    protected String title;
-    protected boolean holiday;
+    String title;
+    boolean holiday;
 
     public String getTitle() {
         return title;

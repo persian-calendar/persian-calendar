@@ -21,7 +21,9 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,12 +42,13 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     private static boolean isRTL = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_month, container, false);
         isRTL = UIUtils.isRTL(getContext());
-        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
+        Bundle args = getArguments();
+        offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
         // We deliberately like to avoid DataBinding thing here, at least for now
         ImageView next = view.findViewById(R.id.next);
@@ -120,17 +123,21 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(null);
 
-        calendarFragment = (CalendarFragment) getActivity()
+        FragmentActivity activity = getActivity();
+//        if (activity == null) throw new AssertionError();
+
+        calendarFragment = (CalendarFragment) activity
                 .getSupportFragmentManager()
                 .findFragmentByTag(CalendarFragment.class.getName());
 
-        if (calendarFragment.firstTime && offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
+        if (calendarFragment != null && calendarFragment.firstTime &&
+                offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.firstTime = false;
             calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(setCurrentMonthReceiver,
+        LocalBroadcastManager.getInstance(activity).registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
         return view;
@@ -167,7 +174,9 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(setCurrentMonthReceiver);
+        Context context = getContext();
+        if (context != null)
+            LocalBroadcastManager.getInstance(context).unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
 

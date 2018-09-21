@@ -45,12 +45,12 @@ public class ItemDayView extends View {
         int radius = Math.min(width, height) / 2;
 
         if (selected) {
-            canvas.drawCircle(width / 2, height / 2, radius - 5,
+            canvas.drawCircle(width / 2f, height / 2f, radius - 5,
                     resource.selectedPaint);
         }
 
         if (today) {
-            canvas.drawCircle(width / 2, height / 2, radius - 5,
+            canvas.drawCircle(width / 2f, height / 2f, radius - 5,
                     resource.todayPaint);
         }
 
@@ -73,16 +73,16 @@ public class ItemDayView extends View {
                 ? color : resource.colorEventLine);
 
         if (hasEvent) {
-            canvas.drawLine(width / 2 - resource.halfEventBarWidth,
+            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
                     height - resource.eventYOffset,
-                    width / 2 + resource.halfEventBarWidth,
+                    width / 2f + resource.halfEventBarWidth,
                     height - resource.eventYOffset, resource.linePaint);
         }
 
         if (hasAppointment) {
-            canvas.drawLine(width / 2 - resource.halfEventBarWidth,
+            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
                     height - resource.appointmentYOffset,
-                    width / 2 + resource.halfEventBarWidth,
+                    width / 2f + resource.halfEventBarWidth,
                     height - resource.appointmentYOffset, resource.linePaint);
         }
 

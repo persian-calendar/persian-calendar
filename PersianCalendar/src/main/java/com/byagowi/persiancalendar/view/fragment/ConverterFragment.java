@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -21,7 +22,7 @@ import calendar.CalendarType;
 
 public class ConverterFragment extends Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
