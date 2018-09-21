@@ -57,7 +57,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_month, container, false);
-        isRTL = UIUtils.isRTL(mainActivityDependency.getActivity());
+        isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
@@ -78,7 +78,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         recyclerView.setHasFixedSize(true);
 
 
-        recyclerView.setLayoutManager(new GridLayoutManager(mainActivityDependency.getActivity(),
+        recyclerView.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
                 Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
@@ -144,7 +144,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             updateTitle();
         }
 
-        LocalBroadcastManager.getInstance(mainActivityDependency.getActivity()).registerReceiver(setCurrentMonthReceiver,
+        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity()).registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
         return view;
@@ -181,7 +181,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(mainActivityDependency.getActivity())
+        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity())
                 .unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
@@ -200,7 +200,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     }
 
     private void updateTitle() {
-        mainActivityDependency.getActivity().setTitleAndSubtitle(
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(
                 CalendarUtils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }

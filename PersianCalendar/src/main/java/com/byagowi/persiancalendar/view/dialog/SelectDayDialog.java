@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 import com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView;
 
@@ -46,7 +46,7 @@ public class SelectDayDialog extends DaggerAppCompatDialogFragment {
         DayPickerView dayPickerView = new SimpleDayPickerView(getContext());
         dayPickerView.setDayJdnOnView(jdn);
 
-        return new AlertDialog.Builder(mainActivityDependency.getActivity())
+        return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                 .setView((View) dayPickerView)
                 .setCustomTitle(null)
                 .setPositiveButton(R.string.go, (dialogInterface, i) -> {

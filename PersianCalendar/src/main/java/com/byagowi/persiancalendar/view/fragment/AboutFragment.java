@@ -50,7 +50,7 @@ public class AboutFragment extends DaggerFragment {
         FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
                 container, false);
 
-        MainActivity activity = mainActivityDependency.getActivity();
+        MainActivity activity = mainActivityDependency.getMainActivity();
         activity.setTitleAndSubtitle(getString(R.string.about), "");
 
         // version
@@ -102,7 +102,7 @@ public class AboutFragment extends DaggerFragment {
         binding.email.setOnClickListener(arg -> {
             DialogEmailBinding emailBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_email,
                     container, false);
-            new AlertDialog.Builder(getActivity())
+            new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                     .setView(emailBinding.getRoot())
                     .setTitle(R.string.about_email_sum)
                     .setPositiveButton(R.string.continue_button, (dialog, id) -> {

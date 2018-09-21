@@ -105,7 +105,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         } else if (preference instanceof GPSLocationPreference) {
             //check whether gps provider and network providers are enabled or not
             try {
-                Activity activity = mainActivityDependency.getActivity();
+                Activity activity = mainActivityDependency.getMainActivity();
 
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +32,8 @@ import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -67,7 +66,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
@@ -152,7 +150,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
-        mainActivityDependency.getActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         if (coordinate != null) {
@@ -206,8 +204,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     }
 
     public void addEventOnCalendar(long jdn) {
-        Activity activity = getActivity();
-        if (activity == null) return;
+        MainActivity activity = mainActivityDependency.getMainActivity();
 
         CivilDate civil = new CivilDate(jdn);
         Calendar time = Calendar.getInstance();
@@ -236,8 +233,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        MainActivity activity = (MainActivity) getActivity();
-        if (activity == null) return;
+        MainActivity activity = mainActivityDependency.getMainActivity();
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
@@ -376,10 +372,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View textView) {
-                    FragmentActivity activity = getActivity();
-                    if (activity != null) {
-                        ((MainActivity) activity).bringPreferences();
-                    }
+                    mainActivityDependency.getMainActivity().bringPreferences();
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

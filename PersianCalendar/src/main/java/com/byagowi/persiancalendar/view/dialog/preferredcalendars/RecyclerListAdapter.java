@@ -95,7 +95,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             try {
                 FragmentActivity activity = calendarPreferenceDialog.getActivity();
                 if (activity == null) return;
-                View view = activity.findViewById(R.id.drawer);
+                View view = activity.findViewById(R.id.coordinator);
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
                 animator.setDuration(3000L);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());

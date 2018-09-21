@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.UIUtils;
 
 import javax.inject.Inject;
 
@@ -30,7 +29,7 @@ public class SettingsFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mainActivityDependency.getActivity().setTitleAndSubtitle(getString(R.string.settings), "");
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.settings), "");
 
         FragmentSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),
                 R.layout.fragment_settings, container, false);

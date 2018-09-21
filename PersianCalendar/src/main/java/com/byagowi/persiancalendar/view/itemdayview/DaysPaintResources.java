@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.itemdayview;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.util.TypedValue;

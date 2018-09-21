@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,8 +36,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import dagger.android.support.DaggerFragment;
 
 /**
@@ -70,7 +67,7 @@ public class CompassFragment extends DaggerFragment {
         if (context == null) return null;
         Coordinate coordinate = Utils.getCoordinate(context);
 
-        mainActivityDependency.getActivity().setTitleAndSubtitle(getString(R.string.compass),
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.compass),
                 Utils.getCityName(context, true));
 
         compassListener = new SensorEventListener() {
@@ -157,15 +154,15 @@ public class CompassFragment extends DaggerFragment {
 
     private void setCompassMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
 
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mainActivityDependency.getMainActivity().getWindowManager()
+                .getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         binding.compassView.setScreenResolution(width, height - 2 * height / 8);
 
-        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) mainActivityDependency.getMainActivity()
+                .getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) {
             return;
         }
@@ -197,9 +194,6 @@ public class CompassFragment extends DaggerFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentActivity activity = getActivity();
-        if (activity == null) return false;
-
         switch (item.getItemId()) {
             case R.id.stop:
                 stop = !stop;
@@ -207,8 +201,9 @@ public class CompassFragment extends DaggerFragment {
                 item.setTitle(stop ? R.string.resume : R.string.stop);
                 break;
             case R.id.level:
-                activity.startActivity(new Intent(activity, Level.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                mainActivityDependency.getMainActivity().startActivity(
+                        new Intent(mainActivityDependency.getMainActivity(), Level.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.help:
                 createAndShowSnackbar(getView(), sensorNotFound

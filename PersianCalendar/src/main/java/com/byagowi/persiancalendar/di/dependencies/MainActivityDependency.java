@@ -14,7 +14,7 @@ public final class MainActivityDependency {
     @Inject
     MainActivity activity;
 
-    public MainActivity getActivity() {
+    public MainActivity getMainActivity() {
         return activity;
     }
 }
