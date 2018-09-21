@@ -330,6 +330,7 @@ public class QiblaCompassView extends View {
 
     public void setBearing(float bearing) {
         this.bearing = bearing;
+        postInvalidate();
     }
 
     // deliberately true

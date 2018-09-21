@@ -89,7 +89,6 @@ public class CompassFragment extends Fragment {
 
                 azimuth = lowPass(angle, azimuth);
                 binding.compassView.setBearing(azimuth);
-                binding.compassView.invalidate();
             }
 
             /**
@@ -109,7 +108,7 @@ public class CompassFragment extends Fragment {
             binding.compassView.setLongitude(coordinate.getLongitude());
             binding.compassView.setLatitude(coordinate.getLatitude());
             binding.compassView.initCompassView();
-            binding.compassView.invalidate();
+            binding.compassView.postInvalidate();
         }
 
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
