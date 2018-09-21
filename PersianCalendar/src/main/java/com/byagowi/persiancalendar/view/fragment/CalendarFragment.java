@@ -27,13 +27,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.MainApplication;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding;
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding;
+import com.byagowi.persiancalendar.di.ActivityDependency;
+import com.byagowi.persiancalendar.di.AppDependency;
+import com.byagowi.persiancalendar.di.FragmentDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
@@ -90,13 +92,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     private EventsTabContentBinding eventsBinding;
 
     @Inject
-    MainApplication.AppDependency appDependency; // same object from App
+    AppDependency appDependency; // same object from App
 
     @Inject
-    MainApplication.ActivityDependency activityDependency; // same object from MainActivity
+    ActivityDependency activityDependency; // same object from MainActivity
 
     @Inject
-    MainApplication.FragmentDependency fragmentDependency;
+    FragmentDependency fragmentDependency;
 
     @Nullable
     @Override

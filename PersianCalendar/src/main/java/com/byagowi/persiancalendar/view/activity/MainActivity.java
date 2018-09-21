@@ -19,9 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.MainApplication;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
+import com.byagowi.persiancalendar.di.ActivityDependency;
+import com.byagowi.persiancalendar.di.AppDependency;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
@@ -125,10 +126,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     private static long creationDateJdn;
 
     @Inject
-    MainApplication.AppDependency appDependency; // same object from App
+    AppDependency appDependency; // same object from App
 
     @Inject
-    MainApplication.ActivityDependency activityDependency;
+    ActivityDependency activityDependency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
