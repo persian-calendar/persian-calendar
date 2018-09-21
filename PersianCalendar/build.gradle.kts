@@ -73,10 +73,12 @@ dependencies {
   implementation("androidx.cardview:cardview:$androidXVersion")
   implementation("com.google.android.material:material:$androidXVersion")
   implementation("com.google.android:flexbox:1.1.0-beta1")
-  implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
+  implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0") {
+    because("to provide a DashClock extension")
+  }
 
   // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
-  // implementation "android.arch.work:work-runtime:1.0.0-alpha07"
+  // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
 
   annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
   implementation("com.google.dagger:dagger-android:$daggerVersion")
