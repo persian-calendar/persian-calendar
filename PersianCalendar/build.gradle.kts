@@ -65,6 +65,7 @@ dependencies {
   val androidXVersion = "1.0.0-rc02"
   val leakCanaryVersion = "1.6.1"
   val junitVersion = "4.12"
+  val daggerVersion = "2.16"
 
   implementation("androidx.appcompat:appcompat:$androidXVersion")
   implementation("androidx.preference:preference:$androidXVersion")
@@ -76,6 +77,11 @@ dependencies {
 
   // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
   // implementation "android.arch.work:work-runtime:1.0.0-alpha07"
+
+  annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
+  implementation("com.google.dagger:dagger-android:$daggerVersion")
+  annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
+  implementation("com.google.dagger:dagger-android-support:$daggerVersion")
 
   debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
   debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
