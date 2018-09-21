@@ -1,5 +1,6 @@
-package com.byagowi.persiancalendar.di;
+package com.byagowi.persiancalendar.di.modules;
 
+import com.byagowi.persiancalendar.di.scopes.PerActivity;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import dagger.Module;

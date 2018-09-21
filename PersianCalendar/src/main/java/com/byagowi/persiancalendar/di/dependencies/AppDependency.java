@@ -1,6 +1,4 @@
-package com.byagowi.persiancalendar.di;
-
-import android.widget.Toast;
+package com.byagowi.persiancalendar.di.dependencies;
 
 import com.byagowi.persiancalendar.MainApplication;
 
@@ -11,6 +9,6 @@ import javax.inject.Singleton;
 public final class AppDependency {
     @Inject
     public AppDependency(MainApplication app) {
-        Toast.makeText(app, "AppDependency", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(app, "AppDependency", Toast.LENGTH_SHORT).show();
     }
 }

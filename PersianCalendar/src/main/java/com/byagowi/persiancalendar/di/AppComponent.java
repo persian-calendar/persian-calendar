@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.di;
 
 import com.byagowi.persiancalendar.MainApplication;
+import com.byagowi.persiancalendar.di.modules.AppModule;
 
 import javax.inject.Singleton;
 

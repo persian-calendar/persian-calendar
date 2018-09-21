@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.di;
+package com.byagowi.persiancalendar.di.modules;
 
 import dagger.Module;
 

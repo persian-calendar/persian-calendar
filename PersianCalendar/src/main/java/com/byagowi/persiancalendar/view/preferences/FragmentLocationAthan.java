@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,17 +18,20 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
+import javax.inject.Inject;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import dagger.android.support.AndroidSupportInjection;
 
 import static android.app.Activity.RESULT_OK;
 import static com.byagowi.persiancalendar.Constants.ATHAN_RINGTONE_REQUEST_CODE;
@@ -37,8 +41,13 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 public class FragmentLocationAthan extends PreferenceFragmentCompat {
     private Preference categoryAthan;
 
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+        AndroidSupportInjection.inject(this);
+
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 
         addPreferencesFromResource(R.xml.preferences_location_athan);
@@ -97,10 +106,9 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             fragment = new NumericDialog();
         } else if (preference instanceof GPSLocationPreference) {
             //check whether gps provider and network providers are enabled or not
-            FragmentActivity activity = getActivity();
-            if (activity == null) return;
-
             try {
+                Activity activity = mainActivityDependency.getActivity();
+
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     UIUtils.askForLocationPermission(activity);
