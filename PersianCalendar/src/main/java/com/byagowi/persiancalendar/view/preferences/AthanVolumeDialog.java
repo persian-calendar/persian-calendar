@@ -18,8 +18,6 @@ import java.io.IOException;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class AthanVolumeDialog extends PreferenceDialogFragmentCompat {
-    private final String TAG = AthanVolumeDialog.class.getName();
-
     private int volume;
     private AudioManager audioManager;
     private Ringtone ringtone;

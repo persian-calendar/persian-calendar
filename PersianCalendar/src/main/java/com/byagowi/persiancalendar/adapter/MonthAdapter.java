@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,8 +73,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         notifyItemChanged(selectedDay);
     }
 
+    @NonNull
     @Override
-    public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MonthAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemDayView itemDayView = new ItemDayView(parent.getContext(), daysPaintResources);
         itemDayView.setLayoutParams(layoutParams);
         return new ViewHolder(itemDayView);
@@ -98,7 +100,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MonthAdapter.ViewHolder holder, int position) {
         holder.bind(position);
     }
 
@@ -109,7 +111,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     private static CalendarFragment getCalendarFragment(View view) {
         Context ctx = view.getContext();
-        if (ctx != null && ctx instanceof FragmentActivity) {
+        if (ctx instanceof FragmentActivity) {
             return (CalendarFragment) ((FragmentActivity) ctx).getSupportFragmentManager()
                     .findFragmentByTag(CalendarFragment.class.getName());
         }

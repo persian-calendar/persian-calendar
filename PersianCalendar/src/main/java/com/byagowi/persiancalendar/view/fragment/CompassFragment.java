@@ -30,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.Level;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.databinding.DataBindingUtil;
@@ -50,7 +51,8 @@ public class CompassFragment extends Fragment {
     private boolean sensorNotFound = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
@@ -58,7 +60,8 @@ public class CompassFragment extends Fragment {
                 container, false);
 
         Context context = getContext();
-        Coordinate coordinate = Utils.getCoordinate(getContext());
+        if (context == null) return null;
+        Coordinate coordinate = Utils.getCoordinate(context);
 
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass),
                 Utils.getCityName(context, true));
@@ -109,7 +112,7 @@ public class CompassFragment extends Fragment {
             binding.compassView.invalidate();
         }
 
-        sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
             if (sensor != null) {
@@ -148,12 +151,15 @@ public class CompassFragment extends Fragment {
 
     private void setCompassMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         binding.compassView.setScreenResolution(width, height - 2 * height / 8);
 
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) {
             return;
         }

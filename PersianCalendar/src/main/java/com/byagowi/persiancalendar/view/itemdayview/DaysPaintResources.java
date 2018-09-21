@@ -18,10 +18,10 @@ public class DaysPaintResources {
     final public int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
             colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
 
-    final public int halfEventBarWidth, appointmentYOffset, eventYOffset;
+    final int halfEventBarWidth, appointmentYOffset, eventYOffset;
     final public int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
 
-    final public Paint textPaint, linePaint, selectedPaint, todayPaint;
+    final Paint textPaint, linePaint, selectedPaint, todayPaint;
 
     @StyleRes
     final public int style;

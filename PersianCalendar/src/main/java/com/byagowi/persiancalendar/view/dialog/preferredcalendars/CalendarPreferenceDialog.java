@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -25,10 +26,11 @@ import calendar.CalendarType;
 public class CalendarPreferenceDialog extends AppCompatDialogFragment {
     private ItemTouchHelper mItemTouchHelper;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getContext();
-        if (context == null) return null;
+//        if (context == null) throw new AssertionError();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -75,7 +77,7 @@ public class CalendarPreferenceDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+    void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
     }
 }

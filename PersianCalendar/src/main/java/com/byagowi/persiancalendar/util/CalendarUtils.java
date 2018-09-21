@@ -84,7 +84,7 @@ public class CalendarUtils {
         }
     }
 
-    static public Calendar makeCalendarFromDate(Date date) {
+    static Calendar makeCalendarFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         if (Utils.isIranTime()) {
             calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));

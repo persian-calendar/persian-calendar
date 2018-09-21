@@ -215,7 +215,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStrokeWidth(2);
         canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
         canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint);
-        canvas.drawLine(getWidth() / 2, height * 0.7f, getWidth() / 2, height * 0.8f, mPaint);
+        canvas.drawLine(getWidth() / 2f, height * 0.7f, getWidth() / 2f, height * 0.8f, mPaint);
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -225,7 +225,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setColor(sunriseTextColor);
         canvas.drawText(sunriseString, width * 0.17f, height * 0.2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(middayString, width / 2, height - 8, mPaint);
+        canvas.drawText(middayString, width / 2f, height - 8, mPaint);
         mPaint.setColor(sunsetTextColor);
         canvas.drawText(sunsetString, width * 0.83f, height * 0.2f, mPaint);
 
@@ -300,8 +300,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
         int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
         moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
-        moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
-                px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
+        moonOval.set(px - Math.abs(arcWidth) / 2f, py + eOffset - radius - r,
+                px + Math.abs(arcWidth) / 2f, py + eOffset - radius + r);
         canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
         canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);

@@ -325,7 +325,7 @@ public class QiblaCompassView extends View {
 
     static public boolean isNearToDegree(float angle, float compareTo) {
         float difference = Math.abs(angle - compareTo);
-        return difference > 180 ? 360 - difference < 3.f : difference < 3.f;
+        return difference > 180 ? 360 - difference < 3f : difference < 3.f;
     }
 
     public void setBearing(float bearing) {

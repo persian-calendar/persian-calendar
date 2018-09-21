@@ -93,12 +93,8 @@ public class UIUtils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    public static String baseClockToString(Clock clock) {
-        return baseClockToString(clock.getHour(), clock.getMinute());
-    }
 
-
-    public static String baseClockToString(int hour, int minute) {
+    static String baseClockToString(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
@@ -113,7 +109,7 @@ public class UIUtils {
         String timeText = null;
 
         int hour = clock.getHour();
-        if (!Utils.isClockIn24()) {
+        if (Utils.isClockIn12()) {
             if (hour >= 12) {
                 timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
                 hour -= 12;
@@ -123,7 +119,7 @@ public class UIUtils {
         }
 
         String result = baseClockToString(hour, clock.getMinute());
-        if (!Utils.isClockIn24()) {
+        if (Utils.isClockIn12()) {
             result = result + " " + timeText;
         }
         return result;
@@ -190,15 +186,11 @@ public class UIUtils {
     }
 
     // https://stackoverflow.com/a/27788209
-    private static Uri resourceToUri(Context context, int resID) {
-        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                context.getResources().getResourcePackageName(resID) + '/' +
-                context.getResources().getResourceTypeName(resID) + '/' +
-                context.getResources().getResourceEntryName(resID));
-    }
-
     static public Uri getDefaultAthanUri(Context context) {
-        return resourceToUri(context, R.raw.abdulbasit);
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                context.getResources().getResourcePackageName(R.raw.abdulbasit) + '/' +
+                context.getResources().getResourceTypeName(R.raw.abdulbasit) + '/' +
+                context.getResources().getResourceEntryName(R.raw.abdulbasit));
     }
 
     static String getOnlyLanguage(String string) {

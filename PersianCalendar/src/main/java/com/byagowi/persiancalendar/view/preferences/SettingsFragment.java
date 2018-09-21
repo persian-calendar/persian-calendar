@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,7 +21,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
  */
 public class SettingsFragment extends Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
 

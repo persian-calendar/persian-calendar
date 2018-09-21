@@ -300,7 +300,7 @@ public class Utils {
         }
     }
 
-    static public boolean isAstronomicalFeaturesEnabled() {
+    static boolean isAstronomicalFeaturesEnabled() {
         return astronomicalFeaturesEnabled;
     }
 
@@ -344,11 +344,11 @@ public class Utils {
         return result;
     }
 
-    public static boolean isClockIn24() {
-        return clockIn24;
+    static boolean isClockIn12() {
+        return !clockIn24;
     }
 
-    public static boolean isShownOnWidgets(String infoType) {
+    static boolean isShownOnWidgets(String infoType) {
         return whatToShowOnWidgets.contains(infoType);
     }
 
@@ -368,11 +368,11 @@ public class Utils {
         return preferredDigits == ARABIC_DIGITS;
     }
 
-    static public boolean isWidgetClock() {
+    static boolean isWidgetClock() {
         return widgetClock;
     }
 
-    static public boolean isNotifyDate() {
+    static boolean isNotifyDate() {
         return notifyDate;
     }
 
@@ -386,7 +386,7 @@ public class Utils {
         return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
     }
 
-    static public boolean isNotifyDateOnLockScreen() {
+    static boolean isNotifyDateOnLockScreen() {
         return notifyInLockScreen;
     }
 
@@ -403,7 +403,7 @@ public class Utils {
         return !getAppLanguage().equals("en-US");
     }
 
-    static public String getSelectedWidgetTextColor() {
+    static String getSelectedWidgetTextColor() {
         return selectedWidgetTextColor;
     }
 
@@ -413,7 +413,7 @@ public class Utils {
 
     static private Map<PrayTime, Clock> prayTimes;
 
-    static public String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
+    static String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
         if (coordinate == null) return null;
 
         if (prayTimes == null || dateHasChanged) {
@@ -467,7 +467,7 @@ public class Utils {
         return String.valueOf(result);
     }
 
-    static public String getSpacedComma() {
+    static String getSpacedComma() {
         return spacedComma;
     }
 
@@ -591,7 +591,7 @@ public class Utils {
             return result;
         }
 
-        CityEntity[] cities = result.toArray(new CityEntity[result.size()]);
+        CityEntity[] cities = result.toArray(new CityEntity[0]);
         // Sort first by country code then city
         Arrays.sort(cities, (l, r) -> {
             if (l.getKey().equals("")) {
@@ -981,7 +981,7 @@ public class Utils {
         return titles.toString();
     }
 
-    public static void loadAlarms(Context context) {
+    static void loadAlarms(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
@@ -1005,7 +1005,7 @@ public class Utils {
             if (alarmTimesSet.remove("IMSAK"))
                 alarmTimesSet.add("FAJR");
 
-            String[] alarmTimesNames = alarmTimesSet.toArray(new String[alarmTimesSet.size()]);
+            String[] alarmTimesNames = alarmTimesSet.toArray(new String[0]);
             for (int i = 0; i < alarmTimesNames.length; i++) {
                 PrayTime prayTime = PrayTime.valueOf(alarmTimesNames[i]);
 
@@ -1239,7 +1239,7 @@ public class Utils {
 //        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
 //    }
 
-    private static final String UPDATE_TAG = "update";
+//    private static final String UPDATE_TAG = "update";
 
     public static void startEitherServiceOrWorker(Context context) {
 //        WorkManager workManager = WorkManager.getInstance();

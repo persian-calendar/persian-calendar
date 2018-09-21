@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             COMPASS = 2,
             PREFERENCE = 3,
             ABOUT = 4,
-            EXIT = 5,
             DEFAULT = CALENDAR; // Default selected fragment
+    // EXIT = 5
     private final String TAG = MainActivity.class.getName();
     private ActivityMainBinding binding;
     private final Class<?>[] fragments = {
@@ -106,18 +106,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     // A never used migration
-    private void oneTimeClockDisablingForAndroid5LE() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            String key = "oneTimeClockDisablingForAndroid5LE";
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            if (!prefs.getBoolean(key, false)) {
-                SharedPreferences.Editor edit = prefs.edit();
-                edit.putBoolean(Constants.PREF_WIDGET_CLOCK, false);
-                edit.putBoolean(key, true);
-                edit.apply();
-            }
-        }
-    }
+//    private void oneTimeClockDisablingForAndroid5LE() {
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+//            String key = "oneTimeClockDisablingForAndroid5LE";
+//            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//            if (!prefs.getBoolean(key, false)) {
+//                SharedPreferences.Editor edit = prefs.edit();
+//                edit.putBoolean(Constants.PREF_WIDGET_CLOCK, false);
+//                edit.putBoolean(key, true);
+//                edit.apply();
+//            }
+//        }
+//    }
 
     private static long creationDateJdn;
 
@@ -282,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             boolean changeToIranEvents = false;
             switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
                 case LANG_EN_US:
-                    persianDigits = false;
                     changeToGregorianCalendar = true;
                     break;
                 case LANG_FA:
@@ -476,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.exit) {
             finish();
             return true;

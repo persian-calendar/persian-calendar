@@ -29,8 +29,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.core.view.MotionEventCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
@@ -48,10 +50,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         this.enabled = new ArrayList<>(enabled);
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_type_item, parent, false);
-        return new ItemViewHolder(view);
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ItemViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.calendar_type_item, parent, false));
     }
 
     @Override
@@ -74,15 +77,14 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         });
     }
 
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(titles, fromPosition, toPosition);
         Collections.swap(values, fromPosition, toPosition);
         Collections.swap(enabled, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        return true;
     }
 
-    public void onItemDismiss(int position) {
+    void onItemDismiss(int position) {
         titles.remove(position);
         values.remove(position);
         enabled.remove(position);
@@ -91,7 +93,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Easter egg when all are swiped
         if (titles.size() == 0) {
             try {
-                View view = calendarPreferenceDialog.getActivity().findViewById(R.id.drawer);
+                FragmentActivity activity = calendarPreferenceDialog.getActivity();
+                if (activity == null) return;
+                View view = activity.findViewById(R.id.drawer);
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
                 animator.setDuration(3000L);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -139,16 +143,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         final AppCompatCheckedTextView checkedTextView;
 
-        public ItemViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
             checkedTextView = itemView.findViewById(R.id.check_text_view);
         }
 
-        public void onItemSelected() {
+        void onItemSelected() {
             itemView.setBackgroundColor(Color.LTGRAY);
         }
 
-        public void onItemClear() {
+        void onItemClear() {
             itemView.setBackgroundColor(0);
         }
     }
