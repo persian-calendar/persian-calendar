@@ -13,10 +13,9 @@ import android.widget.ImageView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
-import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -44,9 +43,6 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     private int monthLength;
 
     private static boolean isRTL = false;
-
-    @Inject
-    AppDependency appDependency;
 
     @Inject
     MainActivityDependency mainActivityDependency;
@@ -204,7 +200,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     }
 
     private void updateTitle() {
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(typedDate),
+        mainActivityDependency.getActivity().setTitleAndSubtitle(
+                CalendarUtils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }
 }

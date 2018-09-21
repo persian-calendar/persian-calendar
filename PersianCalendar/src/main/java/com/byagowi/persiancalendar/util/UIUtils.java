@@ -41,15 +41,6 @@ import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class UIUtils {
-    static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
-        //noinspection ConstantConditions
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(title);
-            supportActionBar.setSubtitle(subtitle);
-        }
-    }
-
     public static void askForCalendarPermission(Activity activity) {
         if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
 

@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -45,7 +46,9 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -130,6 +133,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     @Inject
     MainActivityDependency mainActivityDependency;
+
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,6 +262,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             edit.putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true);
             edit.apply();
         }
+
+        actionBar = getSupportActionBar();
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
@@ -533,5 +540,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         binding.drawer.closeDrawers();
         return true;
+    }
+
+    public void setTitleAndSubtitle(String title, String subtitle) {
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
     }
 }

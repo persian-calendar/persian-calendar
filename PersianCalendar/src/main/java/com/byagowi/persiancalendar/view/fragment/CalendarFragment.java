@@ -152,7 +152,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(today),
+        mainActivityDependency.getActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         if (coordinate != null) {

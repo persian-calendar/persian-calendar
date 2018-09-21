@@ -48,8 +48,6 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle bundle, String s) {
         AndroidSupportInjection.inject(this);
 
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
-
         addPreferencesFromResource(R.xml.preferences_location_athan);
 
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN);

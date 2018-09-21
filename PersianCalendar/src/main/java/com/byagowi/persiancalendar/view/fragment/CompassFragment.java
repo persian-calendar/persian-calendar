@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
@@ -30,25 +31,31 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.Level;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import dagger.android.support.DaggerFragment;
 
 /**
  * Compass/Qibla activity
  *
  * @author ebraminio
  */
-public class CompassFragment extends Fragment {
+public class CompassFragment extends DaggerFragment {
     private SensorManager sensorManager;
     private Sensor sensor;
     private SensorEventListener compassListener;
     private float orientation = 0;
     private FragmentCompassBinding binding;
     private boolean sensorNotFound = false;
+
+    @Inject
+    MainActivityDependency mainActivityDependency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,7 +70,7 @@ public class CompassFragment extends Fragment {
         if (context == null) return null;
         Coordinate coordinate = Utils.getCoordinate(context);
 
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.compass),
+        mainActivityDependency.getActivity().setTitleAndSubtitle(getString(R.string.compass),
                 Utils.getCityName(context, true));
 
         compassListener = new SensorEventListener() {
