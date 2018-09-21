@@ -346,7 +346,7 @@ public class QiblaCompassView extends View {
         // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
-                UIUtils.showToastWithClick(context, R.string.north);
+                UIUtils.a11yShowToastWithClick(context, R.string.north);
                 isCurrentlyNorth = true;
             }
         } else {
@@ -355,7 +355,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 90)) {
             if (!isCurrentlyEast) {
-                UIUtils.showToastWithClick(context, R.string.east);
+                UIUtils.a11yShowToastWithClick(context, R.string.east);
                 isCurrentlyEast = true;
             }
         } else {
@@ -364,7 +364,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 180)) {
             if (!isCurrentlySouth) {
-                UIUtils.showToastWithClick(context, R.string.south);
+                UIUtils.a11yShowToastWithClick(context, R.string.south);
                 isCurrentlySouth = true;
             }
         } else {
@@ -373,7 +373,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 270)) {
             if (!isCurrentlyWest) {
-                UIUtils.showToastWithClick(context, R.string.west);
+                UIUtils.a11yShowToastWithClick(context, R.string.west);
                 isCurrentlyWest = true;
             }
         } else {
@@ -383,7 +383,7 @@ public class QiblaCompassView extends View {
         if (isLongLatAvailable() && qiblaInfo != null) {
             if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
                 if (!isCurrentlyQibla) {
-                    UIUtils.showToastWithClick(context, R.string.qibla);
+                    UIUtils.a11yShowToastWithClick(context, R.string.qibla);
                     isCurrentlyQibla = true;
                 }
             } else {
