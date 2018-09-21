@@ -184,10 +184,13 @@
     <string name="equivalent_to">ڕێککەوتە لەگەڵ</string>
     <string name="holiday_reason">پشوودان بە بۆنەی</string>
     <string name="nth_week_of_year">حەفتەی %sی ساڵ</string>
+    <string name="north">باکوور</string>
+    <string name="east">ڕۆژهەڵات</string>
+    <string name="south">باشوور</string>
+    <string name="west">ڕۆژاوا</string>
+    <string name="qibla">ڕووگە</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
-    <string name="north">شمال</string>
-    <string name="qibla">قبله</string>
 
 </resources>
