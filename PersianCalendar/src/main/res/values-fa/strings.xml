@@ -170,6 +170,7 @@
     <string name="pref_header_location_athan">موقعیت و اذان</string>
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
+    <string name="continue_button">ادامه</string>
 
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>

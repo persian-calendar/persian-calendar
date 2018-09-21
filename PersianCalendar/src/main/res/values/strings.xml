@@ -12,6 +12,7 @@
     <string name="help">Help</string>
     <string name="more">More</string>
     <string name="cancel">Cancel</string>
+    <string name="continue_button">Continue</string>
 
     <!-- No need for translation, remove the section from your translation -->
     <string name="about_developers_list" translatable="false">"Ebrahim Byagowi (@ebraminio)

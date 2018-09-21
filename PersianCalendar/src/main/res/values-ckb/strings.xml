@@ -170,6 +170,7 @@
     <string name="pref_header_location_athan">شوێن و بانگ</string>
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
+    <string name="continue_button">درێژەپێدان</string>
 
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>

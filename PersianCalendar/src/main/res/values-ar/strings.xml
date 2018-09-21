@@ -7,11 +7,12 @@
     <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
     <string name="closeDrawer">إغلاق</string>
     <string name="openDrawer">فتح</string>
-    <string name="cancel">إلغاء</string>
     <string name="accept">موافق</string>
     <string name="add">إضافة</string>
     <string name="help">مساعدة</string>
     <string name="more">المزيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="continue_button">تشغيل</string>
 
     <!--Navigation drawers-->
     <string name="calendar">التقويم</string>
