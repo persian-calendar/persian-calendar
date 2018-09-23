@@ -17,6 +17,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class MainActivityModule {
+
     @PerFragment
     @ContributesAndroidInjector(modules = CalendarFragmentModule.class)
     abstract CalendarFragment calendarFragmentInjector();

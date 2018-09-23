@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
@@ -42,8 +41,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
-    @Inject
-    MonthFragmentDependency monthFragmentDependency;
+//    @Inject
+//    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;
     private int offset;
     private MonthAdapter adapter;
