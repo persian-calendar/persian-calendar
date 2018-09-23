@@ -204,39 +204,7 @@ public class UmmAlQuraConverter {
             79753, 79783, 79812, 79841, 79871, 79900, 79930, 79960,
             79990};
 
-    public static int[] toHijri(int gYear, int gMonth, int gDay) {
-        int[] hDateInfo = d2h(g2d(gYear, gMonth + 1, gDay));
-        hDateInfo[1]--;
-
-        return hDateInfo;
-    }
-
-    public static long toJdn(int hYear, int hMonth, int hDay) {
-        return h2d(hYear, hMonth, hDay);
-    }
-
-    public static int[] fromJdn(long jdn) {
-        return d2h((int) jdn);
-    }
-
-    //------------------------------------------------------------------
-
-    public static int[] toGregorian(int hYear, int hMonth, int hDay) {
-        int[] gDateInfo = d2g(h2d(hYear, hMonth + 1, hDay));
-        gDateInfo[1]--;
-
-        return gDateInfo;
-    }
-
-    private static int div(int a, int b) {
-        return ~~(a / b);
-    }
-
-    private static int mod(int a, int b) {
-        return a - ~~(a / b) * b;
-    }
-
-    private static int h2d(int hy, int hm, int hd) {
+    public static int toJdn(int hy, int hm, int hd) {
         int i = getNewMoonMJDNIndex(hy, hm);
         int lookupResult = ummalquraData(i - 1);
         if (lookupResult == -1)
@@ -245,8 +213,8 @@ public class UmmAlQuraConverter {
         return hd + lookupResult - 1 + 2400000;
     }
 
-    private static int[] d2h(int jdn) {
-        int mjdn = jdn - 2400000;
+    public static int[] fromJdn(long jdn) {
+        long mjdn = jdn - 2400000;
         int i = getNewMoonMJDNIndexByJDN(mjdn);
         int totalMonths = i + 16260;
         int cYears = (int) Math.floor((totalMonths - 1) / 12);
@@ -257,37 +225,17 @@ public class UmmAlQuraConverter {
             return null;
         }
 
-        int hd = mjdn - lookupResult + 1;
+        int hd = (int) (mjdn - lookupResult + 1);
 
         return new int[]{hy, hm, hd};
     }
 
-    private static int g2d(int gy, int gm, int gd) {
-        int d = div((gy + div(gm - 8, 6) + 100100) * 1461, 4) + div(153 * mod(gm + 9, 12) + 2, 5)
-                + gd - 34840408;
-        d = d - div(div(gy + 100100 + div(gm - 8, 6), 100) * 3, 4) + 752;
-
-        return d;
-    }
-
-    private static int[] d2g(int jdn) {
-        int j, i, gd, gm, gy;
-        j = 4 * jdn + 139361631;
-        j = j + div(div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908;
-        i = div(mod(j, 1461), 4) * 5 + 308;
-        gd = div(mod(i, 153), 5) + 1;
-        gm = mod(div(i, 153), 12) + 1;
-        gy = div(j, 1461) - 100100 + div(8 - gm, 6);
-        return new int[]{gy, gm, gd};
-    }
-
     private static int getNewMoonMJDNIndex(int hy, int hm) {
-        int cYears = hy - 1,
-                totalMonths = (cYears * 12) + 1 + (hm - 1);
+        int cYears = hy - 1, totalMonths = (cYears * 12) + 1 + (hm - 1);
         return totalMonths - 16260;
     }
 
-    private static int getNewMoonMJDNIndexByJDN(int mjdn) {
+    private static int getNewMoonMJDNIndexByJDN(long mjdn) {
         for (int i = 0; i < ummalquraData.length; i = i + 1) {
             if (ummalquraData[i] > mjdn) {
                 return i;
