@@ -27,6 +27,9 @@ import calendar.CalendarType;
 public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
         DayPickerView {
     SimpleDayPickerViewBinding binding;
+    private long jdn = -1;
+    private OnSelectedDayChangedListener selectedDayListener = jdn -> {
+    };
 
     public SimpleDayPickerView(Context context) {
         super(context);
@@ -42,8 +45,6 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    private long jdn = -1;
 
     private void init() {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
@@ -147,9 +148,6 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
     public CalendarType getSelectedCalendarType() {
         return ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType();
     }
-
-    private OnSelectedDayChangedListener selectedDayListener = jdn -> {
-    };
 
     @Override
     public void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener) {

@@ -19,13 +19,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
-    private List<CityEntity> cities;
-    private LocationPreferenceDialog locationPreferenceDialog;
+    final private List<CityEntity> mCities;
+    final private LocationPreferenceDialog mLocationPreferenceDialog;
 
     public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog,
                            List<CityEntity> cities) {
-        this.locationPreferenceDialog = locationPreferenceDialog;
-        this.cities = cities;
+        mLocationPreferenceDialog = locationPreferenceDialog;
+        mCities = cities;
     }
 
     @Override
@@ -38,12 +38,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(cities.get(position));
+        holder.bind(mCities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return cities.size();
+        return mCities.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -82,7 +82,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-            locationPreferenceDialog.selectItem(cities.get(getAdapterPosition()).getKey());
+            mLocationPreferenceDialog.selectItem(mCities.get(getAdapterPosition()).getKey());
         }
     }
 }

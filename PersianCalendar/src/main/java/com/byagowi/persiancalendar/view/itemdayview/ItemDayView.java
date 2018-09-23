@@ -13,6 +13,13 @@ import com.byagowi.persiancalendar.util.Utils;
 
 public class ItemDayView extends View {
     private DaysPaintResources resource;
+    private Rect bounds = new Rect();
+    private String text = "";
+    private boolean today, selected, hasEvent, hasAppointment, holiday;
+    private int textSize;
+    private long jdn = -1;
+    private int dayOfMonth = -1;
+    private boolean isNumber;
 
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
@@ -41,8 +48,6 @@ public class ItemDayView extends View {
             resource = new DaysPaintResources((Activity) context);
         }
     }
-
-    private Rect bounds = new Rect();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -135,13 +140,6 @@ public class ItemDayView extends View {
         setAll(text, false, false, false, false, false,
                 textSize, -1, -1, false);
     }
-
-    private String text = "";
-    private boolean today, selected, hasEvent, hasAppointment, holiday;
-    private int textSize;
-    private long jdn = -1;
-    private int dayOfMonth = -1;
-    private boolean isNumber;
 
     public long getJdn() {
         return jdn;

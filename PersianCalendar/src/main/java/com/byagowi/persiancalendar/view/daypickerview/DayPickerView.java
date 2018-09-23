@@ -9,9 +9,9 @@ public interface DayPickerView {
 
     CalendarType getSelectedCalendarType();
 
+    void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener);
+
     interface OnSelectedDayChangedListener {
         void onSelectedDayChanged(long jdn);
     }
-
-    void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener);
 }

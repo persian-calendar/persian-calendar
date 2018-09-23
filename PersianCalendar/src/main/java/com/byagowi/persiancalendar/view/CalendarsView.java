@@ -26,6 +26,12 @@ import calendar.CivilDate;
 
 public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
+    CalendarsViewBinding binding;
+    private OnCalendarsViewExpandListener calendarsViewExpandListener = () -> {
+    };
+    private OnTodayButtonClickListener todayButtonClickListener = () -> {
+    };
+
     public CalendarsView(Context context) {
         super(context);
         init(context);
@@ -40,8 +46,6 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
-    CalendarsViewBinding binding;
 
     public void init(Context context) {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
@@ -88,23 +92,9 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.moreCalendar.setVisibility(View.GONE);
     }
 
-    public interface OnCalendarsViewExpandListener {
-        void onCalendarsViewExpand();
-    }
-
-    private OnCalendarsViewExpandListener calendarsViewExpandListener = () -> {
-    };
-
     public void setOnCalendarsViewExpandListener(OnCalendarsViewExpandListener listener) {
         calendarsViewExpandListener = listener;
     }
-
-    public interface OnTodayButtonClickListener {
-        void onTodayButtonClick();
-    }
-
-    private OnTodayButtonClickListener todayButtonClickListener = () -> {
-    };
 
     public void setOnTodayButtonClickListener(OnTodayButtonClickListener listener) {
         todayButtonClickListener = listener;
@@ -281,5 +271,13 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,
                 diffDays == 0,
                 null, true, true, true));
+    }
+
+    public interface OnCalendarsViewExpandListener {
+        void onCalendarsViewExpand();
+    }
+
+    public interface OnTodayButtonClickListener {
+        void onTodayButtonClick();
     }
 }

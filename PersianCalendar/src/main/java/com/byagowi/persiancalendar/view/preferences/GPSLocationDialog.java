@@ -39,18 +39,38 @@ import androidx.core.app.ActivityCompat;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
+    @Inject
+    AppDependency appDependency;
+    @Inject
+    MainActivityDependency mainActivityDependency;
     private LocationManager locationManager;
     private TextView textView;
     private Handler handler = new Handler();
     private String latitude;
     private String longitude;
     private String cityName;
+    private Runnable checkGPSProviderCallback = this::checkGPSProvider;
+    private boolean lacksPermission = false;
+    private boolean everRegisteredCallback = false;
+    private LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if (location != null)
+                showLocation(location);
+        }
 
-    @Inject
-    AppDependency appDependency;
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+        }
 
-    @Inject
-    MainActivityDependency mainActivityDependency;
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+        }
+    };
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -98,11 +118,6 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
 
     }
 
-    private Runnable checkGPSProviderCallback = this::checkGPSProvider;
-
-    private boolean lacksPermission = false;
-    private boolean everRegisteredCallback = false;
-
     private void getLocation() {
         if (locationManager == null) {
             return;
@@ -124,26 +139,6 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
             everRegisteredCallback = true;
         }
     }
-
-    private LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location != null)
-                showLocation(location);
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-        }
-    };
 
     private void showLocation(Location location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());

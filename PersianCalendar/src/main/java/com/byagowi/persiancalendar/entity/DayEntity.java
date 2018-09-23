@@ -13,12 +13,12 @@ public class DayEntity {
         this.today = today;
     }
 
-    public void setDayOfWeek(int dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
     public int getDayOfWeek() {
         return dayOfWeek;
+    }
+
+    public void setDayOfWeek(int dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
     public long getJdn() {

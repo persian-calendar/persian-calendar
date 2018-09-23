@@ -19,20 +19,6 @@ public class CalendarAdapter extends FragmentStatePagerAdapter {
         CalendarAdapter.isRTL = isRTL;
     }
 
-    @Override
-    public Fragment getItem(int position) {
-        MonthFragment fragment = new MonthFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.OFFSET_ARGUMENT, positionToOffset(position));
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    @Override
-    public int getCount() {
-        return MONTHS_LIMIT;
-    }
-
     public static void gotoOffset(ViewPager monthViewPager, int offset) {
         if (monthViewPager.getCurrentItem() != offsetToPosition(offset)) {
             monthViewPager.setCurrentItem(offsetToPosition(offset));
@@ -45,5 +31,19 @@ public class CalendarAdapter extends FragmentStatePagerAdapter {
 
     private static int offsetToPosition(int position) {
         return (isRTL ? position : -position) + MONTHS_LIMIT / 2;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        MonthFragment fragment = new MonthFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.OFFSET_ARGUMENT, positionToOffset(position));
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public int getCount() {
+        return MONTHS_LIMIT;
     }
 }

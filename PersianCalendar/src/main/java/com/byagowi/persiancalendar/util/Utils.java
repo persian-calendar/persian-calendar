@@ -149,6 +149,45 @@ import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 public class Utils {
 
     static private final String TAG = Utils.class.getName();
+    static private String[] persianMonths;
+    static private String[] islamicMonths;
+    static private String[] gregorianMonths;
+    static private String[] weekDays;
+    static private String[] weekDaysInitials;
+    static private char[] preferredDigits = PERSIAN_DIGITS;
+    static private boolean clockIn24 = DEFAULT_WIDGET_IN_24;
+    static private boolean iranTime = DEFAULT_IRAN_TIME;
+    static private boolean notifyInLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
+    static private boolean widgetClock = DEFAULT_WIDGET_CLOCK;
+    static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
+    static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
+    static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
+    //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+    static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
+    static private String language = DEFAULT_APP_LANGUAGE;
+    static private Coordinate coordinate;
+    static private CalendarType mainCalendar;
+    static private CalendarType[] otherCalendars;
+    static private String spacedComma;
+    static private boolean showWeekOfYear;
+    static private int weekStartOffset;
+    static private boolean[] weekEnds;
+    static private boolean showDeviceCalendarEvents;
+    static private Set<String> whatToShowOnWidgets;
+    static private boolean astronomicalFeaturesEnabled;
+    @StyleRes
+    static private int appTheme = R.style.LightTheme;
+    private static boolean talkBackEnabled = false;
+    static private Map<PrayTime, Clock> prayTimes;
+    static private List<String> irCodeOrder = Arrays.asList("zz", "ir", "af", "iq");
+    static private List<String> afCodeOrder = Arrays.asList("zz", "af", "ir", "iq");
+    static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
+    static private String cachedCityKey = "";
+    static private CityEntity cachedCity;
+    static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
+    static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
+    static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
+    static private List<AbstractEvent> allEnabledEvents;
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -162,12 +201,6 @@ public class Utils {
         loadAlarms(context);
         loadEvents(context);
     }
-
-    static private String[] persianMonths;
-    static private String[] islamicMonths;
-    static private String[] gregorianMonths;
-    static private String[] weekDays;
-    static private String[] weekDaysInitials;
 
     @Nullable
     static public Coordinate getCoordinate(Context context) {
@@ -195,30 +228,6 @@ public class Utils {
             return null;
         }
     }
-
-    static private char[] preferredDigits = PERSIAN_DIGITS;
-    static private boolean clockIn24 = DEFAULT_WIDGET_IN_24;
-    static private boolean iranTime = DEFAULT_IRAN_TIME;
-    static private boolean notifyInLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
-    static private boolean widgetClock = DEFAULT_WIDGET_CLOCK;
-    static private boolean notifyDate = DEFAULT_NOTIFY_DATE;
-    static private boolean notificationAthan = DEFAULT_NOTIFICATION_ATHAN;
-    static private String selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-    //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
-    static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
-    static private String language = DEFAULT_APP_LANGUAGE;
-    static private Coordinate coordinate;
-    static private CalendarType mainCalendar;
-    static private CalendarType[] otherCalendars;
-    static private String spacedComma;
-    static private boolean showWeekOfYear;
-    static private int weekStartOffset;
-    static private boolean[] weekEnds;
-    static private boolean showDeviceCalendarEvents;
-    static private Set<String> whatToShowOnWidgets;
-    static private boolean astronomicalFeaturesEnabled;
-    @StyleRes
-    static private int appTheme = R.style.LightTheme;
 
     static public void updateStoredPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -282,8 +291,6 @@ public class Utils {
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
-
-    private static boolean talkBackEnabled = false;
 
     @StyleRes
     public static int getAppTheme() {
@@ -411,8 +418,6 @@ public class Utils {
         return mainCalendar;
     }
 
-    static private Map<PrayTime, Clock> prayTimes;
-
     static String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
         if (coordinate == null) return null;
 
@@ -527,10 +532,6 @@ public class Utils {
                 .replaceAll("ە", "هی");
     }
 
-    static private List<String> irCodeOrder = Arrays.asList("zz", "ir", "af", "iq");
-    static private List<String> afCodeOrder = Arrays.asList("zz", "af", "ir", "iq");
-    static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
-
     static private int getCountryCodeOrder(String countryCode) {
         switch (language) {
             case LANG_FA_AF:
@@ -623,9 +624,6 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    static private String cachedCityKey = "";
-    static private CityEntity cachedCity;
-
     static private CityEntity getCityFromPreference(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -675,11 +673,6 @@ public class Utils {
 
         return "";
     }
-
-    static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
-    static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
-    static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
-    static private List<AbstractEvent> allEnabledEvents;
 
     public static List<AbstractEvent> getAllEnabledEvents() {
         return allEnabledEvents;

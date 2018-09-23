@@ -26,13 +26,11 @@ import calendar.CalendarType;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
-    private ItemTouchHelper mItemTouchHelper;
-
     @Inject
     AppDependency appDependency;
-
     @Inject
     MainActivityDependency mainActivityDependency;
+    private ItemTouchHelper mItemTouchHelper;
 
     @NonNull
     @Override

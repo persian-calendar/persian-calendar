@@ -38,17 +38,34 @@ import java.util.Locale;
  */
 public class LevelPainter implements Runnable {
 
+    private static final double LEVEL_ASPECT_RATIO = 0.150;
+    private static final double BUBBLE_WIDTH = 0.150;
+    private static final double BUBBLE_ASPECT_RATIO = 1.000;
+    private static final double BUBBLE_CROPPING = 0.500;
+    private static final double MARKER_GAP = BUBBLE_WIDTH + 0.020;
+    /**
+     * Angle max
+     */
+    private static final double MAX_SINUS = Math.sin(Math.PI / 4);
+    /**
+     * Fonts and colors
+     */
+    private static final String FONT_LCD = "fonts/lcd.ttf";
+    /**
+     * Locked
+     */
+    private static final String LOCKED = "LOCKED";
+    private static final String LOCKED_BACKGROUND = "888888";
+    /**
+     * Possesseur de la surface
+     */
+    private final SurfaceHolder surfaceHolder;
+    private final Handler handler;
     /**
      * Etats du thread
      */
     private boolean initialized;
     private boolean wait;
-
-    /**
-     * Possesseur de la surface
-     */
-    private final SurfaceHolder surfaceHolder;
-
     /**
      * Dimensions
      */
@@ -87,36 +104,21 @@ public class LevelPainter implements Runnable {
     private int sensorY;
     private int sensorGap;
     private int levelMaxDimension;
-
     /**
      * Rect
      */
     private Rect displayRect;
     private Rect lockRect;
-
     /**
      * Angles
      */
     private float angle1;
     private float angle2;
     private double n, teta, l;
-
-    private static final double LEVEL_ASPECT_RATIO = 0.150;
-    private static final double BUBBLE_WIDTH = 0.150;
-    private static final double BUBBLE_ASPECT_RATIO = 1.000;
-    private static final double BUBBLE_CROPPING = 0.500;
-    private static final double MARKER_GAP = BUBBLE_WIDTH + 0.020;
-
-    /**
-     * Angle max
-     */
-    private static final double MAX_SINUS = Math.sin(Math.PI / 4);
-
     /**
      * Orientation
      */
     private Orientation orientation;
-
     /**
      * Bubble physics
      */
@@ -130,7 +132,6 @@ public class LevelPainter implements Runnable {
     private double speedX;
     private double speedY;
     private double x, y;
-
     /**
      * Drawables
      */
@@ -141,54 +142,37 @@ public class LevelPainter implements Runnable {
     private Drawable bubble2D;
     private Drawable marker2D;
     private Drawable display;
-
     /**
      * Info
      */
 //	private String infoText;
     private String lockText;
-
     /**
      * Ajustement de la vitesse
      */
     private double viscosityValue = 1;
-
     /**
      * Format des angles
      */
     private DecimalFormat displayFormat;
     private String displayBackgroundText;
-
-    /**
-     * Fonts and colors
-     */
-    private static final String FONT_LCD = "fonts/lcd.ttf";
     private Paint lcdForegroundPaint;
     private Paint lcdBackgroundPaint;
     private Paint lockForegroundPaint;
     private Paint lockBackgroundPaint;
+    //    private DisplayType angleType;
     private Paint infoPaint;
     private int backgroundColor;
-
     /**
      * Config angles
      */
     private boolean showAngle;
-//    private DisplayType angleType;
-
-    /**
-     * Locked
-     */
-    private static final String LOCKED = "LOCKED";
-    private static final String LOCKED_BACKGROUND = "888888";
     private boolean lockEnabled;
     private boolean locked;
-
     /**
      * Animation
      */
     private boolean ecoMode;
-    private final Handler handler;
     private long frameRate;
 
     public LevelPainter(SurfaceHolder surfaceHolder, Context context,

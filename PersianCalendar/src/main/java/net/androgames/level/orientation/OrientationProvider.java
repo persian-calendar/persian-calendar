@@ -34,15 +34,20 @@ import java.util.List;
 public final class OrientationProvider implements SensorEventListener {
 
     private static final int MIN_VALUES = 20;
-
+    /**
+     * Rotation Matrix
+     */
+    private final float[] MAG = new float[]{1f, 1f, 1f};
+    private final float[] I = new float[16];
+    private final float[] R = new float[16];
+    private final float[] outR = new float[16];
+    private final float[] LOC = new float[3];
     private Sensor sensor;
     private SensorManager sensorManager;
-
     /**
      * indicates whether or not Accelerometer Sensor is running
      */
     private boolean running = false;
-
     /**
      * Orientation
      */
@@ -58,16 +63,6 @@ public final class OrientationProvider implements SensorEventListener {
     private Orientation orientation;
     private boolean locked;
     private int displayOrientation;
-
-    /**
-     * Rotation Matrix
-     */
-    private final float[] MAG = new float[]{1f, 1f, 1f};
-    private final float[] I = new float[16];
-    private final float[] R = new float[16];
-    private final float[] outR = new float[16];
-    private final float[] LOC = new float[3];
-
     private Level level;
     private LevelView view;
 

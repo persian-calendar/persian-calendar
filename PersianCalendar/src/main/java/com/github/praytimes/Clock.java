@@ -5,6 +5,7 @@ import java.util.Calendar;
 import static com.github.praytimes.StaticUtils.fixHour;
 
 public class Clock {
+    private static final int MINUTES_PER_HOUR = 60;
     private final int hour;
     private final int minute;
 
@@ -24,6 +25,10 @@ public class Clock {
         return new Clock(hour, minute);
     }
 
+    public static Clock fromInt(int minutes) {
+        return new Clock(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR);
+    }
+
     public int getHour() {
         return hour;
     }
@@ -32,13 +37,7 @@ public class Clock {
         return minute;
     }
 
-    private static final int MINUTES_PER_HOUR = 60;
-
     public int toInt() {
         return (hour * MINUTES_PER_HOUR + minute);
-    }
-
-    public static Clock fromInt(int minutes) {
-        return new Clock(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR);
     }
 }

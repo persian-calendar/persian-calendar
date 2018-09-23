@@ -76,6 +76,11 @@ import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_RE
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends DaggerFragment implements View.OnClickListener {
+    @Inject
+    AppDependency appDependency; // same object from App
+    @Inject
+    MainActivityDependency mainActivityDependency; // same object from MainActivity
+    boolean firstTime = true;
     private Calendar calendar = Calendar.getInstance();
     private Coordinate coordinate;
     private PrayTimesCalculator prayTimesCalculator;
@@ -84,12 +89,22 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     private CalendarsView calendarsView;
     private OwghatTabContentBinding owghatBinding;
     private EventsTabContentBinding eventsBinding;
+    private long lastSelectedJdn = -1;
+    private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            appDependency.getLocalBroadcastManager().sendBroadcast(
+                    new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                            .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
+                                    CalendarAdapter.positionToOffset(position))
+                            .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
 
-    @Inject
-    AppDependency appDependency; // same object from App
+            calendarsView.showTodayIcon();
+        }
 
-    @Inject
-    MainActivityDependency mainActivityDependency; // same object from MainActivity
+    };
+    private SearchView mSearchView;
+    private SearchView.SearchAutoComplete mSearchAutoComplete;
 
     @Nullable
     @Override
@@ -167,28 +182,10 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         return mainBinding.getRoot();
     }
 
-    boolean firstTime = true;
-
-    private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            appDependency.getLocalBroadcastManager().sendBroadcast(
-                    new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                            .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                                    CalendarAdapter.positionToOffset(position))
-                            .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
-
-            calendarsView.showTodayIcon();
-        }
-
-    };
-
     void changeMonth(int position) {
         mainBinding.calendarViewPager.setCurrentItem(
                 mainBinding.calendarViewPager.getCurrentItem() + position, true);
     }
-
-    private long lastSelectedJdn = -1;
 
     public void selectDay(long jdn) {
         lastSelectedJdn = jdn;
@@ -494,9 +491,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         return (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
     }
-
-    private SearchView mSearchView;
-    private SearchView.SearchAutoComplete mSearchAutoComplete;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

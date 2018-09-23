@@ -33,6 +33,7 @@ import net.androgames.level.painter.LevelPainter;
 public class LevelView extends SurfaceView implements SurfaceHolder.Callback {
 
     private LevelPainter painter;
+    private boolean isAlreadyLevel = true; // deliberately
 
     public LevelView(Context context) {
         super(context);
@@ -75,8 +76,6 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback {
         // free resources
         System.gc();
     }
-
-    private boolean isAlreadyLevel = true; // deliberately
 
     public void onOrientationChanged(Orientation orientation, float pitch, float roll, float balance) {
         if (painter != null) {

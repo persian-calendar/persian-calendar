@@ -31,6 +31,43 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
+    Runnable stopTask = new Runnable() {
+        @Override
+        public void run() {
+            if (ringtone == null && mediaPlayer == null) {
+                AthanActivity.this.finish();
+                return;
+            }
+            try {
+                if (ringtone != null) {
+                    if (!ringtone.isPlaying()) {
+                        AthanActivity.this.finish();
+                        return;
+                    }
+                }
+                if (mediaPlayer != null) {
+                    if (!mediaPlayer.isPlaying()) {
+                        AthanActivity.this.finish();
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                AthanActivity.this.finish();
+                return;
+            }
+            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
+        }
+    };
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (state == TelephonyManager.CALL_STATE_RINGING ||
+                    state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                stop();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,35 +134,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    Runnable stopTask = new Runnable() {
-        @Override
-        public void run() {
-            if (ringtone == null && mediaPlayer == null) {
-                AthanActivity.this.finish();
-                return;
-            }
-            try {
-                if (ringtone != null) {
-                    if (!ringtone.isPlaying()) {
-                        AthanActivity.this.finish();
-                        return;
-                    }
-                }
-                if (mediaPlayer != null) {
-                    if (!mediaPlayer.isPlaying()) {
-                        AthanActivity.this.finish();
-                        return;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                AthanActivity.this.finish();
-                return;
-            }
-            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
-        }
-    };
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -133,16 +141,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
             stop();
         }
     }
-
-    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            if (state == TelephonyManager.CALL_STATE_RINGING ||
-                    state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                stop();
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {

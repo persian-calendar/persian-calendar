@@ -40,6 +40,11 @@ import android.widget.TextView;
 import java.util.Locale;
 
 public class ColorPickerView extends LinearLayout {
+    private TextView colorResultView;
+    private SeekBar redSeekbar, greenSeekbar, blueSeekbar;
+    private LinearLayout colorsToPick;
+    private boolean colorCodeVisibility = false;
+
     public ColorPickerView(Context context) {
         super(context);
         init();
@@ -54,12 +59,6 @@ public class ColorPickerView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    private TextView colorResultView;
-    private SeekBar redSeekbar, greenSeekbar, blueSeekbar;
-    private LinearLayout colorsToPick;
-
-    private boolean colorCodeVisibility = false;
 
     private void init() {
         setOrientation(VERTICAL);

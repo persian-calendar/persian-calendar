@@ -35,26 +35,48 @@ import calendar.CalendarType;
 import dagger.android.support.DaggerFragment;
 
 public class MonthFragment extends DaggerFragment implements View.OnClickListener {
+    private static boolean isRTL = false;
+    @Inject
+    AppDependency appDependency;
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    @Inject
+    CalendarFragmentDependency calendarFragmentDependency;
+    @Inject
+    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;
     private int offset;
     private MonthAdapter adapter;
-
     private long baseJdn;
     private int monthLength;
+    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extras = intent.getExtras();
 
-    private static boolean isRTL = false;
+            if (extras == null) return;
 
-    @Inject
-    AppDependency appDependency;
+            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
+            if (value == offset) {
+                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
 
-    @Inject
-    MainActivityDependency mainActivityDependency;
+                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
+                    adapter.initializeMonthEvents(context);
+                    calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
+                } else {
+                    adapter.selectDay(-1);
+                    updateTitle();
+                }
 
-    @Inject
-    CalendarFragmentDependency calendarFragmentDependency;
-
-    @Inject
-    MonthFragmentDependency monthFragmentDependency;
+                long selectedDay = 1 + jdn - baseJdn;
+                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
+                    adapter.selectDay((int) (1 + jdn - baseJdn));
+                }
+            } else {
+                adapter.selectDay(-1);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -152,35 +174,6 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
         return view;
     }
-
-    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle extras = intent.getExtras();
-
-            if (extras == null) return;
-
-            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
-            if (value == offset) {
-                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
-
-                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
-                    adapter.initializeMonthEvents(context);
-                    calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
-                } else {
-                    adapter.selectDay(-1);
-                    updateTitle();
-                }
-
-                long selectedDay = 1 + jdn - baseJdn;
-                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
-                    adapter.selectDay((int) (1 + jdn - baseJdn));
-                }
-            } else {
-                adapter.selectDay(-1);
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {

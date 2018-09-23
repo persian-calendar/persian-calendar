@@ -38,13 +38,17 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_NAME;
 import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 public class FragmentLocationAthan extends PreferenceFragmentCompat {
-    private Preference categoryAthan;
-
     @Inject
     AppDependency appDependency;
-
     @Inject
     MainActivityDependency mainActivityDependency;
+    private Preference categoryAthan;
+    private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateAthanPreferencesState();
+        }
+    };
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -64,13 +68,6 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         putAthanNameOnSummary(appDependency.getSharedPreferences()
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
-
-    private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateAthanPreferencesState();
-        }
-    };
 
     @Override
     public void onDestroyView() {

@@ -15,6 +15,31 @@ public class PersianDate extends AbstractDate {
         super(jdn);
     }
 
+    private static long floor(double d) {
+        return (long) Math.floor(d);
+    }
+
+    private static long toJdn(int year, int month, int day) {
+        final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
+
+        long epbase;
+        if (year >= 0)
+            epbase = year - 474;
+        else
+            epbase = year - 473;
+
+        long epyear = 474 + (epbase % 2820);
+
+        long mdays;
+        if (month <= 7)
+            mdays = (month - 1) * 31;
+        else
+            mdays = (month - 1) * 30 + 6;
+
+        return day + mdays + ((epyear * 682) - 110) / 2816 + (epyear - 1) * 365
+                + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
+    }
+
     @Override
     public CalendarType getType() {
         // Don't refactor and change "SHAMSI" name below
@@ -58,30 +83,5 @@ public class PersianDate extends AbstractDate {
 
         day = (int) (jdn - toJdn(year, month, 1)) + 1;
         return new int[]{year, month, day};
-    }
-
-    private static long floor(double d) {
-        return (long) Math.floor(d);
-    }
-
-    private static long toJdn(int year, int month, int day) {
-        final long PERSIAN_EPOCH = 1948321; // The JDN of 1 Farvardin 1
-
-        long epbase;
-        if (year >= 0)
-            epbase = year - 474;
-        else
-            epbase = year - 473;
-
-        long epyear = 474 + (epbase % 2820);
-
-        long mdays;
-        if (month <= 7)
-            mdays = (month - 1) * 31;
-        else
-            mdays = (month - 1) * 30 + 6;
-
-        return day + mdays + ((epyear * 682) - 110) / 2816 + (epyear - 1) * 365
-                + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
     }
 }

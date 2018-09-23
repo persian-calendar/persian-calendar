@@ -7,12 +7,10 @@ package calendar;
  * @author ebraminio
  */
 public abstract class AbstractDate {
-    // Things needed to be implemented by subclasses
-    public abstract CalendarType getType();
-
-    public abstract long toJdn();
-
-    protected abstract int[] fromJdn(long jdn);
+    // Concrete things
+    final private int year;
+    final private int month;
+    final private int dayOfMonth;
 
     /* What JDN (Julian Day Number) means?
      *
@@ -22,11 +20,6 @@ public abstract class AbstractDate {
      * easily calculating elapsed days between two events (e.g. food production
      * date and sell by date).
      */
-
-    // Concrete things
-    final private int year;
-    final private int month;
-    final private int dayOfMonth;
 
     public AbstractDate(int year, int month, int dayOfMonth) {
         this.year = year;
@@ -40,6 +33,13 @@ public abstract class AbstractDate {
         this.month = result[1];
         this.dayOfMonth = result[2];
     }
+
+    // Things needed to be implemented by subclasses
+    public abstract CalendarType getType();
+
+    public abstract long toJdn();
+
+    protected abstract int[] fromJdn(long jdn);
 
     public int getYear() {
         return year;

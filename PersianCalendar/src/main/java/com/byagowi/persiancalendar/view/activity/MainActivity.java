@@ -86,11 +86,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             CONVERTER = 1,
             COMPASS = 2,
             PREFERENCE = 3,
-            ABOUT = 4,
+            ABOUT = 4, // EXIT = 5
             DEFAULT = CALENDAR; // Default selected fragment
-    // EXIT = 5
+    private static long creationDateJdn;
     private final String TAG = MainActivity.class.getName();
-    private ActivityMainBinding binding;
     private final Class<?>[] fragments = {
             CalendarFragment.class,
             ConverterFragment.class,
@@ -98,17 +97,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             SettingsFragment.class,
             AboutFragment.class
     };
-    private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
-
-    // https://stackoverflow.com/a/3410200
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
+    @Inject
+    AppDependency appDependency; // same object from App
+    @Inject
+    MainActivityDependency mainActivityDependency;
 
     // A never used migration
 //    private void oneTimeClockDisablingForAndroid5LE() {
@@ -123,16 +115,20 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 //            }
 //        }
 //    }
-
-    private static long creationDateJdn;
-
-    @Inject
-    AppDependency appDependency; // same object from App
-
-    @Inject
-    MainActivityDependency mainActivityDependency;
-
     ActionBar actionBar;
+    boolean settingHasChanged = false;
+    private ActivityMainBinding binding;
+    private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
+
+    // https://stackoverflow.com/a/3410200
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -284,8 +280,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         else if (month < 10) return "FALL";
         else return "WINTER";
     }
-
-    boolean settingHasChanged = false;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

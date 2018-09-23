@@ -17,14 +17,11 @@ public class DaysPaintResources {
     @ColorInt
     final public int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
             colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
-
-    final int halfEventBarWidth, appointmentYOffset, eventYOffset;
     final public int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
-
-    final Paint textPaint, linePaint, selectedPaint, todayPaint;
-
     @StyleRes
     final public int style;
+    final int halfEventBarWidth, appointmentYOffset, eventYOffset;
+    final Paint textPaint, linePaint, selectedPaint, todayPaint;
 
     public DaysPaintResources(Activity activity) {
         Resources.Theme theme = activity.getTheme();

@@ -21,24 +21,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
+    private final int startingDayOfWeek;
+    private final int totalDays;
+    private final ViewGroup.LayoutParams layoutParams;
+    private final DaysPaintResources daysPaintResources;
+    private CalendarFragmentDependency calendarFragmentDependency;
     private SparseArray<List<DeviceCalendarEvent>> monthEvents = new SparseArray<>();
     private List<DayEntity> days;
     private boolean isArabicDigit;
-    private final int startingDayOfWeek;
-    private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
     private Context context;
-    private final ViewGroup.LayoutParams layoutParams;
-    private final DaysPaintResources daysPaintResources;
-
-    public void initializeMonthEvents(Context context) {
-        if (Utils.isShowDeviceCalendarEvents()) {
-            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
-        }
-    }
-
-    CalendarFragmentDependency calendarFragmentDependency;
+    private int selectedDay = -1;
 
     public MonthAdapter(CalendarFragmentDependency calendarFragmentDependency, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
@@ -58,7 +52,11 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.daysPaintResources = calendarFragmentDependency.getDaysPaintResources();
     }
 
-    private int selectedDay = -1;
+    public void initializeMonthEvents(Context context) {
+        if (Utils.isShowDeviceCalendarEvents()) {
+            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
+        }
+    }
 
     public void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;

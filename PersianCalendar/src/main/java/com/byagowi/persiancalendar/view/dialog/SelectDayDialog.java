@@ -22,6 +22,10 @@ import dagger.android.support.DaggerAppCompatDialogFragment;
  */
 public class SelectDayDialog extends DaggerAppCompatDialogFragment {
     private static String BUNDLE_KEY = "jdn";
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    @Inject
+    CalendarFragmentDependency calendarFragmentDependency;
 
     public static SelectDayDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -31,12 +35,6 @@ public class SelectDayDialog extends DaggerAppCompatDialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    @Inject
-    MainActivityDependency mainActivityDependency;
-
-    @Inject
-    CalendarFragmentDependency calendarFragmentDependency;
 
     @NonNull
     @Override

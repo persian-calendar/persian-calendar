@@ -27,6 +27,14 @@ import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
+    @ColorInt
+    int qiblaColor;
+    // deliberately true
+    boolean isCurrentlyNorth = true;
+    boolean isCurrentlyEast = true;
+    boolean isCurrentlyWest = true;
+    boolean isCurrentlySouth = true;
+    boolean isCurrentlyQibla = true;
     private Paint dashedPaint;
     private int px, py; // Center of Compass (px,py)
     private int radius; // radius of Compass dial
@@ -39,8 +47,20 @@ public class QiblaCompassView extends View {
     private Horizontal sunPosition, moonPosition;
     private double longitude = 0.0;
     private double latitude = 0.0;
-
     private Paint textPaint;
+    private Path mPath = new Path();
+    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private RectF moonRect = new RectF();
+    private RectF moonOval = new RectF();
+    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public QiblaCompassView(Context context) {
         super(context);
@@ -57,6 +77,11 @@ public class QiblaCompassView extends View {
         initCompassView();
     }
 
+    static public boolean isNearToDegree(float angle, float compareTo) {
+        float difference = Math.abs(angle - compareTo);
+        return difference > 180 ? 360 - difference < 3f : difference < 3.f;
+    }
+
     private void initAstronomicParameters() {
         GregorianCalendar c = new GregorianCalendar();
         double jd = AstroLib.calculateJulianDay(c);
@@ -68,9 +93,6 @@ public class QiblaCompassView extends View {
         sunPosition = sunMoonPosition.getSunPosition();
         moonPosition = sunMoonPosition.getMoonPosition();
     }
-
-    @ColorInt
-    int qiblaColor;
 
     public void initCompassView() {
         setFocusable(true);
@@ -155,9 +177,6 @@ public class QiblaCompassView extends View {
         return longitude != 0.0 && latitude != 0.0;
     }
 
-    private Path mPath = new Path();
-    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     public void drawTrueNorthArrow(Canvas canvas, float drawnAngle) {
         trueNorthArrowPaint.reset();
         trueNorthArrowPaint.setColor(Color.RED);
@@ -178,9 +197,6 @@ public class QiblaCompassView extends View {
         canvas.drawCircle(px, py, 5, dashedPaint);
         canvas.restore();
     }
-
-    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public void drawDial(Canvas canvas) {
         // over here
@@ -241,8 +257,6 @@ public class QiblaCompassView extends View {
 
     }
 
-    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     public void drawSun(Canvas canvas) {
         sunPaint.reset();
         sunPaint.setColor(Color.YELLOW);
@@ -262,13 +276,6 @@ public class QiblaCompassView extends View {
         }
 
     }
-
-    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private RectF moonRect = new RectF();
-    private RectF moonOval = new RectF();
 
     public void drawMoon(Canvas canvas) {
         moonPaint.reset();
@@ -305,9 +312,6 @@ public class QiblaCompassView extends View {
         }
     }
 
-    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
-
     public void drawQibla(Canvas canvas) {
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);
         qiblaPaint.reset();
@@ -323,22 +327,10 @@ public class QiblaCompassView extends View {
         canvas.restore();
     }
 
-    static public boolean isNearToDegree(float angle, float compareTo) {
-        float difference = Math.abs(angle - compareTo);
-        return difference > 180 ? 360 - difference < 3f : difference < 3.f;
-    }
-
     public void setBearing(float bearing) {
         this.bearing = bearing;
         postInvalidate();
     }
-
-    // deliberately true
-    boolean isCurrentlyNorth = true;
-    boolean isCurrentlyEast = true;
-    boolean isCurrentlyWest = true;
-    boolean isCurrentlySouth = true;
-    boolean isCurrentlyQibla = true;
 
     public void isOnDirectionAction() {
         Context context = getContext();

@@ -39,6 +39,10 @@ import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class UIUtils {
+    private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
+    private static long latestToastShowTime = -1;
+    private static AudioManager audioManager = null;
+
     public static void askForCalendarPermission(Activity activity) {
         if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
 
@@ -81,7 +85,6 @@ public class UIUtils {
 
         return title.replaceAll("\\n", " ").trim();
     }
-
 
     static String baseClockToString(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
@@ -185,10 +188,6 @@ public class UIUtils {
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
-
-    private static long latestToastShowTime = -1;
-    private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
-    private static AudioManager audioManager = null;
 
     public static void a11yShowToastWithClick(Context context, @StringRes int resId) {
         if (!Utils.isTalkBackEnabled()) return;

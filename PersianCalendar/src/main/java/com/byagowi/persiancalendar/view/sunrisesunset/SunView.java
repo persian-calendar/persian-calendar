@@ -43,21 +43,34 @@ import androidx.core.content.ContextCompat;
 
 public class SunView extends View implements ValueAnimator.AnimatorUpdateListener {
 
+    private final float FULL_DAY = new Clock(24, 0).toInt();
+    private final float HALF_DAY = new Clock(12, 0).toInt();
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
-
     @ColorInt
     int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
             sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
             middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
-
     int width, height;
-
     Path curvePath, nightPath;
     double segmentByPixel;
-
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
-
     Map<PrayTime, Clock> prayTime;
+    float current = 0;
+    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
+    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    RectF moonRect = new RectF();
+    RectF moonOval = new RectF();
+    String dayLengthString = "";
+    String remainingString = "";
+    String sunriseString = "";
+    String middayString = "";
+    String sunsetString = "";
+    boolean isRTL = false;
+    //    private Horizontal moonPosition;
+    private double moonPhase = 1;
 
     public SunView(Context context) {
         super(context);
@@ -169,8 +182,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         nightPath.close();
     }
 
-    float current = 0;
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -258,17 +269,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         }
     }
 
-    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
-    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    RectF moonRect = new RectF();
-    RectF moonOval = new RectF();
-
-    //    private Horizontal moonPosition;
-    private double moonPhase = 1;
-
     public void drawMoon(Canvas canvas) {
         // This is brought from QiblaCompassView with some modifications
         float r = (height * 0.08f);
@@ -318,16 +318,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         this.moonPhase = moonPhase;
         postInvalidate();
     }
-
-    private final float FULL_DAY = new Clock(24, 0).toInt();
-    private final float HALF_DAY = new Clock(12, 0).toInt();
-
-    String dayLengthString = "";
-    String remainingString = "";
-    String sunriseString = "";
-    String middayString = "";
-    String sunsetString = "";
-    boolean isRTL = false;
 
     public void startAnimate(boolean immediate) {
         Context context = getContext();

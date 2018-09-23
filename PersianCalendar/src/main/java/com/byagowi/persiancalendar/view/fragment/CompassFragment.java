@@ -44,15 +44,15 @@ import dagger.android.support.DaggerFragment;
  * @author ebraminio
  */
 public class CompassFragment extends DaggerFragment {
+    public boolean stop = false;
+    @Inject
+    MainActivityDependency mainActivityDependency;
     private SensorManager sensorManager;
     private Sensor sensor;
     private SensorEventListener compassListener;
     private float orientation = 0;
     private FragmentCompassBinding binding;
     private boolean sensorNotFound = false;
-
-    @Inject
-    MainActivityDependency mainActivityDependency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -188,8 +188,6 @@ public class CompassFragment extends DaggerFragment {
         menu.clear();
         inflater.inflate(R.menu.compass_menu_buttons, menu);
     }
-
-    public boolean stop = false;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -11,6 +11,10 @@ import calendar.islamic.UmmAlQuraConverter;
 
 public class IslamicDate extends AbstractDate {
 
+    // Converters
+    public static boolean useUmmAlQura = false;
+    public static int islamicOffset = 0;
+
     public IslamicDate(int year, int month, int dayOfMonth) {
         super(year, month, dayOfMonth);
     }
@@ -23,10 +27,6 @@ public class IslamicDate extends AbstractDate {
     public CalendarType getType() {
         return CalendarType.ISLAMIC;
     }
-
-    // Converters
-    public static boolean useUmmAlQura = false;
-    public static int islamicOffset = 0;
 
     @Override
     public long toJdn() {

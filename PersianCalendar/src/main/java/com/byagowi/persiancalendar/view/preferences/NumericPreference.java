@@ -14,6 +14,8 @@ import androidx.preference.EditTextPreference;
  */
 public class NumericPreference extends EditTextPreference {
 
+    private Double mDouble;
+
     public NumericPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -30,7 +32,10 @@ public class NumericPreference extends EditTextPreference {
         super(context);
     }
 
-    private Double mDouble;
+    @Override
+    public String getText() {
+        return mDouble != null ? mDouble.toString() : null;
+    }
 
     // http://stackoverflow.com/a/10848393
     @Override
@@ -42,11 +47,6 @@ public class NumericPreference extends EditTextPreference {
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
         LocalBroadcastManager.getInstance(getContext())
                 .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
-    }
-
-    @Override
-    public String getText() {
-        return mDouble != null ? mDouble.toString() : null;
     }
 
     private Double parseDouble(String text) {

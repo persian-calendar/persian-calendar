@@ -15,6 +15,27 @@ public class CivilDate extends AbstractDate {
         super(jdn);
     }
 
+    // TODO Is it correct to return a CivilDate as a JulianDate?
+    private static int[] julianFromJdn(long jdn) {
+        long j = jdn + 1402;
+        long k = ((j - 1) / 1461);
+        long l = j - 1461 * k;
+        long n = ((l - 1) / 365) - (l / 1461);
+        long i = l - 365 * n + 30;
+        j = ((80 * i) / 2447);
+        int day = (int) (i - ((2447 * j) / 80));
+        i = (j / 11);
+        int month = (int) (j + 2 - 12 * i);
+        int year = (int) (4 * k + n + i - 4716);
+
+        return new int[]{year, month, day};
+    }
+
+    private static long julianToJdn(long lYear, long lMonth, long lDay) {
+        return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
+                + ((275 * lMonth) / 9) + lDay + 1729777;
+    }
+
     @Override
     public CalendarType getType() {
         return CalendarType.GREGORIAN;
@@ -53,26 +74,5 @@ public class CivilDate extends AbstractDate {
             return new int[]{year, month, day};
         } else
             return julianFromJdn(jdn);
-    }
-
-    // TODO Is it correct to return a CivilDate as a JulianDate?
-    private static int[] julianFromJdn(long jdn) {
-        long j = jdn + 1402;
-        long k = ((j - 1) / 1461);
-        long l = j - 1461 * k;
-        long n = ((l - 1) / 365) - (l / 1461);
-        long i = l - 365 * n + 30;
-        j = ((80 * i) / 2447);
-        int day = (int) (i - ((2447 * j) / 80));
-        i = (j / 11);
-        int month = (int) (j + 2 - 12 * i);
-        int year = (int) (4 * k + n + i - 4716);
-
-        return new int[]{year, month, day};
-    }
-
-    private static long julianToJdn(long lYear, long lMonth, long lDay) {
-        return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
-                + ((275 * lMonth) / 9) + lDay + 1729777;
     }
 }
