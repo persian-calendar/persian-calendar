@@ -6,6 +6,7 @@ package calendar;
  * @author Amir
  * @author ebraminio
  */
+
 public abstract class AbstractDate {
     // Concrete things
     final private int year;
@@ -35,8 +36,6 @@ public abstract class AbstractDate {
     }
 
     // Things needed to be implemented by subclasses
-    public abstract CalendarType getType();
-
     public abstract long toJdn();
 
     protected abstract int[] fromJdn(long jdn);
@@ -55,10 +54,10 @@ public abstract class AbstractDate {
 
     @Override
     public boolean equals(Object obj) {
+        if (getClass() != obj.getClass()) return false;
         if (obj instanceof AbstractDate) {
             AbstractDate date = (AbstractDate) obj;
-            return getType() == date.getType() &&
-                    getYear() == date.getYear() &&
+            return getYear() == date.getYear() &&
                     getMonth() == date.getMonth() &&
                     getDayOfMonth() == date.getDayOfMonth();
         }

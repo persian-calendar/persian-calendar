@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import calendar.CalendarType;
+import com.byagowi.persiancalendar.util.CalendarType;
 import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;
@@ -948,5 +948,15 @@ public class TestDateCalendar {
         assertTrue(QiblaCompassView.isNearToDegree(182, 180));
         assertFalse(QiblaCompassView.isNearToDegree(183, 180));
         assertFalse(QiblaCompassView.isNearToDegree(184, 180));
+    }
+
+    @Test
+    public void test_it_different_date_object_equal() {
+        assertFalse(new CivilDate(2000, 1, 1)
+                .equals(new PersianDate(2000, 1, 1)));
+        assertTrue(new CivilDate(2000, 1, 1)
+                .equals(new CivilDate(2000, 1, 1)));
+        assertFalse(new CivilDate(2000, 1, 1)
+                .equals(new CivilDate(2000, 2, 1)));
     }
 }

@@ -1,10 +1,5 @@
-package calendar;
+package com.byagowi.persiancalendar.util;
 
-/**
- * Calendars Types
- *
- * @author ebraminio
- */
 // So vital, don't ever change names of these
 public enum CalendarType {
     SHAMSI, ISLAMIC, GREGORIAN

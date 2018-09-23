@@ -40,13 +40,6 @@ public class PersianDate extends AbstractDate {
                 + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
     }
 
-    @Override
-    public CalendarType getType() {
-        // Don't refactor and change "SHAMSI" name below
-        // I don't like it also, but...
-        return CalendarType.SHAMSI;
-    }
-
     // Converters
     @Override
     public long toJdn() {

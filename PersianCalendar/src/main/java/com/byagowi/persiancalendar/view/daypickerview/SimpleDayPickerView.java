@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
@@ -22,7 +23,6 @@ import java.util.List;
 
 import androidx.databinding.DataBindingUtil;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 
 public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
         DayPickerView {

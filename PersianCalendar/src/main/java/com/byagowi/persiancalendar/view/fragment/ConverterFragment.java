@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
@@ -19,7 +20,6 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import calendar.CalendarType;
 import dagger.android.support.DaggerFragment;
 
 public class ConverterFragment extends DaggerFragment {

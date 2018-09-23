@@ -51,9 +51,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
     int width, height;
     Path curvePath, nightPath;
-    private double segmentByPixel;
-    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
-    private PrayTimes prayTimes;
     float current = 0;
     LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
     Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -68,6 +65,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     String middayString = "";
     String sunsetString = "";
     boolean isRTL = false;
+    private double segmentByPixel;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private PrayTimes prayTimes;
     //    private Horizontal moonPosition;
     private double moonPhase = 1;
 

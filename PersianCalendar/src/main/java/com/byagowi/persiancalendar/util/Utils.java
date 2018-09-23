@@ -59,7 +59,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StyleRes;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;

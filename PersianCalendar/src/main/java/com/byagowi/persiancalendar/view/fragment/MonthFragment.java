@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -31,7 +32,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 import dagger.android.support.DaggerFragment;
 
 public class MonthFragment extends DaggerFragment implements View.OnClickListener {

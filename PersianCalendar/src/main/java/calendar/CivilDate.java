@@ -36,11 +36,6 @@ public class CivilDate extends AbstractDate {
                 + ((275 * lMonth) / 9) + lDay + 1729777;
     }
 
-    @Override
-    public CalendarType getType() {
-        return CalendarType.GREGORIAN;
-    }
-
     // Converters
     @Override
     public long toJdn() {

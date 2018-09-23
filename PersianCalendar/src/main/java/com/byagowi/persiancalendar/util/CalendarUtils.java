@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 import calendar.CivilDate;
 import calendar.IslamicDate;
 import calendar.PersianDate;

@@ -33,7 +33,6 @@ import java.util.List;
 
 import androidx.core.app.NotificationCompat;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;

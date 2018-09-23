@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import calendar.CalendarType;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {

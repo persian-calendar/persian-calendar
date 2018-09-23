@@ -24,11 +24,6 @@ public class IslamicDate extends AbstractDate {
     }
 
     @Override
-    public CalendarType getType() {
-        return CalendarType.ISLAMIC;
-    }
-
-    @Override
     public long toJdn() {
         int year = getYear(), month = getMonth(), day = getDayOfMonth();
 

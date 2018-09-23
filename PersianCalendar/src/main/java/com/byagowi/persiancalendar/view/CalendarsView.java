@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -21,7 +22,6 @@ import java.util.List;
 
 import androidx.databinding.DataBindingUtil;
 import calendar.AbstractDate;
-import calendar.CalendarType;
 import calendar.CivilDate;
 
 public class CalendarsView extends FrameLayout implements View.OnClickListener {
