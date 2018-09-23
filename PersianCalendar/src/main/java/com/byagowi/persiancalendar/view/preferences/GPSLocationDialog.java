@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Coordinate;
@@ -27,63 +31,63 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.preference.PreferenceDialogFragmentCompat;
-import androidx.preference.PreferenceManager;
+import dagger.android.support.DaggerAppCompatDialogFragment;
 
-public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
-
+public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
     private LocationManager locationManager;
-    private Context context;
     private TextView textView;
     private Handler handler = new Handler();
     private String latitude;
     private String longitude;
     private String cityName;
 
+    @Inject
+    AppDependency appDependency;
+
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
     @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-
-        context = builder.getContext();
-
-        textView = new TextView(context);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        textView = new TextView(mainActivityDependency.getMainActivity());
         textView.setPadding(32, 32, 32, 32);
         textView.setText(R.string.pleasewaitgps);
 
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) mainActivityDependency.getMainActivity()
+                .getSystemService(Context.LOCATION_SERVICE);
 
         getLocation();
         if (lacksPermission) {
-            UIUtils.askForLocationPermission(getActivity());
+            UIUtils.askForLocationPermission(mainActivityDependency.getMainActivity());
         }
 
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30));
 
-        builder.setPositiveButton("", null);
-        builder.setNegativeButton("", null);
-        builder.setView(textView);
+        return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
+                .setPositiveButton("", null)
+                .setNegativeButton("", null)
+                .setView(textView)
+                .create();
     }
 
     private void checkGPSProvider() {
         if (latitude != null && longitude != null) return;
 
-        FragmentActivity activity = getActivity();
-        if (activity == null) return;
-
         try {
-            LocationManager gps = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+            LocationManager gps = (LocationManager) mainActivityDependency.getMainActivity()
+                    .getSystemService(Context.LOCATION_SERVICE);
 
             if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                new AlertDialog.Builder(activity)
+                new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                         .setMessage(R.string.gps_internet_desc)
                         .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
                             try {
-                                activity.startActivity(
+                                mainActivityDependency.getMainActivity().startActivity(
                                         new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                             } catch (Exception ignore) {
                             }
@@ -104,8 +108,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             lacksPermission = true;
             return;
         }
@@ -144,7 +148,7 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
     private void showLocation(Location location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.getLatitude());
         longitude = String.format(Locale.ENGLISH, "%f", location.getLongitude());
-        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+        Geocoder gcd = new Geocoder(mainActivityDependency.getMainActivity(), Locale.getDefault());
         List<Address> addresses;
         try {
             addresses = gcd.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -160,16 +164,15 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             result = cityName + "\n\n";
         }
         // this time, with native digits
-        result += Utils.formatCoordinate(context,
+        result += Utils.formatCoordinate(mainActivityDependency.getMainActivity(),
                 new Coordinate(location.getLatitude(), location.getLongitude()), "\n");
         textView.setText(result);
     }
 
     @Override
-    public void onDialogClosed(boolean positiveResult) {
+    public void onDismiss(DialogInterface dialog) {
         if (latitude != null && longitude != null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = preferences.edit();
+            SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
             editor.putString(Constants.PREF_LATITUDE, latitude);
             editor.putString(Constants.PREF_LONGITUDE, longitude);
             if (cityName != null) {
@@ -180,8 +183,8 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
             editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY);
             editor.apply();
 
-            LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+            appDependency.getLocalBroadcastManager().sendBroadcast(
+                    new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
         }
 
         if (everRegisteredCallback && locationManager != null) {
@@ -189,11 +192,12 @@ public class GPSLocationDialog extends PreferenceDialogFragmentCompat {
         }
 
         handler.removeCallbacks(checkGPSProviderCallback);
+
+        super.onDismiss(dialog);
     }
 
     @Override
     public void onPause() {
-        onDialogClosed(false);
         dismiss();
         super.onPause();
     }

@@ -4,10 +4,8 @@ import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -66,7 +64,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
 import calendar.CalendarType;
@@ -101,8 +98,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        Context context = getContext();
-        if (context == null) return null;
+        Context context = mainActivityDependency.getMainActivity();
 
         setHasOptionsMenu(true);
 
@@ -132,7 +128,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             owghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(), tabs, titles));
+        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
+                appDependency, tabs, titles));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
 
         prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
@@ -141,8 +138,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         mainBinding.calendarViewPager.addOnPageChangeListener(changeListener);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int lastTab = prefs.getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
+        int lastTab = appDependency.getSharedPreferences()
+                .getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
         if (lastTab >= tabs.size()) {
             lastTab = Constants.CALENDARS_TAB;
         }
@@ -175,10 +172,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            Context context = getContext();
-            if (context == null) return;
-
-            LocalBroadcastManager.getInstance(context).sendBroadcast(
+            appDependency.getLocalBroadcastManager().sendBroadcast(
                     new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                             .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                                     CalendarAdapter.positionToOffset(position))
@@ -237,7 +231,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                LocalBroadcastManager.getInstance(activity).sendBroadcast(
+                appDependency.getLocalBroadcastManager().sendBroadcast(
                         new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                                 .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                                         calculateViewPagerPositionFromJdn(lastSelectedJdn))
@@ -248,7 +242,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                         != PackageManager.PERMISSION_GRANTED) {
                     UIUtils.askForCalendarPermission(activity);
                 } else {
-                    UIUtils.toggleShowCalendarOnPreference(activity, true);
+                    UIUtils.toggleShowDeviceCalendarOnPreference(activity, true);
                     activity.restartActivity();
                 }
             }
@@ -256,9 +250,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
-        Context context = getContext();
-        if (context == null) return null;
-
         String title = UIUtils.formatDeviceCalendarEventTitle(event);
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -270,7 +261,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                                             CalendarContract.Events.CONTENT_URI, event.getId())),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
-                    Toast.makeText(context, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivityDependency.getMainActivity(),
+                            R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -310,7 +302,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
     private void showEvent(long jdn) {
         List<AbstractEvent> events = Utils.getEvents(jdn,
-                CalendarUtils.readDayDeviceEvents(getContext(), jdn));
+                CalendarUtils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
@@ -355,13 +347,10 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             eventsBinding.eventTitle.setVisibility(View.VISIBLE);
         }
 
-        Context context = getContext();
-        if (context == null) return;
-
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+        Set<String> enabledTypes = appDependency.getSharedPreferences()
+                .getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes.size() == 0) {
             eventsBinding.noEvent.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(messageToShow))
@@ -437,9 +426,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        Context context = getContext();
-        if (context == null) return;
-
         switch (v.getId()) {
             case R.id.owghat_text:
             case R.id.owghat_content:
@@ -466,11 +452,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     }
 
     private void bringTodayYearMonth() {
-        Context context = getContext();
-        if (context == null) return;
-
         lastSelectedJdn = -1;
-        LocalBroadcastManager.getInstance(context).sendBroadcast(
+        appDependency.getLocalBroadcastManager().sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
                                 Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
@@ -499,7 +482,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             }
         }
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(
+        appDependency.getLocalBroadcastManager().sendBroadcast(
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
                         .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));

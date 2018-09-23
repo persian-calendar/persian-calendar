@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.SeekBar;
 
-import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 

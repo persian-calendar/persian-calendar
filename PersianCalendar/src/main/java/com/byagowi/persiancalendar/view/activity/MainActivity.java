@@ -136,6 +136,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Don't replace below this with appDependency.getSharedPreferences() ever
+        // as it injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
 
@@ -402,12 +404,12 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
                     == PackageManager.PERMISSION_GRANTED) {
-                UIUtils.toggleShowCalendarOnPreference(this, true);
+                UIUtils.toggleShowDeviceCalendarOnPreference(this, true);
                 if (menuPosition == CALENDAR) {
                     restartActivity();
                 }
             } else {
-                UIUtils.toggleShowCalendarOnPreference(this, false);
+                UIUtils.toggleShowDeviceCalendarOnPreference(this, false);
             }
         }
     }

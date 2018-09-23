@@ -8,8 +8,8 @@
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="2">
 
-        <com.byagowi.persiancalendar.view.preferences.GPSLocationPreference
-            android:key="dummy"
+        <androidx.preference.Preference
+            android:key="pref_gps_location"
             android:summary="@string/gps_location_help"
             android:title="@string/gps_location"
             settings:iconSpaceReserved="false" />

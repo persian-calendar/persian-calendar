@@ -5,37 +5,42 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 
+import javax.inject.Inject;
+
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+import dagger.android.support.AndroidSupportInjection;
 
 public class FragmentInterfaceCalendar extends PreferenceFragmentCompat {
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+        AndroidSupportInjection.inject(this);
+
         addPreferencesFromResource(R.xml.preferences_interface_calendar);
 
         SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("showDeviceCalendarEvents");
 
         switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
 
-            FragmentActivity activity = getActivity();
-            if (activity != null) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    UIUtils.askForCalendarPermission(activity);
+            if (ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.READ_CALENDAR)
+                    != PackageManager.PERMISSION_GRANTED) {
+                UIUtils.askForCalendarPermission(mainActivityDependency.getMainActivity());
+                switchPreference.setChecked(false);
+            } else {
+                if (switchPreference.isChecked()) {
                     switchPreference.setChecked(false);
                 } else {
-                    if (switchPreference.isChecked()) {
-                        switchPreference.setChecked(false);
-                    } else {
-                        switchPreference.setChecked(true);
-                    }
+                    switchPreference.setChecked(true);
                 }
             }
             return false;

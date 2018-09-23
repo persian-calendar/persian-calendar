@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -27,10 +28,8 @@ import javax.inject.Inject;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import dagger.android.support.AndroidSupportInjection;
 
 import static android.app.Activity.RESULT_OK;
@@ -40,6 +39,9 @@ import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
 
 public class FragmentLocationAthan extends PreferenceFragmentCompat {
     private Preference categoryAthan;
+
+    @Inject
+    AppDependency appDependency;
 
     @Inject
     MainActivityDependency mainActivityDependency;
@@ -56,10 +58,10 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         Context context = getContext();
         if (context == null) return;
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(preferenceUpdateReceiver,
+        appDependency.getLocalBroadcastManager().registerReceiver(preferenceUpdateReceiver,
                 new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
 
-        putAthanNameOnSummary(PreferenceManager.getDefaultSharedPreferences(context)
+        putAthanNameOnSummary(appDependency.getSharedPreferences()
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
@@ -74,7 +76,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     public void onDestroyView() {
         Context context = getContext();
         if (context != null)
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(preferenceUpdateReceiver);
+            appDependency.getLocalBroadcastManager().unregisterReceiver(preferenceUpdateReceiver);
         super.onDestroyView();
     }
 
@@ -102,22 +104,6 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             fragment = new LocationPreferenceDialog();
         } else if (preference instanceof NumericPreference) {
             fragment = new NumericDialog();
-        } else if (preference instanceof GPSLocationPreference) {
-            //check whether gps provider and network providers are enabled or not
-            try {
-                Activity activity = mainActivityDependency.getMainActivity();
-
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    UIUtils.askForLocationPermission(activity);
-                    return;
-                } else {
-                    fragment = new GPSLocationDialog();
-                }
-            } catch (Exception e) {
-                // Do whatever we were doing till now
-            }
-
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
@@ -154,14 +140,27 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                 startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE);
                 return true;
             case "pref_key_ringtone_default":
-                SharedPreferences.Editor editor = PreferenceManager
-                        .getDefaultSharedPreferences(context).edit();
+                SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
                 editor.remove(PREF_ATHAN_URI);
                 editor.remove(PREF_ATHAN_NAME);
                 editor.apply();
                 Toast.makeText(context, R.string.returned_to_default, Toast.LENGTH_SHORT).show();
                 putAthanNameOnSummary(getDefaultAthanName());
                 return true;
+            case "pref_gps_location":
+                try {
+                    Activity activity = mainActivityDependency.getMainActivity();
+
+                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        UIUtils.askForLocationPermission(activity);
+                    } else {
+                        new GPSLocationDialog().show(getChildFragmentManager(),
+                                GPSLocationDialog.class.getName());
+                    }
+                } catch (Exception e) {
+                    // Do whatever we were doing till now
+                }
             default:
                 return super.onPreferenceTreeClick(preference);
         }
@@ -176,8 +175,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
             if (resultCode == RESULT_OK) {
                 Parcelable uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 if (uri != null) {
-                    SharedPreferences.Editor editor = PreferenceManager
-                            .getDefaultSharedPreferences(context).edit();
+                    SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
 
                     String ringtoneTitle = RingtoneManager
                             .getRingtone(context, Uri.parse(uri.toString()))

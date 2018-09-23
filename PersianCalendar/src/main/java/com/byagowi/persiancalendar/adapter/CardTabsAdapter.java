@@ -2,13 +2,13 @@ package com.byagowi.persiancalendar.adapter;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.view.sunrisesunset.SunView;
 
 import java.util.List;
@@ -40,11 +40,13 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
 
     private List<View> tabs;
     private List<String> titles;
+    private AppDependency appDependency;
 
-    public CardTabsAdapter(FragmentManager fm, List<View> tabs, List<String> titles) {
+    public CardTabsAdapter(FragmentManager fm, AppDependency appDependency, List<View> tabs, List<String> titles) {
         super(fm);
         this.tabs = tabs;
         this.titles = titles;
+        this.appDependency = appDependency;
     }
 
     @Override
@@ -93,9 +95,7 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
             }
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
-                container.getContext());
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
         editor.putInt(Constants.LAST_CHOSEN_TAB_KEY, position);
         editor.apply();
     }

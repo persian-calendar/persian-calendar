@@ -8,11 +8,11 @@ import javax.inject.Inject;
 @PerActivity
 public final class MainActivityDependency {
     @Inject
-    public MainActivityDependency() {
-    }
+    MainActivity activity;
 
     @Inject
-    MainActivity activity;
+    public MainActivityDependency() {
+    }
 
     public MainActivity getMainActivity() {
         return activity;

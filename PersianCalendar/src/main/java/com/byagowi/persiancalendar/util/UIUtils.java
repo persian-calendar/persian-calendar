@@ -66,7 +66,7 @@ public class UIUtils {
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
+    public static void toggleShowDeviceCalendarOnPreference(Context context, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);

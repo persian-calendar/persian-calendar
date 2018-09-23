@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.core.view.MotionEventCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
@@ -41,13 +41,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private final List<String> values;
     private final List<Boolean> enabled;
     private final CalendarPreferenceDialog calendarPreferenceDialog;
+    private final MainActivityDependency mainActivityDependency;
 
     RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
+                        MainActivityDependency mainActivityDependency,
                         List<String> titles, List<String> values, List<Boolean> enabled) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
         this.titles = new ArrayList<>(titles);
         this.values = new ArrayList<>(values);
         this.enabled = new ArrayList<>(enabled);
+        this.mainActivityDependency = mainActivityDependency;
     }
 
     @NonNull
@@ -93,9 +96,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Easter egg when all are swiped
         if (titles.size() == 0) {
             try {
-                FragmentActivity activity = calendarPreferenceDialog.getActivity();
-                if (activity == null) return;
-                View view = activity.findViewById(R.id.coordinator);
+                View view = mainActivityDependency.getMainActivity()
+                        .findViewById(R.id.coordinator);
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
                 animator.setDuration(3000L);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());

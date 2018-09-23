@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.MonthFragmentDependency;
@@ -27,7 +28,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calendar.AbstractDate;
@@ -43,6 +43,9 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     private int monthLength;
 
     private static boolean isRTL = false;
+
+    @Inject
+    AppDependency appDependency;
 
     @Inject
     MainActivityDependency mainActivityDependency;
@@ -144,7 +147,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             updateTitle();
         }
 
-        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity()).registerReceiver(setCurrentMonthReceiver,
+        appDependency.getLocalBroadcastManager().registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
         return view;
@@ -181,8 +184,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(mainActivityDependency.getMainActivity())
-                .unregisterReceiver(setCurrentMonthReceiver);
+        appDependency.getLocalBroadcastManager().unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
 

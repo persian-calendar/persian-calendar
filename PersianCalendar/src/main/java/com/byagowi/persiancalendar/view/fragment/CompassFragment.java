@@ -63,8 +63,7 @@ public class CompassFragment extends DaggerFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_compass,
                 container, false);
 
-        Context context = getContext();
-        if (context == null) return null;
+        Context context = mainActivityDependency.getMainActivity();
         Coordinate coordinate = Utils.getCoordinate(context);
 
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.compass),
