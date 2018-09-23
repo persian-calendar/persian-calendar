@@ -41,13 +41,6 @@
         <item>التقويم الميلادي</item>
     </string-array>
 
-    <!-- Should be matched with CalendarType -->
-    <string-array name="calendar_values" translatable="false">
-        <item>SHAMSI</item>
-        <item>ISLAMIC</item>
-        <item>GREGORIAN</item>
-    </string-array>
-
     <string-array name="week_days">
         <item>السبت</item>
         <item>الأحد</item>
