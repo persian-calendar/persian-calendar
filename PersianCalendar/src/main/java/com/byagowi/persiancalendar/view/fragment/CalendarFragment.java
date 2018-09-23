@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
-import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimes;
 import com.github.praytimes.PrayTimesCalculator;
 
 import java.util.ArrayList;
@@ -54,7 +54,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -387,20 +386,20 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         Date date = calendar.getTime();
 
-        Map<PrayTime, Clock> prayTimes = prayTimesCalculator.calculate(date, coordinate);
+        PrayTimes prayTimes = prayTimesCalculator.calculate(date, coordinate);
 
-        owghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.IMSAK)));
-        Clock sunriseClock = prayTimes.get(PrayTime.FAJR);
+        owghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.getImsakClock()));
+        Clock sunriseClock = prayTimes.getFajrClock();
         owghatBinding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
-        owghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE)));
-        Clock midddayClock = prayTimes.get(PrayTime.DHUHR);
+        owghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.getSunriseClock()));
+        Clock midddayClock = prayTimes.getDhuhrClock();
         owghatBinding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
-        owghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR)));
-        owghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET)));
-        Clock maghribClock = prayTimes.get(PrayTime.MAGHRIB);
+        owghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.getAsrClock()));
+        owghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.getSunsetClock()));
+        Clock maghribClock = prayTimes.getMaghribClock();
         owghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
-        owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA)));
-        owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT)));
+        owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.getIshaClock()));
+        owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.getMidnightClock()));
 
         double moonPhase = 1;
         try {

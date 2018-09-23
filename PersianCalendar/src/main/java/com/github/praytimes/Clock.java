@@ -2,7 +2,7 @@ package com.github.praytimes;
 
 import java.util.Calendar;
 
-import static com.github.praytimes.StaticUtils.fixHour;
+import static com.github.praytimes.Utils.fixHour;
 
 public class Clock {
     private static final int MINUTES_PER_HOUR = 60;

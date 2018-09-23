@@ -27,11 +27,10 @@ import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.github.praytimes.Clock;
-import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimes;
 
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Map;
 
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
@@ -52,9 +51,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
     int width, height;
     Path curvePath, nightPath;
-    double segmentByPixel;
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
-    Map<PrayTime, Clock> prayTime;
+    private double segmentByPixel;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private PrayTimes prayTimes;
     float current = 0;
     LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
     Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -313,15 +312,15 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         return height - (height * (float) cos) + (height * 0.1f);
     }
 
-    public void setSunriseSunsetMoonPhase(Map<PrayTime, Clock> prayTime, double moonPhase) {
-        this.prayTime = prayTime;
+    public void setSunriseSunsetMoonPhase(PrayTimes prayTimes, double moonPhase) {
+        this.prayTimes = prayTimes;
         this.moonPhase = moonPhase;
         postInvalidate();
     }
 
     public void startAnimate(boolean immediate) {
         Context context = getContext();
-        if (prayTime == null || context == null)
+        if (prayTimes == null || context == null)
             return;
 
         isRTL = UIUtils.isRTL(context);
@@ -329,9 +328,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         middayString = context.getString(R.string.midday);
         sunsetString = context.getString(R.string.sunset);
 
-        float sunset = prayTime.get(PrayTime.SUNSET).toInt();
-        float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
-        float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
+        float sunset = prayTimes.getSunsetClock().toInt();
+        float sunrise = prayTimes.getSunriseClock().toInt();
+        float midnight = prayTimes.getMidnightClock().toInt();
 
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();

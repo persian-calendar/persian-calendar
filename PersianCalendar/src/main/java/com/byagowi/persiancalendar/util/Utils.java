@@ -32,7 +32,7 @@ import com.byagowi.persiancalendar.view.activity.AthanActivity;
 import com.github.praytimes.CalculationMethod;
 import com.github.praytimes.Clock;
 import com.github.praytimes.Coordinate;
-import com.github.praytimes.PrayTime;
+import com.github.praytimes.PrayTimes;
 import com.github.praytimes.PrayTimesCalculator;
 
 import org.json.JSONArray;
@@ -178,7 +178,7 @@ public class Utils {
     @StyleRes
     static private int appTheme = R.style.LightTheme;
     private static boolean talkBackEnabled = false;
-    static private Map<PrayTime, Clock> prayTimes;
+    static private PrayTimes prayTimes;
     static private List<String> irCodeOrder = Arrays.asList("zz", "ir", "af", "iq");
     static private List<String> afCodeOrder = Arrays.asList("zz", "af", "ir", "iq");
     static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
@@ -426,32 +426,32 @@ public class Utils {
                     .calculate(new Date(), coordinate);
         }
 
-        if (prayTimes.get(PrayTime.FAJR).toInt() > clock.toInt()) {
-            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.FAJR));
+        if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock());
 
-        } else if (prayTimes.get(PrayTime.SUNRISE).toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNRISE));
+        } else if (prayTimes.getSunriseClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
 
-        } else if (prayTimes.get(PrayTime.DHUHR).toInt() > clock.toInt()) {
-            return context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.DHUHR));
+        } else if (prayTimes.getDhuhrClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
 
-        } else if (prayTimes.get(PrayTime.ASR).toInt() > clock.toInt()) {
-            return context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.ASR));
+        } else if (prayTimes.getAsrClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(prayTimes.getAsrClock());
 
-        } else if (prayTimes.get(PrayTime.SUNSET).toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.SUNSET));
+        } else if (prayTimes.getSunsetClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
 
-        } else if (prayTimes.get(PrayTime.MAGHRIB).toInt() > clock.toInt()) {
-            return context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.MAGHRIB));
+        } else if (prayTimes.getMaghribClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
 
-        } else if (prayTimes.get(PrayTime.ISHA).toInt() > clock.toInt()) {
-            return context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.ISHA));
+        } else if (prayTimes.getIshaClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(prayTimes.getIshaClock());
 
-        } else if (prayTimes.get(PrayTime.MIDNIGHT).toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.MIDNIGHT));
+        } else if (prayTimes.getMidnightClock().toInt() > clock.toInt()) {
+            return context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(prayTimes.getMidnightClock());
 
         } else {
-            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.get(PrayTime.FAJR)); //this is today & not tomorrow
+            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
         }
     }
 
@@ -991,34 +991,50 @@ public class Utils {
             }
 
             PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
-            Map<PrayTime, Clock> prayTimes = calculator.calculate(new Date(), coordinate);
+            PrayTimes prayTimes = calculator.calculate(new Date(), coordinate);
             // convert spacedComma separated string to a set
             Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
-            // in the past IMSAK was used but now we figured out FAJR was what we wanted
-            if (alarmTimesSet.remove("IMSAK"))
-                alarmTimesSet.add("FAJR");
 
             String[] alarmTimesNames = alarmTimesSet.toArray(new String[0]);
             for (int i = 0; i < alarmTimesNames.length; i++) {
-                PrayTime prayTime = PrayTime.valueOf(alarmTimesNames[i]);
+                Clock alarmTime;
+                switch (alarmTimesNames[i]) {
+                    case "DHUHR":
+                        alarmTime = prayTimes.getDhuhrClock();
+                        break;
 
-                Clock alarmTime = prayTimes.get(prayTime);
+                    case "ASR":
+                        alarmTime = prayTimes.getAsrClock();
+                        break;
 
-                if (alarmTime != null)
-                    setAlarm(context, prayTime, alarmTime, i, athanGap);
+                    case "MAGHRIB":
+                        alarmTime = prayTimes.getMaghribClock();
+                        break;
+
+                    case "ISHA":
+                        alarmTime = prayTimes.getIshaClock();
+                        break;
+
+                    // a better to have default
+                    default:
+                    case "FAJR":
+                        alarmTime = prayTimes.getFajrClock();
+                }
+
+                setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap);
             }
         }
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, Clock clock, int ord,
+    static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
         triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, prayTime, triggerTime.getTimeInMillis(), ord, athanGap);
+        setAlarm(context, alarmTimeName, triggerTime.getTimeInMillis(), ord, athanGap);
     }
 
-    static private void setAlarm(Context context, PrayTime prayTime, long timeInMillis, int ord,
+    static private void setAlarm(Context context, String alarmTimeName, long timeInMillis, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.setTimeInMillis(timeInMillis - athanGap);
@@ -1031,7 +1047,7 @@ public class Utils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                     ALARMS_BASE_ID + ord,
                     new Intent(context, BroadcastReceivers.class)
-                            .putExtra(KEY_EXTRA_PRAYER_KEY, prayTime.name())
+                            .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
                             .setAction(BROADCAST_ALARM),
                     PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -1,7 +1,7 @@
 package com.github.praytimes;
 
-import static com.github.praytimes.StaticUtils.deg;
-import static com.github.praytimes.StaticUtils.min;
+import static com.github.praytimes.Utils.deg;
+import static com.github.praytimes.Utils.min;
 
 public enum CalculationMethod {
     MWL("Muslim World League", deg(18), deg(17)),

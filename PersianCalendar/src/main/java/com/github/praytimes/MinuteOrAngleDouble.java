@@ -4,12 +4,12 @@ public class MinuteOrAngleDouble {
     private final boolean isMin;
     private final double value;
 
-    public MinuteOrAngleDouble(double value, boolean isMin) {
+    MinuteOrAngleDouble(double value, boolean isMinute) {
         this.value = value;
-        this.isMin = isMin;
+        this.isMin = isMinute;
     }
 
-    public boolean isMin() {
+    public boolean isMinute() {
         return isMin;
     }
 
