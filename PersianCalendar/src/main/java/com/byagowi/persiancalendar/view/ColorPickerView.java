@@ -41,7 +41,7 @@ import java.util.Locale;
 
 public class ColorPickerView extends LinearLayout {
     private TextView colorResultView;
-    private SeekBar redSeekbar, greenSeekbar, blueSeekbar;
+    private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
     private LinearLayout colorsToPick;
     private boolean colorCodeVisibility = false;
 
@@ -77,28 +77,28 @@ public class ColorPickerView extends LinearLayout {
             showColor();
         });
 
-        redSeekbar = new SeekBar(context);
-        greenSeekbar = new SeekBar(context);
-        blueSeekbar = new SeekBar(context);
+        redSeekBar = new SeekBar(context);
+        greenSeekBar = new SeekBar(context);
+        blueSeekBar = new SeekBar(context);
 
         float density = context.getResources().getDisplayMetrics().density;
-        int seekbarPadding = (int) density * 8;
-        int currentSidePad = redSeekbar.getPaddingLeft();
-        redSeekbar.setPadding(currentSidePad, seekbarPadding, currentSidePad, seekbarPadding);
-        greenSeekbar.setPadding(currentSidePad, seekbarPadding, currentSidePad, seekbarPadding);
-        blueSeekbar.setPadding(currentSidePad, seekbarPadding, currentSidePad, seekbarPadding);
+        int seekBarPadding = (int) density * 8;
+        int currentSidePad = redSeekBar.getPaddingLeft();
+        redSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding);
+        greenSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding);
+        blueSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding);
 
-        redSeekbar.setMax(255);
-        greenSeekbar.setMax(255);
-        blueSeekbar.setMax(255);
+        redSeekBar.setMax(255);
+        greenSeekBar.setMax(255);
+        blueSeekBar.setMax(255);
 
-        redSeekbar.getProgressDrawable().setColorFilter(0xFFC00000, PorterDuff.Mode.SRC_IN);
-        greenSeekbar.getProgressDrawable().setColorFilter(0xFF00C000, PorterDuff.Mode.SRC_IN);
-        blueSeekbar.getProgressDrawable().setColorFilter(0xFF0000C0, PorterDuff.Mode.SRC_IN);
+        redSeekBar.getProgressDrawable().setColorFilter(0xFFC00000, PorterDuff.Mode.SRC_IN);
+        greenSeekBar.getProgressDrawable().setColorFilter(0xFF00C000, PorterDuff.Mode.SRC_IN);
+        blueSeekBar.getProgressDrawable().setColorFilter(0xFF0000C0, PorterDuff.Mode.SRC_IN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            redSeekbar.getThumb().setColorFilter(0xFFC00000, PorterDuff.Mode.SRC_IN);
-            greenSeekbar.getThumb().setColorFilter(0xFF00C000, PorterDuff.Mode.SRC_IN);
-            blueSeekbar.getThumb().setColorFilter(0xFF0000C0, PorterDuff.Mode.SRC_IN);
+            redSeekBar.getThumb().setColorFilter(0xFFC00000, PorterDuff.Mode.SRC_IN);
+            greenSeekBar.getThumb().setColorFilter(0xFF00C000, PorterDuff.Mode.SRC_IN);
+            blueSeekBar.getThumb().setColorFilter(0xFF0000C0, PorterDuff.Mode.SRC_IN);
         }
 
         SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
@@ -118,15 +118,15 @@ public class ColorPickerView extends LinearLayout {
             }
         };
 
-        redSeekbar.setOnSeekBarChangeListener(listener);
-        greenSeekbar.setOnSeekBarChangeListener(listener);
-        blueSeekbar.setOnSeekBarChangeListener(listener);
+        redSeekBar.setOnSeekBarChangeListener(listener);
+        greenSeekBar.setOnSeekBarChangeListener(listener);
+        blueSeekBar.setOnSeekBarChangeListener(listener);
 
         LinearLayout seekBars = new LinearLayout(context);
         seekBars.setOrientation(VERTICAL);
-        seekBars.addView(redSeekbar);
-        seekBars.addView(greenSeekbar);
-        seekBars.addView(blueSeekbar);
+        seekBars.addView(redSeekBar);
+        seekBars.addView(greenSeekBar);
+        seekBars.addView(blueSeekBar);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.weight = 1;
         seekBars.setLayoutParams(params);
@@ -185,8 +185,8 @@ public class ColorPickerView extends LinearLayout {
     }
 
     private void showColor() {
-        int color = Color.argb(0xFF, redSeekbar.getProgress(),
-                greenSeekbar.getProgress(), blueSeekbar.getProgress());
+        int color = Color.argb(0xFF, redSeekBar.getProgress(),
+                greenSeekBar.getProgress(), blueSeekBar.getProgress());
         colorResultView.setBackgroundColor(color);
         colorResultView.setText(colorCodeVisibility
                 ? String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF & color)
@@ -196,13 +196,13 @@ public class ColorPickerView extends LinearLayout {
 
     public void setPickedColor(/*@ColorInt*/ int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            redSeekbar.setProgress(Color.red(color), true);
-            greenSeekbar.setProgress(Color.green(color), true);
-            blueSeekbar.setProgress(Color.blue(color), true);
+            redSeekBar.setProgress(Color.red(color), true);
+            greenSeekBar.setProgress(Color.green(color), true);
+            blueSeekBar.setProgress(Color.blue(color), true);
         } else {
-            redSeekbar.setProgress(Color.red(color));
-            greenSeekbar.setProgress(Color.green(color));
-            blueSeekbar.setProgress(Color.blue(color));
+            redSeekBar.setProgress(Color.red(color));
+            greenSeekBar.setProgress(Color.green(color));
+            blueSeekBar.setProgress(Color.blue(color));
         }
         showColor();
     }
@@ -210,6 +210,6 @@ public class ColorPickerView extends LinearLayout {
     /*@ColorInt*/
     public int getPickerColor() {
         return Color.argb(0xFF,
-                redSeekbar.getProgress(), greenSeekbar.getProgress(), blueSeekbar.getProgress());
+                redSeekBar.getProgress(), greenSeekBar.getProgress(), blueSeekBar.getProgress());
     }
 }

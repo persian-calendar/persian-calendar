@@ -28,6 +28,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         mCities = cities;
     }
 
+    @NonNull
     @Override
     public LocationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemCityNameBinding binding =

@@ -61,7 +61,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     }
 
     @Override
-    public void onBindViewHolder(final ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
         holder.checkedTextView.setText(titles.get(position));
         holder.checkedTextView.setChecked(enabled.get(position));
 

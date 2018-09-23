@@ -72,6 +72,7 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         }
     };
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         textView = new TextView(mainActivityDependency.getMainActivity());
