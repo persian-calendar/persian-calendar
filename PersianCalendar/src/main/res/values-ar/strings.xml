@@ -37,7 +37,7 @@
     <string name="end_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) إلى آخر السنة</string>
     <string name="date_copied_clipboard">تم النسخ إلى المحفظة</string>
     <string name="year_name">أسم السنة</string>
-	<string name="year1">القرد</string>
+    <string name="year1">القرد</string>
     <string name="year2">الديك</string>
     <string name="year3">الكلب</string>
     <string name="year4">الخنزير</string>
