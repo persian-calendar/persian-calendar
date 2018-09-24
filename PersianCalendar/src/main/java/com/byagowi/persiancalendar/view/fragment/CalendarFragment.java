@@ -34,9 +34,6 @@ import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
-import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
-import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -67,8 +64,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 import calendar.AbstractDate;
 import calendar.CivilDate;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 import dagger.android.support.DaggerFragment;
 
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;

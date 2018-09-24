@@ -41,7 +41,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
-//    @Inject
+    //    @Inject
 //    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;
     private int offset;
