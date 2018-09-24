@@ -82,21 +82,19 @@ public class CalendarUtils {
     }
 
     static public CalendarType getCalendarTypeFromDate(AbstractDate date) {
-        if (date instanceof PersianDate)
-            return CalendarType.SHAMSI;
-        else if (date instanceof IslamicDate)
+        if (date instanceof IslamicDate)
             return CalendarType.ISLAMIC;
-        else
+        else if (date instanceof CivilDate)
             return CalendarType.GREGORIAN;
+        else
+            return CalendarType.SHAMSI;
     }
 
     static public int getMonthLength(CalendarType calendar, int year, int month) {
-        return (int) (
-                getDateOfCalendar(calendar,
-                        month == 12 ? year + 1 : year,
-                        month == 12 ? 1 : month + 1,
-                        1).toJdn() -
-                        getDateOfCalendar(calendar, year, month, 1).toJdn());
+        int yearOfNextMonth = month == 12 ? year + 1 : year;
+        int nextMonth = month == 12 ? 1 : month + 1;
+        return (int) (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() -
+                getDateOfCalendar(calendar, year, month, 1).toJdn());
     }
 
     static Calendar makeCalendarFromDate(Date date) {
