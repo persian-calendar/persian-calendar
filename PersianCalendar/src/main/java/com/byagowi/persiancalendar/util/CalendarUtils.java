@@ -69,33 +69,6 @@ public class CalendarUtils {
         }
     }
 
-    static public long getJdnOfCalendar(CalendarType calendar, int year, int month, int day) {
-        switch (calendar) {
-            case ISLAMIC:
-                return new IslamicDate(year, month, day).toJdn();
-            case GREGORIAN:
-                return new CivilDate(year, month, day).toJdn();
-            case SHAMSI:
-            default:
-                return new PersianDate(year, month, day).toJdn();
-        }
-    }
-
-    static public int getMonthLength(CalendarType calendar, int year, int month) {
-        switch (calendar) {
-            case ISLAMIC:
-                return (int) (new IslamicDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new IslamicDate(year, month, 1).toJdn());
-            case GREGORIAN:
-                return (int) (new CivilDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new CivilDate(year, month, 1).toJdn());
-            case SHAMSI:
-            default:
-                return (int) (new PersianDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new PersianDate(year, month, 1).toJdn());
-        }
-    }
-
     static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
         switch (calendar) {
             case ISLAMIC:
@@ -106,6 +79,24 @@ public class CalendarUtils {
             default:
                 return new PersianDate(jdn);
         }
+    }
+
+    static public CalendarType getCalendarTypeFromDate(AbstractDate date) {
+        if (date instanceof PersianDate)
+            return CalendarType.SHAMSI;
+        else if (date instanceof IslamicDate)
+            return CalendarType.ISLAMIC;
+        else
+            return CalendarType.GREGORIAN;
+    }
+
+    static public int getMonthLength(CalendarType calendar, int year, int month) {
+        return (int) (
+                getDateOfCalendar(calendar,
+                        month == 12 ? year + 1 : year,
+                        month == 12 ? 1 : month + 1,
+                        1).toJdn() -
+                        getDateOfCalendar(calendar, year, month, 1).toJdn());
     }
 
     static Calendar makeCalendarFromDate(Date date) {
@@ -122,34 +113,6 @@ public class CalendarUtils {
                 Utils.formatNumber(date.getMonth()), Utils.formatNumber(date.getDayOfMonth()));
     }
 
-    static public CivilDate getGregorianToday() {
-        return calendarToCivilDate(makeCalendarFromDate(new Date()));
-    }
-
-    static public long getTodayJdn() {
-        return getGregorianToday().toJdn();
-    }
-
-    static public PersianDate getPersianToday() {
-        return new PersianDate(getTodayJdn());
-    }
-
-    static public IslamicDate getIslamicToday() {
-        return new IslamicDate(getTodayJdn());
-    }
-
-    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
-        switch (calendar) {
-            case ISLAMIC:
-                return getIslamicToday();
-            case GREGORIAN:
-                return getGregorianToday();
-            case SHAMSI:
-            default:
-                return getPersianToday();
-        }
-    }
-
     static public String dayTitleSummary(AbstractDate date) {
         return Utils.getWeekDayName(date) + Utils.getSpacedComma() + dateToString(date);
     }
@@ -160,6 +123,14 @@ public class CalendarUtils {
 
     static public int getDayOfWeekFromJdn(long jdn) {
         return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
+    }
+
+    static public long getTodayJdn() {
+        return calendarToCivilDate(makeCalendarFromDate(new Date())).toJdn();
+    }
+
+    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
+        return getDateFromJdnOfCalendar(calendar, getTodayJdn());
     }
 
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
@@ -232,7 +203,7 @@ public class CalendarUtils {
                             CalendarContract.Instances.RRULE,          // 6
                             CalendarContract.Instances.VISIBLE,        // 7
                             CalendarContract.Instances.ALL_DAY,        // 8
-                            CalendarContract.Instances.EVENT_COLOR     // 10
+                            CalendarContract.Instances.EVENT_COLOR     // 9
                     }, null, null, null);
 
             if (cursor == null) {
@@ -393,8 +364,8 @@ public class CalendarUtils {
         }
 
         if (Utils.isWeekOfYearEnabled()) {
-            long startOfYearJdn = CalendarUtils.getJdnOfCalendar(Utils.getMainCalendar(),
-                    mainDate.getYear(), 1, 1);
+            long startOfYearJdn = CalendarUtils.getDateOfCalendar(Utils.getMainCalendar(),
+                    mainDate.getYear(), 1, 1).toJdn();
             int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
             result.append("\n");
             result.append("\n");

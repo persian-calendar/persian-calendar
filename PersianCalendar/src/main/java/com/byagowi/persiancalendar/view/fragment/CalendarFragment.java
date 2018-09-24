@@ -514,43 +514,14 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);
-                if (ev instanceof PersianCalendarEvent) {
-                    PersianDate todayPersian = CalendarUtils.getPersianToday();
-                    PersianDate date = ((PersianCalendarEvent) ev).getDate();
-                    int year = date.getYear();
-                    if (year == -1) {
-                        year = todayPersian.getYear() +
-                                (date.getMonth() < todayPersian.getMonth() ? 1 : 0);
-                    }
-                    bringDate(new PersianDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
-                } else if (ev instanceof IslamicCalendarEvent) {
-                    IslamicDate todayIslamic = CalendarUtils.getIslamicToday();
-                    IslamicDate date = ((IslamicCalendarEvent) ev).getDate();
-                    int year = date.getYear();
-                    if (year == -1) {
-                        year = todayIslamic.getYear() +
-                                (date.getMonth() < todayIslamic.getMonth() ? 1 : 0);
-                    }
-                    bringDate(new IslamicDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
-                } else if (ev instanceof GregorianCalendarEvent) {
-                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
-                    CivilDate date = ((GregorianCalendarEvent) ev).getDate();
-                    int year = date.getYear();
-                    if (year == -1) {
-                        year = todayCivil.getYear() +
-                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
-                    }
-                    bringDate(new CivilDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
-                } else if (ev instanceof DeviceCalendarEvent) {
-                    CivilDate todayCivil = CalendarUtils.getGregorianToday();
-                    CivilDate date = ((DeviceCalendarEvent) ev).getCivilDate();
-                    int year = date.getYear();
-                    if (year == -1) {
-                        year = todayCivil.getYear() +
-                                (date.getMonth() < todayCivil.getMonth() ? 1 : 0);
-                    }
-                    bringDate(new CivilDate(year, date.getMonth(), date.getDayOfMonth()).toJdn());
+                AbstractDate date = ev.getDate();
+                CalendarType type = CalendarUtils.getCalendarTypeFromDate(date);
+                AbstractDate today = CalendarUtils.getTodayOfCalendar(type);
+                int year = date.getYear();
+                if (year == -1) {
+                    year = today.getYear() + (date.getMonth() < today.getMonth() ? 1 : 0);
                 }
+                bringDate(CalendarUtils.getDateOfCalendar(type, year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 mSearchView.onActionViewCollapsed();
             });
         });

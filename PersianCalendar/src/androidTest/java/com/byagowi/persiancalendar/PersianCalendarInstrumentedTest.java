@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
@@ -61,7 +62,7 @@ public class PersianCalendarInstrumentedTest {
         ClipboardManager clipboardManager = futureResult.get();
 
         onView(withId(R.id.first_calendar_date)).perform(click());
-        assertEquals(CalendarUtils.dateToString(CalendarUtils.getPersianToday()),
+        assertEquals(CalendarUtils.dateToString(CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI)),
                 clipboardManager.getPrimaryClip().getItemAt(0).getText());
     }
 

@@ -933,7 +933,7 @@ public class Utils {
             if (deviceEventList != null)
                 for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
                     // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-                    if (deviceCalendarEvent.getCivilDate().equals(civil))
+                    if (deviceCalendarEvent.getDate().equals(civil))
                         result.add(deviceCalendarEvent);
         }
 

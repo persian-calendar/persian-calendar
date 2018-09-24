@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -272,7 +273,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             isSouthernHemisphere = true;
         }
 
-        int month = CalendarUtils.getPersianToday().getMonth();
+        int month = CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
         if (month < 4) return "SPRING";

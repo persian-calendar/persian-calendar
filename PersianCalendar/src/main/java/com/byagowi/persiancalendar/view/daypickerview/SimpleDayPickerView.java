@@ -73,7 +73,7 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
             if (day > CalendarUtils.getMonthLength(selectedCalendarType, year, month))
                 throw new Exception("Not a valid day");
 
-            return CalendarUtils.getJdnOfCalendar(selectedCalendarType, year, month, day);
+            return CalendarUtils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn();
         } catch (Exception e) {
             Toast.makeText(getContext(), getContext().getString(R.string.date_exception),
                     Toast.LENGTH_SHORT).show();

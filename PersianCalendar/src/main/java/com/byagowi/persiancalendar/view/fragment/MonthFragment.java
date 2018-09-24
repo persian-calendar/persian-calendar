@@ -146,7 +146,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             }
         }
 
-        long startOfYearJdn = CalendarUtils.getJdnOfCalendar(mainCalendar, year, 1, 1);
+        long startOfYearJdn = CalendarUtils.getDateOfCalendar(mainCalendar, year, 1, 1).toJdn();
         int weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
         int weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 

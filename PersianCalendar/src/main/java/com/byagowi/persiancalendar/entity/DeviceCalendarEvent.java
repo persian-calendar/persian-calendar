@@ -4,25 +4,24 @@ import java.util.Date;
 
 import calendar.CivilDate;
 
-public class DeviceCalendarEvent extends AbstractEvent {
+public class DeviceCalendarEvent extends AbstractEvent<CivilDate> {
     private int id;
     private String description;
+    private String dateString;
     private Date start;
     private Date end;
-    private String date;
-    private CivilDate civilDate;
     private String color;
 
     public DeviceCalendarEvent(int id, String title, String description,
-                               Date start, Date end, String date, CivilDate civilDate,
+                               Date start, Date end, String dateString, CivilDate date,
                                String color) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.start = start;
         this.end = end;
+        this.dateString = dateString;
         this.date = date;
-        this.civilDate = civilDate;
         this.color = color;
     }
 
@@ -47,12 +46,8 @@ public class DeviceCalendarEvent extends AbstractEvent {
         return end;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public CivilDate getCivilDate() {
-        return civilDate;
+    public String getDateString() {
+        return dateString;
     }
 
     public String getColor() {
