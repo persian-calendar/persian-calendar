@@ -62,7 +62,7 @@ android {
 }
 
 dependencies {
-  val androidXVersion = "1.0.0-rc02"
+  val androidXVersion = "1.0.0"
   val leakCanaryVersion = "1.6.1"
   val junitVersion = "4.12"
   val daggerVersion = "2.16"
