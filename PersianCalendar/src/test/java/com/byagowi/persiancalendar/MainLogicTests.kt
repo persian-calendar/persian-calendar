@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar
 import calendar.CivilDate
 import calendar.IslamicDate
 import calendar.PersianDate
+import com.byagowi.persiancalendar.util.AstronomicalUtils
 import com.byagowi.persiancalendar.util.CalendarType
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.cepmuvakkit.times.view.QiblaCompassView
@@ -780,7 +781,7 @@ class MainLogicTests {
 
       assertEquals(String.format("%d %d %d", year, month, day),
           positiveJdn.contains(jdn),
-          CalendarUtils.isMoonInScorpio(persian, IslamicDate(jdn)))
+          AstronomicalUtils.isMoonInScorpio(persian, IslamicDate(jdn)))
     }
   }
 

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
+import com.byagowi.persiancalendar.util.AstronomicalUtils;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
@@ -212,7 +213,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                     Utils.formatNumber(thirdCalendar.getYear())));
         }
 
-        binding.zodiac.setText(CalendarUtils.getZodiacInfo(context, jdn, true));
+        binding.zodiac.setText(AstronomicalUtils.getZodiacInfo(context, jdn, true));
         binding.zodiac.setVisibility(TextUtils.isEmpty(binding.zodiac.getText()) ? View.GONE : View.VISIBLE);
 
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
