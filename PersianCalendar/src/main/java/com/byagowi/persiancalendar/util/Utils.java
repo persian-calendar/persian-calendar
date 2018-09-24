@@ -866,19 +866,7 @@ public class Utils {
         Utils.allEnabledEvents = allEnabledEvents;
     }
 
-    private static boolean holidayAwareEqualCheck(CivilDate event, CivilDate date) {
-        return event.getDayOfMonth() == date.getDayOfMonth()
-                && event.getMonth() == date.getMonth()
-                && (event.getYear() == -1 || event.getYear() == date.getYear());
-    }
-
-    private static boolean holidayAwareEqualCheck(IslamicDate event, IslamicDate date) {
-        return event.getDayOfMonth() == date.getDayOfMonth()
-                && event.getMonth() == date.getMonth()
-                && (event.getYear() == -1 || event.getYear() == date.getYear());
-    }
-
-    private static boolean holidayAwareEqualCheck(PersianDate event, PersianDate date) {
+    private static <T extends AbstractDate> boolean holidayAwareEqualCheck(T event, T date) {
         return event.getDayOfMonth() == date.getDayOfMonth()
                 && event.getMonth() == date.getMonth()
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
