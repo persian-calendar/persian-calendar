@@ -11,12 +11,12 @@ fun String.runCommand(workingDir: File = File("."),
                       timeoutUnit: TimeUnit = TimeUnit.MINUTES): String? {
   return try {
     ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
-            .directory(workingDir)
-            .redirectOutput(ProcessBuilder.Redirect.PIPE)
-            .redirectError(ProcessBuilder.Redirect.PIPE)
-            .start().apply {
-              waitFor(timeoutAmount, timeoutUnit)
-            }.inputStream.bufferedReader().readText()
+        .directory(workingDir)
+        .redirectOutput(ProcessBuilder.Redirect.PIPE)
+        .redirectError(ProcessBuilder.Redirect.PIPE)
+        .start().apply {
+          waitFor(timeoutAmount, timeoutUnit)
+        }.inputStream.bufferedReader().readText()
   } catch (e: java.io.IOException) {
     e.printStackTrace()
     null
@@ -38,10 +38,10 @@ android {
 
   buildTypes {
     getByName("debug") {
-      versionNameSuffix = "-" + listOf(
-              "git rev-parse --abbrev-ref HEAD",
-              "git rev-list HEAD --count",
-              "git rev-parse --short HEAD"
+      versionNameSuffix = "-" + arrayOf(
+          "git rev-parse --abbrev-ref HEAD",
+          "git rev-list HEAD --count",
+          "git rev-parse --short HEAD"
       ).map { it.runCommand()?.trim() }.joinToString("-")
     }
     getByName("release") {
