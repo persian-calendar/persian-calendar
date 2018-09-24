@@ -58,6 +58,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 import calendar.AbstractDate;
 import calendar.CivilDate;
 import calendar.IslamicDate;
@@ -1284,7 +1285,8 @@ public class Utils {
         if (!alreadyRan) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    context.startForegroundService(new Intent(context, ApplicationService.class));
+                    ContextCompat.startForegroundService(context,
+                            new Intent(context, ApplicationService.class));
 
                 context.startService(new Intent(context, ApplicationService.class));
             } catch (Exception e) {
