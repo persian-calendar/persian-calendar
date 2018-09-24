@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
   id("com.android.application")
+  id("kotlin-android")
 }
 
 // https://stackoverflow.com/a/52441962
@@ -89,6 +90,7 @@ dependencies {
   debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
 
   testImplementation("junit:junit:$junitVersion")
+  testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
   androidTestImplementation("androidx.test:runner:1.1.0-alpha4")
   androidTestImplementation("androidx.test:rules:1.1.0-alpha4")
