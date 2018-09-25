@@ -24,8 +24,8 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.Coordinate;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.Level;

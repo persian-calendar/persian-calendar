@@ -23,11 +23,11 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.praytimes.Clock;
+import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.Clock;
-import com.github.praytimes.PrayTimes;
 
 import java.util.Calendar;
 import java.util.Locale;

@@ -21,18 +21,18 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
+import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.github.praytimes.Clock;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
-import calendar.AbstractDate;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;

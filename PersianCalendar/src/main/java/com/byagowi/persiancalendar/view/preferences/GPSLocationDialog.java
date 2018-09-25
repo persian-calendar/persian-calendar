@@ -22,9 +22,9 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.github.praytimes.Coordinate;
 
 import java.io.IOException;
 import java.util.List;

@@ -12,6 +12,10 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
+import com.byagowi.persiancalendar.calendar.CivilDate;
+import com.byagowi.persiancalendar.calendar.IslamicDate;
+import com.byagowi.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 
@@ -23,10 +27,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.ActivityCompat;
-import calendar.AbstractDate;
-import calendar.CivilDate;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 

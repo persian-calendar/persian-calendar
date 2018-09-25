@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entity;
 
-import calendar.PersianDate;
+import com.byagowi.persiancalendar.calendar.PersianDate;
 
 public class PersianCalendarEvent extends AbstractEvent<PersianDate> {
     public PersianCalendarEvent(PersianDate date, String title, boolean holiday) {

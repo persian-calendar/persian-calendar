@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entity;
 
-import com.github.praytimes.Coordinate;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 
 /**
  * Created by ebraminio on 2/18/16.

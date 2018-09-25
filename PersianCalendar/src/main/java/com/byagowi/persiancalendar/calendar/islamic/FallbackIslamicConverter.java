@@ -1,6 +1,6 @@
-package calendar.islamic;
+package com.byagowi.persiancalendar.calendar.islamic;
 
-import calendar.CivilDate;
+import com.byagowi.persiancalendar.calendar.CivilDate;
 
 public class FallbackIslamicConverter {
 

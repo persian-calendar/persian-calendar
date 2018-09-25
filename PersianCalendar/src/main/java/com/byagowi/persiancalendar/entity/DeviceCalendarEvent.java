@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.entity;
 
-import java.util.Date;
+import com.byagowi.persiancalendar.calendar.CivilDate;
 
-import calendar.CivilDate;
+import java.util.Date;
 
 public class DeviceCalendarEvent extends AbstractEvent<CivilDate> {
     private int id;

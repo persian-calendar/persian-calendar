@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.github.praytimes.Clock;
+import com.byagowi.persiancalendar.praytimes.Clock;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;

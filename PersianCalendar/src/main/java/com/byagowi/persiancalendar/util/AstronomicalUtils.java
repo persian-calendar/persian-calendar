@@ -3,10 +3,10 @@ package com.byagowi.persiancalendar.util;
 import android.content.Context;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.calendar.IslamicDate;
+import com.byagowi.persiancalendar.calendar.PersianDate;
 
 import androidx.annotation.StringRes;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 // Based on Mehdi's work
 public class AstronomicalUtils {

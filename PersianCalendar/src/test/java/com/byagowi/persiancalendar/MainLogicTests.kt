@@ -1,16 +1,16 @@
 package com.byagowi.persiancalendar
 
-import calendar.CivilDate
-import calendar.IslamicDate
-import calendar.PersianDate
+import com.byagowi.persiancalendar.calendar.CivilDate
+import com.byagowi.persiancalendar.calendar.IslamicDate
+import com.byagowi.persiancalendar.calendar.PersianDate
+import com.byagowi.persiancalendar.praytimes.CalculationMethod
+import com.byagowi.persiancalendar.praytimes.Clock
+import com.byagowi.persiancalendar.praytimes.Coordinate
+import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.util.AstronomicalUtils
 import com.byagowi.persiancalendar.util.CalendarType
 import com.byagowi.persiancalendar.util.CalendarUtils
 import com.cepmuvakkit.times.view.QiblaCompassView
-import com.github.praytimes.CalculationMethod
-import com.github.praytimes.Clock
-import com.github.praytimes.Coordinate
-import com.github.praytimes.PrayTimesCalculator
 import org.junit.Assert.*
 import org.junit.Test
 

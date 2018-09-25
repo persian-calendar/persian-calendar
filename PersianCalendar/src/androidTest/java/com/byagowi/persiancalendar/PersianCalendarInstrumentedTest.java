@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+import com.byagowi.persiancalendar.calendar.CivilDate;
+import com.byagowi.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
@@ -19,8 +21,6 @@ import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import calendar.CivilDate;
-import calendar.IslamicDate;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;

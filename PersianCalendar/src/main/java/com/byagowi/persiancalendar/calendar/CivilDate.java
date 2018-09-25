@@ -1,4 +1,4 @@
-package calendar;
+package com.byagowi.persiancalendar.calendar;
 
 /**
  * @author Amir

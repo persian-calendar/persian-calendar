@@ -2,14 +2,13 @@ package com.byagowi.persiancalendar;
 
 import android.content.Intent;
 
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
-
-import calendar.AbstractDate;
 
 public class DashClockUpdate extends DashClockExtension {
     @Override

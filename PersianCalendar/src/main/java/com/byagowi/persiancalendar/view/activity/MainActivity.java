@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
@@ -35,7 +36,6 @@ import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
-import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 

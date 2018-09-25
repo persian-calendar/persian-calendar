@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entity;
 
-import calendar.AbstractDate;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 
 abstract public class AbstractEvent<T extends AbstractDate> {
     T date;

@@ -1,4 +1,4 @@
-package com.github.praytimes;
+package com.byagowi.persiancalendar.praytimes;
 
 public class PrayTimes {
     private double imsak, fajr, sunrise, dhuhr, asr, sunset, maghrib, isha, midnight;

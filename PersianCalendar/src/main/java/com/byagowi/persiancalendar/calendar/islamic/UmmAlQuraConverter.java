@@ -24,7 +24,7 @@
 // Copied from below link but modified to suit our need
 // https://github.com/msarhan/ummalqura-calendar/blob/master/src/main/java/com/github/msarhan/ummalqura/calendar/text/UmmalquraFormatData_en.java
 
-package calendar.islamic;
+package com.byagowi.persiancalendar.calendar.islamic;
 
 public class UmmAlQuraConverter {
 
