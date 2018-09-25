@@ -73,7 +73,7 @@ dependencies {
   implementation("androidx.recyclerview:recyclerview:$androidXVersion")
   implementation("androidx.cardview:cardview:$androidXVersion")
   implementation("com.google.android.material:material:$androidXVersion")
-  implementation("com.google.android:flexbox:1.1.0-beta1")
+  implementation("com.google.android:flexbox:1.1.0")
   implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0") {
     because("to provide a DashClock extension")
   }
