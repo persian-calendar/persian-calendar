@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
   id("com.android.application")
-  id("kotlin-android")
+  kotlin("android")
 }
 
 // https://stackoverflow.com/a/52441962
@@ -57,9 +57,7 @@ android {
     targetCompatibility = JavaVersion.VERSION_1_8
   }
 
-  dataBinding {
-    isEnabled = true
-  }
+  dataBinding.isEnabled = true
 }
 
 dependencies {
