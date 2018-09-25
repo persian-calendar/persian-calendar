@@ -77,7 +77,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     boolean firstTime = true;
     private Calendar calendar = Calendar.getInstance();
     private Coordinate coordinate;
-    private PrayTimesCalculator prayTimesCalculator;
     private int viewPagerPosition;
     private FragmentCalendarBinding mainBinding;
     private CalendarsView calendarsView;
@@ -141,7 +140,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                 appDependency, tabs, titles));
         mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
 
-        prayTimesCalculator = new PrayTimesCalculator(Utils.getCalculationMethod());
         mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
@@ -381,7 +379,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
         Date date = calendar.getTime();
 
-        PrayTimes prayTimes = prayTimesCalculator.calculate(date, coordinate);
+        PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
+                date, coordinate);
 
         owghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.getImsakClock()));
         Clock sunriseClock = prayTimes.getFajrClock();

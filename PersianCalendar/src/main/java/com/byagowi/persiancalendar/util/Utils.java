@@ -422,8 +422,7 @@ public class Utils {
         if (coordinate == null) return null;
 
         if (prayTimes == null || dateHasChanged) {
-            prayTimes = new PrayTimesCalculator(getCalculationMethod())
-                    .calculate(new Date(), coordinate);
+            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
         }
 
         if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
@@ -978,8 +977,8 @@ public class Utils {
                 athanGap = 0;
             }
 
-            PrayTimesCalculator calculator = new PrayTimesCalculator(calculationMethod);
-            PrayTimes prayTimes = calculator.calculate(new Date(), coordinate);
+            PrayTimes prayTimes = PrayTimesCalculator.calculate(calculationMethod,
+                    new Date(), coordinate);
             // convert spacedComma separated string to a set
             Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
 

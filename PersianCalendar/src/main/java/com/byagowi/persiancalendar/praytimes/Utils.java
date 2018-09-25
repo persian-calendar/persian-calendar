@@ -14,15 +14,11 @@ class Utils {
     }
 
     public static MinuteOrAngleDouble min(int value) {
-        return min((double) value);
+        return new MinuteOrAngleDouble((double) value, true);
     }
 
     static MinuteOrAngleDouble deg(double value) {
         return new MinuteOrAngleDouble(value, false);
-    }
-
-    private static MinuteOrAngleDouble min(double value) {
-        return new MinuteOrAngleDouble(value, true);
     }
 
     static double fixHour(double a) {

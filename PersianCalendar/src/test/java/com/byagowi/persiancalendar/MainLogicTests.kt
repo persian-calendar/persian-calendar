@@ -804,10 +804,11 @@ class MainLogicTests {
   @Test
   fun test_praytimes() {
     // http://praytimes.org/code/v2/js/examples/monthly.htm
-    var prayTimes = PrayTimesCalculator()
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
-            Coordinate(43.0, -80.0),
-            -5.0, true)
+    var prayTimes = PrayTimesCalculator.calculate(
+        CalculationMethod.MWL,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+        Coordinate(43.0, -80.0),
+        -5.0, true)
 
     assertEquals(Clock(5, 9).toInt(), prayTimes.fajrClock.toInt())
     assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
@@ -816,10 +817,10 @@ class MainLogicTests {
     assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 21).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.ISNA)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
-            Coordinate(43.0, -80.0),
-            -5.0, true)
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.ISNA,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+        Coordinate(43.0, -80.0),
+        -5.0, true)
     assertEquals(Clock(5, 27).toInt(), prayTimes.fajrClock.toInt())
     assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
     assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
@@ -827,10 +828,10 @@ class MainLogicTests {
     assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 9).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.Egypt)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
-            Coordinate(43.0, -80.0),
-            -5.0, true)
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Egypt,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+        Coordinate(43.0, -80.0),
+        -5.0, true)
     assertEquals(Clock(5, 0).toInt(), prayTimes.fajrClock.toInt())
     assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
     assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
@@ -838,10 +839,10 @@ class MainLogicTests {
     assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 24).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.Makkah)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
-            Coordinate(43.0, -80.0),
-            -5.0, true)
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Makkah,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+        Coordinate(43.0, -80.0),
+        -5.0, true)
     assertEquals(Clock(5, 6).toInt(), prayTimes.fajrClock.toInt())
     assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
     assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
@@ -849,10 +850,10 @@ class MainLogicTests {
     assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 18).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.Karachi)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
-            Coordinate(43.0, -80.0),
-            -5.0, true)
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Karachi,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+        Coordinate(43.0, -80.0),
+        -5.0, true)
     assertEquals(Clock(5, 9).toInt(), prayTimes.fajrClock.toInt())
     assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
     assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
@@ -860,8 +861,8 @@ class MainLogicTests {
     assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 27).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.Jafari)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Jafari,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0),
             -5.0, true)
     assertEquals(Clock(5, 21).toInt(), prayTimes.fajrClock.toInt())
@@ -871,8 +872,8 @@ class MainLogicTests {
     assertEquals(Clock(20, 5).toInt(), prayTimes.maghribClock.toInt())
     assertEquals(Clock(21, 3).toInt(), prayTimes.ishaClock.toInt())
 
-    prayTimes = PrayTimesCalculator(CalculationMethod.Tehran)
-        .calculate(CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+    prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Tehran,
+        CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0),
             -5.0, true)
     assertEquals(Clock(5, 11).toInt(), prayTimes.fajrClock.toInt())
