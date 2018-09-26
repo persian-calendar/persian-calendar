@@ -30,10 +30,10 @@ import androidx.appcompat.app.AlertDialog;
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
-import static com.byagowi.persiancalendar.Constants.CLASSIC_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.MODERN_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
@@ -165,8 +165,8 @@ public class UIUtils {
             case DARK_THEME:
                 return R.style.DarkTheme;
 
-            case CLASSIC_THEME:
-                return R.style.ClassicTheme;
+            case MODERN_THEME:
+                return R.style.ModernTheme;
 
             case BLUE_THEME:
                 return R.style.BlueTheme;

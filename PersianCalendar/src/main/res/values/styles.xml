@@ -202,38 +202,38 @@
         <item name="colorTextDaySelected">@color/dark_primary</item>
     </style>
 
-    <style name="ClassicTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/classic_primary</item>
-        <item name="colorPrimaryDark">@color/classic_primary_dark</item>
-        <item name="colorAccent">@color/classic_accent</item>
+    <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/modern_primary</item>
+        <item name="colorPrimaryDark">@color/modern_primary_dark</item>
+        <item name="colorAccent">@color/modern_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/classic_primary_dark
+            @color/modern_primary_dark
         </item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
-        <item name="colorCard">@color/classic_card_background</item>
-        <item name="colorBackground">@color/classic_background</item>
-        <item name="colorTextPrimary">@color/classic_text_primary</item>
-        <item name="colorIcon">@color/classic_icon</item>
-        <item name="colorTextNormal">@color/classic_text_normal</item>
-        <item name="colorTextSecond">@color/classic_text_second</item>
-        <item name="colorTextHoliday">@color/classic_text_holiday</item>
-        <item name="colorHoliday">@color/classic_holiday</item>
-        <item name="colorHolidaySelected">@color/classic_holiday</item>
-        <item name="colorTextDrawer">@color/classic_text_drawer</item>
-        <item name="colorTextDay">@color/classic_text_day</item>
-        <item name="colorTextToday">@color/classic_text_today</item>
-        <item name="colorTextDayName">@color/classic_text_day_name</item>
-        <item name="colorTextAthan">@color/classic_text_athan</item>
-        <item name="colorDivider">@color/classic_divider</item>
-        <item name="colorCurrentDay">@color/classic_current_day</item>
-        <item name="colorSelectDay">@color/classic_select_day</item>
-        <item name="colorEventLine">@color/classic_event_line</item>
-        <item name="colorDrawerBackground">@color/classic_drawer_background</item>
-        <item name="colorDrawerSelect">@color/classic_drawer_select</item>
-        <item name="colorDrawerIcon">@color/classic_icon_drawer</item>
-        <item name="colorMonthSwitch">@color/classic_month_switch</item>
+        <item name="colorCard">@color/modern_card_background</item>
+        <item name="colorBackground">@color/modern_background</item>
+        <item name="colorTextPrimary">@color/modern_text_primary</item>
+        <item name="colorIcon">@color/modern_icon</item>
+        <item name="colorTextNormal">@color/modern_text_normal</item>
+        <item name="colorTextSecond">@color/modern_text_second</item>
+        <item name="colorTextHoliday">@color/modern_text_holiday</item>
+        <item name="colorHoliday">@color/modern_holiday</item>
+        <item name="colorHolidaySelected">@color/modern_holiday</item>
+        <item name="colorTextDrawer">@color/modern_text_drawer</item>
+        <item name="colorTextDay">@color/modern_text_day</item>
+        <item name="colorTextToday">@color/modern_text_today</item>
+        <item name="colorTextDayName">@color/modern_text_day_name</item>
+        <item name="colorTextAthan">@color/modern_text_athan</item>
+        <item name="colorDivider">@color/modern_divider</item>
+        <item name="colorCurrentDay">@color/modern_current_day</item>
+        <item name="colorSelectDay">@color/modern_select_day</item>
+        <item name="colorEventLine">@color/modern_event_line</item>
+        <item name="colorDrawerBackground">@color/modern_drawer_background</item>
+        <item name="colorDrawerSelect">@color/modern_drawer_select</item>
+        <item name="colorDrawerIcon">@color/modern_icon_drawer</item>
+        <item name="colorMonthSwitch">@color/modern_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
         <item name="android:typeface">serif</item>
@@ -246,17 +246,17 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
-        <item name="android:itemBackground">@color/classic_background</item>
-        <item name="android:textColor">@color/classic_text_normal</item>
+        <item name="android:itemBackground">@color/modern_background</item>
+        <item name="android:textColor">@color/modern_text_normal</item>
 
-        <item name="coloredTabBackground">@color/classic_card_background</item>
-        <item name="coloredTabTextColor">@color/classic_accent</item>
+        <item name="coloredTabBackground">@color/modern_card_background</item>
+        <item name="coloredTabTextColor">@color/modern_accent</item>
 
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
-        <item name="menuIconColor">@color/classic_menu_icon_color</item>
-        <item name="coloredTabIndicatorColor">@color/classic_accent</item>
-        <item name="colorTextDaySelected">@color/classic_text_normal</item>
+        <item name="menuIconColor">@color/modern_menu_icon_color</item>
+        <item name="coloredTabIndicatorColor">@color/modern_accent</item>
+        <item name="colorTextDaySelected">@color/modern_text_normal</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">

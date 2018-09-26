@@ -81,7 +81,7 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor((selected && resource.style != R.style.ClassicTheme)
+        resource.linePaint.setColor((selected && resource.style != R.style.ModernTheme)
                 ? color : resource.colorEventLine);
 
         if (hasEvent) {
@@ -98,7 +98,7 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset, resource.linePaint);
         }
 
-        if (resource.style == R.style.ClassicTheme) {
+        if (resource.style == R.style.ModernTheme) {
             resource.textPaint.setFakeBoldText(today);
             resource.textPaint.setTextSize(textSize * .8f);
         }

@@ -83,7 +83,7 @@ public class Constants {
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
     public static final String BLUE_THEME = "BlueTheme";
-    public static final String CLASSIC_THEME = "ClassicTheme";
+    public static final String MODERN_THEME = "ClassicTheme"; // don't change it, for legacy reasons
 
     public static final int LOAD_APP_ID = 1000;
     public static final int THREE_HOURS_APP_ID = 1010;
