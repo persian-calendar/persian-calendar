@@ -137,7 +137,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
                 colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
 
-                fontSize = dpToPx(context, 12);
+                fontSize = dpToPx(12);
             } finally {
                 typedArray.recycle();
             }
@@ -186,9 +186,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         nightPath.close();
     }
 
-    private int dpToPx(Context context, int dp) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    // https://stackoverflow.com/a/34763668
+    private int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
     @Override
