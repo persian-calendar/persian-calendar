@@ -86,12 +86,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            appDependency.getLocalBroadcastManager().sendBroadcast(
-                    new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                            .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                                    CalendarAdapter.positionToOffset(position))
-                            .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
-
+            sendBroadcastToMonthFragments(CalendarAdapter.positionToOffset(position), false);
             calendarsView.showTodayIcon();
         }
 
@@ -220,12 +215,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                appDependency.getLocalBroadcastManager().sendBroadcast(
-                        new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                                .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                                        calculateViewPagerPositionFromJdn(lastSelectedJdn))
-                                .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, true)
-                                .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
+                sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(lastSelectedJdn), true);
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -236,6 +226,14 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                 }
             }
         }
+    }
+
+    private void sendBroadcastToMonthFragments(int toWhich, boolean addOrModify) {
+        appDependency.getLocalBroadcastManager().sendBroadcast(
+                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
+                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, toWhich)
+                        .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, addOrModify)
+                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
@@ -443,11 +441,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
     private void bringTodayYearMonth() {
         lastSelectedJdn = -1;
-        appDependency.getLocalBroadcastManager().sendBroadcast(
-                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT,
-                                Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY)
-                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, -1));
+        sendBroadcastToMonthFragments(Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
 
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
 
@@ -462,6 +456,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition);
 
         selectDay(jdn);
+        sendBroadcastToMonthFragments(viewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
             long todayJdn = CalendarUtils.getTodayJdn();
@@ -471,11 +466,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                         true, true), Toast.LENGTH_SHORT).show();
             }
         }
-
-        appDependency.getLocalBroadcastManager().sendBroadcast(
-                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, viewPagerPosition)
-                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, jdn));
     }
 
     private int calculateViewPagerPositionFromJdn(long jdn) {
