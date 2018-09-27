@@ -912,4 +912,134 @@ class MainLogicTests {
     assertTrue(CivilDate(2000, 1, 1) == CivilDate(2000, 1, 1))
     assertFalse(CivilDate(2000, 1, 1) == CivilDate(2000, 2, 1))
   }
+
+  @Test
+  fun tests_imported_from_calendariale() {
+    val J0000 = 1721425L // Ours is different apparently
+    arrayOf(
+//        arrayOf(-214193, -1208, 5, 1),
+//        arrayOf(-61387, -790, 9, 14),
+//        arrayOf(25469, -552, 7, 2),
+//        arrayOf(49217, -487, 7, 9),
+//        arrayOf(171307, -153, 10, 18),
+//        arrayOf(210155, -46, 2, 30),
+        arrayOf(253427, 73, 8, 19),
+        arrayOf(369740, 392, 2, 5),
+        arrayOf(400085, 475, 3, 3),
+        arrayOf(434355, 569, 1, 3),
+        arrayOf(452605, 618, 12, 20),
+        arrayOf(470160, 667, 1, 14),
+        arrayOf(473837, 677, 2, 8),
+        arrayOf(507850, 770, 3, 22),
+        arrayOf(524156, 814, 11, 13),
+        arrayOf(544676, 871, 1, 21),
+        arrayOf(567118, 932, 6, 28),
+        arrayOf(569477, 938, 12, 14),
+        arrayOf(601716, 1027, 3, 21),
+        arrayOf(613424, 1059, 4, 10),
+        arrayOf(626596, 1095, 5, 2),
+        arrayOf(645554, 1147, 3, 30),
+        arrayOf(664224, 1198, 5, 10),
+        arrayOf(671401, 1218, 1, 7),
+        arrayOf(694799, 1282, 1, 29),
+        arrayOf(704424, 1308, 6, 3),
+        arrayOf(708842, 1320, 7, 7),
+        arrayOf(709409, 1322, 1, 29),
+        arrayOf(709580, 1322, 7, 14),
+        arrayOf(727274, 1370, 12, 27),
+        arrayOf(728714, 1374, 12, 6),
+        arrayOf(744313, 1417, 8, 19),
+        arrayOf(764652, 1473, 4, 28)
+    ).forEach {
+      assertEquals(it[0] + J0000, PersianDate(it[1], it[2], it[3]).toJdn())
+      val from = PersianDate(it[0] + J0000)
+      assertEquals(from.year, it[1])
+      assertEquals(from.month, it[2])
+      assertEquals(from.dayOfMonth, it[3])
+    }
+
+    arrayOf(
+//        arrayOf(1507231, -586, 7, 24),
+//        arrayOf(1660037, -168, 12, 5),
+//        arrayOf(1746893, 70, 9, 24),
+//        arrayOf(1770641, 135, 10, 2),
+//        arrayOf(1892731, 470, 1, 8),
+//        arrayOf(1931579, 576, 5, 20),
+//        arrayOf(1974851, 694, 11, 10),
+//        arrayOf(2091164, 1013, 4, 25),
+//        arrayOf(2121509, 1096, 5, 24),
+//        arrayOf(2155779, 1190, 3, 23),
+//        arrayOf(2174029, 1240, 3, 10),
+//        arrayOf(2191584, 1288, 4, 2),
+//        arrayOf(2195261, 1298, 4, 27),
+//        arrayOf(2229274, 1391, 6, 12),
+//        arrayOf(2245580, 1436, 2, 3),
+//        arrayOf(2266100, 1492, 4, 9),
+//        arrayOf(2288542, 1553, 9, 19),
+//        arrayOf(2290901, 1560, 3, 5),
+//        arrayOf(2323140, 1648, 6, 10),
+        arrayOf(2334848, 1680, 6, 30),
+        arrayOf(2348020, 1716, 7, 24),
+        arrayOf(2366978, 1768, 6, 19),
+        arrayOf(2385648, 1819, 8, 2),
+        arrayOf(2392825, 1839, 3, 27),
+        arrayOf(2416223, 1903, 4, 19),
+        arrayOf(2425848, 1929, 8, 25),
+        arrayOf(2430266, 1941, 9, 29),
+        arrayOf(2430833, 1943, 4, 19),
+        arrayOf(2431004, 1943, 10, 7),
+        arrayOf(2448698, 1992, 3, 17),
+        arrayOf(2450138, 1996, 2, 25),
+        arrayOf(2465737, 2038, 11, 10),
+        arrayOf(2486076, 2094, 7, 18)
+    ).forEach {
+      assertEquals(it[0] + 1L, CivilDate(it[1], it[2], it[3]).toJdn())
+      val from = CivilDate(it[0] + 1L)
+      assertEquals(from.year, it[1])
+      assertEquals(from.month, it[2])
+      assertEquals(from.dayOfMonth, it[3])
+    }
+
+    arrayOf(
+//        arrayOf(-214193, -1245, 12, 11),
+//        arrayOf(-61387, -813, 2, 25),
+//        arrayOf(25469, -568, 4, 2),
+//        arrayOf(49217, -501, 4, 7),
+//        arrayOf(171307, -157, 10, 18),
+//        arrayOf(210155, -47, 6, 3),
+//        arrayOf(253427, 75, 7, 13),
+//        arrayOf(369740, 403, 10, 5),
+//        arrayOf(400085, 489, 5, 22),
+//        arrayOf(434355, 586, 2, 7),
+        arrayOf(452605, 637, 8, 7),
+//        arrayOf(470160, 687, 2, 21),
+//        arrayOf(473837, 697, 7, 7),
+//        arrayOf(507850, 793, 6, 30),
+//        arrayOf(524156, 839, 7, 6),
+//        arrayOf(544676, 897, 6, 2),
+        arrayOf(567118, 960, 9, 30),
+//        arrayOf(569477, 967, 5, 27),
+//        arrayOf(601716, 1058, 5, 18),
+//        arrayOf(613424, 1091, 6, 3),
+//        arrayOf(626596, 1128, 8, 4),
+        arrayOf(645554, 1182, 2, 4),
+//        arrayOf(664224, 1234, 10, 10),
+//        arrayOf(671401, 1255, 1, 11),
+//        arrayOf(694799, 1321, 1, 20),
+        arrayOf(704424, 1348, 3, 19),
+//        arrayOf(708842, 1360, 9, 7),
+//        arrayOf(709409, 1362, 4, 14),
+//        arrayOf(709580, 1362, 10, 7),
+//        arrayOf(727274, 1412, 9, 12),
+//        arrayOf(728714, 1416, 10, 5),
+//        arrayOf(744313, 1460, 10, 12),
+        arrayOf(764652, 1518, 3, 5)
+    ).forEach {
+      assertEquals("${it[0]}", it[0] + J0000, IslamicDate(it[1], it[2], it[3]).toJdn())
+      val from = IslamicDate(it[0] + 1L)
+//      assertEquals(from.year, it[1])
+//      assertEquals(from[1], it[2])
+//      assertEquals(from[2], it[3])
+    }
+  }
 }
