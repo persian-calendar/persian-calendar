@@ -71,8 +71,6 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/padding_item"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
             android:paddingTop="@dimen/padding_item"
             android:showDividers="middle"
             app:flexWrap="wrap"

@@ -18,6 +18,7 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -96,6 +97,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         init(context, attrs);
     }
 
+    private int fontSize;
+
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
@@ -133,6 +136,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 colorTextNormal = ContextCompat.getColor(context, typedValue.resourceId);
                 theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
                 colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
+
+                fontSize = dpToPx(context, 12);
             } finally {
                 typedArray.recycle();
             }
@@ -179,6 +184,11 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         nightPath.lineTo(width, 0);
         nightPath.lineTo(0, 0);
         nightPath.close();
+    }
+
+    private int dpToPx(Context context, int dp) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @Override
@@ -229,7 +239,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(25);
+        mPaint.setTextSize(fontSize);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(sunriseTextColor);
@@ -241,7 +251,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         // draw remaining time
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(25);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(colorTextSecond);
