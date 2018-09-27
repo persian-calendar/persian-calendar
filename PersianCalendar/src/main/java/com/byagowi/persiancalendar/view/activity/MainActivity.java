@@ -391,6 +391,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
+
+        appDependency.getLocalBroadcastManager()
+                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 
     @Override

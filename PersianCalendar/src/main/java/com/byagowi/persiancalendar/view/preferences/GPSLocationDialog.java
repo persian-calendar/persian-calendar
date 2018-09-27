@@ -178,9 +178,6 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
             }
             editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY);
             editor.apply();
-
-            appDependency.getLocalBroadcastManager().sendBroadcast(
-                    new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
         }
 
         if (everRegisteredCallback && locationManager != null) {

@@ -26,6 +26,7 @@
             android:inputType="numberDecimal"
             android:key="Latitude"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:title="@string/latitude"
             settings:iconSpaceReserved="false" />
 
@@ -35,6 +36,7 @@
             android:inputType="numberDecimal"
             android:key="Longitude"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:title="@string/longitude"
             settings:iconSpaceReserved="false" />
 
@@ -44,6 +46,7 @@
             android:inputType="numberDecimal"
             android:key="Altitude"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/altitude_praytime"
             android:title="@string/altitude"
             settings:iconSpaceReserved="false" />

@@ -14,6 +14,6 @@ public abstract class CalendarFragmentModule {
     abstract MonthFragment monthFragmentInjector();
 
     @PerChildFragment
-    @ContributesAndroidInjector(modules = MainChildFragmentModule.class)
+    @ContributesAndroidInjector
     abstract SelectDayDialog selectDayDialogInjector();
 }
