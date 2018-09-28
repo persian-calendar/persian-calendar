@@ -195,8 +195,8 @@ public class CalendarUtils {
 
                 Date startDate = new Date(cursor.getLong(3));
                 Date endDate = new Date(cursor.getLong(4));
-                Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
-                Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
+                Calendar startCalendar = makeCalendarFromDate(startDate);
+                Calendar endCalendar = makeCalendarFromDate(endDate);
 
                 CivilDate civilDate = calendarToCivilDate(startCalendar);
 
@@ -275,12 +275,11 @@ public class CalendarUtils {
             result.append("\n");
         }
 
-        AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
-                Utils.getMainCalendar(), jdn);
+        AbstractDate mainDate = getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn);
 
         if (withTitle) {
             result.append("\n");
-            result.append(CalendarUtils.dayTitleSummary(mainDate));
+            result.append(dayTitleSummary(mainDate));
         }
 
         if (withOtherCalendars) {
@@ -314,9 +313,9 @@ public class CalendarUtils {
         }
 
         if (Utils.isWeekOfYearEnabled()) {
-            long startOfYearJdn = CalendarUtils.getDateOfCalendar(Utils.getMainCalendar(),
+            long startOfYearJdn = getDateOfCalendar(Utils.getMainCalendar(),
                     mainDate.getYear(), 1, 1).toJdn();
-            int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
+            int weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn);
             result.append("\n");
             result.append("\n");
             result.append(String.format(context.getString(R.string.nth_week_of_year),
