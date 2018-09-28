@@ -5,12 +5,12 @@ import com.byagowi.persiancalendar.calendar.CivilDate;
 import java.util.Date;
 
 public class DeviceCalendarEvent extends AbstractEvent<CivilDate> {
-    private int id;
-    private String description;
-    private String dateString;
-    private Date start;
-    private Date end;
-    private String color;
+    final private int id;
+    final private String description;
+    final private String dateString;
+    final private Date start;
+    final private Date end;
+    final private String color;
 
     public DeviceCalendarEvent(int id, String title, String description,
                                Date start, Date end, String dateString, CivilDate date,

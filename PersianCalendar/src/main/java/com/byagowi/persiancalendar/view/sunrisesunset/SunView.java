@@ -70,6 +70,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     private PrayTimes prayTimes;
     //    private Horizontal moonPosition;
     private double moonPhase = 1;
+    private int fontSize;
 
     public SunView(Context context) {
         super(context);
@@ -95,8 +96,6 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
         init(context, attrs);
     }
-
-    private int fontSize;
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
