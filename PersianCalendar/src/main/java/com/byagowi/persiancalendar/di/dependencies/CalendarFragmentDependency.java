@@ -10,6 +10,7 @@ import javax.inject.Inject;
 @PerFragment
 public final class CalendarFragmentDependency {
     private final DaysPaintResources daysPaintResources;
+
     @Inject
     CalendarFragment calendarFragment;
 
@@ -25,5 +26,4 @@ public final class CalendarFragmentDependency {
     public DaysPaintResources getDaysPaintResources() {
         return daysPaintResources;
     }
-
 }

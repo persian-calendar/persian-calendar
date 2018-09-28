@@ -150,9 +150,9 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         fragmentMonthBinding.monthDays.setAdapter(adapter);
         fragmentMonthBinding.monthDays.setItemAnimator(null);
 
-        if (calendarFragment.firstTime &&
-                offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.firstTime = false;
+        if (calendarFragment.mFirstTime &&
+                offset == 0 && calendarFragment.getmViewPagerPosition() == offset) {
+            calendarFragment.mFirstTime = false;
             calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }

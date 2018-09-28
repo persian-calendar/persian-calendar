@@ -74,25 +74,26 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     AppDependency appDependency; // same object from App
     @Inject
     MainActivityDependency mainActivityDependency; // same object from MainActivity
-    boolean firstTime = true;
-    private Calendar calendar = Calendar.getInstance();
-    private Coordinate coordinate;
-    private int viewPagerPosition;
-    private FragmentCalendarBinding mainBinding;
-    private CalendarsView calendarsView;
-    private OwghatTabContentBinding owghatBinding;
-    private EventsTabContentBinding eventsBinding;
-    private long lastSelectedJdn = -1;
-    private ViewPager.OnPageChangeListener changeListener = new ViewPager.SimpleOnPageChangeListener() {
+    boolean mFirstTime = true;
+    private Calendar mCalendar = Calendar.getInstance();
+    private Coordinate mCoordinate;
+    private int mViewPagerPosition;
+    private FragmentCalendarBinding mMainBinding;
+    private CalendarsView mCalendarsView;
+    private OwghatTabContentBinding mOwghatBinding;
+    private EventsTabContentBinding mEventsBinding;
+    private long mLastSelectedJdn = -1;
+    private SearchView mSearchView;
+    private SearchView.SearchAutoComplete mSearchAutoComplete;
+    private CalendarAdapter.CalendarAdapterHelper mCalendarAdapterHelper;
+    private ViewPager.OnPageChangeListener mChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            sendBroadcastToMonthFragments(CalendarAdapter.positionToOffset(position), false);
-            calendarsView.showTodayIcon();
+            sendBroadcastToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
+            mCalendarsView.showTodayIcon();
         }
 
     };
-    private SearchView mSearchView;
-    private SearchView.SearchAutoComplete mSearchAutoComplete;
 
     @Nullable
     @Override
@@ -105,40 +106,41 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         setHasOptionsMenu(true);
 
-        mainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
+        mMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
                 false);
-        viewPagerPosition = 0;
+        mViewPagerPosition = 0;
 
-        boolean isRTL = UIUtils.isRTL(context);
         List<String> titles = new ArrayList<>();
         List<View> tabs = new ArrayList<>();
 
         titles.add(getString(R.string.calendar));
-        calendarsView = new CalendarsView(context);
-        calendarsView.setOnCalendarsViewExpandListener(() -> mainBinding.cardsViewPager.measureCurrentView(calendarsView));
-        calendarsView.setOnTodayButtonClickListener(this::bringTodayYearMonth);
-        tabs.add(calendarsView);
+        mCalendarsView = new CalendarsView(context);
+        mCalendarsView.setOnCalendarsViewExpandListener(() -> mMainBinding.cardsViewPager.measureCurrentView(mCalendarsView));
+        mCalendarsView.setOnTodayButtonClickListener(this::bringTodayYearMonth);
+        tabs.add(mCalendarsView);
 
         titles.add(getString(R.string.events));
-        eventsBinding = DataBindingUtil.inflate(inflater, R.layout.events_tab_content, container, false);
-        tabs.add(eventsBinding.getRoot());
+        mEventsBinding = DataBindingUtil.inflate(inflater, R.layout.events_tab_content, container, false);
+        tabs.add(mEventsBinding.getRoot());
 
-        coordinate = Utils.getCoordinate(context);
-        if (coordinate != null) {
+        mCoordinate = Utils.getCoordinate(context);
+        if (mCoordinate != null) {
             titles.add(getString(R.string.owghat));
-            owghatBinding = DataBindingUtil.inflate(inflater, R.layout.owghat_tab_content, container, false);
-            tabs.add(owghatBinding.getRoot());
-            owghatBinding.getRoot().setOnClickListener(this);
+            mOwghatBinding = DataBindingUtil.inflate(inflater, R.layout.owghat_tab_content, container, false);
+            tabs.add(mOwghatBinding.getRoot());
+            mOwghatBinding.getRoot().setOnClickListener(this);
         }
 
-        mainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
+        mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
                 appDependency, tabs, titles));
-        mainBinding.tabLayout.setupWithViewPager(mainBinding.cardsViewPager);
+        mMainBinding.tabLayout.setupWithViewPager(mMainBinding.cardsViewPager);
 
-        mainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(), isRTL));
-        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
+        mCalendarAdapterHelper = new CalendarAdapter.CalendarAdapterHelper(UIUtils.isRTL(context));
+        mMainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
+                mCalendarAdapterHelper));
+        mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
-        mainBinding.calendarViewPager.addOnPageChangeListener(changeListener);
+        mMainBinding.calendarViewPager.addOnPageChangeListener(mChangeListener);
 
         int lastTab = appDependency.getSharedPreferences()
                 .getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
@@ -146,37 +148,37 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             lastTab = Constants.CALENDARS_TAB;
         }
 
-        mainBinding.cardsViewPager.setCurrentItem(lastTab, false);
+        mMainBinding.cardsViewPager.setCurrentItem(lastTab, false);
 
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
-        if (coordinate != null) {
+        if (mCoordinate != null) {
             String cityName = Utils.getCityName(context, false);
             if (!TextUtils.isEmpty(cityName)) {
-                owghatBinding.owghatText.setText(cityName);
+                mOwghatBinding.owghatText.setText(cityName);
             }
 
             // Easter egg to test AthanActivity
-            owghatBinding.owghatText.setOnClickListener(this);
-            owghatBinding.owghatText.setOnLongClickListener(v -> {
+            mOwghatBinding.owghatText.setOnClickListener(this);
+            mOwghatBinding.owghatText.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
                 return true;
             });
         }
 
-        return mainBinding.getRoot();
+        return mMainBinding.getRoot();
     }
 
     void changeMonth(int position) {
-        mainBinding.calendarViewPager.setCurrentItem(
-                mainBinding.calendarViewPager.getCurrentItem() + position, true);
+        mMainBinding.calendarViewPager.setCurrentItem(
+                mMainBinding.calendarViewPager.getCurrentItem() + position, true);
     }
 
     public void selectDay(long jdn) {
-        lastSelectedJdn = jdn;
-        calendarsView.showCalendars(jdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
+        mLastSelectedJdn = jdn;
+        mCalendarsView.showCalendars(jdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
         setOwghat(jdn, CalendarUtils.getTodayJdn() == jdn);
         showEvent(jdn);
     }
@@ -215,7 +217,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(lastSelectedJdn), true);
+                sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -233,7 +235,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                 new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
                         .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, toWhich)
                         .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, addOrModify)
-                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, lastSelectedJdn));
+                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, mLastSelectedJdn));
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
@@ -295,51 +297,51 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
         StringBuilder contentDescription = new StringBuilder();
 
-        eventsBinding.holidayTitle.setVisibility(View.GONE);
-        eventsBinding.deviceEventTitle.setVisibility(View.GONE);
-        eventsBinding.eventTitle.setVisibility(View.GONE);
-        eventsBinding.eventMessage.setVisibility(View.GONE);
-        eventsBinding.noEvent.setVisibility(View.VISIBLE);
+        mEventsBinding.holidayTitle.setVisibility(View.GONE);
+        mEventsBinding.deviceEventTitle.setVisibility(View.GONE);
+        mEventsBinding.eventTitle.setVisibility(View.GONE);
+        mEventsBinding.eventMessage.setVisibility(View.GONE);
+        mEventsBinding.noEvent.setVisibility(View.VISIBLE);
 
         if (!TextUtils.isEmpty(holidays)) {
-            eventsBinding.noEvent.setVisibility(View.GONE);
-            eventsBinding.holidayTitle.setText(holidays);
+            mEventsBinding.noEvent.setVisibility(View.GONE);
+            mEventsBinding.holidayTitle.setText(holidays);
             String holidayContent = getString(R.string.holiday_reason) + "\n" + holidays;
-            eventsBinding.holidayTitle.setContentDescription(holidayContent);
+            mEventsBinding.holidayTitle.setContentDescription(holidayContent);
             contentDescription.append(holidayContent);
-            eventsBinding.holidayTitle.setVisibility(View.VISIBLE);
+            mEventsBinding.holidayTitle.setVisibility(View.VISIBLE);
         }
 
         if (deviceEvents.length() != 0) {
-            eventsBinding.noEvent.setVisibility(View.GONE);
-            eventsBinding.deviceEventTitle.setText(deviceEvents);
+            mEventsBinding.noEvent.setVisibility(View.GONE);
+            mEventsBinding.deviceEventTitle.setText(deviceEvents);
             contentDescription.append("\n");
             contentDescription.append(getString(R.string.show_device_calendar_events));
             contentDescription.append("\n");
             contentDescription.append(deviceEvents);
-            eventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            mEventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
-            eventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
+            mEventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
         }
 
 
         if (!TextUtils.isEmpty(nonHolidays)) {
-            eventsBinding.noEvent.setVisibility(View.GONE);
-            eventsBinding.eventTitle.setText(nonHolidays);
+            mEventsBinding.noEvent.setVisibility(View.GONE);
+            mEventsBinding.eventTitle.setText(nonHolidays);
             contentDescription.append("\n");
             contentDescription.append(getString(R.string.events));
             contentDescription.append("\n");
             contentDescription.append(nonHolidays);
 
-            eventsBinding.eventTitle.setVisibility(View.VISIBLE);
+            mEventsBinding.eventTitle.setVisibility(View.VISIBLE);
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
 
         Set<String> enabledTypes = appDependency.getSharedPreferences()
                 .getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
-        if (enabledTypes.size() == 0) {
-            eventsBinding.noEvent.setVisibility(View.GONE);
+        if (enabledTypes == null || enabledTypes.size() == 0) {
+            mEventsBinding.noEvent.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(messageToShow))
                 messageToShow.append("\n");
 
@@ -359,56 +361,56 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         }
 
         if (!TextUtils.isEmpty(messageToShow)) {
-            eventsBinding.eventMessage.setText(messageToShow);
-            eventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
+            mEventsBinding.eventMessage.setText(messageToShow);
+            mEventsBinding.eventMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
-            eventsBinding.eventMessage.setVisibility(View.VISIBLE);
+            mEventsBinding.eventMessage.setVisibility(View.VISIBLE);
         }
 
-        eventsBinding.getRoot().setContentDescription(contentDescription);
+        mEventsBinding.getRoot().setContentDescription(contentDescription);
     }
 
     private void setOwghat(long jdn, boolean isToday) {
-        if (coordinate == null) {
+        if (mCoordinate == null) {
             return;
         }
 
         CivilDate civilDate = new CivilDate(jdn);
-        calendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
-        Date date = calendar.getTime();
+        mCalendar.set(civilDate.getYear(), civilDate.getMonth() - 1, civilDate.getDayOfMonth());
+        Date date = mCalendar.getTime();
 
         PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
-                date, coordinate);
+                date, mCoordinate);
 
-        owghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.getImsakClock()));
+        mOwghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.getImsakClock()));
         Clock sunriseClock = prayTimes.getFajrClock();
-        owghatBinding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
-        owghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.getSunriseClock()));
+        mOwghatBinding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
+        mOwghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.getSunriseClock()));
         Clock midddayClock = prayTimes.getDhuhrClock();
-        owghatBinding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
-        owghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.getAsrClock()));
-        owghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.getSunsetClock()));
+        mOwghatBinding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
+        mOwghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.getAsrClock()));
+        mOwghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.getSunsetClock()));
         Clock maghribClock = prayTimes.getMaghribClock();
-        owghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
-        owghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.getIshaClock()));
-        owghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.getMidnightClock()));
+        mOwghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
+        mOwghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.getIshaClock()));
+        mOwghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.getMidnightClock()));
 
         double moonPhase = 1;
         try {
-            moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), coordinate.getLatitude(),
-                    coordinate.getLongitude(), 0, 0).getMoonPhase();
+            moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), mCoordinate.getLatitude(),
+                    mCoordinate.getLongitude(), 0, 0).getMoonPhase();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        owghatBinding.svPlot.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
+        mOwghatBinding.svPlot.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
 
         if (isToday) {
-            owghatBinding.svPlot.setVisibility(View.VISIBLE);
-            if (mainBinding.cardsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
-                owghatBinding.svPlot.startAnimate(true);
+            mOwghatBinding.svPlot.setVisibility(View.VISIBLE);
+            if (mMainBinding.cardsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
+                mOwghatBinding.svPlot.startAnimate(true);
             }
         } else {
-            owghatBinding.svPlot.setVisibility(View.GONE);
+            mOwghatBinding.svPlot.setVisibility(View.GONE);
         }
     }
 
@@ -418,32 +420,32 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             case R.id.owghat_text:
             case R.id.owghat_content:
 
-                boolean isOpenOwghatCommand = owghatBinding.sunriseLayout.getVisibility() == View.GONE;
+                boolean isOpenOwghatCommand = mOwghatBinding.sunriseLayout.getVisibility() == View.GONE;
 
-                owghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
+                mOwghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
                         ? R.drawable.ic_keyboard_arrow_up
                         : R.drawable.ic_keyboard_arrow_down);
-                owghatBinding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                owghatBinding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                owghatBinding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                owghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                owghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                owghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
+                mOwghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
 
-                mainBinding.cardsViewPager.measureCurrentView(owghatBinding.getRoot());
+                mMainBinding.cardsViewPager.measureCurrentView(mOwghatBinding.getRoot());
 
-                if (lastSelectedJdn == -1)
-                    lastSelectedJdn = CalendarUtils.getTodayJdn();
+                if (mLastSelectedJdn == -1)
+                    mLastSelectedJdn = CalendarUtils.getTodayJdn();
 
                 break;
         }
     }
 
     private void bringTodayYearMonth() {
-        lastSelectedJdn = -1;
+        mLastSelectedJdn = -1;
         sendBroadcastToMonthFragments(Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
 
-        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0);
+        mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
         selectDay(CalendarUtils.getTodayJdn());
     }
@@ -452,11 +454,11 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         Context context = getContext();
         if (context == null) return;
 
-        viewPagerPosition = calculateViewPagerPositionFromJdn(jdn);
-        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition);
+        mViewPagerPosition = calculateViewPagerPositionFromJdn(jdn);
+        mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, mViewPagerPosition);
 
         selectDay(jdn);
-        sendBroadcastToMonthFragments(viewPagerPosition, false);
+        sendBroadcastToMonthFragments(mViewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
             long todayJdn = CalendarUtils.getTodayJdn();
@@ -540,17 +542,17 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                SelectDayDialog.newInstance(lastSelectedJdn).show(getChildFragmentManager(),
+                SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
             case R.id.today:
                 bringTodayYearMonth();
                 break;
             case R.id.add_event:
-                if (lastSelectedJdn == -1)
-                    lastSelectedJdn = CalendarUtils.getTodayJdn();
+                if (mLastSelectedJdn == -1)
+                    mLastSelectedJdn = CalendarUtils.getTodayJdn();
 
-                addEventOnCalendar(lastSelectedJdn);
+                addEventOnCalendar(mLastSelectedJdn);
                 break;
             default:
                 break;
@@ -558,8 +560,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         return true;
     }
 
-    int getViewPagerPosition() {
-        return viewPagerPosition;
+    int getmViewPagerPosition() {
+        return mViewPagerPosition;
     }
 
     public boolean closeSearch() {
