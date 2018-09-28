@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
+import com.byagowi.persiancalendar.databinding.FragmentMonthBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
@@ -29,8 +29,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerFragment;
 
 public class MonthFragment extends DaggerFragment implements View.OnClickListener {
@@ -80,29 +80,26 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        FragmentMonthBinding fragmentMonthBinding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_month, container, false);
         isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
-        // We deliberately like to avoid DataBinding thing here, at least for now
-        ImageView next = view.findViewById(R.id.next);
-        next.setImageResource(isRTL
+        fragmentMonthBinding.next.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_left
                 : R.drawable.ic_keyboard_arrow_right);
-        next.setOnClickListener(this);
+        fragmentMonthBinding.next.setOnClickListener(this);
 
-        ImageView prev = view.findViewById(R.id.prev);
-        prev.setImageResource(isRTL
+        fragmentMonthBinding.prev.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_right
                 : R.drawable.ic_keyboard_arrow_left);
-        prev.setOnClickListener(this);
+        fragmentMonthBinding.prev.setOnClickListener(this);
 
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
-        recyclerView.setHasFixedSize(true);
+        fragmentMonthBinding.monthDays.setHasFixedSize(true);
 
 
-        recyclerView.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
+        fragmentMonthBinding.monthDays.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
                 Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
@@ -158,8 +155,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
         adapter = new MonthAdapter(calendarFragmentDependency, days,
                 startingDayOfWeek, weekOfYearStart, weeksCount);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(null);
+        fragmentMonthBinding.monthDays.setAdapter(adapter);
+        fragmentMonthBinding.monthDays.setItemAnimator(null);
 
         if (calendarFragment.firstTime &&
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
@@ -171,7 +168,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         appDependency.getLocalBroadcastManager().registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
-        return view;
+        return fragmentMonthBinding.getRoot();
     }
 
     @Override
