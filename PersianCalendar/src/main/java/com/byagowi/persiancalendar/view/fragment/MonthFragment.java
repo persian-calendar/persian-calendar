@@ -34,13 +34,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import dagger.android.support.DaggerFragment;
 
 public class MonthFragment extends DaggerFragment implements View.OnClickListener {
-    private static boolean isRTL = false;
     @Inject
     AppDependency appDependency;
     @Inject
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
+    private boolean isRTL = false;
     //    @Inject
 //    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;

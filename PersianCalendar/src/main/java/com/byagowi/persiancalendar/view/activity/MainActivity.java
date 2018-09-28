@@ -292,7 +292,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             boolean changeToGregorianCalendar = false;
             boolean changeToPersianCalendar = false;
             boolean changeToIranEvents = false;
-            switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
+            String lang = sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
+            if (lang == null) lang = "";
+            switch (lang) {
                 case LANG_EN_US:
                     changeToGregorianCalendar = true;
                     break;
@@ -335,7 +337,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-                if (currentHolidays.isEmpty() ||
+                if (currentHolidays == null || currentHolidays.isEmpty() ||
                         (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
@@ -345,7 +347,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-                if (currentHolidays.isEmpty() ||
+                if (currentHolidays == null || currentHolidays.isEmpty() ||
                         (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("iran_holidays")));

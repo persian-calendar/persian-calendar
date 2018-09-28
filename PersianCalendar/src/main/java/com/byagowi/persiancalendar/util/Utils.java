@@ -184,10 +184,10 @@ public class Utils {
     static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
     static private String cachedCityKey = "";
     static private CityEntity cachedCity;
-    static private SparseArray<List<PersianCalendarEvent>> persianCalendarEvents;
-    static private SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents;
-    static private SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents;
-    static private List<AbstractEvent> allEnabledEvents;
+    static private SparseArray<List<PersianCalendarEvent>> sPersianCalendarEvents;
+    static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
+    static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
+    static private List<AbstractEvent> sAllEnabledEvents;
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -332,7 +332,7 @@ public class Utils {
     }
 
     static public List<CalendarTypeEntity> getOrderedCalendarEntities(Context context) {
-        Utils.applyAppLanguage(context);
+        applyAppLanguage(context);
 
         String[] values = context.getResources().getStringArray(R.array.calendar_values);
         String[] titles = context.getResources().getStringArray(R.array.calendar_type);
@@ -674,14 +674,14 @@ public class Utils {
     }
 
     public static List<AbstractEvent> getAllEnabledEvents() {
-        return allEnabledEvents;
+        return sAllEnabledEvents;
     }
 
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        if (enabledTypes.isEmpty())
+        if (enabledTypes == null || enabledTypes.isEmpty())
             enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
 
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
@@ -707,7 +707,7 @@ public class Utils {
             }
         }
         // Now that we are configuring converter's algorithm above, lets set the offset also
-        IslamicDate.islamicOffset = Utils.getIslamicOffset(context);
+        IslamicDate.islamicOffset = getIslamicOffset(context);
 
         SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
         SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
@@ -859,10 +859,10 @@ public class Utils {
             Log.e(TAG, e.getMessage());
         }
 
-        Utils.persianCalendarEvents = persianCalendarEvents;
-        Utils.islamicCalendarEvents = islamicCalendarEvents;
-        Utils.gregorianCalendarEvents = gregorianCalendarEvents;
-        Utils.allEnabledEvents = allEnabledEvents;
+        sPersianCalendarEvents = persianCalendarEvents;
+        sIslamicCalendarEvents = islamicCalendarEvents;
+        sGregorianCalendarEvents = gregorianCalendarEvents;
+        sAllEnabledEvents = allEnabledEvents;
     }
 
     private static <T extends AbstractDate> boolean holidayAwareEqualCheck(T event, T date) {
@@ -880,14 +880,14 @@ public class Utils {
         List<AbstractEvent> result = new ArrayList<>();
 
         List<PersianCalendarEvent> persianList =
-                persianCalendarEvents.get(persian.getMonth() * 100 + persian.getDayOfMonth());
+                sPersianCalendarEvents.get(persian.getMonth() * 100 + persian.getDayOfMonth());
         if (persianList != null)
             for (PersianCalendarEvent persianCalendarEvent : persianList)
                 if (holidayAwareEqualCheck(persianCalendarEvent.getDate(), persian))
                     result.add(persianCalendarEvent);
 
         List<IslamicCalendarEvent> islamicList =
-                islamicCalendarEvents.get(islamic.getMonth() * 100 + islamic.getDayOfMonth());
+                sIslamicCalendarEvents.get(islamic.getMonth() * 100 + islamic.getDayOfMonth());
         if (islamicList != null)
             for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
                 if (holidayAwareEqualCheck(islamicCalendarEvent.getDate(), islamic))
@@ -898,7 +898,7 @@ public class Utils {
                 && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), 2) == 29) {
             IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
 
-            islamicList = islamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
+            islamicList = sIslamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
                     alternativeDate.getDayOfMonth());
             if (islamicList != null)
                 for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
@@ -907,7 +907,7 @@ public class Utils {
         }
 
         List<GregorianCalendarEvent> gregorianList =
-                gregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
+                sGregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
         if (gregorianList != null)
             for (GregorianCalendarEvent gregorianCalendarEvent : gregorianList)
                 if (holidayAwareEqualCheck(gregorianCalendarEvent.getDate(), civil))
