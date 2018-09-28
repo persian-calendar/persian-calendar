@@ -71,8 +71,7 @@ public class AboutFragment extends DaggerFragment {
             scrollView.addView(licenseTextView);
             builder.setView(scrollView);
             builder.setCancelable(true);
-            builder.setNegativeButton(R.string.about_license_dialog_close, (dialog, which) -> {
-            });
+            builder.setNegativeButton(R.string.about_license_dialog_close, null);
             builder.show();
         });
 
@@ -118,7 +117,7 @@ public class AboutFragment extends DaggerFragment {
                             Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
+                    .setNegativeButton(R.string.cancel, null).show();
         });
 
         Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);

@@ -64,8 +64,7 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
         mItemTouchHelper.attachToRecyclerView(recyclerView);
         builder.setView(recyclerView);
         builder.setTitle(R.string.calendars_priority);
-        builder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-        });
+        builder.setNegativeButton(R.string.cancel, null);
         builder.setPositiveButton(R.string.accept, (dialogInterface, i) -> {
             SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
             List<String> ordering = adapter.getResult();
