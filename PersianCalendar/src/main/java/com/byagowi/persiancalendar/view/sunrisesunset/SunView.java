@@ -18,7 +18,6 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -137,7 +136,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
                 colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
 
-                fontSize = dpToPx(12);
+                fontSize = dpToPx(14);
             } finally {
                 typedArray.recycle();
             }
@@ -243,20 +242,20 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(sunriseTextColor);
-        canvas.drawText(sunriseString, width * 0.17f, height * 0.2f, mPaint);
+        canvas.drawText(sunriseString, width * 0.17f, height * .2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(middayString, width / 2f, height - 8, mPaint);
+        canvas.drawText(middayString, width / 2f, height * .94f, mPaint);
         mPaint.setColor(sunsetTextColor);
-        canvas.drawText(sunsetString, width * 0.83f, height * 0.2f, mPaint);
+        canvas.drawText(sunsetString, width * 0.83f, height * .2f, mPaint);
 
         // draw remaining time
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(colorTextSecond);
-        canvas.drawText(dayLengthString, width * (isRTL ? 0.70f : 0.30f), height - 8, mPaint);
+        canvas.drawText(dayLengthString, width * (isRTL ? 0.70f : 0.30f), height * .94f, mPaint);
         if (!TextUtils.isEmpty(remainingString)) {
-            canvas.drawText(remainingString, width * (isRTL ? 0.30f : 0.70f), height - 8, mPaint);
+            canvas.drawText(remainingString, width * (isRTL ? 0.30f : 0.70f), height * .94f, mPaint);
         }
 
         // draw sun
