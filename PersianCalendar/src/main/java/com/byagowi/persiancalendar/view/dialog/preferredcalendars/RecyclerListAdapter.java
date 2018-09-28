@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.core.view.MotionEventCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
@@ -56,14 +57,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.calendar_type_item, parent, false));
+        CalendarTypeItemBinding binding = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.calendar_type_item, parent, false);
+
+        return new ItemViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
-        holder.checkedTextView.setText(titles.get(position));
-        holder.checkedTextView.setChecked(enabled.get(position));
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        holder.bind(position);
 
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener((v, event) -> {
@@ -72,22 +75,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             }
             return false;
         });
-
-        holder.checkedTextView.setOnClickListener(v -> {
-            boolean newState = !holder.checkedTextView.isChecked();
-            holder.checkedTextView.setChecked(newState);
-            enabled.set(position, newState);
-        });
     }
 
-    void onItemMove(int fromPosition, int toPosition) {
+    void onItemMoved(int fromPosition, int toPosition) {
         Collections.swap(titles, fromPosition, toPosition);
         Collections.swap(values, fromPosition, toPosition);
         Collections.swap(enabled, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    void onItemDismiss(int position) {
+    void onItemDismissed(int position) {
         titles.remove(position);
         values.remove(position);
         enabled.remove(position);
@@ -142,20 +139,31 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         return titles.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        final AppCompatCheckedTextView checkedTextView;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
+        private CalendarTypeItemBinding binding;
 
-        ItemViewHolder(View itemView) {
-            super(itemView);
-            checkedTextView = itemView.findViewById(R.id.check_text_view);
+        ItemViewHolder(CalendarTypeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void bind(int position) {
+            binding.checkTextView.setText(titles.get(position));
+            binding.checkTextView.setChecked(enabled.get(position));
+
+            binding.checkTextView.setOnClickListener(v -> {
+                boolean newState = !binding.checkTextView.isChecked();
+                binding.checkTextView.setChecked(newState);
+                enabled.set(position, newState);
+            });
         }
 
         void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            binding.getRoot().setBackgroundColor(Color.LTGRAY);
         }
 
-        void onItemClear() {
-            itemView.setBackgroundColor(0);
+        void onItemCleared() {
+            binding.getRoot().setBackgroundColor(0);
         }
     }
 }

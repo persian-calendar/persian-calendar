@@ -66,14 +66,14 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         }
 
         // Notify the adapter of the move
-        mAdapter.onItemMove(source.getAdapterPosition(), target.getAdapterPosition());
+        mAdapter.onItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         // Notify the adapter of the dismissal
-        mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        mAdapter.onItemDismissed(viewHolder.getAdapterPosition());
     }
 
     @Override
@@ -113,7 +113,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (viewHolder instanceof RecyclerListAdapter.ItemViewHolder) {
             // Tell the view holder it's time to restore the idle state
             RecyclerListAdapter.ItemViewHolder itemViewHolder = (RecyclerListAdapter.ItemViewHolder) viewHolder;
-            itemViewHolder.onItemClear();
+            itemViewHolder.onItemCleared();
         }
     }
 }

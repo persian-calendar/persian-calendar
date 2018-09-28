@@ -52,13 +52,12 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
             enabled.add(enabledCalendarTypes.contains(entity.getType()));
         }
 
-        RecyclerListAdapter adapter = new RecyclerListAdapter(this,
-                mainActivityDependency, titles, values, enabled);
-
         RecyclerView recyclerView = new RecyclerView(mainActivityDependency.getMainActivity());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
+        RecyclerListAdapter adapter = new RecyclerListAdapter(this,
+                mainActivityDependency, titles, values, enabled);
+        recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
