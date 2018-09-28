@@ -1,31 +1,25 @@
 package com.byagowi.persiancalendar.entity;
 
 public class DayEntity {
-    private boolean today;
-    private long jdn;
-    private int dayOfWeek;
+    final private boolean today;
+    final private long jdn;
+    final private int dayOfWeek;
+
+    public DayEntity(boolean today, long jdn, int dayOfWeek) {
+        this.today = today;
+        this.jdn = jdn;
+        this.dayOfWeek = dayOfWeek;
+    }
 
     public boolean isToday() {
         return today;
-    }
-
-    public void setToday(boolean today) {
-        this.today = today;
     }
 
     public int getDayOfWeek() {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(int dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
     public long getJdn() {
         return jdn;
-    }
-
-    public void setJdn(long jdn) {
-        this.jdn = jdn;
     }
 }

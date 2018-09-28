@@ -127,16 +127,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
         long todayJdn = CalendarUtils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
-            DayEntity dayEntity = new DayEntity();
-            dayEntity.setJdn(baseJdn + i);
-
-            if (baseJdn + i == todayJdn) {
-                dayEntity.setToday(true);
-            }
-
-            dayEntity.setDayOfWeek(dayOfWeek);
-
-            days.add(dayEntity);
+            long jdn = baseJdn + i;
+            days.add(new DayEntity(jdn == todayJdn, jdn, dayOfWeek));
             dayOfWeek++;
             if (dayOfWeek == 7) {
                 dayOfWeek = 0;
