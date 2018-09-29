@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.Level;
@@ -49,10 +50,46 @@ public class CompassFragment extends DaggerFragment {
     MainActivityDependency mainActivityDependency;
     private SensorManager sensorManager;
     private Sensor sensor;
-    private SensorEventListener compassListener;
+    private SensorEventListener compassListener = new SensorEventListener() {
+        /*
+         * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
+         * value basically means more smoothing See:
+         * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
+         */
+        static final float ALPHA = 0.15f;
+        float azimuth;
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            // angle between the magnetic north direction
+            // 0=North, 90=East, 180=South, 270=West
+            float angle = event.values[0] + orientation;
+            if (stop) angle = 0;
+            else binding.compassView.isOnDirectionAction();
+
+            azimuth = lowPass(angle, azimuth);
+            binding.compassView.setBearing(azimuth);
+        }
+
+        /**
+         * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
+         * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
+         */
+        private float lowPass(float input, float output) {
+            if (Math.abs(180 - input) > 170) {
+                return input;
+            }
+            return output + ALPHA * (input - output);
+        }
+    };
     private float orientation = 0;
     private FragmentCompassBinding binding;
     private boolean sensorNotFound = false;
+    private Coordinate coordinate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,70 +100,16 @@ public class CompassFragment extends DaggerFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_compass,
                 container, false);
 
-        Context context = mainActivityDependency.getMainActivity();
-        Coordinate coordinate = Utils.getCoordinate(context);
+        coordinate = Utils.getCoordinate(mainActivityDependency.getMainActivity());
 
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.compass),
-                Utils.getCityName(context, true));
-
-        compassListener = new SensorEventListener() {
-            /*
-             * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
-             * value basically means more smoothing See:
-             * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
-             */
-            static final float ALPHA = 0.15f;
-            float azimuth;
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            }
-
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                // angle between the magnetic north direction
-                // 0=North, 90=East, 180=South, 270=West
-                float angle = event.values[0] + orientation;
-                if (stop) angle = 0;
-                else binding.compassView.isOnDirectionAction();
-
-                azimuth = lowPass(angle, azimuth);
-                binding.compassView.setBearing(azimuth);
-            }
-
-            /**
-             * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
-             * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
-             */
-            private float lowPass(float input, float output) {
-                if (Math.abs(180 - input) > 170) {
-                    return input;
-                }
-                return output + ALPHA * (input - output);
-            }
-        };
+                Utils.getCityName(mainActivityDependency.getMainActivity(), true));
         setCompassMetrics();
 
         if (coordinate != null) {
             binding.compassView.setLongitude(coordinate.getLongitude());
             binding.compassView.setLatitude(coordinate.getLatitude());
             binding.compassView.initCompassView();
-            binding.compassView.postInvalidate();
-        }
-
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-            if (sensor != null) {
-                sensorManager.registerListener(compassListener, sensor,
-                        SensorManager.SENSOR_DELAY_FASTEST);
-                if (coordinate == null) {
-                    createAndShowSnackbar(container, R.string.set_location, Snackbar.LENGTH_LONG);
-                }
-            } else {
-                Toast.makeText(context, R.string.compass_not_found, Toast.LENGTH_LONG).show();
-                sensorNotFound = true;
-            }
         }
 
         return binding.getRoot();
@@ -213,10 +196,31 @@ public class CompassFragment extends DaggerFragment {
     }
 
     @Override
-    public void onDestroy() {
+    public void onResume() {
+        super.onResume();
+
+        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        sensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+            if (sensor != null) {
+                sensorManager.registerListener(compassListener, sensor,
+                        SensorManager.SENSOR_DELAY_FASTEST);
+                if (coordinate == null) {
+                    createAndShowSnackbar(mainActivity.getCoordinator(), R.string.set_location, Snackbar.LENGTH_LONG);
+                }
+            } else {
+                Toast.makeText(mainActivity, R.string.compass_not_found, Toast.LENGTH_LONG).show();
+                sensorNotFound = true;
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
         if (sensor != null) {
             sensorManager.unregisterListener(compassListener);
         }
-        super.onDestroy();
+        super.onPause();
     }
 }
