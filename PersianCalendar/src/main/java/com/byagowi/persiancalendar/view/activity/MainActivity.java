@@ -48,6 +48,7 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -231,7 +232,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
                 && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
-            Snackbar snackbar = Snackbar.make(binding.coordinator, "✖  Change app language?",
+            Snackbar snackbar = Snackbar.make(getCoordinator(), "✖  Change app language?",
                     10000);
             View snackbarView = snackbar.getView();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -264,6 +265,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
+    }
+
+    public CoordinatorLayout getCoordinator() {
+        return binding.coordinator;
     }
 
     private String getSeason() {

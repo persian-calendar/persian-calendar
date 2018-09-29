@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.FragmentWidgetNotification;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
@@ -39,12 +42,14 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
         Utils.applyAppLanguage(this);
         super.onCreate(savedInstanceState);
+        WidgetPreferenceLayoutBinding binding =
+                DataBindingUtil.setContentView(this, R.layout.widget_preference_layout);
         setContentView(R.layout.widget_preference_layout);
 
         getSupportFragmentManager().beginTransaction().add(
                 R.id.preference_fragment_holder,
                 new FragmentWidgetNotification(), "TAG").commit();
 
-        findViewById(R.id.add_widget_button).setOnClickListener(v -> finishAndSuccess());
+        binding.addWidgetButton.setOnClickListener(v -> finishAndSuccess());
     }
 }
