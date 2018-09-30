@@ -127,7 +127,7 @@ public class UpdateUtils {
                 remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
             }
 
-            String mainDateString = CalendarUtils.dateToString(date);
+            String mainDateString = CalendarUtils.formatDate(date);
 
             {
                 // Widget 4x1

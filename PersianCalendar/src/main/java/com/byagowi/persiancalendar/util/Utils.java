@@ -677,6 +677,11 @@ public class Utils {
         return sAllEnabledEvents;
     }
 
+    static private String formatDayAndMonth(int day, String month) {
+        return String.format(language.equals(LANG_CKB) ? "%sی %s" : "%s %s",
+                formatNumber(day) + " " + month);
+    }
+
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -766,7 +771,7 @@ public class Utils {
                         else if (type.equals("Afghanistan"))
                             title += "افغانستان، ";
                     }
-                    title += formatNumber(day) + " " + persianMonths[month - 1] + ")";
+                    title += formatDayAndMonth(day, persianMonths[month - 1]) + ")";
 
                     List<PersianCalendarEvent> list = persianCalendarEvents.get(month * 100 + day);
                     if (list == null) {
@@ -821,7 +826,7 @@ public class Utils {
                         else if (type.equals("Islamic Afghanistan"))
                             title += "افغانستان، ";
                     }
-                    title += formatNumber(day) + " " + islamicMonths[month - 1] + ")";
+                    title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")";
                     List<IslamicCalendarEvent> list = islamicCalendarEvents.get(month * 100 + day);
                     if (list == null) {
                         list = new ArrayList<>();
@@ -843,7 +848,7 @@ public class Utils {
                 String title = event.getString("title");
 
                 if (international) {
-                    title += " (" + formatNumber(day) + " " + gregorianMonths[month - 1] + ")";
+                    title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")";
                     List<GregorianCalendarEvent> list = gregorianCalendarEvents.get(month * 100 + day);
                     if (list == null) {
                         list = new ArrayList<>();
@@ -1288,7 +1293,7 @@ public class Utils {
         boolean first = true;
         for (CalendarType type : otherCalendars) {
             if (!first) result.append(getSpacedComma());
-            result.append(CalendarUtils.dateToString(
+            result.append(CalendarUtils.formatDate(
                     CalendarUtils.getDateFromJdnOfCalendar(type, jdn)));
             first = false;
         }

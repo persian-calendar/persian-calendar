@@ -88,7 +88,7 @@ public class CalendarUtils {
     }
 
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + dateToString(date);
+        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + formatDate(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -112,7 +112,7 @@ public class CalendarUtils {
         return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
-    static public String dateToString(AbstractDate date) {
+    static public String formatDate(AbstractDate date) {
         return String.format(Utils.getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
                 Utils.formatNumber(date.getDayOfMonth()), getMonthName(date),
                 Utils.formatNumber(date.getYear()));
@@ -214,11 +214,11 @@ public class CalendarUtils {
                     title = "\uD83D\uDCC5 " + title;
                 } else {
                     title = "\uD83D\uDD53 " + title;
-                    title += " (" + UIUtils.baseClockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
+                    title += " (" + UIUtils.baseFormatClock(startCalendar.get(Calendar.HOUR_OF_DAY),
                             startCalendar.get(Calendar.MINUTE));
 
                     if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-                        title += "-" + UIUtils.baseClockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
+                        title += "-" + UIUtils.baseFormatClock(endCalendar.get(Calendar.HOUR_OF_DAY),
                                 endCalendar.get(Calendar.MINUTE));
                     }
 

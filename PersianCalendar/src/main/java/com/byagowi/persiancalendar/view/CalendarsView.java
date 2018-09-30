@@ -170,7 +170,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         binding.firstCalendarDateLinear.setText(firstCalendarLinear);
         binding.firstCalendarDateLinear.setContentDescription(firstCalendarLinear);
 
-        String firstCalendarString = CalendarUtils.dateToString(firstCalendar);
+        String firstCalendarString = CalendarUtils.formatDate(firstCalendar);
         binding.firstCalendarDateContainer.setContentDescription(firstCalendarString);
         binding.firstCalendarDateDay.setContentDescription("");
         binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
@@ -186,7 +186,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             binding.secondCalendarDateLinear.setText(secondCalendarLinear);
             binding.secondCalendarDateLinear.setContentDescription(secondCalendarLinear);
 
-            String secondCalendarString = CalendarUtils.dateToString(secondCalendar);
+            String secondCalendarString = CalendarUtils.formatDate(secondCalendar);
             binding.secondCalendarDateContainer.setContentDescription(secondCalendarString);
             binding.secondCalendarDateDay.setContentDescription("");
             binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
@@ -203,7 +203,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
             binding.thirdCalendarDateLinear.setText(thirdCalendarLinear);
             binding.thirdCalendarDateLinear.setContentDescription(thirdCalendarLinear);
 
-            String thirdCalendarString = CalendarUtils.dateToString(thirdCalendar);
+            String thirdCalendarString = CalendarUtils.formatDate(thirdCalendar);
             binding.thirdCalendarDateContainer.setContentDescription(thirdCalendarString);
             binding.thirdCalendarDateDay.setContentDescription("");
             binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));

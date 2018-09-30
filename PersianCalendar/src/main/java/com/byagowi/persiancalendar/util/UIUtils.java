@@ -86,7 +86,7 @@ public class UIUtils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    static String baseClockToString(int hour, int minute) {
+    static String baseFormatClock(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
@@ -110,7 +110,7 @@ public class UIUtils {
             }
         }
 
-        String result = baseClockToString(hour, clock.getMinute());
+        String result = baseFormatClock(hour, clock.getMinute());
         if (Utils.isClockIn12()) {
             result = result + " " + timeText;
         }

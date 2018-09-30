@@ -62,7 +62,7 @@ public class PersianCalendarInstrumentedTest {
         ClipboardManager clipboardManager = futureResult.get();
 
         onView(withId(R.id.first_calendar_date)).perform(click());
-        assertEquals(CalendarUtils.dateToString(CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI)),
+        assertEquals(CalendarUtils.formatDate(CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI)),
                 clipboardManager.getPrimaryClip().getItemAt(0).getText());
     }
 
