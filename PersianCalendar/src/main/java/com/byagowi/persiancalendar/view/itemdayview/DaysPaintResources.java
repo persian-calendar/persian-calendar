@@ -21,7 +21,7 @@ public class DaysPaintResources {
     @StyleRes
     final public int style;
     final int halfEventBarWidth, appointmentYOffset, eventYOffset;
-    final Paint textPaint, linePaint, selectedPaint, todayPaint;
+    final Paint textPaint, eventBarPaint, selectedPaint, todayPaint;
 
     public DaysPaintResources(Activity activity) {
         Resources.Theme theme = activity.getTheme();
@@ -57,15 +57,16 @@ public class DaysPaintResources {
         style = Utils.getAppTheme();
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        eventBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         selectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         todayPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         Resources resources = activity.getResources();
-        linePaint.setStrokeWidth(resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness));
+        eventBarPaint.setStrokeWidth(resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness));
 
         todayPaint.setStyle(Paint.Style.STROKE);
         todayPaint.setStrokeWidth(resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness));
+
         theme.resolveAttribute(R.attr.colorCurrentDay, value, true);
         todayPaint.setColor(ContextCompat.getColor(activity, value.resourceId));
 

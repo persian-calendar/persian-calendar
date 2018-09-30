@@ -61,11 +61,12 @@ public class ItemDayView extends View {
         boolean isModernTheme = resource.style == R.style.ModernTheme;
         getDrawingRect(bounds);
         drawingRect.set(bounds);
+        drawingRect.inset(radius * 0.1f, radius * 0.1f);
+        int yOffsetToApply = isModernTheme ? (int) (-height * .1f) : 0;
 
         if (selected) {
             if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, width * 0.05f, width * 0.05f,
-                        resource.selectedPaint);
+                canvas.drawRoundRect(drawingRect, 0, 0, resource.selectedPaint);
             } else {
                 canvas.drawCircle(width / 2f, height / 2f, radius - 5,
                         resource.selectedPaint);
@@ -74,8 +75,7 @@ public class ItemDayView extends View {
 
         if (today) {
             if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, width * 0.05f, width * 0.05f,
-                        resource.todayPaint);
+                canvas.drawRoundRect(drawingRect, 0, 0, resource.todayPaint);
             } else {
                 canvas.drawCircle(width / 2f, height / 2f, radius - 5,
                         resource.todayPaint);
@@ -97,20 +97,20 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
+        resource.eventBarPaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
 
         if (hasEvent) {
             canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                    height - resource.eventYOffset,
+                    height - resource.eventYOffset + yOffsetToApply,
                     width / 2f + resource.halfEventBarWidth,
-                    height - resource.eventYOffset, resource.linePaint);
+                    height - resource.eventYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
         if (hasAppointment) {
             canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                    height - resource.appointmentYOffset,
+                    height - resource.appointmentYOffset + yOffsetToApply,
                     width / 2f + resource.halfEventBarWidth,
-                    height - resource.appointmentYOffset, resource.linePaint);
+                    height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
         if (isModernTheme) {
@@ -123,6 +123,7 @@ public class ItemDayView extends View {
                 isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
         resource.textPaint.getTextBounds(textToMeasure, 0, textToMeasure.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
+        yPos += yOffsetToApply;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);
     }
