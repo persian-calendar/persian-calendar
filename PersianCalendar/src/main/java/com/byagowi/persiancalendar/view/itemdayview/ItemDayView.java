@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import com.byagowi.persiancalendar.util.Utils;
 public class ItemDayView extends View {
     private DaysPaintResources resource;
     private Rect bounds = new Rect();
+    private RectF drawingRect = new RectF();
     private String text = "";
     private boolean today, selected, hasEvent, hasAppointment, holiday;
     private int textSize;
@@ -56,14 +58,28 @@ public class ItemDayView extends View {
         int height = getHeight();
         int radius = Math.min(width, height) / 2;
 
+        boolean isModernTheme = resource.style == R.style.ModernTheme;
+        getDrawingRect(bounds);
+        drawingRect.set(bounds);
+
         if (selected) {
-            canvas.drawCircle(width / 2f, height / 2f, radius - 5,
-                    resource.selectedPaint);
+            if (isModernTheme) {
+                canvas.drawRoundRect(drawingRect, width * 0.05f, width * 0.05f,
+                        resource.selectedPaint);
+            } else {
+                canvas.drawCircle(width / 2f, height / 2f, radius - 5,
+                        resource.selectedPaint);
+            }
         }
 
         if (today) {
-            canvas.drawCircle(width / 2f, height / 2f, radius - 5,
-                    resource.todayPaint);
+            if (isModernTheme) {
+                canvas.drawRoundRect(drawingRect, width * 0.05f, width * 0.05f,
+                        resource.todayPaint);
+            } else {
+                canvas.drawCircle(width / 2f, height / 2f, radius - 5,
+                        resource.todayPaint);
+            }
         }
 
         int color;
@@ -81,8 +97,7 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor((selected && resource.style != R.style.ModernTheme)
-                ? color : resource.colorEventLine);
+        resource.linePaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
 
         if (hasEvent) {
             canvas.drawLine(width / 2f - resource.halfEventBarWidth,
@@ -98,7 +113,7 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset, resource.linePaint);
         }
 
-        if (resource.style == R.style.ModernTheme) {
+        if (isModernTheme) {
             resource.textPaint.setFakeBoldText(today);
             resource.textPaint.setTextSize(textSize * .8f);
         }

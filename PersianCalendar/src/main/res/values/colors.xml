@@ -104,7 +104,7 @@
     <color name="modern_drawer_background">#f4f4f4</color>
     <color name="modern_drawer_select">#eeeeee</color>
     <color name="modern_icon">#587994</color>
-    <color name="modern_icon_drawer">#00695C</color>
+    <color name="modern_icon_drawer">#587994</color>
     <color name="modern_menu_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->

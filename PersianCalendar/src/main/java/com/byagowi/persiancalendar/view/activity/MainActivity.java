@@ -134,8 +134,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Don't replace below this with appDependency.getSharedPreferences() ever
-        // as it injection won't happen at the right time
+        // Don't replace below with appDependency.getSharedPreferences() ever
+        // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
 

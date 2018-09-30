@@ -35,8 +35,8 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Don't replace below this with appDependency.getSharedPreferences() ever
-        // as it injection won't happen at the right time
+        // Don't replace below with appDependency.getSharedPreferences() ever
+        // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
 
@@ -44,7 +44,6 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WidgetPreferenceLayoutBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.widget_preference_layout);
-        setContentView(R.layout.widget_preference_layout);
 
         getSupportFragmentManager().beginTransaction().add(
                 R.id.preference_fragment_holder,

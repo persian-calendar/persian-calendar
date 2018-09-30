@@ -25,6 +25,7 @@
     <attr name="colorDrawerIcon" format="reference" />
     <attr name="coloredTabBackground" format="reference" />
     <attr name="coloredTabTextColor" format="reference" />
+    <attr name="normalTabTextColor" format="reference" />
     <attr name="appDivider" format="reference" />
     <attr name="toolbarTheme" format="reference" />
     <attr name="menuIconColor" format="reference" />
@@ -79,6 +80,7 @@
 
         <item name="coloredTabBackground">@color/dark_card_background</item>
         <item name="coloredTabTextColor">@color/dark_accent</item>
+        <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
 
@@ -137,6 +139,7 @@
 
         <item name="coloredTabBackground">@color/light_accent</item>
         <item name="coloredTabTextColor">@color/light_card_background</item>
+        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
 
@@ -194,6 +197,7 @@
 
         <item name="coloredTabBackground">@color/blue_accent</item>
         <item name="coloredTabTextColor">@color/blue_card_background</item>
+        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
 
@@ -250,7 +254,8 @@
         <item name="android:textColor">@color/modern_text_normal</item>
 
         <item name="coloredTabBackground">@color/modern_card_background</item>
-        <item name="coloredTabTextColor">@color/modern_accent</item>
+        <item name="coloredTabTextColor">@color/tab_background_select</item>
+        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
@@ -295,10 +300,9 @@
         <item name="tabIndicatorHeight">3dp</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="tabIconTint">?attr/colorTextSecond</item>
-        <item name="tabSelectedTextColor">?attr/colorAccent</item>
         <item name="tabTextAppearance">@style/customTabTextAppearance</item>
         <item name="tabBackground">?attr/colorCard</item>
-        <item name="tabTextColor">?attr/colorAccent</item>
+        <item name="tabTextColor">?attr/normalTabTextColor</item>
     </style>
 
     <style name="TabLayoutColored" parent="Widget.MaterialComponents.TabLayout.Colored">
