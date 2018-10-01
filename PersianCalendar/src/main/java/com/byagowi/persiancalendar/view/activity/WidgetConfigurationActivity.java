@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.view.preferences.FragmentWidgetNotification;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;

@@ -69,21 +69,21 @@
     <string name="no_event">تعذّر العثور على أحداث  أو مناسبات أو عُطَل لليوم</string>
     <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطَل إذهب إلى الإعدادات > المناسبات</string>
 
-    <string name="sunrise">الشروق</string>
-    <string name="midday">الظهر</string>
-    <string name="sunset">الغروب</string>
+    <string name="sunriseSunView">الشروق</string>
+    <string name="middaySunView">الظهر</string>
+    <string name="sunsetSunView">الغروب</string>
     <string name="length_of_day">النهار: %sس %sد</string>
     <string name="remaining_daylight">الوقت المتبقي: %sس %sدs</string>
     <string name="owghat">أوقات الصلوات</string>
     <string name="imsak">الإمساك</string>
-    <string name="azan1">أذان الفجر</string>
-    <string name="aftab1">الشروق</string>
-    <string name="azan2">أذان الظهر</string>
-    <string name="azan3">أذان العصر	</string>
-    <string name="aftab2">الغروب</string>
-    <string name="azan4">أذان المغرب</string>
-    <string name="azan5">أذان العشاء</string>
-    <string name="aftab3">منتصف الليل</string>
+    <string name="fajr">أذان الفجر</string>
+    <string name="sunrise">الشروق</string>
+    <string name="dhuhr">أذان الظهر</string>
+    <string name="asr">أذان العصر	</string>
+    <string name="sunset">الغروب</string>
+    <string name="maghrib">أذان المغرب</string>
+    <string name="isha">أذان العشاء</string>
+    <string name="midnight">منتصف الليل</string>
 
     <!--Date Converter-->
     <string name="select_type_date">إختيار نوع التاريخ</string>

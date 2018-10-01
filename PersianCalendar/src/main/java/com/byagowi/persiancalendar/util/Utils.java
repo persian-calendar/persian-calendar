@@ -426,31 +426,31 @@ public class Utils {
         }
 
         if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock());
+            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock());
 
         } else if (prayTimes.getSunriseClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab1) + ": " + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
+            return context.getString(R.string.sunrise) + ": " + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
 
         } else if (prayTimes.getDhuhrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.azan2) + ": " + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
+            return context.getString(R.string.dhuhr) + ": " + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
 
         } else if (prayTimes.getAsrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.azan3) + ": " + UIUtils.getFormattedClock(prayTimes.getAsrClock());
+            return context.getString(R.string.asr) + ": " + UIUtils.getFormattedClock(prayTimes.getAsrClock());
 
         } else if (prayTimes.getSunsetClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab2) + ": " + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
+            return context.getString(R.string.sunset) + ": " + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
 
         } else if (prayTimes.getMaghribClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.azan4) + ": " + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
+            return context.getString(R.string.maghrib) + ": " + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
 
         } else if (prayTimes.getIshaClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.azan5) + ": " + UIUtils.getFormattedClock(prayTimes.getIshaClock());
+            return context.getString(R.string.isha) + ": " + UIUtils.getFormattedClock(prayTimes.getIshaClock());
 
         } else if (prayTimes.getMidnightClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.aftab3) + ": " + UIUtils.getFormattedClock(prayTimes.getMidnightClock());
+            return context.getString(R.string.midnight) + ": " + UIUtils.getFormattedClock(prayTimes.getMidnightClock());
 
         } else {
-            return context.getString(R.string.azan1) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
+            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
         }
     }
 
@@ -678,8 +678,8 @@ public class Utils {
     }
 
     static private String formatDayAndMonth(int day, String month) {
-        return String.format(language.equals(LANG_CKB) ? "%sی %s" : "%s %s",
-                formatNumber(day) + " " + month);
+        return String.format(language.equals(LANG_CKB) ? "%sی %s" : "%s %s", formatNumber(day),
+                month);
     }
 
     static private void loadEvents(Context context) {

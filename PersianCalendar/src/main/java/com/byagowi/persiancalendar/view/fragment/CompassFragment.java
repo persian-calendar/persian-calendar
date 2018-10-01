@@ -50,6 +50,8 @@ public class CompassFragment extends DaggerFragment {
     MainActivityDependency mainActivityDependency;
     private SensorManager sensorManager;
     private Sensor sensor;
+    private float orientation = 0;
+    private FragmentCompassBinding binding;
     private SensorEventListener compassListener = new SensorEventListener() {
         /*
          * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
@@ -86,8 +88,6 @@ public class CompassFragment extends DaggerFragment {
             return output + ALPHA * (input - output);
         }
     };
-    private float orientation = 0;
-    private FragmentCompassBinding binding;
     private boolean sensorNotFound = false;
     private Coordinate coordinate;
 

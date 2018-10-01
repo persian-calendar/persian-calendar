@@ -61,7 +61,7 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
                 pager.measureCurrentView(tab);
 
                 if (mTabs.size() > 2) {
-                    View sunView = mTabs.get(Constants.OWGHAT_TAB).findViewById(R.id.svPlot);
+                    View sunView = mTabs.get(Constants.OWGHAT_TAB).findViewById(R.id.sunView);
                     if (sunView instanceof SunView) {
                         SunView sun = (SunView) sunView;
                         if (position == Constants.OWGHAT_TAB) {

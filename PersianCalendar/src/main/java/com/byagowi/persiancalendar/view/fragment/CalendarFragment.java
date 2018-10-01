@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
+import com.byagowi.persiancalendar.adapter.TimesHolderAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
@@ -36,7 +37,6 @@ import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
@@ -48,6 +48,9 @@ import com.byagowi.persiancalendar.view.CalendarsView;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +66,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import dagger.android.support.DaggerFragment;
 
@@ -97,10 +101,9 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
         Context context = mainActivityDependency.getMainActivity();
 
@@ -129,6 +132,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             mOwghatBinding = DataBindingUtil.inflate(inflater, R.layout.owghat_tab_content, container, false);
             tabs.add(mOwghatBinding.getRoot());
             mOwghatBinding.getRoot().setOnClickListener(this);
+
+            FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+            layoutManager.setFlexWrap(FlexWrap.WRAP);
+            layoutManager.setJustifyContent(JustifyContent.CENTER);
+            mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
+            mOwghatBinding.timesRecyclerView.setAdapter(new TimesHolderAdapter());
+            mOwghatBinding.timesRecyclerView.setOnClickListener(this);
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
@@ -157,12 +167,12 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         if (mCoordinate != null) {
             String cityName = Utils.getCityName(context, false);
             if (!TextUtils.isEmpty(cityName)) {
-                mOwghatBinding.owghatText.setText(cityName);
+                mOwghatBinding.cityName.setText(cityName);
             }
 
             // Easter egg to test AthanActivity
-            mOwghatBinding.owghatText.setOnClickListener(this);
-            mOwghatBinding.owghatText.setOnLongClickListener(v -> {
+            mOwghatBinding.cityName.setOnClickListener(this);
+            mOwghatBinding.cityName.setOnLongClickListener(v -> {
                 Utils.startAthan(context, "FAJR");
                 return true;
             });
@@ -381,19 +391,10 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
                 date, mCoordinate);
-
-        mOwghatBinding.imsak.setText(UIUtils.getFormattedClock(prayTimes.getImsakClock()));
-        Clock sunriseClock = prayTimes.getFajrClock();
-        mOwghatBinding.fajr.setText(UIUtils.getFormattedClock(sunriseClock));
-        mOwghatBinding.sunrise.setText(UIUtils.getFormattedClock(prayTimes.getSunriseClock()));
-        Clock midddayClock = prayTimes.getDhuhrClock();
-        mOwghatBinding.dhuhr.setText(UIUtils.getFormattedClock(midddayClock));
-        mOwghatBinding.asr.setText(UIUtils.getFormattedClock(prayTimes.getAsrClock()));
-        mOwghatBinding.sunset.setText(UIUtils.getFormattedClock(prayTimes.getSunsetClock()));
-        Clock maghribClock = prayTimes.getMaghribClock();
-        mOwghatBinding.maghrib.setText(UIUtils.getFormattedClock(maghribClock));
-        mOwghatBinding.isgha.setText(UIUtils.getFormattedClock(prayTimes.getIshaClock()));
-        mOwghatBinding.midnight.setText(UIUtils.getFormattedClock(prayTimes.getMidnightClock()));
+        RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
+        if (adapter instanceof TimesHolderAdapter) {
+            ((TimesHolderAdapter) adapter).setTimes(prayTimes);
+        }
 
         double moonPhase = 1;
         try {
@@ -402,36 +403,33 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mOwghatBinding.svPlot.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
 
+        mOwghatBinding.sunView.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
         if (isToday) {
-            mOwghatBinding.svPlot.setVisibility(View.VISIBLE);
+            mOwghatBinding.sunView.setVisibility(View.VISIBLE);
             if (mMainBinding.cardsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
-                mOwghatBinding.svPlot.startAnimate(true);
+                mOwghatBinding.sunView.startAnimate(true);
             }
         } else {
-            mOwghatBinding.svPlot.setVisibility(View.GONE);
+            mOwghatBinding.sunView.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.owghat_text:
+            case R.id.city_name:
             case R.id.owghat_content:
-
-                boolean isOpenOwghatCommand = mOwghatBinding.sunriseLayout.getVisibility() == View.GONE;
-
-                mOwghatBinding.moreOwghat.setImageResource(isOpenOwghatCommand
-                        ? R.drawable.ic_keyboard_arrow_up
-                        : R.drawable.ic_keyboard_arrow_down);
-                mOwghatBinding.imsakLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                mOwghatBinding.sunriseLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                mOwghatBinding.asrLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                mOwghatBinding.sunsetLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                mOwghatBinding.ishaLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-                mOwghatBinding.midnightLayout.setVisibility(isOpenOwghatCommand ? View.VISIBLE : View.GONE);
-
+            case R.id.timesRecyclerView:
+                RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
+                if (adapter instanceof TimesHolderAdapter) {
+                    TimesHolderAdapter timesAdapter = (TimesHolderAdapter) adapter;
+                    boolean expanded = !timesAdapter.isExpanded();
+                    timesAdapter.setExpanded(expanded);
+                    mOwghatBinding.moreOwghat.setImageResource(expanded
+                            ? R.drawable.ic_keyboard_arrow_up
+                            : R.drawable.ic_keyboard_arrow_down);
+                }
                 mMainBinding.cardsViewPager.measureCurrentView(mOwghatBinding.getRoot());
 
                 if (mLastSelectedJdn == -1)
@@ -560,7 +558,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         return true;
     }
 
-    int getmViewPagerPosition() {
+    int getViewPagerPosition() {
         return mViewPagerPosition;
     }
 

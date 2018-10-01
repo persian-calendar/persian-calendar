@@ -331,9 +331,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             return;
 
         isRTL = UIUtils.isRTL(context);
-        sunriseString = context.getString(R.string.sunrise);
-        middayString = context.getString(R.string.midday);
-        sunsetString = context.getString(R.string.sunset);
+        sunriseString = context.getString(R.string.sunriseSunView);
+        middayString = context.getString(R.string.middaySunView);
+        sunsetString = context.getString(R.string.sunsetSunView);
 
         float sunset = prayTimes.getSunsetClock().toInt();
         float sunrise = prayTimes.getSunriseClock().toInt();

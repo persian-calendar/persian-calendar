@@ -49,14 +49,14 @@
     <string name="closeDrawer">داخستن</string>
     <string name="openDrawer">کردنەوە</string>
     <string name="imsak">ئیمساک</string>
-    <string name="azan1">بانگی بەیانی</string>
-    <string name="azan2">بانگی نیوەڕۆ</string>
-    <string name="azan3">بانگی ئێوارە</string>
-    <string name="azan4">بانگی شێوان</string>
-    <string name="azan5">بانگی خەوتنان</string>
-    <string name="aftab1">ڕۆژھەڵات</string>
-    <string name="aftab2">ڕۆژاوا</string>
-    <string name="aftab3">نیوه‌شەوی شەرعی</string>
+    <string name="fajr">بانگی بەیانی</string>
+    <string name="dhuhr">بانگی نیوەڕۆ</string>
+    <string name="asr">بانگی ئێوارە</string>
+    <string name="maghrib">بانگی شێوان</string>
+    <string name="isha">بانگی خەوتنان</string>
+    <string name="sunrise">ڕۆژھەڵات</string>
+    <string name="sunset">ڕۆژاوا</string>
+    <string name="midnight">نیوه‌شەوی شەرعی</string>
     <string name="owghat">کاتە شەرعییەکان</string>
     <string name="events">بۆنەکان</string>
     <string name="events_summary">چ جۆر بۆنەگەلێک لە ڕۆژژمێردا نیشان بدرێ</string>
@@ -124,9 +124,9 @@
     <string name="start_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) لە سەرەتای ساڵەوە</string>
     <string name="end_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
-    <string name="sunrise">ڕۆژھەڵات</string>
-    <string name="midday">نیوەڕۆ</string>
-    <string name="sunset">ڕۆژاوا</string>
+    <string name="sunriseSunView">ڕۆژھەڵات</string>
+    <string name="middaySunView">نیوەڕۆ</string>
+    <string name="sunsetSunView">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
     <string name="length_of_day">ڕۆژگار: %sک %sخ</string>
     <string name="remaining_daylight">ماوەوە: %sک %sخ</string>

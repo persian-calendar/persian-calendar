@@ -121,20 +121,20 @@ public class UIUtils {
     int getPrayTimeText(String athanKey) {
         switch (athanKey) {
             case "FAJR":
-                return R.string.azan1;
+                return R.string.fajr;
 
             case "DHUHR":
-                return R.string.azan2;
+                return R.string.dhuhr;
 
             case "ASR":
-                return R.string.azan3;
+                return R.string.asr;
 
             case "MAGHRIB":
-                return R.string.azan4;
+                return R.string.maghrib;
 
             case "ISHA":
             default:
-                return R.string.azan5;
+                return R.string.isha;
         }
     }
 
