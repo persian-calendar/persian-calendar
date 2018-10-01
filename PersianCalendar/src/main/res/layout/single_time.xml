@@ -4,10 +4,9 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/container"
             android:layout_width="@dimen/owghatSize"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/item_calendar_margin_top"

@@ -13,11 +13,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -64,157 +64,13 @@
 
         </LinearLayout>
 
-        <com.google.android.flexbox.FlexboxLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calendarsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="?attr/appDivider"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/padding_item"
             android:paddingTop="@dimen/padding_item"
-            android:showDividers="middle"
-            app:flexWrap="wrap"
-            app:justifyContent="center">
-
-            <LinearLayout
-                android:id="@+id/first_calendar_container"
-                android:layout_width="@dimen/owghatSize"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/first_calendar_date_container"
-                    android:layout_width="@dimen/owghatSize"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center_horizontal|fill_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/first_calendar_date_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="4sp"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="32sp"
-                        tools:text="a" />
-
-                    <TextView
-                        android:id="@+id/first_calendar_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="@dimen/text_size_description"
-                        tools:text="a\nb" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/first_calendar_date_linear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="?attr/colorTextSecond"
-                    android:textSize="@dimen/text_size_description"
-                    tools:text="1/1/1990" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/second_calendar_container"
-                android:layout_width="@dimen/owghatSize"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/second_calendar_date_container"
-                    android:layout_width="@dimen/owghatSize"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center_horizontal|fill_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/second_calendar_date_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="4sp"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="32sp"
-                        tools:text="a" />
-
-                    <TextView
-                        android:id="@+id/second_calendar_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="@dimen/text_size_description"
-                        tools:text="a\nb" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/second_calendar_date_linear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="?attr/colorTextSecond"
-                    android:textSize="@dimen/text_size_description"
-                    tools:text="1/1/1990" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/third_calendar_container"
-                android:layout_width="@dimen/owghatSize"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/third_calendar_date_container"
-                    android:layout_width="@dimen/owghatSize"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center_horizontal|fill_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/third_calendar_date_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="4sp"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="32sp"
-                        tools:text="a" />
-
-                    <TextView
-                        android:id="@+id/third_calendar_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="?attr/colorTextNormal"
-                        android:textSize="@dimen/text_size_description"
-                        tools:text="a\nb" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/third_calendar_date_linear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="?attr/colorTextSecond"
-                    android:textSize="@dimen/text_size_description"
-                    tools:text="1/1/1990" />
-
-            </LinearLayout>
-
-        </com.google.android.flexbox.FlexboxLayout>
+            android:paddingBottom="@dimen/padding_item" />
 
         <LinearLayout
             android:id="@+id/extra_information_container"

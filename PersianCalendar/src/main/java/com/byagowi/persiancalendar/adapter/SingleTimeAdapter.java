@@ -15,7 +15,7 @@ import androidx.annotation.StringRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TimesHolderAdapter extends RecyclerView.Adapter<TimesHolderAdapter.ViewHolder> {
+public class SingleTimeAdapter extends RecyclerView.Adapter<SingleTimeAdapter.ViewHolder> {
     @StringRes
     static final private int[] timeNames = new int[]{
             R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
@@ -46,7 +46,7 @@ public class TimesHolderAdapter extends RecyclerView.Adapter<TimesHolderAdapter.
 
     public void setTimes(PrayTimes prayTimes) {
         mPrayTimes = prayTimes;
-        for (int i = 0; i < 9; ++i) notifyItemChanged(i);
+        for (int i = 0; i < timeNames.length; ++i) notifyItemChanged(i);
     }
 
     public boolean isExpanded() {
@@ -55,23 +55,21 @@ public class TimesHolderAdapter extends RecyclerView.Adapter<TimesHolderAdapter.
 
     public void setExpanded(boolean expanded) {
         mExpanded = expanded;
-        for (int i = 0; i < 9; ++i) notifyItemChanged(i);
+        for (int i = 0; i < timeNames.length; ++i) notifyItemChanged(i);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private SingleTimeBinding binding;
-
-        ViewHolder(SingleTimeBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
         private FlexboxLayoutManager.LayoutParams emptyLayout =
                 new FlexboxLayoutManager.LayoutParams(0, 0);
         private FlexboxLayoutManager.LayoutParams wrapContent =
                 new FlexboxLayoutManager.LayoutParams(
                         FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
                         FlexboxLayoutManager.LayoutParams.WRAP_CONTENT);
+        ViewHolder(SingleTimeBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
 
         public void bind(int position) {
             int timeName = timeNames[position];

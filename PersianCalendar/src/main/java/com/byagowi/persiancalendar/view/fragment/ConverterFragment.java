@@ -33,8 +33,8 @@ public class ConverterFragment extends DaggerFragment {
 
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.date_converter), "");
 
-        FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_converter, container, false);
+        FragmentConverterBinding binding = FragmentConverterBinding.inflate(inflater,
+                container, false);
         DayPickerView dayPickerView = binding.dayPickerView;
 
         binding.calendarsView.expand(true);

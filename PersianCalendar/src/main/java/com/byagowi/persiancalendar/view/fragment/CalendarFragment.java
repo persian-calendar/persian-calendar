@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
-import com.byagowi.persiancalendar.adapter.TimesHolderAdapter;
+import com.byagowi.persiancalendar.adapter.SingleTimeAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
@@ -137,7 +137,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             layoutManager.setFlexWrap(FlexWrap.WRAP);
             layoutManager.setJustifyContent(JustifyContent.CENTER);
             mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
-            mOwghatBinding.timesRecyclerView.setAdapter(new TimesHolderAdapter());
+            mOwghatBinding.timesRecyclerView.setAdapter(new SingleTimeAdapter());
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
@@ -391,8 +391,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
                 date, mCoordinate);
         RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
-        if (adapter instanceof TimesHolderAdapter) {
-            ((TimesHolderAdapter) adapter).setTimes(prayTimes);
+        if (adapter instanceof SingleTimeAdapter) {
+            ((SingleTimeAdapter) adapter).setTimes(prayTimes);
         }
 
         double moonPhase = 1;
@@ -420,8 +420,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             case R.id.city_name:
             case R.id.owghat_content:
                 RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
-                if (adapter instanceof TimesHolderAdapter) {
-                    TimesHolderAdapter timesAdapter = (TimesHolderAdapter) adapter;
+                if (adapter instanceof SingleTimeAdapter) {
+                    SingleTimeAdapter timesAdapter = (SingleTimeAdapter) adapter;
                     boolean expanded = !timesAdapter.isExpanded();
                     timesAdapter.setExpanded(expanded);
                     mOwghatBinding.moreOwghat.setImageResource(expanded
