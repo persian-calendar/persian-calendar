@@ -138,7 +138,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             layoutManager.setJustifyContent(JustifyContent.CENTER);
             mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
             mOwghatBinding.timesRecyclerView.setAdapter(new TimesHolderAdapter());
-            mOwghatBinding.timesRecyclerView.setOnClickListener(this);
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
@@ -420,7 +419,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.city_name:
             case R.id.owghat_content:
-            case R.id.timesRecyclerView:
                 RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
                 if (adapter instanceof TimesHolderAdapter) {
                     TimesHolderAdapter timesAdapter = (TimesHolderAdapter) adapter;
