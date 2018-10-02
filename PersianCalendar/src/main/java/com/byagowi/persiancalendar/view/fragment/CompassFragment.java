@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -29,14 +28,11 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
-import net.androgames.level.Level;
-
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.databinding.DataBindingUtil;
 import dagger.android.support.DaggerFragment;
 
 /**
@@ -180,9 +176,7 @@ public class CompassFragment extends DaggerFragment {
                 item.setTitle(stop ? R.string.resume : R.string.stop);
                 break;
             case R.id.level:
-                mainActivityDependency.getMainActivity().startActivity(
-                        new Intent(mainActivityDependency.getMainActivity(), Level.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                mainActivityDependency.getMainActivity().toggleToLevel();
                 break;
             case R.id.help:
                 createAndShowSnackbar(getView(), sensorNotFound

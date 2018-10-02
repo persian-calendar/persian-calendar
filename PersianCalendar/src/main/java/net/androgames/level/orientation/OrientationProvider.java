@@ -1,5 +1,6 @@
 package net.androgames.level.orientation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
 
-import net.androgames.level.Level;
+import net.androgames.level.LevelFragment;
 import net.androgames.level.view.LevelView;
 
 import java.util.List;
@@ -63,13 +64,18 @@ public final class OrientationProvider implements SensorEventListener {
     private Orientation orientation;
     private boolean locked;
     private int displayOrientation;
-    private Level level;
     private LevelView view;
 
-    public OrientationProvider(Level level, LevelView view) {
-        this.level = level;
+    public OrientationProvider(Activity activity, LevelView view) {
         this.view = view;
-        this.displayOrientation = level.getWindowManager().getDefaultDisplay().getRotation();
+        this.displayOrientation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager == null) return;
+
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if (sensors.size() == 0) return;
+
+        this.sensor = sensors.get(0);
     }
 
     /**
@@ -97,13 +103,7 @@ public final class OrientationProvider implements SensorEventListener {
      */
     public void startListening() {
         // register listener and start listening
-        sensorManager = (SensorManager) level.getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager == null) return;
-
-        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
-        if (sensors.size() == 0) return;
-
-        sensor = sensors.get(0);
         running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 

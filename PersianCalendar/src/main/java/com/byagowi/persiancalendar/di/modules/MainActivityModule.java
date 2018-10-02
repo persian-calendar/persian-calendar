@@ -11,6 +11,8 @@ import com.byagowi.persiancalendar.view.preferences.FragmentLocationAthan;
 import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
 
+import net.androgames.level.LevelFragment;
+
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -28,6 +30,10 @@ public abstract class MainActivityModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract CompassFragment compassFragmentInjector();
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract LevelFragment levelFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector

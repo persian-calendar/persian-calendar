@@ -39,6 +39,8 @@ import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import net.androgames.level.LevelFragment;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -550,5 +552,21 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     public void setTitleAndSubtitle(String title, String subtitle) {
         actionBar.setTitle(title);
         actionBar.setSubtitle(subtitle);
+    }
+
+    public void toggleToLevel() {
+        LevelFragment level = new LevelFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, level, level.getTag())
+                .commit();
+    }
+
+    public void toggleToCompass() {
+        CompassFragment compassFragment = new CompassFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, compassFragment, compassFragment.getTag())
+                .commit();
     }
 }
