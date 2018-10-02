@@ -48,7 +48,6 @@ public class LevelFragment extends DaggerFragment {
     MainActivityDependency mainActivityDependency;
 
     private OrientationProvider provider;
-    private LevelView view;
 
     @Nullable
     @Override
@@ -58,16 +57,17 @@ public class LevelFragment extends DaggerFragment {
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
         mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
-        view = new LevelView(mainActivity);
+        LevelView view = new LevelView(mainActivity);
         view.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        provider = new OrientationProvider(mainActivityDependency.getMainActivity(), view);
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        provider = new OrientationProvider(mainActivityDependency.getMainActivity(), view);
         provider.startListening();
 
         FragmentActivity activity = mainActivityDependency.getMainActivity();

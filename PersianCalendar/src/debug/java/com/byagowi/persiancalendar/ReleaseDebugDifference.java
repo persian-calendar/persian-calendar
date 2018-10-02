@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar;
 
 import android.app.Application;
 
-import com.squareup.leakcanary.LeakCanary;
-
 public class ReleaseDebugDifference {
     public static void mainApplication(Application app) {
 //        if (LeakCanary.isInAnalyzerProcess(app)) {
