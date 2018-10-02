@@ -73,6 +73,7 @@
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap"
             settings:iconSpaceReserved="false" />
@@ -110,6 +111,7 @@
             android:dependency="NotificationAthan"
             android:key="AthanVolume"
             android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume"
             settings:iconSpaceReserved="false" />

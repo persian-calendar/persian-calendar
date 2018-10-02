@@ -22,6 +22,8 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.databinding.DataBindingUtil;
+
 public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
         DayPickerView {
     SimpleDayPickerViewBinding binding;
@@ -31,22 +33,22 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
 
     public SimpleDayPickerView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public SimpleDayPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public SimpleDayPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
-        binding = SimpleDayPickerView.inflate(LayoutInflater.from(getContext()),
-                this, true);
+    private void init(Context context) {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context),
+                R.layout.simple_day_picker_view, this, true);
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
