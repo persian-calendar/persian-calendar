@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 
@@ -33,7 +32,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MotionEventCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {

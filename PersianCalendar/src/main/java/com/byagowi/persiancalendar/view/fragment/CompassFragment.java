@@ -36,7 +36,6 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.databinding.DataBindingUtil;
 import dagger.android.support.DaggerFragment;
 
 /**
@@ -97,8 +96,7 @@ public class CompassFragment extends DaggerFragment {
 
         setHasOptionsMenu(true);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_compass,
-                container, false);
+        binding = FragmentCompassBinding.inflate(inflater, container, false);
 
         coordinate = Utils.getCoordinate(mainActivityDependency.getMainActivity());
 

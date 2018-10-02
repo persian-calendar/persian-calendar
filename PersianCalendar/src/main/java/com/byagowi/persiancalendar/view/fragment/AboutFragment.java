@@ -36,7 +36,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.databinding.DataBindingUtil;
 import dagger.android.support.DaggerFragment;
 
 public class AboutFragment extends DaggerFragment {
@@ -47,8 +46,7 @@ public class AboutFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
-                container, false);
+        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
 
         MainActivity activity = mainActivityDependency.getMainActivity();
         activity.setTitleAndSubtitle(getString(R.string.about), "");
@@ -99,8 +97,7 @@ public class AboutFragment extends DaggerFragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            DialogEmailBinding emailBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_email,
-                    container, false);
+            DialogEmailBinding emailBinding = DialogEmailBinding.inflate(inflater, container, false);
             new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                     .setView(emailBinding.getRoot())
                     .setTitle(R.string.about_email_sum)

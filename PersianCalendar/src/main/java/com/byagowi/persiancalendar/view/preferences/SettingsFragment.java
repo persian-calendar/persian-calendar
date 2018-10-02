@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -31,8 +30,8 @@ public class SettingsFragment extends DaggerFragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.settings), "");
 
-        FragmentSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),
-                R.layout.fragment_settings, container, false);
+        FragmentSettingsBinding binding = FragmentSettingsBinding.inflate(
+                LayoutInflater.from(container.getContext()), container, false);
 
         binding.viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), 3));
         binding.tabLayout.setupWithViewPager(binding.viewPager);

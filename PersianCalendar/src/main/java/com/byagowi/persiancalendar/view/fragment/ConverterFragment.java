@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import dagger.android.support.DaggerFragment;
 
 public class ConverterFragment extends DaggerFragment {

@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
@@ -15,7 +14,6 @@ import com.byagowi.persiancalendar.viewmodel.LocationAdapterViewModel;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
@@ -31,9 +29,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @NonNull
     @Override
     public LocationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ListItemCityNameBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.list_item_city_name, parent, false);
+        ListItemCityNameBinding binding = ListItemCityNameBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 

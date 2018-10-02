@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarAdapter;
 import com.byagowi.persiancalendar.adapter.CardTabsAdapter;
-import com.byagowi.persiancalendar.adapter.SingleTimeAdapter;
+import com.byagowi.persiancalendar.adapter.TimeItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding;
@@ -65,7 +65,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import dagger.android.support.DaggerFragment;
@@ -109,8 +108,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
 
         setHasOptionsMenu(true);
 
-        mMainBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar, container,
-                false);
+        mMainBinding = FragmentCalendarBinding.inflate(inflater, container, false);
         mViewPagerPosition = 0;
 
         List<String> titles = new ArrayList<>();
@@ -123,13 +121,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         tabs.add(mCalendarsView);
 
         titles.add(getString(R.string.events));
-        mEventsBinding = DataBindingUtil.inflate(inflater, R.layout.events_tab_content, container, false);
+        mEventsBinding = EventsTabContentBinding.inflate(inflater, container, false);
         tabs.add(mEventsBinding.getRoot());
 
         mCoordinate = Utils.getCoordinate(context);
         if (mCoordinate != null) {
             titles.add(getString(R.string.owghat));
-            mOwghatBinding = DataBindingUtil.inflate(inflater, R.layout.owghat_tab_content, container, false);
+            mOwghatBinding = OwghatTabContentBinding.inflate(inflater, container, false);
             tabs.add(mOwghatBinding.getRoot());
             mOwghatBinding.getRoot().setOnClickListener(this);
 
@@ -137,7 +135,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             layoutManager.setFlexWrap(FlexWrap.WRAP);
             layoutManager.setJustifyContent(JustifyContent.CENTER);
             mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
-            mOwghatBinding.timesRecyclerView.setAdapter(new SingleTimeAdapter());
+            mOwghatBinding.timesRecyclerView.setAdapter(new TimeItemAdapter());
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
@@ -391,8 +389,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
                 date, mCoordinate);
         RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
-        if (adapter instanceof SingleTimeAdapter) {
-            ((SingleTimeAdapter) adapter).setTimes(prayTimes);
+        if (adapter instanceof TimeItemAdapter) {
+            ((TimeItemAdapter) adapter).setTimes(prayTimes);
         }
 
         double moonPhase = 1;
@@ -420,8 +418,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             case R.id.city_name:
             case R.id.owghat_content:
                 RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
-                if (adapter instanceof SingleTimeAdapter) {
-                    SingleTimeAdapter timesAdapter = (SingleTimeAdapter) adapter;
+                if (adapter instanceof TimeItemAdapter) {
+                    TimeItemAdapter timesAdapter = (TimeItemAdapter) adapter;
                     boolean expanded = !timesAdapter.isExpanded();
                     timesAdapter.setExpanded(expanded);
                     mOwghatBinding.moreOwghat.setImageResource(expanded

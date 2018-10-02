@@ -29,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import dagger.android.support.DaggerFragment;
 
@@ -80,8 +79,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentMonthBinding fragmentMonthBinding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_month, container, false);
+        FragmentMonthBinding fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
+                container, false);
         isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);

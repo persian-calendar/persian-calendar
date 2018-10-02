@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
-import com.byagowi.persiancalendar.databinding.SingleCalendarBinding;
+import com.byagowi.persiancalendar.databinding.CalendarItemBinding;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
@@ -23,13 +23,13 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SingleCalendarAdapter extends RecyclerView.Adapter<SingleCalendarAdapter.ViewHolder> {
+public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapter.ViewHolder> {
     private final Typeface mCalendarFont;
     private List<CalendarType> mCalendars = new ArrayList<>();
     private boolean mExpanded = false;
     private long mJdn;
 
-    public SingleCalendarAdapter(Context context) {
+    public CalendarItemAdapter(Context context) {
         mCalendarFont = TypefaceUtils.getCalendarFragmentFont(context);
     }
 
@@ -51,7 +51,7 @@ public class SingleCalendarAdapter extends RecyclerView.Adapter<SingleCalendarAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        SingleCalendarBinding binding = SingleCalendarBinding
+        CalendarItemBinding binding = CalendarItemBinding
                 .inflate(LayoutInflater.from(parent.getContext()), parent, false);
 
         return new ViewHolder(binding);
@@ -68,9 +68,9 @@ public class SingleCalendarAdapter extends RecyclerView.Adapter<SingleCalendarAd
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private SingleCalendarBinding binding;
+        private CalendarItemBinding binding;
 
-        ViewHolder(SingleCalendarBinding binding) {
+        ViewHolder(CalendarItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

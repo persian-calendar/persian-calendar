@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.adapter.SingleCalendarAdapter;
+import com.byagowi.persiancalendar.adapter.CalendarItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
@@ -29,7 +29,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
     };
     private OnTodayButtonClickListener mTodayButtonClickListener = () -> {
     };
-    private SingleCalendarAdapter mSingleCalendarAdapter;
+    private CalendarItemAdapter mCalendarItemAdapter;
 
     public CalendarsView(Context context) {
         super(context);
@@ -59,8 +59,8 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         layoutManager.setFlexWrap(FlexWrap.WRAP);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
         mBinding.calendarsRecyclerView.setLayoutManager(layoutManager);
-        mSingleCalendarAdapter = new SingleCalendarAdapter(context);
-        mBinding.calendarsRecyclerView.setAdapter(mSingleCalendarAdapter);
+        mCalendarItemAdapter = new CalendarItemAdapter(context);
+        mBinding.calendarsRecyclerView.setAdapter(mCalendarItemAdapter);
     }
 
     public void showTodayIcon() {
@@ -80,7 +80,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
     }
 
     public void expand(boolean expanded) {
-        mSingleCalendarAdapter.setExpanded(expanded);
+        mCalendarItemAdapter.setExpanded(expanded);
 
         mBinding.moreCalendar.setImageResource(expanded
                 ? R.drawable.ic_keyboard_arrow_up
@@ -101,7 +101,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                 break;
 
             case R.id.calendars_tab_content:
-                expand(!mSingleCalendarAdapter.isExpanded());
+                expand(!mCalendarItemAdapter.isExpanded());
                 break;
         }
     }
@@ -112,7 +112,7 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         Context context = getContext();
         if (context == null) return;
 
-        mSingleCalendarAdapter.setDate(calendarsToShow, jdn);
+        mCalendarItemAdapter.setDate(calendarsToShow, jdn);
         mBinding.weekDayName.setText(Utils.getWeekDayName(new CivilDate(jdn)));
 
         mBinding.zodiac.setText(AstronomicalUtils.getZodiacInfo(context, jdn, true));

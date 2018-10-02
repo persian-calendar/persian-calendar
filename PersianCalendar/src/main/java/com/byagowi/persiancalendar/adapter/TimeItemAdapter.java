@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.SingleTimeBinding;
+import com.byagowi.persiancalendar.databinding.TimeItemBinding;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.util.UIUtils;
@@ -12,10 +12,9 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SingleTimeAdapter extends RecyclerView.Adapter<SingleTimeAdapter.ViewHolder> {
+public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHolder> {
     @StringRes
     static final private int[] timeNames = new int[]{
             R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
@@ -27,9 +26,8 @@ public class SingleTimeAdapter extends RecyclerView.Adapter<SingleTimeAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        SingleTimeBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.single_time, parent, false);
+        TimeItemBinding binding = TimeItemBinding.inflate(LayoutInflater.from(parent.getContext()),
+                parent, false);
 
         return new ViewHolder(binding);
     }
@@ -59,14 +57,15 @@ public class SingleTimeAdapter extends RecyclerView.Adapter<SingleTimeAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private SingleTimeBinding binding;
+        private TimeItemBinding binding;
         private FlexboxLayoutManager.LayoutParams emptyLayout =
                 new FlexboxLayoutManager.LayoutParams(0, 0);
         private FlexboxLayoutManager.LayoutParams wrapContent =
                 new FlexboxLayoutManager.LayoutParams(
                         FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
                         FlexboxLayoutManager.LayoutParams.WRAP_CONTENT);
-        ViewHolder(SingleTimeBinding binding) {
+
+        ViewHolder(TimeItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
