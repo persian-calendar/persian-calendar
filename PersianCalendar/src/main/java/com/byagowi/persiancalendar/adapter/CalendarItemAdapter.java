@@ -37,6 +37,7 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
         mCalendars = calendars;
         mJdn = jdn;
         for (int i = 0; i < mCalendars.size(); ++i) notifyItemChanged(i);
+//        notifyDataSetChanged();
     }
 
     public boolean isExpanded() {
