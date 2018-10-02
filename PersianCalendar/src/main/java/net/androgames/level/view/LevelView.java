@@ -130,6 +130,7 @@ public class LevelView extends View {
     private Paint lcdBackgroundPaint;
     private Paint infoPaint;
     private boolean showAngle;
+    private boolean firstTime = true;
 
     public LevelView(Context context) {
         super(context);
@@ -141,11 +142,11 @@ public class LevelView extends View {
         init(context);
     }
 
+
     public LevelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
 
     private void init(Context context) {
         // drawable
@@ -348,8 +349,6 @@ public class LevelView extends View {
                 Math.min(h, w) - 2 * displayGap,
                 Math.max(h, w) - 2 * (sensorGap + 3 * displayGap + lcdHeight));
     }
-
-    private boolean firstTime = true;
 
     @Override
     public void onDraw(Canvas canvas) {

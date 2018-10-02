@@ -147,7 +147,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         adapter = new MonthAdapter(calendarFragmentDependency, days,
                 startingDayOfWeek, weekOfYearStart, weeksCount);
         fragmentMonthBinding.monthDays.setAdapter(adapter);
-//        fragmentMonthBinding.monthDays.setItemAnimator(null);
+        fragmentMonthBinding.monthDays.setItemAnimator(null);
 
         if (calendarFragment.mFirstTime &&
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {

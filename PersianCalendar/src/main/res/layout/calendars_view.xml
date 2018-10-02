@@ -66,8 +66,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/calendarsRecyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:paddingTop="@dimen/padding_item"
             android:paddingBottom="@dimen/padding_item" />

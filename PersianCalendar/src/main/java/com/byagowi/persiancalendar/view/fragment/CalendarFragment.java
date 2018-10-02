@@ -130,7 +130,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             LayoutTransition layoutTransition = new LayoutTransition();
             layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
             mEventsBinding.eventsContent.setLayoutTransition(layoutTransition);
-            mCalendarsView.setLayoutTransition(layoutTransition);
+            // Don't do the same for others tabs, it is problematic
         }
 
         mCoordinate = Utils.getCoordinate(context);
@@ -145,13 +145,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             layoutManager.setJustifyContent(JustifyContent.CENTER);
             mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
             mOwghatBinding.timesRecyclerView.setAdapter(new TimeItemAdapter());
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                LayoutTransition layoutTransition = new LayoutTransition();
-                layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
-                mOwghatBinding.owghatContent.setLayoutTransition(layoutTransition);
-            }
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),

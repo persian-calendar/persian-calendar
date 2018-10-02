@@ -16,11 +16,11 @@ import com.byagowi.persiancalendar.util.AstronomicalUtils;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarsView extends FrameLayout implements View.OnClickListener {
 
@@ -55,10 +55,9 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         mBinding.getRoot().setOnClickListener(this);
         mBinding.extraInformationContainer.setVisibility(View.GONE);
 
-        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
-        layoutManager.setFlexWrap(FlexWrap.WRAP);
-        layoutManager.setJustifyContent(JustifyContent.CENTER);
-        mBinding.calendarsRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        mBinding.calendarsRecyclerView.setLayoutManager(linearLayoutManager);
         mCalendarItemAdapter = new CalendarItemAdapter(context);
         mBinding.calendarsRecyclerView.setAdapter(mCalendarItemAdapter);
     }
