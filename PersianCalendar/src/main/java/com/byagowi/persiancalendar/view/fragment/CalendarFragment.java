@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.view.fragment;
 
 import android.Manifest;
+import android.animation.LayoutTransition;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.text.SpannableString;
@@ -124,6 +126,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         mEventsBinding = EventsTabContentBinding.inflate(inflater, container, false);
         tabs.add(mEventsBinding.getRoot());
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            LayoutTransition layoutTransition = new LayoutTransition();
+            layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+            mEventsBinding.eventsContent.setLayoutTransition(layoutTransition);
+            mCalendarsView.setLayoutTransition(layoutTransition);
+        }
+
         mCoordinate = Utils.getCoordinate(context);
         if (mCoordinate != null) {
             titles.add(getString(R.string.owghat));
@@ -136,6 +145,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             layoutManager.setJustifyContent(JustifyContent.CENTER);
             mOwghatBinding.timesRecyclerView.setLayoutManager(layoutManager);
             mOwghatBinding.timesRecyclerView.setAdapter(new TimeItemAdapter());
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                LayoutTransition layoutTransition = new LayoutTransition();
+                layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+                mOwghatBinding.owghatContent.setLayoutTransition(layoutTransition);
+            }
         }
 
         mMainBinding.cardsViewPager.setAdapter(new CardTabsAdapter(getChildFragmentManager(),
@@ -304,9 +320,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
         StringBuilder contentDescription = new StringBuilder();
 
-        mEventsBinding.holidayTitle.setVisibility(View.GONE);
-        mEventsBinding.deviceEventTitle.setVisibility(View.GONE);
-        mEventsBinding.eventTitle.setVisibility(View.GONE);
         mEventsBinding.eventMessage.setVisibility(View.GONE);
         mEventsBinding.noEvent.setVisibility(View.VISIBLE);
 
@@ -317,6 +330,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             mEventsBinding.holidayTitle.setContentDescription(holidayContent);
             contentDescription.append(holidayContent);
             mEventsBinding.holidayTitle.setVisibility(View.VISIBLE);
+        } else {
+            mEventsBinding.holidayTitle.setVisibility(View.GONE);
         }
 
         if (deviceEvents.length() != 0) {
@@ -329,6 +344,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             mEventsBinding.deviceEventTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
             mEventsBinding.deviceEventTitle.setVisibility(View.VISIBLE);
+        } else {
+            mEventsBinding.deviceEventTitle.setVisibility(View.GONE);
         }
 
 
@@ -341,6 +358,8 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             contentDescription.append(nonHolidays);
 
             mEventsBinding.eventTitle.setVisibility(View.VISIBLE);
+        } else {
+            mEventsBinding.eventTitle.setVisibility(View.GONE);
         }
 
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
