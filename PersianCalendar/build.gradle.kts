@@ -90,8 +90,8 @@ dependencies {
   testImplementation("junit:junit:$junitVersion")
   testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
-  androidTestImplementation("androidx.test:runner:1.1.0-alpha4")
-  androidTestImplementation("androidx.test:rules:1.1.0-alpha4")
-  androidTestImplementation("androidx.test.espresso:espresso-contrib:3.1.0-alpha4")
-  androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0-alpha4")
+  androidTestImplementation("androidx.test:runner:1.1.0-beta01")
+  androidTestImplementation("androidx.test:rules:1.1.0-beta01")
+  androidTestImplementation("androidx.test.espresso:espresso-contrib:3.1.0-beta01")
+  androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0-beta01")
 }
