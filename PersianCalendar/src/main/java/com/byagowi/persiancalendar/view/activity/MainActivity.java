@@ -41,8 +41,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.androgames.level.LevelFragment;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -94,13 +96,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             DEFAULT = CALENDAR; // Default selected fragment
     private static long creationDateJdn;
     private final String TAG = MainActivity.class.getName();
-    private final Class<?>[] fragments = {
+    private final List<Class<? extends Fragment>> fragments = Arrays.asList(
             CalendarFragment.class,
             ConverterFragment.class,
             CompassFragment.class,
             SettingsFragment.class,
             AboutFragment.class
-    };
+    );
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
@@ -267,6 +269,17 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
+    }
+
+    private void bringFragment(Class<? extends Fragment> fragment) {
+        try {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_holder, fragment.newInstance(), fragment.getName())
+                    .commit();
+        } catch (Exception e) {
+            Log.e(TAG, fragment.getName() + " is selected as an index", e);
+        }
     }
 
     public CoordinatorLayout getCoordinator() {
@@ -533,16 +546,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                 UpdateUtils.update(getApplicationContext(), true);
             }
 
-            try {
-                Fragment fragment = (Fragment) fragments[item].newInstance();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, fragment, fragments[item].getName())
-                        .commit();
-                menuPosition = item;
-            } catch (Exception e) {
-                Log.e(TAG, item + " is selected as an index", e);
-            }
+            bringFragment(fragments.get(item));
+            menuPosition = item;
         }
 
         binding.drawer.closeDrawers();
@@ -555,18 +560,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     }
 
     public void toggleToLevel() {
-        LevelFragment level = new LevelFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_holder, level, level.getTag())
-                .commit();
+        bringFragment(LevelFragment.class);
     }
 
     public void toggleToCompass() {
-        CompassFragment compassFragment = new CompassFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_holder, compassFragment, compassFragment.getTag())
-                .commit();
+        bringFragment(CompassFragment.class);
     }
 }
