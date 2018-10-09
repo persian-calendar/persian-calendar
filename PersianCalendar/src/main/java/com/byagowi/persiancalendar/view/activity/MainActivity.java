@@ -205,6 +205,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         actionBar = getSupportActionBar();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.appbarLayout.setOutlineProvider(null);
+        }
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
