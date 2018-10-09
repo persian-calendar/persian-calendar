@@ -23,14 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.fragment.PreferenceFragment;
+import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.annotation.NonNull;
 import androidx.core.view.MotionEventCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,26 +39,31 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private final List<String> titles;
     private final List<String> values;
     private final List<Boolean> enabled;
-    CalendarPreferenceDialog calendarPreferenceDialog;
+    private final CalendarPreferenceDialog calendarPreferenceDialog;
+    private final MainActivityDependency mainActivityDependency;
 
-    public RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
-                               List<String> titles, List<String> values, List<Boolean> enabled) {
+    RecyclerListAdapter(CalendarPreferenceDialog calendarPreferenceDialog,
+                        MainActivityDependency mainActivityDependency,
+                        List<String> titles, List<String> values, List<Boolean> enabled) {
         this.calendarPreferenceDialog = calendarPreferenceDialog;
         this.titles = new ArrayList<>(titles);
         this.values = new ArrayList<>(values);
         this.enabled = new ArrayList<>(enabled);
+        this.mainActivityDependency = mainActivityDependency;
+    }
+
+    @NonNull
+    @Override
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        CalendarTypeItemBinding binding = CalendarTypeItemBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+
+        return new ItemViewHolder(binding);
     }
 
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_type_item, parent, false);
-        return new ItemViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(final ItemViewHolder holder, int position) {
-        holder.checkedTextView.setText(titles.get(position));
-        holder.checkedTextView.setChecked(enabled.get(position));
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        holder.bind(position);
 
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener((v, event) -> {
@@ -67,23 +72,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             }
             return false;
         });
-
-        holder.checkedTextView.setOnClickListener(v -> {
-            boolean newState = !holder.checkedTextView.isChecked();
-            holder.checkedTextView.setChecked(newState);
-            enabled.set(position, newState);
-        });
     }
 
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    void onItemMoved(int fromPosition, int toPosition) {
         Collections.swap(titles, fromPosition, toPosition);
         Collections.swap(values, fromPosition, toPosition);
         Collections.swap(enabled, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        return true;
     }
 
-    public void onItemDismiss(int position) {
+    void onItemDismissed(int position) {
         titles.remove(position);
         values.remove(position);
         enabled.remove(position);
@@ -92,9 +90,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Easter egg when all are swiped
         if (titles.size() == 0) {
             try {
-                View view = calendarPreferenceDialog.getActivity().getSupportFragmentManager()
-                        .findFragmentByTag(PreferenceFragment.class.getName())
-                        .getView();
+                View view = mainActivityDependency.getMainActivity().getCoordinator();
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 360);
                 animator.setDuration(3000L);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -139,20 +135,31 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         return titles.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        final AppCompatCheckedTextView checkedTextView;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
+        private CalendarTypeItemBinding binding;
 
-        public ItemViewHolder(View itemView) {
-            super(itemView);
-            checkedTextView = itemView.findViewById(R.id.check_text_view);
+        ItemViewHolder(CalendarTypeItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
-        public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+        public void bind(int position) {
+            binding.checkTextView.setText(titles.get(position));
+            binding.checkTextView.setChecked(enabled.get(position));
+
+            binding.checkTextView.setOnClickListener(v -> {
+                boolean newState = !binding.checkTextView.isChecked();
+                binding.checkTextView.setChecked(newState);
+                enabled.set(position, newState);
+            });
         }
 
-        public void onItemClear() {
-            itemView.setBackgroundColor(0);
+        void onItemSelected() {
+            binding.getRoot().setBackgroundColor(Color.LTGRAY);
+        }
+
+        void onItemCleared() {
+            binding.getRoot().setBackgroundColor(0);
         }
     }
 }

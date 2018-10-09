@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="@dimen/owghatSize"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="@dimen/owghatSize"
+                android:layout_height="wrap_content"
+                android:gravity="top|center_horizontal|fill_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4sp"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="32sp"
+                    tools:text="a" />
+
+                <TextView
+                    android:id="@+id/month_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description"
+                    tools:text="a\nb" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="?attr/colorTextSecond"
+                android:textSize="@dimen/text_size_description"
+                tools:text="1/1/1990" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

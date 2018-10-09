@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.Preference
+        android:defaultValue="#ffffffff"
+        android:key="SelectedWidgetTextColor"
+        android:summary="@string/select_widgets_text_color"
+        android:title="@string/widget_text_color"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="WidgetClock"
+        android:summary="@string/showing_clock_on_widget"
+        android:title="@string/clock_on_widget"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="IranTime"
+        android:summary="@string/showing_iran_time"
+        android:title="@string/iran_time"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.MultiSelectListPreference
+        android:defaultValue="@array/what_to_show_default"
+        android:dialogTitle="@string/which_one_to_show"
+        android:entries="@array/what_to_show"
+        android:entryValues="@array/what_to_show_keys"
+        android:key="what_to_show"
+        android:negativeButtonText="@string/cancel"
+        android:positiveButtonText="@string/accept"
+        android:summary="@string/customize_widget_summary"
+        android:title="@string/customize_widget"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="NotifyDate"
+        android:summary="@string/enable_notify"
+        android:title="@string/notify_date"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:dependency="NotifyDate"
+        android:key="NotifyDateLockScreen"
+        android:summary="@string/notify_date_lock_screen_summary"
+        android:title="@string/notify_date_lock_screen"
+        settings:iconSpaceReserved="false" />
+
+</androidx.preference.PreferenceScreen>

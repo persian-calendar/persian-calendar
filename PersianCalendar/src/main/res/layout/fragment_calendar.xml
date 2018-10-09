@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
-        android:id="@+id/about_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -14,20 +13,20 @@
             android:orientation="vertical">
 
             <androidx.viewpager.widget.ViewPager
-                android:id="@+id/calendar_pager"
+                android:id="@+id/calendarViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/grid_calendar_height" />
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
+                android:id="@+id/tabLayout"
                 style="@style/TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <com.byagowi.persiancalendar.adapter.CardsViewPager
-                android:id="@+id/tab_content"
+                android:id="@+id/cardsViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="260sp" />
+                android:layout_height="220sp" />
 
         </LinearLayout>
 

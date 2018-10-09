@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/search_in_events"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:title="@string/more"
+        app:showAsAction="ifRoom">
+
+        <item
+            android:id="@+id/go_to"
+            android:title="@string/goto_date" />
+
+        <item
+            android:id="@+id/add_event"
+            android:title="@string/add_event" />
+
+        <item
+            android:id="@+id/today"
+            android:title="@string/return_to_today" />
+
+    </item>
+</menu>

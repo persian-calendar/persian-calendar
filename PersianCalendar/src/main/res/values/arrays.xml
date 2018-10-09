@@ -3,12 +3,15 @@
     <string-array name="themeNames">
         <item>Light</item>
         <item>Dark</item>
+        <item>Modern</item>
+        <item>Blue</item>
     </string-array>
 
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
-        <item>ClassicTheme</item>
+        <item>ClassicTheme</item> <!-- its name is Modern however -->
+        <item>BlueTheme</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -31,27 +34,12 @@
         <item>Tehran</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>White</item>
-        <item>Red</item>
-        <item>Green</item>
-        <item>Yellow</item>
-        <item>Black</item>
-    </string-array>
-
-    <string-array name="colorKeys" translatable="false">
-        <item>#ffffffff</item>
-        <item>#ffe65100</item>
-        <item>#ff00796b</item>
-        <item>#fffef200</item>
-        <item>#ff202020</item>
-    </string-array>
-
     <string-array name="languageNames" translatable="false">
         <item>فارسی</item>
         <item>دری</item>
         <item>پښتو</item>
         <item>کوردی</item>
+        <item>العربية</item>
         <item>اردو</item>
         <item>English (Iran)</item>
         <item>English</item>
@@ -62,6 +50,7 @@
         <item>fa-AF</item>
         <item>ps</item>
         <item>ckb</item>
+        <item>ar</item>
         <item>ur</item>
         <item>en</item>
         <item>en-US</item>
@@ -81,49 +70,6 @@
         <item>ASR</item>
         <item>MAGHRIB</item>
         <item>ISHA</item>
-    </string-array>
-
-    <string-array name="islamicOffsetNames">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
-    <string-array name="islamicOffsetKeys" translatable="false">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
-    <string-array name="drawerTitles">
-        <item>Calendar</item>
-        <item>Calendar Converter</item>
-        <item>Compass</item>
-        <item>Settings</item>
-        <item>About</item>
-        <item>Exit</item>
-    </string-array>
-
-    <string-array name="drawerIcons" translatable="false">
-        <item>@drawable/ic_date_range</item>
-        <item>@drawable/ic_swap_vertical_circle</item>
-        <item>@drawable/ic_explore</item>
-        <item>@drawable/ic_settings</item>
-        <item>@drawable/ic_info</item>
-        <item>@drawable/ic_cancel</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>and Qibla, if location is set in the Settings</item>
-        <item></item>
-        <item></item>
-        <item></item>
     </string-array>
 
     <string-array name="holidays_types">
@@ -202,11 +148,27 @@
         <item>owghat_location</item>
     </string-array>
 
-    <string-array name="what_to_show_default">
+    <string-array name="what_to_show_default" translatable="false">
         <item>other_calendars</item>
         <item>non_holiday_events</item>
         <item>owghat</item>
         <item>owghat_location</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+    </string-array>
+
+    <string-array name="islamicOffsetKeys" translatable="false">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
     </string-array>
 
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/bubble_border" />
+            <padding
+                android:bottom="@dimen/bubble_padding"
+                android:left="@dimen/bubble_padding"
+                android:right="@dimen/bubble_padding"
+                android:top="@dimen/bubble_padding" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:endColor="@color/bubble_border"
+                android:gradientRadius="30"
+                android:startColor="@color/bubble_center"
+                android:type="radial" />
+        </shape>
+    </item>
+</layer-list>

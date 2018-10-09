@@ -3,6 +3,8 @@
     <string-array name="themeNames">
         <item>ڕووناک</item>
         <item>تاریک</item>
+        <item>نۆژەن</item>
+        <item>شین</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -15,46 +17,12 @@
         <item>ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>سپی</item>
-        <item>سوور</item>
-        <item>کەسک</item>
-        <item>زەرد</item>
-        <item>ڕەش</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>بەیانی</item>
         <item>نیوەڕۆ</item>
         <item>ئێوارە</item>
         <item>شێوان</item>
         <item>خەوتنان</item>
-    </string-array>
-
-    <string-array name="islamicOffsetNames">
-        <item>٢-</item>
-        <item>١-</item>
-        <item>٠</item>
-        <item>١+</item>
-        <item>٢+</item>
-    </string-array>
-
-    <string-array name="drawerTitles">
-        <item>ڕۆژژمێر</item>
-        <item>بگۆڕی ڕێککەوت</item>
-        <item>جەمسەرنوێن</item>
-        <item>ڕێکخستن</item>
-        <item>لەبارە</item>
-        <item>دەرچوون</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>و ڕووگەنوێن، ئەگەر لە ڕێکخستندا شوێن دیاری کرابێ</item>
-        <item></item>
-        <item></item>
-        <item></item>
     </string-array>
 
     <string-array name="holidays_types">
@@ -88,6 +56,14 @@
         <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>
         <item>کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
         <item>شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>٢-</item>
+        <item>١-</item>
+        <item>٠</item>
+        <item>١+</item>
+        <item>٢+</item>
     </string-array>
 
 </resources>

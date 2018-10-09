@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
-        android:id="@+id/about_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -18,13 +17,13 @@
                 android:background="?attr/colorCard"
                 android:gravity="center">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/gpl_logo"
                     android:src="@drawable/gpl3_logo" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -34,7 +33,7 @@
                     android:textSize="@dimen/text_size_title"
                     android:textStyle="bold" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -49,7 +48,7 @@
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -67,7 +66,7 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
@@ -80,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:id="@id/title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -88,7 +87,7 @@
                             android:textColor="?attr/colorTextDrawer"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_license_sum"
@@ -102,14 +101,15 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/help_card"
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="@string/about_help_title"
+                    android:text="@string/help"
                     android:textColor="?attr/colorTextDrawer" />
 
                 <LinearLayout
@@ -123,7 +123,7 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
@@ -137,15 +137,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/about_title"
+                        <TextView
+                            android:id="@+id/aboutTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorTextDrawer"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/help_sum"
+                        <TextView
+                            android:id="@+id/helpSummary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_help_sum"
@@ -162,7 +162,7 @@
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -180,7 +180,7 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
@@ -194,14 +194,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_report_bug"
                             android:textColor="?attr/colorTextDrawer"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_report_bug_sum"
@@ -223,7 +223,7 @@
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
@@ -237,14 +237,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_sendMail"
                             android:textColor="?attr/colorTextDrawer"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about_email_sum"
@@ -261,19 +261,20 @@
                 style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="@string/about_developers"
                     android:textColor="?attr/colorTextDrawer" />
 
-                <com.google.android.material.chip.ChipGroup
+                <LinearLayout
                     android:id="@+id/developers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
                     android:layoutDirection="ltr"
+                    android:orientation="vertical"
                     android:padding="5dp"
                     android:textColor="?attr/colorTextDrawer" />
 

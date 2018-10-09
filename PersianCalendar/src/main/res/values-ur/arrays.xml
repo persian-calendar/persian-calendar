@@ -3,6 +3,8 @@
     <string-array name="themeNames">
         <item>روشن</item>
         <item>تاریک</item>
+        <item>مدرن</item>
+        <item>آبی</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
@@ -15,46 +17,12 @@
         <item>انجمن جیوفیزیک، یونیورسٹی</item>
     </string-array>
 
-    <string-array name="colorNames">
-        <item>سفید</item>
-        <item>سرخ</item>
-        <item>سبز</item>
-        <item>سیاه</item>
-        <item>زرد</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>فجر</item>
         <item>ظہر</item>
         <item>عصر</item>
         <item>مغرب</item>
         <item>عشا</item>
-    </string-array>
-
-    <string-array name="islamicOffsetNames">
-        <item>2-</item>
-        <item>1-</item>
-        <item>0</item>
-        <item>1+</item>
-        <item>2+</item>
-    </string-array>
-
-    <string-array name="drawerTitles">
-        <item>تقویم</item>
-        <item>تاریخ</item>
-        <item>قطب نما</item>
-        <item>ترتیبات</item>
-        <item>تعارف</item>
-        <item>باہر نکلیں</item>
-    </string-array>
-
-    <string-array name="drawerSubtitles">
-        <item></item>
-        <item></item>
-        <item>و قبله‌نما، در صورت تنظیم موقعیت در تنظیمات</item>
-        <item></item>
-        <item></item>
-        <item></item>
     </string-array>
 
     <string-array name="holidays_types">
@@ -88,6 +56,14 @@
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>
         <item>اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
         <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>2-</item>
+        <item>1-</item>
+        <item>0</item>
+        <item>1+</item>
+        <item>2+</item>
     </string-array>
 
 </resources>

@@ -12,7 +12,13 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.MonthAdapter;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
+import com.byagowi.persiancalendar.databinding.FragmentMonthBinding;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
@@ -20,50 +26,79 @@ import com.byagowi.persiancalendar.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import calendar.AbstractDate;
-import calendar.CalendarType;
+import javax.inject.Inject;
 
-public class MonthFragment extends Fragment implements View.OnClickListener {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import dagger.android.support.DaggerFragment;
+
+public class MonthFragment extends DaggerFragment implements View.OnClickListener {
+    @Inject
+    AppDependency appDependency;
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    @Inject
+    CalendarFragmentDependency calendarFragmentDependency;
+    private boolean isRTL = false;
+    //    @Inject
+//    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;
     private int offset;
     private MonthAdapter adapter;
-    private CalendarFragment calendarFragment;
-
     private long baseJdn;
     private int monthLength;
+    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extras = intent.getExtras();
 
-    private static boolean isRTL = false;
+            if (extras == null) return;
+
+            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
+            if (value == offset) {
+                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
+
+                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
+                    adapter.initializeMonthEvents(context);
+                    calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
+                } else {
+                    adapter.selectDay(-1);
+                    updateTitle();
+                }
+
+                long selectedDay = 1 + jdn - baseJdn;
+                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
+                    adapter.selectDay((int) (1 + jdn - baseJdn));
+                }
+            } else {
+                adapter.selectDay(-1);
+            }
+        }
+    };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FragmentMonthBinding fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
+                container, false);
+        isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
+        Bundle args = getArguments();
+        offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
-        isRTL = UIUtils.isRTL(getContext());
-        offset = getArguments().getInt(Constants.OFFSET_ARGUMENT);
-
-        // We deliberately like to avoid DataBinding thing here, at least for now
-        AppCompatImageView prev = view.findViewById(R.id.prev);
-        AppCompatImageView next = view.findViewById(R.id.next);
-        prev.setImageResource(isRTL
-                ? R.drawable.ic_keyboard_arrow_right
-                : R.drawable.ic_keyboard_arrow_left);
-        next.setImageResource(isRTL
+        fragmentMonthBinding.next.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_left
                 : R.drawable.ic_keyboard_arrow_right);
-        prev.setOnClickListener(this);
-        next.setOnClickListener(this);
+        fragmentMonthBinding.next.setOnClickListener(this);
 
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
-        recyclerView.setHasFixedSize(true);
+        fragmentMonthBinding.prev.setImageResource(isRTL
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
+        fragmentMonthBinding.prev.setOnClickListener(this);
+
+        fragmentMonthBinding.monthDays.setHasFixedSize(true);
 
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),
+        fragmentMonthBinding.monthDays.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
                 Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
@@ -84,31 +119,22 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         month += 1;
         typedDate = CalendarUtils.getDateOfCalendar(mainCalendar, year, month, 1);
 
-        baseJdn = CalendarUtils.getJdnDate(typedDate);
-        monthLength = (int) (CalendarUtils.getJdnOfCalendar(mainCalendar, month == 12 ? year + 1 : year,
-                month == 12 ? 1 : month + 1, 1) - baseJdn);
+        baseJdn = typedDate.toJdn();
+        monthLength = CalendarUtils.getMonthLength(mainCalendar, year, month);
 
         int dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
 
         long todayJdn = CalendarUtils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
-            DayEntity dayEntity = new DayEntity();
-            dayEntity.setJdn(baseJdn + i);
-
-            if (baseJdn + i == todayJdn) {
-                dayEntity.setToday(true);
-            }
-
-            dayEntity.setDayOfWeek(dayOfWeek);
-
-            days.add(dayEntity);
+            long jdn = baseJdn + i;
+            days.add(new DayEntity(jdn == todayJdn, jdn, dayOfWeek));
             dayOfWeek++;
             if (dayOfWeek == 7) {
                 dayOfWeek = 0;
             }
         }
 
-        long startOfYearJdn = CalendarUtils.getJdnOfCalendar(mainCalendar, year, 1, 1);
+        long startOfYearJdn = CalendarUtils.getDateOfCalendar(mainCalendar, year, 1, 1).toJdn();
         int weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
         int weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
@@ -116,57 +142,29 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
         ///////
         ///////
         ///////
-        adapter = new MonthAdapter(getContext(), days, startingDayOfWeek,
-                weekOfYearStart, weeksCount);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(null);
+        CalendarFragment calendarFragment = calendarFragmentDependency.getCalendarFragment();
 
-        calendarFragment = (CalendarFragment) getParentFragment();
+        adapter = new MonthAdapter(calendarFragmentDependency, days,
+                startingDayOfWeek, weekOfYearStart, weeksCount);
+        fragmentMonthBinding.monthDays.setAdapter(adapter);
+        fragmentMonthBinding.monthDays.setItemAnimator(null);
 
-        if (calendarFragment.firstTime && offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.firstTime = false;
+        if (calendarFragment.mFirstTime &&
+                offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
+            calendarFragment.mFirstTime = false;
             calendarFragment.selectDay(CalendarUtils.getTodayJdn());
             updateTitle();
         }
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(setCurrentMonthReceiver,
+        appDependency.getLocalBroadcastManager().registerReceiver(setCurrentMonthReceiver,
                 new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
 
-        return view;
+        return fragmentMonthBinding.getRoot();
     }
-
-    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle extras = intent.getExtras();
-
-            if (extras == null) return;
-
-            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
-            if (value == offset) {
-                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
-
-                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
-                    adapter.initializeMonthEvents(context);
-                    calendarFragment.selectDay(jdn);
-                } else {
-                    adapter.selectDay(-1);
-                    updateTitle();
-                }
-
-                long selectedDay = 1 + jdn - baseJdn;
-                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
-                    adapter.selectDay((int) (1 + jdn - baseJdn));
-                }
-            } else {
-                adapter.selectDay(-1);
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(setCurrentMonthReceiver);
+        appDependency.getLocalBroadcastManager().unregisterReceiver(setCurrentMonthReceiver);
         super.onDestroy();
     }
 
@@ -174,17 +172,18 @@ public class MonthFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.next:
-                calendarFragment.changeMonth(isRTL ? -1 : 1);
+                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? -1 : 1);
                 break;
 
             case R.id.prev:
-                calendarFragment.changeMonth(isRTL ? 1 : -1);
+                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? 1 : -1);
                 break;
         }
     }
 
     private void updateTitle() {
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), CalendarUtils.getMonthName(typedDate),
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(
+                CalendarUtils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }
 }

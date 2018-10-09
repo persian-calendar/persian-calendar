@@ -2,208 +2,75 @@ package com.byagowi.persiancalendar.util;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.CalendarsTabContentBinding;
-import com.byagowi.persiancalendar.databinding.SelectdayFragmentBinding;
-import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.entity.FormattedIntEntity;
-import com.github.praytimes.Clock;
+import com.byagowi.persiancalendar.praytimes.Clock;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import calendar.AbstractDate;
-import calendar.CalendarType;
-import calendar.CivilDate;
-import calendar.DateConverter;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AlertDialog;
 
 import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
+import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
+import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
+import static com.byagowi.persiancalendar.Constants.MODERN_THEME;
 import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
 import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
-import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 
 public class UIUtils {
-    static public void setActivityTitleAndSubtitle(Activity activity, String title, String subtitle) {
-        //noinspection ConstantConditions
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(title);
-            supportActionBar.setSubtitle(subtitle);
-        }
+    private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
+    private static long latestToastShowTime = -1;
+    private static AudioManager audioManager = null;
+
+    public static void askForCalendarPermission(Activity activity) {
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.calendar_access)
+                .setMessage(R.string.phone_calendar_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.READ_CALENDAR
+                        },
+                        Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    public static void fillCalendarsCard(Context context, long jdn,
-                                         CalendarsTabContentBinding binding,
-                                         CalendarType calendarType,
-                                         List<CalendarType> calendars) {
-        AbstractDate firstCalendar,
-                secondCalendar = null,
-                thirdCalendar = null;
-        firstCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(0), jdn);
-        if (calendars.size() > 1) {
-            secondCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(1), jdn);
-        }
-        if (calendars.size() > 2) {
-            thirdCalendar = CalendarUtils.getDateFromJdnOfCalendar(calendars.get(2), jdn);
-        }
+    public static void askForLocationPermission(Activity activity) {
+        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
 
-        binding.weekDayName.setText(Utils.getWeekDayName(firstCalendar));
-
-        binding.firstCalendarDateLinear.setText(CalendarUtils.toLinearDate(firstCalendar));
-        binding.firstCalendarDateDay.setText(Utils.formatNumber(firstCalendar.getDayOfMonth()));
-        binding.firstCalendarDate.setText(CalendarUtils.getMonthName(firstCalendar) + "\n" + Utils.formatNumber(firstCalendar.getYear()));
-
-        if (secondCalendar == null) {
-            binding.secondCalendarContainer.setVisibility(View.GONE);
-        } else {
-            binding.secondCalendarDateLinear.setText(CalendarUtils.toLinearDate(secondCalendar));
-            binding.secondCalendarDateDay.setText(Utils.formatNumber(secondCalendar.getDayOfMonth()));
-            binding.secondCalendarDate.setText(CalendarUtils.getMonthName(secondCalendar) + "\n" + Utils.formatNumber(secondCalendar.getYear()));
-        }
-
-        if (thirdCalendar == null) {
-            binding.thirdCalendarContainer.setVisibility(View.GONE);
-        } else {
-            binding.thirdCalendarDateLinear.setText(CalendarUtils.toLinearDate(thirdCalendar));
-            binding.thirdCalendarDateDay.setText(Utils.formatNumber(thirdCalendar.getDayOfMonth()));
-            binding.thirdCalendarDate.setText(CalendarUtils.getMonthName(thirdCalendar) + "\n" + Utils.formatNumber(thirdCalendar.getYear()));
-        }
-
-        long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
-
-        if (diffDays == 0) {
-            binding.today.setVisibility(View.GONE);
-            binding.todayIcon.setVisibility(View.GONE);
-            if (Utils.isIranTime()) {
-                binding.weekDayName.setText(binding.weekDayName.getText() + " (" + context.getString(R.string.iran_time) + ")");
-            }
-            binding.today.setVisibility(View.GONE);
-            binding.todayIcon.setVisibility(View.GONE);
-            binding.diffDate.setVisibility(View.GONE);
-        } else {
-            binding.today.setVisibility(View.VISIBLE);
-            binding.todayIcon.setVisibility(View.VISIBLE);
-            binding.diffDate.setVisibility(View.VISIBLE);
-
-            CivilDate civilBase = new CivilDate(2000, 1, 1);
-            CivilDate civilOffset = DateConverter.jdnToCivil(diffDays + DateConverter.civilToJdn(civilBase));
-            int yearDiff = civilOffset.getYear() - 2000;
-            int monthDiff = civilOffset.getMonth() - 1;
-            int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
-            String text = String.format(context.getString(R.string.date_diff_text),
-                    Utils.formatNumber((int) diffDays),
-                    Utils.formatNumber(yearDiff),
-                    Utils.formatNumber(monthDiff),
-                    Utils.formatNumber(dayOfMonthDiff));
-            if (diffDays <= 30) {
-                text = text.split("\\(")[0];
-            }
-            binding.diffDate.setText(text);
-        }
-
-        {
-            AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(calendarType, jdn);
-            AbstractDate startOfYear = CalendarUtils.getDateOfCalendar(calendarType,
-                    mainDate.getYear(), 1, 1);
-            AbstractDate startOfNextYear = CalendarUtils.getDateOfCalendar(
-                    calendarType, mainDate.getYear() + 1, 1, 1);
-            long startOfYearJdn = CalendarUtils.getJdnDate(startOfYear);
-            long endOfYearJdn = CalendarUtils.getJdnDate(startOfNextYear) - 1;
-            int currentWeek = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
-            int weeksCount = CalendarUtils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
-
-            binding.startAndEndOfYearDiff.setText(
-                    String.format(context.getString(R.string.start_of_year_diff) + "\n" +
-                                    context.getString(R.string.end_of_year_diff),
-                            Utils.formatNumber((int) (jdn - startOfYearJdn)),
-                            Utils.formatNumber(currentWeek),
-                            Utils.formatNumber(mainDate.getMonth()),
-                            Utils.formatNumber((int) (endOfYearJdn - jdn)),
-                            Utils.formatNumber(weeksCount - currentWeek),
-                            Utils.formatNumber(12 - mainDate.getMonth())));
-        }
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.location_access)
+                .setMessage(R.string.phone_location_required)
+                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        },
+                        Constants.LOCATION_PERMISSION_REQUEST_CODE))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    static public void fillSelectdaySpinners(Context context, SelectdayFragmentBinding binding,
-                                             long jdn) {
-        if (jdn == -1) {
-            jdn = CalendarUtils.getTodayJdn();
-        }
-
-        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
-                ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType(),
-                jdn);
-
-        // years spinner init.
-        List<FormattedIntEntity> years = new ArrayList<>();
-        final int YEARS = 200;
-        int startingYearOnYearSpinner = date.getYear() - YEARS / 2;
-        for (int i = 0; i < YEARS; ++i) {
-            years.add(new FormattedIntEntity(i + startingYearOnYearSpinner,
-                    Utils.formatNumber(i + startingYearOnYearSpinner)));
-        }
-        binding.yearSpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, years));
-        binding.yearSpinner.setSelection(YEARS / 2);
-        //
-
-        // month spinner init.
-        List<FormattedIntEntity> months = new ArrayList<>();
-        String[] monthsTitle = Utils.monthsNamesOfCalendar(date);
-        for (int i = 1; i <= 12; ++i) {
-            months.add(new FormattedIntEntity(i,
-                    monthsTitle[i - 1] + " / " + Utils.formatNumber(i)));
-        }
-        binding.monthSpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, months));
-        binding.monthSpinner.setSelection(date.getMonth() - 1);
-        //
-
-        // days spinner init.
-        List<FormattedIntEntity> days = new ArrayList<>();
-        for (int i = 1; i <= 31; ++i) {
-            days.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
-        }
-        binding.daySpinner.setAdapter(new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_dropdown_item, days));
-        binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
-    }
-
-    public static void askForCalendarPermission(AppCompatActivity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.requestPermissions(new String[]{
-                            Manifest.permission.READ_CALENDAR
-                    },
-                    Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    public static void toggleShowCalendarOnPreference(Context context, boolean enable) {
+    public static void toggleShowDeviceCalendarOnPreference(Context context, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
@@ -219,12 +86,7 @@ public class UIUtils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    public static String baseClockToString(Clock clock) {
-        return baseClockToString(clock.getHour(), clock.getMinute());
-    }
-
-
-    public static String baseClockToString(int hour, int minute) {
+    static String baseFormatClock(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
@@ -239,21 +101,17 @@ public class UIUtils {
         String timeText = null;
 
         int hour = clock.getHour();
-        if (!Utils.isClockIn24()) {
+        if (Utils.isClockIn12()) {
             if (hour >= 12) {
-                timeText = Utils.getAppLanguage().equals("ckb")
-                        ? PM_IN_CKB
-                        : PM_IN_PERSIAN;
+                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
                 hour -= 12;
             } else {
-                timeText = Utils.getAppLanguage().equals("ckb")
-                        ? AM_IN_CKB
-                        : AM_IN_PERSIAN;
+                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? AM_IN_CKB : AM_IN_PERSIAN;
             }
         }
 
-        String result = baseClockToString(hour, clock.getMinute());
-        if (!Utils.isClockIn24()) {
+        String result = baseFormatClock(hour, clock.getMinute());
+        if (Utils.isClockIn12()) {
             result = result + " " + timeText;
         }
         return result;
@@ -263,20 +121,20 @@ public class UIUtils {
     int getPrayTimeText(String athanKey) {
         switch (athanKey) {
             case "FAJR":
-                return R.string.azan1;
+                return R.string.fajr;
 
             case "DHUHR":
-                return R.string.azan2;
+                return R.string.dhuhr;
 
             case "ASR":
-                return R.string.azan3;
+                return R.string.asr;
 
             case "MAGHRIB":
-                return R.string.azan4;
+                return R.string.maghrib;
 
             case "ISHA":
             default:
-                return R.string.azan5;
+                return R.string.isha;
         }
     }
 
@@ -301,44 +159,49 @@ public class UIUtils {
         }
     }
 
-    static public void copyToClipboard(Context context, CharSequence text) {
-        ClipboardManager clipboardService =
-                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-
-        if (clipboardService != null) {
-            clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
-            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static void setTheme(AppCompatActivity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        switch (prefs.getString(PREF_THEME, LIGHT_THEME)) {
+    @StyleRes
+    public static int getThemeFromName(String name) {
+        switch (name) {
             case DARK_THEME:
-                activity.setTheme(R.style.DarkTheme);
-                return;
-//            case CLASSIC_THEME:
-//                setTheme(R.style.ClassicTheme);
-//                return;
+                return R.style.DarkTheme;
+
+            case MODERN_THEME:
+                return R.style.ModernTheme;
+
+            case BLUE_THEME:
+                return R.style.BlueTheme;
+
             default:
             case LIGHT_THEME:
-                activity.setTheme(R.style.LightTheme);
+                return R.style.LightTheme;
         }
     }
 
     // https://stackoverflow.com/a/27788209
-    private static Uri resourceToUri(Context context, int resID) {
-        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                context.getResources().getResourcePackageName(resID) + '/' +
-                context.getResources().getResourceTypeName(resID) + '/' +
-                context.getResources().getResourceEntryName(resID));
-    }
-
     static public Uri getDefaultAthanUri(Context context) {
-        return resourceToUri(context, R.raw.abdulbasit);
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                context.getResources().getResourcePackageName(R.raw.abdulbasit) + '/' +
+                context.getResources().getResourceTypeName(R.raw.abdulbasit) + '/' +
+                context.getResources().getResourceEntryName(R.raw.abdulbasit));
     }
 
     static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
+    }
+
+    public static void a11yShowToastWithClick(Context context, @StringRes int resId) {
+        if (!Utils.isTalkBackEnabled()) return;
+
+        if (audioManager == null) {
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        }
+
+        long now = System.currentTimeMillis();
+        if (now - latestToastShowTime > twoSeconds) {
+            Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+            // https://stackoverflow.com/a/29423018
+            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
+            latestToastShowTime = now;
+        }
     }
 }

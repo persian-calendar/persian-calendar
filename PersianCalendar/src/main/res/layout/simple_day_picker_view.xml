@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="400dp"
+        android:orientation="vertical"
+        android:padding="@dimen/view_padding">
+
+        <TextView
+            android:id="@+id/calendarTypeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_type_date"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="@dimen/text_size_description" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/calendarTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/calendar_type"
+            android:prompt="@string/day"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
+
+        <LinearLayout
+            android:id="@+id/containerYearSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/converter_padding">
+
+            <TextView
+                android:id="@+id/converterLabelYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year"
+                android:textColor="?attr/colorTextSecond"
+                android:textSize="@dimen/text_size_description" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/yearSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/select_year"
+                android:spinnerMode="dialog"
+                android:textColor="?attr/colorTextNormal"
+                android:textSize="@dimen/text_size_description" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/containerDateSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/containerDaySelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/converterLabelDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/day"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_description" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/daySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foregroundGravity="right"
+                    android:prompt="@string/select_day"
+                    android:spinnerMode="dialog"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerMonthSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/converterLabelMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/month"
+                    android:textColor="?attr/colorTextSecond"
+                    android:textSize="@dimen/text_size_description" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/monthSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/select_month"
+                    android:spinnerMode="dialog"
+                    android:textColor="?attr/colorTextNormal"
+                    android:textSize="@dimen/text_size_description" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

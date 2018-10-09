@@ -53,11 +53,7 @@ public class MoonPhases {
 
     /**
      * Modulo: calculates x mod y,
-     * <ul
-     * x mod y
-     * </ul>
      *
-     * @param double x, double y
      * @return reminder
      */
     private double modulo(double x, double y) {
@@ -67,7 +63,6 @@ public class MoonPhases {
     /**
      * Gives the fractional part of a number
      *
-     * @param double x
      * @return fractional part of a number
      */
     private double frac(double x) {

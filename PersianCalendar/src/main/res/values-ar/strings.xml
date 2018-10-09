@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Global-->
+    <string name="app_name">التقويم الفارسي</string>
+    <string name="widget_name">التقويم الفارسي</string>
+    <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
+    <string name="closeDrawer">إغلاق</string>
+    <string name="openDrawer">فتح</string>
+    <string name="accept">موافق</string>
+    <string name="add">إضافة</string>
+    <string name="help">مساعدة</string>
+    <string name="more">المزيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="continue_button">تشغيل</string>
+
+    <!--Navigation drawers-->
+    <string name="calendar">التقويم</string>
+    <string name="date_converter">محول التاريخ</string>
+    <string name="compass">البوصلة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="about">عن التطبيق</string>
+    <string name="exit">خروج</string>
+
+    <!--Calendar-->
+    <string name="add_event">إضافة حدث جديد</string>
+    <string name="device_calendar_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
+    <string name="today">اليوم</string>
+    <string name="return_to_today">الرجوع إلى اليوم</string>
+    <string name="goto_date">الذهاب إلى تاريخٍ معين</string>
+    <string name="go">إذهب</string>
+
+    <string name="search_in_events">البحث في المناسبات</string>
+
+    <string name="date_diff_text">الفرق: %s يوماً (~%s سنة و %s شهر و %s يوم)</string>
+    <string name="start_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) من بداية السنة</string>
+    <string name="end_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) إلى آخر السنة</string>
+    <string name="date_copied_clipboard">تم النسخ إلى المحفظة</string>
+    <string name="year_name">أسم السنة</string>
+    <string name="year1">القرد</string>
+    <string name="year2">الديك</string>
+    <string name="year3">الكلب</string>
+    <string name="year4">الخنزير</string>
+    <string name="year5">الجرذ</string>
+    <string name="year6">الثور</string>
+    <string name="year7">النمر</string>
+    <string name="year8">الأرنب</string>
+    <string name="year9">التنين</string>
+    <string name="year10">الأفعى</string>
+    <string name="year11">الحصان</string>
+    <string name="year12">الخروف</string>
+
+    <string name="zodiac">الأبراج الفلكية</string>
+    <string name="capricorn">جدي</string>
+    <string name="aquarius">دلو</string>
+    <string name="pisces">حوت</string>
+    <string name="aries">حمل</string>
+    <string name="taurus">ثور</string>
+    <string name="gemini">جوزاء</string>
+    <string name="cancer">سرطان</string>
+    <string name="leo">أسد</string>
+    <string name="virgo">سنبلة</string>
+    <string name="libra">ميزان</string>
+    <string name="scorpio">عقرب</string>
+    <string name="sagittarius">قوس</string>
+    <string name="moonInScorpio">القمر في العقرب</string>
+
+    <string name="events">المناسبات</string>
+    <string name="no_event">تعذّر العثور على أحداث  أو مناسبات أو عُطَل لليوم</string>
+    <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطَل إذهب إلى الإعدادات > المناسبات</string>
+
+    <string name="sunriseSunView">الشروق</string>
+    <string name="middaySunView">الظهر</string>
+    <string name="sunsetSunView">الغروب</string>
+    <string name="length_of_day">النهار: %sس %sد</string>
+    <string name="remaining_daylight">الوقت المتبقي: %sس %sدs</string>
+    <string name="owghat">أوقات الصلوات</string>
+    <string name="imsak">الإمساك</string>
+    <string name="fajr">أذان الفجر</string>
+    <string name="sunrise">الشروق</string>
+    <string name="dhuhr">أذان الظهر</string>
+    <string name="asr">أذان العصر	</string>
+    <string name="sunset">الغروب</string>
+    <string name="maghrib">أذان المغرب</string>
+    <string name="isha">أذان العشاء</string>
+    <string name="midnight">منتصف الليل</string>
+
+    <!--Date Converter-->
+    <string name="select_type_date">إختيار نوع التاريخ</string>
+    <string name="year">السنة</string>
+    <string name="select_year">إختيار السنة</string>
+    <string name="month">الشهر</string>
+    <string name="select_month">إختيار الشهر</string>
+    <string name="day">اليوم</string>
+    <string name="select_day">إختيار اليوم</string>
+    <string name="date_exception">عذرًا، التاريخ الذي أدخلته غير صالح!</string>
+
+    <!--Compass-->
+    <string name="compass_not_found">تعذّر الوصول لمستشعر البوصلة!</string>
+    <string name="calibrate_compass_summary">لتحسين دقة مستشعر البوصلة أبعد الجهاز عن الأجسام المغناطيسية، وحرك الجهاز بكل الإتجاهات.</string>
+    <string name="level">المستوى</string>
+    <string name="stop">إيقاف</string>
+    <string name="resume">تشغيل</string>
+    <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة، حدد مكانك من الإعدادات > المكان والأذان</string>
+
+    <string name="north">الشمال</string>
+    <string name="east">الشرق</string>
+    <string name="south">الجنوب</string>
+    <string name="west">الغرب</string>
+    <string name="qibla">القبلة</string>
+
+    <!-- Settings -->
+    <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
+    <string name="pref_header_widget_location">المُصغر والتنبيهات</string>
+    <string name="pref_header_location_athan">المكان والأذان</string>
+
+    <!--Interface and Calendar Settings-->
+    <string name="pref_interface">الواجهة</string>
+    <string name="language">اللغة</string>
+    <string name="skin">لون التطبيق</string>
+    <string name="select_skin">إختيار لون التطبيق</string>
+    <string name="persian_digits">الأرقام الهندية</string>
+    <string name="enable_persian_digits">إختيار الأرقام الهندية (١٢٣٤٥٦٧٨٩٠)</string>
+
+    <string name="events_summary">ما المناسبات والأحداث التي يتم عرضها في التقويم</string>
+    <string name="show_device_calendar_events">الأحداث الخاصة</string>
+    <string name="show_device_calendar_events_summary">إظهار الأحداث الشخصية</string>
+    <string name="calendars_priority">التقويم الرئيسي</string>
+    <string name="calendars_priority_summary">تغيير التقويم الرئيسي، ترتيب وإخفاء التقاويم الأخرى</string>
+    <string name="astronomical_info">المعلومات الفلكية</string>
+    <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الأبراج، أسماء الأعوام، القمر في العقرب)</string>
+    <string name="week_of_year">رقم الأسبوع</string>
+    <string name="week_of_year_summary">إظهار رقم الأسبوع في تقويم الرئيسي</string>
+    <string name="week_start">بداية الأسبوع</string>
+    <string name="week_start_summary">إختيار اليوم الذي يبدأ به الأسبوع</string>
+    <string name="week_ends">عطلة نهاية الأسبوع</string>
+    <string name="week_ends_summary">إختيار أيام عطلة نهاية الأسبوع</string>
+    <string name="islamic_offset">تعديل التاريخ الهجري</string>
+    <string name="islamic_offset_summary">تصحيح التاريخ الهجري يدوياً</string>
+    <string name="clock_in_24">نظام 24 ساعة</string>
+    <string name="showing_clock_in_24">إستخدام نظام 24 ساعة</string>
+
+    <!--Widget and Notification Settings-->
+    <string name="widget_text_color">لون النص في المُصغر</string>
+    <string name="select_widgets_text_color">إختيار لونٍ للنص في  المُصغر (الودجت)</string>
+    <string name="clock_on_widget">الساعة في المُصغر</string>
+    <string name="showing_clock_on_widget">إظهار الساعة في المُصغر (الودجت)</string>
+    <string name="iran_time">توقيت إيران</string>
+    <string name="showing_iran_time">إظهار المُصغر (الودجت) والتنبيهات بتوقيت إيران</string>
+    <string name="customize_widget">تخصيص المُصغر</string>
+    <string name="which_one_to_show">إظهار/إخفاء العناصر</string>
+    <string name="customize_widget_summary">إختيار العناصر الظاهرة في التنبيهات والمُصغر (الودجت)</string>
+    <string name="notify_date">تاريخ اليوم في تنبيه</string>
+    <string name="enable_notify">إظهار التواريخ في  تنبيهٍ دائمي</string>
+    <string name="notify_date_lock_screen">إظهار التنبيه في شاشة القفل</string>
+    <string name="notify_date_lock_screen_summary">فقط إذا كانت الشاشة مَحميّة</string>
+
+    <!--Location and Athan-->
+    <string name="gps_location">تحديد المكان باستخدام الـGPS</string>
+    <string name="gps_location_help">لا تحتاج إلى الخيارات الأخرى إذا كان هذا الخيار مفعل</string>
+    <string name="gps_internet_desc">"يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان.
+
+التطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد."</string>
+    <string name="pleasewaitgps">"جارٍ البحث يرجى الانتظار …
+
+
+تأكد أن الـGPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى."</string>
+    <string name="location">المكان</string>
+    <string name="location_help">إذا لم يكن أسم مدينتك موجوداً، حدد الإحداثيات اللازمة أدناه</string>
+    <string name="latitude">خط العرض</string>
+    <string name="longitude">خط الطول</string>
+    <string name="altitude">الأرتفاع</string>
+    <string name="altitude_praytime">وحدة القياس: المتر (إختياري)</string>
+
+    <string name="athan">الأذان</string>
+    <string name="in_city_time">بتوقيت</string>
+    <string name="pray_methods">طرق الحساب</string>
+    <string name="pray_methods_calculation">طرق حساب أوقات الصلاة والقبلة</string>
+    <string name="athan_gap">تقديم الأذان</string>
+    <string name="athan_gap_summary">تقديم الأذان (بالدقائق)</string>
+    <string name="athan_alarm">تنبيهات الأذان</string>
+    <string name="athan_alarm_summary">تفعيل تنبيه الأذان لهذه الصلوات</string>
+    <string name="notification_athan">تنبيه الأذان</string>
+    <string name="enable_notification_athan">إظهار الأذان كتنبيه مع الإهتزاز</string>
+    <string name="custom_athan">إختيار صوت المؤذن</string>
+    <string name="default_athan_name">عبدالباسط عبدالصمد</string>
+    <string name="custom_notification_is_set">تم تخصيص صوت المؤذن</string>
+
+    <string name="default_athan">صوت المؤذن الإفتراضي</string>
+    <string name="default_athan_summary">الرجوع إلى صوت المؤذن الإفتراضي</string>
+    <string name="returned_to_default">تم الرجوع إلى إلى صوت المؤذن الإفتراضي</string>
+    <string name="athan_volume">التحكم بمستوى صوت الأذان</string>
+    <string name="athan_volume_summary">مستوى الصوت</string>
+
+    <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات اللازمة</string>
+
+    <!--Permissions-->
+    <string name="location_access">الوصول للموقع</string>
+    <string name="phone_location_required">يحتاج هذا الجزء من التطبيق إذن الوصول للموقع الجغرافي وإلا يجب عليك إدخال خط الطول وخط العرض يدويًا</string>
+    <string name="calendar_access">الوصول إلى التقويم</string>
+    <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم</string>
+
+    <!--About-->
+    <string name="gpl_logo">شعار GPL</string>
+    <string name="version">الإصدار %s</string>
+    <string name="about_license">الترخيص</string>
+    <string name="about_license_title">ترخيص البرنامج</string>
+    <string name="about_license_sum">راجع  رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
+    <string name="about_license_dialog_close">إغلاق</string>
+
+    <string name="about_support_developers">دعم المطورين</string>
+    <string name="about_report_bug">الإبلاغ عن الأخطاء</string>
+    <string name="about_report_bug_sum">للإبلاغ عن الأخطاء وطلب ميزات جديدة يرجى إستخدام خدمة Github</string>
+    <string name="about_sendMail">البريد الإلكتروني</string>
+    <string name="about_email_sum">إرسال بريد إلكتروني لمطور التطبيق</string>
+    <string name="about_noClient">تعذّر العثور على تطبيق البريد الإلكتروني</string>
+    <string name="about_developers">المطوّرون</string>
+
+    <!--TalkBack, a11y-->
+    <string name="previous_month">الشهر السابق</string>
+    <string name="next_month">الشهر القادم</string>
+    <string name="week_days_name_column">عَمود %s في جدول التواريخ</string>
+    <string name="equivalent_to">ما يُعادل</string>
+    <string name="holiday_reason">عُطلة لأن</string>
+    <string name="nth_week_of_year">الأسبوع %s من السنة</string>
+
+    <!-- New additions, to be categorized, keep the section on your translation -->
+    <string name="empty" />
+
+</resources>

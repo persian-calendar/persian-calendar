@@ -2,9 +2,9 @@ package com.byagowi.persiancalendar.view.sunrisesunset;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,20 +16,23 @@ import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.praytimes.Clock;
+import com.byagowi.persiancalendar.praytimes.PrayTimes;
+import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
-import com.github.praytimes.Clock;
-import com.github.praytimes.PrayTime;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Map;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 /**
@@ -39,18 +42,35 @@ import androidx.core.content.ContextCompat;
 
 public class SunView extends View implements ValueAnimator.AnimatorUpdateListener {
 
+    private final float FULL_DAY = new Clock(24, 0).toInt();
+    private final float HALF_DAY = new Clock(12, 0).toInt();
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
-
-    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor, sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor, middayTextColor, sunsetTextColor;
-
+    @ColorInt
+    int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
+            sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
+            middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
     int width, height;
-
     Path curvePath, nightPath;
-    double segmentByPixel;
-
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
-
-    Map<PrayTime, Clock> prayTime;
+    float current = 0;
+    LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, 0, 0, Shader.TileMode.MIRROR);
+    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    RectF moonRect = new RectF();
+    RectF moonOval = new RectF();
+    String dayLengthString = "";
+    String remainingString = "";
+    String sunriseString = "";
+    String middayString = "";
+    String sunsetString = "";
+    boolean isRTL = false;
+    private double segmentByPixel;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private PrayTimes prayTimes;
+    //    private Horizontal moonPosition;
+    private double moonPhase = 1;
+    private int fontSize;
 
     public SunView(Context context) {
         super(context);
@@ -81,15 +101,16 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
             TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
 
             try {
-                context.getTheme().resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true);
                 int HorizonColor = ContextCompat.getColor(context, typedValue.resourceId);
                 horizonColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true);
                 int TimelineColor = ContextCompat.getColor(context, typedValue.resourceId);
                 timelineColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true);
                 int taglineColor = ContextCompat.getColor(context, typedValue.resourceId);
                 taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor);
                 nightColor = typedArray.getColor(R.styleable.SunView_SunViewNightColor, ContextCompat.getColor(context, R.color.sViewNightColor));
@@ -99,22 +120,29 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
                 sunBeforeMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewBeforeMiddayColor, ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor));
                 sunAfterMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewAfterMiddayColor, ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor));
                 sunEveningColor = typedArray.getColor(R.styleable.SunView_SunViewEveningColor, ContextCompat.getColor(context, R.color.sViewSunEveningColor));
-                context.getTheme().resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true);
                 int SunriseTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 sunriseTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunriseTextColor, SunriseTextColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true);
                 int MiddayTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 middayTextColor = typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor);
-                context.getTheme().resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true);
+                theme.resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true);
                 int SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId);
                 sunsetTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor);
 
+                theme.resolveAttribute(R.attr.colorTextNormal, typedValue, true);
+                colorTextNormal = ContextCompat.getColor(context, typedValue.resourceId);
+                theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true);
+                colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId);
+
+                fontSize = dpToPx(14);
             } finally {
                 typedArray.recycle();
             }
         }
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setTypeface(TypefaceUtils.getAppFont(context));
 
         mSunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSunPaint.setColor(sunColor);
@@ -141,7 +169,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         curvePath = new Path();
         curvePath.moveTo(0, height);
 
-        segmentByPixel = (2 * Math.PI) / width;
+        if (width != 0) {
+            segmentByPixel = (2 * Math.PI) / width;
+        }
 
         for (int x = 0; x <= width; x++) {
             curvePath.lineTo(x, getY(x, segmentByPixel, (int) (height * 0.9f)));
@@ -154,12 +184,9 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         nightPath.close();
     }
 
-    float current = 0;
-
-    // FIXME: I am not sure why I have to create this every time...
-    private LinearGradient createShader() {
-        return new LinearGradient(getWidth() * 0.79f, getHeight() / 2, getWidth() / 4, 0,
-                daySecondColor, dayColor, Shader.TileMode.MIRROR);
+    // https://stackoverflow.com/a/34763668
+    private int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
     @Override
@@ -181,7 +208,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         // draw fill of day
         canvas.clipRect(0, 0, width, height);
         canvas.clipRect(0, 0, width * current, height * 0.75f);
-        mDayPaint.setShader(createShader());
+        mDayPaint.setShader(linearGradient);
         canvas.drawPath(curvePath, mDayPaint);
 
         canvas.restore();
@@ -206,71 +233,47 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         mPaint.setStrokeWidth(2);
         canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint);
         canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint);
-        canvas.drawLine(canvas.getWidth() / 2, height * 0.7f, canvas.getWidth() / 2, height * 0.8f, mPaint);
+        canvas.drawLine(getWidth() / 2f, height * 0.7f, getWidth() / 2f, height * 0.8f, mPaint);
 
         // draw text
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(30);
+        mPaint.setTextSize(fontSize);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(sunriseTextColor);
-        canvas.drawText(getContext().getString(R.string.sunrise), width * 0.17f, height * 0.2f, mPaint);
+        canvas.drawText(sunriseString, width * 0.17f, height * .2f, mPaint);
         mPaint.setColor(middayTextColor);
-        canvas.drawText(getContext().getString(R.string.midday), canvas.getWidth() / 2, canvas.getHeight() - 22, mPaint);
+        canvas.drawText(middayString, width / 2f, height * .94f, mPaint);
         mPaint.setColor(sunsetTextColor);
-        canvas.drawText(getContext().getString(R.string.sunset), width * 0.83f, height * 0.2f, mPaint);
+        canvas.drawText(sunsetString, width * 0.83f, height * .2f, mPaint);
 
         // draw remaining time
-        float sunset = prayTime.get(PrayTime.SUNSET).toInt();
-        float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
-        @SuppressLint("DrawAllocation") float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
-        int dayLength = (int) (sunset - sunrise);
-        int remaining = now > sunset || now < sunrise ? 0 : (int) (sunset - now);
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(30);
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(taggingColor);
-        canvas.drawText(String.format(getContext().getString(R.string.length_of_day),
-                UIUtils.baseClockToString(Clock.fromInt(dayLength))), width * 0.76f, height, mPaint);
-        mPaint.setColor(taggingColor);
-        if (remaining != 0) {
-            canvas.drawText(String.format(getContext().getString(R.string.remaining_daylight),
-                    UIUtils.baseClockToString(Clock.fromInt(remaining))), width * 0.24f, height, mPaint);
+        mPaint.setColor(colorTextSecond);
+        canvas.drawText(dayLengthString, width * (isRTL ? 0.70f : 0.30f), height * .94f, mPaint);
+        if (!TextUtils.isEmpty(remainingString)) {
+            canvas.drawText(remainingString, width * (isRTL ? 0.30f : 0.70f), height * .94f, mPaint);
         }
 
         // draw sun
         if (current >= 0.17f && current <= 0.83f) {
 
-            int color;
-            if (current < 0.5) {
-                color = (int) argbEvaluator.evaluate(current + 0.43f,
-                        sunBeforeMiddayColor, sunAfterMiddayColor);
-            } else {
-                color = (int) argbEvaluator.evaluate(current + 0.001f,
-                        sunBeforeMiddayColor, sunEveningColor);
-            }
+            @ColorInt
+            int color = (int) argbEvaluator.evaluate(current,
+                    sunBeforeMiddayColor, sunAfterMiddayColor);
 
             mSunPaint.setColor(color);
-            mSunRaisePaint.setColor(color);
+            //mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunPaint);
+            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f), mSunPaint);
             //mPaint.clearShadowLayer();
-            canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
+            //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
         } else {
             drawMoon(canvas);
         }
     }
-
-    Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    RectF moonRect = new RectF();
-    RectF moonOval = new RectF();
-
-    //    private Horizontal moonPosition;
-    private double moonPhase = 1;
 
     public void drawMoon(Canvas canvas) {
         // This is brought from QiblaCompassView with some modifications
@@ -303,8 +306,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         canvas.drawArc(moonRect, 270, 180, false, moonPaintB);
         int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
         moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
-        moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
-                px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
+        moonOval.set(px - Math.abs(arcWidth) / 2f, py + eOffset - radius - r,
+                px + Math.abs(arcWidth) / 2f, py + eOffset - radius + r);
         canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
         canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
@@ -316,22 +319,25 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         return height - (height * (float) cos) + (height * 0.1f);
     }
 
-    public void setSunriseSunsetMoonPhase(Map<PrayTime, Clock> prayTime, double moonPhase) {
-        this.prayTime = prayTime;
+    public void setSunriseSunsetMoonPhase(PrayTimes prayTimes, double moonPhase) {
+        this.prayTimes = prayTimes;
         this.moonPhase = moonPhase;
         postInvalidate();
     }
 
-    private final float FULL_DAY = new Clock(24, 0).toInt();
-    private final float HALF_DAY = new Clock(12, 0).toInt();
-
     public void startAnimate(boolean immediate) {
-        if (prayTime == null)
+        Context context = getContext();
+        if (prayTimes == null || context == null)
             return;
 
-        float sunset = prayTime.get(PrayTime.SUNSET).toInt();
-        float sunrise = prayTime.get(PrayTime.SUNRISE).toInt();
-        float midnight = prayTime.get(PrayTime.MIDNIGHT).toInt();
+        isRTL = UIUtils.isRTL(context);
+        sunriseString = context.getString(R.string.sunriseSunView);
+        middayString = context.getString(R.string.middaySunView);
+        sunsetString = context.getString(R.string.sunsetSunView);
+
+        float sunset = prayTimes.getSunsetClock().toInt();
+        float sunrise = prayTimes.getSunriseClock().toInt();
+        float midnight = prayTimes.getMidnightClock().toInt();
 
         if (midnight > HALF_DAY) midnight = midnight - FULL_DAY;
         float now = new Clock(Calendar.getInstance(Locale.getDefault())).toInt();
@@ -351,7 +357,23 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
             }
         }
 
+        Clock dayLength = Clock.fromInt((int) (sunset - sunrise));
+        Clock remaining = Clock.fromInt(now > sunset || now < sunrise ? 0 : (int) (sunset - now));
+        dayLengthString = String.format(context.getString(R.string.length_of_day),
+                Utils.formatNumber(dayLength.getHour()),
+                Utils.formatNumber(dayLength.getMinute()));
+        if (remaining.toInt() == 0) {
+            remainingString = "";
+        } else {
+            remainingString = String.format(context.getString(R.string.remaining_daylight),
+                    Utils.formatNumber(remaining.getHour()),
+                    Utils.formatNumber(remaining.getMinute()));
+        }
+
         argbEvaluator = new ArgbEvaluator();
+
+        linearGradient = new LinearGradient(getWidth() * 0.17f, 0, getWidth() * 0.5f, 0,
+                dayColor, daySecondColor, Shader.TileMode.MIRROR);
 
         if (immediate) {
             current = c;
