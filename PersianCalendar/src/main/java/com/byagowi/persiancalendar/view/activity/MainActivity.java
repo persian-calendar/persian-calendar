@@ -193,11 +193,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                 edit.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
                 edit.apply();
 
-                // restart to preferences
-                Intent intent = getIntent();
-                intent.setAction("PREFERENCE_SHORTCUT");
-                finish();
-                startActivity(intent);
+                restartToSettings();
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
             snackbar.show();
@@ -333,7 +329,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
-            restartActivity();
+            restartToSettings();
         }
 
         if (key.equals(PREF_NOTIFY_DATE)) {
@@ -403,19 +399,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     public void restartActivity() {
         Intent intent = getIntent();
-        NavDestination currentDestination = getNavController().getCurrentDestination();
-        if (currentDestination != null) {
-            @IdRes int id = currentDestination.getId();
-            if (id == R.id.converter)
-                intent.setAction("CONVERTER_SHORTCUT");
-            else if (id == R.id.compass)
-                intent.setAction("COMPASS_SHORTCUT");
-            else if (id == R.id.settings)
-                intent.setAction("PREFERENCE_SHORTCUT");
-            else if (id == R.id.about)
-                intent.setAction("ABOUT_SHORTCUT");
-        }
+        finish();
+        startActivity(intent);
+    }
 
+    public void restartToSettings() {
+        Intent intent = getIntent();
+        intent.setAction("PREFERENCE_SHORTCUT");
         finish();
         startActivity(intent);
     }
