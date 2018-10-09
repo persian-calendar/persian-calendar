@@ -126,16 +126,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     private ActivityMainBinding binding;
     private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
 
-    // https://stackoverflow.com/a/3410200
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Don't replace below with appDependency.getSharedPreferences() ever
@@ -163,12 +153,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         setSupportActionBar(binding.toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            binding.toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-
         }
 
         boolean isRTL = UIUtils.isRTL(this);
