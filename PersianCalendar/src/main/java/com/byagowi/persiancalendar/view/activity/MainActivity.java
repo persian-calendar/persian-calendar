@@ -83,15 +83,16 @@ import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
  * @author ebraminio
  */
 public class MainActivity extends DaggerAppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
-    private ActivityMainBinding binding;
-    private static long creationDateJdn;
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
     MainActivityDependency mainActivityDependency;
-    ActionBar actionBar;
-    boolean settingHasChanged = false;
-    NavOptions mNavOptions;
+    private long creationDateJdn;
+    private ActionBar actionBar;
+    private boolean settingHasChanged = false;
+    private NavOptions mNavOptions;
+    private boolean goToLevelInstead = false;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -454,8 +455,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         actionBar.setTitle(title);
         actionBar.setSubtitle(subtitle);
     }
-
-    boolean goToLevelInstead = false;
 
     public void selectItem(@IdRes int id) {
         if (id == R.id.level) {
