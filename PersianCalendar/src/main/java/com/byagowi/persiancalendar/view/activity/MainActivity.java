@@ -40,6 +40,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -166,12 +167,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         binding.navigation.setNavigationItemSelectedListener(this);
 
-        ImageView seasonImage = binding.navigation.getHeaderView(0).findViewById(R.id.season_image);
-        String s = getSeason();
-        if ("SPRING".equals(s)) seasonImage.setImageResource(R.drawable.spring);
-        else if ("SUMMER".equals(s)) seasonImage.setImageResource(R.drawable.summer);
-        else if ("FALL".equals(s)) seasonImage.setImageResource(R.drawable.fall);
-        else if ("WINTER".equals(s)) seasonImage.setImageResource(R.drawable.winter);
+        ((ImageView) binding.navigation.getHeaderView(0).findViewById(R.id.season_image))
+                .setImageResource(getSeasonImage());
 
         if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
                 && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -217,7 +214,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         return binding.coordinator;
     }
 
-    private String getSeason() {
+    @DrawableRes
+    private int getSeasonImage() {
         boolean isSouthernHemisphere = false;
         Coordinate coordinate = Utils.getCoordinate(this);
         if (coordinate != null && coordinate.getLatitude() < 0) {
@@ -227,10 +225,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         int month = CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
-        if (month < 4) return "SPRING";
-        else if (month < 7) return "SUMMER";
-        else if (month < 10) return "FALL";
-        else return "WINTER";
+        if (month < 4) return R.drawable.spring;
+        else if (month < 7) return R.drawable.summer;
+        else if (month < 10) return R.drawable.fall;
+        else return R.drawable.winter;
     }
 
     @Override
