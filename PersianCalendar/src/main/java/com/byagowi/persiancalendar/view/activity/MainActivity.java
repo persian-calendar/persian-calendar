@@ -442,7 +442,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         if (settingHasChanged) { // update on fragment changes
             Utils.initUtils(this);
-            UpdateUtils.update(getApplicationContext(), false);
+            UpdateUtils.update(getApplicationContext(), true);
             settingHasChanged = false; // reset for the next time
         }
 
