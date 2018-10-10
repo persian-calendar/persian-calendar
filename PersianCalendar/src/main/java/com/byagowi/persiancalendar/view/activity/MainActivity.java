@@ -49,7 +49,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -92,6 +91,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     MainActivityDependency mainActivityDependency;
     ActionBar actionBar;
     boolean settingHasChanged = false;
+    NavOptions mNavOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,17 +145,25 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        mNavOptions = new NavOptions.Builder()
+                .setEnterAnim(android.R.anim.fade_in)
+                .setExitAnim(android.R.anim.fade_out)
+                .setPopEnterAnim(android.R.anim.fade_in)
+                .setPopExitAnim(android.R.anim.fade_out)
+                .build();
+
         String action = getIntent() != null ? getIntent().getAction() : null;
-        if ("COMPASS_SHORTCUT".equals(action)) {
-            selectItem(R.id.compass);
-        } else if ("PREFERENCE_SHORTCUT".equals(action)) {
-            selectItem(R.id.settings);
-        } else if ("CONVERTER_SHORTCUT".equals(action)) {
-            selectItem(R.id.converter);
-        } else if ("ABOUT_SHORTCUT".equals(action)) {
-            selectItem(R.id.about);
+        if ("COMPASS".equals(action)) {
+            bringCompass();
+        } else if ("LEVEL".equals(action)) {
+            bringLevel();
+        } else if ("CONVERTER".equals(action)) {
+            bringConverter();
+        } else if ("SETTINGS".equals(action)) {
+            bringSettings();
         } else {
-            selectItem(R.id.calendar);
+            bringCalendar();
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -355,7 +363,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
                     == PackageManager.PERMISSION_GRANTED) {
                 UIUtils.toggleShowDeviceCalendarOnPreference(this, true);
-                NavDestination currentDestination = getNavController().getCurrentDestination();
+                NavDestination currentDestination = Navigation
+                        .findNavController(this, R.id.nav_host_fragment)
+                        .getCurrentDestination();
                 if (currentDestination != null && currentDestination.getId() == R.id.calendar) {
                     restartActivity();
                 }
@@ -407,13 +417,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     public void restartToSettings() {
         Intent intent = getIntent();
-        intent.setAction("PREFERENCE_SHORTCUT");
+        intent.setAction("SETTINGS");
         finish();
         startActivity(intent);
-    }
-
-    public void selectItem(@IdRes int id) {
-        onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
     }
 
     @Override
@@ -426,7 +432,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         menuItem.setCheckable(true);
         menuItem.setChecked(true);
 
-        getNavController().navigate(menuItem.getItemId());
+        @IdRes int destination = menuItem.getItemId();
+        if (goToLevelInstead) {
+            destination = R.id.level;
+            goToLevelInstead = false; // reset for the next time
+        }
+        Navigation.findNavController(this, R.id.nav_host_fragment)
+                .navigate(destination, null, mNavOptions);
 
         if (settingHasChanged) { // update on fragment changes
             Utils.initUtils(this);
@@ -442,29 +454,33 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         actionBar.setSubtitle(subtitle);
     }
 
-    protected NavOptions getNavOptions() {
-        return new NavOptions.Builder()
-                .setEnterAnim(android.R.anim.fade_in)
-                .setExitAnim(android.R.anim.fade_out)
-                .setPopEnterAnim(android.R.anim.fade_in)
-                .setPopExitAnim(android.R.anim.fade_out)
-                .build();
+    boolean goToLevelInstead = false;
+
+    public void selectItem(@IdRes int id) {
+        if (id == R.id.level) {
+            goToLevelInstead = true;
+            id = R.id.compass;
+        }
+        onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
     }
 
-    private NavController getNavController() {
-        return Navigation.findNavController(this, R.id.nav_host_fragment);
+    public void bringCalendar() {
+        selectItem(R.id.calendar);
+    }
+
+    public void bringConverter() {
+        selectItem(R.id.converter);
     }
 
     public void bringLevel() {
-        getNavController().navigate(R.id.level, null, getNavOptions());
+        selectItem(R.id.level);
     }
 
     public void bringCompass() {
-        getNavController().navigate(R.id.compass, null, getNavOptions());
+        selectItem(R.id.compass);
     }
 
-    // Don't use above pattern here, we like to
-    public void bringPreferences() {
+    public void bringSettings() {
         selectItem(R.id.settings);
     }
 
