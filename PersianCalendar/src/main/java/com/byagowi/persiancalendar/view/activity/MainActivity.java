@@ -443,6 +443,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         if (settingHasChanged) { // update on fragment changes
             Utils.initUtils(this);
             UpdateUtils.update(getApplicationContext(), false);
+            settingHasChanged = false; // reset for the next time
         }
 
         binding.drawer.closeDrawers();
