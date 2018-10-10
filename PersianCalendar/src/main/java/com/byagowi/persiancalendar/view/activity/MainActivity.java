@@ -51,6 +51,7 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import dagger.android.support.DaggerAppCompatActivity;
 
@@ -441,16 +442,25 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         actionBar.setSubtitle(subtitle);
     }
 
+    protected NavOptions getNavOptions() {
+        return new NavOptions.Builder()
+                .setEnterAnim(android.R.anim.fade_in)
+                .setExitAnim(android.R.anim.fade_out)
+                .setPopEnterAnim(android.R.anim.fade_in)
+                .setPopExitAnim(android.R.anim.fade_out)
+                .build();
+    }
+
     private NavController getNavController() {
         return Navigation.findNavController(this, R.id.nav_host_fragment);
     }
 
     public void bringLevel() {
-        getNavController().navigate(R.id.level);
+        getNavController().navigate(R.id.level, null, getNavOptions());
     }
 
     public void bringCompass() {
-        getNavController().navigate(R.id.compass);
+        getNavController().navigate(R.id.compass, null, getNavOptions());
     }
 
     // Don't use above pattern here, we like to
