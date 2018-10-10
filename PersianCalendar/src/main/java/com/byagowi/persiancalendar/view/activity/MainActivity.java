@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,24 +30,18 @@ import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
-import com.byagowi.persiancalendar.view.fragment.CompassFragment;
-import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import net.androgames.level.LevelFragment;
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -56,7 +49,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
 import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
@@ -81,50 +76,21 @@ import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
 import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 
+
 /**
  * Program activity for android
  *
  * @author ebraminio
  */
 public class MainActivity extends DaggerAppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int CALENDAR = 0,
-            CONVERTER = 1,
-            COMPASS = 2,
-            PREFERENCE = 3,
-            ABOUT = 4, // EXIT = 5
-            DEFAULT = CALENDAR; // Default selected fragment
+    private ActivityMainBinding binding;
     private static long creationDateJdn;
-    private final String TAG = MainActivity.class.getName();
-    private final List<Class<? extends Fragment>> fragments = Arrays.asList(
-            CalendarFragment.class,
-            ConverterFragment.class,
-            CompassFragment.class,
-            SettingsFragment.class,
-            AboutFragment.class
-    );
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
     MainActivityDependency mainActivityDependency;
-
-    // A never used migration
-//    private void oneTimeClockDisablingForAndroid5LE() {
-//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-//            String key = "oneTimeClockDisablingForAndroid5LE";
-//            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//            if (!prefs.getBoolean(key, false)) {
-//                SharedPreferences.Editor edit = prefs.edit();
-//                edit.putBoolean(Constants.PREF_WIDGET_CLOCK, false);
-//                edit.putBoolean(key, true);
-//                edit.apply();
-//            }
-//        }
-//    }
     ActionBar actionBar;
     boolean settingHasChanged = false;
-    private ActivityMainBinding binding;
-    private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,15 +146,15 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         drawerToggle.syncState();
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS_SHORTCUT".equals(action)) {
-            selectItem(COMPASS);
+            selectItem(R.id.compass);
         } else if ("PREFERENCE_SHORTCUT".equals(action)) {
-            selectItem(PREFERENCE);
+            selectItem(R.id.settings);
         } else if ("CONVERTER_SHORTCUT".equals(action)) {
-            selectItem(CONVERTER);
+            selectItem(R.id.converter);
         } else if ("ABOUT_SHORTCUT".equals(action)) {
-            selectItem(ABOUT);
+            selectItem(R.id.about);
         } else {
-            selectItem(DEFAULT);
+            selectItem(R.id.calendar);
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -200,25 +166,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         binding.navigation.setNavigationItemSelectedListener(this);
-        ImageView seasonImage = binding.navigation
-                .getHeaderView(0).findViewById(R.id.season_image);
-        switch (getSeason()) {
-            case "SPRING":
-                seasonImage.setImageResource(R.drawable.spring);
-                break;
 
-            case "SUMMER":
-                seasonImage.setImageResource(R.drawable.summer);
-                break;
-
-            case "FALL":
-                seasonImage.setImageResource(R.drawable.fall);
-                break;
-
-            case "WINTER":
-                seasonImage.setImageResource(R.drawable.winter);
-                break;
-        }
+        ((ImageView) binding.navigation.getHeaderView(0).findViewById(R.id.season_image))
+                .setImageResource(getSeasonImage());
 
         if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
                 && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -233,14 +183,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
             snackbarView.setOnClickListener(v -> snackbar.dismiss());
             snackbar.setAction("Settings", view -> {
-                menuPosition = PREFERENCE;
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
                 edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 edit.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
                 edit.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
                 edit.apply();
-                restartActivity();
+
+                restartToSettings();
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
             snackbar.show();
@@ -252,27 +202,20 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         actionBar = getSupportActionBar();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.appbarLayout.setOutlineProvider(null);
+        }
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
-    }
-
-    private void bringFragment(Class<? extends Fragment> fragment) {
-        try {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_holder, fragment.newInstance(), fragment.getName())
-                    .commit();
-        } catch (Exception e) {
-            Log.e(TAG, fragment.getName() + " is selected as an index", e);
-        }
     }
 
     public CoordinatorLayout getCoordinator() {
         return binding.coordinator;
     }
 
-    private String getSeason() {
+    @DrawableRes
+    private int getSeasonImage() {
         boolean isSouthernHemisphere = false;
         Coordinate coordinate = Utils.getCoordinate(this);
         if (coordinate != null && coordinate.getLatitude() < 0) {
@@ -282,10 +225,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         int month = CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
-        if (month < 4) return "SPRING";
-        else if (month < 7) return "SUMMER";
-        else if (month < 10) return "FALL";
-        else return "WINTER";
+        if (month < 4) return R.drawable.spring;
+        else if (month < 7) return R.drawable.summer;
+        else if (month < 10) return R.drawable.fall;
+        else return R.drawable.winter;
     }
 
     @Override
@@ -387,7 +330,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
-            restartActivity();
+            restartToSettings();
         }
 
         if (key.equals(PREF_NOTIFY_DATE)) {
@@ -411,7 +354,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
                     == PackageManager.PERMISSION_GRANTED) {
                 UIUtils.toggleShowDeviceCalendarOnPreference(this, true);
-                if (menuPosition == CALENDAR) {
+                NavDestination currentDestination = getNavController().getCurrentDestination();
+                if (currentDestination != null && currentDestination.getId() == R.id.calendar) {
                     restartActivity();
                 }
             } else {
@@ -440,26 +384,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     }
 
     @Override
-    public void onBackPressed() {
-        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-            binding.drawer.closeDrawers();
-        } else if (menuPosition != DEFAULT) {
-            selectItem(DEFAULT);
-        } else {
-            CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
-                    .findFragmentByTag(CalendarFragment.class.getName());
-
-            if (calendarFragment != null) {
-                if (calendarFragment.closeSearch()) {
-                    return;
-                }
-            }
-
-            finish();
-        }
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Checking for the "menu" key
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -476,25 +400,19 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     public void restartActivity() {
         Intent intent = getIntent();
-        if (menuPosition == CONVERTER)
-            intent.setAction("CONVERTER_SHORTCUT");
-        else if (menuPosition == COMPASS)
-            intent.setAction("COMPASS_SHORTCUT");
-        else if (menuPosition == PREFERENCE)
-            intent.setAction("PREFERENCE_SHORTCUT");
-        else if (menuPosition == ABOUT)
-            intent.setAction("ABOUT_SHORTCUT");
-
         finish();
         startActivity(intent);
     }
 
-    public void bringPreferences() {
-        selectItem(PREFERENCE);
+    public void restartToSettings() {
+        Intent intent = getIntent();
+        intent.setAction("PREFERENCE_SHORTCUT");
+        finish();
+        startActivity(intent);
     }
 
-    public void selectItem(int item) {
-        onNavigationItemSelected(binding.navigation.getMenu().getItem(item));
+    public void selectItem(@IdRes int id) {
+        onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
     }
 
     @Override
@@ -507,33 +425,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         menuItem.setCheckable(true);
         menuItem.setChecked(true);
 
-        int item = -1;
-        switch (menuItem.getItemId()) {
-            case R.id.calendar:
-                item = CALENDAR;
-                break;
-            case R.id.converter:
-                item = CONVERTER;
-                break;
-            case R.id.compass:
-                item = COMPASS;
-                break;
-            case R.id.settings:
-                item = PREFERENCE;
-                break;
-            case R.id.about:
-                item = ABOUT;
-                break;
-        }
+        getNavController().navigate(menuItem.getItemId());
 
-        if (menuPosition != item) {
-            if (settingHasChanged && menuPosition == PREFERENCE) { // update on returning from preferences
-                Utils.initUtils(this);
-                UpdateUtils.update(getApplicationContext(), true);
-            }
-
-            bringFragment(fragments.get(item));
-            menuPosition = item;
+        if (settingHasChanged) { // update on fragment changes
+            Utils.initUtils(this);
+            UpdateUtils.update(getApplicationContext(), false);
         }
 
         binding.drawer.closeDrawers();
@@ -545,11 +441,37 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         actionBar.setSubtitle(subtitle);
     }
 
-    public void toggleToLevel() {
-        bringFragment(LevelFragment.class);
+    private NavController getNavController() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment);
     }
 
-    public void toggleToCompass() {
-        bringFragment(CompassFragment.class);
+    public void bringLevel() {
+        getNavController().navigate(R.id.level);
+    }
+
+    public void bringCompass() {
+        getNavController().navigate(R.id.compass);
+    }
+
+    // Don't use above pattern here, we like to
+    public void bringPreferences() {
+        selectItem(R.id.settings);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawers();
+        } else {
+            CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
+                    .findFragmentByTag(CalendarFragment.class.getName());
+
+            if (calendarFragment != null) {
+                if (calendarFragment.closeSearch())
+                    return;
+            }
+
+            super.onBackPressed();
+        }
     }
 }

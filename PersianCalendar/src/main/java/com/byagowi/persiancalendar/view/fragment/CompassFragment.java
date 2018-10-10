@@ -176,7 +176,7 @@ public class CompassFragment extends DaggerFragment {
                 item.setTitle(stop ? R.string.resume : R.string.stop);
                 break;
             case R.id.level:
-                mainActivityDependency.getMainActivity().toggleToLevel();
+                mainActivityDependency.getMainActivity().bringLevel();
                 break;
             case R.id.help:
                 createAndShowSnackbar(getView(), sensorNotFound

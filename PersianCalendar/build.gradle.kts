@@ -65,12 +65,15 @@ dependencies {
   val leakCanaryVersion = "1.6.1"
   val junitVersion = "4.12"
   val daggerVersion = "2.16"
+  val navigationVersion = "1.0.0-alpha06"
 
   implementation("androidx.appcompat:appcompat:$androidXVersion")
   implementation("androidx.preference:preference:$androidXVersion")
   implementation("androidx.recyclerview:recyclerview:$androidXVersion")
   implementation("androidx.cardview:cardview:$androidXVersion")
   implementation("com.google.android.material:material:$androidXVersion")
+  implementation("android.arch.navigation:navigation-fragment:$navigationVersion")
+  implementation("android.arch.navigation:navigation-ui:$navigationVersion")
   implementation("com.google.android:flexbox:1.1.0")
   implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0") {
     because("to provide a DashClock extension")
