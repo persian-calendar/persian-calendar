@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView
-                android:id="@+id/day_picker_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/card_margin"
-                app:cardBackgroundColor="?attr/colorCard">
+                android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.view.CalendarsView
-                    android:id="@+id/calendars_view"
+                <com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView
+                    android:id="@+id/day_picker_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/card_margin"
+                    app:cardBackgroundColor="?attr/colorCard">
 
-        </LinearLayout>
+                    <com.byagowi.persiancalendar.view.CalendarsView
+                        android:id="@+id/calendars_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-    </ScrollView>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/today_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_restore_modified" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

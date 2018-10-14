@@ -38,8 +38,13 @@ public class ConverterFragment extends DaggerFragment {
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
-        binding.calendarsView.setOnTodayButtonClickListener(
-                () -> dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
+        binding.todayButton.setOnClickListener(v -> dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
+        binding.calendarsView.setOnShowHideTodayButton(show -> {
+            if (show)
+                binding.todayButton.show();
+            else
+                binding.todayButton.hide();
+        });
 
         dayPickerView.setOnSelectedDayChangedListener(jdn -> {
             if (jdn == -1) {

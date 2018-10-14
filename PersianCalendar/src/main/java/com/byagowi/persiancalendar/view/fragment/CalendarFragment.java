@@ -95,7 +95,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         @Override
         public void onPageSelected(int position) {
             sendBroadcastToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
-            mCalendarsView.showTodayIcon();
+            mMainBinding.todayButton.show();
         }
 
     };
@@ -119,7 +119,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         titles.add(getString(R.string.calendar));
         mCalendarsView = new CalendarsView(context);
         mCalendarsView.setOnCalendarsViewExpandListener(() -> mMainBinding.cardsViewPager.measureCurrentView(mCalendarsView));
-        mCalendarsView.setOnTodayButtonClickListener(this::bringTodayYearMonth);
+        mCalendarsView.setOnShowHideTodayButton(show -> {
+            if (show)
+                mMainBinding.todayButton.show();
+            else
+                mMainBinding.todayButton.hide();
+        });
+        mMainBinding.todayButton.setOnClickListener(v -> bringTodayYearMonth());
         tabs.add(mCalendarsView);
 
         titles.add(getString(R.string.events));
