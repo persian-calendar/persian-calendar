@@ -15,7 +15,8 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/calendarViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/grid_calendar_height" />
+                android:layout_height="@dimen/grid_calendar_height"
+                android:background="?attr/colorMonthsBackground" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
+    <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorCard" format="reference" />
     <attr name="colorBackground" format="reference" />
     <attr name="colorTextPrimary" format="reference" />
@@ -33,6 +34,7 @@
     <attr name="colorTextDaySelected" format="reference" />
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
@@ -91,6 +93,7 @@
 
     <!-- Base application theme. -->
     <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
@@ -149,6 +152,7 @@
     </style>
 
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary_dark</item>
         <item name="colorAccent">@color/blue_accent</item>
@@ -207,6 +211,7 @@
     </style>
 
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_primary</item>
         <item name="colorPrimaryDark">@color/modern_primary_dark</item>
         <item name="colorAccent">@color/modern_accent</item>
