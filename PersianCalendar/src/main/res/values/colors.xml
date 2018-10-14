@@ -57,7 +57,7 @@
 
     <color name="blue_primary">#1a237e</color>
     <color name="blue_primary_dark">#000000</color>
-    <color name="blue_accent">#0D47A1</color>
+    <color name="blue_accent">#1a237e</color>
     <color name="blue_text_normal">#232323</color>
     <color name="blue_text_second">#737373</color>
     <color name="blue_text_primary">#0D47A1</color>
@@ -78,7 +78,7 @@
     <color name="blue_drawer_background">#f4f4f4</color>
     <color name="blue_drawer_select">#eeeeee</color>
     <color name="blue_icon">#0D47A1</color>
-    <color name="blue_icon_drawer">#232323</color>
+    <color name="blue_icon_drawer">#1a237e</color>
     <color name="blue_menu_icon_color">#88ffffff</color>
 
     <color name="modern_primary">#FFFFFF</color>
