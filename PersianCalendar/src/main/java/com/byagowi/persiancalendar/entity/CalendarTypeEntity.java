@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entity;
 
-import calendar.CalendarType;
+import com.byagowi.persiancalendar.util.CalendarType;
 
 public class CalendarTypeEntity {
     private final CalendarType type;

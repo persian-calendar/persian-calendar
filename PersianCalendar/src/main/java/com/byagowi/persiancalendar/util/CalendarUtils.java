@@ -12,6 +12,10 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
+import com.byagowi.persiancalendar.calendar.CivilDate;
+import com.byagowi.persiancalendar.calendar.IslamicDate;
+import com.byagowi.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 
@@ -22,17 +26,13 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
-import calendar.AbstractDate;
-import calendar.CalendarType;
-import calendar.CivilDate;
-import calendar.IslamicDate;
-import calendar.PersianDate;
 
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 
 public class CalendarUtils {
+    private final static long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
+
     static public AbstractDate getDateOfCalendar(CalendarType calendar, int year, int month, int day) {
         switch (calendar) {
             case ISLAMIC:
@@ -42,33 +42,6 @@ public class CalendarUtils {
             case SHAMSI:
             default:
                 return new PersianDate(year, month, day);
-        }
-    }
-
-    static public long getJdnOfCalendar(CalendarType calendar, int year, int month, int day) {
-        switch (calendar) {
-            case ISLAMIC:
-                return new IslamicDate(year, month, day).toJdn();
-            case GREGORIAN:
-                return new CivilDate(year, month, day).toJdn();
-            case SHAMSI:
-            default:
-                return new PersianDate(year, month, day).toJdn();
-        }
-    }
-
-    static public int getMonthLength(CalendarType calendar, int year, int month) {
-        switch (calendar) {
-            case ISLAMIC:
-                return (int) (new IslamicDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new IslamicDate(year, month, 1).toJdn());
-            case GREGORIAN:
-                return (int) (new CivilDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new CivilDate(year, month, 1).toJdn());
-            case SHAMSI:
-            default:
-                return (int) (new PersianDate(month == 12 ? year + 1 : year, month == 12 ? 1 : month + 1, 1).toJdn() -
-                        new PersianDate(year, month, 1).toJdn());
         }
     }
 
@@ -84,7 +57,23 @@ public class CalendarUtils {
         }
     }
 
-    static public Calendar makeCalendarFromDate(Date date) {
+    static public CalendarType getCalendarTypeFromDate(AbstractDate date) {
+        if (date instanceof IslamicDate)
+            return CalendarType.ISLAMIC;
+        else if (date instanceof CivilDate)
+            return CalendarType.GREGORIAN;
+        else
+            return CalendarType.SHAMSI;
+    }
+
+    static public int getMonthLength(CalendarType calendar, int year, int month) {
+        int yearOfNextMonth = month == 12 ? year + 1 : year;
+        int nextMonth = month == 12 ? 1 : month + 1;
+        return (int) (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() -
+                getDateOfCalendar(calendar, year, month, 1).toJdn());
+    }
+
+    static Calendar makeCalendarFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         if (Utils.isIranTime()) {
             calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
@@ -98,36 +87,8 @@ public class CalendarUtils {
                 Utils.formatNumber(date.getMonth()), Utils.formatNumber(date.getDayOfMonth()));
     }
 
-    static public CivilDate getGregorianToday() {
-        return calendarToCivilDate(makeCalendarFromDate(new Date()));
-    }
-
-    static public long getTodayJdn() {
-        return getGregorianToday().toJdn();
-    }
-
-    static public PersianDate getPersianToday() {
-        return new PersianDate(getTodayJdn());
-    }
-
-    static public IslamicDate getIslamicToday() {
-        return new IslamicDate(getTodayJdn());
-    }
-
-    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
-        switch (calendar) {
-            case ISLAMIC:
-                return getIslamicToday();
-            case GREGORIAN:
-                return getGregorianToday();
-            case SHAMSI:
-            default:
-                return getPersianToday();
-        }
-    }
-
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + dateToString(date);
+        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + formatDate(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -138,12 +99,20 @@ public class CalendarUtils {
         return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
     }
 
+    static public long getTodayJdn() {
+        return calendarToCivilDate(makeCalendarFromDate(new Date())).toJdn();
+    }
+
+    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
+        return getDateFromJdnOfCalendar(calendar, getTodayJdn());
+    }
+
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
         long dayOfYear = jdn - startOfYearJdn;
         return (int) Math.ceil(1 + (dayOfYear - Utils.fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
-    static public String dateToString(AbstractDate date) {
+    static public String formatDate(AbstractDate date) {
         return String.format(Utils.getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
                 Utils.formatNumber(date.getDayOfMonth()), getMonthName(date),
                 Utils.formatNumber(date.getYear()));
@@ -158,8 +127,6 @@ public class CalendarUtils {
                 TimeUnit.DAYS.toMillis(365 * 2));
         return allEnabledAppointments;
     }
-
-    private final static long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
 
     public static SparseArray<List<DeviceCalendarEvent>> readDayDeviceEvents(Context context, long jdn) {
         if (jdn == -1) {
@@ -210,7 +177,7 @@ public class CalendarUtils {
                             CalendarContract.Instances.RRULE,          // 6
                             CalendarContract.Instances.VISIBLE,        // 7
                             CalendarContract.Instances.ALL_DAY,        // 8
-                            CalendarContract.Instances.EVENT_COLOR     // 10
+                            CalendarContract.Instances.EVENT_COLOR     // 9
                     }, null, null, null);
 
             if (cursor == null) {
@@ -228,8 +195,8 @@ public class CalendarUtils {
 
                 Date startDate = new Date(cursor.getLong(3));
                 Date endDate = new Date(cursor.getLong(4));
-                Calendar startCalendar = CalendarUtils.makeCalendarFromDate(startDate);
-                Calendar endCalendar = CalendarUtils.makeCalendarFromDate(endDate);
+                Calendar startCalendar = makeCalendarFromDate(startDate);
+                Calendar endCalendar = makeCalendarFromDate(endDate);
 
                 CivilDate civilDate = calendarToCivilDate(startCalendar);
 
@@ -247,11 +214,11 @@ public class CalendarUtils {
                     title = "\uD83D\uDCC5 " + title;
                 } else {
                     title = "\uD83D\uDD53 " + title;
-                    title += " (" + UIUtils.baseClockToString(startCalendar.get(Calendar.HOUR_OF_DAY),
+                    title += " (" + UIUtils.baseFormatClock(startCalendar.get(Calendar.HOUR_OF_DAY),
                             startCalendar.get(Calendar.MINUTE));
 
                     if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0) {
-                        title += "-" + UIUtils.baseClockToString(endCalendar.get(Calendar.HOUR_OF_DAY),
+                        title += "-" + UIUtils.baseFormatClock(endCalendar.get(Calendar.HOUR_OF_DAY),
                                 endCalendar.get(Calendar.MINUTE));
                     }
 
@@ -280,14 +247,6 @@ public class CalendarUtils {
         }
     }
 
-    // Based on Mehdi's work
-    public static boolean isMoonInScorpio(PersianDate persianDate, IslamicDate islamicDate) {
-        int res = (int) (((((float) (islamicDate.getDayOfMonth() + 1) * 12.2f) +
-                (persianDate.getDayOfMonth() + 1)) / 30.f) + persianDate.getMonth());
-        if (res > 12) res -= 12;
-        return res == 8;
-    }
-
     // Extra helpers
     public static Calendar civilDateToCalendar(CivilDate civilDate) {
         Calendar cal = Calendar.getInstance();
@@ -303,49 +262,6 @@ public class CalendarUtils {
                 calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-
-    @StringRes
-    final private static int[] YEARS_NAME = {
-            R.string.year10, R.string.year11, R.string.year12,
-            R.string.year1, R.string.year2, R.string.year3,
-            R.string.year4, R.string.year5, R.string.year6,
-            R.string.year7, R.string.year8, R.string.year9
-    };
-
-    @StringRes
-    final private static int[] ZODIAC_MONTHS = {
-            R.string.empty,
-            R.string.aries, R.string.taurus, R.string.gemini,
-            R.string.cancer, R.string.leo, R.string.virgo,
-            R.string.libra, R.string.scorpio, R.string.sagittarius,
-            R.string.capricorn, R.string.aquarius, R.string.pisces
-    };
-
-    @StringRes
-    final private static int[] ZODIAC_MONTHS_EMOJI = {
-            R.string.empty,
-            R.string.aries_emoji, R.string.taurus_emoji, R.string.gemini_emoji,
-            R.string.cancer_emoji, R.string.leo_emoji, R.string.virgo_emoji,
-            R.string.libra_emoji, R.string.scorpio_emoji, R.string.sagittarius_emoji,
-            R.string.capricorn_emoji, R.string.aquarius_emoji, R.string.pisces_emoji
-    };
-
-    // Based on Mehdi's work
-    static public String getZodiacInfo(Context context, long jdn, boolean withEmoji) {
-        if (!Utils.isAstronomicalFeaturesEnabled()) return "";
-
-        PersianDate persianDate = new PersianDate(jdn);
-        IslamicDate islamicDate = new IslamicDate(jdn);
-        return String.format("%s: %s\n%s: %s %s\n%s",
-                context.getString(R.string.year_name),
-                context.getString(YEARS_NAME[persianDate.getYear() % 12]),
-                context.getString(R.string.zodiac),
-                withEmoji ? context.getString(ZODIAC_MONTHS_EMOJI[persianDate.getMonth()]) : "",
-                context.getString(ZODIAC_MONTHS[persianDate.getMonth()]),
-                CalendarUtils.isMoonInScorpio(persianDate, islamicDate)
-                        ? context.getString(R.string.moonInScorpio) : "").trim();
-    }
-
     static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
                                            SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                            boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
@@ -359,12 +275,11 @@ public class CalendarUtils {
             result.append("\n");
         }
 
-        AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(
-                Utils.getMainCalendar(), jdn);
+        AbstractDate mainDate = getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn);
 
         if (withTitle) {
             result.append("\n");
-            result.append(CalendarUtils.dayTitleSummary(mainDate));
+            result.append(dayTitleSummary(mainDate));
         }
 
         if (withOtherCalendars) {
@@ -398,9 +313,9 @@ public class CalendarUtils {
         }
 
         if (Utils.isWeekOfYearEnabled()) {
-            long startOfYearJdn = CalendarUtils.getJdnOfCalendar(Utils.getMainCalendar(),
-                    mainDate.getYear(), 1, 1);
-            int weekOfYearStart = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
+            long startOfYearJdn = getDateOfCalendar(Utils.getMainCalendar(),
+                    mainDate.getYear(), 1, 1).toJdn();
+            int weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn);
             result.append("\n");
             result.append("\n");
             result.append(String.format(context.getString(R.string.nth_week_of_year),
@@ -408,7 +323,7 @@ public class CalendarUtils {
         }
 
         if (withZodiac) {
-            String zodiac = getZodiacInfo(context, jdn, false);
+            String zodiac = AstronomicalUtils.getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
                 result.append("\n");
                 result.append("\n");

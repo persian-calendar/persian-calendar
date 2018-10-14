@@ -1,13 +1,11 @@
 package com.byagowi.persiancalendar.entity;
 
-/**
- * PersianCalendarEvent
- *
- * @author ebraminio
- */
-abstract public class AbstractEvent {
-    protected String title;
-    protected boolean holiday;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
+
+abstract public class AbstractEvent<T extends AbstractDate> {
+    T date;
+    String title;
+    boolean holiday;
 
     public String getTitle() {
         return title;
@@ -19,5 +17,9 @@ abstract public class AbstractEvent {
 
     public String toString() {
         return title;
+    }
+
+    public T getDate() {
+        return date;
     }
 }

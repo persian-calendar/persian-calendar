@@ -26,6 +26,9 @@ import androidx.core.app.NotificationCompat;
 
 public class AthanNotification extends Service {
 
+    private static final int NOTIFICATION_ID = 1002;
+    String NOTIFICATION_CHANNEL_ID = "1002";
+
     @Nullable
     public static AthanNotification getInstance() {
         return null;
@@ -35,9 +38,6 @@ public class AthanNotification extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-    private static final int NOTIFICATION_ID = 1002;
-    String NOTIFICATION_CHANNEL_ID = "1002";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

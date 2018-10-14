@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,18 +20,17 @@ import android.widget.TextView;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
-import com.byagowi.persiancalendar.view.fragment.CompassFragment;
-import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
-import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
-import com.github.praytimes.Coordinate;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -40,15 +38,26 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
@@ -65,60 +74,31 @@ import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
 import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
+import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
+
 
 /**
  * Program activity for android
  *
  * @author ebraminio
  */
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int CALENDAR = 0,
-            CONVERTER = 1,
-            COMPASS = 2,
-            PREFERENCE = 3,
-            ABOUT = 4,
-            EXIT = 5,
-            DEFAULT = CALENDAR; // Default selected fragment
-    private final String TAG = MainActivity.class.getName();
+public class MainActivity extends DaggerAppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+    @Inject
+    AppDependency appDependency; // same object from App
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    private long creationDateJdn;
+    private ActionBar actionBar;
+    private boolean settingHasChanged = false;
+    private NavOptions mNavOptions;
+    private boolean goToLevelInstead = false;
     private ActivityMainBinding binding;
-    private final Class<?>[] fragments = {
-            CalendarFragment.class,
-            ConverterFragment.class,
-            CompassFragment.class,
-            SettingsFragment.class,
-            AboutFragment.class
-    };
-    private int menuPosition = -1; // it should be zero otherwise #selectItem won't be called
-
-    // https://stackoverflow.com/a/3410200
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    // A never used migration
-    private void oneTimeClockDisablingForAndroid5LE() {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            String key = "oneTimeClockDisablingForAndroid5LE";
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            if (!prefs.getBoolean(key, false)) {
-                SharedPreferences.Editor edit = prefs.edit();
-                edit.putBoolean(Constants.PREF_WIDGET_CLOCK, false);
-                edit.putBoolean(key, true);
-                edit.apply();
-            }
-        }
-    }
-
-    private static long creationDateJdn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Don't replace below with appDependency.getSharedPreferences() ever
+        // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
 
@@ -142,12 +122,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setSupportActionBar(binding.toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            binding.toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-
         }
 
         boolean isRTL = UIUtils.isRTL(this);
@@ -171,17 +147,29 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        mNavOptions = new NavOptions.Builder()
+                .setEnterAnim(android.R.anim.fade_in)
+                .setExitAnim(android.R.anim.fade_out)
+                .setPopEnterAnim(android.R.anim.fade_in)
+                .setPopExitAnim(android.R.anim.fade_out)
+                .build();
+
         String action = getIntent() != null ? getIntent().getAction() : null;
-        if ("COMPASS_SHORTCUT".equals(action)) {
-            selectItem(COMPASS);
-        } else if ("PREFERENCE_SHORTCUT".equals(action)) {
-            selectItem(PREFERENCE);
-        } else if ("CONVERTER_SHORTCUT".equals(action)) {
-            selectItem(CONVERTER);
-        } else if ("ABOUT_SHORTCUT".equals(action)) {
-            selectItem(ABOUT);
+        if ("COMPASS".equals(action)) {
+            bringCompass();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.compass));
+        } else if ("LEVEL".equals(action)) {
+            bringLevel();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.level));
+        } else if ("CONVERTER".equals(action)) {
+            bringConverter();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.converter));
+        } else if ("SETTINGS".equals(action)) {
+            bringSettings();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.settings));
         } else {
-            selectItem(DEFAULT);
+            checkMenu(binding.navigation.getMenu().findItem(R.id.calendar));
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -193,29 +181,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         binding.navigation.setNavigationItemSelectedListener(this);
-        ImageView seasonImage = binding.navigation
-                .getHeaderView(0).findViewById(R.id.season_image);
-        switch (getSeason()) {
-            case "SPRING":
-                seasonImage.setImageResource(R.drawable.spring);
-                break;
 
-            case "SUMMER":
-                seasonImage.setImageResource(R.drawable.summer);
-                break;
-
-            case "FALL":
-                seasonImage.setImageResource(R.drawable.fall);
-                break;
-
-            case "WINTER":
-                seasonImage.setImageResource(R.drawable.winter);
-                break;
-        }
+        ((ImageView) binding.navigation.getHeaderView(0).findViewById(R.id.season_image))
+                .setImageResource(getSeasonImage());
 
         if (prefs.getString(PREF_APP_LANGUAGE, "N/A").equals("N/A")
                 && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
-            Snackbar snackbar = Snackbar.make(binding.coordinator, "✖  Change app language?",
+            Snackbar snackbar = Snackbar.make(getCoordinator(), "✖  Change app language?",
                     10000);
             View snackbarView = snackbar.getView();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -226,14 +198,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             snackbarView.setOnClickListener(v -> snackbar.dismiss());
             snackbar.setAction("Settings", view -> {
-                menuPosition = PREFERENCE;
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US);
                 edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 edit.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
                 edit.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
                 edit.apply();
-                restartActivity();
+
+                restartToSettings();
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
             snackbar.show();
@@ -244,27 +216,46 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             edit.apply();
         }
 
+        actionBar = getSupportActionBar();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.appbarLayout.setOutlineProvider(null);
+        }
+
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
     }
 
-    private String getSeason() {
+    void checkMenu(MenuItem menuItem) {
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+
+        if (settingHasChanged) { // update when checked menu item is changed
+            Utils.initUtils(this);
+            UpdateUtils.update(getApplicationContext(), true);
+            settingHasChanged = false; // reset for the next time
+        }
+    }
+
+    public CoordinatorLayout getCoordinator() {
+        return binding.coordinator;
+    }
+
+    @DrawableRes
+    private int getSeasonImage() {
         boolean isSouthernHemisphere = false;
         Coordinate coordinate = Utils.getCoordinate(this);
         if (coordinate != null && coordinate.getLatitude() < 0) {
             isSouthernHemisphere = true;
         }
 
-        int month = CalendarUtils.getPersianToday().getMonth();
+        int month = CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
-        if (month < 4) return "SPRING";
-        else if (month < 7) return "SUMMER";
-        else if (month < 10) return "FALL";
-        else return "WINTER";
+        if (month < 4) return R.drawable.spring;
+        else if (month < 7) return R.drawable.summer;
+        else if (month < 10) return R.drawable.fall;
+        else return R.drawable.winter;
     }
-
-    boolean settingHasChanged = false;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -276,9 +267,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             boolean changeToGregorianCalendar = false;
             boolean changeToPersianCalendar = false;
             boolean changeToIranEvents = false;
-            switch (sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)) {
+            String lang = sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
+            if (lang == null) lang = "";
+            switch (lang) {
                 case LANG_EN_US:
-                    persianDigits = false;
                     changeToGregorianCalendar = true;
                     break;
                 case LANG_FA:
@@ -320,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-                if (currentHolidays.isEmpty() ||
+                if (currentHolidays == null || currentHolidays.isEmpty() ||
                         (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("afghanistan_holidays")));
@@ -330,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Set<String> currentHolidays =
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-                if (currentHolidays.isEmpty() ||
+                if (currentHolidays == null || currentHolidays.isEmpty() ||
                         (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("iran_holidays")));
@@ -339,12 +331,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (changeToGregorianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI");
+                editor.putString(PREF_WEEK_START, "1");
+                editor.putStringSet(PREF_WEEK_ENDS, new HashSet<>(Collections.singletonList("1")));
             } else if (changeToIslamicCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
             } else if (changeToPersianCalendar) {
                 editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI");
                 editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
+                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START);
+                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
             }
             editor.apply();
         }
@@ -358,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         if (key.equals(PREF_APP_LANGUAGE) || key.equals(PREF_THEME)) {
-            restartActivity();
+            restartToSettings();
         }
 
         if (key.equals(PREF_NOTIFY_DATE)) {
@@ -370,6 +368,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
+
+        appDependency.getLocalBroadcastManager()
+                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
     }
 
     @Override
@@ -378,12 +379,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
                     == PackageManager.PERMISSION_GRANTED) {
-                UIUtils.toggleShowCalendarOnPreference(this, true);
-                if (menuPosition == CALENDAR) {
+                UIUtils.toggleShowDeviceCalendarOnPreference(this, true);
+                NavDestination currentDestination = Navigation
+                        .findNavController(this, R.id.nav_host_fragment)
+                        .getCurrentDestination();
+                if (currentDestination != null && currentDestination.getId() == R.id.calendar) {
                     restartActivity();
                 }
             } else {
-                UIUtils.toggleShowCalendarOnPreference(this, false);
+                UIUtils.toggleShowDeviceCalendarOnPreference(this, false);
             }
         }
     }
@@ -408,26 +412,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     @Override
-    public void onBackPressed() {
-        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-            binding.drawer.closeDrawers();
-        } else if (menuPosition != DEFAULT) {
-            selectItem(DEFAULT);
-        } else {
-            CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
-                    .findFragmentByTag(CalendarFragment.class.getName());
-
-            if (calendarFragment != null) {
-                if (calendarFragment.closeSearch()) {
-                    return;
-                }
-            }
-
-            finish();
-        }
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Checking for the "menu" key
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -444,75 +428,87 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     public void restartActivity() {
         Intent intent = getIntent();
-        if (menuPosition == CONVERTER)
-            intent.setAction("CONVERTER_SHORTCUT");
-        else if (menuPosition == COMPASS)
-            intent.setAction("COMPASS_SHORTCUT");
-        else if (menuPosition == PREFERENCE)
-            intent.setAction("PREFERENCE_SHORTCUT");
-        else if (menuPosition == ABOUT)
-            intent.setAction("ABOUT_SHORTCUT");
-
         finish();
         startActivity(intent);
     }
 
-    public void bringPreferences() {
-        selectItem(PREFERENCE);
-    }
-
-    public void selectItem(int item) {
-        onNavigationItemSelected(binding.navigation.getMenu().getItem(item));
+    public void restartToSettings() {
+        Intent intent = getIntent();
+        intent.setAction("SETTINGS");
+        finish();
+        startActivity(intent);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.exit) {
             finish();
             return true;
         }
 
-        menuItem.setCheckable(true);
-        menuItem.setChecked(true);
+        checkMenu(menuItem);
 
-        int item = -1;
-        switch (menuItem.getItemId()) {
-            case R.id.calendar:
-                item = CALENDAR;
-                break;
-            case R.id.converter:
-                item = CONVERTER;
-                break;
-            case R.id.compass:
-                item = COMPASS;
-                break;
-            case R.id.settings:
-                item = PREFERENCE;
-                break;
-            case R.id.about:
-                item = ABOUT;
-                break;
+        @IdRes int destination = menuItem.getItemId();
+        if (goToLevelInstead) {
+            destination = R.id.level;
+            goToLevelInstead = false; // reset for the next time
         }
-
-        if (menuPosition != item) {
-            if (settingHasChanged && menuPosition == PREFERENCE) { // update on returning from preferences
-                Utils.initUtils(this);
-                UpdateUtils.update(getApplicationContext(), true);
-            }
-
-            try {
-                Fragment fragment = (Fragment) fragments[item].newInstance();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, fragment, fragments[item].getName())
-                        .commit();
-                menuPosition = item;
-            } catch (Exception e) {
-                Log.e(TAG, item + " is selected as an index", e);
-            }
-        }
+        Navigation.findNavController(this, R.id.nav_host_fragment)
+                .navigate(destination, null, mNavOptions);
 
         binding.drawer.closeDrawers();
         return true;
+    }
+
+    public void setTitleAndSubtitle(String title, String subtitle) {
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
+    }
+
+    public void selectItem(@IdRes int id) {
+        if (id == R.id.level) {
+            goToLevelInstead = true;
+            id = R.id.compass;
+        }
+        onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
+    }
+
+    public void bringConverter() {
+        selectItem(R.id.converter);
+    }
+
+    public void bringLevel() {
+        selectItem(R.id.level);
+    }
+
+    public void bringCompass() {
+        selectItem(R.id.compass);
+    }
+
+    public void bringSettings() {
+        selectItem(R.id.settings);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawers();
+        } else {
+            CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
+                    .findFragmentByTag(CalendarFragment.class.getName());
+
+            if (calendarFragment != null) {
+                if (calendarFragment.closeSearch())
+                    return;
+            }
+
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            if (!navController.navigateUp())
+                super.onBackPressed();
+
+            NavDestination currentDestination = navController.getCurrentDestination();
+            if (currentDestination != null)
+                checkMenu(binding.navigation.getMenu().findItem(currentDestination.getId()));
+        }
     }
 }

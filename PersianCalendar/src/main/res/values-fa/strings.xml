@@ -49,14 +49,14 @@
     <string name="closeDrawer">بستن</string>
     <string name="openDrawer">گشودن</string>
     <string name="imsak">امساک</string>
-    <string name="azan1">اذان صبح</string>
-    <string name="azan2">اذان ظهر</string>
-    <string name="azan3">عصر</string>
-    <string name="azan4">اذان مغرب</string>
-    <string name="azan5">عشاء</string>
-    <string name="aftab1">طلوع آفتاب</string>
-    <string name="aftab2">غروب آفتاب</string>
-    <string name="aftab3">نیمه‌شب شرعی</string>
+    <string name="fajr">اذان صبح</string>
+    <string name="dhuhr">اذان ظهر</string>
+    <string name="asr">عصر</string>
+    <string name="maghrib">اذان مغرب</string>
+    <string name="isha">عشاء</string>
+    <string name="sunrise">طلوع آفتاب</string>
+    <string name="sunset">غروب آفتاب</string>
+    <string name="midnight">نیمه‌شب شرعی</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">مناسبت‌ها</string>
     <string name="events_summary">چه نوع مناسبت‌هایی در تقویم نمایش داده شود</string>
@@ -124,9 +124,9 @@
     <string name="start_of_year_diff">%s روز (~%s هفته و یا %s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%s روز (~%s هفته و یا %s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
-    <string name="sunrise">طلوع</string>
-    <string name="midday">ظهر</string>
-    <string name="sunset">غروب</string>
+    <string name="sunriseSunView">طلوع</string>
+    <string name="middaySunView">ظهر</string>
+    <string name="sunsetSunView">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
     <string name="length_of_day">طول روز: %sس %sد</string>
     <string name="remaining_daylight">باقی‌مانده: %sس %sد</string>
@@ -170,6 +170,7 @@
     <string name="pref_header_location_athan">موقعیت و اذان</string>
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
+    <string name="continue_button">ادامه</string>
 
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>
@@ -187,5 +188,10 @@
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+    <string name="north">شمال</string>
+    <string name="east">شرق</string>
+    <string name="south">جنوب</string>
+    <string name="west">غرب</string>
+    <string name="qibla">قبله</string>
 
 </resources>

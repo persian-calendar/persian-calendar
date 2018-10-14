@@ -6,56 +6,57 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
 import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
 
 import java.util.List;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
+    private final int startingDayOfWeek;
+    private final int totalDays;
+    private final ViewGroup.LayoutParams layoutParams;
+    private final DaysPaintResources daysPaintResources;
+    private CalendarFragmentDependency calendarFragmentDependency;
     private SparseArray<List<DeviceCalendarEvent>> monthEvents = new SparseArray<>();
     private List<DayEntity> days;
     private boolean isArabicDigit;
-    private final int startingDayOfWeek;
-    private final int totalDays;
     private int weekOfYearStart;
     private int weeksCount;
     private Context context;
-    private final ViewGroup.LayoutParams layoutParams;
-    private final DaysPaintResources daysPaintResources;
+    private int selectedDay = -1;
 
-    public void initializeMonthEvents(Context context) {
-        if (Utils.isShowDeviceCalendarEvents()) {
-            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
-        }
-    }
-
-    public MonthAdapter(Context context, List<DayEntity> days,
+    public MonthAdapter(CalendarFragmentDependency calendarFragmentDependency, List<DayEntity> days,
                         int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
+        this.calendarFragmentDependency = calendarFragmentDependency;
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
         totalDays = days.size();
         this.days = days;
         this.weekOfYearStart = weekOfYearStart;
         this.weeksCount = weeksCount;
-        this.context = context;
+        this.context = calendarFragmentDependency.getCalendarFragment().getContext();
         initializeMonthEvents(context);
         isArabicDigit = Utils.isArabicDigitSelected();
 
         layoutParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 context.getResources().getDimensionPixelSize(R.dimen.day_item_size));
-        daysPaintResources = new DaysPaintResources(context);
+        this.daysPaintResources = calendarFragmentDependency.getDaysPaintResources();
     }
 
-    private int selectedDay = -1;
+    public void initializeMonthEvents(Context context) {
+        if (Utils.isShowDeviceCalendarEvents()) {
+            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
+        }
+    }
 
     public void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;
@@ -72,8 +73,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         notifyItemChanged(selectedDay);
     }
 
+    @NonNull
     @Override
-    public MonthAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MonthAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemDayView itemDayView = new ItemDayView(parent.getContext(), daysPaintResources);
         itemDayView.setLayoutParams(layoutParams);
         return new ViewHolder(itemDayView);
@@ -98,22 +100,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MonthAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MonthAdapter.ViewHolder holder, int position) {
         holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
         return 7 * (Utils.isWeekOfYearEnabled() ? 8 : 7); // days of week * month view rows
-    }
-
-    private static CalendarFragment getCalendarFragment(View view) {
-        Context ctx = view.getContext();
-        if (ctx != null && ctx instanceof FragmentActivity) {
-            return (CalendarFragment) ((FragmentActivity) ctx).getSupportFragmentManager()
-                    .findFragmentByTag(CalendarFragment.class.getName());
-        }
-        return null;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -129,10 +122,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             long jdn = itemDayView.getJdn();
             if (jdn == -1) return;
 
-            CalendarFragment calendarFragment = getCalendarFragment(v);
-            if (calendarFragment != null) {
-                calendarFragment.selectDay(jdn);
-            }
+            calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
             MonthAdapter.this.selectDay(itemDayView.getDayOfMonth());
         }
 
@@ -144,11 +134,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             long jdn = itemDayView.getJdn();
             if (jdn == -1) return false;
 
-            CalendarFragment calendarFragment = getCalendarFragment(v);
-            if (calendarFragment != null) {
-                calendarFragment.addEventOnCalendar(jdn);
-            }
-
+            calendarFragmentDependency.getCalendarFragment().addEventOnCalendar(jdn);
             return false;
         }
 

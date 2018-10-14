@@ -1,22 +1,22 @@
 package com.byagowi.persiancalendar.entity;
 
-import com.github.praytimes.Coordinate;
+import com.byagowi.persiancalendar.praytimes.Coordinate;
 
 /**
  * Created by ebraminio on 2/18/16.
  */
 public class CityEntity {
-    private String key;
-    private String en;
-    private String fa;
-    private String ckb;
-    private String ar;
-    private String countryCode;
-    private String countryEn;
-    private String countryFa;
-    private String countryCkb;
-    private String countryAr;
-    private Coordinate coordinate;
+    final private String key;
+    final private String en;
+    final private String fa;
+    final private String ckb;
+    final private String ar;
+    final private String countryCode;
+    final private String countryEn;
+    final private String countryFa;
+    final private String countryCkb;
+    final private String countryAr;
+    final private Coordinate coordinate;
 
     public CityEntity(String key, String en, String fa, String ckb, String ar, String countryCode,
                       String countryEn, String countryFa, String countryCkb, String countryAr,

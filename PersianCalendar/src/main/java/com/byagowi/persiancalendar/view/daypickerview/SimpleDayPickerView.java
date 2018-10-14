@@ -11,9 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
@@ -21,34 +23,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.databinding.DataBindingUtil;
-import calendar.AbstractDate;
-import calendar.CalendarType;
 
 public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
         DayPickerView {
     SimpleDayPickerViewBinding binding;
+    private long jdn = -1;
+    private OnSelectedDayChangedListener selectedDayListener = jdn -> {
+    };
 
     public SimpleDayPickerView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public SimpleDayPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public SimpleDayPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private long jdn = -1;
-
-    private void init() {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.simple_day_picker_view, this,
-                true);
+    private void init(Context context) {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context),
+                R.layout.simple_day_picker_view, this, true);
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -72,7 +72,7 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
             if (day > CalendarUtils.getMonthLength(selectedCalendarType, year, month))
                 throw new Exception("Not a valid day");
 
-            return CalendarUtils.getJdnOfCalendar(selectedCalendarType, year, month, day);
+            return CalendarUtils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn();
         } catch (Exception e) {
             Toast.makeText(getContext(), getContext().getString(R.string.date_exception),
                     Toast.LENGTH_SHORT).show();
@@ -147,9 +147,6 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
     public CalendarType getSelectedCalendarType() {
         return ((CalendarTypeEntity) binding.calendarTypeSpinner.getSelectedItem()).getType();
     }
-
-    private OnSelectedDayChangedListener selectedDayListener = jdn -> {
-    };
 
     @Override
     public void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener) {

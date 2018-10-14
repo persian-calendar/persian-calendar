@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,29 +25,31 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding;
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding;
-import com.byagowi.persiancalendar.util.UIUtils;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.google.android.material.chip.Chip;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
+import dagger.android.support.DaggerFragment;
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends DaggerFragment {
+
+    @Inject
+    MainActivityDependency mainActivityDependency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Activity activity = getActivity();
-        if (activity == null) return null;
+        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
 
-        FragmentAboutBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_about,
-                container, false);
-
-        UIUtils.setActivityTitleAndSubtitle(activity, getString(R.string.about), "");
+        MainActivity activity = mainActivityDependency.getMainActivity();
+        activity.setTitleAndSubtitle(getString(R.string.about), "");
 
         // version
         String[] version = programVersion(activity).split("-");
@@ -68,8 +69,7 @@ public class AboutFragment extends Fragment {
             scrollView.addView(licenseTextView);
             builder.setView(scrollView);
             builder.setCancelable(true);
-            builder.setNegativeButton(R.string.about_license_dialog_close, (dialog, which) -> {
-            });
+            builder.setNegativeButton(R.string.about_license_dialog_close, null);
             builder.show();
         });
 
@@ -97,12 +97,11 @@ public class AboutFragment extends Fragment {
         });
 
         binding.email.setOnClickListener(arg -> {
-            DialogEmailBinding emailBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_email,
-                    container, false);
-            new AlertDialog.Builder(getActivity())
+            DialogEmailBinding emailBinding = DialogEmailBinding.inflate(inflater, container, false);
+            new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                     .setView(emailBinding.getRoot())
                     .setTitle(R.string.about_email_sum)
-                    .setPositiveButton(R.string.resume, (dialog, id) -> {
+                    .setPositiveButton(R.string.continue_button, (dialog, id) -> {
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts
                                 ("mailto", "ebrahim@gnu.org", null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
@@ -115,7 +114,7 @@ public class AboutFragment extends Fragment {
                             Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
+                    .setNegativeButton(R.string.cancel, null).show();
         });
 
         Drawable developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer);

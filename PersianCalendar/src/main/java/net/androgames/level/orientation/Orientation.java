@@ -30,17 +30,17 @@ public enum Orientation {
     private int reverse;
     private int rotation;
 
+    Orientation(int reverse, int rotation) {
+        this.reverse = reverse;
+        this.rotation = rotation;
+    }
+
     public int getReverse() {
         return reverse;
     }
 
     public int getRotation() {
         return rotation;
-    }
-
-    Orientation(int reverse, int rotation) {
-        this.reverse = reverse;
-        this.rotation = rotation;
     }
 
     public boolean isLevel(float pitch, float roll, float balance, float sensibility) {

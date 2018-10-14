@@ -20,15 +20,13 @@ public class CardsViewPager extends RtlViewPager {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mCurrentView == null) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            return;
+        if (mCurrentView != null) {
+            int height = 0;
+            mCurrentView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            int h = mCurrentView.getMeasuredHeight();
+            if (h > height) height = h;
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
         }
-        int height = 0;
-        mCurrentView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        int h = mCurrentView.getMeasuredHeight();
-        if (h > height) height = h;
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }

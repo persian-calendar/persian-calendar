@@ -150,8 +150,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name="net.androgames.level.Level" />
-
     </application>
 
 </manifest>

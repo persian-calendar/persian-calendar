@@ -12,6 +12,7 @@
     <string name="help">Help</string>
     <string name="more">More</string>
     <string name="cancel">Cancel</string>
+    <string name="continue_button">Continue</string>
 
     <!-- No need for translation, remove the section from your translation -->
     <string name="about_developers_list" translatable="false">"Ebrahim Byagowi (@ebraminio)
@@ -115,21 +116,21 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="no_event">No event or appointment is found for this day.</string>
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
 
-    <string name="sunrise">Sunrise</string>
-    <string name="midday">Midday</string>
-    <string name="sunset">Sunset</string>
+    <string name="sunriseSunView">Sunrise</string>
+    <string name="middaySunView">Midday</string>
+    <string name="sunsetSunView">Sunset</string>
     <string name="length_of_day">Daytime: %sh %sm</string>
     <string name="remaining_daylight">Remaining: %sh %sm</string>
     <string name="owghat">Pray times</string>
     <string name="imsak">Imsak</string>
-    <string name="azan1">Fajr</string>
-    <string name="aftab1">Sunrise</string>
-    <string name="azan2">Dhuhr</string>
-    <string name="azan3">Asr</string>
-    <string name="aftab2">Sunset</string>
-    <string name="azan4">Maghrib</string>
-    <string name="azan5">Isha</string>
-    <string name="aftab3">Midnight</string>
+    <string name="fajr">Fajr</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="sunset">Sunset</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+    <string name="midnight">Midnight</string>
 
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>
@@ -148,6 +149,12 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="stop">Stop</string>
     <string name="resume">Resume</string>
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
+
+    <string name="north">North</string>
+    <string name="east">East</string>
+    <string name="south">South</string>
+    <string name="west">West</string>
+    <string name="qibla">Qibla</string>
 
     <!-- Settings -->
     <string name="pref_header_interface_calendar">Interface and Calendar</string>

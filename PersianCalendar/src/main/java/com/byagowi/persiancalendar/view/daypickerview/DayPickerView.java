@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.view.daypickerview;
 
-import calendar.CalendarType;
+import com.byagowi.persiancalendar.util.CalendarType;
 
 public interface DayPickerView {
     void setDayJdnOnView(long jdn);
@@ -9,9 +9,9 @@ public interface DayPickerView {
 
     CalendarType getSelectedCalendarType();
 
+    void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener);
+
     interface OnSelectedDayChangedListener {
         void onSelectedDayChanged(long jdn);
     }
-
-    void setOnSelectedDayChangedListener(OnSelectedDayChangedListener listener);
 }

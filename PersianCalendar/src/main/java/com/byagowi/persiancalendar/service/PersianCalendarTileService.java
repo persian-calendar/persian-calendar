@@ -8,11 +8,10 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-
-import calendar.AbstractDate;
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.

@@ -7,11 +7,12 @@
     <string name="widget_mini_name">التقويم الفارسي (صغير)</string>
     <string name="closeDrawer">إغلاق</string>
     <string name="openDrawer">فتح</string>
-    <string name="cancel">إلغاء</string>
     <string name="accept">موافق</string>
     <string name="add">إضافة</string>
     <string name="help">مساعدة</string>
     <string name="more">المزيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="continue_button">تشغيل</string>
 
     <!--Navigation drawers-->
     <string name="calendar">التقويم</string>
@@ -36,7 +37,7 @@
     <string name="end_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) إلى آخر السنة</string>
     <string name="date_copied_clipboard">تم النسخ إلى المحفظة</string>
     <string name="year_name">أسم السنة</string>
-	<string name="year1">القرد</string>
+    <string name="year1">القرد</string>
     <string name="year2">الديك</string>
     <string name="year3">الكلب</string>
     <string name="year4">الخنزير</string>
@@ -68,21 +69,21 @@
     <string name="no_event">تعذّر العثور على أحداث  أو مناسبات أو عُطَل لليوم</string>
     <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطَل إذهب إلى الإعدادات > المناسبات</string>
 
-    <string name="sunrise">الشروق</string>
-    <string name="midday">الظهر</string>
-    <string name="sunset">الغروب</string>
+    <string name="sunriseSunView">الشروق</string>
+    <string name="middaySunView">الظهر</string>
+    <string name="sunsetSunView">الغروب</string>
     <string name="length_of_day">النهار: %sس %sد</string>
     <string name="remaining_daylight">الوقت المتبقي: %sس %sدs</string>
     <string name="owghat">أوقات الصلوات</string>
     <string name="imsak">الإمساك</string>
-    <string name="azan1">أذان الفجر</string>
-    <string name="aftab1">الشروق</string>
-    <string name="azan2">أذان الظهر</string>
-    <string name="azan3">أذان العصر	</string>
-    <string name="aftab2">الغروب</string>
-    <string name="azan4">أذان المغرب</string>
-    <string name="azan5">أذان العشاء</string>
-    <string name="aftab3">منتصف الليل</string>
+    <string name="fajr">أذان الفجر</string>
+    <string name="sunrise">الشروق</string>
+    <string name="dhuhr">أذان الظهر</string>
+    <string name="asr">أذان العصر	</string>
+    <string name="sunset">الغروب</string>
+    <string name="maghrib">أذان المغرب</string>
+    <string name="isha">أذان العشاء</string>
+    <string name="midnight">منتصف الليل</string>
 
     <!--Date Converter-->
     <string name="select_type_date">إختيار نوع التاريخ</string>
@@ -101,6 +102,12 @@
     <string name="stop">إيقاف</string>
     <string name="resume">تشغيل</string>
     <string name="set_location">لمعرفة مكان الشمس والقمر والقبلة، حدد مكانك من الإعدادات > المكان والأذان</string>
+
+    <string name="north">الشمال</string>
+    <string name="east">الشرق</string>
+    <string name="south">الجنوب</string>
+    <string name="west">الغرب</string>
+    <string name="qibla">القبلة</string>
 
     <!-- Settings -->
     <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
@@ -190,8 +197,8 @@
     <!--Permissions-->
     <string name="location_access">الوصول للموقع</string>
     <string name="phone_location_required">يحتاج هذا الجزء من التطبيق إذن الوصول للموقع الجغرافي وإلا يجب عليك إدخال خط الطول وخط العرض يدويًا</string>
-    <string name="calendar_access">دسترسی به تقویم دستگاه</string>
-    <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
+    <string name="calendar_access">الوصول إلى التقويم</string>
+    <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم</string>
 
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>

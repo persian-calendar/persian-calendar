@@ -7,25 +7,31 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding;
-import com.byagowi.persiancalendar.util.UIUtils;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 
-import androidx.databinding.DataBindingUtil;
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import dagger.android.support.DaggerFragment;
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-public class SettingsFragment extends Fragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.settings), "");
+public class SettingsFragment extends DaggerFragment {
+    @Inject
+    MainActivityDependency mainActivityDependency;
 
-        FragmentSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),
-                R.layout.fragment_settings, container, false);
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.settings), "");
+
+        FragmentSettingsBinding binding = FragmentSettingsBinding.inflate(
+                LayoutInflater.from(container.getContext()), container, false);
 
         binding.viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), 3));
         binding.tabLayout.setupWithViewPager(binding.viewPager);

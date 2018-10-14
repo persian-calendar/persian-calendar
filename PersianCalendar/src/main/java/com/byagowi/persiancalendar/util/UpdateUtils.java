@@ -21,19 +21,18 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
+import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.github.praytimes.Clock;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
-import calendar.AbstractDate;
-import calendar.CalendarType;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
@@ -128,7 +127,7 @@ public class UpdateUtils {
                 remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
             }
 
-            String mainDateString = CalendarUtils.dateToString(date);
+            String mainDateString = CalendarUtils.formatDate(date);
 
             {
                 // Widget 4x1
@@ -204,7 +203,7 @@ public class UpdateUtils {
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
                     text2 = text2 + "\n" + subtitle + "\n" +
-                            CalendarUtils.getZodiacInfo(context, jdn, true);
+                            AstronomicalUtils.getZodiacInfo(context, jdn, true);
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 

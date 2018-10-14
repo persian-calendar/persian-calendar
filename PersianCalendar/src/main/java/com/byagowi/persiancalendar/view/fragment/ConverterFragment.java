@@ -7,28 +7,33 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import calendar.CalendarType;
+import javax.inject.Inject;
 
-public class ConverterFragment extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import dagger.android.support.DaggerFragment;
+
+public class ConverterFragment extends DaggerFragment {
+    @Inject
+    MainActivityDependency mainActivityDependency;
+
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        UIUtils.setActivityTitleAndSubtitle(getActivity(), getString(R.string.date_converter), "");
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.date_converter), "");
 
-        FragmentConverterBinding binding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_converter, container, false);
+        FragmentConverterBinding binding = FragmentConverterBinding.inflate(inflater,
+                container, false);
         DayPickerView dayPickerView = binding.dayPickerView;
 
         binding.calendarsView.expand(true);

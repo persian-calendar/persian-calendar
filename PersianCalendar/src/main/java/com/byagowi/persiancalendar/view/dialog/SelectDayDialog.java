@@ -5,18 +5,27 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 import com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView;
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialogFragment;
+import dagger.android.support.DaggerAppCompatDialogFragment;
 
 /**
  * Created by ebrahim on 3/20/16.
  */
-public class SelectDayDialog extends AppCompatDialogFragment {
+public class SelectDayDialog extends DaggerAppCompatDialogFragment {
     private static String BUNDLE_KEY = "jdn";
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    @Inject
+    CalendarFragmentDependency calendarFragmentDependency;
 
     public static SelectDayDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -27,24 +36,23 @@ public class SelectDayDialog extends AppCompatDialogFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        long jdn = args.getLong(BUNDLE_KEY, -1);
+        long jdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
 
-        DayPickerView dayPickerView = new SimpleDayPickerView(getContext());
+        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        DayPickerView dayPickerView = new SimpleDayPickerView(mainActivity);
         dayPickerView.setDayJdnOnView(jdn);
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(mainActivity)
                 .setView((View) dayPickerView)
                 .setCustomTitle(null)
                 .setPositiveButton(R.string.go, (dialogInterface, i) -> {
-                    CalendarFragment calendarFragment = (CalendarFragment) getActivity()
-                            .getSupportFragmentManager()
-                            .findFragmentByTag(CalendarFragment.class.getName());
-
                     long resultJdn = dayPickerView.getDayJdnFromView();
-                    if (resultJdn != -1) calendarFragment.bringDate(resultJdn);
+                    if (resultJdn != -1)
+                        calendarFragmentDependency.getCalendarFragment().bringDate(resultJdn);
                 }).create();
     }
 }

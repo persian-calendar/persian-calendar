@@ -1,5 +1,6 @@
 package net.androgames.level.orientation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,7 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
 
-import net.androgames.level.Level;
 import net.androgames.level.view.LevelView;
 
 import java.util.List;
@@ -34,31 +34,6 @@ import java.util.List;
 public final class OrientationProvider implements SensorEventListener {
 
     private static final int MIN_VALUES = 20;
-
-    private Sensor sensor;
-    private SensorManager sensorManager;
-
-    /**
-     * indicates whether or not Accelerometer Sensor is running
-     */
-    private boolean running = false;
-
-    /**
-     * Orientation
-     */
-    private float pitch;
-    private float roll;
-    private float balance;
-    private float tmp;
-    private float oldPitch;
-    private float oldRoll;
-    private float oldBalance;
-    private float minStep = 360;
-    private float refValues = 0;
-    private Orientation orientation;
-    private boolean locked;
-    private int displayOrientation;
-
     /**
      * Rotation Matrix
      */
@@ -67,14 +42,33 @@ public final class OrientationProvider implements SensorEventListener {
     private final float[] R = new float[16];
     private final float[] outR = new float[16];
     private final float[] LOC = new float[3];
-
-    private Level level;
+    private Sensor sensor;
+    private SensorManager sensorManager;
+    /**
+     * indicates whether or not Accelerometer Sensor is running
+     */
+    private boolean running = false;
+    /**
+     * Orientation
+     */
+    private float pitch;
+    private float roll;
+    private float balance;
+    private float minStep = 360;
+    private float refValues = 0;
+    private int displayOrientation;
     private LevelView view;
 
-    public OrientationProvider(Level level, LevelView view) {
-        this.level = level;
+    public OrientationProvider(Activity activity, LevelView view) {
         this.view = view;
-        this.displayOrientation = level.getWindowManager().getDefaultDisplay().getRotation();
+        this.displayOrientation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager == null) return;
+
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if (sensors.size() == 0) return;
+
+        this.sensor = sensors.get(0);
     }
 
     /**
@@ -93,7 +87,7 @@ public final class OrientationProvider implements SensorEventListener {
             if (sensorManager != null) {
                 sensorManager.unregisterListener(this);
             }
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
     }
 
@@ -102,14 +96,8 @@ public final class OrientationProvider implements SensorEventListener {
      */
     public void startListening() {
         // register listener and start listening
-        sensorManager = (SensorManager) level.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager == null) return;
-
-        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
-        if (sensors.size() == 0) return;
-
-        sensor = sensors.get(0);
-        running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sensorManager == null || sensor == null) return;
+        running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -119,9 +107,9 @@ public final class OrientationProvider implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        oldPitch = pitch;
-        oldRoll = roll;
-        oldBalance = balance;
+        float oldPitch = pitch;
+        float oldRoll = roll;
+        float oldBalance = balance;
 
         SensorManager.getRotationMatrix(R, I, event.values, MAG);
 
@@ -161,7 +149,7 @@ public final class OrientationProvider implements SensorEventListener {
         SensorManager.getOrientation(outR, LOC);
 
         // normalize z on ux, uy
-        tmp = (float) Math.sqrt(outR[8] * outR[8] + outR[9] * outR[9]);
+        float tmp = (float) Math.sqrt(outR[8] * outR[8] + outR[9] * outR[9]);
         tmp = (tmp == 0 ? 0 : outR[8] / tmp);
 
         // LOC[0] compass
@@ -185,26 +173,25 @@ public final class OrientationProvider implements SensorEventListener {
             }
         }
 
-        if (!locked || orientation == null) {
-            if (pitch < -45 && pitch > -135) {
-                // top side up
-                orientation = Orientation.TOP;
-            } else if (pitch > 45 && pitch < 135) {
-                // bottom side up
-                orientation = Orientation.BOTTOM;
-            } else if (roll > 45) {
-                // right side up
-                orientation = Orientation.RIGHT;
-            } else if (roll < -45) {
-                // left side up
-                orientation = Orientation.LEFT;
-            } else {
-                // landing
-                orientation = Orientation.LANDING;
-            }
+        Orientation orientation;
+        if (pitch < -45 && pitch > -135) {
+            // top side up
+            orientation = Orientation.TOP;
+        } else if (pitch > 45 && pitch < 135) {
+            // bottom side up
+            orientation = Orientation.BOTTOM;
+        } else if (roll > 45) {
+            // right side up
+            orientation = Orientation.RIGHT;
+        } else if (roll < -45) {
+            // left side up
+            orientation = Orientation.LEFT;
+        } else {
+            // landing
+            orientation = Orientation.LANDING;
         }
 
         // propagation of the orientation
-        view.onOrientationChanged(orientation, pitch, roll, balance);
+        view.setOrientation(orientation, pitch, roll, balance);
     }
 }

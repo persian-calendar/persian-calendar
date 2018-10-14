@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
@@ -22,9 +23,18 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
+    @ColorInt
+    int qiblaColor;
+    // deliberately true
+    boolean isCurrentlyNorth = true;
+    boolean isCurrentlyEast = true;
+    boolean isCurrentlyWest = true;
+    boolean isCurrentlySouth = true;
+    boolean isCurrentlyQibla = true;
     private Paint dashedPaint;
     private int px, py; // Center of Compass (px,py)
     private int radius; // radius of Compass dial
@@ -37,8 +47,20 @@ public class QiblaCompassView extends View {
     private Horizontal sunPosition, moonPosition;
     private double longitude = 0.0;
     private double latitude = 0.0;
-
     private Paint textPaint;
+    private Path mPath = new Path();
+    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private RectF moonRect = new RectF();
+    private RectF moonOval = new RectF();
+    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public QiblaCompassView(Context context) {
         super(context);
@@ -53,6 +75,11 @@ public class QiblaCompassView extends View {
     public QiblaCompassView(Context context, AttributeSet ats, int defaultStyle) {
         super(context, ats, defaultStyle);
         initCompassView();
+    }
+
+    static public boolean isNearToDegree(float angle, float compareTo) {
+        float difference = Math.abs(angle - compareTo);
+        return difference > 180 ? 360 - difference < 3f : difference < 3.f;
     }
 
     private void initAstronomicParameters() {
@@ -80,11 +107,13 @@ public class QiblaCompassView extends View {
         dashedPaint.setPathEffect(dashPath);
         dashedPaint.setStrokeWidth(2);
         dashedPaint.setPathEffect(dashPath);
-        dashedPaint.setColor(ContextCompat.getColor(getContext(), R.color.qibla_color));
+        qiblaColor = ContextCompat.getColor(getContext(), R.color.qibla_color);
+        dashedPaint.setColor(qiblaColor);
 
         textPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
         textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
         textPaint.setTextSize(20);
+
     }
 
     @Override
@@ -125,7 +154,7 @@ public class QiblaCompassView extends View {
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setColor(ContextCompat.getColor(getContext(), (R.color.qibla_color)));
+        textPaint.setColor(qiblaColor);
         canvas.rotate(-bearing, px, py);// Attach and Detach capability lies
         canvas.save();
         drawDial(canvas);
@@ -148,9 +177,6 @@ public class QiblaCompassView extends View {
         return longitude != 0.0 && latitude != 0.0;
     }
 
-    private Path mPath = new Path();
-    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     public void drawTrueNorthArrow(Canvas canvas, float drawnAngle) {
         trueNorthArrowPaint.reset();
         trueNorthArrowPaint.setColor(Color.RED);
@@ -171,9 +197,6 @@ public class QiblaCompassView extends View {
         canvas.drawCircle(px, py, 5, dashedPaint);
         canvas.restore();
     }
-
-    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public void drawDial(Canvas canvas) {
         // over here
@@ -234,8 +257,6 @@ public class QiblaCompassView extends View {
 
     }
 
-    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     public void drawSun(Canvas canvas) {
         sunPaint.reset();
         sunPaint.setColor(Color.YELLOW);
@@ -255,13 +276,6 @@ public class QiblaCompassView extends View {
         }
 
     }
-
-    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private RectF moonRect = new RectF();
-    private RectF moonOval = new RectF();
 
     public void drawMoon(Canvas canvas) {
         moonPaint.reset();
@@ -298,11 +312,7 @@ public class QiblaCompassView extends View {
         }
     }
 
-    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
-
     public void drawQibla(Canvas canvas) {
-
         canvas.rotate((float) qiblaInfo.getHeading() - 360, px, py);
         qiblaPaint.reset();
         qiblaPaint.setColor(Color.GREEN);
@@ -315,11 +325,64 @@ public class QiblaCompassView extends View {
         canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - radius - kaaba.getHeight() / 2,
                 qiblaPaint);
         canvas.restore();
-
     }
 
-    public void setBearing(float _bearing) {
-        bearing = _bearing;
+    public void setBearing(float bearing) {
+        this.bearing = bearing;
+        postInvalidate();
+    }
+
+    public void isOnDirectionAction() {
+        Context context = getContext();
+        if (context == null) return;
+
+        // 0=North, 90=East, 180=South, 270=West
+        if (isNearToDegree(bearing, 0)) {
+            if (!isCurrentlyNorth) {
+                UIUtils.a11yShowToastWithClick(context, R.string.north);
+                isCurrentlyNorth = true;
+            }
+        } else {
+            isCurrentlyNorth = false;
+        }
+
+        if (isNearToDegree(bearing, 90)) {
+            if (!isCurrentlyEast) {
+                UIUtils.a11yShowToastWithClick(context, R.string.east);
+                isCurrentlyEast = true;
+            }
+        } else {
+            isCurrentlyEast = false;
+        }
+
+        if (isNearToDegree(bearing, 180)) {
+            if (!isCurrentlySouth) {
+                UIUtils.a11yShowToastWithClick(context, R.string.south);
+                isCurrentlySouth = true;
+            }
+        } else {
+            isCurrentlySouth = false;
+        }
+
+        if (isNearToDegree(bearing, 270)) {
+            if (!isCurrentlyWest) {
+                UIUtils.a11yShowToastWithClick(context, R.string.west);
+                isCurrentlyWest = true;
+            }
+        } else {
+            isCurrentlyWest = false;
+        }
+
+        if (isLongLatAvailable() && qiblaInfo != null) {
+            if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
+                if (!isCurrentlyQibla) {
+                    UIUtils.a11yShowToastWithClick(context, R.string.qibla);
+                    isCurrentlyQibla = true;
+                }
+            } else {
+                isCurrentlyQibla = false;
+            }
+        }
     }
 
     public void setLatitude(double latitude) {

@@ -10,7 +10,7 @@
     <string-array name="themeKeys" translatable="false">
         <item>LightTheme</item>
         <item>DarkTheme</item>
-        <item>ClassicTheme</item> <!-- Its UI name is Modern however -->
+        <item>ClassicTheme</item> <!-- its name is Modern however -->
         <item>BlueTheme</item>
     </string-array>
 

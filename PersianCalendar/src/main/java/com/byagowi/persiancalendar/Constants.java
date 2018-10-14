@@ -1,5 +1,9 @@
 package com.byagowi.persiancalendar;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Constants {
 
     public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
@@ -7,7 +11,6 @@ public class Constants {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
     public static final int ATHAN_RINGTONE_REQUEST_CODE = 19;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
-    public static final int WRITE_EXTERNAL_STORAGE = 76;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
     public static final String LANG_FA = "fa";
@@ -52,6 +55,8 @@ public class Constants {
     public static final String PREF_ATHAN_GAP = "AthanGap";
     public static final String PREF_THEME = "Theme";
     public static final String PREF_HOLIDAY_TYPES = "holiday_types";
+    public static final String PREF_WEEK_START = "WeekStart";
+    public static final String PREF_WEEK_ENDS = "WeekEnds";
 
     public static final String CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE";
 
@@ -71,26 +76,14 @@ public class Constants {
     public static final boolean DEFAULT_NOTIFICATION_ATHAN = false;
     public static final boolean DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true;
     public static final int DEFAULT_ATHAN_VOLUME = 1;
+    public static final String DEFAULT_WEEK_START = "0";
+    // WeekEnds, 6 means Friday
+    public static final Set<String> DEFAULT_WEEK_ENDS = new HashSet<>(Collections.singletonList("6"));
 
     public static final String LIGHT_THEME = "LightTheme";
     public static final String DARK_THEME = "DarkTheme";
     public static final String BLUE_THEME = "BlueTheme";
-    public static final String CLASSIC_THEME = "ClassicTheme";
-
-    public static final String FAJR = "fajr";
-    public static final String SUNRISE = "sunrise";
-    public static final String DHUHR = "dhuhr";
-    public static final String ASR = "asr";
-    public static final String SUNSET = "sunset";
-    public static final String MAGHRIB = "maghrib";
-    public static final String ISHA = "isha";
-    public static final String MIDNIGHT = "midnight";
-
-    public static final String TODAY = "today";
-    public static final String EQUALS_WITH = "equals_with";
-    public static final String DAY = "day";
-    public static final String MONTH = "month";
-    public static final String YEAR = "year";
+    public static final String MODERN_THEME = "ClassicTheme"; // don't change it, for legacy reasons
 
     public static final int LOAD_APP_ID = 1000;
     public static final int THREE_HOURS_APP_ID = 1010;

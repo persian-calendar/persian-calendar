@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.view.itemdayview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -12,6 +14,14 @@ import com.byagowi.persiancalendar.util.Utils;
 
 public class ItemDayView extends View {
     private DaysPaintResources resource;
+    private Rect bounds = new Rect();
+    private RectF drawingRect = new RectF();
+    private String text = "";
+    private boolean today, selected, hasEvent, hasAppointment, holiday;
+    private int textSize;
+    private long jdn = -1;
+    private int dayOfMonth = -1;
+    private boolean isNumber;
 
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
@@ -22,20 +32,24 @@ public class ItemDayView extends View {
     // as the first one reuses resource retrieval across the days
     public ItemDayView(Context context) {
         super(context);
-        resource = new DaysPaintResources(context);
+        if (context instanceof Activity) {
+            resource = new DaysPaintResources((Activity) context);
+        }
     }
 
     public ItemDayView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        resource = new DaysPaintResources(context);
+        if (context instanceof Activity) {
+            resource = new DaysPaintResources((Activity) context);
+        }
     }
 
     public ItemDayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        resource = new DaysPaintResources(context);
+        if (context instanceof Activity) {
+            resource = new DaysPaintResources((Activity) context);
+        }
     }
-
-    private Rect bounds = new Rect();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -44,14 +58,28 @@ public class ItemDayView extends View {
         int height = getHeight();
         int radius = Math.min(width, height) / 2;
 
+        boolean isModernTheme = resource.style == R.style.ModernTheme;
+        getDrawingRect(bounds);
+        drawingRect.set(bounds);
+        drawingRect.inset(radius * 0.1f, radius * 0.1f);
+        int yOffsetToApply = isModernTheme ? (int) (-height * .1f) : 0;
+
         if (selected) {
-            canvas.drawCircle(width / 2, height / 2, radius - 5,
-                    resource.selectedPaint);
+            if (isModernTheme) {
+                canvas.drawRoundRect(drawingRect, 0, 0, resource.selectedPaint);
+            } else {
+                canvas.drawCircle(width / 2f, height / 2f, radius - 5,
+                        resource.selectedPaint);
+            }
         }
 
         if (today) {
-            canvas.drawCircle(width / 2, height / 2, radius - 5,
-                    resource.todayPaint);
+            if (isModernTheme) {
+                canvas.drawRoundRect(drawingRect, 0, 0, resource.todayPaint);
+            } else {
+                canvas.drawCircle(width / 2f, height / 2f, radius - 5,
+                        resource.todayPaint);
+            }
         }
 
         int color;
@@ -69,24 +97,23 @@ public class ItemDayView extends View {
         // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
-        resource.linePaint.setColor((selected && resource.style != R.style.ClassicTheme)
-                ? color : resource.colorEventLine);
+        resource.eventBarPaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
 
         if (hasEvent) {
-            canvas.drawLine(width / 2 - resource.halfEventBarWidth,
-                    height - resource.eventYOffset,
-                    width / 2 + resource.halfEventBarWidth,
-                    height - resource.eventYOffset, resource.linePaint);
+            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
+                    height - resource.eventYOffset + yOffsetToApply,
+                    width / 2f + resource.halfEventBarWidth,
+                    height - resource.eventYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
         if (hasAppointment) {
-            canvas.drawLine(width / 2 - resource.halfEventBarWidth,
-                    height - resource.appointmentYOffset,
-                    width / 2 + resource.halfEventBarWidth,
-                    height - resource.appointmentYOffset, resource.linePaint);
+            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
+                    height - resource.appointmentYOffset + yOffsetToApply,
+                    width / 2f + resource.halfEventBarWidth,
+                    height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
-        if (resource.style == R.style.ClassicTheme) {
+        if (isModernTheme) {
             resource.textPaint.setFakeBoldText(today);
             resource.textPaint.setTextSize(textSize * .8f);
         }
@@ -96,6 +123,7 @@ public class ItemDayView extends View {
                 isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
         resource.textPaint.getTextBounds(textToMeasure, 0, textToMeasure.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
+        yPos += yOffsetToApply;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);
     }
@@ -128,13 +156,6 @@ public class ItemDayView extends View {
         setAll(text, false, false, false, false, false,
                 textSize, -1, -1, false);
     }
-
-    private String text = "";
-    private boolean today, selected, hasEvent, hasAppointment, holiday;
-    private int textSize;
-    private long jdn = -1;
-    private int dayOfMonth = -1;
-    private boolean isNumber;
 
     public long getJdn() {
         return jdn;
