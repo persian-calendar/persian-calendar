@@ -49,6 +49,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -157,14 +158,18 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS".equals(action)) {
             bringCompass();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.compass));
         } else if ("LEVEL".equals(action)) {
             bringLevel();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.level));
         } else if ("CONVERTER".equals(action)) {
             bringConverter();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.converter));
         } else if ("SETTINGS".equals(action)) {
             bringSettings();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.settings));
         } else {
-            bringCalendar();
+            checkMenu(binding.navigation.getMenu().findItem(R.id.calendar));
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -218,6 +223,17 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         creationDateJdn = CalendarUtils.getTodayJdn();
         Utils.applyAppLanguage(this);
+    }
+
+    void checkMenu(MenuItem menuItem) {
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+
+        if (settingHasChanged) { // update when checked menu item is changed
+            Utils.initUtils(this);
+            UpdateUtils.update(getApplicationContext(), true);
+            settingHasChanged = false; // reset for the next time
+        }
     }
 
     public CoordinatorLayout getCoordinator() {
@@ -430,8 +446,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             return true;
         }
 
-        menuItem.setCheckable(true);
-        menuItem.setChecked(true);
+        checkMenu(menuItem);
 
         @IdRes int destination = menuItem.getItemId();
         if (goToLevelInstead) {
@@ -440,12 +455,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
         Navigation.findNavController(this, R.id.nav_host_fragment)
                 .navigate(destination, null, mNavOptions);
-
-        if (settingHasChanged) { // update on fragment changes
-            Utils.initUtils(this);
-            UpdateUtils.update(getApplicationContext(), true);
-            settingHasChanged = false; // reset for the next time
-        }
 
         binding.drawer.closeDrawers();
         return true;
@@ -462,10 +471,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             id = R.id.compass;
         }
         onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
-    }
-
-    public void bringCalendar() {
-        selectItem(R.id.calendar);
     }
 
     public void bringConverter() {
@@ -497,7 +502,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                     return;
             }
 
-            super.onBackPressed();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            if (!navController.navigateUp())
+                super.onBackPressed();
+
+            NavDestination currentDestination = navController.getCurrentDestination();
+            if (currentDestination != null)
+                checkMenu(binding.navigation.getMenu().findItem(currentDestination.getId()));
         }
     }
 }
