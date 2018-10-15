@@ -158,18 +158,18 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS".equals(action)) {
             bringCompass();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.compass));
+            checkMenu(R.id.compass);
         } else if ("LEVEL".equals(action)) {
             bringLevel();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.level));
+            checkMenu(R.id.level);
         } else if ("CONVERTER".equals(action)) {
             bringConverter();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.converter));
+            checkMenu(R.id.converter);
         } else if ("SETTINGS".equals(action)) {
             bringSettings();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.settings));
+            checkMenu(R.id.settings);
         } else {
-            checkMenu(binding.navigation.getMenu().findItem(R.id.calendar));
+            checkMenu(R.id.calendar);
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -225,9 +225,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         Utils.applyAppLanguage(this);
     }
 
-    void checkMenu(MenuItem menuItem) {
-        menuItem.setCheckable(true);
-        menuItem.setChecked(true);
+    private void checkMenu(@IdRes int id) {
+        // We don't have a menu entry for compass, so
+        if (id == R.id.level) id = R.id.compass;
+        MenuItem menuItem = binding.navigation.getMenu().findItem(id);
+        if (menuItem != null) {
+            menuItem.setCheckable(true);
+            menuItem.setChecked(true);
+        }
 
         if (settingHasChanged) { // update when checked menu item is changed
             Utils.initUtils(this);
@@ -446,9 +451,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             return true;
         }
 
-        checkMenu(menuItem);
-
         @IdRes int destination = menuItem.getItemId();
+        checkMenu(destination);
         if (goToLevelInstead) {
             destination = R.id.level;
             goToLevelInstead = false; // reset for the next time
@@ -508,7 +512,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
             NavDestination currentDestination = navController.getCurrentDestination();
             if (currentDestination != null)
-                checkMenu(binding.navigation.getMenu().findItem(currentDestination.getId()));
+                checkMenu(currentDestination.getId());
         }
     }
 }
