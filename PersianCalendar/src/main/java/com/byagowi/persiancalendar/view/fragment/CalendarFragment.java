@@ -557,9 +557,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
                 SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
-            case R.id.today:
-                bringTodayYearMonth();
-                break;
             case R.id.add_event:
                 if (mLastSelectedJdn == -1)
                     mLastSelectedJdn = CalendarUtils.getTodayJdn();
