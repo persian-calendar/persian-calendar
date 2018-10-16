@@ -375,7 +375,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View textView) {
-                    mainActivityDependency.getMainActivity().bringSettings();
+                    mainActivityDependency.getMainActivity().navigateTo(R.id.settings);
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
