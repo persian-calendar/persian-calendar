@@ -155,17 +155,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                 .build();
 
         String action = getIntent() != null ? getIntent().getAction() : null;
-        if ("COMPASS".equals(action)) {
-            navigateTo(R.id.compass);
-        } else if ("LEVEL".equals(action)) {
-            navigateTo(R.id.level);
-        } else if ("CONVERTER".equals(action)) {
-            navigateTo(R.id.converter);
-        } else if ("SETTINGS".equals(action)) {
-            navigateTo(R.id.settings);
-        } else {
-            navigateTo(R.id.calendar);
-        }
+        if ("COMPASS".equals(action)) navigateTo(R.id.compass);
+        else if ("LEVEL".equals(action)) navigateTo(R.id.level);
+        else if ("CONVERTER".equals(action)) navigateTo(R.id.converter);
+        else if ("SETTINGS".equals(action)) navigateTo(R.id.settings);
+        else navigateTo(R.id.calendar);
 
         prefs.registerOnSharedPreferenceChangeListener(this);
 
