@@ -109,7 +109,7 @@ public class LevelFragment extends DaggerFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.compass)
-            mainActivityDependency.getMainActivity().bringCompass();
+            mainActivityDependency.getMainActivity().navigateTo(R.id.compass);
         else if (item.getItemId() == R.id.stop) {
             boolean stop = !provider.isListening();
             item.setIcon(stop ? R.drawable.ic_stop : R.drawable.ic_play);

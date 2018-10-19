@@ -22,12 +22,12 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CalendarsView extends FrameLayout implements View.OnClickListener {
+public class CalendarsView extends FrameLayout {
 
     CalendarsViewBinding mBinding;
     private OnCalendarsViewExpandListener mCalendarsViewExpandListener = () -> {
     };
-    private OnTodayButtonClickListener mTodayButtonClickListener = () -> {
+    private OnShowHideTodayButton mOnShowHideTodayButton = show -> {
     };
     private CalendarItemAdapter mCalendarItemAdapter;
 
@@ -49,10 +49,8 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
     public void init(Context context) {
         mBinding = CalendarsViewBinding.inflate(LayoutInflater.from(context), this,
                 true);
-        mBinding.todayButton.setVisibility(View.GONE);
-        mBinding.todayButton.setOnClickListener(this);
 
-        mBinding.getRoot().setOnClickListener(this);
+        mBinding.getRoot().setOnClickListener(v -> expand(!mCalendarItemAdapter.isExpanded()));
         mBinding.extraInformationContainer.setVisibility(View.GONE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -60,10 +58,6 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         mBinding.calendarsRecyclerView.setLayoutManager(linearLayoutManager);
         mCalendarItemAdapter = new CalendarItemAdapter(context);
         mBinding.calendarsRecyclerView.setAdapter(mCalendarItemAdapter);
-    }
-
-    public void showTodayIcon() {
-        mBinding.todayButton.setVisibility(View.VISIBLE);
     }
 
     public void hideMoreIcon() {
@@ -74,8 +68,8 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         mCalendarsViewExpandListener = listener;
     }
 
-    public void setOnTodayButtonClickListener(OnTodayButtonClickListener listener) {
-        mTodayButtonClickListener = listener;
+    public void setOnShowHideTodayButton(OnShowHideTodayButton listener) {
+        mOnShowHideTodayButton = listener;
     }
 
     public void expand(boolean expanded) {
@@ -87,22 +81,6 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         mBinding.extraInformationContainer.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
         mCalendarsViewExpandListener.onCalendarsViewExpand();
-    }
-
-    @Override
-    public void onClick(View view) {
-        Context context = getContext();
-        if (context == null) return;
-
-        switch (view.getId()) {
-            case R.id.today_button:
-                mTodayButtonClickListener.onTodayButtonClick();
-                break;
-
-            case R.id.calendars_tab_content:
-                expand(!mCalendarItemAdapter.isExpanded());
-                break;
-        }
     }
 
     public void showCalendars(long jdn,
@@ -120,16 +98,15 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
         long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
 
         if (diffDays == 0) {
-            mBinding.todayButton.setVisibility(View.GONE);
             if (Utils.isIranTime()) {
                 mBinding.weekDayName.setText(String.format("%s (%s)",
                         mBinding.weekDayName.getText(),
                         context.getString(R.string.iran_time)));
             }
-            mBinding.todayButton.setVisibility(View.GONE);
+            mOnShowHideTodayButton.onShowHideTodayButton(false);
             mBinding.diffDate.setVisibility(View.GONE);
         } else {
-            mBinding.todayButton.setVisibility(View.VISIBLE);
+            mOnShowHideTodayButton.onShowHideTodayButton(true);
             mBinding.diffDate.setVisibility(View.VISIBLE);
 
             CivilDate civilBase = new CivilDate(2000, 1, 1);
@@ -175,11 +152,11 @@ public class CalendarsView extends FrameLayout implements View.OnClickListener {
                 null, true, true, true));
     }
 
-    public interface OnCalendarsViewExpandListener {
-        void onCalendarsViewExpand();
+    public interface OnShowHideTodayButton {
+        void onShowHideTodayButton(boolean show);
     }
 
-    public interface OnTodayButtonClickListener {
-        void onTodayButtonClick();
+    public interface OnCalendarsViewExpandListener {
+        void onCalendarsViewExpand();
     }
 }

@@ -92,7 +92,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     private ActionBar actionBar;
     private boolean settingHasChanged = false;
     private NavOptions mNavOptions;
-    private boolean goToLevelInstead = false;
     private ActivityMainBinding binding;
 
     @Override
@@ -157,19 +156,15 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS".equals(action)) {
-            bringCompass();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.compass));
+            navigateTo(R.id.compass);
         } else if ("LEVEL".equals(action)) {
-            bringLevel();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.level));
+            navigateTo(R.id.level);
         } else if ("CONVERTER".equals(action)) {
-            bringConverter();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.converter));
+            navigateTo(R.id.converter);
         } else if ("SETTINGS".equals(action)) {
-            bringSettings();
-            checkMenu(binding.navigation.getMenu().findItem(R.id.settings));
+            navigateTo(R.id.settings);
         } else {
-            checkMenu(binding.navigation.getMenu().findItem(R.id.calendar));
+            navigateTo(R.id.calendar);
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -225,7 +220,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         Utils.applyAppLanguage(this);
     }
 
-    void checkMenu(MenuItem menuItem) {
+    public void navigateTo(@IdRes int id) {
+        MenuItem menuItem = binding.navigation.getMenu().findItem(
+                id == R.id.level ? R.id.compass : id); // We don't have a menu entry for compass, so
+        if (menuItem == null) return;
+
         menuItem.setCheckable(true);
         menuItem.setChecked(true);
 
@@ -234,6 +233,9 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             UpdateUtils.update(getApplicationContext(), true);
             settingHasChanged = false; // reset for the next time
         }
+
+        Navigation.findNavController(this, R.id.nav_host_fragment)
+                .navigate(menuItem.getItemId(), null, mNavOptions);
     }
 
     public CoordinatorLayout getCoordinator() {
@@ -446,47 +448,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             return true;
         }
 
-        checkMenu(menuItem);
-
-        @IdRes int destination = menuItem.getItemId();
-        if (goToLevelInstead) {
-            destination = R.id.level;
-            goToLevelInstead = false; // reset for the next time
-        }
-        Navigation.findNavController(this, R.id.nav_host_fragment)
-                .navigate(destination, null, mNavOptions);
-
         binding.drawer.closeDrawers();
+        navigateTo(menuItem.getItemId());
         return true;
     }
 
     public void setTitleAndSubtitle(String title, String subtitle) {
         actionBar.setTitle(title);
         actionBar.setSubtitle(subtitle);
-    }
-
-    public void selectItem(@IdRes int id) {
-        if (id == R.id.level) {
-            goToLevelInstead = true;
-            id = R.id.compass;
-        }
-        onNavigationItemSelected(binding.navigation.getMenu().findItem(id));
-    }
-
-    public void bringConverter() {
-        selectItem(R.id.converter);
-    }
-
-    public void bringLevel() {
-        selectItem(R.id.level);
-    }
-
-    public void bringCompass() {
-        selectItem(R.id.compass);
-    }
-
-    public void bringSettings() {
-        selectItem(R.id.settings);
     }
 
     @Override
@@ -508,7 +477,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
             NavDestination currentDestination = navController.getCurrentDestination();
             if (currentDestination != null)
-                checkMenu(binding.navigation.getMenu().findItem(currentDestination.getId()));
+                navigateTo(currentDestination.getId());
         }
     }
 }

@@ -95,7 +95,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         @Override
         public void onPageSelected(int position) {
             sendBroadcastToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
-            mCalendarsView.showTodayIcon();
+            mMainBinding.todayButton.show();
         }
 
     };
@@ -119,7 +119,13 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         titles.add(getString(R.string.calendar));
         mCalendarsView = new CalendarsView(context);
         mCalendarsView.setOnCalendarsViewExpandListener(() -> mMainBinding.cardsViewPager.measureCurrentView(mCalendarsView));
-        mCalendarsView.setOnTodayButtonClickListener(this::bringTodayYearMonth);
+        mCalendarsView.setOnShowHideTodayButton(show -> {
+            if (show)
+                mMainBinding.todayButton.show();
+            else
+                mMainBinding.todayButton.hide();
+        });
+        mMainBinding.todayButton.setOnClickListener(v -> bringTodayYearMonth());
         tabs.add(mCalendarsView);
 
         titles.add(getString(R.string.events));
@@ -369,7 +375,7 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View textView) {
-                    mainActivityDependency.getMainActivity().bringSettings();
+                    mainActivityDependency.getMainActivity().navigateTo(R.id.settings);
                 }
             };
             ss.setSpan(clickableSpan, 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -550,9 +556,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             case R.id.go_to:
                 SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
-                break;
-            case R.id.today:
-                bringTodayYearMonth();
                 break;
             case R.id.add_event:
                 if (mLastSelectedJdn == -1)
