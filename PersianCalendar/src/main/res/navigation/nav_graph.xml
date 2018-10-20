@@ -15,7 +15,20 @@
         android:id="@+id/calendar"
         android:name="com.byagowi.persiancalendar.view.fragment.CalendarFragment"
         android:label="Calendar Fragment"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendar_to_converter"
+            app:destination="@id/converter" />
+        <action
+            android:id="@+id/action_calendar_to_about"
+            app:destination="@id/about" />
+        <action
+            android:id="@+id/action_calendar_to_settings"
+            app:destination="@id/settings" />
+        <action
+            android:id="@+id/action_calendar_to_compass"
+            app:destination="@id/compass" />
+    </fragment>
 
     <fragment
         android:id="@+id/converter"
@@ -27,7 +40,11 @@
         android:id="@+id/compass"
         android:name="com.byagowi.persiancalendar.view.fragment.CompassFragment"
         android:label="Compass Fragment"
-        tools:layout="@layout/fragment_compass" />
+        tools:layout="@layout/fragment_compass" >
+        <action
+            android:id="@+id/action_compass_to_level"
+            app:destination="@id/level" />
+    </fragment>
 
     <fragment
         android:id="@+id/level"
