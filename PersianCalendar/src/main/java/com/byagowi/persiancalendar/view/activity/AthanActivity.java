@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-public class AthanActivity extends AppCompatActivity implements View.OnClickListener {
+public class AthanActivity extends AppCompatActivity {
     private static final String TAG = AthanActivity.class.getName();
     private Ringtone ringtone;
     private MediaPlayer mediaPlayer;
@@ -116,7 +116,7 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         binding.athanName.setText(UIUtils.getPrayTimeText(prayerKey));
 
         View root = binding.getRoot();
-        root.setOnClickListener(this);
+        root.setOnClickListener(v -> stop());
         root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
 
         binding.place.setText(String.format("%s %s",
@@ -140,11 +140,6 @@ public class AthanActivity extends AppCompatActivity implements View.OnClickList
         if (!hasFocus) {
             stop();
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        stop();
     }
 
     @Override

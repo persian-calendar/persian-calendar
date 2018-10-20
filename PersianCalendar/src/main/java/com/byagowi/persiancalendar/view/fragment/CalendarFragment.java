@@ -74,7 +74,7 @@ import dagger.android.support.DaggerFragment;
 import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
-public class CalendarFragment extends DaggerFragment implements View.OnClickListener {
+public class CalendarFragment extends DaggerFragment {
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
@@ -144,7 +144,17 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
             titles.add(getString(R.string.owghat));
             mOwghatBinding = OwghatTabContentBinding.inflate(inflater, container, false);
             tabs.add(mOwghatBinding.getRoot());
-            mOwghatBinding.getRoot().setOnClickListener(this);
+            mOwghatBinding.getRoot().setOnClickListener(this::onOwghatClick);
+            mOwghatBinding.cityName.setOnClickListener(this::onOwghatClick);
+            // Easter egg to test AthanActivity
+            mOwghatBinding.cityName.setOnLongClickListener(v -> {
+                Utils.startAthan(context, "FAJR");
+                return true;
+            });
+            String cityName = Utils.getCityName(context, false);
+            if (!TextUtils.isEmpty(cityName)) {
+                mOwghatBinding.cityName.setText(cityName);
+            }
 
             FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
             layoutManager.setFlexWrap(FlexWrap.WRAP);
@@ -175,20 +185,6 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
-
-        if (mCoordinate != null) {
-            String cityName = Utils.getCityName(context, false);
-            if (!TextUtils.isEmpty(cityName)) {
-                mOwghatBinding.cityName.setText(cityName);
-            }
-
-            // Easter egg to test AthanActivity
-            mOwghatBinding.cityName.setOnClickListener(this);
-            mOwghatBinding.cityName.setOnLongClickListener(v -> {
-                Utils.startAthan(context, "FAJR");
-                return true;
-            });
-        }
 
         return mMainBinding.getRoot();
     }
@@ -430,27 +426,20 @@ public class CalendarFragment extends DaggerFragment implements View.OnClickList
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.city_name:
-            case R.id.owghat_content:
-                RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
-                if (adapter instanceof TimeItemAdapter) {
-                    TimeItemAdapter timesAdapter = (TimeItemAdapter) adapter;
-                    boolean expanded = !timesAdapter.isExpanded();
-                    timesAdapter.setExpanded(expanded);
-                    mOwghatBinding.moreOwghat.setImageResource(expanded
-                            ? R.drawable.ic_keyboard_arrow_up
-                            : R.drawable.ic_keyboard_arrow_down);
-                }
-                mMainBinding.cardsViewPager.measureCurrentView(mOwghatBinding.getRoot());
-
-                if (mLastSelectedJdn == -1)
-                    mLastSelectedJdn = CalendarUtils.getTodayJdn();
-
-                break;
+    private void onOwghatClick(View v) {
+        RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
+        if (adapter instanceof TimeItemAdapter) {
+            TimeItemAdapter timesAdapter = (TimeItemAdapter) adapter;
+            boolean expanded = !timesAdapter.isExpanded();
+            timesAdapter.setExpanded(expanded);
+            mOwghatBinding.moreOwghat.setImageResource(expanded
+                    ? R.drawable.ic_keyboard_arrow_up
+                    : R.drawable.ic_keyboard_arrow_down);
         }
+        mMainBinding.cardsViewPager.measureCurrentView(mOwghatBinding.getRoot());
+
+        if (mLastSelectedJdn == -1)
+            mLastSelectedJdn = CalendarUtils.getTodayJdn();
     }
 
     private void bringTodayYearMonth() {
