@@ -154,7 +154,7 @@
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
-        <item name="colorPrimaryDark">@color/blue_primary_dark</item>
+        <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/blue_primary_dark
