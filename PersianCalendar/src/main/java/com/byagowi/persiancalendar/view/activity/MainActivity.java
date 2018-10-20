@@ -49,7 +49,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -217,10 +216,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     public void navigateTo(@IdRes int id) {
         MenuItem menuItem = binding.navigation.getMenu().findItem(
                 id == R.id.level ? R.id.compass : id); // We don't have a menu entry for compass, so
-        if (menuItem == null) return;
-
-        menuItem.setCheckable(true);
-        menuItem.setChecked(true);
+        if (menuItem != null) {
+            menuItem.setCheckable(true);
+            menuItem.setChecked(true);
+        }
 
         if (settingHasChanged) { // update when checked menu item is changed
             Utils.initUtils(this);
@@ -229,7 +228,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment)
-                .navigate(menuItem.getItemId(), null, mNavOptions);
+                .navigate(id, null, mNavOptions);
     }
 
     public CoordinatorLayout getCoordinator() {
@@ -465,13 +464,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                     return;
             }
 
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            if (!navController.navigateUp())
-                super.onBackPressed();
-
-            NavDestination currentDestination = navController.getCurrentDestination();
-            if (currentDestination != null)
-                navigateTo(currentDestination.getId());
+            NavDestination currentDestination = Navigation
+                    .findNavController(this, R.id.nav_host_fragment)
+                    .getCurrentDestination();
+            if (currentDestination == null || (currentDestination.getId() == R.id.calendar))
+                finish();
+            else
+                navigateTo(R.id.calendar);
         }
     }
 }
