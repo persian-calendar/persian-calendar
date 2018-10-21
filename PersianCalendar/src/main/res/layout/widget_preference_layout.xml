@@ -9,16 +9,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_widget_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/add" />
+
             <FrameLayout
                 android:id="@+id/preference_fragment_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_widget_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add" />
 
         </LinearLayout>
 
