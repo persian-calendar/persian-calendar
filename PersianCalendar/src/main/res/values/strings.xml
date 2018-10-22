@@ -65,6 +65,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="calendar">Calendar</string>
     <string name="date_converter">Date Converter</string>
     <string name="compass">Compass</string>
+    <string name="countdown">Countdown</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>
@@ -270,5 +271,11 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+
+    <!--TalkBack, a11y-->
+    <string name="text_day">زمان باقی‌مانده تا پایان امروز</string>
+    <string name="text_miladi2">تحویل سال 2019 در تاریخ 1397/11/10</string>
+    <string name="text_shamsi">زمان تحویل سال 1398</string>
+    <string name="text_shamsi2">تاریخ 1398/1/1 حدودا ساعت 01:40</string>
 
 </resources>

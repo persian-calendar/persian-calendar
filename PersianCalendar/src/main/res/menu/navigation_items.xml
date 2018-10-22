@@ -17,6 +17,11 @@
         android:title="@string/compass" />
 
     <item
+        android:id="@+id/countdown"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/countdown" />
+
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />

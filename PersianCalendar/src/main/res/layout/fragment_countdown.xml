@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TableRow
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#000"
+            android:id="@+id/txt_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="امروز برابر است با "/>
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#f44248"
+            android:id="@+id/txt_name_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#000"
+            android:id="@+id/txt_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ام، "/>
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#f44248"
+            android:id="@+id/txt_name_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
+            android:layout_marginStart="5sp" />
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#000"
+            android:id="@+id/txt_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="، "/>
+
+        <TextView
+            android:textStyle="normal"
+            android:textColor="#f44248"
+            android:id="@+id/txt_name_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginStart="10sp" />
+
+    </TableRow>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        app:cardElevation="3dp">
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/txt_shamsi1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="@string/text_shamsi"/>
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/txt_shamsi2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="@string/text_shamsi2"/>
+
+            <com.byagowi.persiancalendar.view.countdown.CountdownView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/countdown_shamsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isHideTimeBackground="false"
+                app:isShowDay="true" app:isShowHour="true"
+                app:isShowMillisecond="true"
+                app:isShowMinute="true"
+                app:isShowSecond="true"
+                app:isShowTimeBgDivisionLine="false"
+                app:isTimeTextBold="true"
+                app:suffixGravity="center"
+                app:suffixTextColor="#000000"
+                app:suffixTextSize="20sp"
+                app:timeBgColor="#482f28"
+                app:timeBgRadius="22.5dp"
+                app:timeBgSize="38dp"
+                app:timeTextColor="#ffffff"
+                app:timeTextSize="20sp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        app:cardElevation="3dp">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/txt_miladi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="@string/text_miladi2"/>
+
+            <com.byagowi.persiancalendar.view.countdown.CountdownView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/countdown_miladi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:isHideTimeBackground="false"
+                app:isShowDay="true"
+                app:isShowHour="true"
+                app:isShowMillisecond="false"
+                app:isShowMinute="true"
+                app:isShowSecond="true"
+                app:suffixGravity="center"
+                app:suffixTextColor="#000000"
+                app:suffixTextSize="20dp"
+                app:timeBgDivisionLineSize="1dp"
+                app:timeBgRadius="3dp"
+                app:timeBgSize="50dp"
+                app:timeTextColor="#ffffff"
+                app:timeTextSize="30sp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1" app:cardElevation="3dp">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/txt_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="@string/text_day"/>
+
+            <com.byagowi.persiancalendar.view.countdown.CountdownView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/countdown_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:isHideTimeBackground="false"
+                app:isShowDay="false"
+                app:isShowHour="true"
+                app:isShowMillisecond="true"
+                app:isShowMinute="true"
+                app:isShowSecond="true"
+                app:isShowTimeBgBorder="true"
+                app:suffixGravity="center"
+                app:suffixLRMargin="5dp"
+                app:suffixTextColor="#fc903e"
+                app:suffixTextSize="20dp"
+                app:timeBgBorderColor="#e8e8e8"
+                app:timeBgBorderRadius="3dp"
+                app:timeBgBorderSize="3dp"
+                app:timeBgColor="#ffffff"
+                app:timeBgDivisionLineSize="1dp"
+                app:timeBgRadius="3dp"
+                app:timeBgSize="30dp"
+                app:timeTextColor="#fc903e"
+                app:timeTextSize="15dp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

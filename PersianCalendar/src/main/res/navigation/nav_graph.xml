@@ -35,6 +35,12 @@
         android:label="Level Fragment" />
 
     <fragment
+        android:id="@+id/countdown"
+        android:name="com.byagowi.persiancalendar.view.fragment.CountdownFragment"
+        android:label="Countdown Fragment"
+        tools:layout="@layout/fragment_countdown" />
+
+    <fragment
         android:id="@+id/settings"
         android:name="com.byagowi.persiancalendar.view.preferences.SettingsFragment"
         android:label="Settings Fragment"
