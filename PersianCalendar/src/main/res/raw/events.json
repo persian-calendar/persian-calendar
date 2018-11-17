@@ -204,9 +204,6 @@
     { "holiday": false, "month": 2, "day": 12, "type": "Iran",
       "title": "روز معلم" },
 
-    { "holiday": false, "month": 2, "day": 12, "type": "Iran",
-      "title": "روز جهانی مستضعفان" },
-
     { "holiday": false, "month": 2, "day": 15, "type": "Iran",
       "title": "روز بزرگداشت شیخ صدوق" },
 
@@ -238,13 +235,13 @@
       "title": "روز بزرگداشت ملاصدرا (صدرالمتألهین)" },
 
     { "holiday": false, "month": 3, "day": 3, "type": "Iran",
-      "title": "فتح خرمشهر در عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش)" },
-
-    { "holiday": false, "month": 3, "day": 4, "type": "Iran",
-      "title": " روز مقاومت، ایثار و پیروزی" },
+      "title": "فتح خرمشهر در عملیات بیت‌المقدس (۱۳۶۱ ه‍.ش) و روز مقاومت، ایثار و پیروزی" },
 
     { "holiday": false, "month": 3, "day": 4, "type": "Iran",
       "title": "روز دزفول" },
+
+    { "holiday": false, "month": 3, "day": 4, "type": "Iran",
+      "title": " روز مقاومت و پایداری" },
 
     { "holiday": true, "month": 3, "day": 14, "type": "Iran",
       "title": "رحلت امام خمینی رهبر انقلاب اسلامی (۱۳۶۸ ه‍.ش)" },
@@ -1049,7 +1046,9 @@
     { "holiday": true, "month": 7, "day": 13, "type": "Islamic Iran",
       "title": "روز پدر و مرد و ولادت امام علی (ع) (۲۳ سال قبل از هجرت) – آغاز ایام‌البیض (اعتکاف)" },
     { "holiday": false, "month": 7, "day": 15, "type": "Islamic Iran",
-      "title": "وفات حضرت زینب (س) (۶۲ ه‍.ق) – تغییر قبلهٔ مسلمین از بیت‌المقدس به مکهٔ معظمه (۲ ه‍.ق)" },
+      "title": "وفات حضرت زینب (س) (۶۲ ه‍.ق)" },
+    { "holiday": false, "month": 7, "day": 15, "type": "Islamic Iran",
+      "title": "تغییر قبلهٔ مسلمین از بیت‌المقدس به مکهٔ معظمه (۲ ه‍.ق)" },
     { "holiday": false, "month": 7, "day": 25, "type": "Islamic Iran",
       "title": "شهادت امام موسی کاظم (ع) (۱۸۳ ه‍.ق)" },
     { "holiday": true, "month": 7, "day": 27, "type": "Islamic Iran",
@@ -1071,11 +1070,11 @@
     { "holiday": false, "month": 9, "day": 18, "type": "Islamic Iran",
       "title": "شب قدر" },
     { "holiday": false, "month": 9, "day": 19, "type": "Islamic Iran",
-      "title": "ضربت خوردن حضرت علی (ع) (۴۰ ه‍.ق)" },
+      "title": "ضربت خوردن امام علی (ع) (۴۰ ه‍.ق)" },
     { "holiday": false, "month": 9, "day": 20, "type": "Islamic Iran",
       "title": "شب قدر" },
     { "holiday": true, "month": 9, "day": 21, "type": "Islamic Iran",
-      "title": "شهادت حضرت علی (ع) (۴۰ ه‍.ق)" },
+      "title": "شهادت امام علی (ع) (۴۰ ه‍.ق)" },
     { "holiday": false, "month": 9, "day": 22, "type": "Islamic Iran",
       "title": "شب قدر" },
     { "holiday": true, "month": 10, "day": 1, "type": "Islamic Iran",
@@ -1097,7 +1096,7 @@
     { "holiday": false, "month": 11, "day": 29, "type": "Islamic Iran",
       "title": "شهادت امام محمد تقی (ع) (۲۲۰ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 1, "type": "Islamic Iran",
-      "title": "سالروز ازدواج حضرت علی (ع) و حضرت فاطمه (س) (۲ ه‍.ق) – روز ازدواج" },
+      "title": "سالروز ازدواج امام علی (ع) و حضرت فاطمه (س) (۲ ه‍.ق) – روز ازدواج" },
     { "holiday": false, "month": 12, "day": 6, "type": "Islamic Iran",
       "title": "شهادت زائران خانهٔ خدا به دست مأموران آل سعود (۱۳۶۶ ه‍.ش برابر با ۶ ذی‌الحجه ۱۴۰۷ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 7, "type": "Islamic Iran",
@@ -1158,7 +1157,7 @@
     { "holiday": false, "month": 7, "day": 23, "type": "Islamic Iran",
       "title": "مسموم شدن امام موسی کاظم (ع) به دستور مأمون" },
     { "holiday": false, "month": 7, "day": 24, "type": "Islamic Iran",
-      "title": "فتح قلعهٔ خیبر توسط حضرت علی (ع)، بازگشت جعفر بن ابی‌طالب از حبشه" },
+      "title": "فتح قلعهٔ خیبر توسط امام علی (ع)، بازگشت جعفر بن ابی‌طالب از حبشه" },
     { "holiday": false, "month": 7, "day": 26, "type": "Islamic Iran",
       "title": "وفات حضرت ابوطالب (ع)" },
     { "holiday": false, "month": 7, "day": 28, "type": "Islamic Iran",
