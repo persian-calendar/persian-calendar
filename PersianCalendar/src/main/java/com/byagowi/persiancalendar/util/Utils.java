@@ -953,7 +953,7 @@ public class Utils {
                     }
                 } else {
                     if (compact)
-                        title = title.replaceAll(" \\(.*$", "");
+                        title = title.replaceAll("(.*) \\(.*?$", "$1");
                 }
 
                 if (first)
