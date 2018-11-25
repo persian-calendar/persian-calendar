@@ -90,7 +90,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
     private long creationDateJdn;
     private ActionBar actionBar;
     private boolean settingHasChanged = false;
-    private NavOptions mNavOptions;
     private ActivityMainBinding binding;
 
     @Override
@@ -145,13 +144,6 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-
-        mNavOptions = new NavOptions.Builder()
-                .setEnterAnim(android.R.anim.fade_in)
-                .setExitAnim(android.R.anim.fade_out)
-                .setPopEnterAnim(android.R.anim.fade_in)
-                .setPopExitAnim(android.R.anim.fade_out)
-                .build();
 
         String action = getIntent() != null ? getIntent().getAction() : null;
         if ("COMPASS".equals(action)) navigateTo(R.id.compass);
@@ -228,7 +220,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment)
-                .navigate(id, null, mNavOptions);
+                .navigate(id, null, null);
     }
 
     public CoordinatorLayout getCoordinator() {
