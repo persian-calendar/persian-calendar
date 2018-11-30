@@ -467,6 +467,8 @@ class MainLogicTests {
   @Test
   fun test_equinox_time() {
     val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
+
+    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
     calendar.time = Equinox(2019).nowruz
     assertEquals(33, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
     assertEquals(27, calendar.get(Calendar.MINUTE)) // It should be 28
@@ -474,5 +476,16 @@ class MainLogicTests {
     assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2019, calendar.get(Calendar.YEAR))
+
+    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
+    calendar.time = Equinox(2018).nowruz
+    assertEquals(32, calendar.get(Calendar.SECOND)) // It should be 28
+    assertEquals(38, calendar.get(Calendar.MINUTE)) // It should be 45
+    assertEquals(7, calendar.get(Calendar.HOUR)) // It should be 19
+    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
+    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
+    assertEquals(2018, calendar.get(Calendar.YEAR))
+
+    // Well, conclusion is Equinox doesn't match with ours
   }
 }
