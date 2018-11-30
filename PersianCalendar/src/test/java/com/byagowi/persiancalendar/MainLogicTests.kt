@@ -13,6 +13,8 @@ import com.byagowi.persiancalendar.util.CalendarUtils
 import com.cepmuvakkit.times.view.QiblaCompassView
 import org.junit.Assert.*
 import org.junit.Test
+import us.fatehi.calculation.Equinox
+import java.util.*
 
 class MainLogicTests {
   @Test
@@ -130,6 +132,7 @@ class MainLogicTests {
 
   @Test
   fun practice_persian_converting_back_and_forth() {
+    assertEquals(PersianDate(1398, 1, 1).toJdn(), 1)
     val startJdn = CivilDate(1950, 1, 1).toJdn()
     val endJdn = CivilDate(2050, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, CivilDate(it).toJdn()) }
@@ -459,5 +462,17 @@ class MainLogicTests {
       assertEquals(CalendarUtils.getMonthLength(CalendarType.SHAMSI, it, 12),
               if (leapYears.contains(it)) 30 else 29)
     }
+  }
+
+  @Test
+  fun test_equinox_time() {
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
+    calendar.time = Equinox(2019).marchEquinoxDate
+    assertEquals(33, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
+    assertEquals(27, calendar.get(Calendar.MINUTE)) // It should be 28
+    assertEquals(1, calendar.get(Calendar.HOUR))
+    assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
+    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
+    assertEquals(2019, calendar.get(Calendar.YEAR))
   }
 }
