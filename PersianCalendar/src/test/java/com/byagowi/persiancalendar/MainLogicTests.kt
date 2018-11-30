@@ -467,7 +467,7 @@ class MainLogicTests {
   @Test
   fun test_equinox_time() {
     val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
-    calendar.time = Equinox(2019).marchEquinoxDate
+    calendar.time = Equinox(2019).nowruz
     assertEquals(33, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
     assertEquals(27, calendar.get(Calendar.MINUTE)) // It should be 28
     assertEquals(1, calendar.get(Calendar.HOUR))
