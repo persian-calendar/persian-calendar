@@ -473,7 +473,7 @@ class MainLogicTests {
     calendar.time = Equinox.northwardEquinox(2019)
     assertEquals(13, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
     assertEquals(28, calendar.get(Calendar.MINUTE))
-    assertEquals(1, calendar.get(Calendar.HOUR))
+    assertEquals(1, calendar.get(Calendar.HOUR_OF_DAY))
     assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2019, calendar.get(Calendar.YEAR))
