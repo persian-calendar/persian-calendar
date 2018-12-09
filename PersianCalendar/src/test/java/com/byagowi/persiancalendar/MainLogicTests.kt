@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.calendar.IslamicDate
 import com.byagowi.persiancalendar.calendar.PersianDate
+import com.byagowi.persiancalendar.equinox.Equinox
 import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.Coordinate
@@ -13,7 +14,7 @@ import com.byagowi.persiancalendar.util.CalendarUtils
 import com.cepmuvakkit.times.view.QiblaCompassView
 import org.junit.Assert.*
 import org.junit.Test
-import us.fatehi.calculation.Equinox
+//import us.fatehi.calculation.Equinox
 import java.util.*
 
 class MainLogicTests {
@@ -469,23 +470,23 @@ class MainLogicTests {
     val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
 
     // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
-    calendar.time = Equinox(2019).nowruz
-    assertEquals(33, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
-    assertEquals(27, calendar.get(Calendar.MINUTE)) // It should be 28
+    calendar.time = Equinox.northwardEquinox(2019)
+    assertEquals(13, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
+    assertEquals(28, calendar.get(Calendar.MINUTE))
     assertEquals(1, calendar.get(Calendar.HOUR))
     assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2019, calendar.get(Calendar.YEAR))
 
+    calendar.clear()
+
     // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
-    calendar.time = Equinox(2018).nowruz
-    assertEquals(32, calendar.get(Calendar.SECOND)) // It should be 28
-    assertEquals(38, calendar.get(Calendar.MINUTE)) // It should be 45
+    calendar.time = Equinox.northwardEquinox(2018)
+    assertEquals(53, calendar.get(Calendar.SECOND)) // It should be 28, but well, is acceptable
+    assertEquals(45, calendar.get(Calendar.MINUTE))
     assertEquals(7, calendar.get(Calendar.HOUR)) // It should be 19
     assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2018, calendar.get(Calendar.YEAR))
-
-    // Well, conclusion is Equinox doesn't match with ours
   }
 }
