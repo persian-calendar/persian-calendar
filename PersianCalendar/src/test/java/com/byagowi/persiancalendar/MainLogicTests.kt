@@ -133,7 +133,7 @@ class MainLogicTests {
 
   @Test
   fun practice_persian_converting_back_and_forth() {
-    assertEquals(PersianDate(1398, 1, 1).toJdn(), 1)
+    assertEquals(PersianDate(1398, 1, 1).toJdn(), 2458564)
     val startJdn = CivilDate(1950, 1, 1).toJdn()
     val endJdn = CivilDate(2050, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, CivilDate(it).toJdn()) }
@@ -484,7 +484,7 @@ class MainLogicTests {
     calendar.time = Equinox.northwardEquinox(2018)
     assertEquals(53, calendar.get(Calendar.SECOND)) // It should be 28, but well, is acceptable
     assertEquals(45, calendar.get(Calendar.MINUTE))
-    assertEquals(7, calendar.get(Calendar.HOUR)) // It should be 19
+    assertEquals(19, calendar.get(Calendar.HOUR_OF_DAY))
     assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2018, calendar.get(Calendar.YEAR))
