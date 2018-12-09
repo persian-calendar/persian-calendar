@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -206,6 +207,26 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         creationDateJdn = CalendarUtils.getTodayJdn();
+
+        if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
+                (CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
+            Snackbar snackbar = Snackbar.make(getCoordinator(), "به دلیل قدیمی بودن نسخه مناسبت‌های ممکن صحیح نباشد",
+                    10000);
+            TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+            text.setTextColor(Color.WHITE);
+
+            snackbar.setAction("بروزرسانی", view -> {
+                final String appPackageName = getPackageName();
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.dark_accent));
+            snackbar.show();
+        }
+
         Utils.applyAppLanguage(this);
     }
 
