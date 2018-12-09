@@ -488,5 +488,7 @@ class MainLogicTests {
     assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2018, calendar.get(Calendar.YEAR))
+
+    (-2000..10000).forEach { Equinox.northwardEquinox(it) }
   }
 }
