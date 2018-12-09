@@ -135,7 +135,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                slidingAnimation(drawerView, slideOffset);
+                slidingAnimation(drawerView, slideOffset / 1.5f);
             }
 
 
