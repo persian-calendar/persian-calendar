@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.view.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -119,8 +120,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         setSupportActionBar(binding.toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            Window win = getWindow();
+            WindowManager.LayoutParams winParams = win.getAttributes();
+            winParams.flags &= ~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            win.setAttributes(winParams);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
         boolean isRTL = UIUtils.isRTL(this);

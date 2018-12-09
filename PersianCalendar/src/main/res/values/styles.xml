@@ -213,7 +213,7 @@
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_primary</item>
-        <item name="colorPrimaryDark">@color/modern_primary_dark</item>
+        <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/modern_primary_dark
@@ -267,6 +267,8 @@
         <item name="menuIconColor">@color/modern_menu_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
+
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
