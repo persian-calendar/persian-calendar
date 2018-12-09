@@ -11,12 +11,17 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
+import com.byagowi.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
+import com.byagowi.persiancalendar.equinox.Equinox;
 import com.byagowi.persiancalendar.util.AstronomicalUtils;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
+import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -144,6 +149,13 @@ public class CalendarsView extends FrameLayout {
                     Utils.formatNumber((int) (endOfYearJdn - jdn)),
                     Utils.formatNumber(weeksCount - currentWeek),
                     Utils.formatNumber(12 - mainDate.getMonth()));
+            if (chosenCalendarType == CalendarType.SHAMSI) {
+                Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
+                endOfYearText += "\n" + String.format("لحظه اعتدال بهاری و تحویل سال %s: %s",
+                        Utils.formatNumber(mainDate.getYear()),
+                        UIUtils.baseFormatClock(springEquinox.get(Calendar.HOUR_OF_DAY),
+                                springEquinox.get(Calendar.MINUTE)));
+            }
             mBinding.startAndEndOfYearDiff.setText(String.format("%s\n%s", startOfYearText, endOfYearText));
         }
 

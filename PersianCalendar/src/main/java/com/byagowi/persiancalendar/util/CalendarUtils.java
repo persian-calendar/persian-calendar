@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
+import com.byagowi.persiancalendar.equinox.Equinox;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +81,11 @@ public class CalendarUtils {
         }
         calendar.setTime(date);
         return calendar;
+    }
+
+    static public Calendar getSpringEquinox(long jdn) {
+        return makeCalendarFromDate(
+                Equinox.northernSolstice(new CivilDate(jdn).getYear()));
     }
 
     static public String toLinearDate(AbstractDate date) {

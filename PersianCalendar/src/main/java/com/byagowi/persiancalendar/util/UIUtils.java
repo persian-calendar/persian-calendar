@@ -86,7 +86,7 @@ public class UIUtils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    static String baseFormatClock(int hour, int minute) {
+    public static String baseFormatClock(int hour, int minute) {
         return Utils.formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
