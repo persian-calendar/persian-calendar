@@ -121,6 +121,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         setSupportActionBar(binding.toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
             Window win = getWindow();
             WindowManager.LayoutParams winParams = win.getAttributes();
             winParams.flags &= ~WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
