@@ -91,7 +91,7 @@ public class Equinox {
         int minute = (int) round(minutef);
         int second = (int) round((minutef - Math.floor(minutef)) * 60.0);
         if (minute == 60.0d) {
-            minute = 0.0d;
+            minute = 0;
             hour += 1.0d;
         }
 
