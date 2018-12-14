@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
@@ -149,7 +150,7 @@ public class CalendarsView extends FrameLayout {
                     Utils.formatNumber((int) (endOfYearJdn - jdn)),
                     Utils.formatNumber(weeksCount - currentWeek),
                     Utils.formatNumber(12 - mainDate.getMonth()));
-            if (chosenCalendarType == CalendarType.SHAMSI) {
+            if (chosenCalendarType == CalendarType.SHAMSI && Utils.getAppLanguage().equals(Constants.LANG_FA)) {
                 Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
                 endOfYearText += "\n" + String.format("لحظه اعتدال بهاری و تحویل سال %s: %s",
                         Utils.formatNumber(mainDate.getYear()),
