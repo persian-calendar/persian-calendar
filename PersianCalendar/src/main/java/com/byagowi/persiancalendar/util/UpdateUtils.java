@@ -202,8 +202,7 @@ public class UpdateUtils {
                 }
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 = text2 + "\n" + subtitle + "\n" +
-                            AstronomicalUtils.getZodiacInfo(context, jdn, true);
+                    text2 = text2 + "\n" + subtitle;
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
