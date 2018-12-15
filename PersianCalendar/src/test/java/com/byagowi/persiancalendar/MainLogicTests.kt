@@ -478,8 +478,6 @@ class MainLogicTests {
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2019, calendar.get(Calendar.YEAR))
 
-    calendar.clear()
-
     // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
     calendar.time = Equinox.northwardEquinox(2018)
     assertEquals(53, calendar.get(Calendar.SECOND)) // It should be 28, but well, is acceptable
@@ -488,6 +486,24 @@ class MainLogicTests {
     assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2018, calendar.get(Calendar.YEAR))
+
+    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201396-Full.pdf
+    calendar.time = Equinox.northwardEquinox(2017)
+    assertEquals(38, calendar.get(Calendar.SECOND)) // It should be 40, but well, is acceptable
+    assertEquals(59, calendar.get(Calendar.MINUTE)) // It should be 58
+    assertEquals(13, calendar.get(Calendar.HOUR_OF_DAY))
+    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
+    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
+    assertEquals(2017, calendar.get(Calendar.YEAR))
+
+    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201395-Full.pdf
+    calendar.time = Equinox.northwardEquinox(2016)
+    assertEquals(55, calendar.get(Calendar.SECOND)) // It should be 12, but well, is acceptable
+    assertEquals(0, calendar.get(Calendar.MINUTE))
+    assertEquals(8, calendar.get(Calendar.HOUR_OF_DAY))
+    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
+    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
+    assertEquals(2016, calendar.get(Calendar.YEAR))
 
     (-2000..10000).forEach { Equinox.northwardEquinox(it) }
   }
