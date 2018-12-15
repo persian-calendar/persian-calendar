@@ -66,14 +66,9 @@ public class Equinox {
         return result;
     }
 
-    interface Calc {
-        double fn(double value);
-    }
-
     // Calculate vårjevndøgn, sommersolverv, høstjevndøgn or vintersolverv
-    private static Date calculateEquinoxOrSolstice(int year, Calc fn) {
+    private static Date calculateEquinoxOrSolstice(int year, double a) {
         // TODO: Simplify with a symbolic calculator
-        double a = fn.fn(((double) (year) - 2000.0) / 1000.0);
         double b = (a - 2451545.0) / 36525.0;
         double c = (35999.373 * b - 2.47) * degrees;
         double d = a + (0.00001 * tableFormula(b)) / (1.0 + 0.0334 * Math.cos(c) + 0.0007 * Math.cos(2 * c)) - (66.0 + ((double) (year - 2000)) * 1.0) / 86400.0;
@@ -107,21 +102,29 @@ public class Equinox {
 
     // Spring equinox for the northern hemisphere
     public static Date northwardEquinox(int year) {
-        return calculateEquinoxOrSolstice(year, y -> 2451623.80984 + 365242.37404 * y + 0.05169 * y * y - 0.00411 * y * y * y - 0.00057 * y * y * y * y);
+        double y = ((double) (year) - 2000.0) / 1000.0;
+        double a = 2451623.80984 + 365242.37404 * y + 0.05169 * y * y - 0.00411 * y * y * y - 0.00057 * y * y * y * y;
+        return calculateEquinoxOrSolstice(year, a);
     }
 
     // Summer solstice for the northern hemisphere
     public static Date northernSolstice(int year) {
-        return calculateEquinoxOrSolstice(year, y -> 2451716.56767 + 365241.62603 * y + 0.00325 * y * y + 0.00888 * y * y * y - 0.00030 * y * y * y * y);
+        double y = ((double) (year) - 2000.0) / 1000.0;
+        double a = 2451716.56767 + 365241.62603 * y + 0.00325 * y * y + 0.00888 * y * y * y - 0.00030 * y * y * y * y;
+        return calculateEquinoxOrSolstice(year, a);
     }
 
     // Autumn equinox for the northern hemisphere
     public static Date southwardEquinox(int year) {
-        return calculateEquinoxOrSolstice(year, y -> 2451810.21715 + 365242.01767 * y - 0.11575 * y * y + 0.00337 * y * y * y + 0.00078 * y * y * y * y);
+        double y = ((double) (year) - 2000.0) / 1000.0;
+        double a = 2451810.21715 + 365242.01767 * y - 0.11575 * y * y + 0.00337 * y * y * y + 0.00078 * y * y * y * y;
+        return calculateEquinoxOrSolstice(year, a);
     }
 
     // Winter solstice for the northern hemisphere
     public static Date southernSolstice(int year) {
-        return calculateEquinoxOrSolstice(year, y -> 2451900.05952 + 365242.74049 * y - 0.06223 * y * y - 0.00823 * y * y * y + 0.00032 * y * y * y * y);
+        double y = ((double) (year) - 2000.0) / 1000.0;
+        double a = 2451900.05952 + 365242.74049 * y - 0.06223 * y * y - 0.00823 * y * y * y + 0.00032 * y * y * y * y;
+        return calculateEquinoxOrSolstice(year, a);
     }
 }
