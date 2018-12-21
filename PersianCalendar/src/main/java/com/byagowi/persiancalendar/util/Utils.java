@@ -576,8 +576,8 @@ public class Utils {
                     Coordinate coordinate = new Coordinate(
                             city.getDouble("latitude"),
                             city.getDouble("longitude"),
-                            // Consider elevation only for Afghanistan, nvm, otherwise
-                            countryCode.equals("af") ? city.getDouble("elevation") : 0
+                            // Don't Consider elevation for Iran
+                            countryCode.equals("ir") ? 0 : city.getDouble("elevation")
                     );
 
                     result.add(new CityEntity(key, en, fa, ckb, ar, countryCode,
