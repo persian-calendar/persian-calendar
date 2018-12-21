@@ -5,10 +5,6 @@ public class Coordinate {
     private final double longitude;
     private final double elevation;
 
-    public Coordinate(double latitude, double longitude) {
-        this(latitude, longitude, 0);
-    }
-
     public Coordinate(double latitude, double longitude, double elevation) {
         this.latitude = latitude;
         this.longitude = longitude;

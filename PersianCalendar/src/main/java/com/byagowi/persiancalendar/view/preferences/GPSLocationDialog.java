@@ -161,7 +161,8 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         }
         // this time, with native digits
         result += Utils.formatCoordinate(mainActivityDependency.getMainActivity(),
-                new Coordinate(location.getLatitude(), location.getLongitude()), "\n");
+                new Coordinate(location.getLatitude(), location.getLongitude(),
+                        location.getAltitude()), "\n");
         textView.setText(result);
     }
 
