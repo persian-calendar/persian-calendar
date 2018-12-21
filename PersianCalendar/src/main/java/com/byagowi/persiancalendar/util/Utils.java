@@ -682,6 +682,12 @@ public class Utils {
                 month);
     }
 
+    private static boolean sIsIranHolidaysEnabled = true;
+
+    public static boolean isIranHolidaysEnabled() {
+        return sIsIranHolidaysEnabled;
+    }
+
     static private void loadEvents(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
@@ -696,6 +702,8 @@ public class Utils {
         boolean iranAncient = enabledTypes.contains("iran_ancient");
         boolean iranOthers = enabledTypes.contains("iran_others");
         boolean international = enabledTypes.contains("international");
+
+        sIsIranHolidaysEnabled = iranHolidays;
 
         if (!iranHolidays) {
             if (afghanistanHolidays) {

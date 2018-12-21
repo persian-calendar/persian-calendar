@@ -152,7 +152,7 @@ public class CalendarsView extends FrameLayout {
                     Utils.formatNumber(12 - mainDate.getMonth()));
             if (chosenCalendarType == CalendarType.SHAMSI && Utils.getAppLanguage().equals(Constants.LANG_FA)) {
                 Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
-                endOfYearText += "\n" + String.format("لحظه اعتدال بهاری و تحویل سال %s: %s",
+                endOfYearText += "\n" + String.format(context.getString(R.string.spring_equinox),
                         Utils.formatNumber(mainDate.getYear()),
                         UIUtils.baseFormatClock(springEquinox.get(Calendar.HOUR_OF_DAY),
                                 springEquinox.get(Calendar.MINUTE)));

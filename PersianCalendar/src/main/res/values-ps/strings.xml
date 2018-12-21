@@ -194,4 +194,8 @@
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
 
+    <string name="outdated_app">تقویم به‌روز نیست؛ مناسبت‌ها ممکن است نادرست باشد</string>
+    <string name="update">بروزرسانی</string>
+    <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %s: %s</string>
+
 </resources>

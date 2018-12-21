@@ -84,8 +84,7 @@ public class CalendarUtils {
     }
 
     static public Calendar getSpringEquinox(long jdn) {
-        return makeCalendarFromDate(
-                Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
+        return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
     }
 
     static public String toLinearDate(AbstractDate date) {

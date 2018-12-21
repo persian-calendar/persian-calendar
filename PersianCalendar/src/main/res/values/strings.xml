@@ -14,6 +14,9 @@
     <string name="cancel">Cancel</string>
     <string name="continue_button">Continue</string>
 
+    <string name="outdated_app">Due to being outdated, things may are incorrect</string>
+    <string name="update">Update</string>
+
     <!-- No need for translation, remove the section from your translation -->
     <string name="about_developers_list" translatable="false">"Ebrahim Byagowi (@ebraminio)
 Hamid Safdari (@hamidsafdari)
@@ -131,6 +134,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Midnight</string>
+
+    <string name="spring_equinox">Spring equinox time of year %s: %s</string>
 
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>

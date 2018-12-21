@@ -14,6 +14,9 @@
     <string name="cancel">إلغاء</string>
     <string name="continue_button">تشغيل</string>
 
+    <string name="outdated_app">Due to being outdated, things may are incorrect</string>
+    <string name="update">Update</string>
+
     <!--Navigation drawers-->
     <string name="calendar">التقويم</string>
     <string name="date_converter">محول التاريخ</string>
@@ -84,6 +87,8 @@
     <string name="maghrib">أذان المغرب</string>
     <string name="isha">أذان العشاء</string>
     <string name="midnight">منتصف الليل</string>
+
+    <string name="spring_equinox">اعتدال ربيعي %s: %s</string>
 
     <!--Date Converter-->
     <string name="select_type_date">إختيار نوع التاريخ</string>

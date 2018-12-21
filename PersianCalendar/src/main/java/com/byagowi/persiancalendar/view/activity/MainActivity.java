@@ -210,13 +210,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         creationDateJdn = CalendarUtils.getTodayJdn();
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
+                Utils.isIranHolidaysEnabled() &&
                 (CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
-            Snackbar snackbar = Snackbar.make(getCoordinator(), "به دلیل قدیمی بودن نسخه مناسبت‌های ممکن صحیح نباشد",
+            Snackbar snackbar = Snackbar.make(getCoordinator(), getString(R.string.outdated_app),
                     10000);
             TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
             text.setTextColor(Color.WHITE);
 
-            snackbar.setAction("بروزرسانی", view -> {
+            snackbar.setAction(getString(R.string.update), view -> {
                 final String appPackageName = getPackageName();
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));

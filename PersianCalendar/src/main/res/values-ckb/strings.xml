@@ -194,4 +194,8 @@
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
 
+    <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
+    <string name="update">نوێکردنەوە</string>
+    <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %s: %s</string>
+
 </resources>
