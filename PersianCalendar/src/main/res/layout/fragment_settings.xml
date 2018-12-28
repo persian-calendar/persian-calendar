@@ -9,7 +9,8 @@
             android:id="@+id/tab_layout"
             style="@style/TabLayoutColored"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="?attr/coloredTabBackground" />
 
         <com.duolingo.open.rtlviewpager.RtlViewPager
             android:id="@+id/view_pager"
