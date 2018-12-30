@@ -454,6 +454,55 @@ public class Utils {
         }
     }
 
+    // According to Method@getOwghat4Widget4x2 array index
+    static int getNextOwghatTimeIndex4Widget4x2(Context context, Clock clock ,boolean dateHasChanged) {
+        if (coordinate == null) return -1;
+
+        if (prayTimes == null || dateHasChanged) {
+            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
+        }
+
+        if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
+            return 0;
+
+        } else if (prayTimes.getSunriseClock().toInt() > clock.toInt()) {
+            return 1;
+
+        } else if (prayTimes.getDhuhrClock().toInt() > clock.toInt()) {
+            return 2;
+
+        } else if (prayTimes.getSunsetClock().toInt() > clock.toInt()) {
+            return 3;
+
+        } else if (prayTimes.getMaghribClock().toInt() > clock.toInt()) {
+            return 4;
+
+        } else {
+            return -1;
+        }
+    }
+
+    static String[] getOwghat4Widget4x2(Context context, boolean dateHasChanged) {
+        if (coordinate == null) return null;
+
+        if (prayTimes == null || dateHasChanged) {
+            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
+        }
+
+        String[] owghats = new String[5];
+        owghats[0] = context.getString(R.string.sunrise)+ "\n" + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
+
+        owghats[1] = context.getString(R.string.fajr) + "\n" + UIUtils.getFormattedClock(prayTimes.getFajrClock());
+
+        owghats[2] = context.getString(R.string.dhuhr) + "\n" + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
+
+        owghats[3] = context.getString(R.string.sunset) + "\n" + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
+
+        owghats[4] = context.getString(R.string.maghrib) + "\n" + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
+
+        return owghats;
+    }
+
     static public String formatNumber(int number) {
         return formatNumber(Integer.toString(number));
     }

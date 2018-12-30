@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
 import com.byagowi.persiancalendar.Widget4x1;
+import com.byagowi.persiancalendar.Widget4x2;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
@@ -73,6 +74,7 @@ public class UpdateUtils {
         // Widget 1x1
         ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
                 widget4x1 = new ComponentName(context, Widget4x1.class),
+                widget4x2 = new ComponentName(context, Widget4x2.class),
                 widget2x2 = new ComponentName(context, Widget2x2.class);
 
         if (manager.getAppWidgetIds(widget1x1).length != 0) {
@@ -210,6 +212,43 @@ public class UpdateUtils {
                 manager.updateAppWidget(widget2x2, remoteViews2);
             }
         }
+
+        if (manager.getAppWidgetIds(widget4x2).length != 0) {
+            RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget4x2);
+            remoteViews1.setTextColor(R.id.textPlaceholder1_4x2, color);
+            remoteViews1.setTextColor(R.id.textPlaceholder2_4x2, color);
+
+
+            String text2 = title;
+            if (Utils.isShownOnWidgets("other_calendars")) {
+                text2 = text2 + "\n" + subtitle;
+            }
+
+            text2 = text2.replaceAll(",", "\n").replaceAll("،", "\n");
+            remoteViews1.setTextViewText(R.id.textPlaceholder2_4x2, text2);
+
+            String[] topOwthat = Utils.getOwghat4Widget4x2(context, updateDate);
+            int[] owghatPlaceHolderId = new int[]{
+                    R.id.textPlaceholder4owghat_1_4x2,
+                    R.id.textPlaceholder4owghat_2_4x2,
+                    R.id.textPlaceholder4owghat_3_4x2,
+                    R.id.textPlaceholder4owghat_4_4x2,
+                    R.id.textPlaceholder4owghat_5_4x2
+            };
+
+            for (int i = 0; i < owghatPlaceHolderId.length; i++) {
+                remoteViews1.setTextViewText(owghatPlaceHolderId[i], topOwthat[i]);
+            }
+
+            int nextOwghatIndex = Utils.getNextOwghatTimeIndex4Widget4x2(context, new Clock(calendar), updateDate);
+            if (nextOwghatIndex != -1) {
+                remoteViews1.setTextColor(owghatPlaceHolderId[nextOwghatIndex],
+                        context.getResources().getColor(R.color.widget_next_owghat_highlight));
+            }
+
+            manager.updateAppWidget(widget4x2, remoteViews1);
+        }
+
 
         //
         // Permanent Notification Bar and DashClock Data Extension Update
