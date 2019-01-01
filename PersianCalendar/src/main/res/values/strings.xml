@@ -202,6 +202,10 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which one to show</string>
     <string name="customize_widget_summary">What to show from notification and widges to make them more compact</string>
+    <string name="unseted_time">--:--</string>
+    <!-- TODO Translate below strings in other langs -->
+    <string name="remaining_time_to_next_owghat">%s تا وقت شرعی بعدی</string>
+    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
