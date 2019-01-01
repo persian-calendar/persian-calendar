@@ -86,7 +86,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         row.addView(typeSpinner);
 
         MaterialButton button = new MaterialButton(context);
-        button.setText("حذف");
+        button.setText(R.string.remove);
         button.setOnClickListener(v -> {
             daysSpinner.setSelection(0);
             row.setVisibility(View.GONE);

@@ -198,5 +198,8 @@
     <string name="update">نوێکردنەوە</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %s: %s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
+    <string name="remaining_time_to_next_owghat">%s تا وقت شرعی بعدی</string>
+    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
+    <string name="remove">سڕینەوە</string>
 
 </resources>

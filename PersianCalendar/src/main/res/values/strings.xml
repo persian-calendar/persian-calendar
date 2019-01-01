@@ -23,7 +23,8 @@ Hamid Safdari (@hamidsafdari)
 Behdad Abedi (@behdad222)
 Hamidreza Bayat (@HrBDev)
 Alireza Afkar (@alirezaafkar)
-Mehdi Dimyadi (@MEHDIMYADI)"</string>
+Mehdi Dimyadi (@MEHDIMYADI)
+Ruhollah (@runo280)"</string>
     <string name="about_designers_list" translatable="false">"Mehrara Abedi (Icon design)
 Behdad Pournader (Previous designer)
 Iman Soltanian (Previous designer)"</string>
@@ -63,6 +64,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="libra_emoji" translatable="false">♎</string>
     <string name="scorpio_emoji" translatable="false">♏</string>
     <string name="sagittarius_emoji" translatable="false">♐</string>
+    <string name="unseted_time" translatable="false">--:--</string>
 
     <!--Navigation drawers-->
     <string name="calendar">Calendar</string>
@@ -202,10 +204,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which one to show</string>
     <string name="customize_widget_summary">What to show from notification and widges to make them more compact</string>
-    <string name="unseted_time">--:--</string>
-    <!-- TODO Translate below strings in other langs -->
-    <string name="remaining_time_to_next_owghat">%s تا وقت شرعی بعدی</string>
-    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
+    <string name="remaining_time_to_next_owghat">%s till the next pray time</string>
+    <string name="ask_user_to_set_location">Set the location in the settings in order to pray times here</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
@@ -280,5 +280,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
     <string name="shift_work_settings">Shift Work Settings</string>
+    <string name="remove">Remove</string>
 
 </resources>
