@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.CalendarsView;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
+import com.byagowi.persiancalendar.view.dialog.ShiftWorkDialog;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -451,6 +452,11 @@ public class CalendarFragment extends DaggerFragment {
         selectDay(CalendarUtils.getTodayJdn());
     }
 
+    public void afterShiftWorkChange() {
+        Utils.updateStoredPreference(getContext());
+        sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
+    }
+
     public void bringDate(long jdn) {
         Context context = getContext();
         if (context == null) return;
@@ -551,6 +557,10 @@ public class CalendarFragment extends DaggerFragment {
                     mLastSelectedJdn = CalendarUtils.getTodayJdn();
 
                 addEventOnCalendar(mLastSelectedJdn);
+                break;
+            case R.id.shift_work:
+                ShiftWorkDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
+                        ShiftWorkDialog.class.getName());
                 break;
             default:
                 break;

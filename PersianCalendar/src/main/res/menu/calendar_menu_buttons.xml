@@ -18,4 +18,9 @@
         android:title="@string/add_event"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/shift_work"
+        android:title="@string/shift_work_settings"
+        app:showAsAction="never" />
+
 </menu>

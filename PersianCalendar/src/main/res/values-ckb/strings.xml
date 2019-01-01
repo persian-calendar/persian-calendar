@@ -197,5 +197,6 @@
     <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
     <string name="update">نوێکردنەوە</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %s: %s</string>
+    <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
 
 </resources>

@@ -231,5 +231,6 @@
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+    <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
 
 </resources>

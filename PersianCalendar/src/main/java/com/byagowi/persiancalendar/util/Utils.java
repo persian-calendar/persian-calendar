@@ -125,6 +125,8 @@ import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_SETTING;
+import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 import static com.byagowi.persiancalendar.Constants.PREF_THEME;
 import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
@@ -281,6 +283,24 @@ public class Utils {
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
+
+        try {
+            sShiftWorks = new ArrayList<>();
+            String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
+            String[] parts = shiftWork.split(",");
+            Log.e("AAAAAAAAAA", shiftWork);
+            for (String p : parts) {
+                String[] v = p.split("=");
+                if (v.length != 2) continue;
+                sShiftWorks.add(new ShiftWorkRecord(v[0], Integer.valueOf(v[1])));
+            }
+            sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sShiftWorks = Collections.emptyList();
+            sShiftWorkStartingJdn = -1;
+        }
+
         try {
             appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
         } catch (Exception e) {
@@ -290,6 +310,28 @@ public class Utils {
 
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
+    }
+
+    static public class ShiftWorkRecord {
+        public final String type;
+        public final int length;
+
+        public ShiftWorkRecord(String type, int length) {
+            this.type = type;
+            this.length = length;
+        }
+    }
+
+    static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
+
+    static public ArrayList<ShiftWorkRecord> getShiftWorks() {
+        return new ArrayList<>(sShiftWorks);
+    }
+
+    static private long sShiftWorkStartingJdn = -1;
+
+    static public long getShiftWorkStartingJdn() {
+        return sShiftWorkStartingJdn;
     }
 
     @StyleRes

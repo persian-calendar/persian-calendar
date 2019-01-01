@@ -66,4 +66,11 @@
         <item>2+</item>
     </string-array>
 
+    <string-array name="shift_work">
+        <item>روزکاری</item>
+        <item>استراحت</item>
+        <item>عصرکاری</item>
+        <item>شب‌کاری</item>
+    </string-array>
+
 </resources>

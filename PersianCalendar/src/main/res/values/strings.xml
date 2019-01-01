@@ -275,5 +275,6 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
+    <string name="shift_work_settings">Shift Work Settings</string>
 
 </resources>
