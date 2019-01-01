@@ -287,6 +287,12 @@ public class CalendarUtils {
             result.append(dayTitleSummary(mainDate));
         }
 
+        String shift = Utils.getShiftWorkTitleOfJdn(jdn);
+        if (!TextUtils.isEmpty(shift)) {
+            result.append("\n");
+            result.append(shift);
+        }
+
         if (withOtherCalendars) {
             String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
             if (!TextUtils.isEmpty(otherCalendars)) {

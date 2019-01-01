@@ -52,12 +52,11 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         return fragment;
     }
 
-    public class Row {
-        public final AppCompatSpinner daysSpinner;
-        public final AppCompatSpinner typeSpinner;
+    static class Row {
+        final AppCompatSpinner daysSpinner;
+        final AppCompatSpinner typeSpinner;
 
-
-        public Row(AppCompatSpinner daysSpinner, AppCompatSpinner typeSpinner) {
+        Row(AppCompatSpinner daysSpinner, AppCompatSpinner typeSpinner) {
             this.daysSpinner = daysSpinner;
             this.typeSpinner = typeSpinner;
         }
@@ -111,8 +110,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         shiftWorkKeys = Arrays.asList(getResources().getStringArray(R.array.shift_work_keys));
 
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
-        //        DayPickerView dayPickerView = new SimpleDayPickerView(mainActivity);
-//        dayPickerView.setDayJdnOnView(jdn);
 
         LinearLayout container = new LinearLayout(mainActivity);
         container.setPadding(20, 20, 20, 20);
@@ -137,7 +134,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         container.addView(addButton);
 
         TextView description = new TextView(mainActivity);
-        description.setText(String.format("شروع شیفت کاری از روز انتخاب شده %s است.",
+        description.setText(String.format("شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.",
                 CalendarUtils.formatDate(
                         CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
         description.append("\n");

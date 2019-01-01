@@ -151,6 +151,11 @@ import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 public class Utils {
 
     static private final String TAG = Utils.class.getName();
+
+    static public int getMaxSupportedYear() {
+        return 1398;
+    }
+
     static private String[] persianMonths;
     static private String[] islamicMonths;
     static private String[] gregorianMonths;
@@ -190,9 +195,22 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
     static private List<AbstractEvent> sAllEnabledEvents;
+    static private String[] sShiftWorkTitles;
+    private static List<String> sShiftWorkKeys;
 
-    static public int getMaxSupportedYear() {
-        return 1398;
+    static private long sShiftWorkStartingJdn = -1;
+    static public class ShiftWorkRecord {
+        public final String type;
+        public final int length;
+
+        public ShiftWorkRecord(String type, int length) {
+            this.type = type;
+            this.length = length;
+        }
+    }
+    static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
+    static public ArrayList<ShiftWorkRecord> getShiftWorks() {
+        return new ArrayList<>(sShiftWorks);
     }
 
     // This should be called before any use of Utils on the activity and services
@@ -288,7 +306,6 @@ public class Utils {
             sShiftWorks = new ArrayList<>();
             String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
             String[] parts = shiftWork.split(",");
-            Log.e("AAAAAAAAAA", shiftWork);
             for (String p : parts) {
                 String[] v = p.split("=");
                 if (v.length != 2) continue;
@@ -300,6 +317,8 @@ public class Utils {
             sShiftWorks = Collections.emptyList();
             sShiftWorkStartingJdn = -1;
         }
+        sShiftWorkTitles = context.getResources().getStringArray(R.array.shift_work);
+        sShiftWorkKeys = Arrays.asList(context.getResources().getStringArray(R.array.shift_work_keys));
 
         try {
             appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
@@ -312,27 +331,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    static public class ShiftWorkRecord {
-        public final String type;
-        public final int length;
-
-        public ShiftWorkRecord(String type, int length) {
-            this.type = type;
-            this.length = length;
-        }
-    }
-
-    static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
-
-    static public ArrayList<ShiftWorkRecord> getShiftWorks() {
-        return new ArrayList<>(sShiftWorks);
-    }
-
-    static private long sShiftWorkStartingJdn = -1;
-
-    static public long getShiftWorkStartingJdn() {
-        return sShiftWorkStartingJdn;
-    }
 
     @StyleRes
     public static int getAppTheme() {
@@ -925,6 +923,25 @@ public class Utils {
         return event.getDayOfMonth() == date.getDayOfMonth()
                 && event.getMonth() == date.getMonth()
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
+    }
+
+    static public String getShiftWorkTitleOfJdn(long jdn) {
+        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn) return "";
+        // TODO: All should be cached
+//        try {
+        int period = 0;
+        for (ShiftWorkRecord shift : sShiftWorks) period += shift.length;
+        if (period == 0) return "";
+        int dayInPeriod = (int) (jdn - sShiftWorkStartingJdn) % period;
+        int accumulation = 0;
+        for (ShiftWorkRecord shift : sShiftWorks) {
+            accumulation += shift.length;
+            if (accumulation > dayInPeriod)
+                // TODO: Replace with a map!
+                return sShiftWorkTitles[sShiftWorkKeys.indexOf(shift.type)];
+        }
+        return "";
+//        } catch (Exception e) return "";
     }
 
     static public List<AbstractEvent> getEvents(long jdn,
