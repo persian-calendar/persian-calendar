@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
+import com.byagowi.persiancalendar.entity.Widget4x2OwghatEntity;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
@@ -492,6 +493,24 @@ public class Utils {
         } else {
             return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
         }
+    }
+
+    static boolean isLocationSet(Context context){
+        return getCityFromPreference(context) != null ? true : false;
+    }
+
+    static Widget4x2OwghatEntity getOwghat4Widget4x2(Context context, Clock clock, boolean dateHasChanged) {
+        if (coordinate == null) return null;
+
+        if (prayTimes == null || dateHasChanged) {
+            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
+        }
+
+        boolean isShia = calculationMethod.equalsIgnoreCase("Tehran") ||
+                calculationMethod.equalsIgnoreCase("Jafari");
+
+        Widget4x2OwghatEntity owghatEntity = new Widget4x2OwghatEntity(prayTimes, isShia, clock);
+        return owghatEntity;
     }
 
     static public String formatNumber(int number) {
