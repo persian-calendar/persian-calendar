@@ -227,9 +227,7 @@ public class UpdateUtils {
                 text2 = text2 + "\n" + subtitle;
             }
 
-            text2 = text2.replaceAll(",", "\n").replaceAll("،", "\n");
-            //remove space from beginning of lines
-            text2 = text2.replaceAll("^\\s+", "");
+            text2 = text2.replaceAll(", ", "\n").replaceAll("، ", "\n");
 
             remoteViews1.setTextViewText(R.id.textPlaceholder1_4x2, text2);
 
@@ -257,7 +255,7 @@ public class UpdateUtils {
                             UIUtils.getFormattedClock(owghatEntity.getClocks()[i]);
 
                     remoteViews1.setTextViewText(owghatPlaceHolderId[i], txt);
-                    remoteViews1.setTextColor(owghatPlaceHolderId[i], newColor);
+                    remoteViews1.setTextColor(owghatPlaceHolderId[i], color);
                 }
 
                 // Set remaining time to next owghat
@@ -267,16 +265,18 @@ public class UpdateUtils {
                             owghatEntity.getRemainingTime());
 
                     remoteViews1.setTextViewText(R.id.textPlaceholder2_4x2, rem);
-                    remoteViews1.setTextColor(R.id.textPlaceholder2_4x2, newColor);
+                    remoteViews1.setTextColor(R.id.textPlaceholder2_4x2, color);
                 }
 
                 // Highlight the next owghat with user selected color, because others owghats are darkened
                 if (owghatEntity.getIndexOfNextOwghat() != -1)
                     remoteViews1.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
-                            color);
+                            Color.RED);
             } else {
                 remoteViews1.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
             }
+
+            remoteViews1.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent);
 
             manager.updateAppWidget(widget4x2, remoteViews1);
         }

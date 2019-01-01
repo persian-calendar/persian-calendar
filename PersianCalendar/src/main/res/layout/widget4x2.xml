@@ -43,13 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="right|center_vertical"
-            android:text=" "
-            android:minLines="4"
+            android:text=""
+            android:lineSpacingExtra="6dp"            android:minLines="4"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
-
-
-
 
     </LinearLayout>
 
