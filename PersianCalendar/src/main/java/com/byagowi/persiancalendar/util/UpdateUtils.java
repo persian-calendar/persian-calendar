@@ -114,10 +114,11 @@ public class UpdateUtils {
         }
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
 
+        boolean enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1;
+
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
             RemoteViews remoteViews4, remoteViews2;
-            boolean enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1;
             if (enableClock) {
                 if (!Utils.isIranTime()) {
                     remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock);
@@ -217,10 +218,23 @@ public class UpdateUtils {
 
         //region Widget 4x2
         if (manager.getAppWidgetIds(widget4x2).length != 0) {
-            RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget4x2);
-            remoteViews1.setTextColor(R.id.textPlaceholder1_4x2, color);
-            remoteViews1.setTextColor(R.id.textPlaceholder2_4x2, color);
+            RemoteViews remoteViews4x2;
+            if (enableClock) {
+                if (!Utils.isIranTime()) {
+                    remoteViews4x2 = new RemoteViews(context.getPackageName(), R.layout.widget4x2_clock);
+                } else {
+                    remoteViews4x2 = new RemoteViews(context.getPackageName(), R.layout.widget4x2_clock_iran);
+                }
+            } else {
+                remoteViews4x2 = new RemoteViews(context.getPackageName(), R.layout.widget4x2);
+            }
 
+            remoteViews4x2.setTextColor(R.id.textPlaceholder0_4x2, color);
+            remoteViews4x2.setTextColor(R.id.textPlaceholder1_4x2, color);
+            remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
+
+            if (!enableClock)
+                remoteViews4x2.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName);
 
             String text2 = title;
             if (Utils.isShownOnWidgets("other_calendars")) {
@@ -229,8 +243,7 @@ public class UpdateUtils {
 
             text2 = text2.replaceAll(", ", "\n").replaceAll("، ", "\n");
 
-            remoteViews1.setTextViewText(R.id.textPlaceholder1_4x2, text2);
-
+            remoteViews4x2.setTextViewText(R.id.textPlaceholder1_4x2, text2);
 
             if (Utils.isLocationSet(context)) {
 
@@ -254,31 +267,31 @@ public class UpdateUtils {
                     String txt = context.getString(owghatEntity.getTitle()[i]) + "\n" +
                             UIUtils.getFormattedClock(owghatEntity.getClocks()[i]);
 
-                    remoteViews1.setTextViewText(owghatPlaceHolderId[i], txt);
-                    remoteViews1.setTextColor(owghatPlaceHolderId[i], color);
+                    remoteViews4x2.setTextViewText(owghatPlaceHolderId[i], txt);
+                    remoteViews4x2.setTextColor(owghatPlaceHolderId[i], color);
                 }
 
                 // Set remaining time to next owghat
-                if(!owghatEntity.getRemainingTime().isEmpty()) {
+                if (!owghatEntity.getRemainingTime().isEmpty()) {
                     //TODO We should point to exact owghat name in remaining time string
                     String rem = String.format(context.getString(R.string.remaining_time_to_next_owghat),
                             owghatEntity.getRemainingTime());
 
-                    remoteViews1.setTextViewText(R.id.textPlaceholder2_4x2, rem);
-                    remoteViews1.setTextColor(R.id.textPlaceholder2_4x2, color);
+                    remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, rem);
+                    remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
                 }
 
                 // Highlight the next owghat with user selected color, because others owghats are darkened
                 if (owghatEntity.getIndexOfNextOwghat() != -1)
-                    remoteViews1.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
+                    remoteViews4x2.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
                             Color.RED);
             } else {
-                remoteViews1.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
+                remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
             }
 
-            remoteViews1.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent);
+            remoteViews4x2.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent);
 
-            manager.updateAppWidget(widget4x2, remoteViews1);
+            manager.updateAppWidget(widget4x2, remoteViews4x2);
         }
         //endregion
 

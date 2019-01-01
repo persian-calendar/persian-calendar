@@ -59,7 +59,9 @@ public class Widget4x2OwghatEntity {
         //Log.d(TAG, "indexOfNextOwghat is " + indexOfNextOwghat);
 
         switch (indexOfNextOwghat) {
-            case 0: case 1: case 2:
+            case 0:
+            case 1:
+            case 2:
                 clocks = clocks.subList(0, 5);
                 clocks.toArray(mClocks);
                 if (isShia) mOwghatTtitle = shia1;

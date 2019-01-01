@@ -200,6 +200,7 @@ public class Utils {
     private static List<String> sShiftWorkKeys;
 
     static private long sShiftWorkStartingJdn = -1;
+
     static public class ShiftWorkRecord {
         public final String type;
         public final int length;
@@ -209,7 +210,9 @@ public class Utils {
             this.length = length;
         }
     }
+
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
+
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
     }
@@ -495,7 +498,7 @@ public class Utils {
         }
     }
 
-    static boolean isLocationSet(Context context){
+    static boolean isLocationSet(Context context) {
         return getCityFromPreference(context) != null ? true : false;
     }
 
