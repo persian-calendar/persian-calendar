@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
+import com.byagowi.persiancalendar.entity.ShiftWorkRecord;
 import com.byagowi.persiancalendar.entity.Widget4x2OwghatEntity;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
@@ -200,16 +201,6 @@ public class Utils {
     private static List<String> sShiftWorkKeys;
 
     static private long sShiftWorkStartingJdn = -1;
-
-    static public class ShiftWorkRecord {
-        public final String type;
-        public final int length;
-
-        public ShiftWorkRecord(String type, int length) {
-            this.type = type;
-            this.length = length;
-        }
-    }
 
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
 
