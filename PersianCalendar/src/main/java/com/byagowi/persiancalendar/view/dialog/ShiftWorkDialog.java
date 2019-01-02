@@ -120,7 +120,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 binding.lengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mRows.get(mPosition).length = position;
+                        mRows.set(mPosition, new ShiftWorkRecord(
+                                mRows.get(mPosition).type, position));
                     }
 
                     @Override
@@ -131,7 +132,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 binding.typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mRows.get(mPosition).type = mShiftWorkKeys.get(position);
+                        mRows.set(mPosition, new ShiftWorkRecord(
+                                mShiftWorkKeys.get(position), mRows.get(mPosition).length));
                     }
 
                     @Override

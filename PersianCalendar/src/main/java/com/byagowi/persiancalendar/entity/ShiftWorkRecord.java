@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.entity;
 
 public class ShiftWorkRecord {
-    public String type;
-    public int length;
+    final public String type;
+    final public int length;
 
     public ShiftWorkRecord(String type, int length) {
         this.type = type;
