@@ -25,4 +25,5 @@
             android:text="@string/add" />
 
     </LinearLayout>
+
 </layout>
