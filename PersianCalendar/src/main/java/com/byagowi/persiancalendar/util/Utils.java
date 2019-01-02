@@ -503,7 +503,7 @@ public class Utils {
         boolean isShia = calculationMethod.equalsIgnoreCase("Tehran") ||
                 calculationMethod.equalsIgnoreCase("Jafari");
 
-        Widget4x2OwghatEntity owghatEntity = new Widget4x2OwghatEntity(prayTimes, isShia, clock);
+        Widget4x2OwghatEntity owghatEntity = new Widget4x2OwghatEntity(context, prayTimes, isShia, clock);
         return owghatEntity;
     }
 

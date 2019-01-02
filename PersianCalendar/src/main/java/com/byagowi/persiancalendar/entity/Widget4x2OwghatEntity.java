@@ -1,8 +1,11 @@
 package com.byagowi.persiancalendar.entity;
 
+import android.content.Context;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +20,7 @@ public class Widget4x2OwghatEntity {
     private int[] mOwghatTtitle;
     private String mRemainingTime = "";
 
-    public Widget4x2OwghatEntity(PrayTimes prayTimes, boolean isShia, Clock currentClock) {
+    public Widget4x2OwghatEntity(Context context, PrayTimes prayTimes, boolean isShia, Clock currentClock) {
 
         //TODO We may want to show Imsak only in Ramadan for Shia
 
@@ -84,7 +87,7 @@ public class Widget4x2OwghatEntity {
 
         if (indexOfNextOwghat != -1) {
             mIndexOfNextOwghat = getClockIndex(clocks, currentClock);
-            mRemainingTime = getRemaningString(mClocks[mIndexOfNextOwghat], currentClock);
+            mRemainingTime = getRemainingString(context, mClocks[mIndexOfNextOwghat], currentClock);
         }
         //Log.d(TAG, "mIndexOfNextOwghat is " + mIndexOfNextOwghat);
     }
@@ -119,27 +122,18 @@ public class Widget4x2OwghatEntity {
 
     }
 
-    private String getRemaningString(Clock startDate, Clock endDate) {
-
+    private String getRemainingString(Context context, Clock startDate, Clock endDate) {
         int different = Math.abs(endDate.toInt() - startDate.toInt());
 
-        //Log.d(TAG, "startDate : " + startDate);
-        //Log.d(TAG, "endDate : " + endDate);
-        //Log.d(TAG, "different : " + different);
-
-        MINUTES.toHours(different);
         int hrs = (int) (MINUTES.toHours(different) % 24);
         int min = (int) (MINUTES.toMinutes(different) % 60);
 
         if (hrs == 0) {
-            return String.format("%d دقیقه", min);
+            return String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min));
         }
         if (min == 0) {
-            return String.format("%d ساعت", hrs);
+            return String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs));
         }
-        if (hrs == 0 && min == 0) {
-            return "";
-        }
-        return String.format("%d ساعت و %d دقیقه", hrs, min);
+        return String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min));
     }
 }

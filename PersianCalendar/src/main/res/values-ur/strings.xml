@@ -202,5 +202,8 @@
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
     <string name="shift_work_extra_comment">برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.</string>
+    <string name="n_minutes">%s دقیقه</string>
+    <string name="n_hours">%s ساعت</string>
+    <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
 
 </resources>
