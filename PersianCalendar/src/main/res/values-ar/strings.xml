@@ -235,5 +235,7 @@
     <string name="empty" />
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="remove">Remove</string>
+    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
+    <string name="shift_work_extra_comment">برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.</string>
 
 </resources>

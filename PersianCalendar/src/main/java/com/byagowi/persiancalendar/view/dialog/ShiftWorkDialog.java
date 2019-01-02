@@ -170,11 +170,11 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         binding.addButton.setOnClickListener(v ->
                 shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0)));
 
-        binding.description.setText(String.format("شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.",
+        binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
                 CalendarUtils.formatDate(
                         CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
         binding.description.append("\n");
-        binding.description.append("برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.");
+        binding.description.append(getString(R.string.shift_work_extra_comment));
 
         return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                 .setView(binding.getRoot())
