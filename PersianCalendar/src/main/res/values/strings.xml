@@ -281,7 +281,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="empty" />
     <string name="shift_work_settings">Shift Work Settings</string>
     <string name="remove">Remove</string>
-    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
-    <string name="shift_work_extra_comment">برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.</string>
+    <string name="shift_work_starting_date">%s is the chosen shift work starting day.</string>
+    <string name="shift_work_extra_comment">To disable shift work or reprogram it, remove all the entries and reenter here again.</string>
 
 </resources>

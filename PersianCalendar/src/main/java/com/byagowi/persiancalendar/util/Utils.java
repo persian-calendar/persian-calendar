@@ -941,20 +941,22 @@ public class Utils {
     static public String getShiftWorkTitleOfJdn(long jdn) {
         if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn) return "";
         // TODO: All should be cached
-//        try {
-        int period = 0;
-        for (ShiftWorkRecord shift : sShiftWorks) period += shift.length;
-        if (period == 0) return "";
-        int dayInPeriod = (int) (jdn - sShiftWorkStartingJdn) % period;
-        int accumulation = 0;
-        for (ShiftWorkRecord shift : sShiftWorks) {
-            accumulation += shift.length;
-            if (accumulation > dayInPeriod)
-                // TODO: Replace with a map!
-                return sShiftWorkTitles[sShiftWorkKeys.indexOf(shift.type)];
+        try {
+            int period = 0;
+            for (ShiftWorkRecord shift : sShiftWorks) period += shift.length;
+            if (period == 0) return "";
+            int dayInPeriod = (int) (jdn - sShiftWorkStartingJdn) % period;
+            int accumulation = 0;
+            for (ShiftWorkRecord shift : sShiftWorks) {
+                accumulation += shift.length;
+                if (accumulation > dayInPeriod)
+                    // TODO: Replace with a map!
+                    return sShiftWorkTitles[sShiftWorkKeys.indexOf(shift.type)];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
-//        } catch (Exception e) return "";
     }
 
     static public List<AbstractEvent> getEvents(long jdn,
