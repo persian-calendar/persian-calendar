@@ -6,17 +6,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/length_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/type_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/remove"
             android:layout_width="wrap_content"
@@ -24,4 +24,5 @@
             android:text="@string/remove" />
 
     </LinearLayout>
+
 </layout>
