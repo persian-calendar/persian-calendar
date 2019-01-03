@@ -169,8 +169,10 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
             shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
         ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
-        binding.addButton.setOnClickListener(v ->
-                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0)));
+        binding.addButton.setOnClickListener(v -> {
+            if (shiftWorkItemAdapter.getItemCount() < 5)
+                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0));
+        });
 
         binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
                 CalendarUtils.formatDate(
