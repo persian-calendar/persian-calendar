@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.core.app.ActivityCompat;
 
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
+import static com.byagowi.persiancalendar.util.Utils.getSpacedComma;
 
 public class CalendarUtils {
     private final static long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
@@ -93,7 +94,7 @@ public class CalendarUtils {
     }
 
     static public String dayTitleSummary(AbstractDate date) {
-        return Utils.getWeekDayName(date) + Utils.getSpacedComma() + formatDate(date);
+        return Utils.getWeekDayName(date) + getSpacedComma() + formatDate(date);
     }
 
     static public String getMonthName(AbstractDate date) {
@@ -294,7 +295,7 @@ public class CalendarUtils {
         }
 
         if (withOtherCalendars) {
-            String otherCalendars = Utils.dateStringOfOtherCalendars(jdn);
+            String otherCalendars = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());
             if (!TextUtils.isEmpty(otherCalendars)) {
                 result.append("\n");
                 result.append("\n");

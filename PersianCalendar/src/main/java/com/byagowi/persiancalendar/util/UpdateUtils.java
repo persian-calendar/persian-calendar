@@ -37,6 +37,8 @@ import java.util.List;
 import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.ColorUtils;
 
+import static com.byagowi.persiancalendar.util.Utils.getSpacedComma;
+
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static AbstractDate pastDate;
@@ -104,7 +106,7 @@ public class UpdateUtils {
         String title = CalendarUtils.dayTitleSummary(date);
         String shiftWorkTitle = Utils.getShiftWorkTitleOfJdn(jdn);
         if (!TextUtils.isEmpty(shiftWorkTitle)) title += " (" + shiftWorkTitle.substring(0, 1) + ")";
-        String subtitle = Utils.dateStringOfOtherCalendars(jdn);
+        String subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());
 
         Clock currentClock = new Clock(calendar);
         String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
@@ -155,7 +157,7 @@ public class UpdateUtils {
                     text2 = mainDateString;
                 }
                 if (Utils.isShownOnWidgets("other_calendars")) {
-                    text2 += Utils.getSpacedComma() + subtitle;
+                    text2 += getSpacedComma() + subtitle;
                 }
 
                 remoteViews4.setTextViewText(R.id.textPlaceholder2_4x1, text2);
@@ -235,58 +237,56 @@ public class UpdateUtils {
             remoteViews4x2.setTextColor(R.id.textPlaceholder1_4x2, color);
             remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
 
-            if (!enableClock)
+            String text2 = CalendarUtils.formatDate(date);
+            if (enableClock)
+                text2 = Utils.getWeekDayName(date) + "\n" + text2;
+            else
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName);
 
-            String text2 = title;
             if (Utils.isShownOnWidgets("other_calendars")) {
-                text2 = text2 + "\n" + subtitle;
+                text2 = text2 + "\n" + Utils.dateStringOfOtherCalendars(jdn, "\n");
             }
-
-            text2 = text2.replaceAll(", ", "\n").replaceAll("، ", "\n");
 
             remoteViews4x2.setTextViewText(R.id.textPlaceholder1_4x2, text2);
 
             if (Utils.isLocationSet(context)) {
 
                 Widget4x2OwghatEntity owghatEntity = Utils.getOwghat4Widget4x2(context, currentClock, updateDate);
+                if (owghatEntity != null) {
 
-                // Owghats placeholder ids
-                int[] owghatPlaceHolderId = new int[]{
-                        R.id.textPlaceholder4owghat_1_4x2,
-                        R.id.textPlaceholder4owghat_2_4x2,
-                        R.id.textPlaceholder4owghat_3_4x2,
-                        R.id.textPlaceholder4owghat_4_4x2,
-                        R.id.textPlaceholder4owghat_5_4x2
-                };
+                    // Owghats placeholder ids
+                    int[] owghatPlaceHolderId = new int[]{
+                            R.id.textPlaceholder4owghat_1_4x2,
+                            R.id.textPlaceholder4owghat_2_4x2,
+                            R.id.textPlaceholder4owghat_3_4x2,
+                            R.id.textPlaceholder4owghat_4_4x2,
+                            R.id.textPlaceholder4owghat_5_4x2
+                    };
 
+                    // Set text of owghats
+                    for (int i = 0; i < owghatPlaceHolderId.length; i++) {
+                        String txt = context.getString(owghatEntity.getTitle()[i]) + "\n" +
+                                UIUtils.getFormattedClock(owghatEntity.getClocks()[i]);
 
-                // Make user selected color darker for owghats
-                int newColor = ColorUtils.blendARGB(color, Color.BLACK, 0.25f);
+                        remoteViews4x2.setTextViewText(owghatPlaceHolderId[i], txt);
+                        remoteViews4x2.setTextColor(owghatPlaceHolderId[i], color);
+                    }
 
-                // Set text of owghats
-                for (int i = 0; i < owghatPlaceHolderId.length; i++) {
-                    String txt = context.getString(owghatEntity.getTitle()[i]) + "\n" +
-                            UIUtils.getFormattedClock(owghatEntity.getClocks()[i]);
+                    // Set remaining time to next owghat
+                    if (!owghatEntity.getRemainingTime().isEmpty()) {
+                        //TODO We should point to exact owghat name in remaining time string
+                        String rem = String.format(context.getString(R.string.remaining_time_to_next_owghat),
+                                owghatEntity.getRemainingTime());
 
-                    remoteViews4x2.setTextViewText(owghatPlaceHolderId[i], txt);
-                    remoteViews4x2.setTextColor(owghatPlaceHolderId[i], color);
+                        remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, rem);
+                        remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
+                    }
+
+                    // Highlight the next owghat with user selected color, because others owghats are darkened
+                    if (owghatEntity.getIndexOfNextOwghat() != -1)
+                        remoteViews4x2.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
+                                Color.RED);
                 }
-
-                // Set remaining time to next owghat
-                if (!owghatEntity.getRemainingTime().isEmpty()) {
-                    //TODO We should point to exact owghat name in remaining time string
-                    String rem = String.format(context.getString(R.string.remaining_time_to_next_owghat),
-                            owghatEntity.getRemainingTime());
-
-                    remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, rem);
-                    remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
-                }
-
-                // Highlight the next owghat with user selected color, because others owghats are darkened
-                if (owghatEntity.getIndexOfNextOwghat() != -1)
-                    remoteViews4x2.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
-                            Color.RED);
             } else {
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
             }
@@ -334,7 +334,7 @@ public class UpdateUtils {
                         deviceCalendarEvents,
                         true, true, false);
                 if (!TextUtils.isEmpty(owghat)) {
-                    subtitle += Utils.getSpacedComma();
+                    subtitle += getSpacedComma();
                     subtitle += owghat;
                 }
             }

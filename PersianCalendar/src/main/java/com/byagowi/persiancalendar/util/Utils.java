@@ -490,7 +490,7 @@ public class Utils {
     }
 
     static boolean isLocationSet(Context context) {
-        return getCityFromPreference(context) != null ? true : false;
+        return getCityFromPreference(context) != null;
     }
 
     static Widget4x2OwghatEntity getOwghat4Widget4x2(Context context, Clock clock, boolean dateHasChanged) {
@@ -503,8 +503,7 @@ public class Utils {
         boolean isShia = calculationMethod.equalsIgnoreCase("Tehran") ||
                 calculationMethod.equalsIgnoreCase("Jafari");
 
-        Widget4x2OwghatEntity owghatEntity = new Widget4x2OwghatEntity(context, prayTimes, isShia, clock);
-        return owghatEntity;
+        return new Widget4x2OwghatEntity(context, prayTimes, isShia, clock);
     }
 
     static public String formatNumber(int number) {
@@ -524,7 +523,7 @@ public class Utils {
         return String.valueOf(result);
     }
 
-    static String getSpacedComma() {
+    static public String getSpacedComma() {
         return spacedComma;
     }
 
@@ -1371,11 +1370,11 @@ public class Utils {
 //        }
     }
 
-    static public String dateStringOfOtherCalendars(long jdn) {
+    static public String dateStringOfOtherCalendars(long jdn, String separator) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (CalendarType type : otherCalendars) {
-            if (!first) result.append(getSpacedComma());
+            if (!first) result.append(separator);
             result.append(CalendarUtils.formatDate(
                     CalendarUtils.getDateFromJdnOfCalendar(type, jdn)));
             first = false;
