@@ -30,17 +30,14 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_margin="8dp"
             android:background="@color/widget_divider" />
 
         <TextView
             android:id="@+id/textPlaceholder1_4x2"
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="right|center_vertical"
             android:lineSpacingExtra="6dp"
             android:minLines="4"
