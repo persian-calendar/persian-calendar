@@ -287,4 +287,19 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="n_hours">%s hours</string>
     <string name="n_minutes_and_hours">%s hours and %s minutes</string>
 
+    <!--Device Info-->
+    <string name="device_info">Device Info</string>
+    <string name="unknown">UNKNOWN</string>
+    <string name="info_manufacturer">Manufacturer</string>
+    <string name="info_Brand">Brand</string>
+    <string name="info_Serial_No">Serial No</string>
+    <string name="info_locale">Locale</string>
+    <string name="info_model">Model</string>
+    <string name="info_androidId">Android ID</string>
+    <string name="info_board">Board</string>
+    <string name="info_bootloader">Bootloader</string>
+    <string name="info_user">User</string>
+    <string name="info_host">Host</string>
+    <string name="info_screen">Screen Resolution</string>
+
 </resources>
