@@ -20,18 +20,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.MyViewHold
 
     private List<InfoList> infoLists;
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title, ver, content;
-
-        MyViewHolder(View view) {
-            super(view);
-            title = view.findViewById(R.id.title);
-            content = view.findViewById(R.id.content);
-            ver = view.findViewById(R.id.ver);
-        }
-    }
-
-
     public DeviceAdapter(List<InfoList> moviesList) {
         this.infoLists = moviesList;
     }
@@ -56,5 +44,16 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return infoLists.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView title, ver, content;
+
+        MyViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.title);
+            content = view.findViewById(R.id.content);
+            ver = view.findViewById(R.id.ver);
+        }
     }
 }

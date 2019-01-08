@@ -55,9 +55,67 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         return fragment;
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        long tempJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
+        if (tempJdn == -1) tempJdn = CalendarUtils.getTodayJdn();
+        long jdn = tempJdn;
+
+        Context context = getContext();
+        ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
+                LayoutInflater.from(getContext()), null, false);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
+        if (shiftWorks.size() == 0)
+            shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
+        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
+        binding.recyclerView.setAdapter(shiftWorkItemAdapter);
+        binding.addButton.setOnClickListener(v -> {
+            if (shiftWorkItemAdapter.getItemCount() < 5)
+                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0));
+        });
+
+        binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
+                CalendarUtils.formatDate(
+                        CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+        binding.description.append("\n");
+        binding.description.append(getString(R.string.shift_work_extra_comment));
+
+        return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
+                .setView(binding.getRoot())
+                .setTitle(R.string.shift_work_settings)
+                .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                    StringBuilder result = new StringBuilder();
+                    boolean first = true;
+                    for (ShiftWorkRecord record : shiftWorkItemAdapter.getRows()) {
+                        if (record.length == 0) continue;
+
+                        if (first) first = false;
+                        else result.append(",");
+                        result.append(record.type);
+                        result.append("=");
+                        result.append(record.length);
+                    }
+
+                    SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
+                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, result.length() == 0 ? -1 : jdn);
+                    edit.putString(PREF_SHIFT_WORK_SETTING, result.toString());
+                    edit.apply();
+
+                    calendarFragmentDependency.getCalendarFragment().afterShiftWorkChange();
+                    mainActivityDependency.getMainActivity().restartActivity();
+                })
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+    }
+
     private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkDialog.ShiftWorkItemAdapter.ViewHolder> {
-        private List<ShiftWorkRecord> mRows = new ArrayList<>();
         List<String> mShiftWorkKeys;
+        private List<ShiftWorkRecord> mRows = new ArrayList<>();
 
         ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems) {
             mRows.addAll(initialItems);
@@ -149,63 +207,5 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type));
             }
         }
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Bundle args = getArguments();
-        long tempJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
-        if (tempJdn == -1) tempJdn = CalendarUtils.getTodayJdn();
-        long jdn = tempJdn;
-
-        Context context = getContext();
-        ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
-                LayoutInflater.from(getContext()), null, false);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
-        if (shiftWorks.size() == 0)
-            shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
-        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
-        binding.recyclerView.setAdapter(shiftWorkItemAdapter);
-        binding.addButton.setOnClickListener(v -> {
-            if (shiftWorkItemAdapter.getItemCount() < 5)
-                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0));
-        });
-
-        binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
-                CalendarUtils.formatDate(
-                        CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
-        binding.description.append("\n");
-        binding.description.append(getString(R.string.shift_work_extra_comment));
-
-        return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
-                .setView(binding.getRoot())
-                .setTitle(R.string.shift_work_settings)
-                .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-                    StringBuilder result = new StringBuilder();
-                    boolean first = true;
-                    for (ShiftWorkRecord record : shiftWorkItemAdapter.getRows()) {
-                        if (record.length == 0) continue;
-
-                        if (first) first = false;
-                        else result.append(",");
-                        result.append(record.type);
-                        result.append("=");
-                        result.append(record.length);
-                    }
-
-                    SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
-                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, result.length() == 0 ? -1 : jdn);
-                    edit.putString(PREF_SHIFT_WORK_SETTING, result.toString());
-                    edit.apply();
-
-                    calendarFragmentDependency.getCalendarFragment().afterShiftWorkChange();
-                    mainActivityDependency.getMainActivity().restartActivity();
-                })
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel, null)
-                .create();
     }
 }
