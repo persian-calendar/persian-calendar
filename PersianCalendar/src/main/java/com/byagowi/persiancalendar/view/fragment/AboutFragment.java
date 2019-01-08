@@ -14,6 +14,9 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -46,6 +49,9 @@ public class AboutFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+
         FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater, container, false);
 
         MainActivity activity = mainActivityDependency.getMainActivity();
@@ -170,6 +176,25 @@ public class AboutFragment extends DaggerFragment {
 
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.about_menu_buttons, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.deviceInfo:
+                mainActivityDependency.getMainActivity().navigateTo(R.id.deviceInfo);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     private String programVersion(Context context) {

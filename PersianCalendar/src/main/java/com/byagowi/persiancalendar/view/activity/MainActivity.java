@@ -154,6 +154,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         else if ("LEVEL".equals(action)) navigateTo(R.id.level);
         else if ("CONVERTER".equals(action)) navigateTo(R.id.converter);
         else if ("SETTINGS".equals(action)) navigateTo(R.id.settings);
+        else if ("DEVICE".equals(action)) navigateTo(R.id.deviceInfo);
         else navigateTo(R.id.calendar);
 
         prefs.registerOnSharedPreferenceChangeListener(this);

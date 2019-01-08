@@ -63,4 +63,9 @@
         android:label="About Fragment"
         tools:layout="@layout/fragment_about" />
 
+    <fragment
+        android:id="@+id/deviceInfo"
+        android:name="com.byagowi.persiancalendar.view.fragment.DeviceInfoFragment"
+        android:label="Device Info Fragment" />
+
 </navigation>

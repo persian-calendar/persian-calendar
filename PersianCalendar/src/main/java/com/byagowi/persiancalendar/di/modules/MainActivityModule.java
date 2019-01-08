@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
 import com.byagowi.persiancalendar.view.fragment.CompassFragment;
 import com.byagowi.persiancalendar.view.fragment.ConverterFragment;
+import com.byagowi.persiancalendar.view.fragment.DeviceInfoFragment;
 import com.byagowi.persiancalendar.view.preferences.FragmentInterfaceCalendar;
 import com.byagowi.persiancalendar.view.preferences.FragmentLocationAthan;
 import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
@@ -38,6 +39,10 @@ public abstract class MainActivityModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract AboutFragment aboutFragmentInjector();
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract DeviceInfoFragment deviceInfoFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector
