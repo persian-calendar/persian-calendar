@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.view.deviceinfo.DeviceAdapter;
 import com.byagowi.persiancalendar.view.deviceinfo.DeviceInfoUtils;
 import com.byagowi.persiancalendar.view.deviceinfo.InfoList;
-import com.byagowi.persiancalendar.view.deviceinfo.DeviceAdapter;
 import com.byagowi.persiancalendar.view.deviceinfo.RecyclerTouchListener;
 
 import java.util.ArrayList;
@@ -34,11 +34,10 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class DeviceInfoFragment extends Fragment {
 
-    private List<InfoList> DeviceInfoList = new ArrayList<>();
-    private DeviceAdapter mAdapter;
-
     @Inject
     MainActivityDependency mainActivityDependency;
+    private List<InfoList> DeviceInfoList = new ArrayList<>();
+    private DeviceAdapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -106,13 +105,13 @@ public class DeviceInfoFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    private String getScreenResolution(){
+    private String getScreenResolution() {
         WindowManager wm = Objects.requireNonNull(getActivity()).getWindowManager();
-        if (null != wm){
+        if (null != wm) {
             int width = wm.getDefaultDisplay().getWidth();
             int height = wm.getDefaultDisplay().getHeight();
-            return width + "*" +height +" Pixels";
-        }else {
+            return width + "*" + height + " Pixels";
+        } else {
             return null;
         }
     }

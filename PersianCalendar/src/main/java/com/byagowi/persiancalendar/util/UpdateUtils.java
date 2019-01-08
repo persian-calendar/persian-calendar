@@ -35,7 +35,6 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.graphics.ColorUtils;
 
 import static com.byagowi.persiancalendar.util.Utils.getSpacedComma;
 
@@ -105,7 +104,8 @@ public class UpdateUtils {
         String weekDayName = Utils.getWeekDayName(date);
         String title = CalendarUtils.dayTitleSummary(date);
         String shiftWorkTitle = Utils.getShiftWorkTitleOfJdn(jdn);
-        if (!TextUtils.isEmpty(shiftWorkTitle)) title += " (" + shiftWorkTitle.substring(0, 1) + ")";
+        if (!TextUtils.isEmpty(shiftWorkTitle))
+            title += " (" + shiftWorkTitle.substring(0, 1) + ")";
         String subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());
 
         Clock currentClock = new Clock(calendar);

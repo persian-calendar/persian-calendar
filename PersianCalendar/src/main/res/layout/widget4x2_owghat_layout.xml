@@ -2,11 +2,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:layout_marginTop="12dp"
         android:id="@+id/textPlaceholder2_4x2"
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="8dp"
         android:gravity="center"
         android:text=""

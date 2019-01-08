@@ -153,11 +153,6 @@ import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 public class Utils {
 
     static private final String TAG = Utils.class.getName();
-
-    static public int getMaxSupportedYear() {
-        return 1398;
-    }
-
     static private String[] persianMonths;
     static private String[] islamicMonths;
     static private String[] gregorianMonths;
@@ -199,10 +194,13 @@ public class Utils {
     static private List<AbstractEvent> sAllEnabledEvents;
     static private String[] sShiftWorkTitles;
     private static List<String> sShiftWorkKeys;
-
     static private long sShiftWorkStartingJdn = -1;
-
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
+    private static boolean sIsIranHolidaysEnabled = true;
+
+    static public int getMaxSupportedYear() {
+        return 1398;
+    }
 
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
@@ -325,7 +323,6 @@ public class Utils {
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
-
 
     @StyleRes
     public static int getAppTheme() {
@@ -734,8 +731,6 @@ public class Utils {
         return String.format(language.equals(LANG_CKB) ? "%sی %s" : "%s %s", formatNumber(day),
                 month);
     }
-
-    private static boolean sIsIranHolidaysEnabled = true;
 
     public static boolean isIranHolidaysEnabled() {
         return sIsIranHolidaysEnabled;
