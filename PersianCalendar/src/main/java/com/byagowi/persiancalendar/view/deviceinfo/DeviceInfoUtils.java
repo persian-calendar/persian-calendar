@@ -48,4 +48,31 @@ public class DeviceInfoUtils {
         return Build.BOOTLOADER;
     }
 
+    public static String getDevice() {
+        return Build.DEVICE;
+    }
+
+    public static String getFingerPrint() {
+        return Build.FINGERPRINT;
+    }
+
+    public static String getProduct() {
+        return Build.PRODUCT;
+    }
+
+    public static String getDisplay() {
+        return Build.DISPLAY;
+    }
+
+    public static String getRadioFirmware() {
+        return Build.RADIO;
+    }
+
+    public static String getFirstCPU() {
+        return Build.CPU_ABI;
+    }
+
+    public static String getSecondCPU() {
+        return Build.CPU_ABI2;
+    }
 }

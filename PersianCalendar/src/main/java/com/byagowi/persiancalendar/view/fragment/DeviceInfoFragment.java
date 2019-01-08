@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +62,10 @@ public class DeviceInfoFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 InfoList DeviceInfo = DeviceInfoList.get(position);
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), DeviceInfo.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(DeviceInfo.getTitle(), DeviceInfo.getContent());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), DeviceInfo.getTitle() + " " + getString(R.string.copy_to_clipboard), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -84,6 +90,18 @@ public class DeviceInfoFragment extends Fragment {
         DeviceInfo = new InfoList(getString(R.string.info_model), DeviceInfoUtils.getSystemModel(), DeviceInfoUtils.getSystemVersion());
         DeviceInfoList.add(DeviceInfo);
 
+        DeviceInfo = new InfoList(getString(R.string.info_product), DeviceInfoUtils.getProduct(), null);
+        DeviceInfoList.add(DeviceInfo);
+
+        DeviceInfo = new InfoList(getString(R.string.info_first_cpu), DeviceInfoUtils.getFirstCPU(), null);
+        DeviceInfoList.add(DeviceInfo);
+
+        DeviceInfo = new InfoList(getString(R.string.info_second_cpu), DeviceInfoUtils.getSecondCPU(), null);
+        DeviceInfoList.add(DeviceInfo);
+
+        DeviceInfo = new InfoList(getString(R.string.info_device_arch), DeviceInfoUtils.getDevice(), null);
+        DeviceInfoList.add(DeviceInfo);
+
         DeviceInfo = new InfoList(getString(R.string.info_Serial_No), DeviceInfoUtils.getSerialNo(), null);
         DeviceInfoList.add(DeviceInfo);
 
@@ -93,13 +111,22 @@ public class DeviceInfoFragment extends Fragment {
         DeviceInfo = new InfoList(getString(R.string.info_board), DeviceInfoUtils.getBuildBoard(), null);
         DeviceInfoList.add(DeviceInfo);
 
+        DeviceInfo = new InfoList(getString(R.string.info_radio), DeviceInfoUtils.getRadioFirmware(), null);
+        DeviceInfoList.add(DeviceInfo);
+
         DeviceInfo = new InfoList(getString(R.string.info_user), DeviceInfoUtils.getBuildUser(), null);
         DeviceInfoList.add(DeviceInfo);
 
         DeviceInfo = new InfoList(getString(R.string.info_host), DeviceInfoUtils.getBuildHost(), null);
         DeviceInfoList.add(DeviceInfo);
 
+        DeviceInfo = new InfoList(getString(R.string.info_display), DeviceInfoUtils.getDisplay(), null);
+        DeviceInfoList.add(DeviceInfo);
+
         DeviceInfo = new InfoList(getString(R.string.info_screen), getScreenResolution(), null);
+        DeviceInfoList.add(DeviceInfo);
+
+        DeviceInfo = new InfoList(getString(R.string.info_device_fingerprints), DeviceInfoUtils.getFingerPrint(), null);
         DeviceInfoList.add(DeviceInfo);
 
         mAdapter.notifyDataSetChanged();
