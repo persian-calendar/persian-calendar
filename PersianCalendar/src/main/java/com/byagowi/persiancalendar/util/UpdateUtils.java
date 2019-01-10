@@ -119,21 +119,22 @@ public class UpdateUtils {
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
 
         boolean enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1;
+        boolean isCenterAligned = Utils.isCenterAlignWidgets();
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
                 manager.getAppWidgetIds(widget2x2).length != 0) {
             RemoteViews remoteViews4, remoteViews2;
             if (enableClock) {
                 if (!Utils.isIranTime()) {
-                    remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock);
-                    remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock);
+                    remoteViews4 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget4x1_clock_center : R.layout.widget4x1_clock);
+                    remoteViews2 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget2x2_clock_center : R.layout.widget2x2_clock);
                 } else {
-                    remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1_clock_iran);
-                    remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2_clock_iran);
+                    remoteViews4 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget4x1_clock_iran_center : R.layout.widget4x1_clock_iran);
+                    remoteViews2 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget2x2_clock_iran_center : R.layout.widget2x2_clock_iran);
                 }
             } else {
-                remoteViews4 = new RemoteViews(context.getPackageName(), R.layout.widget4x1);
-                remoteViews2 = new RemoteViews(context.getPackageName(), R.layout.widget2x2);
+                remoteViews4 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget4x1_center : R.layout.widget4x1);
+                remoteViews2 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget2x2_center : R.layout.widget2x2);
             }
 
             String mainDateString = CalendarUtils.formatDate(date);

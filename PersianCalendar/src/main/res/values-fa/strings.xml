@@ -208,5 +208,7 @@
     <string name="n_hours">%s ساعت</string>
     <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
     <string name="device_info">اطلاعات دستگاه</string>
+    <string name="center_align_widgets_summary">وسط‌چین کردن ابزارک‌های ۲×۲ و ۴×۲</string>
+    <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
 
 </resources>

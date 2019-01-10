@@ -177,6 +177,7 @@ public class Utils {
     static private CalendarType[] otherCalendars;
     static private String spacedComma;
     static private boolean showWeekOfYear;
+    static private boolean centerAlignWidgets;
     static private int weekStartOffset;
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
@@ -262,6 +263,7 @@ public class Utils {
         widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
         notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
         notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN);
+        centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false);
         selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                 DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
@@ -1394,5 +1396,9 @@ public class Utils {
 
     public static boolean isTalkBackEnabled() {
         return talkBackEnabled;
+    }
+
+    public static boolean isCenterAlignWidgets() {
+        return centerAlignWidgets;
     }
 }

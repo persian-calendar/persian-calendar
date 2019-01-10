@@ -287,5 +287,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="n_hours">%s hours</string>
     <string name="n_minutes_and_hours">%s hours and %s minutes</string>
     <string name="device_info">Device Information</string>
+    <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۴در۱ و ۲در۲</string>
+    <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
 
 </resources>
