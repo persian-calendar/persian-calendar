@@ -45,18 +45,4 @@
 
     </shortcut>
 
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/sc_device_information"
-        android:shortcutId="DEVICE"
-        android:shortcutLongLabel="@string/device_info"
-        android:shortcutShortLabel="@string/device_info">
-
-        <intent
-            android:action="DEVICE"
-            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
-            android:targetPackage="com.byagowi.persiancalendar" />
-
-    </shortcut>
-
 </shortcuts>
