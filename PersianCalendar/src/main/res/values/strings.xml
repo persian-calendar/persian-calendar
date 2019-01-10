@@ -286,8 +286,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="n_minutes">%s minutes</string>
     <string name="n_hours">%s hours</string>
     <string name="n_minutes_and_hours">%s hours and %s minutes</string>
-
-    <!--Device Info-->
     <string name="device_info">Device Information</string>
 
 </resources>

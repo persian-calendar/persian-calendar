@@ -207,5 +207,6 @@
     <string name="n_minutes">%s دقیقه</string>
     <string name="n_hours">%s ساعت</string>
     <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
+    <string name="device_info">اطلاعات دستگاه</string>
 
 </resources>
