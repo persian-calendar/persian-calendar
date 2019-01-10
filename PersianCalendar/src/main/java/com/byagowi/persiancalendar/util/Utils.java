@@ -436,6 +436,12 @@ public class Utils {
         return CalculationMethod.valueOf(calculationMethod);
     }
 
+    static public boolean isCalculationMethodShia() {
+        CalculationMethod calculationMethod = getCalculationMethod();
+        return calculationMethod.equals(CalculationMethod.Tehran) ||
+                calculationMethod.equals(CalculationMethod.Jafari);
+    }
+
     static public String getAppLanguage() {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
@@ -500,10 +506,7 @@ public class Utils {
             prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
         }
 
-        boolean isShia = calculationMethod.equalsIgnoreCase("Tehran") ||
-                calculationMethod.equalsIgnoreCase("Jafari");
-
-        return new Widget4x2OwghatEntity(context, prayTimes, isShia, clock);
+        return new Widget4x2OwghatEntity(context, prayTimes, Utils.isCalculationMethodShia(), clock);
     }
 
     static public String formatNumber(int number) {

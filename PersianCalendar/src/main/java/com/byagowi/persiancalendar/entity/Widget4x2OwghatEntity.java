@@ -13,18 +13,23 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class Widget4x2OwghatEntity {
-    private final String TAG = Widget4x2OwghatEntity.class.getSimpleName();
-
     private int mIndexOfNextOwghat = -1;
     private Clock[] mClocks = new Clock[5];
-    private int[] mOwghatTtitle;
+    private int[] mOwghatTitle;
     private String mRemainingTime = "";
 
     public Widget4x2OwghatEntity(Context context, PrayTimes prayTimes, boolean isShia, Clock currentClock) {
+        //TODO We may want to show Imsak only in Ramadan
 
-        //TODO We may want to show Imsak only in Ramadan for Shia
+        int[] shia1 = {R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.sunset};
+        //int[] shia2 = {R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.sunset, R.string.maghrib};
+        int[] shia3 = {R.string.sunrise, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight};
 
-        List<Clock> shiaClocks = Arrays.asList(
+        int[] sunni1 = {R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset};
+        //int[] sunni2 = {R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib};
+        int[] sunni3 = {R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib, R.string.isha};
+
+        List<Clock> clocks = isShia ? Arrays.asList(
                 prayTimes.getImsakClock(), //0
                 prayTimes.getFajrClock(), //1
                 prayTimes.getSunriseClock(), //2
@@ -32,13 +37,7 @@ public class Widget4x2OwghatEntity {
                 prayTimes.getSunsetClock(), //4
                 prayTimes.getMaghribClock(), //5
                 prayTimes.getMidnightClock() //6
-        );
-
-        int[] shia1 = {R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.sunset};
-        //int[] shia2 = {R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.sunset, R.string.maghrib};
-        int[] shia3 = {R.string.sunrise, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight};
-
-        List<Clock> sunniClocks = Arrays.asList(
+        ) : Arrays.asList(
                 prayTimes.getFajrClock(), //0
                 prayTimes.getSunriseClock(), //1
                 prayTimes.getDhuhrClock(), //2
@@ -47,16 +46,6 @@ public class Widget4x2OwghatEntity {
                 prayTimes.getMaghribClock(), //5
                 prayTimes.getIshaClock() //6
         );
-
-        int[] sunni1 = {R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset};
-        //int[] sunni2 = {R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib};
-        int[] sunni3 = {R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib, R.string.isha};
-
-        List<Clock> clocks;
-        if (isShia)
-            clocks = shiaClocks;
-        else
-            clocks = sunniClocks;
 
         int indexOfNextOwghat = getClockIndex(clocks, currentClock);
         //Log.d(TAG, "indexOfNextOwghat is " + indexOfNextOwghat);
@@ -67,8 +56,8 @@ public class Widget4x2OwghatEntity {
             case 2:
                 clocks = clocks.subList(0, 5);
                 clocks.toArray(mClocks);
-                if (isShia) mOwghatTtitle = shia1;
-                else mOwghatTtitle = sunni1;
+                if (isShia) mOwghatTitle = shia1;
+                else mOwghatTitle = sunni1;
                 break;
             /*case 3:
                 clocks = clocks.subList(1, 6);
@@ -79,17 +68,14 @@ public class Widget4x2OwghatEntity {
             default:
                 clocks = clocks.subList(2, 7);
                 clocks.toArray(mClocks);
-                if (isShia) mOwghatTtitle = shia3;
-                else mOwghatTtitle = sunni3;
+                if (isShia) mOwghatTitle = shia3;
+                else mOwghatTitle = sunni3;
         }
-
-        //Log.d(TAG, "clocks " + clocks.toString());
 
         if (indexOfNextOwghat != -1) {
             mIndexOfNextOwghat = getClockIndex(clocks, currentClock);
             mRemainingTime = getRemainingString(context, mClocks[mIndexOfNextOwghat], currentClock);
         }
-        //Log.d(TAG, "mIndexOfNextOwghat is " + mIndexOfNextOwghat);
     }
 
     public int getIndexOfNextOwghat() {
@@ -101,7 +87,7 @@ public class Widget4x2OwghatEntity {
     }
 
     public int[] getTitle() {
-        return mOwghatTtitle;
+        return mOwghatTitle;
     }
 
     public String getRemainingTime() {
@@ -119,14 +105,13 @@ public class Widget4x2OwghatEntity {
             index++;
         }
         return next;
-
     }
 
     private String getRemainingString(Context context, Clock startDate, Clock endDate) {
-        int different = Math.abs(endDate.toInt() - startDate.toInt());
+        int difference = Math.abs(endDate.toInt() - startDate.toInt());
 
-        int hrs = (int) (MINUTES.toHours(different) % 24);
-        int min = (int) (MINUTES.toMinutes(different) % 60);
+        int hrs = (int) (MINUTES.toHours(difference) % 24);
+        int min = (int) (MINUTES.toMinutes(difference) % 60);
 
         if (hrs == 0) {
             return String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min));
