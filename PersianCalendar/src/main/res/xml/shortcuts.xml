@@ -47,7 +47,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_device_information"
+        android:icon="@drawable/sc_device_information"
         android:shortcutId="DEVICE"
         android:shortcutLongLabel="@string/device_info"
         android:shortcutShortLabel="@string/device_info">

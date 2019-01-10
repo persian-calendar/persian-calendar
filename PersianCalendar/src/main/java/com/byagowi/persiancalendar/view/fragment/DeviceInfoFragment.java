@@ -1,145 +1,54 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.view.deviceinfo.DeviceAdapter;
-import com.byagowi.persiancalendar.view.deviceinfo.DeviceInfoUtils;
-import com.byagowi.persiancalendar.view.deviceinfo.InfoList;
-import com.byagowi.persiancalendar.view.deviceinfo.RecyclerTouchListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import com.byagowi.persiancalendar.view.deviceinfo.DeviceInfoAdapter;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dagger.android.support.DaggerFragment;
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-public class DeviceInfoFragment extends Fragment {
-
+public class DeviceInfoFragment extends DaggerFragment {
     @Inject
     MainActivityDependency mainActivityDependency;
-    private List<InfoList> DeviceInfoList = new ArrayList<>();
-    private DeviceAdapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_device_info, container, false);
+        FragmentDeviceInfoBinding binding = FragmentDeviceInfoBinding.inflate(inflater,
+                container, false);
 
-        //MainActivity mainActivity = mainActivityDependency.getMainActivity();
-        //mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "");
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(
+                getString(R.string.device_info), "");
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        mAdapter = new DeviceAdapter(DeviceInfoList);
+        RecyclerView recyclerView = binding.recyclerView;
+        DeviceInfoAdapter mAdapter = new DeviceInfoAdapter(
+                mainActivityDependency.getMainActivity().getWindowManager());
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager =
+                new LinearLayoutManager(mainActivityDependency.getMainActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(
+                mainActivityDependency.getMainActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                InfoList DeviceInfo = DeviceInfoList.get(position);
-                ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(DeviceInfo.getTitle(), DeviceInfo.getContent());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), DeviceInfo.getTitle() + " " + getString(R.string.copy_to_clipboard), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-        prepareDeviceInfoData();
-
-        return view;
-
-    }
-
-    private void prepareDeviceInfoData() {
-        InfoList DeviceInfo = new InfoList(getString(R.string.info_manufacturer), DeviceInfoUtils.getDeviceBrand(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_Brand), DeviceInfoUtils.getDeviceBrand(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_model), DeviceInfoUtils.getSystemModel(), DeviceInfoUtils.getSystemVersion());
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_product), DeviceInfoUtils.getProduct(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_first_cpu), DeviceInfoUtils.getFirstCPU(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_second_cpu), DeviceInfoUtils.getSecondCPU(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_device_arch), DeviceInfoUtils.getDevice(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_Serial_No), DeviceInfoUtils.getSerialNo(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_androidId), DeviceInfoUtils.getBuildId(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_board), DeviceInfoUtils.getBuildBoard(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_radio), DeviceInfoUtils.getRadioFirmware(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_user), DeviceInfoUtils.getBuildUser(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_host), DeviceInfoUtils.getBuildHost(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_display), DeviceInfoUtils.getDisplay(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_screen), getScreenResolution(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        DeviceInfo = new InfoList(getString(R.string.info_device_fingerprints), DeviceInfoUtils.getFingerPrint(), null);
-        DeviceInfoList.add(DeviceInfo);
-
-        mAdapter.notifyDataSetChanged();
-    }
-
-    private String getScreenResolution() {
-        WindowManager wm = Objects.requireNonNull(getActivity()).getWindowManager();
-        if (null != wm) {
-            int width = wm.getDefaultDisplay().getWidth();
-            int height = wm.getDefaultDisplay().getHeight();
-            return width + "*" + height + " Pixels";
-        } else {
-            return null;
-        }
+        return binding.getRoot();
     }
 }

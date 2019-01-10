@@ -1,15 +1,11 @@
 package com.byagowi.persiancalendar.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding;
 import com.byagowi.persiancalendar.util.CalendarType;
@@ -103,15 +99,8 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
 
         @Override
         public void onClick(View view) {
-            Context context = view.getContext();
-            ClipboardManager clipboardService =
-                    (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            CharSequence text = view.getContentDescription();
-
-            if (clipboardService != null && text != null) {
-                clipboardService.setPrimaryClip(ClipData.newPlainText("converted date", text));
-                Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
-            }
+            Utils.copyToClipboard(view.getContext(), "converted date", view.getContentDescription());
         }
     }
+
 }

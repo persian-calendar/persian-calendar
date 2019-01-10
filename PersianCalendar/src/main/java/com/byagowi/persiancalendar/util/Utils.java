@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.util;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -1375,6 +1378,15 @@ public class Utils {
             first = false;
         }
         return result.toString();
+    }
+
+    public static void copyToClipboard(Context context, CharSequence label, CharSequence text) {
+        ClipboardManager clipboardService =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardService != null && text != null) {
+            clipboardService.setPrimaryClip(ClipData.newPlainText("text", text));
+            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static boolean isTalkBackEnabled() {
