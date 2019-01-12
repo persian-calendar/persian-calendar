@@ -86,7 +86,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
 
         return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
                 .setView(binding.getRoot())
-                .setTitle(R.string.shift_work_settings)
+                .setTitle(null)
                 .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
                     StringBuilder result = new StringBuilder();
                     boolean first = true;
