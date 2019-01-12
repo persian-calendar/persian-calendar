@@ -63,7 +63,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
@@ -514,7 +513,8 @@ public class Utils {
                 return prayTimes.getIshaClock();
             case R.string.midnight:
                 return prayTimes.getMidnightClock();
-            default: return Clock.fromInt(0);
+            default:
+                return Clock.fromInt(0);
         }
     }
 
@@ -755,8 +755,17 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        if (enabledTypes == null || enabledTypes.isEmpty())
-            enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
+        if (enabledTypes == null || enabledTypes.isEmpty()) {
+            switch (getAppLanguage()) {
+                case LANG_FA:
+                case LANG_EN_IR:
+                case LANG_CKB:
+                    enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
+                    break;
+                default:
+                    enabledTypes = new HashSet<>();
+            }
+        }
 
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
