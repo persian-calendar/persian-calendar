@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entity.ShiftWorkRecord;
-import com.byagowi.persiancalendar.entity.Widget4x2OwghatEntity;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
@@ -64,8 +63,10 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
@@ -438,12 +439,6 @@ public class Utils {
         return CalculationMethod.valueOf(calculationMethod);
     }
 
-    static public boolean isCalculationMethodShia() {
-        CalculationMethod calculationMethod = getCalculationMethod();
-        return calculationMethod.equals(CalculationMethod.Tehran) ||
-                calculationMethod.equals(CalculationMethod.Jafari);
-    }
-
     static public String getAppLanguage() {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
     }
@@ -461,54 +456,66 @@ public class Utils {
         return mainCalendar;
     }
 
-    static String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
-        if (coordinate == null) return null;
+    @StringRes
+    static int getNextOwghatTimeId(Clock current, boolean dateHasChanged) {
+        if (coordinate == null) return 0;
 
         if (prayTimes == null || dateHasChanged) {
             prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
         }
 
-        if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock());
+        int clock = current.toInt();
 
-        } else if (prayTimes.getSunriseClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.sunrise) + ": " + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
+        //TODO We like to show Imsak only in Ramadan
+        if (prayTimes.getFajrClock().toInt() > clock)
+            return R.string.fajr;
 
-        } else if (prayTimes.getDhuhrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.dhuhr) + ": " + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
+        else if (prayTimes.getSunriseClock().toInt() > clock)
+            return R.string.sunrise;
 
-        } else if (prayTimes.getAsrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.asr) + ": " + UIUtils.getFormattedClock(prayTimes.getAsrClock());
+        else if (prayTimes.getDhuhrClock().toInt() > clock)
+            return R.string.dhuhr;
 
-        } else if (prayTimes.getSunsetClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.sunset) + ": " + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
+        else if (prayTimes.getAsrClock().toInt() > clock)
+            return R.string.asr;
 
-        } else if (prayTimes.getMaghribClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.maghrib) + ": " + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
+        else if (prayTimes.getSunsetClock().toInt() > clock)
+            return R.string.sunset;
 
-        } else if (prayTimes.getIshaClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.isha) + ": " + UIUtils.getFormattedClock(prayTimes.getIshaClock());
+        else if (prayTimes.getMaghribClock().toInt() > clock)
+            return R.string.maghrib;
 
-        } else if (prayTimes.getMidnightClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.midnight) + ": " + UIUtils.getFormattedClock(prayTimes.getMidnightClock());
+        else if (prayTimes.getIshaClock().toInt() > clock)
+            return R.string.isha;
 
-        } else {
-            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
-        }
+        else if (prayTimes.getMidnightClock().toInt() > clock)
+            return R.string.midnight;
+
+        else
+            // TODO: this is today's, not tomorrow
+            return R.string.fajr;
     }
 
-    static boolean isLocationSet(Context context) {
-        return getCityFromPreference(context) != null;
-    }
-
-    static Widget4x2OwghatEntity getOwghat4Widget4x2(Context context, Clock clock, boolean dateHasChanged) {
-        if (coordinate == null) return null;
-
-        if (prayTimes == null || dateHasChanged) {
-            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
+    static Clock getClockFromStringId(@StringRes int stringId) {
+        switch (stringId) {
+            case R.string.fajr:
+                return prayTimes.getFajrClock();
+            case R.string.sunrise:
+                return prayTimes.getSunriseClock();
+            case R.string.dhuhr:
+                return prayTimes.getDhuhrClock();
+            case R.string.asr:
+                return prayTimes.getAsrClock();
+            case R.string.sunset:
+                return prayTimes.getSunsetClock();
+            case R.string.maghrib:
+                return prayTimes.getMaghribClock();
+            case R.string.isha:
+                return prayTimes.getIshaClock();
+            case R.string.midnight:
+                return prayTimes.getMidnightClock();
+            default: return Clock.fromInt(0);
         }
-
-        return new Widget4x2OwghatEntity(context, prayTimes, Utils.isCalculationMethodShia(), clock);
     }
 
     static public String formatNumber(int number) {

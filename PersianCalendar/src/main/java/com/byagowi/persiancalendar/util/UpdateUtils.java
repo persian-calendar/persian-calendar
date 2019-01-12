@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.Widget4x2;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.entity.Widget4x2OwghatEntity;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
@@ -34,14 +33,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
+import static com.byagowi.persiancalendar.util.Utils.getClockFromStringId;
 import static com.byagowi.persiancalendar.util.Utils.getSpacedComma;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class UpdateUtils {
     private static final int NOTIFICATION_ID = 1001;
     private static AbstractDate pastDate;
     private static SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
+    @StringRes
+    private static int[] timesOn4x2 = {R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight};
+    @IdRes
+    private static int[] owghatPlaceHolderId = {
+            R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
+            R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
+            R.id.textPlaceholder4owghat_5_4x2
+    };
 
     public static void setDeviceCalendarEvents(Context context) {
         try {
@@ -109,11 +120,17 @@ public class UpdateUtils {
         String subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());
 
         Clock currentClock = new Clock(calendar);
-        String owghat = Utils.getNextOwghatTime(context, currentClock, updateDate);
-        if (Utils.isShownOnWidgets("owghat_location") && !TextUtils.isEmpty(owghat)) {
-            String cityName = Utils.getCityName(context, false);
-            if (!TextUtils.isEmpty(cityName)) {
-                owghat = owghat + " (" + cityName + ")";
+        String owghat = "";
+        @StringRes
+        int nextOwghatId = Utils.getNextOwghatTimeId(currentClock, updateDate);
+        if (nextOwghatId != 0) {
+            owghat = context.getString(nextOwghatId) + ": " +
+                    UIUtils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId));
+            if (Utils.isShownOnWidgets("owghat_location")) {
+                String cityName = Utils.getCityName(context, false);
+                if (!TextUtils.isEmpty(cityName)) {
+                    owghat = owghat + " (" + cityName + ")";
+                }
             }
         }
         List<AbstractEvent> events = Utils.getEvents(jdn, deviceCalendarEvents);
@@ -250,46 +267,38 @@ public class UpdateUtils {
 
             remoteViews4x2.setTextViewText(R.id.textPlaceholder1_4x2, text2);
 
-            if (Utils.isLocationSet(context)) {
-
-                Widget4x2OwghatEntity owghatEntity = Utils.getOwghat4Widget4x2(context, currentClock, updateDate);
-                if (owghatEntity != null) {
-
-                    // Owghats placeholder ids
-                    int[] owghatPlaceHolderId = new int[]{
-                            R.id.textPlaceholder4owghat_1_4x2,
-                            R.id.textPlaceholder4owghat_2_4x2,
-                            R.id.textPlaceholder4owghat_3_4x2,
-                            R.id.textPlaceholder4owghat_4_4x2,
-                            R.id.textPlaceholder4owghat_5_4x2
-                    };
-
-                    // Set text of owghats
-                    for (int i = 0; i < owghatPlaceHolderId.length; i++) {
-                        String txt = context.getString(owghatEntity.getTitle()[i]) + "\n" +
-                                UIUtils.getFormattedClock(owghatEntity.getClocks()[i]);
-
-                        remoteViews4x2.setTextViewText(owghatPlaceHolderId[i], txt);
-                        remoteViews4x2.setTextColor(owghatPlaceHolderId[i], color);
-                    }
-
-                    // Set remaining time to next owghat
-                    if (!owghatEntity.getRemainingTime().isEmpty()) {
-                        //TODO We should point to exact owghat name in remaining time string
-                        String rem = String.format(context.getString(R.string.remaining_time_to_next_owghat),
-                                owghatEntity.getRemainingTime());
-
-                        remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, rem);
-                        remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
-                    }
-
-                    // Highlight the next owghat with user selected color, because others owghats are darkened
-                    if (owghatEntity.getIndexOfNextOwghat() != -1)
-                        remoteViews4x2.setTextColor(owghatPlaceHolderId[owghatEntity.getIndexOfNextOwghat()],
-                                Color.RED);
+            if (nextOwghatId != 0) {
+                // Set text of owghats
+                for (int i = 0; i < owghatPlaceHolderId.length; ++i) {
+                    remoteViews4x2.setTextViewText(owghatPlaceHolderId[i],
+                            context.getString(timesOn4x2[i]) + "\n" +
+                                    UIUtils.getFormattedClock(getClockFromStringId(timesOn4x2[i])));
+                    remoteViews4x2.setTextColor(owghatPlaceHolderId[i],
+                            timesOn4x2[i] == nextOwghatId ?
+                                    Color.RED : color);
                 }
+
+                int difference = Math.abs(
+                        Utils.getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt());
+
+                int hrs = (int) (MINUTES.toHours(difference) % 24);
+                int min = (int) (MINUTES.toMinutes(difference) % 60);
+
+                String remainingTime;
+                if (hrs == 0)
+                    remainingTime = String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min));
+                else if (min == 0)
+                    remainingTime = String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs));
+                else
+                    remainingTime = String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min));
+
+                remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2,
+                        String.format(context.getString(R.string.n_till),
+                                remainingTime, context.getString(nextOwghatId)));
+                remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
             } else {
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
+                remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
             }
 
             remoteViews4x2.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent);

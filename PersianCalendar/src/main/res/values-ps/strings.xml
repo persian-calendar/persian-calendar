@@ -199,7 +199,6 @@
     <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %s: %s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
 
-    <string name="remaining_time_to_next_owghat">%s تا وقت شرعی بعدی</string>
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">Remove</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
@@ -210,5 +209,6 @@
     <string name="device_info">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۴در۱ و ۲در۲</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
+    <string name="n_till">%s تا %s</string>
 
 </resources>
