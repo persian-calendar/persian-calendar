@@ -206,7 +206,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     mBinding.addButton.setVisibility(View.GONE);
                 } else {
                     mBinding.detail.setVisibility(View.GONE);
-                    mBinding.addButton.setVisibility(mRows.size() <= 6 ? View.VISIBLE : View.GONE);
+                    mBinding.addButton.setVisibility(mRows.size() < 6 ? View.VISIBLE : View.GONE);
                 }
             }
         }

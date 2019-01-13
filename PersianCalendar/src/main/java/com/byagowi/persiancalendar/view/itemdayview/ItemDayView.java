@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -22,6 +23,7 @@ public class ItemDayView extends View {
     private long jdn = -1;
     private int dayOfMonth = -1;
     private boolean isNumber;
+    private String footer = "";
 
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
@@ -126,11 +128,18 @@ public class ItemDayView extends View {
         yPos += yOffsetToApply;
 
         canvas.drawText(text, xPos, yPos, resource.textPaint);
+
+        resource.textPaint.setColor(resource.colorTextDayName);
+        resource.textPaint.setTextSize(textSize * 0.5f);
+        if (!TextUtils.isEmpty(footer)) {
+            canvas.drawText(footer.substring(0, 1), xPos, yPos * 1.4f, resource.textPaint);
+        }
     }
 
     private void setAll(String text, boolean isToday, boolean isSelected,
                         boolean hasEvent, boolean hasAppointment, boolean isHoliday,
-                        int textSize, long jdn, int dayOfMonth, boolean isNumber) {
+                        int textSize, long jdn, int dayOfMonth, boolean isNumber,
+                        String footer) {
         this.text = text;
         this.today = isToday;
         this.selected = isSelected;
@@ -141,20 +150,21 @@ public class ItemDayView extends View {
         this.jdn = jdn;
         this.dayOfMonth = dayOfMonth;
         this.isNumber = isNumber;
+        this.footer = footer;
         postInvalidate();
     }
 
     public void setDayOfMonthItem(boolean isToday, boolean isSelected,
                                   boolean hasEvent, boolean hasAppointment, boolean isHoliday,
-                                  int textSize, long jdn, int dayOfMonth) {
+                                  int textSize, long jdn, int dayOfMonth, String footer) {
         String dayOfMonthString = Utils.formatNumber(dayOfMonth);
         setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
-                isHoliday, textSize, jdn, dayOfMonth, true);
+                isHoliday, textSize, jdn, dayOfMonth, true, footer);
     }
 
     public void setNonDayOfMonthItem(String text, int textSize) {
         setAll(text, false, false, false, false, false,
-                textSize, -1, -1, false);
+                textSize, -1, -1, false, "");
     }
 
     public long getJdn() {
