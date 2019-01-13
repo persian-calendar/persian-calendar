@@ -73,10 +73,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
             shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
         ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
-        binding.addButton.setOnClickListener(v -> {
-            if (shiftWorkItemAdapter.getItemCount() < 5)
-                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0));
-        });
 
         binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
                 CalendarUtils.formatDate(
@@ -122,11 +118,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
             mShiftWorkKeys = Arrays.asList(getResources().getStringArray(R.array.shift_work_keys));
         }
 
-        void addItem(ShiftWorkRecord record) {
-            mRows.add(record);
-            notifyItemInserted(mRows.size());
-        }
-
         List<ShiftWorkRecord> getRows() {
             return mRows;
         }
@@ -147,7 +138,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
 
         @Override
         public int getItemCount() {
-            return mRows.size();
+            return mRows.size() + 1;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -198,13 +189,25 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+                binding.addButton.setOnClickListener((v -> {
+                    mRows.add(new ShiftWorkRecord("r", 0));
+                    notifyDataSetChanged();
+                }));
             }
 
             public void bind(int position) {
-                ShiftWorkRecord shiftWorkRecord = mRows.get(position);
-                mPosition = position;
-                mBinding.lengthSpinner.setSelection(shiftWorkRecord.length);
-                mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type));
+                if (position < mRows.size()) {
+                    ShiftWorkRecord shiftWorkRecord = mRows.get(position);
+                    mPosition = position;
+                    mBinding.lengthSpinner.setSelection(shiftWorkRecord.length);
+                    mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type));
+                    mBinding.detail.setVisibility(View.VISIBLE);
+                    mBinding.addButton.setVisibility(View.GONE);
+                } else {
+                    mBinding.detail.setVisibility(View.GONE);
+                    mBinding.addButton.setVisibility(mRows.size() <= 6 ? View.VISIBLE : View.GONE);
+                }
             }
         }
     }

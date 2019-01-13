@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/length_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Spinner
-            android:id="@+id/type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/remove"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:id="@+id/add_button"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/remove" />
+            android:text="@string/add" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/length_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/remove"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remove" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </layout>
