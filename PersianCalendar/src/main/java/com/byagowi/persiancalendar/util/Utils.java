@@ -196,11 +196,11 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
     static private List<AbstractEvent> sAllEnabledEvents;
-    static private String[] sShiftWorkTitles;
-    private static List<String> sShiftWorkKeys;
+    static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
     private static boolean sIsIranHolidaysEnabled = true;
+    static private int sShiftWorkPeriod = 0;
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -300,6 +300,7 @@ public class Utils {
                 new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
 
+        sShiftWorkTitles = new HashMap<>();
         try {
             sShiftWorks = new ArrayList<>();
             String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
@@ -310,13 +311,21 @@ public class Utils {
                 sShiftWorks.add(new ShiftWorkRecord(v[0], Integer.valueOf(v[1])));
             }
             sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1);
+
+            sShiftWorkPeriod = 0;
+            for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
+
+            String[] titles = context.getResources().getStringArray(R.array.shift_work);
+            String[] keys = context.getResources().getStringArray(R.array.shift_work_keys);
+            for (int i = 0; i < titles.length; ++i)
+                sShiftWorkTitles.put(keys[i], titles[i]);
         } catch (Exception e) {
             e.printStackTrace();
             sShiftWorks = Collections.emptyList();
             sShiftWorkStartingJdn = -1;
+
+            sShiftWorkPeriod = 0;
         }
-        sShiftWorkTitles = context.getResources().getStringArray(R.array.shift_work);
-        sShiftWorkKeys = Arrays.asList(context.getResources().getStringArray(R.array.shift_work_keys));
 
         try {
             appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
@@ -956,24 +965,24 @@ public class Utils {
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
     }
 
-    static public String getShiftWorkTitleOfJdn(long jdn) {
-        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn) return "";
-        // TODO: All should be cached
-        try {
-            int period = 0;
-            for (ShiftWorkRecord shift : sShiftWorks) period += shift.length;
-            if (period == 0) return "";
-            int dayInPeriod = (int) (jdn - sShiftWorkStartingJdn) % period;
-            int accumulation = 0;
-            for (ShiftWorkRecord shift : sShiftWorks) {
-                accumulation += shift.length;
-                if (accumulation > dayInPeriod)
-                    // TODO: Replace with a map!
-                    return sShiftWorkTitles[sShiftWorkKeys.indexOf(shift.type)];
+    static public String getShiftWorkTitleOfJdn(long jdn, boolean abbreviated) {
+        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
+            return "";
+
+        int dayInPeriod = (int) ((jdn - sShiftWorkStartingJdn) % sShiftWorkPeriod);
+        int accumulation = 0;
+        for (ShiftWorkRecord shift : sShiftWorks) {
+            accumulation += shift.length;
+            if (accumulation > dayInPeriod) {
+                String title = sShiftWorkTitles.get(shift.type);
+                if (title == null) return "";
+                return abbreviated ?
+                        (title.substring(0, 1) + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? "\u200d" : "")) :
+                        title;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        // Shouldn't be reached
         return "";
     }
 

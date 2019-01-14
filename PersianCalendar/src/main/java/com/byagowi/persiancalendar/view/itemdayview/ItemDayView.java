@@ -96,9 +96,6 @@ public class ItemDayView extends View {
             color = resource.colorTextDayName;
         }
 
-        // TODO: Better to not change resource's paint objects, but for now
-        resource.textPaint.setColor(color);
-        resource.textPaint.setTextSize(textSize);
         resource.eventBarPaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
 
         if (hasEvent) {
@@ -115,25 +112,30 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
-        if (isModernTheme) {
-            resource.textPaint.setFakeBoldText(today);
-            resource.textPaint.setTextSize(textSize * .8f);
-        }
-
-        int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
         String textToMeasure =
                 isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
         resource.textPaint.getTextBounds(textToMeasure, 0, textToMeasure.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
         yPos += yOffsetToApply;
 
-        canvas.drawText(text, xPos, yPos, resource.textPaint);
-
+        // TODO: Better to not change resource's paint objects, but for now
         resource.textPaint.setColor(resource.colorTextDayName);
-        resource.textPaint.setTextSize(textSize * 0.5f);
+        resource.textPaint.setTextSize(textSize);
         if (!TextUtils.isEmpty(footer)) {
-            canvas.drawText(footer.substring(0, 1), xPos, yPos * 1.4f, resource.textPaint);
+            int footerXPos = (width - (int) resource.textPaint.measureText(footer)) / 2;
+            canvas.drawText(footer, footerXPos, yPos, resource.textPaint);
         }
+
+        resource.textPaint.setColor(color);
+        resource.textPaint.setTextSize(textSize);
+
+        if (isModernTheme) {
+            resource.textPaint.setFakeBoldText(today);
+            resource.textPaint.setTextSize(textSize * .8f);
+        }
+
+        int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
+        canvas.drawText(text, xPos, yPos, resource.textPaint);
     }
 
     private void setAll(String text, boolean isToday, boolean isSelected,

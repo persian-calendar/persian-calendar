@@ -68,6 +68,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import dagger.android.support.DaggerFragment;
@@ -309,15 +310,12 @@ public class CalendarFragment extends DaggerFragment {
     }
 
     private void showEvent(long jdn) {
+        mEventsBinding.shiftWorkTitle.setText(Utils.getShiftWorkTitleOfJdn(jdn, false));
+
         List<AbstractEvent> events = Utils.getEvents(jdn,
                 CalendarUtils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
-        {
-            String shift = Utils.getShiftWorkTitleOfJdn(jdn);
-            nonHolidays = shift + (TextUtils.isEmpty(nonHolidays) ? "" : "\n") + nonHolidays;
-            nonHolidays = nonHolidays.trim(); // TODO: WHY?
-        }
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
         StringBuilder contentDescription = new StringBuilder();
 

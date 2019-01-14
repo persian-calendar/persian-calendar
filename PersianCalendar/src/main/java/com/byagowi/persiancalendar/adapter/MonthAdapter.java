@@ -186,7 +186,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                                     ? daysPaintResources.arabicDigitsTextSize
                                     : daysPaintResources.persianDigitsTextSize,
                             day.getJdn(), position - 6 - startingDayOfWeek,
-                            Utils.getShiftWorkTitleOfJdn(day.getJdn()));
+                            Utils.getShiftWorkTitleOfJdn(day.getJdn(), true));
 
                     itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
                             day.getJdn(), day.isToday(), monthEvents,
