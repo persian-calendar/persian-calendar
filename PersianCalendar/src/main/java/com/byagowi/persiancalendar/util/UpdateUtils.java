@@ -116,9 +116,6 @@ public class UpdateUtils {
 
         String weekDayName = Utils.getWeekDayName(date);
         String title = CalendarUtils.dayTitleSummary(date);
-        String shiftWorkTitle = Utils.getShiftWorkTitle(jdn, true);
-        if (!TextUtils.isEmpty(shiftWorkTitle))
-            title += " (" + shiftWorkTitle + ")";
         String subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());
 
         Clock currentClock = new Clock(calendar);
