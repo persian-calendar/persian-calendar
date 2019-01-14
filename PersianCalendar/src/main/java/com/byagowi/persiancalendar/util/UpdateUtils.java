@@ -114,7 +114,7 @@ public class UpdateUtils {
 
         String weekDayName = Utils.getWeekDayName(date);
         String title = CalendarUtils.dayTitleSummary(date);
-        String shiftWorkTitle = Utils.getShiftWorkTitleOfJdn(jdn, true);
+        String shiftWorkTitle = Utils.getShiftWorkTitle(jdn, true);
         if (!TextUtils.isEmpty(shiftWorkTitle))
             title += " (" + shiftWorkTitle + ")";
         String subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma());

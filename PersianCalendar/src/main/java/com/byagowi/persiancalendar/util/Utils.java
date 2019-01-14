@@ -965,7 +965,7 @@ public class Utils {
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
     }
 
-    static public String getShiftWorkTitleOfJdn(long jdn, boolean abbreviated) {
+    static public String getShiftWorkTitle(long jdn, boolean abbreviated) {
         if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
             return "";
 

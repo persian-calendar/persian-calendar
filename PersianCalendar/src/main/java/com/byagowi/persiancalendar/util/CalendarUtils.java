@@ -288,7 +288,7 @@ public class CalendarUtils {
             result.append(dayTitleSummary(mainDate));
         }
 
-        String shift = Utils.getShiftWorkTitleOfJdn(jdn, false);
+        String shift = Utils.getShiftWorkTitle(jdn, false);
         if (!TextUtils.isEmpty(shift)) {
             result.append("\n");
             result.append(shift);
