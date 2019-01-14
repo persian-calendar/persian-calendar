@@ -13,9 +13,9 @@
             android:shadowColor="?attr/colorTextNormal"
             android:shadowDx="0"
             android:shadowDy="0"
-            android:shadowRadius="1.5"
+            android:shadowRadius="2"
             android:textAlignment="center"
-            android:textColor="?attr/colorBackground"
+            android:textColor="?attr/colorCard"
             android:textSize="70sp" />
 
         <LinearLayout
