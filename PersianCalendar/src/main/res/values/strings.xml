@@ -118,7 +118,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="moonInScorpio">Moon is in Scorpio</string>
 
     <string name="events">Events</string>
-    <string name="no_event">No event or appointment is found for this day.</string>
+    <string name="no_event">No event or appointment for this day.</string>
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
 
     <string name="sunriseSunView">Sunrise</string>
