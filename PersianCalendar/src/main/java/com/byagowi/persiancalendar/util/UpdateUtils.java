@@ -46,7 +46,9 @@ public class UpdateUtils {
     private static AbstractDate pastDate;
     private static SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents = new SparseArray<>();
     @StringRes
-    private static int[] timesOn4x2 = {R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight};
+    private static int[] timesOn4x2Shia = {R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight};
+    @StringRes
+    private static int[] timesOn4x2Sunna = {R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha};
     @IdRes
     private static int[] owghatPlaceHolderId = {
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
@@ -268,6 +270,8 @@ public class UpdateUtils {
             remoteViews4x2.setTextViewText(R.id.textPlaceholder1_4x2, text2);
 
             if (nextOwghatId != 0) {
+                @StringRes
+                int[] timesOn4x2 = Utils.isShiaPrayTimeCalculationSelected() ? timesOn4x2Shia : timesOn4x2Sunna;
                 // Set text of owghats
                 for (int i = 0; i < owghatPlaceHolderId.length; ++i) {
                     remoteViews4x2.setTextViewText(owghatPlaceHolderId[i],

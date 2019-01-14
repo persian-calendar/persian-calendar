@@ -54,9 +54,9 @@
     <string name="asr">عصر</string>
     <string name="maghrib">اذان مغرب</string>
     <string name="isha">عشا</string>
-    <string name="sunrise">طلوع آفتاب</string>
-    <string name="sunset">غروب آفتاب</string>
-    <string name="midnight">نیمه وقت شرعی</string>
+    <string name="sunrise">طلوع</string>
+    <string name="sunset">غروب</string>
+    <string name="midnight">نیمه‌شب</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">مناسبت‌ها</string>
     <string name="events_summary">تنظیم نوع مناسبت‌های نمایش داده شده در تقویم</string>

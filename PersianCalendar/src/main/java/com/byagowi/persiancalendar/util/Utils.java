@@ -506,6 +506,8 @@ public class Utils {
 
     static Clock getClockFromStringId(@StringRes int stringId) {
         switch (stringId) {
+            case R.string.imsak:
+                return prayTimes.getImsakClock();
             case R.string.fajr:
                 return prayTimes.getFajrClock();
             case R.string.sunrise:
@@ -1426,7 +1428,13 @@ public class Utils {
         return talkBackEnabled;
     }
 
-    public static boolean isCenterAlignWidgets() {
+    static boolean isCenterAlignWidgets() {
         return centerAlignWidgets;
+    }
+
+    public static boolean isShiaPrayTimeCalculationSelected() {
+        CalculationMethod calculationMethod = getCalculationMethod();
+        return calculationMethod.equals(CalculationMethod.Tehran) ||
+                calculationMethod.equals(CalculationMethod.Jafari);
     }
 }
