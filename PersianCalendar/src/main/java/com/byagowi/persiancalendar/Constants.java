@@ -59,6 +59,7 @@ public class Constants {
     public static final String PREF_WEEK_ENDS = "WeekEnds";
     public static final String PREF_SHIFT_WORK_STARTING_JDN = "ShiftWorkJdn";
     public static final String PREF_SHIFT_WORK_SETTING = "ShiftWorkSetting";
+    public static final String PREF_SHIFT_WORK_RECURS = "ShiftWorkRecurs";
 
     public static final String CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE";
 

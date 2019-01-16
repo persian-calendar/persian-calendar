@@ -130,6 +130,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_RECURS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_SETTING;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
@@ -199,6 +200,7 @@ public class Utils {
     static private String sShiftWorkStoredTitlesLanguage = "";
     static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
+    static private boolean sShiftWorkRecurs = true;
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
     private static boolean sIsIranHolidaysEnabled = true;
     static private int sShiftWorkPeriod = 0;
@@ -209,6 +211,14 @@ public class Utils {
 
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
+    }
+
+    static public long getShiftWorkStartingJdn() {
+        return sShiftWorkStartingJdn;
+    }
+
+    static public boolean getShiftWorkRecurs() {
+        return sShiftWorkRecurs;
     }
 
     static public Map<String, String> getShiftWorkTitles() {
@@ -321,6 +331,8 @@ public class Utils {
             sShiftWorkPeriod = 0;
             for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
 
+            sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
+
             if (!getAppLanguage().equals(sShiftWorkStoredTitlesLanguage) || sShiftWorkTitles.size() == 0) {
                 String[] titles = resources.getStringArray(R.array.shift_work);
                 String[] keys = resources.getStringArray(R.array.shift_work_keys);
@@ -335,6 +347,7 @@ public class Utils {
             sShiftWorkStartingJdn = -1;
 
             sShiftWorkPeriod = 0;
+            sShiftWorkRecurs = true;
         }
 
         try {
@@ -981,7 +994,11 @@ public class Utils {
         if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
             return "";
 
-        int dayInPeriod = (int) ((jdn - sShiftWorkStartingJdn) % sShiftWorkPeriod);
+        long passedDays = jdn - sShiftWorkStartingJdn;
+        if (!sShiftWorkRecurs && (passedDays >= sShiftWorkPeriod))
+            return "";
+
+        int dayInPeriod = (int) (passedDays % sShiftWorkPeriod);
         int accumulation = 0;
         for (ShiftWorkRecord shift : sShiftWorks) {
             accumulation += shift.length;
