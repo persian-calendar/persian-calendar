@@ -32,7 +32,7 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
-    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار اعلان و برنامه به وقت ایران در همه جا</string>
+    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار اعلان و برنامه به وقت ایران در همه جا، مناسب ایرانیان خارج</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">حسگر قطب‌نما پیدا نشد</string>
