@@ -1,25 +1,27 @@
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
+
 plugins {
     id("com.android.application")
     kotlin("android")
 }
 
-//// https://stackoverflow.com/a/52441962
-//fun String.runCommand(workingDir: File = File("."),
-//                      timeoutAmount: Long = 60,
-//                      timeoutUnit: TimeUnit = TimeUnit.MINUTES): String? {
-//  return try {
-//    ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
-//        .directory(workingDir)
-//        .redirectOutput(ProcessBuilder.Redirect.PIPE)
-//        .redirectError(ProcessBuilder.Redirect.PIPE)
-//        .start().apply {
-//          waitFor(timeoutAmount, timeoutUnit)
-//        }.inputStream.bufferedReader().readText()
-//  } catch (e: java.io.IOException) {
-//    e.printStackTrace()
-//    null
-//  }
-//}
+// https://stackoverflow.com/a/52441962
+fun String.runCommand(workingDir: File = File("."),
+                      timeoutAmount: Long = 60,
+                      timeoutUnit: TimeUnit = TimeUnit.MINUTES): String? {
+    return try {
+        ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
+                .directory(workingDir)
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.PIPE)
+                .start().apply {
+                    waitFor(timeoutAmount, timeoutUnit)
+                }.inputStream.bufferedReader().readText()
+    } catch (e: java.io.IOException) {
+        e.printStackTrace()
+        null
+    }
+}
 
 android {
     compileSdkVersion(28)
@@ -37,11 +39,11 @@ android {
 
     buildTypes {
         getByName("debug") {
-            //      versionNameSuffix = "-" + arrayOf(
-//          "git rev-parse --abbrev-ref HEAD",
-//          "git rev-list HEAD --count",
-//          "git rev-parse --short HEAD"
-//      ).map { it.runCommand()?.trim() }.joinToString("-")
+            versionNameSuffix = "-" + arrayOf(
+                    "git rev-parse --abbrev-ref HEAD",
+                    "git rev-list HEAD --count",
+                    "git rev-parse --short HEAD"
+            ).map { it.runCommand()?.trim() }.joinToString("-")
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -71,16 +73,18 @@ dependencies {
     // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
     // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
 
-    implementation("com.google.dagger:dagger-android:2.16")
-    implementation("com.google.dagger:dagger-android-support:2.16")
-    annotationProcessor("com.google.dagger:dagger-compiler:2.16")
-    annotationProcessor("com.google.dagger:dagger-android-processor:2.16")
+    val daggerVersion = "2.16"
+    implementation("com.google.dagger:dagger-android:$daggerVersion")
+    implementation("com.google.dagger:dagger-android-support:$daggerVersion")
+    annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
+    annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
 
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:1.6.1")
-    debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:1.6.1")
+    val leakCanaryVersion = "1.6.1"
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
+    debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
 
     testImplementation("junit:junit:4.12")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.11")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
     androidTestImplementation("androidx.test:runner:1.1.1")
     androidTestImplementation("androidx.test:rules:1.1.1")
