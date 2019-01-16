@@ -1004,7 +1004,7 @@ public class Utils {
             accumulation += shift.length;
             if (accumulation > dayInPeriod) {
                 // Skip rests on abbreviated mode
-                if (abbreviated && shift.type.equals("r")) return "";
+                if (sShiftWorkRecurs && abbreviated && shift.type.equals("r")) return "";
 
                 String title = sShiftWorkTitles.get(shift.type);
                 if (title == null) return "";
