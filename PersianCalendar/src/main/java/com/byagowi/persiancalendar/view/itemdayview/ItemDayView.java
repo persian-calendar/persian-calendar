@@ -64,7 +64,7 @@ public class ItemDayView extends View {
         getDrawingRect(bounds);
         drawingRect.set(bounds);
         drawingRect.inset(radius * 0.1f, radius * 0.1f);
-        int yOffsetToApply = isModernTheme ? (int) (-height * .1f) : 0;
+        int yOffsetToApply = isModernTheme ? (int) (-height * .07f) : 0;
 
         if (selected) {
             if (isModernTheme) {
