@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -20,25 +21,28 @@
 
             <TextView
                 android:id="@+id/row_number"
+                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical" />
+
             <Spinner
                 android:id="@+id/type_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            
+
             <Spinner
                 android:id="@+id/length_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <Button
+            <ImageView
                 android:id="@+id/remove"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/remove" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/remove"
+                app:srcCompat="@drawable/ic_remove_button" />
 
         </LinearLayout>
 

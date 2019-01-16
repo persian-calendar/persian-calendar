@@ -202,7 +202,7 @@
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">Remove</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
-    <string name="shift_work_extra_comment">برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.</string>
+    <string name="shift_work_extra_comment">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
     <string name="n_minutes">%s دقیقه</string>
     <string name="n_hours">%s ساعت</string>
     <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>

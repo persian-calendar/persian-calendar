@@ -12,9 +12,7 @@
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/reset_link"
@@ -28,24 +26,15 @@
             android:id="@+id/result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textSize="12sp" />
 
         <CheckBox
             android:id="@+id/recurs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
             android:text="@string/recurs" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="ردیف، نوع شیفت، تعداد روز"
-            android:textSize="12sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
