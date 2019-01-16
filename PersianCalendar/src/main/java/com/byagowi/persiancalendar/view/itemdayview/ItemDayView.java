@@ -112,20 +112,7 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
-        String textToMeasureHeight =
-                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
-        resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length(), bounds);
-        int yPos = (height + bounds.height()) / 2;
-        yPos += yOffsetToApply;
-
         // TODO: Better to not change resource's paint objects, but for now
-        resource.textPaint.setColor(selected ? resource.colorTextDaySelected : resource.colorTextDay);
-        resource.textPaint.setTextSize(textSize / 2.f);
-        if (!TextUtils.isEmpty(footer)) {
-            int footerXPos = (width - (int) resource.textPaint.measureText(footer)) / 2;
-            canvas.drawText(footer, footerXPos, yPos * 0.9f - bounds.height(), resource.textPaint);
-        }
-
         resource.textPaint.setColor(color);
         resource.textPaint.setTextSize(textSize);
 
@@ -135,7 +122,19 @@ public class ItemDayView extends View {
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
+        String textToMeasureHeight =
+                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
+        resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length(), bounds);
+        int yPos = (height + bounds.height()) / 2;
+        yPos += yOffsetToApply;
         canvas.drawText(text, xPos, yPos, resource.textPaint);
+
+        resource.textPaint.setColor(selected ? resource.colorTextDaySelected : resource.colorTextDay);
+        resource.textPaint.setTextSize(textSize / 2.f);
+        if (!TextUtils.isEmpty(footer)) {
+            int footerXPos = (width - (int) resource.textPaint.measureText(footer)) / 2;
+            canvas.drawText(footer, footerXPos, yPos * 0.87f - bounds.height(), resource.textPaint);
+        }
     }
 
     private void setAll(String text, boolean isToday, boolean isSelected,
