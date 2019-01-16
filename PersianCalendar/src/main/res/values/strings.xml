@@ -290,7 +290,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%s till to %s</string>
     <string name="shift_work_record_title">%s day(s) %s</string>
-    <string name="shift_work_result">Shift Work settings result:</string>
     <string name="recurs">Recurs</string>
 
 </resources>
