@@ -289,5 +289,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%s till to %s</string>
+    <string name="shift_work_record_title">%s day(s) %s</string>
+    <string name="shift_work_result">Shift Work settings result:</string>
 
 </resources>

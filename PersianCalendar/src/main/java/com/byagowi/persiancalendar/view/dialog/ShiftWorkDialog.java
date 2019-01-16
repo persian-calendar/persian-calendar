@@ -71,7 +71,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
         if (shiftWorks.size() == 0)
             shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
-        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
+        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks, binding);
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
 
         binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
@@ -112,14 +112,36 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkDialog.ShiftWorkItemAdapter.ViewHolder> {
         List<String> mShiftWorkKeys;
         private List<ShiftWorkRecord> mRows = new ArrayList<>();
+        final private ShiftWorkSettingsBinding mBinding;
 
-        ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems) {
+        ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems, ShiftWorkSettingsBinding binding) {
             mRows.addAll(initialItems);
             mShiftWorkKeys = Arrays.asList(getResources().getStringArray(R.array.shift_work_keys));
+            mBinding = binding;
+            updateShiftWorkResult();
         }
 
         List<ShiftWorkRecord> getRows() {
             return mRows;
+        }
+
+
+        private void updateShiftWorkResult() {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for (ShiftWorkRecord record : mRows) {
+                if (record.length == 0) continue;
+
+                if (first) first = false;
+                else result.append(Utils.getSpacedComma());
+                result.append(String.format(getString(R.string.shift_work_record_title),
+                        Utils.formatNumber(record.length), Utils.getShiftWorkTitles().get(record.type)));
+            }
+
+            if (result.length() != 0)
+                mBinding.result.setText(String.format("%s\n%s",
+                        getString(R.string.shift_work_result), result.toString()));
+            else mBinding.result.setText("");
         }
 
         @NonNull
@@ -164,6 +186,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 binding.remove.setOnClickListener(v -> {
                     mRows.remove(mPosition);
                     notifyDataSetChanged();
+                    updateShiftWorkResult();
                 });
 
                 binding.lengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -171,6 +194,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
                                 mRows.get(mPosition).type, position));
+                        updateShiftWorkResult();
                     }
 
                     @Override
@@ -183,6 +207,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
                                 mShiftWorkKeys.get(position), mRows.get(mPosition).length));
+                        updateShiftWorkResult();
                     }
 
                     @Override
@@ -193,6 +218,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 binding.addButton.setOnClickListener((v -> {
                     mRows.add(new ShiftWorkRecord("r", 0));
                     notifyDataSetChanged();
+                    updateShiftWorkResult();
                 }));
             }
 

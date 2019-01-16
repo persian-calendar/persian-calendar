@@ -196,6 +196,7 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
     static private List<AbstractEvent> sAllEnabledEvents;
+    static private String sShiftWorkStoredTitlesLanguage = "";
     static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
@@ -208,6 +209,10 @@ public class Utils {
 
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
+    }
+
+    static public Map<String, String> getShiftWorkTitles() {
+        return sShiftWorkTitles;
     }
 
     // This should be called before any use of Utils on the activity and services
@@ -296,8 +301,9 @@ public class Utils {
             weekEnds[Integer.parseInt(s)] = true;
 
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
+        Resources resources = context.getResources();
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
-                new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
+                new HashSet<>(Arrays.asList(resources.getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
 
         sShiftWorkTitles = new HashMap<>();
@@ -315,10 +321,14 @@ public class Utils {
             sShiftWorkPeriod = 0;
             for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
 
-            String[] titles = context.getResources().getStringArray(R.array.shift_work);
-            String[] keys = context.getResources().getStringArray(R.array.shift_work_keys);
-            for (int i = 0; i < titles.length; ++i)
-                sShiftWorkTitles.put(keys[i], titles[i]);
+            if (!getAppLanguage().equals(sShiftWorkStoredTitlesLanguage) || sShiftWorkTitles.size() == 0) {
+                String[] titles = resources.getStringArray(R.array.shift_work);
+                String[] keys = resources.getStringArray(R.array.shift_work_keys);
+                for (int i = 0; i < titles.length; ++i)
+                    sShiftWorkTitles.put(keys[i], titles[i]);
+
+                sShiftWorkStoredTitlesLanguage = getAppLanguage();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sShiftWorks = Collections.emptyList();
@@ -1432,7 +1442,7 @@ public class Utils {
         return centerAlignWidgets;
     }
 
-    public static boolean isShiaPrayTimeCalculationSelected() {
+    static boolean isShiaPrayTimeCalculationSelected() {
         CalculationMethod calculationMethod = getCalculationMethod();
         return calculationMethod.equals(CalculationMethod.Tehran) ||
                 calculationMethod.equals(CalculationMethod.Jafari);

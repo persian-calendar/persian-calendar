@@ -149,13 +149,19 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         binding.drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        String action = getIntent() != null ? getIntent().getAction() : null;
-        if ("COMPASS".equals(action)) navigateTo(R.id.compass);
-        else if ("LEVEL".equals(action)) navigateTo(R.id.level);
-        else if ("CONVERTER".equals(action)) navigateTo(R.id.converter);
-        else if ("SETTINGS".equals(action)) navigateTo(R.id.settings);
-        else if ("DEVICE".equals(action)) navigateTo(R.id.deviceInfo);
-        else navigateTo(R.id.calendar);
+        Intent intent = getIntent();
+        if (intent != null) {
+            String action = intent.getAction();
+            if ("COMPASS".equals(action)) navigateTo(R.id.compass);
+            else if ("LEVEL".equals(action)) navigateTo(R.id.level);
+            else if ("CONVERTER".equals(action)) navigateTo(R.id.converter);
+            else if ("SETTINGS".equals(action)) navigateTo(R.id.settings);
+            else if ("DEVICE".equals(action)) navigateTo(R.id.deviceInfo);
+            else navigateTo(R.id.calendar);
+
+            // So it won't happen again if the activity restarted
+            intent.setAction("");
+        }
 
         prefs.registerOnSharedPreferenceChangeListener(this);
 

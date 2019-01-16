@@ -179,8 +179,8 @@
     </string-array>
 
     <string-array name="shift_work_keys" translatable="false">
-        <item>d</item>
-        <item>r</item>
+        <item>d</item> <!-- day work -->
+        <item>r</item> <!-- rest -->
         <item>e</item>
         <item>n</item>
     </string-array>
