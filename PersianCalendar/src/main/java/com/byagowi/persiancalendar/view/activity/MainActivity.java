@@ -286,11 +286,13 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             boolean changeToGregorianCalendar = false;
             boolean changeToPersianCalendar = false;
             boolean changeToIranEvents = false;
+            boolean removeAllEvents = false;
             String lang = sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
             if (lang == null) lang = "";
             switch (lang) {
                 case LANG_EN_US:
                     changeToGregorianCalendar = true;
+                    removeAllEvents = true;
                     break;
                 case LANG_FA:
                     persianDigits = true;
@@ -345,6 +347,15 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                         (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
                             new HashSet<>(Collections.singletonList("iran_holidays")));
+                }
+            }
+            if (removeAllEvents) {
+                Set<String> currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+
+                if (currentHolidays == null || currentHolidays.isEmpty() ||
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                    editor.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
                 }
             }
             if (changeToGregorianCalendar) {
