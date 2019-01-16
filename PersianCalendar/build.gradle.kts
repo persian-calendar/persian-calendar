@@ -8,7 +8,7 @@ plugins {
 // https://stackoverflow.com/a/52441962
 fun String.runCommand(workingDir: File = File("."),
                       timeoutAmount: Long = 60,
-                      timeoutUnit: TimeUnit = TimeUnit.SECONDS): String? {
+                      timeoutUnit: TimeUnit = TimeUnit.MINUTES): String? {
     return try {
         ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
                 .directory(workingDir)
