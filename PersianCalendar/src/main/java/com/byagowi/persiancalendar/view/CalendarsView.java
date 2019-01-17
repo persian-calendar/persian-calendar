@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.adapter.CalendarItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
+import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.util.AstronomicalUtils;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
@@ -151,8 +152,9 @@ public class CalendarsView extends FrameLayout {
                 Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
                 endOfYearText += "\n" + String.format(context.getString(R.string.spring_equinox),
                         Utils.formatNumber(mainDate.getYear() + 1),
-                        UIUtils.baseFormatClock(springEquinox.get(Calendar.HOUR_OF_DAY),
-                                springEquinox.get(Calendar.MINUTE)));
+                        UIUtils.getFormattedClock(
+                                new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
+                                        springEquinox.get(Calendar.MINUTE)), true));
             }
             mBinding.startAndEndOfYearDiff.setText(String.format("%s\n%s", startOfYearText, endOfYearText));
         }

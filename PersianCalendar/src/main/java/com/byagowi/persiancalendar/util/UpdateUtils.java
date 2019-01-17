@@ -127,7 +127,7 @@ public class UpdateUtils {
         int nextOwghatId = Utils.getNextOwghatTimeId(currentClock, updateDate);
         if (nextOwghatId != 0) {
             owghat = context.getString(nextOwghatId) + ": " +
-                    UIUtils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId));
+                    UIUtils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false);
             if (Utils.isShownOnWidgets("owghat_location")) {
                 String cityName = Utils.getCityName(context, false);
                 if (!TextUtils.isEmpty(cityName)) {
@@ -276,7 +276,7 @@ public class UpdateUtils {
                 for (int i = 0; i < owghatPlaceHolderId.length; ++i) {
                     remoteViews4x2.setTextViewText(owghatPlaceHolderId[i],
                             context.getString(timesOn4x2[i]) + "\n" +
-                                    UIUtils.getFormattedClock(getClockFromStringId(timesOn4x2[i])));
+                                    UIUtils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false));
                     remoteViews4x2.setTextColor(owghatPlaceHolderId[i],
                             timesOn4x2[i] == nextOwghatId ?
                                     Color.RED : color);

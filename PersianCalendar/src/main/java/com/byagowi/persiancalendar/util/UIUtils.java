@@ -97,11 +97,13 @@ public class UIUtils {
         return false;
     }
 
-    static public String getFormattedClock(Clock clock) {
+    static public String getFormattedClock(Clock clock, boolean forceIn24) {
         String timeText = null;
 
+        boolean in12 = Utils.isClockIn12() || forceIn24;
+
         int hour = clock.getHour();
-        if (Utils.isClockIn12()) {
+        if (in12) {
             if (hour >= 12) {
                 timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
                 hour -= 12;
@@ -111,7 +113,7 @@ public class UIUtils {
         }
 
         String result = baseFormatClock(hour, clock.getMinute());
-        if (Utils.isClockIn12()) {
+        if (in12) {
             result = result + " " + timeText;
         }
         return result;
