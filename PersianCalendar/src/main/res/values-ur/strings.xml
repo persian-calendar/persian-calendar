@@ -206,7 +206,7 @@
     <string name="n_hours">%s ساعت</string>
     <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
     <string name="device_info">اطلاعات دستگاه</string>
-    <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۴×۱ و ۲×۲</string>
+    <string name="center_align_widgets_summary">وسط‌چین کردن ابزارک‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
     <string name="n_till">%s تا %s</string>
     <string name="shift_work_record_title">%s روز %s</string>
