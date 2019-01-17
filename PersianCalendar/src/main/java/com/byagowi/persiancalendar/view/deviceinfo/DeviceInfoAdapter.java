@@ -26,9 +26,15 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
 
     public DeviceInfoAdapter(WindowManager wm) {
         deviceInfoItemsList.add(new DeviceInfoItem(
-                "Android version",
-                Build.VERSION.RELEASE,
-                "" + Build.VERSION.SDK_INT
+                "Screen Resolution",
+                getScreenResolution(wm),
+                null
+        ));
+
+        deviceInfoItemsList.add(new DeviceInfoItem(
+                "Android Version",
+                Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
+                Integer.toString(Build.VERSION.SDK_INT)
         ));
 
         deviceInfoItemsList.add(new DeviceInfoItem(
@@ -106,12 +112,6 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
         deviceInfoItemsList.add(new DeviceInfoItem(
                 "Display",
                 Build.DISPLAY,
-                null
-        ));
-
-        deviceInfoItemsList.add(new DeviceInfoItem(
-                "Screen Resolution",
-                getScreenResolution(wm),
                 null
         ));
 
