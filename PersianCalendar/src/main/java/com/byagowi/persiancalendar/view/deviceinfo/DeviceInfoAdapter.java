@@ -26,6 +26,12 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
 
     public DeviceInfoAdapter(WindowManager wm) {
         deviceInfoItemsList.add(new DeviceInfoItem(
+                "Android version",
+                Build.VERSION.RELEASE,
+                "" + Build.VERSION.SDK_INT
+        ));
+
+        deviceInfoItemsList.add(new DeviceInfoItem(
                 "Manufacturer",
                 Build.MANUFACTURER,
                 null
@@ -40,7 +46,7 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
         deviceInfoItemsList.add(new DeviceInfoItem(
                 "Model",
                 Build.MODEL,
-                Build.VERSION.RELEASE
+                null
         ));
 
         deviceInfoItemsList.add(new DeviceInfoItem(
