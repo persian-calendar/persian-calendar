@@ -246,5 +246,7 @@
     <string name="n_till">%s till to %s</string>
     <string name="shift_work_record_title">%s day(s) %s</string>
     <string name="recurs">Recurs</string>
+    <string name="am">ص</string>
+    <string name="pm">م</string>
 
 </resources>

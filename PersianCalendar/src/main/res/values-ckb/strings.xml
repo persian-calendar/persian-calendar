@@ -212,5 +212,7 @@
     <string name="n_till">%s بۆ %s</string>
     <string name="shift_work_record_title">%s ڕۆژ %s</string>
     <string name="recurs">پاتەکردنەوە</string>
+    <string name="am">ب.ن</string>
+    <string name="pm">د.ن</string>
 
 </resources>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.adapter.CalendarItemAdapter;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
@@ -148,15 +147,24 @@ public class CalendarsView extends FrameLayout {
                     Utils.formatNumber((int) (endOfYearJdn - jdn)),
                     Utils.formatNumber(weeksCount - currentWeek),
                     Utils.formatNumber(12 - mainDate.getMonth()));
-            if (chosenCalendarType == CalendarType.SHAMSI && Utils.getAppLanguage().equals(Constants.LANG_FA)) {
-                Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
-                endOfYearText += "\n" + String.format(context.getString(R.string.spring_equinox),
-                        Utils.formatNumber(mainDate.getYear() + 1),
-                        UIUtils.getFormattedClock(
-                                new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
-                                        springEquinox.get(Calendar.MINUTE)), true));
-            }
             mBinding.startAndEndOfYearDiff.setText(String.format("%s\n%s", startOfYearText, endOfYearText));
+
+            String equinox = "";
+            if (Utils.getMainCalendar() == chosenCalendarType &&
+                    chosenCalendarType == CalendarType.SHAMSI) {
+                if ((mainDate.getMonth() == 12 && mainDate.getDayOfMonth() > 22) ||
+                        (mainDate.getMonth() == 1 && mainDate.getDayOfMonth() == 1)) {
+                    int addition = mainDate.getMonth() == 12 ? 1 : 0;
+                    Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
+                    equinox = String.format(context.getString(R.string.spring_equinox),
+                            Utils.formatNumber(mainDate.getYear() + addition),
+                            UIUtils.getFormattedClock(
+                                    new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
+                                            springEquinox.get(Calendar.MINUTE)), true));
+                }
+            }
+            mBinding.equinox.setText(equinox);
+            mBinding.equinox.setVisibility(TextUtils.isEmpty(equinox) ? GONE : VISIBLE);
         }
 
         mBinding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,

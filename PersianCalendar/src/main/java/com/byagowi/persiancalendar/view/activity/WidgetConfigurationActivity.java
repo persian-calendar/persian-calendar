@@ -16,9 +16,6 @@ import com.byagowi.persiancalendar.view.preferences.FragmentWidgetNotification;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
-import static com.byagowi.persiancalendar.Constants.PREF_THEME;
-
 public class WidgetConfigurationActivity extends AppCompatActivity {
     protected void finishAndSuccess() {
         Bundle extras = getIntent().getExtras();
@@ -37,7 +34,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        setTheme(UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME)));
+        setTheme(UIUtils.getThemeFromName(Utils.getThemeFromPreference(prefs)));
 
         Utils.applyAppLanguage(this);
         super.onCreate(savedInstanceState);

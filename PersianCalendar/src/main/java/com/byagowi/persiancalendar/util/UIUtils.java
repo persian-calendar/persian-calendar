@@ -27,15 +27,10 @@ import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
 
-import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
-import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
-import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.MODERN_THEME;
-import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
-import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class UIUtils {
@@ -97,26 +92,19 @@ public class UIUtils {
         return false;
     }
 
-    static public String getFormattedClock(Clock clock, boolean forceIn24) {
-        String timeText = null;
-
-        boolean in12 = Utils.isClockIn12() || forceIn24;
+    static public String getFormattedClock(Clock clock, boolean forceIn12) {
+        boolean in12 = Utils.isClockIn12() || forceIn12;
+        if (!in12) return baseFormatClock(clock.getHour(), clock.getMinute());
 
         int hour = clock.getHour();
-        if (in12) {
-            if (hour >= 12) {
-                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
-                hour -= 12;
-            } else {
-                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? AM_IN_CKB : AM_IN_PERSIAN;
-            }
+        String suffix;
+        if (hour >= 12) {
+            suffix = Utils.getAmString();
+            hour -= 12;
+        } else {
+            suffix = Utils.getPmString();
         }
-
-        String result = baseFormatClock(hour, clock.getMinute());
-        if (in12) {
-            result = result + " " + timeText;
-        }
-        return result;
+        return baseFormatClock(hour, clock.getMinute()) + " " + suffix;
     }
 
     static public @StringRes

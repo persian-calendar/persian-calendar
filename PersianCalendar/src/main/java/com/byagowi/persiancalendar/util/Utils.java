@@ -80,6 +80,7 @@ import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_AM;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
@@ -91,6 +92,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_PM;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
@@ -204,6 +206,8 @@ public class Utils {
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
     private static boolean sIsIranHolidaysEnabled = true;
     static private int sShiftWorkPeriod = 0;
+    static private String sAM = DEFAULT_AM;
+    static private String sPM = DEFAULT_PM;
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -211,6 +215,14 @@ public class Utils {
 
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
+    }
+
+    static String getAmString() {
+        return sAM;
+    }
+
+    static String getPmString() {
+        return sPM;
     }
 
     static public long getShiftWorkStartingJdn() {
@@ -244,10 +256,17 @@ public class Utils {
         }
 
         try {
+            String latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE);
+            if (latitudeString == null) latitudeString = DEFAULT_LATITUDE;
+            String longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE);
+            if (longtitudeString == null) longtitudeString = DEFAULT_LONGITUDE;
+            String altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE);
+            if (altitudeString == null) altitudeString = DEFAULT_ALTITUDE;
+
             Coordinate coord = new Coordinate(
-                    Double.parseDouble(prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)),
-                    Double.parseDouble(prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)),
-                    Double.parseDouble(prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE))
+                    Double.parseDouble(latitudeString),
+                    Double.parseDouble(longtitudeString),
+                    Double.parseDouble(altitudeString)
             );
 
             // If latitude or longitude is zero probably preference is not set yet
@@ -287,7 +306,9 @@ public class Utils {
         coordinate = getCoordinate(context);
         try {
             mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
-            String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC").trim();
+            String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
+            if (otherCalendarsString == null) otherCalendarsString = "GREGORIAN,ISLAMIC";
+            otherCalendarsString = otherCalendarsString.trim();
             if (TextUtils.isEmpty(otherCalendarsString)) {
                 otherCalendars = new CalendarType[0];
             } else {
@@ -305,9 +326,13 @@ public class Utils {
         spacedComma = language.equals(LANG_EN_US) ? ", " : "، ";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
-        weekStartOffset = Integer.parseInt(prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START));
+        String weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START);
+        if (weekStart == null) weekStart = DEFAULT_WEEK_START;
+        weekStartOffset = Integer.parseInt(weekStart);
         weekEnds = new boolean[7];
-        for (String s : prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS))
+        Set<String> weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
+        if (weekEndsSet == null) weekEndsSet = DEFAULT_WEEK_ENDS;
+        for (String s : weekEndsSet)
             weekEnds[Integer.parseInt(s)] = true;
 
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
@@ -320,6 +345,7 @@ public class Utils {
         try {
             sShiftWorks = new ArrayList<>();
             String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
+            if (shiftWork == null) shiftWork = "";
             String[] parts = shiftWork.split(",");
             for (String p : parts) {
                 String[] v = p.split("=");
@@ -350,8 +376,20 @@ public class Utils {
             sShiftWorkRecurs = true;
         }
 
+        switch (getAppLanguage()) {
+            case LANG_FA:
+            case LANG_FA_AF:
+            case LANG_EN_US:
+                sAM = DEFAULT_AM;
+                sPM = DEFAULT_PM;
+                break;
+            default:
+                sAM = context.getString(R.string.am);
+                sPM = context.getString(R.string.pm);
+        }
+
         try {
-            appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
+            appTheme = UIUtils.getThemeFromName(getThemeFromPreference(prefs));
         } catch (Exception e) {
             e.printStackTrace();
             appTheme = R.style.LightTheme;
@@ -359,6 +397,11 @@ public class Utils {
 
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
+    }
+
+    public static String getThemeFromPreference(SharedPreferences prefs) {
+        String result = prefs.getString(PREF_THEME, LIGHT_THEME);
+        return result == null ? LIGHT_THEME : result;
     }
 
     @StyleRes
@@ -369,8 +412,9 @@ public class Utils {
     private static int getIslamicOffset(Context context) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return Integer.parseInt(prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
-                    .replace("+", ""));
+            String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
+            if (islamicOffset == null) islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+            return Integer.parseInt(islamicOffset.replace("+", ""));
         } catch (Exception ignore) {
             return 0;
         }
@@ -726,6 +770,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
+        if (key == null) key = "";
 
         if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
@@ -1118,8 +1163,9 @@ public class Utils {
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             long athanGap;
             try {
-                athanGap = (long) (Double.parseDouble(
-                        prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
+                String athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0");
+                if (athanGapStr == null) athanGapStr = "0";
+                athanGap = (long) (Double.parseDouble(athanGapStr) * 60 * 1000);
             } catch (NumberFormatException e) {
                 athanGap = 0;
             }
@@ -1445,8 +1491,8 @@ public class Utils {
     public static void copyToClipboard(Context context, CharSequence label, CharSequence text) {
         ClipboardManager clipboardService =
                 (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboardService != null && text != null) {
-            clipboardService.setPrimaryClip(ClipData.newPlainText("text", text));
+        if (clipboardService != null && label != null && text != null) {
+            clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
             Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
         }
     }
