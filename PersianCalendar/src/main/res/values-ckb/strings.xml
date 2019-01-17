@@ -170,13 +170,13 @@
     <string name="pref_header_location_athan">شوێن و بانگ</string>
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
-    <string name="continue_button">درێژەپێدان</string>
+    <string name="continue_button">بەردەوامبوون</string>
 
     <!--Permissions-->
-    <string name="location_access">دسترسی به موقعیت مکانی</string>
-    <string name="phone_location_required">این قسمت از برنامه نیازمند گرفتن دسترسی مکان است، در غیر است می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
-    <string name="calendar_access">دسترسی به تقویم دستگاه</string>
-    <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
+    <string name="location_access">دەستڕاگەیشتن بە شوێن</string>
+    <string name="phone_location_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی شوێنە، دەنا دەبێ بەدەست درێژایی و پانایی جوگرافی تێ‌بخەن.</string>
+    <string name="calendar_access">دەستڕاگەیشتن بە ڕۆژژمێری ئامراز</string>
+    <string name="phone_calendar_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی ڕۆژژمێری ئامرازە، بە پێدانی ئەم دەستەڵاتە بەرنامە دەتوانێ ڕووداوە کەسییەکانت لە ڕۆژژمێردا نیشان بدا.</string>
 
     <!--TalkBack, a11y-->
     <string name="previous_month">مانگی پاشەوە</string>
@@ -197,19 +197,19 @@
     <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
     <string name="update">نوێکردنەوە</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %s: %s</string>
-    <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
+    <string name="shift_work_settings">ڕێکخستنی نۆرەکار</string>
+    <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه.</string>
     <string name="remove">سڕینەوە</string>
-    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
-    <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
-    <string name="n_minutes">%s دقیقه</string>
-    <string name="n_hours">%s ساعت</string>
-    <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
+    <string name="shift_work_starting_date">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%s) سەرەتای نۆرەکارە.</string>
+    <string name="shift_work_reset_button">ناچالاککردن یان ڕێکخستنەوە</string>
+    <string name="n_minutes">%s خولەک</string>
+    <string name="n_hours">%s کاتکۆ</string>
+    <string name="n_minutes_and_hours">%s کاتکۆ و %s خولەک</string>
     <string name="device_info">زانیاریی ئامراز</string>
-    <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۴در۱ و ۲در۲</string>
-    <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
-    <string name="n_till">%s تا %s</string>
-    <string name="shift_work_record_title">%s روز %s</string>
-    <string name="recurs">تکرار شود</string>
+    <string name="center_align_widgets_summary">ھێنانە ناوەڕاستی ویجتەکانی ٤×١ و ٢×٢</string>
+    <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجت</string>
+    <string name="n_till">%s بۆ %s</string>
+    <string name="shift_work_record_title">%s ڕۆژ %s</string>
+    <string name="recurs">پاتەکردنەوە</string>
 
 </resources>
