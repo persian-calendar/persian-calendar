@@ -152,7 +152,7 @@ public class CalendarsView extends FrameLayout {
             String equinox = "";
             if (Utils.getMainCalendar() == chosenCalendarType &&
                     chosenCalendarType == CalendarType.SHAMSI) {
-                if ((mainDate.getMonth() == 12 && mainDate.getDayOfMonth() > 22) ||
+                if ((mainDate.getMonth() == 12 && mainDate.getDayOfMonth() >= 20) ||
                         (mainDate.getMonth() == 1 && mainDate.getDayOfMonth() == 1)) {
                     int addition = mainDate.getMonth() == 12 ? 1 : 0;
                     Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
