@@ -198,7 +198,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="widget_text_color">Widget Text Color</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
     <string name="clock_on_widget">Clock on the Widget</string>
-    <string name="showing_clock_on_widget">Show the clock on widget</string>
+    <string name="showing_clock_on_widget">Show clock on the widget</string>
     <string name="iran_time">Iran Time</string>
     <string name="showing_iran_time">Widgets and notifications in Iran TimeZone</string>
     <string name="customize_widget">Widget Customization</string>
