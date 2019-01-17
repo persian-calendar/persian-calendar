@@ -201,6 +201,7 @@
     <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه.</string>
     <string name="remove">سڕینەوە</string>
     <string name="shift_work_starting_date">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%s) سەرەتای نۆرەکارە.</string>
+    <string name="shift_work_starting_date_edit">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%s) سەرەتای نۆرەکارە.</string>
     <string name="shift_work_reset_button">ناچالاککردن یان ڕێکخستنەوە</string>
     <string name="n_minutes">%s خولەک</string>
     <string name="n_hours">%s کاتکۆ</string>

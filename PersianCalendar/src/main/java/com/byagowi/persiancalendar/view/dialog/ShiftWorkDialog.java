@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +47,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
+    private long jdn = -1;
+    private long selectedJdn = -1;
 
     public static ShiftWorkDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -57,9 +58,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    private long jdn = -1;
-    private long selectedJdn = -1;
 
     @NonNull
     @Override
@@ -74,7 +72,11 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         if (selectedJdn == -1) selectedJdn = CalendarUtils.getTodayJdn();
 
         jdn = Utils.getShiftWorkStartingJdn();
-        if (jdn == -1) jdn = selectedJdn;
+        boolean isFirstSetup = false;
+        if (jdn == -1) {
+            isFirstSetup = true;
+            jdn = selectedJdn;
+        }
 
         Context context = getContext();
         ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
@@ -87,7 +89,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks, binding);
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
 
-        binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
+        binding.description.setText(String.format(getString(
+                isFirstSetup ? R.string.shift_work_starting_date : R.string.shift_work_starting_date_edit),
                 CalendarUtils.formatDate(
                         CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
 
@@ -131,9 +134,9 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     }
 
     private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkDialog.ShiftWorkItemAdapter.ViewHolder> {
+        final private ShiftWorkSettingsBinding mBinding;
         List<String> mShiftWorkKeys;
         private List<ShiftWorkRecord> mRows = new ArrayList<>();
-        final private ShiftWorkSettingsBinding mBinding;
 
         ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems, ShiftWorkSettingsBinding binding) {
             mRows.addAll(initialItems);

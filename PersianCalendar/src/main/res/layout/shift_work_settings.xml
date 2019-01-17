@@ -14,6 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <CheckBox
+            android:id="@+id/recurs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recurs" />
+
         <Button
             android:id="@+id/reset_link"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -29,12 +35,6 @@
             android:gravity="center"
             android:textAlignment="center"
             android:textSize="12sp" />
-
-        <CheckBox
-            android:id="@+id/recurs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/recurs" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

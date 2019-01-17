@@ -22,7 +22,7 @@
             <TextView
                 android:id="@+id/row_number"
                 android:gravity="center_vertical"
-                android:layout_width="wrap_content"
+                android:layout_width="16sp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical" />
 
