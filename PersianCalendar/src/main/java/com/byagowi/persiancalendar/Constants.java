@@ -59,6 +59,7 @@ public class Constants {
     public static final String PREF_WEEK_ENDS = "WeekEnds";
     public static final String PREF_SHIFT_WORK_STARTING_JDN = "ShiftWorkJdn";
     public static final String PREF_SHIFT_WORK_SETTING = "ShiftWorkSetting";
+    public static final String PREF_SHIFT_WORK_RECURS = "ShiftWorkRecurs";
 
     public static final String CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE";
 
@@ -110,10 +111,9 @@ public class Constants {
             '7', '8', '9'};
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',
             '۷', '۸', '۹'};
-    public static final String AM_IN_PERSIAN = "ق.ظ";
-    public static final String AM_IN_CKB = "ب.ن";
-    public static final String PM_IN_PERSIAN = "ب.ظ";
-    public static final String PM_IN_CKB = "د.ن";
+
+    public static final String DEFAULT_AM = "ق.ظ";
+    public static final String DEFAULT_PM = "ب.ظ";
 
     public static final int[] DAYS_ICONS = {0,
             R.drawable.day1, R.drawable.day2, R.drawable.day3,

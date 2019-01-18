@@ -324,6 +324,4 @@
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
 
-    <style name="outlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton" />
-
 </resources>

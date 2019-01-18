@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.entity.ShiftWorkRecord;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
+import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_RECURS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_SETTING;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN;
 
@@ -45,6 +47,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
+    private long jdn = -1;
+    private long selectedJdn = -1;
 
     public static ShiftWorkDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -59,9 +63,20 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        long tempJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
-        if (tempJdn == -1) tempJdn = CalendarUtils.getTodayJdn();
-        long jdn = tempJdn;
+        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+
+        Utils.applyAppLanguage(mainActivity);
+        Utils.updateStoredPreference(mainActivity);
+
+        selectedJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
+        if (selectedJdn == -1) selectedJdn = CalendarUtils.getTodayJdn();
+
+        jdn = Utils.getShiftWorkStartingJdn();
+        boolean isFirstSetup = false;
+        if (jdn == -1) {
+            isFirstSetup = true;
+            jdn = selectedJdn;
+        }
 
         Context context = getContext();
         ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
@@ -71,22 +86,26 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
         if (shiftWorks.size() == 0)
             shiftWorks = Collections.singletonList(new ShiftWorkRecord("d", 0));
-        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks);
+        ShiftWorkItemAdapter shiftWorkItemAdapter = new ShiftWorkItemAdapter(shiftWorks, binding);
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
-        binding.addButton.setOnClickListener(v -> {
-            if (shiftWorkItemAdapter.getItemCount() < 5)
-                shiftWorkItemAdapter.addItem(new ShiftWorkRecord("r", 0));
-        });
 
-        binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
+        binding.description.setText(String.format(getString(
+                isFirstSetup ? R.string.shift_work_starting_date : R.string.shift_work_starting_date_edit),
                 CalendarUtils.formatDate(
                         CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
-        binding.description.append("\n");
-        binding.description.append(getString(R.string.shift_work_extra_comment));
 
-        return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
+        binding.resetLink.setOnClickListener(v -> {
+            jdn = selectedJdn;
+            binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
+                    CalendarUtils.formatDate(
+                            CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+            shiftWorkItemAdapter.reset();
+        });
+        binding.recurs.setChecked(Utils.getShiftWorkRecurs());
+
+        return new AlertDialog.Builder(mainActivity)
                 .setView(binding.getRoot())
-                .setTitle(R.string.shift_work_settings)
+                .setTitle(null)
                 .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
                     StringBuilder result = new StringBuilder();
                     boolean first = true;
@@ -103,10 +122,11 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
                     edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, result.length() == 0 ? -1 : jdn);
                     edit.putString(PREF_SHIFT_WORK_SETTING, result.toString());
+                    edit.putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked());
                     edit.apply();
 
                     calendarFragmentDependency.getCalendarFragment().afterShiftWorkChange();
-                    mainActivityDependency.getMainActivity().restartActivity();
+                    mainActivity.restartActivity();
                 })
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel, null)
@@ -114,21 +134,36 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     }
 
     private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkDialog.ShiftWorkItemAdapter.ViewHolder> {
+        final private ShiftWorkSettingsBinding mBinding;
         List<String> mShiftWorkKeys;
         private List<ShiftWorkRecord> mRows = new ArrayList<>();
 
-        ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems) {
+        ShiftWorkItemAdapter(List<ShiftWorkRecord> initialItems, ShiftWorkSettingsBinding binding) {
             mRows.addAll(initialItems);
             mShiftWorkKeys = Arrays.asList(getResources().getStringArray(R.array.shift_work_keys));
-        }
-
-        void addItem(ShiftWorkRecord record) {
-            mRows.add(record);
-            notifyItemInserted(mRows.size());
+            mBinding = binding;
+            updateShiftWorkResult();
         }
 
         List<ShiftWorkRecord> getRows() {
             return mRows;
+        }
+
+
+        private void updateShiftWorkResult() {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for (ShiftWorkRecord record : mRows) {
+                if (record.length == 0) continue;
+
+                if (first) first = false;
+                else result.append(Utils.getSpacedComma());
+                result.append(String.format(getString(R.string.shift_work_record_title),
+                        Utils.formatNumber(record.length), Utils.getShiftWorkTitles().get(record.type)));
+            }
+
+            mBinding.result.setText(result.toString());
+            mBinding.result.setVisibility(result.length() == 0 ? View.GONE : View.VISIBLE);
         }
 
         @NonNull
@@ -147,7 +182,14 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
 
         @Override
         public int getItemCount() {
-            return mRows.size();
+            return mRows.size() + 1;
+        }
+
+        void reset() {
+            mRows.clear();
+            mRows.add(new ShiftWorkRecord("d", 0));
+            notifyDataSetChanged();
+            updateShiftWorkResult();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -173,6 +215,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 binding.remove.setOnClickListener(v -> {
                     mRows.remove(mPosition);
                     notifyDataSetChanged();
+                    updateShiftWorkResult();
                 });
 
                 binding.lengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -180,6 +223,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
                                 mRows.get(mPosition).type, position));
+                        updateShiftWorkResult();
                     }
 
                     @Override
@@ -192,19 +236,34 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
                                 mShiftWorkKeys.get(position), mRows.get(mPosition).length));
+                        updateShiftWorkResult();
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+                binding.addButton.setOnClickListener((v -> {
+                    mRows.add(new ShiftWorkRecord("r", 0));
+                    notifyDataSetChanged();
+                    updateShiftWorkResult();
+                }));
             }
 
             public void bind(int position) {
-                ShiftWorkRecord shiftWorkRecord = mRows.get(position);
-                mPosition = position;
-                mBinding.lengthSpinner.setSelection(shiftWorkRecord.length);
-                mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type));
+                if (position < mRows.size()) {
+                    ShiftWorkRecord shiftWorkRecord = mRows.get(position);
+                    mPosition = position;
+                    mBinding.rowNumber.setText(String.format("%s:", Utils.formatNumber(position + 1)));
+                    mBinding.lengthSpinner.setSelection(shiftWorkRecord.length);
+                    mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type));
+                    mBinding.detail.setVisibility(View.VISIBLE);
+                    mBinding.addButton.setVisibility(View.GONE);
+                } else {
+                    mBinding.detail.setVisibility(View.GONE);
+                    mBinding.addButton.setVisibility(mRows.size() < 20 ? View.VISIBLE : View.GONE);
+                }
             }
         }
     }

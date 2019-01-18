@@ -172,15 +172,15 @@
     </string-array>
 
     <string-array name="shift_work">
-        <item>Day work</item>
-        <item>Resting</item>
-        <item>Evening work</item>
-        <item>Night work</item>
+        <item>Morning</item>
+        <item>Off</item>
+        <item>Evening</item>
+        <item>Night</item>
     </string-array>
 
     <string-array name="shift_work_keys" translatable="false">
-        <item>d</item>
-        <item>r</item>
+        <item>d</item> <!-- day work -->
+        <item>r</item> <!-- rest -->
         <item>e</item>
         <item>n</item>
     </string-array>

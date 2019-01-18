@@ -18,6 +18,13 @@
 
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
+        android:key="CenterAlignWidgets"
+        android:summary="@string/center_align_widgets_summary"
+        android:title="@string/center_align_widgets"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
         android:key="IranTime"
         android:summary="@string/showing_iran_time"
         android:title="@string/iran_time"

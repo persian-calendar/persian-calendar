@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.util;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -30,7 +33,6 @@ import com.byagowi.persiancalendar.entity.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entity.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entity.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entity.ShiftWorkRecord;
-import com.byagowi.persiancalendar.entity.Widget4x2OwghatEntity;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
@@ -63,6 +65,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
@@ -77,6 +80,7 @@ import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_AM;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
@@ -88,6 +92,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.Constants.DEFAULT_PM;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
@@ -127,6 +132,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
 import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_RECURS;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_SETTING;
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
@@ -174,6 +180,7 @@ public class Utils {
     static private CalendarType[] otherCalendars;
     static private String spacedComma;
     static private boolean showWeekOfYear;
+    static private boolean centerAlignWidgets;
     static private int weekStartOffset;
     static private boolean[] weekEnds;
     static private boolean showDeviceCalendarEvents;
@@ -192,11 +199,15 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
     static private List<AbstractEvent> sAllEnabledEvents;
-    static private String[] sShiftWorkTitles;
-    private static List<String> sShiftWorkKeys;
+    static private String sShiftWorkStoredTitlesLanguage = "";
+    static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
+    static private boolean sShiftWorkRecurs = true;
     static private List<ShiftWorkRecord> sShiftWorks = Collections.emptyList();
     private static boolean sIsIranHolidaysEnabled = true;
+    static private int sShiftWorkPeriod = 0;
+    static private String sAM = DEFAULT_AM;
+    static private String sPM = DEFAULT_PM;
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -204,6 +215,26 @@ public class Utils {
 
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
+    }
+
+    static String getAmString() {
+        return sAM;
+    }
+
+    static String getPmString() {
+        return sPM;
+    }
+
+    static public long getShiftWorkStartingJdn() {
+        return sShiftWorkStartingJdn;
+    }
+
+    static public boolean getShiftWorkRecurs() {
+        return sShiftWorkRecurs;
+    }
+
+    static public Map<String, String> getShiftWorkTitles() {
+        return sShiftWorkTitles;
     }
 
     // This should be called before any use of Utils on the activity and services
@@ -225,10 +256,17 @@ public class Utils {
         }
 
         try {
+            String latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE);
+            if (latitudeString == null) latitudeString = DEFAULT_LATITUDE;
+            String longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE);
+            if (longtitudeString == null) longtitudeString = DEFAULT_LONGITUDE;
+            String altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE);
+            if (altitudeString == null) altitudeString = DEFAULT_ALTITUDE;
+
             Coordinate coord = new Coordinate(
-                    Double.parseDouble(prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)),
-                    Double.parseDouble(prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)),
-                    Double.parseDouble(prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE))
+                    Double.parseDouble(latitudeString),
+                    Double.parseDouble(longtitudeString),
+                    Double.parseDouble(altitudeString)
             );
 
             // If latitude or longitude is zero probably preference is not set yet
@@ -259,6 +297,7 @@ public class Utils {
         widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK);
         notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE);
         notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN);
+        centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false);
         selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                 DEFAULT_SELECTED_WIDGET_TEXT_COLOR);
         // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
@@ -267,7 +306,9 @@ public class Utils {
         coordinate = getCoordinate(context);
         try {
             mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
-            String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC").trim();
+            String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
+            if (otherCalendarsString == null) otherCalendarsString = "GREGORIAN,ISLAMIC";
+            otherCalendarsString = otherCalendarsString.trim();
             if (TextUtils.isEmpty(otherCalendarsString)) {
                 otherCalendars = new CalendarType[0];
             } else {
@@ -285,19 +326,26 @@ public class Utils {
         spacedComma = language.equals(LANG_EN_US) ? ", " : "، ";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
-        weekStartOffset = Integer.parseInt(prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START));
+        String weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START);
+        if (weekStart == null) weekStart = DEFAULT_WEEK_START;
+        weekStartOffset = Integer.parseInt(weekStart);
         weekEnds = new boolean[7];
-        for (String s : prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS))
+        Set<String> weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
+        if (weekEndsSet == null) weekEndsSet = DEFAULT_WEEK_ENDS;
+        for (String s : weekEndsSet)
             weekEnds[Integer.parseInt(s)] = true;
 
         showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false);
+        Resources resources = context.getResources();
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
-                new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.what_to_show_default))));
+                new HashSet<>(Arrays.asList(resources.getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
 
+        sShiftWorkTitles = new HashMap<>();
         try {
             sShiftWorks = new ArrayList<>();
             String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
+            if (shiftWork == null) shiftWork = "";
             String[] parts = shiftWork.split(",");
             for (String p : parts) {
                 String[] v = p.split("=");
@@ -305,16 +353,43 @@ public class Utils {
                 sShiftWorks.add(new ShiftWorkRecord(v[0], Integer.valueOf(v[1])));
             }
             sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1);
+
+            sShiftWorkPeriod = 0;
+            for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
+
+            sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
+
+            if (!getAppLanguage().equals(sShiftWorkStoredTitlesLanguage) || sShiftWorkTitles.size() == 0) {
+                String[] titles = resources.getStringArray(R.array.shift_work);
+                String[] keys = resources.getStringArray(R.array.shift_work_keys);
+                for (int i = 0; i < titles.length; ++i)
+                    sShiftWorkTitles.put(keys[i], titles[i]);
+
+                sShiftWorkStoredTitlesLanguage = getAppLanguage();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sShiftWorks = Collections.emptyList();
             sShiftWorkStartingJdn = -1;
+
+            sShiftWorkPeriod = 0;
+            sShiftWorkRecurs = true;
         }
-        sShiftWorkTitles = context.getResources().getStringArray(R.array.shift_work);
-        sShiftWorkKeys = Arrays.asList(context.getResources().getStringArray(R.array.shift_work_keys));
+
+        switch (getAppLanguage()) {
+            case LANG_FA:
+            case LANG_FA_AF:
+            case LANG_EN_US:
+                sAM = DEFAULT_AM;
+                sPM = DEFAULT_PM;
+                break;
+            default:
+                sAM = context.getString(R.string.am);
+                sPM = context.getString(R.string.pm);
+        }
 
         try {
-            appTheme = UIUtils.getThemeFromName(prefs.getString(PREF_THEME, LIGHT_THEME));
+            appTheme = UIUtils.getThemeFromName(getThemeFromPreference(prefs));
         } catch (Exception e) {
             e.printStackTrace();
             appTheme = R.style.LightTheme;
@@ -322,6 +397,11 @@ public class Utils {
 
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
+    }
+
+    public static String getThemeFromPreference(SharedPreferences prefs) {
+        String result = prefs.getString(PREF_THEME, LIGHT_THEME);
+        return result == null ? LIGHT_THEME : result;
     }
 
     @StyleRes
@@ -332,8 +412,9 @@ public class Utils {
     private static int getIslamicOffset(Context context) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            return Integer.parseInt(prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
-                    .replace("+", ""));
+            String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
+            if (islamicOffset == null) islamicOffset = DEFAULT_ISLAMIC_OFFSET;
+            return Integer.parseInt(islamicOffset.replace("+", ""));
         } catch (Exception ignore) {
             return 0;
         }
@@ -450,57 +531,69 @@ public class Utils {
         return mainCalendar;
     }
 
-    static String getNextOwghatTime(Context context, Clock clock, boolean dateHasChanged) {
-        if (coordinate == null) return null;
+    @StringRes
+    static int getNextOwghatTimeId(Clock current, boolean dateHasChanged) {
+        if (coordinate == null) return 0;
 
         if (prayTimes == null || dateHasChanged) {
             prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
         }
 
-        if (prayTimes.getFajrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock());
+        int clock = current.toInt();
 
-        } else if (prayTimes.getSunriseClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.sunrise) + ": " + UIUtils.getFormattedClock(prayTimes.getSunriseClock());
+        //TODO We like to show Imsak only in Ramadan
+        if (prayTimes.getFajrClock().toInt() > clock)
+            return R.string.fajr;
 
-        } else if (prayTimes.getDhuhrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.dhuhr) + ": " + UIUtils.getFormattedClock(prayTimes.getDhuhrClock());
+        else if (prayTimes.getSunriseClock().toInt() > clock)
+            return R.string.sunrise;
 
-        } else if (prayTimes.getAsrClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.asr) + ": " + UIUtils.getFormattedClock(prayTimes.getAsrClock());
+        else if (prayTimes.getDhuhrClock().toInt() > clock)
+            return R.string.dhuhr;
 
-        } else if (prayTimes.getSunsetClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.sunset) + ": " + UIUtils.getFormattedClock(prayTimes.getSunsetClock());
+        else if (prayTimes.getAsrClock().toInt() > clock)
+            return R.string.asr;
 
-        } else if (prayTimes.getMaghribClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.maghrib) + ": " + UIUtils.getFormattedClock(prayTimes.getMaghribClock());
+        else if (prayTimes.getSunsetClock().toInt() > clock)
+            return R.string.sunset;
 
-        } else if (prayTimes.getIshaClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.isha) + ": " + UIUtils.getFormattedClock(prayTimes.getIshaClock());
+        else if (prayTimes.getMaghribClock().toInt() > clock)
+            return R.string.maghrib;
 
-        } else if (prayTimes.getMidnightClock().toInt() > clock.toInt()) {
-            return context.getString(R.string.midnight) + ": " + UIUtils.getFormattedClock(prayTimes.getMidnightClock());
+        else if (prayTimes.getIshaClock().toInt() > clock)
+            return R.string.isha;
 
-        } else {
-            return context.getString(R.string.fajr) + ": " + UIUtils.getFormattedClock(prayTimes.getFajrClock()); //this is today & not tomorrow
-        }
+        else if (prayTimes.getMidnightClock().toInt() > clock)
+            return R.string.midnight;
+
+        else
+            // TODO: this is today's, not tomorrow
+            return R.string.fajr;
     }
 
-    static boolean isLocationSet(Context context) {
-        return getCityFromPreference(context) != null;
-    }
-
-    static Widget4x2OwghatEntity getOwghat4Widget4x2(Context context, Clock clock, boolean dateHasChanged) {
-        if (coordinate == null) return null;
-
-        if (prayTimes == null || dateHasChanged) {
-            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
+    static Clock getClockFromStringId(@StringRes int stringId) {
+        switch (stringId) {
+            case R.string.imsak:
+                return prayTimes.getImsakClock();
+            case R.string.fajr:
+                return prayTimes.getFajrClock();
+            case R.string.sunrise:
+                return prayTimes.getSunriseClock();
+            case R.string.dhuhr:
+                return prayTimes.getDhuhrClock();
+            case R.string.asr:
+                return prayTimes.getAsrClock();
+            case R.string.sunset:
+                return prayTimes.getSunsetClock();
+            case R.string.maghrib:
+                return prayTimes.getMaghribClock();
+            case R.string.isha:
+                return prayTimes.getIshaClock();
+            case R.string.midnight:
+                return prayTimes.getMidnightClock();
+            default:
+                return Clock.fromInt(0);
         }
-
-        boolean isShia = calculationMethod.equalsIgnoreCase("Tehran") ||
-                calculationMethod.equalsIgnoreCase("Jafari");
-
-        return new Widget4x2OwghatEntity(context, prayTimes, isShia, clock);
     }
 
     static public String formatNumber(int number) {
@@ -677,6 +770,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
+        if (key == null) key = "";
 
         if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
@@ -740,8 +834,17 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        if (enabledTypes == null || enabledTypes.isEmpty())
-            enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
+        if (enabledTypes == null || enabledTypes.isEmpty()) {
+            switch (getAppLanguage()) {
+                case LANG_FA:
+                case LANG_EN_IR:
+                case LANG_CKB:
+                    enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
+                    break;
+                default:
+                    enabledTypes = new HashSet<>();
+            }
+        }
 
         boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
         boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
@@ -932,24 +1035,31 @@ public class Utils {
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
     }
 
-    static public String getShiftWorkTitleOfJdn(long jdn) {
-        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn) return "";
-        // TODO: All should be cached
-        try {
-            int period = 0;
-            for (ShiftWorkRecord shift : sShiftWorks) period += shift.length;
-            if (period == 0) return "";
-            int dayInPeriod = (int) (jdn - sShiftWorkStartingJdn) % period;
-            int accumulation = 0;
-            for (ShiftWorkRecord shift : sShiftWorks) {
-                accumulation += shift.length;
-                if (accumulation > dayInPeriod)
-                    // TODO: Replace with a map!
-                    return sShiftWorkTitles[sShiftWorkKeys.indexOf(shift.type)];
+    static public String getShiftWorkTitle(long jdn, boolean abbreviated) {
+        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
+            return "";
+
+        long passedDays = jdn - sShiftWorkStartingJdn;
+        if (!sShiftWorkRecurs && (passedDays >= sShiftWorkPeriod))
+            return "";
+
+        int dayInPeriod = (int) (passedDays % sShiftWorkPeriod);
+        int accumulation = 0;
+        for (ShiftWorkRecord shift : sShiftWorks) {
+            accumulation += shift.length;
+            if (accumulation > dayInPeriod) {
+                // Skip rests on abbreviated mode
+                if (sShiftWorkRecurs && abbreviated && shift.type.equals("r")) return "";
+
+                String title = sShiftWorkTitles.get(shift.type);
+                if (title == null) return "";
+                return abbreviated ?
+                        (title.substring(0, 1) + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? "\u200d" : "")) :
+                        title;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        // Shouldn't be reached
         return "";
     }
 
@@ -1053,8 +1163,9 @@ public class Utils {
         if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
             long athanGap;
             try {
-                athanGap = (long) (Double.parseDouble(
-                        prefs.getString(PREF_ATHAN_GAP, "0")) * 60 * 1000);
+                String athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0");
+                if (athanGapStr == null) athanGapStr = "0";
+                athanGap = (long) (Double.parseDouble(athanGapStr) * 60 * 1000);
             } catch (NumberFormatException e) {
                 athanGap = 0;
             }
@@ -1377,7 +1488,26 @@ public class Utils {
         return result.toString();
     }
 
+    public static void copyToClipboard(Context context, CharSequence label, CharSequence text) {
+        ClipboardManager clipboardService =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardService != null && label != null && text != null) {
+            clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
+            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public static boolean isTalkBackEnabled() {
         return talkBackEnabled;
+    }
+
+    static boolean isCenterAlignWidgets() {
+        return centerAlignWidgets;
+    }
+
+    static boolean isShiaPrayTimeCalculationSelected() {
+        CalculationMethod calculationMethod = getCalculationMethod();
+        return calculationMethod.equals(CalculationMethod.Tehran) ||
+                calculationMethod.equals(CalculationMethod.Jafari);
     }
 }

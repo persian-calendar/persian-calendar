@@ -31,6 +31,15 @@
             android:paddingTop="@dimen/padding_item"
             android:paddingBottom="@dimen/padding_item" />
 
+        <TextView
+            android:id="@+id/equinox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
         <LinearLayout
             android:id="@+id/extra_information_container"
             android:layout_width="match_parent"

@@ -11,7 +11,7 @@
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">نمایش عددها به فارسی</string>
     <string name="persian_digits">عددهای فارسی</string>
-    <string name="showing_clock_on_widget">نمایش ساعت در ابزارک ۲×۲ و ۴×۱</string>
+    <string name="showing_clock_on_widget">نمایش ساعت در ابزارک‌ها</string>
     <string name="clock_on_widget">ساعت در ابزارک</string>
     <string name="showing_clock_in_24">نمایش ساعت به صورت ۲۴تایی</string>
     <string name="clock_in_24">۲۴ ساعته</string>
@@ -32,7 +32,7 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را وارد کنید</string>
-    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار اعلان و برنامه به وقت ایران در همه جا</string>
+    <string name="showing_iran_time">نمایش ابزارک‌ها، نوار اعلان و برنامه به وقت ایران در همه جا، مناسب ایرانیان خارج</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">حسگر قطب‌نما پیدا نشد</string>
@@ -54,9 +54,9 @@
     <string name="asr">عصر</string>
     <string name="maghrib">اذان مغرب</string>
     <string name="isha">عشاء</string>
-    <string name="sunrise">طلوع آفتاب</string>
-    <string name="sunset">غروب آفتاب</string>
-    <string name="midnight">نیمه‌شب شرعی</string>
+    <string name="sunrise">طلوع</string>
+    <string name="sunset">غروب</string>
+    <string name="midnight">نیمه‌شب</string>
     <string name="owghat">اوقات شرعی</string>
     <string name="events">مناسبت‌ها</string>
     <string name="events_summary">چه نوع مناسبت‌هایی در تقویم نمایش داده شود</string>
@@ -199,13 +199,21 @@
     <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %s: %s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
 
-    <string name="remaining_time_to_next_owghat">%s تا وقت شرعی بعدی</string>
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
-    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
-    <string name="shift_work_extra_comment">برای غیرفعال کردن شیفت‌کاری و یا برنامه‌ریزی مجدد، همهٔ سطرها را حذف کنید دوباره وارد تنظیمات شوید.</string>
+    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %s خواهد بود.</string>
+    <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %s خواهد بود.</string>
+    <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
     <string name="n_minutes">%s دقیقه</string>
     <string name="n_hours">%s ساعت</string>
     <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
+    <string name="device_info">اطلاعات دستگاه</string>
+    <string name="center_align_widgets_summary">وسط‌چین کردن ابزارک‌های ۲×۲ و ۴×۱</string>
+    <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
+    <string name="n_till">%s تا %s</string>
+    <string name="shift_work_record_title">%s روز %s</string>
+    <string name="recurs">تکرار شود</string>
+    <string name="am">ق.ظ</string>
+    <string name="pm">ب.ظ</string>
 
 </resources>

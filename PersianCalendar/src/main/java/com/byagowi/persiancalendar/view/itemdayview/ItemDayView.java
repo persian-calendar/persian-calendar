@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -22,6 +23,7 @@ public class ItemDayView extends View {
     private long jdn = -1;
     private int dayOfMonth = -1;
     private boolean isNumber;
+    private String header = "";
 
     public ItemDayView(Context context, DaysPaintResources resource) {
         super(context);
@@ -62,7 +64,7 @@ public class ItemDayView extends View {
         getDrawingRect(bounds);
         drawingRect.set(bounds);
         drawingRect.inset(radius * 0.1f, radius * 0.1f);
-        int yOffsetToApply = isModernTheme ? (int) (-height * .1f) : 0;
+        int yOffsetToApply = isModernTheme ? (int) (-height * .07f) : 0;
 
         if (selected) {
             if (isModernTheme) {
@@ -94,9 +96,6 @@ public class ItemDayView extends View {
             color = resource.colorTextDayName;
         }
 
-        // TODO: Better to not change resource's paint objects, but for now
-        resource.textPaint.setColor(color);
-        resource.textPaint.setTextSize(textSize);
         resource.eventBarPaint.setColor((selected && !isModernTheme) ? color : resource.colorEventLine);
 
         if (hasEvent) {
@@ -113,24 +112,35 @@ public class ItemDayView extends View {
                     height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
+        // TODO: Better to not change resource's paint objects, but for now
+        resource.textPaint.setColor(color);
+        resource.textPaint.setTextSize(textSize);
+
         if (isModernTheme) {
             resource.textPaint.setFakeBoldText(today);
             resource.textPaint.setTextSize(textSize * .8f);
         }
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
-        String textToMeasure =
+        String textToMeasureHeight =
                 isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
-        resource.textPaint.getTextBounds(textToMeasure, 0, textToMeasure.length(), bounds);
+        resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
         yPos += yOffsetToApply;
-
         canvas.drawText(text, xPos, yPos, resource.textPaint);
+
+        resource.textPaint.setColor(selected ? resource.colorTextDaySelected : resource.colorTextDay);
+        resource.textPaint.setTextSize(textSize / 2.f);
+        if (!TextUtils.isEmpty(header)) {
+            int headerXPos = (width - (int) resource.textPaint.measureText(header)) / 2;
+            canvas.drawText(header, headerXPos, yPos * 0.87f - bounds.height(), resource.textPaint);
+        }
     }
 
     private void setAll(String text, boolean isToday, boolean isSelected,
                         boolean hasEvent, boolean hasAppointment, boolean isHoliday,
-                        int textSize, long jdn, int dayOfMonth, boolean isNumber) {
+                        int textSize, long jdn, int dayOfMonth, boolean isNumber,
+                        String header) {
         this.text = text;
         this.today = isToday;
         this.selected = isSelected;
@@ -141,20 +151,21 @@ public class ItemDayView extends View {
         this.jdn = jdn;
         this.dayOfMonth = dayOfMonth;
         this.isNumber = isNumber;
+        this.header = header;
         postInvalidate();
     }
 
     public void setDayOfMonthItem(boolean isToday, boolean isSelected,
                                   boolean hasEvent, boolean hasAppointment, boolean isHoliday,
-                                  int textSize, long jdn, int dayOfMonth) {
+                                  int textSize, long jdn, int dayOfMonth, String header) {
         String dayOfMonthString = Utils.formatNumber(dayOfMonth);
         setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
-                isHoliday, textSize, jdn, dayOfMonth, true);
+                isHoliday, textSize, jdn, dayOfMonth, true, header);
     }
 
     public void setNonDayOfMonthItem(String text, int textSize) {
         setAll(text, false, false, false, false, false,
-                textSize, -1, -1, false);
+                textSize, -1, -1, false, "");
     }
 
     public long getJdn() {

@@ -27,15 +27,10 @@ import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
 
-import static com.byagowi.persiancalendar.Constants.AM_IN_CKB;
-import static com.byagowi.persiancalendar.Constants.AM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
-import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
 import static com.byagowi.persiancalendar.Constants.MODERN_THEME;
-import static com.byagowi.persiancalendar.Constants.PM_IN_CKB;
-import static com.byagowi.persiancalendar.Constants.PM_IN_PERSIAN;
 import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
 
 public class UIUtils {
@@ -49,7 +44,7 @@ public class UIUtils {
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.calendar_access)
                 .setMessage(R.string.phone_calendar_required)
-                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                .setPositiveButton(R.string.continue_button, (dialog, id) -> activity.requestPermissions(new String[]{
                                 Manifest.permission.READ_CALENDAR
                         },
                         Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
@@ -62,7 +57,7 @@ public class UIUtils {
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.location_access)
                 .setMessage(R.string.phone_location_required)
-                .setPositiveButton(R.string.resume, (dialog, id) -> activity.requestPermissions(new String[]{
+                .setPositiveButton(R.string.continue_button, (dialog, id) -> activity.requestPermissions(new String[]{
                                 Manifest.permission.ACCESS_COARSE_LOCATION,
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         },
@@ -97,24 +92,19 @@ public class UIUtils {
         return false;
     }
 
-    static public String getFormattedClock(Clock clock) {
-        String timeText = null;
+    static public String getFormattedClock(Clock clock, boolean forceIn12) {
+        boolean in12 = Utils.isClockIn12() || forceIn12;
+        if (!in12) return baseFormatClock(clock.getHour(), clock.getMinute());
 
         int hour = clock.getHour();
-        if (Utils.isClockIn12()) {
-            if (hour >= 12) {
-                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? PM_IN_CKB : PM_IN_PERSIAN;
-                hour -= 12;
-            } else {
-                timeText = Utils.getAppLanguage().equals(LANG_CKB) ? AM_IN_CKB : AM_IN_PERSIAN;
-            }
+        String suffix;
+        if (hour >= 12) {
+            suffix = Utils.getAmString();
+            hour -= 12;
+        } else {
+            suffix = Utils.getPmString();
         }
-
-        String result = baseFormatClock(hour, clock.getMinute());
-        if (Utils.isClockIn12()) {
-            result = result + " " + timeText;
-        }
-        return result;
+        return baseFormatClock(hour, clock.getMinute()) + " " + suffix;
     }
 
     static public @StringRes

@@ -35,12 +35,6 @@
                         android:layout_height="wrap_content"
                         android:theme="?attr/toolbarTheme" />
 
-                    <!--<FrameLayout-->
-                    <!--android:id="@+id/fragment_holder"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:background="?attr/colorBackground" />-->
-
                 </com.google.android.material.appbar.AppBarLayout>
 
                 <fragment
@@ -52,14 +46,6 @@
                     app:navGraph="@navigation/nav_graph" />
 
             </LinearLayout>
-
-            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom|start"-->
-            <!--android:layout_margin="@dimen/fab_margin"-->
-            <!--app:srcCompat="@drawable/ic_keyboard_arrow_right" />-->
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

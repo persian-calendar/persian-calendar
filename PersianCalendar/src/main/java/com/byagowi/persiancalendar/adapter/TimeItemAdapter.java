@@ -114,7 +114,7 @@ public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHo
                     clock = mPrayTimes.getMidnightClock();
                     break;
             }
-            binding.time.setText(UIUtils.getFormattedClock(clock));
+            binding.time.setText(UIUtils.getFormattedClock(clock, false));
         }
     }
 }

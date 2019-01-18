@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_layout2x2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="1dp"
+    android:layout_marginRight="1dp"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    tools:context=".Widget2x2"
+    tools:targetApi="JELLY_BEAN_MR1">
+
+    <TextClock
+        android:id="@+id/time_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:format12Hour="H:mm"
+        android:format24Hour="H:mm"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/date_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/owghat_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/holiday_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/widget_holiday"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/event_2x2"
+        style="@style/ShadowTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>
