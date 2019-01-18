@@ -21,10 +21,10 @@
 
             <TextView
                 android:id="@+id/row_number"
-                android:gravity="center_vertical"
                 android:layout_width="16sp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical" />
 
             <Spinner
                 android:id="@+id/type_spinner"

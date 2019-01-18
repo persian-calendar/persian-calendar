@@ -5,7 +5,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/sc_explore"
+        android:icon="@drawable/sc_compass"
         android:shortcutId="COMPASS"
         android:shortcutLongLabel="@string/compass"
         android:shortcutShortLabel="@string/compass">
