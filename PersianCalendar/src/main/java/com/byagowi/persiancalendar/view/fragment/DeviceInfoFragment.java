@@ -39,7 +39,7 @@ public class DeviceInfoFragment extends DaggerFragment {
 
         RecyclerView recyclerView = binding.recyclerView;
         DeviceInfoAdapter mAdapter = new DeviceInfoAdapter(
-                mainActivityDependency.getMainActivity().getWindowManager());
+                mainActivityDependency.getMainActivity());
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager =
                 new LinearLayoutManager(mainActivityDependency.getMainActivity());
