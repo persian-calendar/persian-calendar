@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.view.deviceinfo;
 
+import android.app.Activity;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +25,10 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
 
     private List<DeviceInfoItem> deviceInfoItemsList = new ArrayList<>();
 
-    public DeviceInfoAdapter(WindowManager wm) {
+    public DeviceInfoAdapter(Activity activity) {
         deviceInfoItemsList.add(new DeviceInfoItem(
                 "Screen Resolution",
-                getScreenResolution(wm),
+                getScreenResolution(activity.getWindowManager()),
                 null
         ));
 

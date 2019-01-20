@@ -774,6 +774,9 @@
     { "holiday": false, "month": 10, "day": 8, "type": "Iran",
       "title": "روز صنعت پتروشیمی" },
 
+    { "holiday": false, "month": 10, "day": 9, "type": "Iran",
+      "title": "۹ دی، روز بصیرت و میثاق" },
+
     { "holiday": false, "month": 10, "day": 13, "type": "Iran",
       "title": "ابلاغ پیام تاریخی امام خمینی به گورباچف رهبر شوروی سابق (۱۳۶۷ ه‍.ش)" },
 
