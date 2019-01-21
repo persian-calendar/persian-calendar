@@ -1087,8 +1087,8 @@ public class Utils {
 
         // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
         if ((islamic.getMonth() == 2 || islamic.getMonth() == 11) && islamic.getDayOfMonth() == 29
-                && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), 2) == 29) {
-            IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), 2, 30);
+                && CalendarUtils.getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), islamic.getMonth()) == 29) {
+            IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), islamic.getMonth(), 30);
 
             islamicList = sIslamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
                     alternativeDate.getDayOfMonth());
