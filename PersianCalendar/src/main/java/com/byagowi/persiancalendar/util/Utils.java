@@ -856,6 +856,7 @@ public class Utils {
 
         sIsIranHolidaysEnabled = iranHolidays;
 
+        IslamicDate.useUmmAlQura = false;
         if (!iranHolidays) {
             if (afghanistanHolidays) {
                 IslamicDate.useUmmAlQura = true;
