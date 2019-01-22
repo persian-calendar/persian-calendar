@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:text="@string/return_to_today"
+            android:contentDescription="@string/return_to_today"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_restore_modified" />
 

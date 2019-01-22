@@ -505,6 +505,16 @@ class MainLogicTests {
     assertEquals(3, calendar.get(Calendar.MONTH) + 1)
     assertEquals(2016, calendar.get(Calendar.YEAR))
 
+    // http://vetmed.uk.ac.ir/documents/203998/204600/calendar-1394.pdf
+    calendar.time = Equinox.northwardEquinox(2015)
+    assertEquals(0, calendar.get(Calendar.SECOND)) // It should be 11, but well, is acceptable
+    assertEquals(16, calendar.get(Calendar.MINUTE)) // It should be 15
+    assertEquals(2, calendar.get(Calendar.HOUR_OF_DAY))
+    assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
+    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
+    assertEquals(2015, calendar.get(Calendar.YEAR))
+
+
     // https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt
     calendar.time = Equinox.northwardEquinox(2014)
     assertEquals(41, calendar.get(Calendar.SECOND)) // It should be 7, but well, is acceptable
