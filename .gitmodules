@@ -1,0 +1,3 @@
+[submodule "fastlane"]
+	path = fastlane
+	url = https://github.com/ebraminio/persian-calendar-metadata.git
