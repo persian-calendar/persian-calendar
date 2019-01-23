@@ -282,8 +282,8 @@ public class UpdateUtils {
                                     Color.RED : color);
                 }
 
-                int difference = Math.abs(
-                        Utils.getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt());
+                int difference = Utils.getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt();
+                if (difference < 0) difference = 60 * 24 - difference;
 
                 int hrs = (int) (MINUTES.toHours(difference) % 24);
                 int min = (int) (MINUTES.toMinutes(difference) % 60);
