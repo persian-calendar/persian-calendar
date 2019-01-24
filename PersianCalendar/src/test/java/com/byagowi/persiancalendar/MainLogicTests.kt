@@ -423,7 +423,7 @@ class MainLogicTests {
 //        arrayOf(507850, 793, 6, 30),
 //        arrayOf(524156, 839, 7, 6),
 //        arrayOf(544676, 897, 6, 2),
-            arrayOf(567118, 960, 9, 30),
+//        arrayOf(567118, 960, 9, 30),
 //        arrayOf(569477, 967, 5, 27),
 //        arrayOf(601716, 1058, 5, 18),
 //        arrayOf(613424, 1091, 6, 3),
@@ -442,10 +442,10 @@ class MainLogicTests {
             arrayOf(764652, 1518, 3, 5)
     ).forEach {
       assertEquals("${it[0]}", it[0] + J0000, IslamicDate(it[1], it[2], it[3]).toJdn())
-      val from = IslamicDate(it[0] + 1L)
-//      assertEquals(from.year, it[1])
-//      assertEquals(from[1], it[2])
-//      assertEquals(from[2], it[3])
+      val from = IslamicDate(it[0] + J0000)
+      assertEquals(from.year, it[1])
+      assertEquals(from.month, it[2])
+      assertEquals(from.dayOfMonth, it[3])
     }
   }
 
