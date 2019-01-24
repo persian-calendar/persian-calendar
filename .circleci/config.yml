@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: behdad222/android-sdk:v2.1.1
+      - image: circleci/android:api-28
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -17,8 +17,8 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "PersianCalendar/build.gradle.kts" }}
       - run:
-          name: Build
-          command: ./gradlew assemble build lint test
+          name: Run Tests
+          command: ./gradlew lint test
       - store_artifacts:
           path: PersianCalendar/build/reports
           destination: reports
