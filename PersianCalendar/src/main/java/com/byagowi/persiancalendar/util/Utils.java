@@ -142,6 +142,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
+import static com.byagowi.persiancalendar.Constants.ZWJ;
 
 //import com.byagowi.persiancalendar.service.UpdateWorker;
 //import androidx.work.ExistingPeriodicWorkPolicy;
@@ -1055,7 +1056,9 @@ public class Utils {
                 String title = sShiftWorkTitles.get(shift.type);
                 if (title == null) return "";
                 return abbreviated ?
-                        (title.substring(0, 1) + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? "\u200d" : "")) :
+                        (title.substring(0, 1) +
+                                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                                        && !language.equals(LANG_AR) ? ZWJ : "")) :
                         title;
             }
         }
