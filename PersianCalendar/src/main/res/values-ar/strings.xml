@@ -232,20 +232,20 @@
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
-    <string name="shift_work_settings">Shift work settings</string>
-    <string name="remove">Remove</string>
-    <string name="shift_work_starting_date">%s, selected on the calendar, is shift work starting day.</string>
-    <string name="shift_work_starting_date_edit">%s is the chosen shift work starting day.</string>
-    <string name="shift_work_reset_button">Disable or reprogram</string>
-    <string name="n_minutes">%s minutes</string>
-    <string name="n_hours">%s hours</string>
-    <string name="n_minutes_and_hours">%s hours and %s minutes</string>
-    <string name="device_info">Device Information</string>
-    <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
-    <string name="center_align_widgets">Center align the widgets</string>
-    <string name="n_till">%s till to %s</string>
-    <string name="shift_work_record_title">%s day(s) %s</string>
-    <string name="recurs">Recurs</string>
+    <string name="shift_work_settings">إعدادات إزاحة وقت العمل</string>
+    <string name="remove">إزالة</string>
+    <string name="shift_work_starting_date">%s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
+    <string name="shift_work_starting_date_edit">%s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
+    <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
+    <string name="n_minutes">%s دقائق</string>
+    <string name="n_hours">%s ساعات</string>
+    <string name="n_minutes_and_hours">%s ساعات و %s دقائق</string>
+    <string name="device_info">معلومات الجهاز</string>
+    <string name="center_align_widgets_summary">توسيط المصغر  4x1 و 2x2</string>
+    <string name="center_align_widgets">توسيط المصغر</string>
+    <string name="n_till">%s إلى %s</string>
+    <string name="shift_work_record_title">%s أيام %s</string>
+    <string name="recurs">تكرار</string>
     <string name="am">ص</string>
     <string name="pm">م</string>
 
