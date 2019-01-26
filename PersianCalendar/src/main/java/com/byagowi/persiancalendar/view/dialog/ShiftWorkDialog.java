@@ -203,7 +203,8 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
 
                 List<FormattedIntEntity> days = new ArrayList<>();
                 for (int i = 0; i <= 7; ++i) {
-                    days.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
+                    days.add(new FormattedIntEntity(i, i == 0 ?
+                            getString(R.string.shift_work_days_head) : Utils.formatNumber(i)));
                 }
                 binding.lengthSpinner.setAdapter(new ArrayAdapter<>(context,
                         android.R.layout.simple_spinner_dropdown_item, days));

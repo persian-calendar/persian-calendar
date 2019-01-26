@@ -248,5 +248,6 @@
     <string name="recurs">تكرار</string>
     <string name="am">ص</string>
     <string name="pm">م</string>
+    <string name="shift_work_days_head">كرات</string>
 
 </resources>

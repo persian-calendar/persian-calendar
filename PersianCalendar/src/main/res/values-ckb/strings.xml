@@ -214,5 +214,6 @@
     <string name="recurs">پاتەکردنەوە</string>
     <string name="am">ب.ن</string>
     <string name="pm">د.ن</string>
+    <string name="shift_work_days_head">Number</string>
 
 </resources>

@@ -294,5 +294,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="recurs">Recurs</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
+    <string name="shift_work_days_head">Number</string>
 
 </resources>
