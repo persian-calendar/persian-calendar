@@ -800,7 +800,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityEntity cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
-            if (language.equals(LANG_EN_IR))
+            if (language.equals(LANG_EN_IR) || language.equals(LANG_EN_US))
                 return cityEntity.getEn();
             else if (language.equals(LANG_CKB))
                 return cityEntity.getCkb();
