@@ -1500,7 +1500,7 @@ public class Utils {
         if (clipboardService != null && label != null && text != null) {
             clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
             createAndShowShortSnackbar(view,
-                    "«" + text + "»\n" + view.getContext().getString(R.string.date_copied_clipboard);
+                    "«" + text + "»\n" + view.getContext().getString(R.string.date_copied_clipboard));
         }
     }
 
