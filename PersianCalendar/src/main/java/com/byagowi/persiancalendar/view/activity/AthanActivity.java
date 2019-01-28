@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
@@ -90,7 +89,7 @@ public class AthanActivity extends AppCompatActivity {
         } else {
             MediaPlayer player = new MediaPlayer();
             try {
-                player.setDataSource(this, UIUtils.getDefaultAthanUri(this));
+                player.setDataSource(this, Utils.getDefaultAthanUri(this));
                 player.setAudioStreamType(AudioManager.STREAM_ALARM);
                 player.prepare();
             } catch (IOException e) {
@@ -113,11 +112,11 @@ public class AthanActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
-        binding.athanName.setText(UIUtils.getPrayTimeText(prayerKey));
+        binding.athanName.setText(Utils.getPrayTimeText(prayerKey));
 
         View root = binding.getRoot();
         root.setOnClickListener(v -> stop());
-        root.setBackgroundResource(UIUtils.getPrayTimeImage(prayerKey));
+        root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey));
 
         binding.place.setText(String.format("%s %s",
                 getString(R.string.in_city_time),

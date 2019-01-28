@@ -15,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
@@ -339,7 +338,7 @@ public class QiblaCompassView extends View {
         // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
-                UIUtils.a11yShowToastWithClick(this, R.string.north);
+                Utils.a11yAnnounceAndClick(this, R.string.north);
                 isCurrentlyNorth = true;
             }
         } else {
@@ -348,7 +347,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 90)) {
             if (!isCurrentlyEast) {
-                UIUtils.a11yShowToastWithClick(this, R.string.east);
+                Utils.a11yAnnounceAndClick(this, R.string.east);
                 isCurrentlyEast = true;
             }
         } else {
@@ -357,7 +356,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 180)) {
             if (!isCurrentlySouth) {
-                UIUtils.a11yShowToastWithClick(this, R.string.south);
+                Utils.a11yAnnounceAndClick(this, R.string.south);
                 isCurrentlySouth = true;
             }
         } else {
@@ -366,7 +365,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 270)) {
             if (!isCurrentlyWest) {
-                UIUtils.a11yShowToastWithClick(this, R.string.west);
+                Utils.a11yAnnounceAndClick(this, R.string.west);
                 isCurrentlyWest = true;
             }
         } else {
@@ -376,7 +375,7 @@ public class QiblaCompassView extends View {
         if (isLongLatAvailable() && qiblaInfo != null) {
             if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
                 if (!isCurrentlyQibla) {
-                    UIUtils.a11yShowToastWithClick(this, R.string.qibla);
+                    Utils.a11yAnnounceAndClick(this, R.string.qibla);
                     isCurrentlyQibla = true;
                 }
             } else {

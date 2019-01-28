@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.util.AstronomicalUtils
 import com.byagowi.persiancalendar.util.CalendarType
-import com.byagowi.persiancalendar.util.CalendarUtils
 import com.cepmuvakkit.times.view.QiblaCompassView
 import org.junit.Assert.*
 import org.junit.Test
@@ -193,18 +192,18 @@ class MainLogicTests {
 
   @Test
   fun test_getMonthLength() {
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 1))
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 2))
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 3))
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 4))
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 5))
-    assertEquals(31, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 6))
-    assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 7))
-    assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 8))
-    assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 9))
-    assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 10))
-    assertEquals(30, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 11))
-    assertEquals(29, CalendarUtils.getMonthLength(CalendarType.SHAMSI, 1397, 12))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 1))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 2))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 3))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 4))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 5))
+    assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 6))
+    assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 7))
+    assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 8))
+    assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 9))
+    assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 10))
+    assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 11))
+    assertEquals(29, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 12))
   }
 
   @Test
@@ -212,7 +211,7 @@ class MainLogicTests {
     // http://praytimes.org/code/v2/js/examples/monthly.htm
     var prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.MWL,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
 
@@ -224,7 +223,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 21).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.ISNA,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 27).toInt(), prayTimes.fajrClock.toInt())
@@ -235,7 +234,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 9).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Egypt,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 0).toInt(), prayTimes.fajrClock.toInt())
@@ -246,7 +245,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 24).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Makkah,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 6).toInt(), prayTimes.fajrClock.toInt())
@@ -257,7 +256,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 18).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Karachi,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 9).toInt(), prayTimes.fajrClock.toInt())
@@ -268,7 +267,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 27).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Jafari,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 21).toInt(), prayTimes.fajrClock.toInt())
@@ -279,7 +278,7 @@ class MainLogicTests {
     assertEquals(Clock(21, 3).toInt(), prayTimes.ishaClock.toInt())
 
     prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Tehran,
-            CalendarUtils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            Utils.civilDateToCalendar(CivilDate(2018, 9, 5)).time,
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true)
     assertEquals(Clock(5, 11).toInt(), prayTimes.fajrClock.toInt())
@@ -460,7 +459,7 @@ class MainLogicTests {
             1441, 1445, 1449, 1453, 1457, 1461, 1465, /*1469*/1470, 1474, 1478, 1482, 1486, 1490, 1494,
             1498)
     (1206..1498).forEach {
-      assertEquals(CalendarUtils.getMonthLength(CalendarType.SHAMSI, it, 12),
+      assertEquals(Utils.getMonthLength(CalendarType.SHAMSI, it, 12),
               if (leapYears.contains(it)) 30 else 29)
     }
   }

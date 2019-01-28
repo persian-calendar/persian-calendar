@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.entity.ShiftWorkRecord;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
@@ -69,7 +68,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         Utils.updateStoredPreference(mainActivity);
 
         selectedJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
-        if (selectedJdn == -1) selectedJdn = CalendarUtils.getTodayJdn();
+        if (selectedJdn == -1) selectedJdn = Utils.getTodayJdn();
 
         jdn = Utils.getShiftWorkStartingJdn();
         boolean isFirstSetup = false;
@@ -91,14 +90,14 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
 
         binding.description.setText(String.format(getString(
                 isFirstSetup ? R.string.shift_work_starting_date : R.string.shift_work_starting_date_edit),
-                CalendarUtils.formatDate(
-                        CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+                Utils.formatDate(
+                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
 
         binding.resetLink.setOnClickListener(v -> {
             jdn = selectedJdn;
             binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
-                    CalendarUtils.formatDate(
-                            CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+                    Utils.formatDate(
+                            Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
             shiftWorkItemAdapter.reset();
         });
         binding.recurs.setChecked(Utils.getShiftWorkRecurs());

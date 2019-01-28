@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 
 import javax.inject.Inject;
@@ -34,7 +33,7 @@ public class FragmentInterfaceCalendar extends PreferenceFragmentCompat {
 
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.READ_CALENDAR)
                     != PackageManager.PERMISSION_GRANTED) {
-                UIUtils.askForCalendarPermission(mainActivityDependency.getMainActivity());
+                Utils.askForCalendarPermission(mainActivityDependency.getMainActivity());
                 switchPreference.setChecked(false);
             } else {
                 if (switchPreference.isChecked()) {

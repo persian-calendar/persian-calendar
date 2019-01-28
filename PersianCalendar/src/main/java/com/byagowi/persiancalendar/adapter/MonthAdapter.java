@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.entity.AbstractEvent;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
 import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
@@ -54,7 +53,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
 
     public void initializeMonthEvents(Context context) {
         if (Utils.isShowDeviceCalendarEvents()) {
-            monthEvents = CalendarUtils.readMonthDeviceEvents(context, days.get(0).getJdn());
+            monthEvents = Utils.readMonthDeviceEvents(context, days.get(0).getJdn());
         }
     }
 
@@ -188,7 +187,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                             day.getJdn(), position - 6 - startingDayOfWeek,
                             Utils.getShiftWorkTitle(day.getJdn(), true));
 
-                    itemDayView.setContentDescription(CalendarUtils.getA11yDaySummary(context,
+                    itemDayView.setContentDescription(Utils.getA11yDaySummary(context,
                             day.getJdn(), day.isToday(), monthEvents,
                             day.isToday(), false, true));
 

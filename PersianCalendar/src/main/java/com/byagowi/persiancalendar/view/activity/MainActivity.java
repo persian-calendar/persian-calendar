@@ -26,9 +26,7 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
@@ -96,7 +94,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        setTheme(UIUtils.getThemeFromName(Utils.getThemeFromPreference(prefs)));
+        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(prefs)));
 
         Utils.applyAppLanguage(this);
 
@@ -126,7 +124,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
-        boolean isRTL = UIUtils.isRTL(this);
+        boolean isRTL = Utils.isRTL(this);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             int slidingDirection = isRTL ? -1 : +1;
@@ -166,7 +164,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         if (Utils.isShowDeviceCalendarEvents()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                UIUtils.askForCalendarPermission(this);
+                Utils.askForCalendarPermission(this);
             }
         }
 
@@ -213,11 +211,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             binding.appbarLayout.setOutlineProvider(null);
         }
 
-        creationDateJdn = CalendarUtils.getTodayJdn();
+        creationDateJdn = Utils.getTodayJdn();
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
                 Utils.isIranHolidaysEnabled() &&
-                (CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
+                (Utils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
             Snackbar snackbar = Snackbar.make(getCoordinator(), getString(R.string.outdated_app),
                     10000);
             TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
@@ -268,7 +266,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             isSouthernHemisphere = true;
         }
 
-        int month = CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
+        int month = Utils.getTodayOfCalendar(CalendarType.SHAMSI).getMonth();
         if (isSouthernHemisphere) month = ((month + 6 - 1) % 12) + 1;
 
         if (month < 4) return R.drawable.spring;
@@ -381,7 +379,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         if (key.equals(PREF_SHOW_DEVICE_CALENDAR_EVENTS)) {
             if (sharedPreferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true)) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                    UIUtils.askForCalendarPermission(this);
+                    Utils.askForCalendarPermission(this);
                 }
             }
         }
@@ -410,7 +408,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
                     == PackageManager.PERMISSION_GRANTED) {
-                UIUtils.toggleShowDeviceCalendarOnPreference(this, true);
+                Utils.toggleShowDeviceCalendarOnPreference(this, true);
                 NavDestination currentDestination = Navigation
                         .findNavController(this, R.id.nav_host_fragment)
                         .getCurrentDestination();
@@ -418,7 +416,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                     restartActivity();
                 }
             } else {
-                UIUtils.toggleShowDeviceCalendarOnPreference(this, false);
+                Utils.toggleShowDeviceCalendarOnPreference(this, false);
             }
         }
     }
@@ -428,7 +426,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         super.onConfigurationChanged(newConfig);
         Utils.initUtils(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding.drawer.setLayoutDirection(UIUtils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            binding.drawer.setLayoutDirection(Utils.isRTL(this) ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         }
     }
 
@@ -437,7 +435,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         super.onResume();
         Utils.applyAppLanguage(this);
         UpdateUtils.update(getApplicationContext(), false);
-        if (creationDateJdn != CalendarUtils.getTodayJdn()) {
+        if (creationDateJdn != Utils.getTodayJdn()) {
             restartActivity();
         }
     }

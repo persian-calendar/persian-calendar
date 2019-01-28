@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.UIUtils;
 
 import net.androgames.level.orientation.Orientation;
 
@@ -328,7 +327,7 @@ public class LevelView extends View {
 
         if (orientation.isLevel(newPitch, newRoll, newBalance, .8f)) {
             if (!isAlreadyLeveled) {
-                UIUtils.a11yShowToastWithClick(this, R.string.level);
+                Utils.a11yAnnounceAndClick(this, R.string.level);
                 isAlreadyLeveled = true;
             }
         } else {

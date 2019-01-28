@@ -6,7 +6,6 @@ import android.content.Context;
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import org.junit.Before;
@@ -62,7 +61,7 @@ public class PersianCalendarInstrumentedTest {
         ClipboardManager clipboardManager = futureResult.get();
 
         onView(withId(R.id.first_calendar_date)).perform(click());
-        assertEquals(CalendarUtils.formatDate(CalendarUtils.getTodayOfCalendar(CalendarType.SHAMSI)),
+        assertEquals(Utils.formatDate(Utils.getTodayOfCalendar(CalendarType.SHAMSI)),
                 clipboardManager.getPrimaryClip().getItemAt(0).getText());
     }
 

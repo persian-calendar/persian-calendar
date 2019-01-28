@@ -15,8 +15,6 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.util.AstronomicalUtils;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Calendar;
@@ -98,7 +96,7 @@ public class CalendarsView extends FrameLayout {
         mBinding.zodiac.setText(AstronomicalUtils.getZodiacInfo(context, jdn, true));
         mBinding.zodiac.setVisibility(TextUtils.isEmpty(mBinding.zodiac.getText()) ? View.GONE : View.VISIBLE);
 
-        long diffDays = Math.abs(CalendarUtils.getTodayJdn() - jdn);
+        long diffDays = Math.abs(Utils.getTodayJdn() - jdn);
 
         if (diffDays == 0) {
             if (Utils.isIranTime()) {
@@ -129,15 +127,15 @@ public class CalendarsView extends FrameLayout {
         }
 
         {
-            AbstractDate mainDate = CalendarUtils.getDateFromJdnOfCalendar(chosenCalendarType, jdn);
-            AbstractDate startOfYear = CalendarUtils.getDateOfCalendar(chosenCalendarType,
+            AbstractDate mainDate = Utils.getDateFromJdnOfCalendar(chosenCalendarType, jdn);
+            AbstractDate startOfYear = Utils.getDateOfCalendar(chosenCalendarType,
                     mainDate.getYear(), 1, 1);
-            AbstractDate startOfNextYear = CalendarUtils.getDateOfCalendar(
+            AbstractDate startOfNextYear = Utils.getDateOfCalendar(
                     chosenCalendarType, mainDate.getYear() + 1, 1, 1);
             long startOfYearJdn = startOfYear.toJdn();
             long endOfYearJdn = startOfNextYear.toJdn() - 1;
-            int currentWeek = CalendarUtils.calculateWeekOfYear(jdn, startOfYearJdn);
-            int weeksCount = CalendarUtils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
+            int currentWeek = Utils.calculateWeekOfYear(jdn, startOfYearJdn);
+            int weeksCount = Utils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
 
             String startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
                     Utils.formatNumber((int) (jdn - startOfYearJdn)),
@@ -155,10 +153,10 @@ public class CalendarsView extends FrameLayout {
                 if ((mainDate.getMonth() == 12 && mainDate.getDayOfMonth() >= 20) ||
                         (mainDate.getMonth() == 1 && mainDate.getDayOfMonth() == 1)) {
                     int addition = mainDate.getMonth() == 12 ? 1 : 0;
-                    Calendar springEquinox = CalendarUtils.getSpringEquinox(mainDate.toJdn());
+                    Calendar springEquinox = Utils.getSpringEquinox(mainDate.toJdn());
                     equinox = String.format(context.getString(R.string.spring_equinox),
                             Utils.formatNumber(mainDate.getYear() + addition),
-                            UIUtils.getFormattedClock(
+                            Utils.getFormattedClock(
                                     new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
                                             springEquinox.get(Calendar.MINUTE)), true));
                 }
@@ -167,7 +165,7 @@ public class CalendarsView extends FrameLayout {
             mBinding.equinox.setVisibility(TextUtils.isEmpty(equinox) ? GONE : VISIBLE);
         }
 
-        mBinding.getRoot().setContentDescription(CalendarUtils.getA11yDaySummary(context, jdn,
+        mBinding.getRoot().setContentDescription(Utils.getA11yDaySummary(context, jdn,
                 diffDays == 0,
                 null, true, true, true));
     }

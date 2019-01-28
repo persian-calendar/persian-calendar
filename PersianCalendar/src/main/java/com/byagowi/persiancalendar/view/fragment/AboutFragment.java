@@ -200,7 +200,7 @@ public class AboutFragment extends DaggerFragment {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(AboutFragment.class.getName(), "Name not found on PersianCalendarUtils.programVersion");
+            Log.e(AboutFragment.class.getName(), "Name not found on PersianUtils.programVersion");
             return "";
         }
     }

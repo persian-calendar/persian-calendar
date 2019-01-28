@@ -16,7 +16,6 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.concurrent.TimeUnit;
@@ -60,7 +59,7 @@ public class AthanNotification extends Service {
 
             String title = intent == null
                     ? ""
-                    : getString(UIUtils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
+                    : getString(Utils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
             String cityName = Utils.getCityName(this, false);
             String subtitle = TextUtils.isEmpty(cityName)
                     ? ""

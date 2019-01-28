@@ -58,7 +58,7 @@ public class UpdateUtils {
 
     public static void setDeviceCalendarEvents(Context context) {
         try {
-            deviceCalendarEvents = CalendarUtils.readDayDeviceEvents(context, -1);
+            deviceCalendarEvents = Utils.readDayDeviceEvents(context, -1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,9 +67,9 @@ public class UpdateUtils {
     public static void update(Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils.applyAppLanguage(context);
-        Calendar calendar = CalendarUtils.makeCalendarFromDate(new Date());
+        Calendar calendar = Utils.makeCalendarFromDate(new Date());
         CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate date = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = Utils.getTodayOfCalendar(mainCalendar);
         long jdn = date.toJdn();
 
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
@@ -100,7 +100,7 @@ public class UpdateUtils {
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
                     Utils.formatNumber(date.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                    CalendarUtils.getMonthName(date));
+                    Utils.getMonthName(date));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
@@ -115,7 +115,7 @@ public class UpdateUtils {
         }
 
         String weekDayName = Utils.getWeekDayName(date);
-        String title = CalendarUtils.dayTitleSummary(date);
+        String title = Utils.dayTitleSummary(date);
         String shiftWorkTitle = Utils.getShiftWorkTitle(jdn, false);
         if (!TextUtils.isEmpty(shiftWorkTitle))
             title += " (" + shiftWorkTitle + ")";
@@ -127,7 +127,7 @@ public class UpdateUtils {
         int nextOwghatId = Utils.getNextOwghatTimeId(currentClock, updateDate);
         if (nextOwghatId != 0) {
             owghat = context.getString(nextOwghatId) + ": " +
-                    UIUtils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false);
+                    Utils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false);
             if (Utils.isShownOnWidgets("owghat_location")) {
                 String cityName = Utils.getCityName(context, false);
                 if (!TextUtils.isEmpty(cityName)) {
@@ -156,7 +156,7 @@ public class UpdateUtils {
                 remoteViews2 = new RemoteViews(context.getPackageName(), isCenterAligned ? R.layout.widget2x2_center : R.layout.widget2x2);
             }
 
-            String mainDateString = CalendarUtils.formatDate(date);
+            String mainDateString = Utils.formatDate(date);
 
             {
                 // Widget 4x1
@@ -257,7 +257,7 @@ public class UpdateUtils {
             remoteViews4x2.setTextColor(R.id.textPlaceholder1_4x2, color);
             remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
 
-            String text2 = CalendarUtils.formatDate(date);
+            String text2 = Utils.formatDate(date);
             if (enableClock)
                 text2 = Utils.getWeekDayName(date) + "\n" + text2;
             else
@@ -276,7 +276,7 @@ public class UpdateUtils {
                 for (int i = 0; i < owghatPlaceHolderId.length; ++i) {
                     remoteViews4x2.setTextViewText(owghatPlaceHolderId[i],
                             context.getString(timesOn4x2[i]) + "\n" +
-                                    UIUtils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false));
+                                    Utils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false));
                     remoteViews4x2.setTextColor(owghatPlaceHolderId[i],
                             timesOn4x2[i] == nextOwghatId ?
                                     Color.RED : color);
@@ -344,7 +344,7 @@ public class UpdateUtils {
             // Don't remove this condition checking ever
             if (Utils.isTalkBackEnabled()) {
                 // Don't use isToday, per a feedback
-                subtitle = CalendarUtils.getA11yDaySummary(context, jdn, false,
+                subtitle = Utils.getA11yDaySummary(context, jdn, false,
                         deviceCalendarEvents,
                         true, true, false);
                 if (!TextUtils.isEmpty(owghat)) {

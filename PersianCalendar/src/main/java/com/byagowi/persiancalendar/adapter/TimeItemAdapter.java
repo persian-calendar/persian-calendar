@@ -7,7 +7,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.TimeItemBinding;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import androidx.annotation.NonNull;
@@ -114,7 +113,7 @@ public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHo
                     clock = mPrayTimes.getMidnightClock();
                     break;
             }
-            binding.time.setText(UIUtils.getFormattedClock(clock, false));
+            binding.time.setText(Utils.getFormattedClock(clock, false));
         }
     }
 }

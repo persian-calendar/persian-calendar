@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import javax.inject.Inject;
@@ -149,7 +148,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        UIUtils.askForLocationPermission(activity);
+                        Utils.askForLocationPermission(activity);
                     } else {
                         new GPSLocationDialog().show(getChildFragmentManager(),
                                 GPSLocationDialog.class.getName());
