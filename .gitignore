@@ -1,16 +1,6 @@
 # Created by https://www.gitignore.io
 
 ### Android ###
-# Built application files
-*.apk
-*.ap_
-
-# Files for the Dalvik VM
-*.dex
-
-# Java class files
-*.class
-
 # Generated files
 bin/
 gen/
@@ -32,8 +22,6 @@ proguard/
 
 
 ### Java ###
-*.class
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -54,35 +42,14 @@ hs_err_pid*
 
 ## Directory-based project format:
 .idea/
-# if you remove the above rule, at least ignore the following:
-
-# User-specific stuff:
-**/.idea/workspace.xml
-**/.idea/tasks.xml
-**/.idea/dictionaries
-
-# Sensitive or high-churn files:
-.idea/dataSources.ids
-.idea/dataSources.xml
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
-
-# Gradle:
-.idea/gradle.xml
-.idea/libraries
 
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
 ## File-based project format:
 *.ipr
-*.iws
 
 ## Plugin-specific files:
-
-# IntelliJ
-out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -97,9 +64,6 @@ crashlytics-build.properties
 
 
 ### Gradle ###
-.gradle
-build/
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
