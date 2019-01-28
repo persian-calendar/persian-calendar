@@ -196,7 +196,7 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
         @Override
         public void onClick(View v) {
             DeviceInfoItem info = deviceInfoItemsList.get(mPosition);
-            Utils.copyToClipboard(v.getContext(), info.title, info.content);
+            Utils.copyToClipboard(v, info.title, info.content);
         }
     }
 }

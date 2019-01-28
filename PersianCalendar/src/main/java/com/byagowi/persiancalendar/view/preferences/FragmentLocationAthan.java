@@ -141,7 +141,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                 editor.remove(PREF_ATHAN_URI);
                 editor.remove(PREF_ATHAN_NAME);
                 editor.apply();
-                Toast.makeText(context, R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.returned_to_default);
                 putAthanNameOnSummary(getDefaultAthanName());
                 return true;
             case "pref_gps_location":
@@ -183,8 +183,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                     editor.putString(PREF_ATHAN_NAME, ringtoneTitle);
                     editor.putString(PREF_ATHAN_URI, uri.toString());
                     editor.apply();
-                    Toast.makeText(context, R.string.custom_notification_is_set,
-                            Toast.LENGTH_SHORT).show();
+                    Utils.createAndShowShortSnackbar(getView(), R.string.custom_notification_is_set);
                     putAthanNameOnSummary(ringtoneTitle);
                 }
             }

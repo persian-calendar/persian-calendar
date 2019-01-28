@@ -10,13 +10,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
@@ -42,6 +45,7 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1490,13 +1494,44 @@ public class Utils {
         return result.toString();
     }
 
-    public static void copyToClipboard(Context context, CharSequence label, CharSequence text) {
+    public static void copyToClipboard(View view, CharSequence label, CharSequence text) {
         ClipboardManager clipboardService =
-                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                (ClipboardManager) view.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardService != null && label != null && text != null) {
             clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
-            Toast.makeText(context, "«" + text + "»\n" + context.getString(R.string.date_copied_clipboard), Toast.LENGTH_SHORT).show();
+            createAndShowSnackbar(view,
+                    "«" + text + "»\n" + view.getContext().getString(R.string.date_copied_clipboard),
+                    Snackbar.LENGTH_SHORT);
         }
+    }
+
+    public static void createAndShowSnackbar(@Nullable View view, String message, int duration) {
+        if (view == null) return;
+
+        Snackbar snackbar = Snackbar.make(view, message, duration);
+
+        View snackbarView = snackbar.getView();
+        snackbarView.setOnClickListener(v -> snackbar.dismiss());
+
+        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        text.setTextColor(Color.WHITE);
+        text.setMaxLines(5);
+
+        snackbar.show();
+    }
+
+    public static void createAndShowShortSnackbar(@Nullable View view, @StringRes int messageId) {
+        if (view == null) return;
+        Context context = view.getContext();
+        if (context == null) return;
+
+        createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT);
+    }
+
+    public static void createAndShowShortSnackbar(@Nullable View view, String message) {
+        if (view == null) return;
+
+        createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT);
     }
 
     public static boolean isTalkBackEnabled() {

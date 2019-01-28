@@ -117,7 +117,7 @@ public class AboutFragment extends DaggerFragment {
                                             Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]));
                             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)));
                         } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(activity, getString(R.string.about_noClient), Toast.LENGTH_SHORT).show();
+                            Utils.createAndShowShortSnackbar(getView(), R.string.about_noClient);
                         }
                     })
                     .setNegativeButton(R.string.cancel, null).show();

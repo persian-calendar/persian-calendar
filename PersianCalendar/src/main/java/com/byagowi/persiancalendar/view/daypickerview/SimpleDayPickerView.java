@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,7 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
 
             return CalendarUtils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn();
         } catch (Exception e) {
-            Toast.makeText(getContext(), getContext().getString(R.string.date_exception),
-                    Toast.LENGTH_SHORT).show();
+            Utils.createAndShowShortSnackbar(getRootView(), R.string.date_exception);
             Log.e("SelectDayDialog", "", e);
         }
 

@@ -53,7 +53,7 @@ public class LevelView extends View {
      * Fonts and colors
      */
     private static final String FONT_LCD = "fonts/lcd.ttf";
-    private boolean isAlreadyLevel = true; // deliberately
+    private boolean isAlreadyLeveled = true; // deliberately
     /**
      * Dimensions
      */
@@ -327,12 +327,12 @@ public class LevelView extends View {
         }
 
         if (orientation.isLevel(newPitch, newRoll, newBalance, .8f)) {
-            if (!isAlreadyLevel) {
-                UIUtils.a11yShowToastWithClick(getContext(), R.string.level);
-                isAlreadyLevel = true;
+            if (!isAlreadyLeveled) {
+                UIUtils.a11yShowToastWithClick(this, R.string.level);
+                isAlreadyLeveled = true;
             }
         } else {
-            isAlreadyLevel = false;
+            isAlreadyLeveled = false;
         }
 
         postInvalidate();

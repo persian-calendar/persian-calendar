@@ -110,19 +110,6 @@ public class CompassFragment extends DaggerFragment {
         return binding.getRoot();
     }
 
-    private void createAndShowSnackbar(View view, @StringRes int msg, int duration) {
-        Snackbar snackbar = Snackbar.make(view, msg, duration);
-
-        View snackbarView = snackbar.getView();
-        snackbarView.setOnClickListener(v -> snackbar.dismiss());
-
-        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setTextColor(Color.WHITE);
-        text.setMaxLines(5);
-
-        snackbar.show();
-    }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -179,8 +166,9 @@ public class CompassFragment extends DaggerFragment {
                 mainActivityDependency.getMainActivity().navigateTo(R.id.level);
                 break;
             case R.id.help:
-                createAndShowSnackbar(getView(), sensorNotFound
-                                ? R.string.compass_not_found : R.string.calibrate_compass_summary,
+                Utils.createAndShowSnackbar(getView(), mainActivityDependency.getMainActivity()
+                                .getString(sensorNotFound
+                                        ? R.string.compass_not_found : R.string.calibrate_compass_summary),
                         5000);
             default:
                 break;
@@ -200,10 +188,10 @@ public class CompassFragment extends DaggerFragment {
                 sensorManager.registerListener(compassListener, sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
-                    createAndShowSnackbar(mainActivity.getCoordinator(), R.string.set_location, Snackbar.LENGTH_LONG);
+                    Utils.createAndShowShortSnackbar(mainActivity.getCoordinator(), R.string.set_location);
                 }
             } else {
-                Toast.makeText(mainActivity, R.string.compass_not_found, Toast.LENGTH_LONG).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.compass_not_found);
                 sensorNotFound = true;
             }
         }

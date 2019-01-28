@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.praytimes.Clock;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -179,8 +180,11 @@ public class UIUtils {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
-    public static void a11yShowToastWithClick(Context context, @StringRes int resId) {
+    public static void a11yShowToastWithClick(View view, @StringRes int resId) {
         if (!Utils.isTalkBackEnabled()) return;
+
+        Context context = view.getContext();
+        if (context == null) return;
 
         if (audioManager == null) {
             audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -188,7 +192,7 @@ public class UIUtils {
 
         long now = System.currentTimeMillis();
         if (now - latestToastShowTime > twoSeconds) {
-            Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+            Utils.createAndShowShortSnackbar(view, resId);
             // https://stackoverflow.com/a/29423018
             audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
             latestToastShowTime = now;

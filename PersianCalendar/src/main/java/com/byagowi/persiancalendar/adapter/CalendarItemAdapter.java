@@ -99,7 +99,7 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
 
         @Override
         public void onClick(View view) {
-            Utils.copyToClipboard(view.getContext(), "converted date", view.getContentDescription());
+            Utils.copyToClipboard(view, "converted date", view.getContentDescription());
         }
     }
 

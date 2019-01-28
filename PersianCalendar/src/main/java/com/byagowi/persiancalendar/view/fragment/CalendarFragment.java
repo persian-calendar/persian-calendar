@@ -54,6 +54,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -225,7 +226,7 @@ public class CalendarFragment extends DaggerFragment {
                                 .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                         CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
             } catch (Exception e) {
-                Toast.makeText(activity, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.device_calendar_does_not_support);
             }
         }
     }
@@ -269,8 +270,7 @@ public class CalendarFragment extends DaggerFragment {
                                             CalendarContract.Events.CONTENT_URI, event.getId())),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
-                    Toast.makeText(mainActivityDependency.getMainActivity(),
-                            R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                    Utils.createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support);
                 }
             }
 
@@ -472,9 +472,10 @@ public class CalendarFragment extends DaggerFragment {
         if (Utils.isTalkBackEnabled()) {
             long todayJdn = CalendarUtils.getTodayJdn();
             if (jdn != todayJdn) {
-                Toast.makeText(context, CalendarUtils.getA11yDaySummary(context, jdn,
-                        false, null, true,
-                        true, true), Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(),
+                        CalendarUtils.getA11yDaySummary(context, jdn,
+                                false, null, true,
+                                true, true));
             }
         }
     }
