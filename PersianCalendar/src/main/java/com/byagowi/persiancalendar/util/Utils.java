@@ -1499,9 +1499,8 @@ public class Utils {
                 (ClipboardManager) view.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardService != null && label != null && text != null) {
             clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
-            createAndShowSnackbar(view,
-                    "«" + text + "»\n" + view.getContext().getString(R.string.date_copied_clipboard),
-                    Snackbar.LENGTH_SHORT);
+            createAndShowShortSnackbar(view,
+                    "«" + text + "»\n" + view.getContext().getString(R.string.date_copied_clipboard);
         }
     }
 
