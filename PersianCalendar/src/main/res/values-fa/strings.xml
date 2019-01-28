@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="code">fa</string>
+
     <string name="app_name">تقویم فارسی</string>
     <string name="cancel">لغو</string>
     <string name="widget_name">تقویم فارسی</string>

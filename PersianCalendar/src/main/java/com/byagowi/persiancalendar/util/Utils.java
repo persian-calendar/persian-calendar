@@ -200,7 +200,6 @@ public class Utils {
     static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
     static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
     static private List<AbstractEvent> sAllEnabledEvents;
-    static private String sShiftWorkStoredTitlesLanguage = "";
     static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
     static private boolean sShiftWorkRecurs = true;
@@ -360,13 +359,12 @@ public class Utils {
 
             sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
 
-            if (!getAppLanguage().equals(sShiftWorkStoredTitlesLanguage) || sShiftWorkTitles.size() == 0) {
+            if (UIUtils.getOnlyLanguage(getAppLanguage()).equals(resources.getString(R.string.code))
+                    || sShiftWorkTitles.size() == 0) {
                 String[] titles = resources.getStringArray(R.array.shift_work);
                 String[] keys = resources.getStringArray(R.array.shift_work_keys);
                 for (int i = 0; i < titles.length; ++i)
                     sShiftWorkTitles.put(keys[i], titles[i]);
-
-                sShiftWorkStoredTitlesLanguage = getAppLanguage();
             }
         } catch (Exception e) {
             e.printStackTrace();

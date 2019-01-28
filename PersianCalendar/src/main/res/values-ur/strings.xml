@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="code">ur</string>
+
     <string name="app_name">فارسی تقویم</string>
     <string name="cancel">بند کریں</string>
     <string name="widget_name">فارسی تقویم</string>
