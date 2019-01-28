@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;

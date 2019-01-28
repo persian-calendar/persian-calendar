@@ -12,13 +12,11 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.praytimes.Clock;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;

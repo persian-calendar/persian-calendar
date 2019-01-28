@@ -20,7 +20,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
