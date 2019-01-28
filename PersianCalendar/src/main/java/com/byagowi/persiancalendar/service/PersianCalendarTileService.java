@@ -32,6 +32,7 @@ public class PersianCalendarTileService extends TileService {
     @Override
     public void onStartListening() {
         Tile tile = getQsTile();
+        if (tile == null) return;
         AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
 
         tile.setIcon(Icon.createWithResource(this,
