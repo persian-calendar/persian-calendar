@@ -67,7 +67,6 @@ public class DeviceInfoFragment extends DaggerFragment {
             menu.add(Build.MODEL);
             menu.getItem(3).setIcon(R.drawable.ic_device_information);
 
-            binding.bottomNavigation.setSelectedItemId(10);
             binding.bottomNavigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         }
 
