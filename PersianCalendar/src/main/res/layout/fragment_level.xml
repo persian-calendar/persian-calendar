@@ -6,11 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.cepmuvakkit.times.view.QiblaCompassView
-            android:id="@+id/compass_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+        <net.androgames.level.view.LevelView
+            android:id="@+id/level_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_appbar"
@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             app:backgroundTint="@color/black"
-            android:tint="@color/white"
             app:layout_anchor="@+id/bottom_appbar"
             app:srcCompat="@drawable/ic_stop" />
 

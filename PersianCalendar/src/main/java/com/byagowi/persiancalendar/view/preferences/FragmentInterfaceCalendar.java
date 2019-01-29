@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 
 import javax.inject.Inject;

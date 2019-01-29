@@ -8,10 +8,4 @@
         android:title="@string/level"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/stop"
-        android:icon="@drawable/ic_stop"
-        android:title="@string/stop"
-        app:showAsAction="always" />
-
 </menu>

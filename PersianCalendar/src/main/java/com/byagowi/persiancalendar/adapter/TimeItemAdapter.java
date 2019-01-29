@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.TimeItemBinding;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
+import com.byagowi.persiancalendar.util.Utils;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import androidx.annotation.NonNull;

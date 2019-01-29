@@ -3,19 +3,16 @@ package net.androgames.level;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import net.androgames.level.orientation.OrientationProvider;
-import net.androgames.level.view.LevelView;
 
 import javax.inject.Inject;
 
@@ -52,17 +49,27 @@ public class LevelFragment extends DaggerFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
         mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
-        LevelView view = new LevelView(mainActivity);
-        view.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        provider = new OrientationProvider(mainActivityDependency.getMainActivity(), view);
+        FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
+        provider = new OrientationProvider(mainActivityDependency.getMainActivity(), binding.levelView);
 
-        return view;
+        binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
+        binding.bottomAppbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.compass)
+                mainActivityDependency.getMainActivity().navigateTo(R.id.compass);
+            return true;
+        });
+        binding.fab.setOnClickListener(v -> {
+            boolean stop = !provider.isListening();
+            binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
+            binding.fab.setContentDescription(mainActivity.getString(stop ? R.string.stop : R.string.resume));
+            if (stop) provider.startListening();
+            else provider.stopListening();
+        });
+
+        return binding.getRoot();
     }
 
     @Override
@@ -97,26 +104,5 @@ public class LevelFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity()
                 .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         super.onPause();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.level_menu_buttons, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.compass)
-            mainActivityDependency.getMainActivity().navigateTo(R.id.compass);
-        else if (item.getItemId() == R.id.stop) {
-            boolean stop = !provider.isListening();
-            item.setIcon(stop ? R.drawable.ic_stop : R.drawable.ic_play);
-            item.setTitle(stop ? R.string.stop : R.string.resume);
-            if (stop) provider.startListening();
-            else provider.stopListening();
-        }
-        return true;
     }
 }

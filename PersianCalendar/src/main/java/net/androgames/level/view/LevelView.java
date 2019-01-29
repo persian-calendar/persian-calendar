@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.util.Utils;
 
 import net.androgames.level.orientation.Orientation;
 
