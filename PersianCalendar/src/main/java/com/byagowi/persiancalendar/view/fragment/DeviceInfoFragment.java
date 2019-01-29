@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.view.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -9,6 +11,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.view.deviceinfo.DeviceInfoAdapter;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 
 import javax.inject.Inject;
 
@@ -48,6 +51,25 @@ public class DeviceInfoFragment extends DaggerFragment {
                 mainActivityDependency.getMainActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        {
+            Menu menu = binding.bottomNavigation.getMenu();
+
+            menu.add(Build.VERSION.RELEASE);
+            menu.getItem(0).setIcon(R.drawable.ic_developer);
+
+            menu.add("API " + Build.VERSION.SDK_INT);
+            menu.getItem(1).setIcon(R.drawable.ic_settings);
+
+            menu.add(Build.CPU_ABI);
+            menu.getItem(2).setIcon(R.drawable.ic_motorcycle);
+
+            menu.add(Build.MODEL);
+            menu.getItem(3).setIcon(R.drawable.ic_device_information);
+
+            binding.bottomNavigation.setSelectedItemId(10);
+            binding.bottomNavigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+        }
 
         return binding.getRoot();
     }
