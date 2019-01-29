@@ -24,8 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.ViewHolder> {
 
     private List<DeviceInfoItem> deviceInfoItemsList = new ArrayList<>();
+    private final View mRootView;
 
-    public DeviceInfoAdapter(Activity activity) {
+    public DeviceInfoAdapter(Activity activity, View rootView) {
+        mRootView = rootView;
+
         deviceInfoItemsList.add(new DeviceInfoItem(
                 "Screen Resolution",
                 getScreenResolution(activity.getWindowManager()),
@@ -196,7 +199,7 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.Vi
         @Override
         public void onClick(View v) {
             DeviceInfoItem info = deviceInfoItemsList.get(mPosition);
-            Utils.copyToClipboard(v, info.title, info.content);
+            Utils.copyToClipboard(mRootView, info.title, info.content);
         }
     }
 }
