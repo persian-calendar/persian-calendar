@@ -1809,6 +1809,11 @@ public class Utils {
     }
 
     static public String formatDate(AbstractDate date) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && date instanceof CivilDate) {
+//            int[] ints = AndroidCalendar.jdnToChinese(date.toJdn());
+//            return String.format("%d %d %d", ints[0], ints[1], ints[2]);
+            return AndroidCalendar.jdnToChineseString(date.toJdn());
+        }
         return String.format(getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
                 formatNumber(date.getDayOfMonth()), getMonthName(date),
                 formatNumber(date.getYear()));
@@ -1952,7 +1957,7 @@ public class Utils {
         return cal;
     }
 
-    private static CivilDate calendarToCivilDate(Calendar calendar) {
+    public static CivilDate calendarToCivilDate(Calendar calendar) {
         return new CivilDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH));
