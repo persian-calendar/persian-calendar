@@ -14,13 +14,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import javax.inject.Inject;
@@ -141,7 +139,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                 editor.remove(PREF_ATHAN_URI);
                 editor.remove(PREF_ATHAN_NAME);
                 editor.apply();
-                Toast.makeText(context, R.string.returned_to_default, Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.returned_to_default);
                 putAthanNameOnSummary(getDefaultAthanName());
                 return true;
             case "pref_gps_location":
@@ -150,7 +148,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        UIUtils.askForLocationPermission(activity);
+                        Utils.askForLocationPermission(activity);
                     } else {
                         new GPSLocationDialog().show(getChildFragmentManager(),
                                 GPSLocationDialog.class.getName());
@@ -183,8 +181,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                     editor.putString(PREF_ATHAN_NAME, ringtoneTitle);
                     editor.putString(PREF_ATHAN_URI, uri.toString());
                     editor.apply();
-                    Toast.makeText(context, R.string.custom_notification_is_set,
-                            Toast.LENGTH_SHORT).show();
+                    Utils.createAndShowShortSnackbar(getView(), R.string.custom_notification_is_set);
                     putAthanNameOnSummary(ringtoneTitle);
                 }
             }

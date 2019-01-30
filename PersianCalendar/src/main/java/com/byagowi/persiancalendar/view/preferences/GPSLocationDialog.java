@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.io.IOException;
@@ -84,7 +83,7 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
 
         getLocation();
         if (lacksPermission) {
-            UIUtils.askForLocationPermission(mainActivityDependency.getMainActivity());
+            Utils.askForLocationPermission(mainActivityDependency.getMainActivity());
         }
 
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30));

@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.daypickerview.DayPickerView;
 
@@ -38,7 +37,7 @@ public class ConverterFragment extends DaggerFragment {
 
         binding.calendarsView.expand(true);
         binding.calendarsView.hideMoreIcon();
-        binding.todayButton.setOnClickListener(v -> dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn()));
+        binding.todayButton.setOnClickListener(v -> dayPickerView.setDayJdnOnView(Utils.getTodayJdn()));
         binding.calendarsView.setOnShowHideTodayButton(show -> {
             if (show)
                 binding.todayButton.show();
@@ -57,7 +56,7 @@ public class ConverterFragment extends DaggerFragment {
                 binding.calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes);
             }
         });
-        dayPickerView.setDayJdnOnView(CalendarUtils.getTodayJdn());
+        dayPickerView.setDayJdnOnView(Utils.getTodayJdn());
 
         return binding.getRoot();
     }

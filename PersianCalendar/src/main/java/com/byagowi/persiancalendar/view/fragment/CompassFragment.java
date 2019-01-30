@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.view.fragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,15 +9,10 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding;
@@ -26,13 +20,11 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import dagger.android.support.DaggerFragment;
 
 /**
@@ -90,9 +82,6 @@ public class CompassFragment extends DaggerFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        setHasOptionsMenu(true);
-
         binding = FragmentCompassBinding.inflate(inflater, container, false);
 
         coordinate = Utils.getCoordinate(mainActivityDependency.getMainActivity());
@@ -107,20 +96,30 @@ public class CompassFragment extends DaggerFragment {
             binding.compassView.initCompassView();
         }
 
+        binding.bottomAppbar.replaceMenu(R.menu.compass_menu_buttons);
+        binding.bottomAppbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.level:
+                    mainActivityDependency.getMainActivity().navigateTo(R.id.level);
+                    break;
+                case R.id.help:
+                    Utils.createAndShowSnackbar(getView(), mainActivityDependency.getMainActivity()
+                                    .getString(sensorNotFound
+                                            ? R.string.compass_not_found : R.string.calibrate_compass_summary),
+                            5000);
+                default:
+                    break;
+            }
+            return true;
+        });
+        binding.fab.setOnClickListener(v -> {
+            stop = !stop;
+            binding.fab.setImageResource(stop ? R.drawable.ic_play : R.drawable.ic_stop);
+            binding.fab.setContentDescription(mainActivityDependency.getMainActivity()
+                    .getString(stop ? R.string.resume : R.string.stop));
+        });
+
         return binding.getRoot();
-    }
-
-    private void createAndShowSnackbar(View view, @StringRes int msg, int duration) {
-        Snackbar snackbar = Snackbar.make(view, msg, duration);
-
-        View snackbarView = snackbar.getView();
-        snackbarView.setOnClickListener(v -> snackbar.dismiss());
-
-        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setTextColor(Color.WHITE);
-        text.setMaxLines(5);
-
-        snackbar.show();
     }
 
     @Override
@@ -161,34 +160,6 @@ public class CompassFragment extends DaggerFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.compass_menu_buttons, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.stop:
-                stop = !stop;
-                item.setIcon(stop ? R.drawable.ic_play : R.drawable.ic_stop);
-                item.setTitle(stop ? R.string.resume : R.string.stop);
-                break;
-            case R.id.level:
-                mainActivityDependency.getMainActivity().navigateTo(R.id.level);
-                break;
-            case R.id.help:
-                createAndShowSnackbar(getView(), sensorNotFound
-                                ? R.string.compass_not_found : R.string.calibrate_compass_summary,
-                        5000);
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -200,10 +171,10 @@ public class CompassFragment extends DaggerFragment {
                 sensorManager.registerListener(compassListener, sensor,
                         SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
-                    createAndShowSnackbar(mainActivity.getCoordinator(), R.string.set_location, Snackbar.LENGTH_LONG);
+                    Utils.createAndShowShortSnackbar(mainActivity.getCoordinator(), R.string.set_location);
                 }
             } else {
-                Toast.makeText(mainActivity, R.string.compass_not_found, Toast.LENGTH_LONG).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.compass_not_found);
                 sensorNotFound = true;
             }
         }

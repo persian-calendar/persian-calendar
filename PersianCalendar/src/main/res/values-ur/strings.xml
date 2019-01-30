@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="code">ur</string>
+
     <string name="app_name">فارسی تقویم</string>
     <string name="cancel">بند کریں</string>
     <string name="widget_name">فارسی تقویم</string>
@@ -37,7 +39,7 @@
     <string name="compass">قطب نما</string>
     <string name="compass_not_found">کمپاس نہیں ملا</string>
     <string name="language">زبان</string>
-    <string name="version">نسخہ %s</string>
+    <string name="version">نسخہ %1$s</string>
     <string name="athan">اذان</string>
     <string name="athan_alarm_summary">ان نمازوں کے لیے اذان کو فعال کریں</string>
     <string name="athan_alarm">اذانیں</string>
@@ -79,7 +81,7 @@
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
-    <string name="date_diff_text">فاصله: %s روز (~%s سال و %s ماه و %s روز)</string>
+    <string name="date_diff_text">فاصله: %1$s روز (~%2$s سال و %3$s ماه و %4$s روز)</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
     <string name="week_of_year">هفتهٔ سال</string>
@@ -121,15 +123,15 @@
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسندهٔ برنامه</string>
     <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
 برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
-    <string name="start_of_year_diff">%s روز (~%s هفته و یا %s ماه) از ابتدای سال</string>
-    <string name="end_of_year_diff">%s روز (~%s هفته و یا %s ماه) تا انتهای سال</string>
+    <string name="start_of_year_diff">%1$s روز (~%2$s هفته و یا %3$s ماه) از ابتدای سال</string>
+    <string name="end_of_year_diff">%1$s روز (~%2$s هفته و یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
     <string name="sunriseSunView">طلوع</string>
     <string name="middaySunView">ظهر</string>
     <string name="sunsetSunView">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
-    <string name="length_of_day">طول روز: %sس %sد</string>
-    <string name="remaining_daylight">باقی‌مانده: %sس %sد</string>
+    <string name="length_of_day">طول روز: %1$sس %2$sد</string>
+    <string name="remaining_daylight">باقی‌مانده: %1$sس %2$sد</string>
     <string name="more">بیشتر</string>
     <string name="zodiac">برج فلکی</string>
     <string name="capricorn">جَدْی (بزغاله)</string>
@@ -181,10 +183,10 @@
     <!--Talkback, a11y-->
     <string name="previous_month">ماه قبل</string>
     <string name="next_month">ماه بعد</string>
-    <string name="week_days_name_column">ستون %s در جدول روزها</string>
+    <string name="week_days_name_column">ستون %1$s در جدول روزها</string>
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت</string>
-    <string name="nth_week_of_year">هفتهٔ %s سال</string>
+    <string name="nth_week_of_year">هفتهٔ %1$s سال</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
@@ -195,23 +197,24 @@
     <string name="qibla">قبله</string>
     <string name="outdated_app">به دلیل قدیمی بودن نسخه مناسبت‌های ممکن صحیح نباشد</string>
     <string name="update">بروزرسانی</string>
-    <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %s: %s</string>
+    <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
-    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %s است.</string>
-    <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %s خواهد بود.</string>
+    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %1$s است.</string>
+    <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
     <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
-    <string name="n_minutes">%s دقیقه</string>
-    <string name="n_hours">%s ساعت</string>
-    <string name="n_minutes_and_hours">%s ساعت و %s دقیقه</string>
+    <string name="n_minutes">%1$s دقیقه</string>
+    <string name="n_hours">%1$s ساعت</string>
+    <string name="n_minutes_and_hours">%1$s ساعت و %2$s دقیقه</string>
     <string name="device_info">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ابزارک‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
-    <string name="n_till">%s تا %s</string>
-    <string name="shift_work_record_title">%s روز %s</string>
+    <string name="n_till">%1$s تا %2$s</string>
+    <string name="shift_work_record_title">%1$s روز %2$s</string>
     <string name="recurs">تکرار شود</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
+    <string name="shift_work_days_head">طول</string>
 
 </resources>

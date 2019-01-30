@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -43,8 +42,6 @@ import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.CalendarsView;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
@@ -168,7 +165,7 @@ public class CalendarFragment extends DaggerFragment {
                 appDependency, tabs, titles));
         mMainBinding.tabLayout.setupWithViewPager(mMainBinding.cardsViewPager);
 
-        mCalendarAdapterHelper = new CalendarAdapter.CalendarAdapterHelper(UIUtils.isRTL(context));
+        mCalendarAdapterHelper = new CalendarAdapter.CalendarAdapterHelper(Utils.isRTL(context));
         mMainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
                 mCalendarAdapterHelper));
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
@@ -183,8 +180,8 @@ public class CalendarFragment extends DaggerFragment {
 
         mMainBinding.cardsViewPager.setCurrentItem(lastTab, false);
 
-        AbstractDate today = CalendarUtils.getTodayOfCalendar(Utils.getMainCalendar());
-        mainActivityDependency.getMainActivity().setTitleAndSubtitle(CalendarUtils.getMonthName(today),
+        AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
         return mMainBinding.getRoot();
@@ -198,7 +195,7 @@ public class CalendarFragment extends DaggerFragment {
     public void selectDay(long jdn) {
         mLastSelectedJdn = jdn;
         mCalendarsView.showCalendars(jdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
-        setOwghat(jdn, CalendarUtils.getTodayJdn() == jdn);
+        setOwghat(jdn, Utils.getTodayJdn() == jdn);
         showEvent(jdn);
     }
 
@@ -210,14 +207,14 @@ public class CalendarFragment extends DaggerFragment {
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED) {
-            UIUtils.askForCalendarPermission(activity);
+            Utils.askForCalendarPermission(activity);
         } else {
             try {
                 startActivityForResult(
                         new Intent(Intent.ACTION_INSERT)
                                 .setData(CalendarContract.Events.CONTENT_URI)
-                                .putExtra(CalendarContract.Events.DESCRIPTION, CalendarUtils.dayTitleSummary(
-                                        CalendarUtils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                                .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                         time.getTimeInMillis())
                                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -225,7 +222,7 @@ public class CalendarFragment extends DaggerFragment {
                                 .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                         CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
             } catch (Exception e) {
-                Toast.makeText(activity, R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(), R.string.device_calendar_does_not_support);
             }
         }
     }
@@ -240,9 +237,9 @@ public class CalendarFragment extends DaggerFragment {
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED) {
-                    UIUtils.askForCalendarPermission(activity);
+                    Utils.askForCalendarPermission(activity);
                 } else {
-                    UIUtils.toggleShowDeviceCalendarOnPreference(activity, true);
+                    Utils.toggleShowDeviceCalendarOnPreference(activity, true);
                     activity.restartActivity();
                 }
             }
@@ -258,7 +255,7 @@ public class CalendarFragment extends DaggerFragment {
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
-        String title = UIUtils.formatDeviceCalendarEventTitle(event);
+        String title = Utils.formatDeviceCalendarEventTitle(event);
         SpannableString ss = new SpannableString(title);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -269,8 +266,7 @@ public class CalendarFragment extends DaggerFragment {
                                             CalendarContract.Events.CONTENT_URI, event.getId())),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
-                    Toast.makeText(mainActivityDependency.getMainActivity(),
-                            R.string.device_calendar_does_not_support, Toast.LENGTH_SHORT).show();
+                    Utils.createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support);
                 }
             }
 
@@ -312,7 +308,7 @@ public class CalendarFragment extends DaggerFragment {
         mEventsBinding.shiftWorkTitle.setText(Utils.getShiftWorkTitle(jdn, false));
 
         List<AbstractEvent> events = Utils.getEvents(jdn,
-                CalendarUtils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
+                Utils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
@@ -412,7 +408,7 @@ public class CalendarFragment extends DaggerFragment {
 
         double moonPhase = 1;
         try {
-            moonPhase = new SunMoonPosition(CalendarUtils.getTodayJdn(), mCoordinate.getLatitude(),
+            moonPhase = new SunMoonPosition(Utils.getTodayJdn(), mCoordinate.getLatitude(),
                     mCoordinate.getLongitude(), 0, 0).getMoonPhase();
         } catch (Exception e) {
             e.printStackTrace();
@@ -442,7 +438,7 @@ public class CalendarFragment extends DaggerFragment {
         mMainBinding.cardsViewPager.measureCurrentView(mOwghatBinding.getRoot());
 
         if (mLastSelectedJdn == -1)
-            mLastSelectedJdn = CalendarUtils.getTodayJdn();
+            mLastSelectedJdn = Utils.getTodayJdn();
     }
 
     private void bringTodayYearMonth() {
@@ -451,7 +447,7 @@ public class CalendarFragment extends DaggerFragment {
 
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
-        selectDay(CalendarUtils.getTodayJdn());
+        selectDay(Utils.getTodayJdn());
     }
 
     public void afterShiftWorkChange() {
@@ -470,19 +466,20 @@ public class CalendarFragment extends DaggerFragment {
         sendBroadcastToMonthFragments(mViewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
-            long todayJdn = CalendarUtils.getTodayJdn();
+            long todayJdn = Utils.getTodayJdn();
             if (jdn != todayJdn) {
-                Toast.makeText(context, CalendarUtils.getA11yDaySummary(context, jdn,
-                        false, null, true,
-                        true, true), Toast.LENGTH_SHORT).show();
+                Utils.createAndShowShortSnackbar(getView(),
+                        Utils.getA11yDaySummary(context, jdn,
+                                false, null, true,
+                                true, true));
             }
         }
     }
 
     private int calculateViewPagerPositionFromJdn(long jdn) {
         CalendarType mainCalendar = Utils.getMainCalendar();
-        AbstractDate today = CalendarUtils.getTodayOfCalendar(mainCalendar);
-        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mainCalendar, jdn);
+        AbstractDate today = Utils.getTodayOfCalendar(mainCalendar);
+        AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn);
         return (today.getYear() - date.getYear()) * 12 + today.getMonth() - date.getMonth();
     }
 
@@ -505,18 +502,18 @@ public class CalendarFragment extends DaggerFragment {
             ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
                     R.layout.suggestion, android.R.id.text1);
             eventsAdapter.addAll(Utils.getAllEnabledEvents());
-            eventsAdapter.addAll(CalendarUtils.getAllEnabledAppointments(context));
+            eventsAdapter.addAll(Utils.getAllEnabledAppointments(context));
             mSearchAutoComplete.setAdapter(eventsAdapter);
             mSearchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
                 AbstractEvent ev = (AbstractEvent) parent.getItemAtPosition(position);
                 AbstractDate date = ev.getDate();
-                CalendarType type = CalendarUtils.getCalendarTypeFromDate(date);
-                AbstractDate today = CalendarUtils.getTodayOfCalendar(type);
+                CalendarType type = Utils.getCalendarTypeFromDate(date);
+                AbstractDate today = Utils.getTodayOfCalendar(type);
                 int year = date.getYear();
                 if (year == -1) {
                     year = today.getYear() + (date.getMonth() < today.getMonth() ? 1 : 0);
                 }
-                bringDate(CalendarUtils.getDateOfCalendar(type, year, date.getMonth(), date.getDayOfMonth()).toJdn());
+                bringDate(Utils.getDateOfCalendar(type, year, date.getMonth(), date.getDayOfMonth()).toJdn());
                 mSearchView.onActionViewCollapsed();
             });
         });
@@ -556,7 +553,7 @@ public class CalendarFragment extends DaggerFragment {
                 break;
             case R.id.add_event:
                 if (mLastSelectedJdn == -1)
-                    mLastSelectedJdn = CalendarUtils.getTodayJdn();
+                    mLastSelectedJdn = Utils.getTodayJdn();
 
                 addEventOnCalendar(mLastSelectedJdn);
                 break;

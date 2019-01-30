@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.FragmentWidgetNotification;
@@ -34,7 +33,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        setTheme(UIUtils.getThemeFromName(Utils.getThemeFromPreference(prefs)));
+        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(prefs)));
 
         Utils.applyAppLanguage(this);
         super.onCreate(savedInstanceState);

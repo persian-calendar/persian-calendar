@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Calendar;
@@ -330,7 +329,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         if (prayTimes == null || context == null)
             return;
 
-        isRTL = UIUtils.isRTL(context);
+        isRTL = Utils.isRTL(context);
         sunriseString = context.getString(R.string.sunriseSunView);
         middayString = context.getString(R.string.middaySunView);
         sunsetString = context.getString(R.string.sunsetSunView);

@@ -95,7 +95,7 @@ public class Equinox {
         calendar.set(Calendar.MONTH, (int) month - 1);
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, (int) minute);
+        calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
         return calendar.getTime();
     }

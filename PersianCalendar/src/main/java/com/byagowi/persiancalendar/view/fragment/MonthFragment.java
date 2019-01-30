@@ -19,8 +19,6 @@ import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
-import com.byagowi.persiancalendar.util.UIUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -81,7 +79,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         FragmentMonthBinding fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
                 container, false);
-        isRTL = UIUtils.isRTL(mainActivityDependency.getMainActivity());
+        isRTL = Utils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
@@ -105,7 +103,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         ///////
         CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
-        typedDate = CalendarUtils.getTodayOfCalendar(mainCalendar);
+        typedDate = Utils.getTodayOfCalendar(mainCalendar);
         int month = typedDate.getMonth() - offset;
         month -= 1;
         int year = typedDate.getYear();
@@ -117,14 +115,14 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             month += 12;
         }
         month += 1;
-        typedDate = CalendarUtils.getDateOfCalendar(mainCalendar, year, month, 1);
+        typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
 
         baseJdn = typedDate.toJdn();
-        monthLength = CalendarUtils.getMonthLength(mainCalendar, year, month);
+        monthLength = Utils.getMonthLength(mainCalendar, year, month);
 
-        int dayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
+        int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
 
-        long todayJdn = CalendarUtils.getTodayJdn();
+        long todayJdn = Utils.getTodayJdn();
         for (int i = 0; i < monthLength; i++) {
             long jdn = baseJdn + i;
             days.add(new DayEntity(jdn == todayJdn, jdn, dayOfWeek));
@@ -134,11 +132,11 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             }
         }
 
-        long startOfYearJdn = CalendarUtils.getDateOfCalendar(mainCalendar, year, 1, 1).toJdn();
-        int weekOfYearStart = CalendarUtils.calculateWeekOfYear(baseJdn, startOfYearJdn);
-        int weeksCount = 1 + CalendarUtils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
+        long startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, year, 1, 1).toJdn();
+        int weekOfYearStart = Utils.calculateWeekOfYear(baseJdn, startOfYearJdn);
+        int weeksCount = 1 + Utils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
-        int startingDayOfWeek = CalendarUtils.getDayOfWeekFromJdn(baseJdn);
+        int startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
         ///////
         ///////
         ///////
@@ -152,7 +150,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         if (calendarFragment.mFirstTime &&
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.mFirstTime = false;
-            calendarFragment.selectDay(CalendarUtils.getTodayJdn());
+            calendarFragment.selectDay(Utils.getTodayJdn());
             updateTitle();
         }
 
@@ -183,7 +181,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
 
     private void updateTitle() {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(
-                CalendarUtils.getMonthName(typedDate),
+                Utils.getMonthName(typedDate),
                 Utils.formatNumber(typedDate.getYear()));
     }
 }

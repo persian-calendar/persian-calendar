@@ -105,6 +105,7 @@ public class Constants {
     public static final String FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf";
 
     public static final char RLM = '\u200F';
+    public static final String ZWJ = "\u200D";
     public static final char[] ARABIC_INDIC_DIGITS = {'٠', '١', '٢', '٣', '٤', '٥',
             '٦', '٧', '٨', '٩'};
     public static final char[] ARABIC_DIGITS = {'0', '1', '2', '3', '4', '5', '6',

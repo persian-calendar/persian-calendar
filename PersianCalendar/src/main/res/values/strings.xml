@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="code">en</string>
+
     <!--Global-->
     <string name="app_name">Persian Calendar</string>
     <string name="widget_name">Persian Calendar</string>
@@ -25,9 +27,9 @@ Hamidreza Bayat (@HrBDev)
 Alireza Afkar (@alirezaafkar)
 Mehdi Dimyadi (@MEHDIMYADI)
 Ruhollah Nosrati (@runo280)"</string>
-    <string name="about_designers_list" translatable="false">"Mehrara Abedi (Icon design)
-Behdad Pournader (Previous designer)
-Iman Soltanian (Previous designer)"</string>
+    <string name="about_designers_list" translatable="false">"Mehrara Abedi (Designer)
+Behdad Pournader (Designer)
+Iman Soltanian (Designer)"</string>
     <string name="about_contributors_list" translatable="false">"Javad Arjmandi (@La-Volpe)
 Mehdi Sadeghi (@mehdisadeghi)
 Masood Fallahpoor (@MasoodFallahpoor)
@@ -84,9 +86,9 @@ Aysha Aminnejad (@aysha319)"</string>
 
     <string name="search_in_events">Search in events</string>
 
-    <string name="date_diff_text">Distance: %s days (~%s years and %s months and %s days)</string>
-    <string name="start_of_year_diff">%s days (~%s weeks or %s months) from start of the year</string>
-    <string name="end_of_year_diff">%s days (~%s weeks or %s months) to end of the year</string>
+    <string name="date_diff_text">Distance: %1$s days (~%2$s years and %3$s months and %4$s days)</string>
+    <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>
+    <string name="end_of_year_diff">%1$s days (~%2$s weeks or %3$s months) to end of the year</string>
     <string name="date_copied_clipboard">Copied to clipboard</string>
     <string name="year_name">Year name</string>
     <string name="year1">Monkey</string>
@@ -124,8 +126,8 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="sunriseSunView">Sunrise</string>
     <string name="middaySunView">Midday</string>
     <string name="sunsetSunView">Sunset</string>
-    <string name="length_of_day">Daytime: %sh %sm</string>
-    <string name="remaining_daylight">Remaining: %sh %sm</string>
+    <string name="length_of_day">Daytime: %1$sh %2$sm</string>
+    <string name="remaining_daylight">Remaining: %1$sh %2$sm</string>
     <string name="owghat">Pray times</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
@@ -137,7 +139,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="isha">Isha</string>
     <string name="midnight">Midnight</string>
 
-    <string name="spring_equinox">Spring equinox time of year %s: %s</string>
+    <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
 
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>
@@ -254,7 +256,7 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
-    <string name="version">Version %s</string>
+    <string name="version">Version %1$s</string>
     <string name="about_license">License</string>
     <string name="about_license_title">Application License</string>
     <string name="about_license_sum">Check GPL3 License and other license terms used on Persian Calendar.</string>
@@ -271,28 +273,29 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--TalkBack, a11y-->
     <string name="previous_month">Previous Month</string>
     <string name="next_month">Next Month</string>
-    <string name="week_days_name_column">%s column in days table</string>
+    <string name="week_days_name_column">%1$s column in days table</string>
     <string name="equivalent_to">Equivalent to</string>
     <string name="holiday_reason">Holiday because of</string>
-    <string name="nth_week_of_year">%s week of year</string>
+    <string name="nth_week_of_year">%1$s week of year</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
     <string name="shift_work_settings">Shift work settings</string>
     <string name="remove">Remove</string>
-    <string name="shift_work_starting_date">%s, selected on the calendar, is shift work starting day.</string>
-    <string name="shift_work_starting_date_edit">%s, previously selected, is the chosen shift work starting day.</string>
+    <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
+    <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
     <string name="shift_work_reset_button">Disable or reprogram</string>
-    <string name="n_minutes">%s minutes</string>
-    <string name="n_hours">%s hours</string>
-    <string name="n_minutes_and_hours">%s hours and %s minutes</string>
+    <string name="n_minutes">%1$s minutes</string>
+    <string name="n_hours">%1$s hours</string>
+    <string name="n_minutes_and_hours">%1$s hours and %2$s minutes</string>
     <string name="device_info">Device Information</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
-    <string name="n_till">%s till to %s</string>
-    <string name="shift_work_record_title">%s day(s) %s</string>
+    <string name="n_till">%1$s till to %2$s</string>
+    <string name="shift_work_record_title">%1$s day(s) %2$s</string>
     <string name="recurs">Recurs</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
+    <string name="shift_work_days_head">Length</string>
 
 </resources>

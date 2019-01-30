@@ -49,7 +49,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             // Maybe proguard-android-optimize.txt in future
-//      setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
+            // setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
         }
     }
 
@@ -65,15 +65,15 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.0.0")
-    implementation("android.arch.navigation:navigation-fragment:1.0.0-alpha09")
-    implementation("android.arch.navigation:navigation-ui:1.0.0-alpha09")
+    implementation("android.arch.navigation:navigation-fragment:1.0.0-alpha11")
+    implementation("android.arch.navigation:navigation-ui:1.0.0-alpha11")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
     // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
     // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
 
-    val daggerVersion = "2.20"
+    val daggerVersion = "2.21"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
     annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")

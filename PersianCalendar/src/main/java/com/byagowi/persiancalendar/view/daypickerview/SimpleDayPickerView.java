@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
@@ -16,7 +15,6 @@ import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding;
 import com.byagowi.persiancalendar.entity.CalendarTypeEntity;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
@@ -69,13 +67,12 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
 
         try {
             CalendarType selectedCalendarType = getSelectedCalendarType();
-            if (day > CalendarUtils.getMonthLength(selectedCalendarType, year, month))
+            if (day > Utils.getMonthLength(selectedCalendarType, year, month))
                 throw new Exception("Not a valid day");
 
-            return CalendarUtils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn();
+            return Utils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn();
         } catch (Exception e) {
-            Toast.makeText(getContext(), getContext().getString(R.string.date_exception),
-                    Toast.LENGTH_SHORT).show();
+            Utils.createAndShowShortSnackbar(getRootView(), R.string.date_exception);
             Log.e("SelectDayDialog", "", e);
         }
 
@@ -89,10 +86,10 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
         if (context == null) return;
 
         if (jdn == -1) {
-            jdn = CalendarUtils.getTodayJdn();
+            jdn = Utils.getTodayJdn();
         }
 
-        AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(
+        AbstractDate date = Utils.getDateFromJdnOfCalendar(
                 getSelectedCalendarType(),
                 jdn);
 

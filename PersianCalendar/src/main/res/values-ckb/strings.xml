@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="code">ckb</string>
+
     <string name="app_name">ڕۆژژمێری فارسی</string>
     <string name="cancel">ھەڵوەشاندنەوە</string>
     <string name="widget_name">ڕۆژژمێری فارسی</string>
@@ -37,7 +39,7 @@
     <string name="compass">جەمسەرنوێن</string>
     <string name="compass_not_found">جەمسەرنوێن نەدۆزرایەوە</string>
     <string name="language">زمان</string>
-    <string name="version">وەشان %s</string>
+    <string name="version">وەشان %1$s</string>
     <string name="athan">بانگ</string>
     <string name="athan_alarm_summary">بۆ ئەم نوێژانە بانگ بدرێ</string>
     <string name="athan_alarm">بانگەکان</string>
@@ -79,7 +81,7 @@
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
-    <string name="date_diff_text">مەودا: %s ڕۆژ (~%s ساڵ و %s مانگ و %s ڕۆژ)</string>
+    <string name="date_diff_text">مەودا: %1$s ڕۆژ (~%2$s ساڵ و %3$s مانگ و %4$s ڕۆژ)</string>
     <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
     <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
     <string name="week_of_year">ژمارەی حەفتە</string>
@@ -121,15 +123,15 @@
     <string name="about_report_bug_sum">"ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ."</string>
     <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
 بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
-    <string name="start_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) لە سەرەتای ساڵەوە</string>
-    <string name="end_of_year_diff">%s ڕۆژ (~%s حەفتە یان %s مانگ) بۆ کۆتای ساڵ</string>
+    <string name="start_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) لە سەرەتای ساڵەوە</string>
+    <string name="end_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
     <string name="sunriseSunView">ڕۆژھەڵات</string>
     <string name="middaySunView">نیوەڕۆ</string>
     <string name="sunsetSunView">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
-    <string name="length_of_day">ڕۆژگار: %sک %sخ</string>
-    <string name="remaining_daylight">ماوەوە: %sک %sخ</string>
+    <string name="length_of_day">ڕۆژگار: %1$sک %2$sخ</string>
+    <string name="remaining_daylight">ماوەوە: %1$sک %2$sخ</string>
     <string name="more">زیاتر</string>
     <string name="zodiac">کەلوو</string>
     <string name="capricorn">گیسک</string>
@@ -181,10 +183,10 @@
     <!--TalkBack, a11y-->
     <string name="previous_month">مانگی پاشەوە</string>
     <string name="next_month">مانگی پێشەوە</string>
-    <string name="week_days_name_column">ئەستوونی %s لە خشتەی ڕۆژەکاندا</string>
+    <string name="week_days_name_column">ئەستوونی %1$s لە خشتەی ڕۆژەکاندا</string>
     <string name="equivalent_to">ڕێککەوتە لەگەڵ</string>
     <string name="holiday_reason">پشوودان بە بۆنەی</string>
-    <string name="nth_week_of_year">حەفتەی %sی ساڵ</string>
+    <string name="nth_week_of_year">حەفتەی %1$sی ساڵ</string>
     <string name="north">باکوور</string>
     <string name="east">ڕۆژهەڵات</string>
     <string name="south">باشوور</string>
@@ -196,23 +198,24 @@
 
     <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
     <string name="update">نوێکردنەوە</string>
-    <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %s: %s</string>
+    <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %1$s: %2$s</string>
     <string name="shift_work_settings">ڕێکخستنی نۆرەکار</string>
     <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه.</string>
     <string name="remove">سڕینەوە</string>
-    <string name="shift_work_starting_date">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%s) سەرەتای نۆرەکارە.</string>
-    <string name="shift_work_starting_date_edit">ڕۆژی دیاریکراوی پێشوو (%s) سەرەتای نۆرەکارە.</string>
+    <string name="shift_work_starting_date">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%1$s) سەرەتای نۆرەکارە.</string>
+    <string name="shift_work_starting_date_edit">ڕۆژی دیاریکراوی پێشوو (%1$s) سەرەتای نۆرەکارە.</string>
     <string name="shift_work_reset_button">ناچالاککردن یان ڕێکخستنەوە</string>
-    <string name="n_minutes">%s خولەک</string>
-    <string name="n_hours">%s کاتکۆ</string>
-    <string name="n_minutes_and_hours">%s کاتکۆ و %s خولەک</string>
+    <string name="n_minutes">%1$s خولەک</string>
+    <string name="n_hours">%1$s کاتکۆ</string>
+    <string name="n_minutes_and_hours">%1$s کاتکۆ و %2$s خولەک</string>
     <string name="device_info">زانیاریی ئامراز</string>
     <string name="center_align_widgets_summary">ھێنانە ناوەڕاستی ویجتەکانی ٢×٢ و ٤×١</string>
     <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجت</string>
-    <string name="n_till">%s بۆ %s</string>
-    <string name="shift_work_record_title">%s ڕۆژ %s</string>
+    <string name="n_till">%1$s بۆ %2$s</string>
+    <string name="shift_work_record_title">%1$s ڕۆژ %2$s</string>
     <string name="recurs">پاتەکردنەوە</string>
     <string name="am">ب.ن</string>
     <string name="pm">د.ن</string>
+    <string name="shift_work_days_head">درێژایی</string>
 
 </resources>

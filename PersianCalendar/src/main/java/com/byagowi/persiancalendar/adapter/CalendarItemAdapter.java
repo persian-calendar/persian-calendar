@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding;
 import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.util.CalendarUtils;
 import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.Utils;
 
@@ -83,23 +82,23 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
         }
 
         public void bind(int position) {
-            AbstractDate date = CalendarUtils.getDateFromJdnOfCalendar(mCalendars.get(position), mJdn);
+            AbstractDate date = Utils.getDateFromJdnOfCalendar(mCalendars.get(position), mJdn);
 
             binding.linear.setVisibility(mExpanded ? View.VISIBLE : View.GONE);
-            binding.linear.setText(CalendarUtils.toLinearDate(date));
-            String firstCalendarString = CalendarUtils.formatDate(date);
+            binding.linear.setText(Utils.toLinearDate(date));
+            String firstCalendarString = Utils.formatDate(date);
             binding.container.setContentDescription(firstCalendarString);
             binding.day.setContentDescription("");
             binding.day.setText(Utils.formatNumber(date.getDayOfMonth()));
             binding.monthYear.setContentDescription("");
             binding.monthYear.setText(String.format("%s\n%s",
-                    CalendarUtils.getMonthName(date),
+                    Utils.getMonthName(date),
                     Utils.formatNumber(date.getYear())));
         }
 
         @Override
         public void onClick(View view) {
-            Utils.copyToClipboard(view.getContext(), "converted date", view.getContentDescription());
+            Utils.copyToClipboard(view, "converted date", view.getContentDescription());
         }
     }
 
