@@ -37,9 +37,9 @@
 
     <string name="search_in_events">البحث في المناسبات</string>
 
-    <string name="date_diff_text">الفرق: %s يوماً (~%s سنة و %s شهر و %s يوم)</string>
-    <string name="start_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) من بداية السنة</string>
-    <string name="end_of_year_diff">%s يوماً (~%s أسبوعاً أو %s شهراً) إلى آخر السنة</string>
+    <string name="date_diff_text">الفرق: %1$s يوماً (~%2$s سنة و %3$s شهر و %4$s يوم)</string>
+    <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>
+    <string name="end_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) إلى آخر السنة</string>
     <string name="date_copied_clipboard">تم النسخ إلى المحفظة</string>
     <string name="year_name">أسم السنة</string>
     <string name="year1">القرد</string>
@@ -77,8 +77,8 @@
     <string name="sunriseSunView">الشروق</string>
     <string name="middaySunView">الظهر</string>
     <string name="sunsetSunView">الغروب</string>
-    <string name="length_of_day">النهار: %sس %sد</string>
-    <string name="remaining_daylight">الوقت المتبقي: %sس %sدs</string>
+    <string name="length_of_day">النهار: %1$sس %2$sد</string>
+    <string name="remaining_daylight">الوقت المتبقي: %1$sس %2$sدs</string>
     <string name="owghat">أوقات الصلوات</string>
     <string name="imsak">الإمساك</string>
     <string name="fajr">أذان الفجر</string>
@@ -90,7 +90,7 @@
     <string name="isha">أذان العشاء</string>
     <string name="midnight">منتصف الليل</string>
 
-    <string name="spring_equinox">اعتدال ربيعي %s: %s</string>
+    <string name="spring_equinox">اعتدال ربيعي %1$s: %2$s</string>
 
     <!--Date Converter-->
     <string name="select_type_date">إختيار نوع التاريخ</string>
@@ -210,7 +210,7 @@
 
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>
-    <string name="version">الإصدار %s</string>
+    <string name="version">الإصدار %1$s</string>
     <string name="about_license">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
     <string name="about_license_sum">راجع  رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
@@ -227,26 +227,26 @@
     <!--TalkBack, a11y-->
     <string name="previous_month">الشهر السابق</string>
     <string name="next_month">الشهر القادم</string>
-    <string name="week_days_name_column">عَمود %s في جدول التواريخ</string>
+    <string name="week_days_name_column">عَمود %1$s في جدول التواريخ</string>
     <string name="equivalent_to">ما يُعادل</string>
     <string name="holiday_reason">عُطلة لأن</string>
-    <string name="nth_week_of_year">الأسبوع %s من السنة</string>
+    <string name="nth_week_of_year">الأسبوع %1$s من السنة</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="empty" />
     <string name="shift_work_settings">إعدادات إزاحة وقت العمل</string>
     <string name="remove">إزالة</string>
-    <string name="shift_work_starting_date">%s، حدد على التقويم، هو مدة إزاحة وقت العمل من اليوم.</string>
-    <string name="shift_work_starting_date_edit">%s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
+    <string name="shift_work_starting_date">%1$s، حدد على التقويم، هو مدة إزاحة وقت العمل من اليوم.</string>
+    <string name="shift_work_starting_date_edit">%1$s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
-    <string name="n_minutes">%s دقائق</string>
-    <string name="n_hours">%s ساعات</string>
-    <string name="n_minutes_and_hours">%s ساعات و %s دقائق</string>
+    <string name="n_minutes">%1$s دقائق</string>
+    <string name="n_hours">%1$s ساعات</string>
+    <string name="n_minutes_and_hours">%1$s ساعات و %2$s دقائق</string>
     <string name="device_info">معلومات الجهاز</string>
     <string name="center_align_widgets_summary">توسيط المصغر  4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
-    <string name="n_till">%s إلى %s</string>
-    <string name="shift_work_record_title">%s أيام %s</string>
+    <string name="n_till">%1$s إلى %2$s</string>
+    <string name="shift_work_record_title">%1$s أيام %2$s</string>
     <string name="recurs">تكرار</string>
     <string name="am">ص</string>
     <string name="pm">م</string>
