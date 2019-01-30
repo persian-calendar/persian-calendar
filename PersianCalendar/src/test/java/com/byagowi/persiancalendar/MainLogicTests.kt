@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.util.AstronomicalUtils
 import com.byagowi.persiancalendar.util.CalendarType
+import com.byagowi.persiancalendar.util.Utils
 import com.cepmuvakkit.times.view.QiblaCompassView
 import org.junit.Assert.*
 import org.junit.Test
