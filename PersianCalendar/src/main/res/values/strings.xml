@@ -298,4 +298,21 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="pm">PM</string>
     <string name="shift_work_days_head">Length</string>
 
+    <!-- Drug Alert -->
+    <string name="drugPeriod">Every</string>
+    <string name="ok">OK</string>
+    <string name="drugName">Name</string>
+    <string name="drugInfo">Drug information</string>
+    <string name="start">Start from</string>
+    <string name="alertTitle">Alert!</string>
+    <string name="emptyName">Name cannot be empty</string>
+    <string name="turnOFF">Turn OFF</string>
+
+    <string-array name="period_units">
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+        <item>Weeks</item>
+    </string-array>
+
 </resources>
