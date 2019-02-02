@@ -382,13 +382,13 @@ public class Utils {
 
             sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
 
-            if (getOnlyLanguage(getAppLanguage()).equals(resources.getString(R.string.code))
-                    || sShiftWorkTitles.size() == 0) {
-                String[] titles = resources.getStringArray(R.array.shift_work);
-                String[] keys = resources.getStringArray(R.array.shift_work_keys);
-                for (int i = 0; i < titles.length; ++i)
-                    sShiftWorkTitles.put(keys[i], titles[i]);
-            }
+            if (!getOnlyLanguage(getAppLanguage()).equals(resources.getString(R.string.code)))
+                applyAppLanguage(context);
+
+            String[] titles = resources.getStringArray(R.array.shift_work);
+            String[] keys = resources.getStringArray(R.array.shift_work_keys);
+            for (int i = 0; i < titles.length; ++i)
+                sShiftWorkTitles.put(keys[i], titles[i]);
         } catch (Exception e) {
             e.printStackTrace();
             sShiftWorks = Collections.emptyList();
