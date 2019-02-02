@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
@@ -37,15 +38,23 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    val appVerboseVersion = defaultConfig.versionName + "-" + arrayOf(
+        "git rev-parse --abbrev-ref HEAD",
+        "git rev-list HEAD --count",
+        "git rev-parse --short HEAD"
+    ).map { it.runCommand()?.trim() }.joinToString("-")
+
     buildTypes {
         getByName("debug") {
-            versionNameSuffix = "-" + arrayOf(
-                    "git rev-parse --abbrev-ref HEAD",
-                    "git rev-list HEAD --count",
-                    "git rev-parse --short HEAD"
-            ).map { it.runCommand()?.trim() }.joinToString("-")
+            buildOutputs.all {
+                (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-Debug-$appVerboseVersion.apk"
+            }
+            versionNameSuffix = "-" + appVerboseVersion
         }
         getByName("release") {
+            buildOutputs.all {
+                (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-Release-$appVerboseVersion.apk"
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             // Maybe proguard-android-optimize.txt in future
