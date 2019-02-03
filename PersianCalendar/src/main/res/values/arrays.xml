@@ -102,10 +102,11 @@
         <item>Gregorian Calendar</item>
     </string-array>
 
+    <!-- I don't know a suitable equivalent to this, see the other languages for the use -->
     <string-array name="calendar_type_abbr">
-        <item></item>
-        <item></item>
-        <item></item>
+        <item />
+        <item />
+        <item />
     </string-array>
 
     <!-- Should be matched with CalendarType -->
