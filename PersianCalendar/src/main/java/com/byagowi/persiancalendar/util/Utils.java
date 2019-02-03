@@ -1626,10 +1626,10 @@ public class Utils {
         int hour = clock.getHour();
         String suffix;
         if (hour >= 12) {
-            suffix = getAmString();
+            suffix = getPmString();
             hour -= 12;
         } else {
-            suffix = getPmString();
+            suffix = getAmString();
         }
         return baseFormatClock(hour, clock.getMinute()) + " " + suffix;
     }
