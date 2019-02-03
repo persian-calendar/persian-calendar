@@ -86,6 +86,7 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
 
             binding.linear.setVisibility(mExpanded ? View.VISIBLE : View.GONE);
             binding.linear.setText(Utils.toLinearDate(date));
+            binding.linear.setContentDescription(Utils.toLinearDate(date));
             String firstCalendarString = Utils.formatDate(date);
             binding.container.setContentDescription(firstCalendarString);
             binding.day.setContentDescription("");
