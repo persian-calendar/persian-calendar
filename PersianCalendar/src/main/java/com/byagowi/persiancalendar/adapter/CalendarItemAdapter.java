@@ -71,7 +71,6 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
             this.binding = binding;
 
             boolean applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled();
-            binding.linear.setVisibility(View.GONE);
 
             binding.monthYear.setTypeface(mCalendarFont);
             binding.day.setTypeface(mCalendarFont);
@@ -84,7 +83,6 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
         public void bind(int position) {
             AbstractDate date = Utils.getDateFromJdnOfCalendar(mCalendars.get(position), mJdn);
 
-            binding.linear.setVisibility(mExpanded ? View.VISIBLE : View.GONE);
             binding.linear.setText(Utils.toLinearDate(date));
             binding.linear.setContentDescription(Utils.toLinearDate(date));
             String firstCalendarString = Utils.formatDate(date);

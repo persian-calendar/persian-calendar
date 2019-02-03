@@ -41,6 +41,12 @@
         <item>عیسوی</item>
     </string-array>
 
+    <string-array name="calendar_type_abbr">
+        <item>شمسی</item>
+        <item>قمری</item>
+        <item>عیسوی</item>
+    </string-array>
+
     <string-array name="week_days">
         <item>سنیچر</item>
         <item>اتوار</item>

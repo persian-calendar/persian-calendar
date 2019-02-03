@@ -26,14 +26,14 @@
             android:title="@string/skin"
             settings:iconSpaceReserved="false" />
 
-    </androidx.preference.PreferenceCategory>
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="PersianDigits"
+            android:summary="@string/enable_persian_digits"
+            android:title="@string/persian_digits"
+            settings:iconSpaceReserved="false" />
 
-    <androidx.preference.SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:key="PersianDigits"
-        android:summary="@string/enable_persian_digits"
-        android:title="@string/persian_digits"
-        settings:iconSpaceReserved="false" />
+    </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         android:layout="@layout/category_preference"

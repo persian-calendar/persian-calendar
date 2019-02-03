@@ -10,6 +10,13 @@
         settings:iconSpaceReserved="false" />
 
     <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="numericalDatePreferred"
+        android:summary="استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان"
+        android:title="ترجیح نمایش عددی تاریخ"
+        settings:iconSpaceReserved="false" />
+
+    <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="WidgetClock"
         android:summary="@string/showing_clock_on_widget"

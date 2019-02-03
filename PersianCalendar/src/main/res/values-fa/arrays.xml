@@ -41,6 +41,12 @@
         <item>میلادی</item>
     </string-array>
 
+    <string-array name="calendar_type_abbr">
+        <item>شمسی</item>
+        <item>قمری</item>
+        <item>میلادی</item>
+    </string-array>
+
     <string-array name="week_days">
         <item>شنبه</item>
         <item>یک‌شنبه</item>

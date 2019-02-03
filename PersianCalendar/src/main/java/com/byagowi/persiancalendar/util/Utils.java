@@ -230,7 +230,8 @@ public class Utils {
     static private String sAM = DEFAULT_AM;
     static private String sPM = DEFAULT_PM;
     private static long latestToastShowTime = -1;
-    private static AudioManager audioManager = null;
+    private static boolean numericalDatePreferred = false;
+    private static String[] calendarTypesTitleAbbr = new String[]{};
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -363,6 +364,12 @@ public class Utils {
         whatToShowOnWidgets = prefs.getStringSet("what_to_show",
                 new HashSet<>(Arrays.asList(resources.getStringArray(R.array.what_to_show_default))));
         astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false);
+        numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false);
+
+        if (!getOnlyLanguage(getAppLanguage()).equals(resources.getString(R.string.code)))
+            applyAppLanguage(context);
+
+        calendarTypesTitleAbbr = context.getResources().getStringArray(R.array.calendar_type_abbr);
 
         sShiftWorkTitles = new HashMap<>();
         try {
@@ -381,9 +388,6 @@ public class Utils {
             for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
 
             sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
-
-            if (!getOnlyLanguage(getAppLanguage()).equals(resources.getString(R.string.code)))
-                applyAppLanguage(context);
 
             String[] titles = resources.getStringArray(R.array.shift_work);
             String[] keys = resources.getStringArray(R.array.shift_work_keys);
@@ -419,6 +423,19 @@ public class Utils {
 
         AccessibilityManager a11y = (AccessibilityManager) context.getSystemService(ACCESSIBILITY_SERVICE);
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
+    }
+
+    public static String getCalendarNameAbbr(AbstractDate date) {
+        if (calendarTypesTitleAbbr.length < 3) return "";
+
+        // It should match with calendar_type array
+        if (date instanceof PersianDate) {
+            return calendarTypesTitleAbbr[0];
+        } if (date instanceof IslamicDate) {
+            return calendarTypesTitleAbbr[1];
+        } if (date instanceof CivilDate) {
+            return calendarTypesTitleAbbr[2];
+        } else return "";
     }
 
     public static String getThemeFromPreference(SharedPreferences prefs) {
@@ -1712,15 +1729,13 @@ public class Utils {
         Context context = view.getContext();
         if (context == null) return;
 
-        if (audioManager == null) {
-            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        }
-
         long now = System.currentTimeMillis();
         if (now - latestToastShowTime > twoSeconds) {
             createAndShowShortSnackbar(view, resId);
             // https://stackoverflow.com/a/29423018
-            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null)
+                audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
             latestToastShowTime = now;
         }
     }
@@ -1809,9 +1824,10 @@ public class Utils {
     }
 
     static public String formatDate(AbstractDate date) {
-        return String.format(getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
-                formatNumber(date.getDayOfMonth()), getMonthName(date),
-                formatNumber(date.getYear()));
+        return numericalDatePreferred ? (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim() : (
+                String.format(getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
+                        formatNumber(date.getDayOfMonth()), getMonthName(date),
+                        formatNumber(date.getYear())));
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {
