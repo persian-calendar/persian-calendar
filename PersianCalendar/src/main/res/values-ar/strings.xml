@@ -251,5 +251,7 @@
     <string name="am">ص</string>
     <string name="pm">م</string>
     <string name="shift_work_days_head">طول</string>
+    <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
+    <string name="prefer_linear_date">Prefer linear form of dates</string>
 
 </resources>

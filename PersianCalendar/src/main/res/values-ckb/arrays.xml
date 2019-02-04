@@ -36,15 +36,15 @@
     </string-array>
 
     <string-array name="calendar_type">
-        <item>ک.ھ</item>
-        <item>ک.م</item>
-        <item>ز.</item>
+        <item>کۆچیی ھەتاوی</item>
+        <item>کۆچیی مانگی</item>
+        <item>زایینی</item>
     </string-array>
 
     <string-array name="calendar_type_abbr">
-        <item>ھەتاوی</item>
-        <item>مانگی</item>
-        <item>زایینی</item>
+        <item>ک.ھ</item>
+        <item>ک.م</item>
+        <item>ز.</item>
     </string-array>
 
     <string-array name="week_days">

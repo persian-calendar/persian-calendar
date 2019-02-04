@@ -12,8 +12,8 @@
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="numericalDatePreferred"
-        android:summary="استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان"
-        android:title="ترجیح نمایش عددی تاریخ"
+        android:summary="@string/prefer_linear_date_summary"
+        android:title="@string/prefer_linear_date"
         settings:iconSpaceReserved="false" />
 
     <androidx.preference.SwitchPreferenceCompat
