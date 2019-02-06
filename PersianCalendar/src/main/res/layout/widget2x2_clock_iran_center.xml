@@ -19,7 +19,7 @@
         android:fontFamily="sans-serif-thin"
         android:format12Hour="H:mm"
         android:format24Hour="H:mm"
-        android:gravity="right"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:textSize="34sp"
         android:timeZone="Asia/Tehran" />
