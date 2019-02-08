@@ -429,13 +429,10 @@ public class Utils {
         if (calendarTypesTitleAbbr.length < 3) return "";
 
         // It should match with calendar_type array
-        if (date instanceof PersianDate) {
-            return calendarTypesTitleAbbr[0];
-        } if (date instanceof IslamicDate) {
-            return calendarTypesTitleAbbr[1];
-        } if (date instanceof CivilDate) {
-            return calendarTypesTitleAbbr[2];
-        } else return "";
+        if (date instanceof PersianDate) return calendarTypesTitleAbbr[0];
+        else if (date instanceof IslamicDate) return calendarTypesTitleAbbr[1];
+        else if (date instanceof CivilDate) return calendarTypesTitleAbbr[2];
+        else return "";
     }
 
     public static String getThemeFromPreference(SharedPreferences prefs) {
@@ -669,6 +666,7 @@ public class Utils {
         CivilDate civilDate = date instanceof CivilDate
                 ? (CivilDate) date
                 : new CivilDate(date.toJdn());
+        if (weekDays == null) return "";
         return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7];
     }
 
