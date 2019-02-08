@@ -40,7 +40,7 @@
     <string name="date_diff_text">الفرق: %1$s يوماً (~%2$s سنة و %3$s شهر و %4$s يوم)</string>
     <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>
     <string name="end_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) إلى آخر السنة</string>
-    <string name="date_copied_clipboard">تم النسخ إلى المحفظة</string>
+    <string name="date_copied_clipboard">«%1$s» تم النسخ إلى المحفظة</string>
     <string name="year_name">أسم السنة</string>
     <string name="year1">القرد</string>
     <string name="year2">الديك</string>

@@ -90,7 +90,7 @@ Aysha Aminnejad (@aysha319)"</string>
     <string name="date_diff_text">Distance: %1$s days (~%2$s years and %3$s months and %4$s days)</string>
     <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>
     <string name="end_of_year_diff">%1$s days (~%2$s weeks or %3$s months) to end of the year</string>
-    <string name="date_copied_clipboard">Copied to clipboard</string>
+    <string name="date_copied_clipboard">"%1$s" copied to clipboard.</string>
     <string name="year_name">Year name</string>
     <string name="year1">Monkey</string>
     <string name="year2">Rooster</string>

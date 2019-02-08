@@ -241,11 +241,11 @@ public class Utils {
         return new ArrayList<>(sShiftWorks);
     }
 
-    static String getAmString() {
+    private static String getAmString() {
         return sAM;
     }
 
-    static String getPmString() {
+    private static String getPmString() {
         return sPM;
     }
 
@@ -425,7 +425,7 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    public static String getCalendarNameAbbr(AbstractDate date) {
+    private static String getCalendarNameAbbr(AbstractDate date) {
         if (calendarTypesTitleAbbr.length < 3) return "";
 
         // It should match with calendar_type array
@@ -498,10 +498,6 @@ public class Utils {
         }
 
         return result;
-    }
-
-    static boolean isClockIn12() {
-        return !clockIn24;
     }
 
     static boolean isShownOnWidgets(String infoType) {
@@ -1530,11 +1526,12 @@ public class Utils {
     public static void copyToClipboard(View view, CharSequence label, CharSequence text) {
         ClipboardManager clipboardService =
                 (ClipboardManager) view.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboardService != null && label != null && text != null) {
-            clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
-            createAndShowShortSnackbar(view,
-                    text + " " + view.getContext().getString(R.string.date_copied_clipboard));
-        }
+
+        if (clipboardService == null || label == null || text == null) return;
+
+        clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
+        createAndShowShortSnackbar(view,
+                String.format(view.getContext().getString(R.string.date_copied_clipboard), text));
     }
 
     public static void createAndShowSnackbar(@Nullable View view, String message, int duration) {
@@ -1623,7 +1620,7 @@ public class Utils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    public static String baseFormatClock(int hour, int minute) {
+    private static String baseFormatClock(int hour, int minute) {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
@@ -1635,7 +1632,7 @@ public class Utils {
     }
 
     static public String getFormattedClock(Clock clock, boolean forceIn12) {
-        boolean in12 = isClockIn12() || forceIn12;
+        boolean in12 = !clockIn24 || forceIn12;
         if (!in12) return baseFormatClock(clock.getHour(), clock.getMinute());
 
         int hour = clock.getHour();
@@ -1717,7 +1714,7 @@ public class Utils {
                 context.getResources().getResourceEntryName(R.raw.abdulbasit));
     }
 
-    static String getOnlyLanguage(String string) {
+    private static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
