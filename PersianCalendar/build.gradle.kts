@@ -49,7 +49,7 @@ android {
             buildOutputs.all {
                 (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-Debug-$appVerboseVersion.apk"
             }
-            versionNameSuffix = "-" + appVerboseVersion
+            versionNameSuffix = "-$appVerboseVersion"
         }
         getByName("release") {
             buildOutputs.all {
@@ -74,8 +74,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.0.0")
-    implementation("android.arch.navigation:navigation-fragment:1.0.0-alpha11")
-    implementation("android.arch.navigation:navigation-ui:1.0.0-alpha11")
+    implementation("android.arch.navigation:navigation-fragment:1.0.0-beta01")
+    implementation("android.arch.navigation:navigation-ui:1.0.0-beta01")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
