@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar.entity;
 
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 
+import androidx.annotation.NonNull;
+
 abstract public class AbstractEvent<T extends AbstractDate> {
     T date;
     String title;
@@ -15,6 +17,7 @@ abstract public class AbstractEvent<T extends AbstractDate> {
         return holiday;
     }
 
+    @NonNull
     public String toString() {
         return title;
     }

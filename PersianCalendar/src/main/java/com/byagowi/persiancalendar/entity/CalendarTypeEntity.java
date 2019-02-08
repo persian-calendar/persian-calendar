@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar.entity;
 
 import com.byagowi.persiancalendar.util.CalendarType;
 
+import androidx.annotation.NonNull;
+
 public class CalendarTypeEntity {
     private final CalendarType type;
     private final String title;
@@ -15,6 +17,7 @@ public class CalendarTypeEntity {
         return type;
     }
 
+    @NonNull
     public String toString() {
         return title;
     }

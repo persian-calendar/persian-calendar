@@ -12,11 +12,11 @@ public class AthanVolumePreference extends DialogPreference {
         setDialogIcon(null);
     }
 
-    public int getVolume() {
+    int getVolume() {
         return getPersistedInt(1);
     }
 
-    public void setVolume(int volume) {
+    void setVolume(int volume) {
         final boolean wasBlocking = shouldDisableDependents();
         persistInt(volume);
         final boolean isBlocking = shouldDisableDependents();

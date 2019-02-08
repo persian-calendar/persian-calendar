@@ -484,7 +484,7 @@ public class CalendarFragment extends DaggerFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.calendar_menu_buttons, menu);
@@ -545,7 +545,7 @@ public class CalendarFragment extends DaggerFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
                 SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),

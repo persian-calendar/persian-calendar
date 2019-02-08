@@ -123,7 +123,7 @@ public class CompassFragment extends DaggerFragment {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setCompassMetrics();
     }

@@ -201,7 +201,7 @@ public class PrayTimesCalculator {
             portion = 1d / 60d * angle;
         }
         if (HIGH_LATS_METHOD == CalculationMethod.HighLatMethods.OneSeventh) {
-            portion = 1 / 7;
+            portion = 1d / 7d;
         }
         return portion * night;
     }

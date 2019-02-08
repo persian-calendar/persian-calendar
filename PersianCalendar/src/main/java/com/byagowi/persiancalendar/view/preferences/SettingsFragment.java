@@ -48,6 +48,7 @@ public class SettingsFragment extends DaggerFragment {
             this.pageCount = pageCount;
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = new Fragment();

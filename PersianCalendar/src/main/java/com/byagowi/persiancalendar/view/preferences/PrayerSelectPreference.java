@@ -16,12 +16,12 @@ public class PrayerSelectPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    public Set<String> getPrayers() {
+    Set<String> getPrayers() {
         // convert comma separated string to a set
         return new HashSet<>(Arrays.asList(TextUtils.split(getPersistedString(""), ",")));
     }
 
-    public void setPrayers(Set<String> prayers) {
+    void setPrayers(Set<String> prayers) {
         final boolean wasBlocking = shouldDisableDependents();
         // convert set to a comma separated string
         persistString(TextUtils.join(",", prayers));

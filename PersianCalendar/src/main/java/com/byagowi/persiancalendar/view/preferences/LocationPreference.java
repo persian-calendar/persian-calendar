@@ -16,7 +16,7 @@ public class LocationPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    public void setSelected(String selected) {
+    void setSelected(String selected) {
         final boolean wasBlocking = shouldDisableDependents();
         persistString(selected);
         final boolean isBlocking = shouldDisableDependents();

@@ -166,7 +166,7 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(@NonNull DialogInterface dialog) {
         if (latitude != null && longitude != null) {
             SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
             editor.putString(Constants.PREF_LATITUDE, latitude);

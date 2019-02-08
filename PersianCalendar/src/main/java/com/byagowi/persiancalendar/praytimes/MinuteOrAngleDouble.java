@@ -9,7 +9,7 @@ public class MinuteOrAngleDouble {
         this.isMin = isMinute;
     }
 
-    public boolean isMinute() {
+    boolean isMinute() {
         return isMin;
     }
 

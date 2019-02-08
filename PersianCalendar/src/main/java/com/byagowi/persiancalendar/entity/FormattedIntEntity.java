@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.entity;
 
+import androidx.annotation.NonNull;
+
 public class FormattedIntEntity {
     final private int value;
     final private String title;
@@ -13,6 +15,7 @@ public class FormattedIntEntity {
         return value;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return title;
