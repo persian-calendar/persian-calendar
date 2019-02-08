@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -18,6 +19,7 @@ public class CalendarAdapter extends FragmentStatePagerAdapter {
         mCalendarAdapterHelper = calendarAdapterHelper;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         MonthFragment fragment = new MonthFragment();

@@ -37,6 +37,7 @@ public class CardTabsAdapter extends FragmentStatePagerAdapter {
         return mTitles.get(position);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         return TabFragment.newInstance(mTabs.get(position));

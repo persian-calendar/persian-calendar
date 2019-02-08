@@ -6,7 +6,7 @@ public class FallbackIslamicConverter {
 
     private static int NMONTHS = (1405 * 12 + 1);
 
-    static long floor(double d) {
+    private static long floor(double d) {
         return (long) Math.floor(d);
     }
 
