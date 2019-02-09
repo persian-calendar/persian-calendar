@@ -37,6 +37,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ## Build
 
-1. `git clone --depth=1 https://github.com/ebraminio/DroidPersianCalendar`
+1. `git clone --depth=1 --single-branch --branch master https://github.com/ebraminio/DroidPersianCalendar`
 1. Import the project on Android Studio
 
