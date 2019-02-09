@@ -149,7 +149,7 @@ public class QiblaCompassView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.radius = Math.min(px, py);
+        this.radius = Math.min(px - px / 12, py - py / 12);
         this.r = radius / 10; // Sun Moon radius;
         // over here
         qiblaInfo = sunMoonPosition.getDestinationHeading();
