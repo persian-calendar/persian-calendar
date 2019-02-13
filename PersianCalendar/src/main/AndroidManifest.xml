@@ -57,6 +57,14 @@
             android:launchMode="singleTop"
             android:theme="@style/FullscreenTheme" />
 
+        <activity
+            android:name=".view.reminder.activity.ReminderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/FullscreenTheme" />
+
         <receiver
             android:name=".service.BroadcastReceivers"
             android:exported="false">
@@ -128,6 +136,19 @@
                 android:resource="@xml/persiancalendar_provider2x2" />
         </receiver>
 
+        <receiver
+            android:name=".service.ReminderAlert"
+            android:exported="false"
+            android:label="@string/widget_name"/>
+        <receiver
+            android:name=".service.ResetService"
+            android:exported="false"
+            android:label="@string/widget_name">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".DashClockUpdate"
             android:icon="@drawable/day18"
@@ -164,6 +185,14 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".service.RestoreReminderAlert"
+            android:label="Reminder Service" />
+
+        <service
+            android:name=".service.ReminderNotification"
+            android:label="Reminder Service" />
 
     </application>
 

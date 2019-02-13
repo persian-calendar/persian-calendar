@@ -301,4 +301,20 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
 
+    <!-- Reminder -->
+    <string name="reminderPeriod">Every</string>
+    <string name="ok">OK</string>
+    <string name="reminder">Reminder</string>
+    <string name="reminderInfo">Reminder information</string>
+    <string name="start">Start from</string>
+    <string name="alertTitle">Alert!</string>
+    <string name="emptyName">Name cannot be empty</string>
+    <string name="turnOFF">Turn OFF</string>
+
+    <string-array name="period_units">
+        <item>Minutes</item>
+        <item>Hours</item>
+        <item>Days</item>
+        <item>Weeks</item>
+    </string-array>
 </resources>
