@@ -661,7 +661,7 @@ public class Utils {
     static public String getWeekDayName(AbstractDate date) {
         CivilDate civilDate = date instanceof CivilDate
                 ? (CivilDate) date
-                : new CivilDate(date.toJdn());
+                : new CivilDate(date);
         if (weekDays == null) return "";
         return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7];
     }

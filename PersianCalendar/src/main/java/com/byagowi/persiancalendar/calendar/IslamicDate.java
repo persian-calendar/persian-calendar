@@ -23,6 +23,10 @@ public class IslamicDate extends AbstractDate {
         super(jdn);
     }
 
+    public IslamicDate(AbstractDate date) {
+        super(date);
+    }
+
     @Override
     public long toJdn() {
         int year = getYear(), month = getMonth(), day = getDayOfMonth();

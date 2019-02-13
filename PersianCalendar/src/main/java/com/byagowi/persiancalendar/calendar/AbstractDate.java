@@ -35,6 +35,10 @@ public abstract class AbstractDate {
         this.dayOfMonth = result[2];
     }
 
+    public AbstractDate(AbstractDate date) {
+        this(date.toJdn());
+    }
+
     // Things needed to be implemented by subclasses
     public abstract long toJdn();
 

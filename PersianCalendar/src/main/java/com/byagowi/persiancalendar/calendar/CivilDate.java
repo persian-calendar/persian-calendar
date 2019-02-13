@@ -15,6 +15,10 @@ public class CivilDate extends AbstractDate {
         super(jdn);
     }
 
+    public CivilDate(AbstractDate date) {
+        super(date);
+    }
+
     // TODO Is it correct to return a CivilDate as a JulianDate?
     private static int[] julianFromJdn(long jdn) {
         long j = jdn + 1402;

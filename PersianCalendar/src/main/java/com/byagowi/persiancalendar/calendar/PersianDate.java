@@ -15,6 +15,10 @@ public class PersianDate extends AbstractDate {
         super(jdn);
     }
 
+    public PersianDate(AbstractDate date) {
+        super(date);
+    }
+
     private static long floor(double d) {
         return (long) Math.floor(d);
     }
