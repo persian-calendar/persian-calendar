@@ -41,7 +41,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     @Inject
     ReminderFragmentDependency reminderFragmentDependency;
 
-    static EditReminderDialog newInstance(int id) {
+    static EditReminderDialog newInstance(long id) {
         Bundle args = new Bundle();
         args.putLong(Constants.REMINDER_ID, id);
 

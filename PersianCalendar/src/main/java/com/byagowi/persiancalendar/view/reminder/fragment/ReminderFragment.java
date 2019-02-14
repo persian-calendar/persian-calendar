@@ -122,7 +122,10 @@ public class ReminderFragment extends DaggerFragment {
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
                 mBinding = binding;
-
+                mBinding.getRoot().setOnClickListener(v -> {
+                    EditReminderDialog.newInstance(remindersList.get(mPosition).id).show(getChildFragmentManager(),
+                            EditReminderDialog.class.getName());
+                });
                 mBinding.delete.setOnClickListener(v -> {
                     List<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
                     if (reminders.remove(remindersList.get(mPosition)))
