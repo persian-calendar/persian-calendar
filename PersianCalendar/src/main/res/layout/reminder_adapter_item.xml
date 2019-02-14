@@ -22,7 +22,7 @@
             android:id="@+id/delete"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/ic_delete_alarm"
+            android:background="@drawable/ic_remove_button"
             android:focusable="false"
             android:focusableInTouchMode="false" />
 
