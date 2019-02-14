@@ -54,6 +54,7 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
+import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -232,6 +233,11 @@ public class Utils {
     private static long latestToastShowTime = -1;
     private static boolean numericalDatePreferred = false;
     private static String[] calendarTypesTitleAbbr = new String[]{};
+    private static List<ReminderDetails> sReminderDetails = Collections.emptyList();
+
+    public static List<ReminderDetails> getRemiderDetails() {
+        return sReminderDetails;
+    }
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -401,6 +407,8 @@ public class Utils {
             sShiftWorkPeriod = 0;
             sShiftWorkRecurs = true;
         }
+
+        sReminderDetails = updateSavedReminders(context);
 
         switch (getAppLanguage()) {
             case LANG_FA:
@@ -2045,5 +2053,98 @@ public class Utils {
         }
 
         return result.toString();
+    }
+
+    private static TimeUnit timeUnitFromString(String string) {
+        switch (string) {
+            case "m":
+                return TimeUnit.MINUTES;
+            case "h":
+                return TimeUnit.HOURS;
+            default:
+            case "d":
+                return TimeUnit.DAYS;
+        }
+    }
+
+    private static String timeUnitToString(TimeUnit unit) {
+        switch (unit) {
+            case MINUTES:
+                return "m";
+            case HOURS:
+                return "h";
+            default:
+            case DAYS:
+                return "d";
+        }
+    }
+
+    private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
+
+    private static List<ReminderDetails> updateSavedReminders(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
+        if (TextUtils.isEmpty(storedJson))
+            storedJson = "[]";
+
+        List<ReminderDetails> reminders = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(storedJson);
+            int length = jsonArray.length();
+            for (int i = 0; i < length; ++i) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                reminders.add(new ReminderDetails(
+                        jsonObject.getLong("id"),
+                        jsonObject.getString("name"),
+                        jsonObject.getString("info"),
+                        timeUnitFromString(jsonObject.getString("unit")),
+                        jsonObject.getInt("quantity"),
+                        jsonObject.getLong("startTime")
+                ));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return reminders;
+    }
+
+    public static void storeReminders(Context context, List<ReminderDetails> reminders) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        try {
+            JSONArray json = new JSONArray();
+            for (ReminderDetails reminder : reminders) {
+                JSONObject object = new JSONObject();
+                object.put("id", reminder.id);
+                object.put("name", reminder.name);
+                object.put("info", reminder.info);
+                object.put("unit", timeUnitToString(reminder.unit));
+                object.put("quantity", reminder.quantity);
+                object.put("startTime", reminder.startTime);
+                json.put(object);
+            }
+
+            String serializedJson = json.toString();
+
+            // Just don't store huge objects
+            if (serializedJson.length() > 2000)
+                return;
+
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putString(REMINDERS_STORE_KEY, serializedJson);
+            edit.apply();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Nullable
+    public static ReminderDetails getReminderById(long id) {
+        for (ReminderDetails reminder : sReminderDetails) {
+            if (reminder.id == id) return reminder;
+        }
+        return null;
     }
 }

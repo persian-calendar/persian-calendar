@@ -19,7 +19,7 @@
                 android:padding="6dip">
 
                 <EditText
-                    android:id="@+id/et_name"
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -27,7 +27,7 @@
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/et_info"
+                    android:id="@+id/info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -54,12 +54,12 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spin_per_q"
+                        android:id="@+id/quantity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spin_per_u"
+                        android:id="@+id/unit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -85,7 +85,7 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_time"
+                        android:id="@+id/time"
                         style="?android:attr/spinnerStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

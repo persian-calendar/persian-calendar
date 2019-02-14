@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.database.DatabaseManager;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 
 import java.util.Arrays;
@@ -75,17 +74,15 @@ public class ReminderFragment extends DaggerFragment {
     }
 
     class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
-        DatabaseManager mDatabaseManager;
 
         ReminderAdapter() {
-            mDatabaseManager = new DatabaseManager(mainActivityDependency.getMainActivity());
             refresh();
         }
 
         List<ReminderDetails> allEvents = Collections.emptyList();
 
         private void refresh() {
-            allEvents = Arrays.asList(new DatabaseManager(getActivity()).getAllEvents());
+            allEvents = Utils.getRemiderDetails();
         }
 
         @NonNull
@@ -117,15 +114,15 @@ public class ReminderFragment extends DaggerFragment {
 
             public void bind(int position) {
                 ReminderDetails reminderDetails = allEvents.get(position);
-                mBinding.name.setText(reminderDetails.getReminderName());
+                mBinding.name.setText(reminderDetails.name);
                 mBinding.period.setText(
                         String.format("%s %s %s",
                                 mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
-                                Utils.formatNumber(reminderDetails.getReminderPeriod().getQuantity()),
-                                reminderDetails.getReminderPeriod().getUnit()));
+                                Utils.formatNumber(reminderDetails.quantity),
+                                reminderDetails.unit));
 
                 mBinding.delete.setOnClickListener(v -> {
-                    mDatabaseManager.removeEvent(reminderDetails.getId());
+//                    mDatabaseManager.removeEvent(reminderDetails.getId());
                     //FIXME
                 });
             }

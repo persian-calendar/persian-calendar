@@ -9,21 +9,24 @@ import android.widget.ArrayAdapter;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentEditReminderBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.reminder.constants.Constants;
-import com.byagowi.persiancalendar.view.reminder.database.DatabaseManager;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderUnit;
-import com.byagowi.persiancalendar.view.reminder.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
@@ -32,27 +35,52 @@ import dagger.android.support.DaggerAppCompatDialogFragment;
  * MEHDIMYADI
  */
 public class EditReminderDialog extends DaggerAppCompatDialogFragment {
-    private static String BUNDLE_KEY = "id";
-
     @Inject
     MainActivityDependency mainActivityDependency;
 
-    private SimpleDateFormat time_format;
-    private SimpleDateFormat date_format;
-    private Calendar calendar;
-    private ReminderDetails event;
-
-    private DatabaseManager databaseManager;
-
-    private long id;
-
-    public static EditReminderDialog newInstance(int id) {
+    static EditReminderDialog newInstance(int id) {
         Bundle args = new Bundle();
-        args.putLong(BUNDLE_KEY, id);
+        args.putLong(Constants.REMINDER_ID, id);
 
         EditReminderDialog fragment = new EditReminderDialog();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private static int unitToOrdination(TimeUnit unit) {
+        switch (unit) {
+            case MINUTES:
+                return 0;
+            case HOURS:
+                return 1;
+            default:
+            case DAYS:
+                return 2;
+        }
+    }
+
+    private static TimeUnit ordinationToUnit(int ordination) {
+        switch (ordination) {
+            case 0:
+                return TimeUnit.MINUTES;
+            case 1:
+                return TimeUnit.HOURS;
+            default:
+            case 2:
+                return TimeUnit.DAYS;
+        }
+    }
+
+    @Nullable
+    private static ReminderDetails findReminderById(long id) {
+        List<ReminderDetails> reminderDetails = Utils.getRemiderDetails();
+        int length = reminderDetails.size();
+        for (int i = 0; i < length; ++i) {
+            if (id == reminderDetails.get(i).id) {
+                return reminderDetails.get(i);
+            }
+        }
+        return null;
     }
 
     @NonNull
@@ -62,42 +90,40 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
         FragmentEditReminderBinding binding = FragmentEditReminderBinding.inflate(LayoutInflater.from(mainActivity), null, false);
 
+        long tmpId = new Random().nextInt();
         Bundle args = getArguments();
-        if (args != null) {
-            id = args.getLong(Constants.EVENT_ID, -1);
-        }
+        if (args != null) tmpId = args.getLong(Constants.REMINDER_ID, tmpId);
+        final long id = tmpId;
 
-        databaseManager = new DatabaseManager(getActivity());
-        event = databaseManager.getEvent(id);
-        time_format = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        date_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        binding.spinPerQ.setAdapter(new ArrayAdapter<>(mainActivity,
-                R.layout.reminder_item, Utils.getQuantity()));
-        binding.spinPerU.setAdapter(ArrayAdapter.createFromResource(mainActivity,
+        String[] quantity = new String[Constants.MAX_QUANTITY - 1];
+        for (int i = 1; i < Constants.MAX_QUANTITY; i++)
+            quantity[i - 1] = String.valueOf(i);
+        binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
+                R.layout.reminder_item, quantity));
+        binding.unit.setAdapter(ArrayAdapter.createFromResource(mainActivity,
                 R.array.period_units, R.layout.reminder_item));
 
-        calendar = Calendar.getInstance();
-        if (event != null) {
-            binding.etName.setText(event.getReminderName());
-            binding.etInfo.setText(event.getReminderInfo());
-            binding.spinPerQ.setSelection(event.getReminderPeriod().getQuantity() - 1);
-            binding.spinPerU.setSelection(Utils.getUnit(mainActivity, event
-                    .getReminderPeriod().getUnit()));
-            calendar.setTimeInMillis(event.getStartTime().getTime());
-        }
-        if (savedInstanceState != null) {
-            calendar.setTimeInMillis(savedInstanceState.getLong("calendar"));
+        Calendar calendar = Calendar.getInstance();
+        ReminderDetails reminder = findReminderById(id);
+        if (reminder != null) {
+            binding.name.setText(reminder.name);
+            binding.info.setText(reminder.info);
+            binding.quantity.setSelection(reminder.quantity);
+            binding.unit.setSelection(unitToOrdination(reminder.unit));
+            calendar.setTimeInMillis(reminder.startTime);
         }
 
-        binding.btnTime.setText(time_format.format(calendar.getTime()));
-        binding.btnDate.setText(date_format.format(calendar.getTime()));
-        binding.btnTime.setOnClickListener(v -> {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        binding.time.setText(timeFormat.format(calendar.getTime()));
+        binding.btnDate.setText(dateFormat.format(calendar.getTime()));
+        binding.time.setOnClickListener(v -> {
             TimePickerDialog time_dialog = new TimePickerDialog(
                     getActivity(), (view1, hourOfDay, minute) -> {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
-                binding.btnTime.setText(time_format.format(calendar
+                binding.time.setText(timeFormat.format(calendar
                         .getTime()));
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar
                     .get(Calendar.MINUTE), true);
@@ -109,8 +135,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                binding.btnDate.setText(date_format.format(calendar
-                        .getTime()));
+                binding.btnDate.setText(dateFormat.format(calendar.getTime()));
             }, calendar.get(Calendar.YEAR), calendar
                     .get(Calendar.MONTH), calendar
                     .get(Calendar.DAY_OF_MONTH));
@@ -120,43 +145,41 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         return new AlertDialog.Builder(mainActivity)
                 .setView(binding.getRoot())
                 .setPositiveButton(R.string.accept, (dialog, which) -> {
-                    String name = binding.etName.getText().toString();
-                    String info = binding.etInfo.getText().toString();
+                    String name = binding.name.getText().toString();
+                    String info = binding.info.getText().toString();
                     if (name.isEmpty()) {
                         // Replace with inline editor's material validator
                         com.byagowi.persiancalendar.util.Utils.createAndShowSnackbar(getView(),
                                 "خالی است!", Snackbar.LENGTH_SHORT);
                     } else {
-                        if (event == null)
-                            event = new ReminderDetails();
-                        event.setReminderName(name);
-                        event.setReminderInfo(info);
-                        event.setReminderPeriod(new ReminderUnit(Integer.parseInt(binding.spinPerQ
-                                .getSelectedItem().toString()), binding.spinPerU
-                                .getSelectedItem().toString()));
-                        event.setStartTime(Utils.stringToDate(binding.btnDate.getText()
-                                + " " + binding.btnTime.getText()));
-                        databaseManager.saveEvent(event);
-                        // FIXME: Notify the parent about the change
+                        ReminderDetails newReminder = new ReminderDetails(
+                                id,
+                                name,
+                                info,
+                                ordinationToUnit(binding.unit.getSelectedItemPosition()),
+                                binding.quantity.getSelectedItemPosition(),
+                                System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
+                        );
+
+                        ArrayList<ReminderDetails> reminders = new ArrayList<>(Utils.getRemiderDetails());
+                        int length = reminders.size();
+                        int index = -1;
+                        for (int i = 0; i < length; ++i) {
+                            if (id == reminders.get(i).id) {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        if (index == -1)
+                            reminders.add(newReminder);
+                        else
+                            reminders.set(index, newReminder);
+
+                        Utils.storeReminders(mainActivity, reminders);
                     }
                 })
                 .create();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putLong("calendar", calendar.getTimeInMillis());
     }
 
 }

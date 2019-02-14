@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.view.reminder.model;
 
-import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author MEHDI DIMYADI
@@ -8,54 +8,20 @@ import java.util.Date;
  */
 public class ReminderDetails {
 	
-	private long id;
-	private String reminderName;
-	private String reminderInfo;
-	private ReminderUnit reminderPeriod;
-	private Date setStartTime;
+	final public long id;
+	final public String name;
+	final public String info;
+	final public TimeUnit unit;
+	final public int quantity;
+	final public long startTime;
 
-	public ReminderDetails() {
-		id = -1;
-	}
-	
-	public void setId(long id) {
+	public ReminderDetails(long id, String name, String info, TimeUnit unit, int quantity,
+						   long startTime) {
 		this.id = id;
+		this.name = name;
+		this.info = info;
+		this.unit = unit;
+		this.quantity = quantity;
+		this.startTime = startTime;
 	}
-	
-	public long getId() {
-		return id;
-	}
-	
-	public void setReminderName(String reminderName) {
-		this.reminderName = reminderName;
-	}
-	
-	public String getReminderName() {
-		return reminderName;
-	}
-	
-	public void setReminderInfo(String reminderInfo) {
-		this.reminderInfo = reminderInfo;
-	}
-	
-	public String getReminderInfo() {
-		return reminderInfo;
-	}
-	
-	public void setReminderPeriod(ReminderUnit reminderPeriod) {
-		this.reminderPeriod = reminderPeriod;
-	}
-	
-	public ReminderUnit getReminderPeriod() {
-		return reminderPeriod;
-	}
-	
-	public void setStartTime(Date start_time) {
-		this.setStartTime = start_time;
-	}
-	
-	public Date getStartTime() {
-		return setStartTime;
-	}
-
 }

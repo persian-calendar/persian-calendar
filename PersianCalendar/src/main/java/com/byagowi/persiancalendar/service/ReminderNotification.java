@@ -16,7 +16,6 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.database.DatabaseManager;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 
 import java.util.concurrent.TimeUnit;
@@ -24,13 +23,12 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import static com.byagowi.persiancalendar.view.reminder.constants.Constants.EVENT_ID;
+import static com.byagowi.persiancalendar.view.reminder.constants.Constants.REMINDER_ID;
 
 public class ReminderNotification extends Service {
 
     private static final int NOTIFICATION_ID = 1003;
     String NOTIFICATION_CHANNEL_ID = "1003";
-    private ReminderDetails event;
 
     @Nullable
     public static ReminderNotification getInstance() {
@@ -44,7 +42,6 @@ public class ReminderNotification extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        DatabaseManager databaseManager = new DatabaseManager(this);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -63,12 +60,14 @@ public class ReminderNotification extends Service {
             }
 
             String title = "یادآور";
-            long event_id = intent.getLongExtra(EVENT_ID, -1);
-            event = databaseManager.getEvent(event_id);
-            String Name = "";
-            String subtitle = TextUtils.isEmpty(Name)
-                    ? ""
-                    : "زمان دارو" + " " + Name;
+            String subtitle = "";
+            if (intent != null) {
+                ReminderDetails reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
+                if (reminder != null)
+                    subtitle = TextUtils.isEmpty(reminder.name)
+                            ? ""
+                            : "زمان دارو" + " " + reminder.name;
+            }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     NOTIFICATION_CHANNEL_ID);
