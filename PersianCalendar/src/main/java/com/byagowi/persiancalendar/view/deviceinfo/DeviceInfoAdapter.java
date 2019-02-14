@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.ViewHolder> {
 
-    private List<DeviceInfoItem> deviceInfoItemsList = new ArrayList<>();
     private final View mRootView;
+    private List<DeviceInfoItem> deviceInfoItemsList = new ArrayList<>();
 
     public DeviceInfoAdapter(Activity activity, View rootView) {
         mRootView = rootView;

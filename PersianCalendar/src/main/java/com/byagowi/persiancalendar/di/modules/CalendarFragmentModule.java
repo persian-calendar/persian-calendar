@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.di.modules;
 
 import com.byagowi.persiancalendar.di.scopes.PerChildFragment;
+import com.byagowi.persiancalendar.view.dialog.MonthOverviewDialog;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.byagowi.persiancalendar.view.dialog.ShiftWorkDialog;
 import com.byagowi.persiancalendar.view.fragment.MonthFragment;
@@ -21,4 +22,8 @@ public abstract class CalendarFragmentModule {
     @PerChildFragment
     @ContributesAndroidInjector
     abstract ShiftWorkDialog shiftWorkDialogInjector();
+
+    @PerChildFragment
+    @ContributesAndroidInjector
+    abstract MonthOverviewDialog monthOverviewDialogInjector();
 }

@@ -253,5 +253,6 @@
     <string name="shift_work_days_head">طول</string>
     <string name="prefer_linear_date_summary">إستخدام صيغة (1432/12/24) بدل (1432 ذي الحجة 24) في المصغر والتنبيهات</string>
     <string name="prefer_linear_date">إظهار التاريخ بالصيغة الرقمية</string>
+    <string name="month_overview">Month overview</string>
 
 </resources>

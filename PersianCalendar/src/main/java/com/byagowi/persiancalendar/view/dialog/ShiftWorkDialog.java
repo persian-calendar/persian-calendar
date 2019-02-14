@@ -77,10 +77,9 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
             jdn = selectedJdn;
         }
 
-        Context context = getContext();
         ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
-                LayoutInflater.from(getContext()), null, false);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                LayoutInflater.from(mainActivity), null, false);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 
         List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
         if (shiftWorks.size() == 0)

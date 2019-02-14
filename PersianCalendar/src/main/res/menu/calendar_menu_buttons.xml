@@ -23,4 +23,9 @@
         android:title="@string/shift_work_settings"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/month_overview"
+        android:title="@string/month_overview"
+        app:showAsAction="never" />
+
 </menu>

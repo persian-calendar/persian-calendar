@@ -37,13 +37,13 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
+    // @Inject
+    // MonthFragmentDependency monthFragmentDependency;
     private boolean isRTL = false;
-    //    @Inject
-//    MonthFragmentDependency monthFragmentDependency;
     private AbstractDate typedDate;
+    private long baseJdn;
     private int offset;
     private MonthAdapter adapter;
-    private long baseJdn;
     private int monthLength;
     private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
         @Override
@@ -74,6 +74,22 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         }
     };
 
+    static AbstractDate getDateFromOffset(CalendarType calendar, int offset) {
+        AbstractDate date = Utils.getTodayOfCalendar(calendar);
+        int month = date.getMonth() - offset;
+        month -= 1;
+        int year = date.getYear();
+
+        year = year + (month / 12);
+        month = month % 12;
+        if (month < 0) {
+            year -= 1;
+            month += 12;
+        }
+        month += 1;
+        return Utils.getDateOfCalendar(calendar, year, month, 1);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,22 +119,10 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         ///////
         CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
-        typedDate = Utils.getTodayOfCalendar(mainCalendar);
-        int month = typedDate.getMonth() - offset;
-        month -= 1;
-        int year = typedDate.getYear();
 
-        year = year + (month / 12);
-        month = month % 12;
-        if (month < 0) {
-            year -= 1;
-            month += 12;
-        }
-        month += 1;
-        typedDate = Utils.getDateOfCalendar(mainCalendar, year, month, 1);
-
+        typedDate = getDateFromOffset(mainCalendar, offset);
         baseJdn = typedDate.toJdn();
-        monthLength = Utils.getMonthLength(mainCalendar, year, month);
+        monthLength = Utils.getMonthLength(mainCalendar, typedDate.getYear(), typedDate.getMonth());
 
         int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
 
@@ -132,7 +136,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             }
         }
 
-        long startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, year, 1, 1).toJdn();
+        long startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, typedDate.getYear(), 1, 1).toJdn();
         int weekOfYearStart = Utils.calculateWeekOfYear(baseJdn, startOfYearJdn);
         int weeksCount = 1 + Utils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 

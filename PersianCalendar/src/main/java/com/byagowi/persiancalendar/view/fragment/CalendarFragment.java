@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.CalendarsView;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.view.dialog.MonthOverviewDialog;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.byagowi.persiancalendar.view.dialog.ShiftWorkDialog;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
@@ -560,6 +561,12 @@ public class CalendarFragment extends DaggerFragment {
             case R.id.shift_work:
                 ShiftWorkDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         ShiftWorkDialog.class.getName());
+                break;
+            case R.id.month_overview:
+                long visibleMonthJdn = MonthFragment.getDateFromOffset(Utils.getMainCalendar(),
+                        mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.getCurrentItem())).toJdn();
+                MonthOverviewDialog.newInstance(visibleMonthJdn).show(getChildFragmentManager(),
+                        MonthOverviewDialog.class.getName());
                 break;
             default:
                 break;
