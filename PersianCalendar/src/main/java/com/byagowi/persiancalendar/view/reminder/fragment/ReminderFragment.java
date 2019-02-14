@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +34,6 @@ public class ReminderFragment extends DaggerFragment {
 
     @Inject
     MainActivityDependency mainActivityDependency;
-    private ListView listView;
 
     @Nullable
     @Override
@@ -82,6 +81,7 @@ public class ReminderFragment extends DaggerFragment {
         List<ReminderDetails> allEvents = Collections.emptyList();
 
         private void refresh() {
+            Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
             allEvents = Utils.getRemiderDetails();
         }
 
@@ -122,8 +122,10 @@ public class ReminderFragment extends DaggerFragment {
                                 reminderDetails.unit));
 
                 mBinding.delete.setOnClickListener(v -> {
-//                    mDatabaseManager.removeEvent(reminderDetails.getId());
-                    //FIXME
+                    List<ReminderDetails> reminders = new ArrayList<>(Utils.getRemiderDetails());
+                    if (reminders.remove(reminderDetails))
+                        Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
+                    notifyDataSetChanged();
                 });
             }
         }
