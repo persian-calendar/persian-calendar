@@ -5,7 +5,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -16,26 +17,22 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
                 android:textColor="?attr/colorTextNormal"
-                android:padding="4dp"
                 tools:text="Title" />
 
             <TextView
                 android:id="@+id/holidays"
-                android:textColor="?attr/colorTextHoliday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
+                android:textColor="?attr/colorTextHoliday"
                 tools:text="Content" />
 
             <TextView
                 android:id="@+id/non_holidays"
-                android:textColor="?attr/colorTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
+                android:textColor="?attr/colorTextNormal"
                 tools:text="Content" />
 
         </LinearLayout>

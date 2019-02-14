@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
+import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding;
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
@@ -75,12 +76,13 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
                         Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
         }
 
-        RecyclerView recyclerView = new RecyclerView(mainActivity);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
-        recyclerView.setAdapter(new ItemAdapter(records));
+        MonthOverviewDialogBinding binding = MonthOverviewDialogBinding.inflate(
+                LayoutInflater.from(mainActivity), null, false);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+        binding.recyclerView.setAdapter(new ItemAdapter(records));
 
         return new AlertDialog.Builder(mainActivity)
-                .setView(recyclerView)
+                .setView(binding.getRoot())
                 .setTitle(null)
                 .setCancelable(true)
                 .setNegativeButton(R.string.closeDrawer, null)
