@@ -1,11 +1,5 @@
 package com.byagowi.persiancalendar.view.reminder.fragment;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import dagger.android.support.DaggerFragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,15 +10,22 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.view.reminder.constants.Constants;
+import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.reminder.database.DatabaseManager;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderAdapter;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import dagger.android.support.DaggerFragment;
 
 /**
  * @author MEHDI DIMYADI
@@ -32,87 +33,102 @@ import javax.inject.Inject;
  */
 public class ReminderFragment extends DaggerFragment {
 
-	@Inject
-	MainActivityDependency mainActivityDependency;
-	private ListView listView;
+    @Inject
+    MainActivityDependency mainActivityDependency;
+    private ListView listView;
 
-	@Nullable
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-							 @Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		mainActivityDependency.getMainActivity().setTitleAndSubtitle(
-				getString(R.string.reminder), "");
+        mainActivityDependency.getMainActivity().setTitleAndSubtitle(
+                getString(R.string.reminder), "");
 
-		setHasOptionsMenu(true);
-		View view = inflater.inflate(R.layout.fragment_reminder, container, false);
+        setHasOptionsMenu(true);
 
+        RecyclerView recyclerView = new RecyclerView(mainActivityDependency.getMainActivity());
+        recyclerView.setAdapter(new ReminderAdapter());
 
-		listView = view.findViewById(R.id.list);
-		listView.setOnItemClickListener((parent, view1, position, id) -> {
-			listView.setVisibility(View.GONE);
-			EditReminderFragment toEditEvent = new EditReminderFragment();
-			Bundle args = new Bundle();
-			args.putLong(Constants.EVENT_ID, id);
-			toEditEvent.setArguments(args);
-			FragmentManager EventFragmentMgr = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-			EventFragmentMgr.beginTransaction()
-					.replace(R.id.fragment_holder_reminder, toEditEvent)
-					.addToBackStack(null)
-					.commit();
-		});
-		return  view;
-	}
+        return recyclerView;
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		menu.clear();
-		inflater.inflate(R.menu.reminder_menu, menu);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.reminder_menu, menu);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_add:
-				listView.setVisibility(View.GONE);
-				Fragment EventFragment = new EditReminderFragment();
-				FragmentManager EventFragmentMgr = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-				EventFragmentMgr.beginTransaction()
-						.replace(R.id.fragment_holder_reminder, EventFragment)
-						.addToBackStack(null)
-						.commit();
-				break;
-			default:
-				break;
-		}
-		return true;
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                EditReminderDialog.newInstance(-1).show(getChildFragmentManager(),
+                        EditReminderDialog.class.getName());
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
-	@Override
-	public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
-	}
+    class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
+        DatabaseManager mDatabaseManager;
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		refresh();
-	}
+        ReminderAdapter() {
+            mDatabaseManager = new DatabaseManager(mainActivityDependency.getMainActivity());
+            refresh();
+        }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-	}
+        List<ReminderDetails> allEvents = Collections.emptyList();
 
-	private void refresh() {
-		DatabaseManager databaseManager = new DatabaseManager(getActivity());
-		ReminderDetails[] data = databaseManager.getAllEvents();
-		if (data == null)
-			data = new ReminderDetails[0];
-		ReminderAdapter adapter = new ReminderAdapter(getActivity(), R.layout.reminder_adapter_item, data);
-		listView.setAdapter(adapter);
-	}
+        private void refresh() {
+            allEvents = Arrays.asList(new DatabaseManager(getActivity()).getAllEvents());
+        }
 
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ReminderAdapterItemBinding binding = ReminderAdapterItemBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false);
+
+            return new ViewHolder(binding);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.bind(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return allEvents.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            private ReminderAdapterItemBinding mBinding;
+
+            public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
+                super(binding.getRoot());
+                mBinding = binding;
+            }
+
+            public void bind(int position) {
+                ReminderDetails reminderDetails = allEvents.get(position);
+                mBinding.name.setText(reminderDetails.getReminderName());
+                mBinding.period.setText(
+                        String.format("%s %s %s",
+                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
+                                Utils.formatNumber(reminderDetails.getReminderPeriod().getQuantity()),
+                                reminderDetails.getReminderPeriod().getUnit()));
+
+                mBinding.delete.setOnClickListener(v -> {
+                    mDatabaseManager.removeEvent(reminderDetails.getId());
+                    //FIXME
+                });
+            }
+        }
+    }
 }

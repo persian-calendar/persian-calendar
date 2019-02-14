@@ -10,6 +10,9 @@ import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderUnit;
 import com.byagowi.persiancalendar.view.reminder.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
@@ -86,27 +89,28 @@ public class ReminderAction implements DatabaseAction<ReminderDetails> {
 
 	@Override
 	public ReminderDetails[] getAll() {
-		ReminderDetails[] events = null;
+		List<ReminderDetails> result = new ArrayList<>();
+
 		Cursor c = db.query(ReminderTable.TABLE_NAME, new String[] {
 				ReminderTable.EventsColumns._ID, ReminderTable.EventsColumns.NAME, ReminderTable.EventsColumns.INFO,
 				ReminderTable.EventsColumns.PERIOD, ReminderTable.EventsColumns.PERIOD_UNIT,
 				ReminderTable.EventsColumns.START_TIME }, null, null, null, null, null);
 		if (c.moveToFirst()) {
-			events = new ReminderDetails[c.getCount()];
 			for (int i = 0; i < c.getCount(); i++) {
-				events[i] = new ReminderDetails();
-				events[i].setId(c.getLong(0));
-				events[i].setReminderName(c.getString(1));
-				events[i].setReminderInfo(c.getString(2));
-				events[i].setReminderPeriod(new ReminderUnit(c.getInt(3), c.getString(4)));
-				events[i].setStartTime(Utils.stringToDate(c.getString(5)));
+				ReminderDetails reminder = new ReminderDetails();
+				reminder.setId(c.getLong(0));
+				reminder.setReminderName(c.getString(1));
+				reminder.setReminderInfo(c.getString(2));
+				reminder.setReminderPeriod(new ReminderUnit(c.getInt(3), c.getString(4)));
+				reminder.setStartTime(Utils.stringToDate(c.getString(5)));
+				result.add(reminder);
 				c.moveToNext();
 			}
 		}
 		if (!c.isClosed()) {
 			c.close();
 		}
-		return events;
+		return result.toArray(new ReminderDetails[0]);
 	}
 
 }

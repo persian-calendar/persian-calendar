@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
 import com.byagowi.persiancalendar.view.reminder.utils.Reminder;
 
+import java.util.List;
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI

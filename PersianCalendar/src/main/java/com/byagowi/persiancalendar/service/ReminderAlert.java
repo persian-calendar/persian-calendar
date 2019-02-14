@@ -14,7 +14,7 @@ public class ReminderAlert extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		//Intent reminderIntent = new Intent(context, ReminderActivity.class);
-		//reminderIntent.putExtras(Objects.requireNonNull(intent.getExtras()));
+		//reminderIntent.putExtras(intent.getExtras());
 		//reminderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 		//		| Intent.FLAG_ACTIVITY_NEW_TASK);
 		//context.startActivity(reminderIntent);
