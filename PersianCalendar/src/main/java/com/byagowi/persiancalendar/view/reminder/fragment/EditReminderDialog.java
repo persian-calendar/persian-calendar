@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.databinding.FragmentEditReminderBinding;
+import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.reminder.constants.Constants;
@@ -37,6 +38,8 @@ import dagger.android.support.DaggerAppCompatDialogFragment;
 public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     @Inject
     MainActivityDependency mainActivityDependency;
+    @Inject
+    ReminderFragmentDependency reminderFragmentDependency;
 
     static EditReminderDialog newInstance(int id) {
         Bundle args = new Bundle();
@@ -73,7 +76,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
 
     @Nullable
     private static ReminderDetails findReminderById(long id) {
-        List<ReminderDetails> reminderDetails = Utils.getRemiderDetails();
+        List<ReminderDetails> reminderDetails = Utils.getReminderDetails();
         int length = reminderDetails.size();
         for (int i = 0; i < length; ++i) {
             if (id == reminderDetails.get(i).id) {
@@ -88,11 +91,13 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
-        FragmentEditReminderBinding binding = FragmentEditReminderBinding.inflate(LayoutInflater.from(mainActivity), null, false);
+        EditReminderDialogBinding binding = EditReminderDialogBinding.inflate(
+                LayoutInflater.from(mainActivity), null, false);
 
-        long tmpId = new Random().nextInt();
+        long tmpId = -1;
         Bundle args = getArguments();
-        if (args != null) tmpId = args.getLong(Constants.REMINDER_ID, tmpId);
+        if (args != null) tmpId = args.getLong(Constants.REMINDER_ID, -1);
+        if (tmpId == -1) tmpId = new Random().nextInt();
         final long id = tmpId;
 
         String[] quantity = new String[Constants.MAX_QUANTITY - 1];
@@ -161,7 +166,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                                 System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
                         );
 
-                        ArrayList<ReminderDetails> reminders = new ArrayList<>(Utils.getRemiderDetails());
+                        ArrayList<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
                         int length = reminders.size();
                         int index = -1;
                         for (int i = 0; i < length; ++i) {
@@ -171,12 +176,15 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                             }
                         }
 
-                        if (index == -1)
+                        boolean isNew = index == -1;
+                        if (isNew)
                             reminders.add(newReminder);
                         else
                             reminders.set(index, newReminder);
 
                         Utils.storeReminders(mainActivity, reminders);
+
+                        reminderFragmentDependency.getReminderFragment().updateList(isNew);
                     }
                 })
                 .create();

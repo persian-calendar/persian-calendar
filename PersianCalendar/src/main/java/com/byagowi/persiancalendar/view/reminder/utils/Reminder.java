@@ -15,19 +15,20 @@ import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
  */
 public class Reminder {
 
-    public static void turnON(Context context, ReminderDetails event) {
+    public static void turnOn(Context context, ReminderDetails event) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
         long startTime = event.startTime;
         long period = event.unit.toMillis(1);
-        while (startTime < System.currentTimeMillis()) startTime += period;
+        // FIXME: BAD IDEA
+        // while (startTime < System.currentTimeMillis()) startTime += period;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period,
                 prepareIntent(context, event.id));
 
     }
 
-    public static void turnOFF(Context context, long event_id) {
+    public static void turnOff(Context context, long event_id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 

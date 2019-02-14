@@ -1,16 +1,18 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:padding="6dip">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:ellipsize="marquee"
+            android:gravity="center_vertical"
             android:singleLine="true" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -18,13 +20,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/delete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_remove_button"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/delete"
+                android:contentDescription="@string/remove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end"
+                app:srcCompat="@drawable/ic_remove_button" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

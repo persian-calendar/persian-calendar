@@ -131,7 +131,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 .create();
     }
 
-    private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkDialog.ShiftWorkItemAdapter.ViewHolder> {
+    private class ShiftWorkItemAdapter extends RecyclerView.Adapter<ShiftWorkItemAdapter.ViewHolder> {
         final private ShiftWorkSettingsBinding mBinding;
         List<String> mShiftWorkKeys;
         private List<ShiftWorkRecord> mRows = new ArrayList<>();
@@ -146,7 +146,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         List<ShiftWorkRecord> getRows() {
             return mRows;
         }
-
 
         private void updateShiftWorkResult() {
             StringBuilder result = new StringBuilder();

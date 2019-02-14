@@ -235,7 +235,7 @@ public class Utils {
     private static String[] calendarTypesTitleAbbr = new String[]{};
     private static List<ReminderDetails> sReminderDetails = Collections.emptyList();
 
-    public static List<ReminderDetails> getRemiderDetails() {
+    public static List<ReminderDetails> getReminderDetails() {
         return sReminderDetails;
     }
 

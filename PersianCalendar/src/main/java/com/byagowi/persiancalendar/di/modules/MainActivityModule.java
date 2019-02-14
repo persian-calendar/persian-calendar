@@ -47,12 +47,8 @@ public abstract class MainActivityModule {
     abstract DeviceInfoFragment deviceInfoFragmentInjector();
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = ReminderFragmentModule.class)
     abstract ReminderFragment reminderFragmentInjector();
-
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract EditReminderDialog editReminderFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector

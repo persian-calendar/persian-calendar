@@ -21,8 +21,8 @@ public class RestoreReminderAlert extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        for (ReminderDetails event : Utils.getRemiderDetails()) {
-            Reminder.turnON(this, event);
+        for (ReminderDetails event : Utils.getReminderDetails()) {
+            Reminder.turnOn(this, event);
         }
         return START_NOT_STICKY;
     }
