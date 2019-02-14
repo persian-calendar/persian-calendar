@@ -2104,6 +2104,8 @@ public class Utils {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return reminders;
@@ -2136,6 +2138,8 @@ public class Utils {
             edit.apply();
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
