@@ -17,6 +17,11 @@
         android:title="@string/compass" />
 
     <item
+        android:id="@+id/reminder"
+        android:icon="@drawable/ic_alarm"
+        android:title="@string/reminder" />
+
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />

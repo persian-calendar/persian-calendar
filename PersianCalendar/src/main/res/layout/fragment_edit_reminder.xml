@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="6dip" >
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/reminder"
+                android:inputType="text" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/et_name"
+                android:ems="10"
+                android:hint="@string/reminderInfo"
+                android:inputType="text|textMultiLine"
+                android:lines="4" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_every"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/et_info"
+                android:paddingEnd="0dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/reminderPeriod" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/ll_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_every"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spin_per_q"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spin_per_u"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_period"
+                android:paddingEnd="0dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="0dp"
+                android:paddingStart="5dp"
+                android:paddingTop="10dp"
+                android:text="@string/start" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/ll_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_start"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_time"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_date"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_add_alarm" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</LinearLayout>

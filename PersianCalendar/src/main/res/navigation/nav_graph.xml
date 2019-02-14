@@ -72,4 +72,9 @@
         android:name="com.byagowi.persiancalendar.view.fragment.DeviceInfoFragment"
         android:label="Device Info Fragment" />
 
+    <fragment
+        android:id="@+id/reminder"
+        android:name="com.byagowi.persiancalendar.view.reminder.fragment.ReminderFragment"
+        android:label="Reminder Fragment" />
+
 </navigation>

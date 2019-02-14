@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.view.preferences.FragmentInterfaceCalendar;
 import com.byagowi.persiancalendar.view.preferences.FragmentLocationAthan;
 import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
+import com.byagowi.persiancalendar.view.reminder.fragment.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 
@@ -43,6 +44,10 @@ public abstract class MainActivityModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract DeviceInfoFragment deviceInfoFragmentInjector();
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract ReminderFragment reminderFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector
