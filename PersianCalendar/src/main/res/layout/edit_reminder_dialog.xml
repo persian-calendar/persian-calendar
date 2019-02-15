@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,93 +13,265 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="6dip">
-
-                <EditText
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/reminder"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/reminderInfo"
-                    android:inputType="text|textMultiLine"
-                    android:lines="4" />
-
-                <TextView
-                    android:id="@+id/tv_every"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="0dp"
-                    android:paddingRight="0dp"
-                    android:text="@string/reminderPeriod" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/ll_period"
+                    android:id="@+id/nameOfReminder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:layout_height="72dp">
 
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/quantity"
+                    <ImageView
+                        android:id="@+id/name_icon"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_text"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/nameEditTExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/name_icon"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:textSize="15sp"
+                            android:gravity="center_vertical"
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/reminder" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/infoOfReminder"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp">
+
+                    <ImageView
+                        android:id="@+id/info_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_text"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/infoEditTExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/info_icon"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:textSize="15sp"
+                            android:gravity="center_vertical"
+                            android:id="@+id/info"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/reminderInfo"
+                            android:inputType="text|textMultiLine" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp">
+
+                    <ImageView
+                        android:id="@+id/repeat_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_repeat"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/repeat_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_toEndOf="@+id/repeat_icon"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/repeat_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/reminderPeriod"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/unit"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="0dp"
-                    android:paddingRight="0dp"
-                    android:text="@string/start" />
+                <LinearLayout
+                    android:id="@+id/repeat_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp">
+
+                    <ImageView
+                        android:id="@+id/unit_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_repeat"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/repeat_unt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_toEndOf="@+id/unit_icon"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/unit_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/reminderUnit"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_alignParentEnd="true"/>
+
+
+                </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_start"
+                    android:id="@+id/date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_start"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:layout_height="72dp">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/time"
-                        style="?android:attr/spinnerStyle"
+                    <ImageView
+                        android:id="@+id/date_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
+                        app:srcCompat="@drawable/ic_date"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_date"
-                        style="?android:attr/spinnerStyle"
+                    <LinearLayout
+                        android:id="@+id/date_t"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center"
+                        android:layout_toEndOf="@+id/date_icon"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/date_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/reminderDate"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_date"
+                            style="?android:attr/spinnerStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_alignParentEnd="true"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tim"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp">
+
+                    <ImageView
+                        android:id="@+id/time_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_time"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_alignParentStart="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/time_t"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_toEndOf="@+id/time_icon"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/time_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/reminderTime"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/time"
+                            style="?android:attr/spinnerStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_alignParentEnd="true"/>
+
 
                 </LinearLayout>
 
