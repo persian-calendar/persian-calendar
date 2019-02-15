@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
@@ -59,14 +58,14 @@ public class ReminderNotification extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
-            String title = "یادآور";
+            String title = getString(R.string.reminder);
             String subtitle = "";
             if (intent != null) {
                 ReminderDetails reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
                 if (reminder != null)
                     subtitle = TextUtils.isEmpty(reminder.name)
                             ? ""
-                            : "زمان دارو" + " " + reminder.name;
+                            : R.string.remindeNow + " " + reminder.name;
             }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
@@ -88,11 +87,7 @@ public class ReminderNotification extends Service {
                         ? R.layout.custom_notification
                         : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
-                if (TextUtils.isEmpty(subtitle)) {
-                    cv.setViewVisibility(R.id.body, View.GONE);
-                } else {
-                    cv.setTextViewText(R.id.body, subtitle);
-                }
+                cv.setTextViewText(R.id.body, subtitle);
 
                 notificationBuilder = notificationBuilder
                         .setCustomContentView(cv)

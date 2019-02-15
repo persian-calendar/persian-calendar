@@ -310,6 +310,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="reminderInfo">Reminder information</string>
     <string name="reminderDate">Date</string>
     <string name="reminderTime">Time</string>
+    <string name="remindeNow">The time has come for the</string>
     <string name="start">Start from</string>
     <string name="alertTitle">Alert!</string>
     <string name="emptyName">Name cannot be empty</string>

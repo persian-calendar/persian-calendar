@@ -30,14 +30,13 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
 
                     <LinearLayout
                         android:id="@+id/nameEditTExt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/name_icon"
                         android:orientation="horizontal">
 
                         <EditText
@@ -65,14 +64,12 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
-
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
                     <LinearLayout
                         android:id="@+id/infoEditTExt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/info_icon"
                         android:orientation="horizontal">
 
                         <EditText
@@ -101,14 +98,13 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
-
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
                     <LinearLayout
                         android:id="@+id/repeat_ll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_toEndOf="@+id/repeat_icon"
                         android:orientation="horizontal">
 
                         <TextView
@@ -126,10 +122,7 @@
                         android:id="@+id/unit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="16dp" />
+                        android:layout_gravity="center" />
 
                 </LinearLayout>
 
@@ -146,21 +139,20 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
 
                     <LinearLayout
                         android:id="@+id/repeat_unt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_toEndOf="@+id/unit_icon"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/unit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:text="@string/reminderUnit"
                             android:textSize="15sp" />
 
@@ -170,10 +162,7 @@
                         android:id="@+id/quantity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_alignParentEnd="true"/>
+                        android:layout_gravity="center" />
 
 
                 </LinearLayout>
@@ -191,21 +180,19 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
-
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
                     <LinearLayout
                         android:id="@+id/date_t"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_toEndOf="@+id/date_icon"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/date_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:text="@string/reminderDate"
                             android:textSize="15sp" />
 
@@ -219,10 +206,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
                             android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_alignParentEnd="true"/>
+                            android:layout_gravity="center" />
 
 
                 </LinearLayout>
@@ -240,21 +224,20 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:layout_alignParentStart="true"/>
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="32dp" />
 
                     <LinearLayout
                         android:id="@+id/time_t"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_toEndOf="@+id/time_icon"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/time_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:text="@string/reminderTime"
                             android:textSize="15sp" />
 
@@ -267,10 +250,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
                             android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_alignParentEnd="true"/>
+                            android:layout_gravity="center" />
 
 
                 </LinearLayout>
