@@ -2130,7 +2130,7 @@ public class Utils {
             String serializedJson = json.toString();
 
             // Just don't store huge objects
-            if (serializedJson.length() > 2000)
+            if (serializedJson.length() > 8000)
                 return;
 
             SharedPreferences.Editor edit = prefs.edit();
