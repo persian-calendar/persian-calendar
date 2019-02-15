@@ -304,9 +304,12 @@ The app needs this only once, however, if you move to a new location, accessing 
 
     <!-- Reminder -->
     <string name="reminderPeriod">Every</string>
+    <string name="reminderUnit">Quantity</string>
     <string name="ok">OK</string>
     <string name="reminder">Reminder</string>
     <string name="reminderInfo">Reminder information</string>
+    <string name="reminderDate">Date</string>
+    <string name="reminderTime">Time</string>
     <string name="start">Start from</string>
     <string name="alertTitle">Alert!</string>
     <string name="emptyName">Name cannot be empty</string>
