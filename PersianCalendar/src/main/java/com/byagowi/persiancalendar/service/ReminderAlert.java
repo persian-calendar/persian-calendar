@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Objects;
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
@@ -19,6 +21,7 @@ public class ReminderAlert extends BroadcastReceiver {
 		//		| Intent.FLAG_ACTIVITY_NEW_TASK);
 		//context.startActivity(reminderIntent);
 		Intent i = new Intent(context, ReminderNotification.class);
+		i.putExtras(Objects.requireNonNull(intent.getExtras()));
 		context.startService(i);
 	}
 }
