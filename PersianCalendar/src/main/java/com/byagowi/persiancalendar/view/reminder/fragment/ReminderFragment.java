@@ -133,7 +133,7 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             //private ReminderAdapterItemBinding mBinding;
-            private int mPosition;
+            private int mPosition
             TextView name, period;
             ImageView delete;
             LinearLayout content;
