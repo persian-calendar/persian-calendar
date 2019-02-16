@@ -4,8 +4,7 @@ package com.byagowi.persiancalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import java.util.Objects;
+import android.os.Bundle;
 
 /**
  * @author MEHDI DIMYADI
@@ -13,15 +12,17 @@ import java.util.Objects;
  */
 public class ReminderAlert extends BroadcastReceiver {
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		//Intent reminderIntent = new Intent(context, ReminderActivity.class);
-		//reminderIntent.putExtras(intent.getExtras());
-		//reminderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-		//		| Intent.FLAG_ACTIVITY_NEW_TASK);
-		//context.startActivity(reminderIntent);
-		Intent i = new Intent(context, ReminderNotification.class);
-		i.putExtras(Objects.requireNonNull(intent.getExtras()));
-		context.startService(i);
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        //Intent reminderIntent = new Intent(context, ReminderActivity.class);
+        //reminderIntent.putExtras(intent.getExtras());
+        //reminderIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+        //		| Intent.FLAG_ACTIVITY_NEW_TASK);
+        //context.startActivity(reminderIntent);
+        Intent i = new Intent(context, ReminderNotification.class);
+        Bundle extras = intent.getExtras();
+        if (extras != null)
+            i.putExtras(extras);
+        context.startService(i);
+    }
 }

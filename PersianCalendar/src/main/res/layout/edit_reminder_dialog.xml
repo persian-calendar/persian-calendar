@@ -1,266 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <androidx.core.widget.NestedScrollView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="top"
+                android:hint="نام یادآور" />
 
-                <LinearLayout
-                    android:id="@+id/nameOfReminder"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
+        </com.google.android.material.textfield.TextInputLayout>
 
-                    <ImageView
-                        android:id="@+id/name_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_text" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:id="@+id/nameEditTExt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:hint="اطلاعات بیشتر"
+                android:inputType="textMultiLine"
+                android:minLines="2" />
 
-                        <EditText
-                            android:id="@+id/name"
-                            android:layout_width="match_parent"
-                            android:layout_height="72dp"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center_vertical"
-                            android:hint="@string/reminder"
-                            android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                    </LinearLayout>
-                </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/infoOfReminder"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="تناوب یادآور" />
 
-                    <ImageView
-                        android:id="@+id/info_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_text" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:id="@+id/infoEditTExt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                        <EditText
-                            android:id="@+id/info"
-                            android:layout_width="match_parent"
-                            android:layout_height="72dp"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center_vertical"
-                            android:hint="@string/reminderInfo"
-                            android:inputType="text|textMultiLine"
-                            android:textSize="15sp" />
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/repeat"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
-
-                    <ImageView
-                        android:id="@+id/repeat_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_repeat" />
-
-                        <TextView
-                            android:id="@+id/repeat_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/reminderPeriod"
-                            android:textSize="15sp" />
-
-                        <RelativeLayout
-                            android:id="@+id/repeat_ll"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
-
-                            <androidx.appcompat.widget.AppCompatSpinner
-                                android:id="@+id/unit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true" />
-
-                        </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/repeat_unit"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
-
-                    <ImageView
-                        android:id="@+id/unit_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_repeat" />
-
-                        <TextView
-                            android:id="@+id/unit_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/reminderUnit"
-                            android:layout_gravity="center"
-                            android:textSize="15sp" />
-
-                        <RelativeLayout
-                            android:id="@+id/repeat_unt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
-
-                            <androidx.appcompat.widget.AppCompatSpinner
-                                android:id="@+id/quantity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true" />
-
-                        </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
-
-                    <ImageView
-                        android:id="@+id/date_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_date" />
-
-                        <TextView
-                            android:id="@+id/date_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/reminderDate"
-                            android:layout_gravity="center"
-                            android:textSize="15sp" />
-
-
-                        <RelativeLayout
-                            android:id="@+id/date_t"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
-
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/btn_date"
-                                style="?android:attr/spinnerStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textSize="30sp"
-                                android:textStyle="bold"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true" />
-
-                        </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tim"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp">
-
-                    <ImageView
-                        android:id="@+id/time_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
-                        app:srcCompat="@drawable/ic_time" />
-
-                        <TextView
-                            android:id="@+id/time_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/reminderTime"
-                            android:layout_gravity="center"
-                            android:textSize="15sp" />
-
-                        <RelativeLayout
-                            android:id="@+id/time_t"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
-
-
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/time"
-                                style="?android:attr/spinnerStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textSize="30sp"
-                                android:textStyle="bold"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true" />
-
-                        </RelativeLayout>
-
-                </LinearLayout>
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="زمان شروع تناوب" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_date"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/time"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 </layout>

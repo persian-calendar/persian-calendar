@@ -7,9 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
@@ -104,26 +101,15 @@ public class ReminderFragment extends DaggerFragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            //ReminderAdapterItemBinding binding = ReminderAdapterItemBinding.inflate(
-            //        LayoutInflater.from(parent.getContext()), parent, false);
-            //return new ViewHolder(binding);
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reminder_adapter_item,parent,false);
-            return new ViewHolder(view);
+            ReminderAdapterItemBinding binding = ReminderAdapterItemBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false);
+
+            return new ViewHolder(binding);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            //holder.bind(position);
-            ReminderDetails reminderDetails = remindersList.get(position);
-            holder.name.setText(reminderDetails.name);
-            holder.period.setText(String.format("%s %s %s",
-                                    mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
-                                    Utils.formatNumber(reminderDetails.quantity),
-                                    reminderDetails.unit));
-
-            holder.content.setOnClickListener(v -> EditReminderDialog.newInstance(remindersList.get(position).id).show(getChildFragmentManager(),
-                    EditReminderDialog.class.getName()));
-
+            holder.bind(position);
         }
 
         @Override
@@ -132,32 +118,16 @@ public class ReminderFragment extends DaggerFragment {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            //private ReminderAdapterItemBinding mBinding;
-            private int mPosition
-            TextView name, period;
-            ImageView delete;
-            LinearLayout content;
+            private ReminderAdapterItemBinding mBinding;
+            private int mPosition;
 
-            public ViewHolder(@NonNull View view) {
-                super(view);
-                //mBinding = binding;
-                //mBinding.getRoot().setOnClickListener(v -> {
-                //    EditReminderDialog.newInstance(remindersList.get(mPosition).id).show(getChildFragmentManager(),
-                //            EditReminderDialog.class.getName());
-                //});
-                //mBinding.delete.setOnClickListener(v -> {
-                //    List<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
-                //    if (reminders.remove(remindersList.get(mPosition)))
-                //        Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
-                //    refresh();
-                //    notifyItemRemoved(mPosition);
-                //});
-
-                content = view.findViewById(R.id.content);
-                name = view.findViewById(R.id.name);
-                period = view.findViewById(R.id.period);
-                delete = view.findViewById(R.id.delete);
-                delete.setOnClickListener(v -> {
+            public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
+                super(binding.getRoot());
+                mBinding = binding;
+                mBinding.getRoot().setOnClickListener(
+                        v -> EditReminderDialog.newInstance(remindersList.get(mPosition).id)
+                                .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
+                mBinding.delete.setOnClickListener(v -> {
                     List<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
                     if (reminders.remove(remindersList.get(mPosition)))
                         Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
@@ -166,16 +136,16 @@ public class ReminderFragment extends DaggerFragment {
                 });
             }
 
-            //public void bind(int position) {
-                //mPosition = position;
-                //ReminderDetails reminderDetails = remindersList.get(position);
-                //mBinding.name.setText(reminderDetails.name);
-                //mBinding.period.setText(
-                //        String.format("%s %s %s",
-                //                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
-                //                Utils.formatNumber(reminderDetails.quantity),
-                //                reminderDetails.unit));
-            //}
+            public void bind(int position) {
+                mPosition = position;
+                ReminderDetails reminderDetails = remindersList.get(position);
+                mBinding.name.setText(reminderDetails.name);
+                mBinding.period.setText(
+                        String.format("%s %s %s",
+                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
+                                Utils.formatNumber(reminderDetails.quantity),
+                                reminderDetails.unit));
+            }
         }
     }
 }
