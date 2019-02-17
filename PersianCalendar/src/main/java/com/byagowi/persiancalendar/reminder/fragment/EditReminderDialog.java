@@ -3,17 +3,23 @@ package com.byagowi.persiancalendar.reminder.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
+import com.byagowi.persiancalendar.entity.FormattedIntEntity;
+import com.byagowi.persiancalendar.reminder.constants.Constants;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.byagowi.persiancalendar.reminder.constants.Constants;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -75,8 +81,8 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     }
 
     @Nullable
-    private static ReminderDetails findReminderById(long id) {
-        List<ReminderDetails> reminderDetails = Utils.getReminderDetails();
+    private static Reminder findReminderById(long id) {
+        List<Reminder> reminderDetails = Utils.getReminderDetails();
         int length = reminderDetails.size();
         for (int i = 0; i < length; ++i) {
             if (id == reminderDetails.get(i).id) {
@@ -100,16 +106,17 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         if (tmpId == -1) tmpId = new Random().nextInt();
         final long id = tmpId;
 
-        String[] quantity = new String[Constants.MAX_QUANTITY - 1];
-        for (int i = 1; i < Constants.MAX_QUANTITY; i++)
-            quantity[i - 1] = String.valueOf(i);
+        List<FormattedIntEntity> quantities = new ArrayList<>();
+        for (int i = 1; i <= Constants.MAX_QUANTITY; ++i) {
+            quantities.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
+        }
         binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
-                R.layout.reminder_item, quantity));
+                R.layout.reminder_item, quantities));
         binding.unit.setAdapter(ArrayAdapter.createFromResource(mainActivity,
                 R.array.period_units, R.layout.reminder_item));
 
         Calendar calendar = Calendar.getInstance();
-        ReminderDetails reminder = findReminderById(id);
+        Reminder reminder = findReminderById(id);
         if (reminder != null) {
             binding.name.setText(reminder.name);
             binding.info.setText(reminder.info);
@@ -147,47 +154,66 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
             date_dialog.show();
         });
 
+        binding.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.nameLayout.setError(TextUtils.isEmpty(s) ? "حالی است" : "");
+                AlertDialog dialog = (AlertDialog) getDialog();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!TextUtils.isEmpty(s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         return new AlertDialog.Builder(mainActivity)
                 .setView(binding.getRoot())
-                .setPositiveButton(R.string.accept, (dialog, which) -> {
-                    String name = binding.name.getText().toString();
-                    String info = binding.info.getText().toString();
-                    if (name.isEmpty()) {
-                        // Replace with inline editor's material validator
-                        com.byagowi.persiancalendar.util.Utils.createAndShowSnackbar(getView(),
-                                "خالی است!", Snackbar.LENGTH_SHORT);
-                    } else {
-                        ReminderDetails newReminder = new ReminderDetails(
-                                id,
-                                name,
-                                info,
-                                ordinationToUnit(binding.unit.getSelectedItemPosition()),
-                                binding.quantity.getSelectedItemPosition(),
-                                System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
-                        );
+                .setPositiveButton(R.string.accept, (d, which) -> {
+                    Editable nameEditable = binding.name.getText();
+                    String name = nameEditable == null ? "" : nameEditable.toString();
+                    Editable infoEditable = binding.info.getText();
+                    String info = infoEditable == null ? "" : infoEditable.toString();
+                    Reminder newReminder = new Reminder(
+                            id,
+                            name,
+                            info,
+                            ordinationToUnit(binding.unit.getSelectedItemPosition()),
+                            binding.quantity.getSelectedItemPosition(),
+                            System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
+                    );
 
-                        ArrayList<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
-                        int length = reminders.size();
-                        int index = -1;
-                        for (int i = 0; i < length; ++i) {
-                            if (id == reminders.get(i).id) {
-                                index = i;
-                                break;
-                            }
+                    ArrayList<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
+                    int length = reminders.size();
+                    int index = -1;
+                    for (int i = 0; i < length; ++i) {
+                        if (id == reminders.get(i).id) {
+                            index = i;
+                            break;
                         }
-
-                        boolean isNew = index == -1;
-                        if (isNew)
-                            reminders.add(newReminder);
-                        else
-                            reminders.set(index, newReminder);
-
-                        Utils.storeReminders(mainActivity, reminders);
-
-                        reminderFragmentDependency.getReminderFragment().updateList(isNew);
                     }
+
+                    boolean isNew = index == -1;
+                    if (isNew)
+                        reminders.add(newReminder);
+                    else
+                        reminders.set(index, newReminder);
+
+                    Utils.storeReminders(mainActivity, reminders);
+
+                    reminderFragmentDependency.getReminderFragment().updateList(isNew);
                 })
                 .create();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AlertDialog dialog = (AlertDialog) getDialog();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+    }
 }

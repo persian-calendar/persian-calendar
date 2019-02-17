@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.reminder.utils;
+package com.byagowi.persiancalendar.reminder;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,15 +7,15 @@ import android.content.Intent;
 
 import com.byagowi.persiancalendar.service.ReminderAlert;
 import com.byagowi.persiancalendar.reminder.constants.Constants;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-public class Reminder {
+public class ReminderUtils {
 
-    public static void turnOn(Context context, ReminderDetails event) {
+    public static void turnOn(Context context, Reminder event) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 

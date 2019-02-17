@@ -15,7 +15,7 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +61,7 @@ public class ReminderNotification extends Service {
             String title = getString(R.string.reminder);
             String subtitle = "";
             if (intent != null) {
-                ReminderDetails reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
+                Reminder reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
                 if (reminder != null)
                     subtitle = TextUtils.isEmpty(reminder.name)
                             ? ""

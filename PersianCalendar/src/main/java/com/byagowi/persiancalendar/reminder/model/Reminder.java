@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-public class ReminderDetails {
+public class Reminder {
 	
 	final public long id;
 	final public String name;
@@ -15,8 +15,8 @@ public class ReminderDetails {
 	final public int quantity;
 	final public long startTime;
 
-	public ReminderDetails(long id, String name, String info, TimeUnit unit, int quantity,
-						   long startTime) {
+	public Reminder(long id, String name, String info, TimeUnit unit, int quantity,
+                    long startTime) {
 		this.id = id;
 		this.name = name;
 		this.info = info;

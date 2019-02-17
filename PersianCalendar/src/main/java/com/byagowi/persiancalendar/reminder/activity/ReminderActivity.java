@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityReminderAlertBinding;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.reminder.constants.Constants;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -33,7 +33,7 @@ import androidx.databinding.DataBindingUtil;
 public class ReminderActivity extends AppCompatActivity {
 
     private ScheduledExecutorService scheduler;
-    private ReminderDetails event;
+    private Reminder event;
     private TextToSpeech tts;
     private boolean isTTSEnabled;
     private int previousVolume;
