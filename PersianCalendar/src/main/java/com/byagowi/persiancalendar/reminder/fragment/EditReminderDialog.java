@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.fragment;
+package com.byagowi.persiancalendar.reminder.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,8 +12,8 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.byagowi.persiancalendar.view.reminder.constants.Constants;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.constants.Constants;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;

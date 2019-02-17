@@ -11,8 +11,7 @@ import com.byagowi.persiancalendar.view.preferences.FragmentInterfaceCalendar;
 import com.byagowi.persiancalendar.view.preferences.FragmentLocationAthan;
 import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
-import com.byagowi.persiancalendar.view.reminder.fragment.EditReminderDialog;
-import com.byagowi.persiancalendar.view.reminder.fragment.ReminderFragment;
+import com.byagowi.persiancalendar.reminder.fragment.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 

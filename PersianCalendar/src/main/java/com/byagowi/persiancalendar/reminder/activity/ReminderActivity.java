@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.activity;
+package com.byagowi.persiancalendar.reminder.activity;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -14,8 +14,8 @@ import android.view.WindowManager.LayoutParams;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityReminderAlertBinding;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.constants.Constants;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.constants.Constants;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 
 import java.util.Locale;
 import java.util.concurrent.Executors;

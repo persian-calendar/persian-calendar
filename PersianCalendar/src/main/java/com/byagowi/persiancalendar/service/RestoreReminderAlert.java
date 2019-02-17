@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
-import com.byagowi.persiancalendar.view.reminder.utils.Reminder;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.utils.Reminder;
 
 /**
  * @author MEHDI DIMYADI

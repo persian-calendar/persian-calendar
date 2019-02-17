@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.constants;
+package com.byagowi.persiancalendar.reminder.constants;
 
 /**
  * @author MEHDI DIMYADI

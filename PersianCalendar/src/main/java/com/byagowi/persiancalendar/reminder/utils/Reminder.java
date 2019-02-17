@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.utils;
+package com.byagowi.persiancalendar.reminder.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.byagowi.persiancalendar.service.ReminderAlert;
-import com.byagowi.persiancalendar.view.reminder.constants.Constants;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.constants.Constants;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 
 /**
  * @author MEHDI DIMYADI

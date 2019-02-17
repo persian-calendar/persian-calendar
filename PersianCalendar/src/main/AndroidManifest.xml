@@ -58,7 +58,7 @@
             android:theme="@style/FullscreenTheme" />
 
         <activity
-            android:name=".view.reminder.activity.ReminderActivity"
+            android:name=".reminder.activity.ReminderActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"

@@ -15,14 +15,14 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import static com.byagowi.persiancalendar.view.reminder.constants.Constants.REMINDER_ID;
+import static com.byagowi.persiancalendar.reminder.constants.Constants.REMINDER_ID;
 
 public class ReminderNotification extends Service {
 

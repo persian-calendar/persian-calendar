@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/reminder"
-        android:name="com.byagowi.persiancalendar.view.reminder.fragment.ReminderFragment"
+        android:name="com.byagowi.persiancalendar.reminder.fragment.ReminderFragment"
         android:label="Reminder Fragment" />
 
 </navigation>

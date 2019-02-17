@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.di.dependencies;
 
 import com.byagowi.persiancalendar.di.scopes.PerFragment;
-import com.byagowi.persiancalendar.view.reminder.fragment.ReminderFragment;
+import com.byagowi.persiancalendar.reminder.fragment.ReminderFragment;
 
 import javax.inject.Inject;
 

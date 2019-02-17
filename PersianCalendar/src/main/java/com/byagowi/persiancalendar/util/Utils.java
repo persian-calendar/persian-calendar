@@ -54,7 +54,7 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;

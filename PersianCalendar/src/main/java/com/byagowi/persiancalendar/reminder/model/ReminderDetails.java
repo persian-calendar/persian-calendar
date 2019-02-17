@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.model;
+package com.byagowi.persiancalendar.reminder.model;
 
 import java.util.concurrent.TimeUnit;
 

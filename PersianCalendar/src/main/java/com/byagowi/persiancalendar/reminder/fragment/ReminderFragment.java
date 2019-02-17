@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view.reminder.fragment;
+package com.byagowi.persiancalendar.reminder.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 
 import java.util.ArrayList;
 import java.util.List;
