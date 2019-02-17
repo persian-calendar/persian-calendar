@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_date"
+                    android:id="@+id/date"
                     style="?android:attr/spinnerStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

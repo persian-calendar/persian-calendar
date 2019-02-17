@@ -107,30 +107,26 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         binding.time.setText(timeFormat.format(calendar.getTime()));
-        binding.btnDate.setText(dateFormat.format(calendar.getTime()));
-        binding.time.setOnClickListener(v -> {
-            TimePickerDialog time_dialog = new TimePickerDialog(
-                    getActivity(), (view1, hourOfDay, minute) -> {
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
-                binding.time.setText(timeFormat.format(calendar
-                        .getTime()));
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar
-                    .get(Calendar.MINUTE), true);
-            time_dialog.show();
-        });
-        binding.btnDate.setOnClickListener(v -> {
-            DatePickerDialog date_dialog = new DatePickerDialog(
-                    mainActivity, (view12, year, monthOfYear, dayOfMonth) -> {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                binding.btnDate.setText(dateFormat.format(calendar.getTime()));
-            }, calendar.get(Calendar.YEAR), calendar
-                    .get(Calendar.MONTH), calendar
-                    .get(Calendar.DAY_OF_MONTH));
-            date_dialog.show();
-        });
+        binding.date.setText(dateFormat.format(calendar.getTime()));
+        binding.time.setOnClickListener(v ->
+                new TimePickerDialog(mainActivity, (view1, hourOfDay, minute) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    calendar.set(Calendar.MINUTE, minute);
+                    binding.time.setText(timeFormat.format(calendar.getTime()));
+                },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true).show());
+        binding.date.setOnClickListener(v ->
+                new DatePickerDialog(mainActivity, (view12, year, monthOfYear, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    binding.date.setText(dateFormat.format(calendar.getTime()));
+                },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show());
 
         binding.name.addTextChangedListener(new TextWatcher() {
             @Override
