@@ -92,6 +92,13 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         return null;
     }
 
+    private long getIdFromArguments() {
+        long result = -1;
+        Bundle args = getArguments();
+        if (args != null) result = args.getLong(Constants.REMINDER_ID, -1);
+        return result;
+    }
+
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -100,9 +107,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         EditReminderDialogBinding binding = EditReminderDialogBinding.inflate(
                 LayoutInflater.from(mainActivity), null, false);
 
-        long tmpId = -1;
-        Bundle args = getArguments();
-        if (args != null) tmpId = args.getLong(Constants.REMINDER_ID, -1);
+        long tmpId = getIdFromArguments();
         if (tmpId == -1) tmpId = new Random().nextInt();
         final long id = tmpId;
 
@@ -213,7 +218,9 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        AlertDialog dialog = (AlertDialog) getDialog();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        if (getIdFromArguments() == -1) {
+            AlertDialog dialog = (AlertDialog) getDialog();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
     }
 }
