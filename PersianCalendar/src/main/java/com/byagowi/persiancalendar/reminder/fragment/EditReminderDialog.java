@@ -166,7 +166,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.nameLayout.setError(TextUtils.isEmpty(s) ? "حالی است" : "");
+                binding.nameLayout.setError(TextUtils.isEmpty(s) ? "خالی است" : "");
                 AlertDialog dialog = (AlertDialog) getDialog();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!TextUtils.isEmpty(s));
             }
