@@ -119,26 +119,26 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ReminderAdapterItemBinding mBinding;
-            private int mPosition;
+            private long id;
 
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
                 mBinding = binding;
                 mBinding.getRoot().setOnClickListener(
-                        v -> EditReminderDialog.newInstance(remindersList.get(mPosition).id)
+                        v -> EditReminderDialog.newInstance(id)
                                 .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> {
                     List<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    if (reminders.remove(remindersList.get(mPosition)))
+                    if (reminders.remove(Utils.getReminderById(id)))
                         Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
                     refresh();
-                    notifyItemRemoved(mPosition);
+                    notifyDataSetChanged();
                 });
             }
 
             public void bind(int position) {
-                mPosition = position;
                 ReminderDetails reminderDetails = remindersList.get(position);
+                id = reminderDetails.id;
                 mBinding.name.setText(reminderDetails.name);
                 mBinding.period.setText(
                         String.format("%s %s %s",
