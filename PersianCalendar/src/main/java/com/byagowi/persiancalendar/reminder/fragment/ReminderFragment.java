@@ -12,8 +12,9 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class ReminderFragment extends DaggerFragment {
     MainActivityDependency mainActivityDependency;
 
     private ReminderAdapter mReminderAdapter;
+    private String[] periodUnits;
 
     @Nullable
     @Override
@@ -47,6 +49,8 @@ public class ReminderFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.reminder), "");
 
         setHasOptionsMenu(true);
+
+        periodUnits = mainActivityDependency.getMainActivity().getResources().getStringArray(R.array.period_units);
 
         FragmentReminderBinding binding = FragmentReminderBinding.inflate(inflater, container, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
@@ -87,11 +91,11 @@ public class ReminderFragment extends DaggerFragment {
 
     class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
 
+        private List<Reminder> remindersList = new ArrayList<>();
+
         ReminderAdapter() {
             refresh();
         }
-
-        private List<Reminder> remindersList = new ArrayList<>();
 
         private void refresh() {
             Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
@@ -141,10 +145,10 @@ public class ReminderFragment extends DaggerFragment {
                 id = reminder.id;
                 mBinding.name.setText(reminder.name);
                 mBinding.period.setText(
-                        String.format("%s %s %s",
-                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
+                        String.format(
+                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
                                 Utils.formatNumber(reminder.quantity),
-                                reminder.unit));
+                                periodUnits[ReminderUtils.unitToOrdination(reminder.unit)]));
             }
         }
     }

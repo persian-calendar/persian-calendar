@@ -11,11 +11,11 @@ import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ActivityReminderAlertBinding;
-import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.reminder.constants.Constants;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -61,15 +61,14 @@ public class ReminderActivity extends AppCompatActivity {
             isTTSEnabled = false;
             if (status == TextToSpeech.SUCCESS) {
                 int result = tts.setLanguage(Locale.getDefault());
-                if (result == TextToSpeech.LANG_MISSING_DATA
-                        || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                } else {
+                if (result != TextToSpeech.LANG_MISSING_DATA
+                        && result != TextToSpeech.LANG_NOT_SUPPORTED) {
                     isTTSEnabled = true;
                 }
             }
         });
 
-        event = Utils.getReminderById(getIntent().getLongExtra(Constants.REMINDER_ID, -1));
+        event = Utils.getReminderById(getIntent().getLongExtra(com.byagowi.persiancalendar.Constants.REMINDER_ID, -1));
         if (event != null) {
             binding.name.setText(event.name);
             binding.info.setText(event.info);

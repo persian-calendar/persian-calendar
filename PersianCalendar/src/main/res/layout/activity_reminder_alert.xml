@@ -37,7 +37,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
             android:padding="10dp"
-            android:text="@string/turnOFF" />
+            android:text="@string/stop" />
 
         <androidx.appcompat.widget.ContentFrameLayout
             android:id="@+id/ad_layout"

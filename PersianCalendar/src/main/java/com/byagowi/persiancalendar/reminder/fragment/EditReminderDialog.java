@@ -6,21 +6,19 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
-import com.byagowi.persiancalendar.reminder.constants.Constants;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -49,35 +46,11 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
 
     static EditReminderDialog newInstance(long id) {
         Bundle args = new Bundle();
-        args.putLong(Constants.REMINDER_ID, id);
+        args.putLong(com.byagowi.persiancalendar.Constants.REMINDER_ID, id);
 
         EditReminderDialog fragment = new EditReminderDialog();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    private static int unitToOrdination(TimeUnit unit) {
-        switch (unit) {
-            case MINUTES:
-                return 0;
-            case HOURS:
-                return 1;
-            default:
-            case DAYS:
-                return 2;
-        }
-    }
-
-    private static TimeUnit ordinationToUnit(int ordination) {
-        switch (ordination) {
-            case 0:
-                return TimeUnit.MINUTES;
-            case 1:
-                return TimeUnit.HOURS;
-            default:
-            case 2:
-                return TimeUnit.DAYS;
-        }
     }
 
     @Nullable
@@ -112,21 +85,21 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         final long id = tmpId;
 
         List<FormattedIntEntity> quantities = new ArrayList<>();
-        for (int i = 1; i <= Constants.MAX_QUANTITY; ++i) {
+        for (int i = 1; i <= 60; ++i) {
             quantities.add(new FormattedIntEntity(i, Utils.formatNumber(i)));
         }
         binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
-                R.layout.reminder_item, quantities));
+                android.R.layout.simple_spinner_dropdown_item, quantities));
         binding.unit.setAdapter(ArrayAdapter.createFromResource(mainActivity,
-                R.array.period_units, R.layout.reminder_item));
+                R.array.period_units, android.R.layout.simple_spinner_dropdown_item));
 
         Calendar calendar = Calendar.getInstance();
         Reminder reminder = findReminderById(id);
         if (reminder != null) {
             binding.name.setText(reminder.name);
             binding.info.setText(reminder.info);
-            binding.quantity.setSelection(reminder.quantity);
-            binding.unit.setSelection(unitToOrdination(reminder.unit));
+            binding.quantity.setSelection(reminder.quantity - 1);
+            binding.unit.setSelection(ReminderUtils.unitToOrdination(reminder.unit));
             calendar.setTimeInMillis(reminder.startTime);
         }
 
@@ -187,8 +160,8 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                             id,
                             name,
                             info,
-                            ordinationToUnit(binding.unit.getSelectedItemPosition()),
-                            binding.quantity.getSelectedItemPosition(),
+                            ReminderUtils.ordinationToUnit(binding.unit.getSelectedItemPosition()),
+                            ((FormattedIntEntity) binding.quantity.getSelectedItem()).getValue(),
                             System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
                     );
 
