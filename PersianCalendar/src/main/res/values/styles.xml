@@ -216,8 +216,10 @@
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/modern_primary_dark
+            @color/modern_primary
         </item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
