@@ -1971,7 +1971,7 @@ public class Utils {
         return cal;
     }
 
-    private static CivilDate calendarToCivilDate(Calendar calendar) {
+    public static CivilDate calendarToCivilDate(Calendar calendar) {
         return new CivilDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH));

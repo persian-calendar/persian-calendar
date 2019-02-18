@@ -300,11 +300,16 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_days_head">Length</string>
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
-    <string name="month_overview">Month overview</string>
+    <string name="month_overview">مناسبت‌های ماه</string>
 
     <!-- Reminder -->
     <string name="reminder_summary">هر %1$s %2$s</string>
     <string name="reminder">یادآور</string>
+    <string name="reminder_name">نام یادآور</string>
+    <string name="more_information">اطلاعات بیشتر</string>
+    <string name="reminder_period">تناوب یادآور</string>
+    <string name="period_starting_time">زمان شروع تناوب</string>
+    <string name="please_enter_a_name">لطفاً نامی وارد کنید</string>
 
     <string-array name="period_units">
         <item>دقیقه</item>
