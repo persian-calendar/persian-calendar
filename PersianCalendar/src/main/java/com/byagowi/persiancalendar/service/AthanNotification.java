@@ -20,18 +20,12 @@ import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 public class AthanNotification extends Service {
 
     private static final int NOTIFICATION_ID = 1002;
-    String NOTIFICATION_CHANNEL_ID = "1002";
-
-    @Nullable
-    public static AthanNotification getInstance() {
-        return null;
-    }
+    private static String NOTIFICATION_CHANNEL_ID = String.valueOf(NOTIFICATION_ID);
 
     @Override
     public IBinder onBind(Intent intent) {

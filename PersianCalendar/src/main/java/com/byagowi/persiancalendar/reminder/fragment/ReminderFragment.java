@@ -50,8 +50,6 @@ public class ReminderFragment extends DaggerFragment {
 
         setHasOptionsMenu(true);
 
-        periodUnits = mainActivityDependency.getMainActivity().getResources().getStringArray(R.array.period_units);
-
         FragmentReminderBinding binding = FragmentReminderBinding.inflate(inflater, container, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
         mReminderAdapter = new ReminderAdapter();
@@ -98,7 +96,7 @@ public class ReminderFragment extends DaggerFragment {
         }
 
         private void refresh() {
-            Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
+            Utils.initUtils(mainActivityDependency.getMainActivity());
             remindersList = Utils.getReminderDetails();
         }
 
@@ -123,7 +121,7 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ReminderAdapterItemBinding mBinding;
-            private long id;
+            private int id;
 
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
@@ -133,8 +131,10 @@ public class ReminderFragment extends DaggerFragment {
                                 .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> {
                     List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    if (reminders.remove(Utils.getReminderById(id)))
+                    Reminder reminder = Utils.getReminderById(id);
+                    if (reminder != null && reminders.remove(reminder))
                         Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
+                    ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
                     refresh();
                     notifyDataSetChanged();
                 });
@@ -145,10 +145,9 @@ public class ReminderFragment extends DaggerFragment {
                 id = reminder.id;
                 mBinding.name.setText(reminder.name);
                 mBinding.period.setText(
-                        String.format(
-                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
+                        String.format(mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
                                 Utils.formatNumber(reminder.quantity),
-                                periodUnits[ReminderUtils.unitToOrdination(reminder.unit)]));
+                                getString(ReminderUtils.unitToStringId(reminder.unit))));
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.reminder.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,16 +16,15 @@ import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
+import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -44,9 +44,9 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     @Inject
     ReminderFragmentDependency reminderFragmentDependency;
 
-    static EditReminderDialog newInstance(long id) {
+    static EditReminderDialog newInstance(int id) {
         Bundle args = new Bundle();
-        args.putLong(com.byagowi.persiancalendar.Constants.REMINDER_ID, id);
+        args.putInt(Constants.REMINDER_ID, id);
 
         EditReminderDialog fragment = new EditReminderDialog();
         fragment.setArguments(args);
@@ -65,24 +65,24 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         return null;
     }
 
-    private long getIdFromArguments() {
-        long result = -1;
+    private int getIdFromArguments() {
+        int result = -1;
         Bundle args = getArguments();
-        if (args != null) result = args.getLong(Constants.REMINDER_ID, -1);
+        if (args != null) result = args.getInt(Constants.REMINDER_ID, -1);
         return result;
     }
 
     @NonNull
     @Override
-    public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
         EditReminderDialogBinding binding = EditReminderDialogBinding.inflate(
                 LayoutInflater.from(mainActivity), null, false);
 
-        long tmpId = getIdFromArguments();
-        if (tmpId == -1) tmpId = new Random().nextInt();
-        final long id = tmpId;
+        int tmpId = getIdFromArguments();
+        if (tmpId == -1) tmpId = new Random().nextInt() % Constants.REMINDERS_MAX_ID;
+        final int id = tmpId;
 
         List<FormattedIntEntity> quantities = new ArrayList<>();
         for (int i = 1; i <= 60; ++i) {
@@ -90,8 +90,9 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         }
         binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
                 android.R.layout.simple_spinner_dropdown_item, quantities));
-        binding.unit.setAdapter(ArrayAdapter.createFromResource(mainActivity,
-                R.array.period_units, android.R.layout.simple_spinner_dropdown_item));
+        binding.unit.setAdapter(new ArrayAdapter<>(mainActivity,
+                android.R.layout.simple_spinner_dropdown_item,
+                ReminderUtils.timeUnitsStringArray(mainActivity)));
 
         Calendar calendar = Calendar.getInstance();
         Reminder reminder = findReminderById(id);
@@ -103,16 +104,16 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
             calendar.setTimeInMillis(reminder.startTime);
         }
 
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        binding.time.setText(timeFormat.format(calendar.getTime()));
-        binding.date.setText(dateFormat.format(calendar.getTime()));
+        binding.time.setText(Utils.getFormattedClock(new Clock(calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE)), false));
+        binding.date.setText(Utils.formatDate(Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(),
+                Utils.calendarToCivilDate(calendar).toJdn())));
         binding.time.setOnClickListener(v ->
                 new TimePickerDialog(mainActivity, (view1, hourOfDay, minute) -> {
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
-                    binding.time.setText(timeFormat.format(calendar.getTime()));
+                    binding.time.setText(Utils.getFormattedClock(new Clock(calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE)), false));
                 },
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -122,7 +123,8 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, monthOfYear);
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    binding.date.setText(dateFormat.format(calendar.getTime()));
+                    binding.date.setText(Utils.formatDate(Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(),
+                            Utils.calendarToCivilDate(calendar).toJdn())));
                 },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
@@ -135,7 +137,8 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.nameLayout.setError(TextUtils.isEmpty(s) ? "خالی است" : "");
+                binding.nameLayout.setError(getString(TextUtils.isEmpty(s) ?
+                        R.string.please_enter_a_name : R.string.empty));
                 AlertDialog dialog = (AlertDialog) getDialog();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!TextUtils.isEmpty(s));
             }
@@ -158,7 +161,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                             info,
                             ReminderUtils.ordinationToUnit(binding.unit.getSelectedItemPosition()),
                             ((FormattedIntEntity) binding.quantity.getSelectedItem()).getValue(),
-                            System.currentTimeMillis() // Somehow should be get from binding.btnDate.getText() and binding.time.getText()
+                            calendar.getTimeInMillis()
                     );
 
                     ArrayList<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());

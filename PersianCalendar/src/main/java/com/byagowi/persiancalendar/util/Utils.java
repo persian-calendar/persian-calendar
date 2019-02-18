@@ -50,11 +50,12 @@ import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
-import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -1248,6 +1249,10 @@ public class Utils {
                 setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap);
             }
         }
+
+        for (Reminder event : Utils.getReminderDetails()) {
+            ReminderUtils.turnOn(context, event);
+        }
     }
 
     static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
@@ -1293,6 +1298,11 @@ public class Utils {
 
     static public void startAthan(Context context, String prayTimeKey) {
         if (notificationAthan) {
+            // Is this needed?
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//                ContextCompat.startForegroundService(context,
+//                        new Intent(context, AthanNotification.class));
+
             context.startService(new Intent(context, AthanNotification.class)
                     .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
         } else {
@@ -1971,7 +1981,7 @@ public class Utils {
         return cal;
     }
 
-    private static CivilDate calendarToCivilDate(Calendar calendar) {
+    public static CivilDate calendarToCivilDate(Calendar calendar) {
         return new CivilDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH));
@@ -2055,30 +2065,6 @@ public class Utils {
         return result.toString();
     }
 
-    private static TimeUnit timeUnitFromString(String string) {
-        switch (string) {
-            case "m":
-                return TimeUnit.MINUTES;
-            case "h":
-                return TimeUnit.HOURS;
-            default:
-            case "d":
-                return TimeUnit.DAYS;
-        }
-    }
-
-    private static String timeUnitToString(TimeUnit unit) {
-        switch (unit) {
-            case MINUTES:
-                return "m";
-            case HOURS:
-                return "h";
-            default:
-            case DAYS:
-                return "d";
-        }
-    }
-
     private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
 
     private static List<Reminder> updateSavedReminders(Context context) {
@@ -2094,10 +2080,10 @@ public class Utils {
             for (int i = 0; i < length; ++i) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 reminders.add(new Reminder(
-                        jsonObject.getLong("id"),
+                        jsonObject.getInt("id"),
                         jsonObject.getString("name"),
                         jsonObject.getString("info"),
-                        timeUnitFromString(jsonObject.getString("unit")),
+                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
                         jsonObject.getInt("quantity"),
                         jsonObject.getLong("startTime")
                 ));
@@ -2121,7 +2107,7 @@ public class Utils {
                 object.put("id", reminder.id);
                 object.put("name", reminder.name);
                 object.put("info", reminder.info);
-                object.put("unit", timeUnitToString(reminder.unit));
+                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
                 object.put("quantity", reminder.quantity);
                 object.put("startTime", reminder.startTime);
                 json.put(object);
@@ -2145,7 +2131,7 @@ public class Utils {
     }
 
     @Nullable
-    public static Reminder getReminderById(long id) {
+    public static Reminder getReminderById(int id) {
         for (Reminder reminder : sReminderDetails) {
             if (reminder.id == id) return reminder;
         }
