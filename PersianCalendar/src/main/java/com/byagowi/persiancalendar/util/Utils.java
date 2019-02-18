@@ -50,11 +50,12 @@ import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
-import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -1248,6 +1249,10 @@ public class Utils {
                 setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap);
             }
         }
+
+        for (Reminder event : Utils.getReminderDetails()) {
+            ReminderUtils.turnOn(context, event);
+        }
     }
 
     static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
@@ -2094,7 +2099,7 @@ public class Utils {
             for (int i = 0; i < length; ++i) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 reminders.add(new Reminder(
-                        jsonObject.getLong("id"),
+                        jsonObject.getInt("id"),
                         jsonObject.getString("name"),
                         jsonObject.getString("info"),
                         timeUnitFromString(jsonObject.getString("unit")),
@@ -2145,7 +2150,7 @@ public class Utils {
     }
 
     @Nullable
-    public static Reminder getReminderById(long id) {
+    public static Reminder getReminderById(int id) {
         for (Reminder reminder : sReminderDetails) {
             if (reminder.id == id) return reminder;
         }

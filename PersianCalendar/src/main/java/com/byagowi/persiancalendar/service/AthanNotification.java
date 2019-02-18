@@ -26,7 +26,7 @@ import androidx.core.app.NotificationCompat;
 public class AthanNotification extends Service {
 
     private static final int NOTIFICATION_ID = 1002;
-    String NOTIFICATION_CHANNEL_ID = "1002";
+    private static String NOTIFICATION_CHANNEL_ID = String.valueOf(NOTIFICATION_ID);
 
     @Nullable
     public static AthanNotification getInstance() {

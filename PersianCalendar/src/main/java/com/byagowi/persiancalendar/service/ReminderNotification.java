@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.service;
 
+import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -13,8 +14,8 @@ import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.util.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,12 +27,7 @@ import static com.byagowi.persiancalendar.Constants.REMINDER_ID;
 public class ReminderNotification extends Service {
 
     private static final int NOTIFICATION_ID = 1003;
-    String NOTIFICATION_CHANNEL_ID = "1003";
-
-    @Nullable
-    public static ReminderNotification getInstance() {
-        return null;
-    }
+    private static String NOTIFICATION_CHANNEL_ID = String.valueOf(NOTIFICATION_ID);
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -60,7 +56,7 @@ public class ReminderNotification extends Service {
             String title = getString(R.string.reminder);
             String subtitle = "";
             if (intent != null) {
-                Reminder reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
+                Reminder reminder = Utils.getReminderById(intent.getIntExtra(REMINDER_ID, -1));
                 if (reminder != null)
                     subtitle = reminder.name;
             }

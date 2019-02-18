@@ -98,7 +98,7 @@ public class ReminderFragment extends DaggerFragment {
         }
 
         private void refresh() {
-            Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
+            Utils.initUtils(mainActivityDependency.getMainActivity());
             remindersList = Utils.getReminderDetails();
         }
 
@@ -123,7 +123,7 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ReminderAdapterItemBinding mBinding;
-            private long id;
+            private int id;
 
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
@@ -133,8 +133,10 @@ public class ReminderFragment extends DaggerFragment {
                                 .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> {
                     List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    if (reminders.remove(Utils.getReminderById(id)))
+                    Reminder reminder = Utils.getReminderById(id);
+                    if (reminder != null && reminders.remove(reminder))
                         Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
+                    ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
                     refresh();
                     notifyDataSetChanged();
                 });

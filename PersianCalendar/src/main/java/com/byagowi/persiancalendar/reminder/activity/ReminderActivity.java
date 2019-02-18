@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.reminder.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,22 +56,30 @@ public class ReminderActivity extends AppCompatActivity {
         //window.addFlags(LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         //window.addFlags(LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        Uri notification = RingtoneManager
-                .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        alarm = MediaPlayer.create(getApplicationContext(), notification);
-        tts = new TextToSpeech(this, status -> {
-            isTTSEnabled = false;
-            if (status == TextToSpeech.SUCCESS) {
-                int result = tts.setLanguage(Locale.getDefault());
-                if (result != TextToSpeech.LANG_MISSING_DATA
-                        && result != TextToSpeech.LANG_NOT_SUPPORTED) {
-                    isTTSEnabled = true;
-                }
-            }
-        });
 
-        event = Utils.getReminderById(getIntent().getLongExtra(com.byagowi.persiancalendar.Constants.REMINDER_ID, -1));
-        if (event != null) {
+//        try {
+//            Ringtone ringtone = RingtoneManager.getRingtone(this,
+//                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+//            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+//            ringtone.play();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        tts = new TextToSpeech(this, status -> {
+//            isTTSEnabled = false;
+//            if (status == TextToSpeech.SUCCESS) {
+//                int result = tts.setLanguage(Locale.getDefault());
+//                if (result != TextToSpeech.LANG_MISSING_DATA
+//                        && result != TextToSpeech.LANG_NOT_SUPPORTED) {
+//                    isTTSEnabled = true;
+//                }
+//            }
+//        });
+
+        Intent intent = getIntent();
+        if (intent != null && (event = Utils.getReminderById(intent.getIntExtra(
+                Constants.REMINDER_ID, -1))) != null) {
             binding.name.setText(event.name);
             binding.info.setText(event.info);
             binding.btnTurnOff.setOnClickListener(v -> {
@@ -80,12 +90,12 @@ public class ReminderActivity extends AppCompatActivity {
             });
             scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate(() -> {
-                if (isTTSEnabled && !TextUtils.isEmpty(event.info)) {
-                    tts.speak(event.info, TextToSpeech.QUEUE_FLUSH, null);
-                } else {
-                    if (!alarm.isPlaying())
-                        alarm.start();
-                }
+//                if (isTTSEnabled && !TextUtils.isEmpty(event.info)) {
+//                    tts.speak(event.info, TextToSpeech.QUEUE_FLUSH, null);
+//                } else {
+//                    if (alarm != null && !alarm.isPlaying())
+//                        alarm.start();
+//                }
             }, 0, Constants.SIGNAL_PAUSE, TimeUnit.SECONDS);
         } else {
             finish();
@@ -107,11 +117,11 @@ public class ReminderActivity extends AppCompatActivity {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
+//        am.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
+//        if (tts != null) {
+//            tts.stop();
+//            tts.shutdown();
+//        }
         super.onDestroy();
     }
 }

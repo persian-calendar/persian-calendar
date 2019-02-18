@@ -11,6 +11,8 @@ import com.byagowi.persiancalendar.service.ReminderAlert;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.byagowi.persiancalendar.Constants.REMINDERS_BASE_ID;
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
@@ -23,26 +25,25 @@ public class ReminderUtils {
 
         long startTime = event.startTime;
         long period = event.unit.toMillis(1);
-        // FIXME: BAD IDEA
-        // while (startTime < System.currentTimeMillis()) startTime += period;
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period,
-                prepareIntent(context, event.id));
+
+        startTime = System.currentTimeMillis() + (System.currentTimeMillis() - startTime) % period;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period, prepareIntent(context, event.id));
 
     }
 
-    public static void turnOff(Context context, long event_id) {
+    public static void turnOff(Context context, long eventId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        alarmManager.cancel(prepareIntent(context, event_id));
+        alarmManager.cancel(prepareIntent(context, eventId));
     }
 
-    private static PendingIntent prepareIntent(Context context, long event_id) {
+    private static PendingIntent prepareIntent(Context context, long eventId) {
+        int id = (int) (eventId % 10000) + REMINDERS_BASE_ID;
         Intent intent = new Intent(context, ReminderAlert.class);
-        intent.setAction(String.valueOf(event_id));
-        intent.putExtra(Constants.REMINDER_ID, event_id);
-        return PendingIntent.getBroadcast(context, 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        intent.setAction(String.valueOf(id));
+        intent.putExtra(Constants.REMINDER_ID, id);
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     public static int unitToOrdination(TimeUnit unit) {
