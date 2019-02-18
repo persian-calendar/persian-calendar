@@ -90,7 +90,7 @@
                     style="?android:attr/spinnerStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -98,7 +98,7 @@
                     style="?android:attr/spinnerStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

@@ -65,8 +65,7 @@ public class ReminderNotification extends Service {
                     NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
-                    // a png should be here, vector drawable won't work on older Androids
-                    // .setSmallIcon(R.drawable.ic_alarm)
+                    .setSmallIcon(R.drawable.ic_alarm_raster)
                     .setContentTitle(title)
                     .setContentText(subtitle);
 

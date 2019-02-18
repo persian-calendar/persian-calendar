@@ -1298,6 +1298,11 @@ public class Utils {
 
     static public void startAthan(Context context, String prayTimeKey) {
         if (notificationAthan) {
+            // Is this needed?
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//                ContextCompat.startForegroundService(context,
+//                        new Intent(context, AthanNotification.class));
+
             context.startService(new Intent(context, AthanNotification.class)
                     .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
         } else {
