@@ -1,21 +1,23 @@
-package com.byagowi.persiancalendar.reminder.utils;
+package com.byagowi.persiancalendar.reminder;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.service.ReminderAlert;
-import com.byagowi.persiancalendar.reminder.constants.Constants;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-public class Reminder {
+public class ReminderUtils {
 
-    public static void turnOn(Context context, ReminderDetails event) {
+    public static void turnOn(Context context, Reminder event) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
@@ -41,5 +43,29 @@ public class Reminder {
         intent.putExtra(Constants.REMINDER_ID, event_id);
         return PendingIntent.getBroadcast(context, 0,
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    public static int unitToOrdination(TimeUnit unit) {
+        switch (unit) {
+            case MINUTES:
+                return 0;
+            case HOURS:
+                return 1;
+            default:
+            case DAYS:
+                return 2;
+        }
+    }
+
+    public static TimeUnit ordinationToUnit(int ordination) {
+        switch (ordination) {
+            case 0:
+                return TimeUnit.MINUTES;
+            case 1:
+                return TimeUnit.HOURS;
+            default:
+            case 2:
+                return TimeUnit.DAYS;
+        }
     }
 }

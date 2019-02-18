@@ -54,7 +54,7 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.view.activity.AthanActivity;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -233,9 +233,9 @@ public class Utils {
     private static long latestToastShowTime = -1;
     private static boolean numericalDatePreferred = false;
     private static String[] calendarTypesTitleAbbr = new String[]{};
-    private static List<ReminderDetails> sReminderDetails = Collections.emptyList();
+    private static List<Reminder> sReminderDetails = Collections.emptyList();
 
-    public static List<ReminderDetails> getReminderDetails() {
+    public static List<Reminder> getReminderDetails() {
         return sReminderDetails;
     }
 
@@ -2081,19 +2081,19 @@ public class Utils {
 
     private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
 
-    private static List<ReminderDetails> updateSavedReminders(Context context) {
+    private static List<Reminder> updateSavedReminders(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
         if (TextUtils.isEmpty(storedJson))
             storedJson = "[]";
 
-        List<ReminderDetails> reminders = new ArrayList<>();
+        List<Reminder> reminders = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(storedJson);
             int length = jsonArray.length();
             for (int i = 0; i < length; ++i) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                reminders.add(new ReminderDetails(
+                reminders.add(new Reminder(
                         jsonObject.getLong("id"),
                         jsonObject.getString("name"),
                         jsonObject.getString("info"),
@@ -2111,12 +2111,12 @@ public class Utils {
         return reminders;
     }
 
-    public static void storeReminders(Context context, List<ReminderDetails> reminders) {
+    public static void storeReminders(Context context, List<Reminder> reminders) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         try {
             JSONArray json = new JSONArray();
-            for (ReminderDetails reminder : reminders) {
+            for (Reminder reminder : reminders) {
                 JSONObject object = new JSONObject();
                 object.put("id", reminder.id);
                 object.put("name", reminder.name);
@@ -2145,8 +2145,8 @@ public class Utils {
     }
 
     @Nullable
-    public static ReminderDetails getReminderById(long id) {
-        for (ReminderDetails reminder : sReminderDetails) {
+    public static Reminder getReminderById(long id) {
+        for (Reminder reminder : sReminderDetails) {
             if (reminder.id == id) return reminder;
         }
         return null;

@@ -13,6 +13,9 @@ public class Constants {
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
+    public static final String REMINDER_ID = "reminder_id";
+    public static final int SIGNAL_PAUSE = 5;
+
     public static final String LANG_FA = "fa";
     public static final String LANG_FA_AF = "fa-AF";
     public static final String LANG_PS = "ps";

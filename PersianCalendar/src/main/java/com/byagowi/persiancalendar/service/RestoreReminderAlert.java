@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
-import com.byagowi.persiancalendar.reminder.utils.Reminder;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
 
 /**
  * @author MEHDI DIMYADI
@@ -21,8 +21,8 @@ public class RestoreReminderAlert extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        for (ReminderDetails event : Utils.getReminderDetails()) {
-            Reminder.turnOn(this, event);
+        for (Reminder event : Utils.getReminderDetails()) {
+            ReminderUtils.turnOn(this, event);
         }
         return START_NOT_STICKY;
     }

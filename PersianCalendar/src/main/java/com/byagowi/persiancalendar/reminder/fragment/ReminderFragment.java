@@ -12,8 +12,9 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.reminder.ReminderUtils;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class ReminderFragment extends DaggerFragment {
     MainActivityDependency mainActivityDependency;
 
     private ReminderAdapter mReminderAdapter;
+    private String[] periodUnits;
 
     @Nullable
     @Override
@@ -47,6 +49,8 @@ public class ReminderFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.reminder), "");
 
         setHasOptionsMenu(true);
+
+        periodUnits = mainActivityDependency.getMainActivity().getResources().getStringArray(R.array.period_units);
 
         FragmentReminderBinding binding = FragmentReminderBinding.inflate(inflater, container, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
@@ -87,11 +91,11 @@ public class ReminderFragment extends DaggerFragment {
 
     class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {
 
+        private List<Reminder> remindersList = new ArrayList<>();
+
         ReminderAdapter() {
             refresh();
         }
-
-        private List<ReminderDetails> remindersList = new ArrayList<>();
 
         private void refresh() {
             Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
@@ -119,32 +123,32 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ReminderAdapterItemBinding mBinding;
-            private int mPosition;
+            private long id;
 
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
                 mBinding = binding;
                 mBinding.getRoot().setOnClickListener(
-                        v -> EditReminderDialog.newInstance(remindersList.get(mPosition).id)
+                        v -> EditReminderDialog.newInstance(id)
                                 .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> {
-                    List<ReminderDetails> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    if (reminders.remove(remindersList.get(mPosition)))
+                    List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
+                    if (reminders.remove(Utils.getReminderById(id)))
                         Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
                     refresh();
-                    notifyItemRemoved(mPosition);
+                    notifyDataSetChanged();
                 });
             }
 
             public void bind(int position) {
-                mPosition = position;
-                ReminderDetails reminderDetails = remindersList.get(position);
-                mBinding.name.setText(reminderDetails.name);
+                Reminder reminder = remindersList.get(position);
+                id = reminder.id;
+                mBinding.name.setText(reminder.name);
                 mBinding.period.setText(
-                        String.format("%s %s %s",
-                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminderPeriod),
-                                Utils.formatNumber(reminderDetails.quantity),
-                                reminderDetails.unit));
+                        String.format(
+                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
+                                Utils.formatNumber(reminder.quantity),
+                                periodUnits[ReminderUtils.unitToOrdination(reminder.unit)]));
             }
         }
     }

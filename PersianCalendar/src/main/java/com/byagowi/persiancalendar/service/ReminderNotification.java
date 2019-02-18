@@ -9,20 +9,19 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.reminder.model.ReminderDetails;
+import com.byagowi.persiancalendar.reminder.model.Reminder;
 
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import static com.byagowi.persiancalendar.reminder.constants.Constants.REMINDER_ID;
+import static com.byagowi.persiancalendar.Constants.REMINDER_ID;
 
 public class ReminderNotification extends Service {
 
@@ -61,11 +60,9 @@ public class ReminderNotification extends Service {
             String title = getString(R.string.reminder);
             String subtitle = "";
             if (intent != null) {
-                ReminderDetails reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
+                Reminder reminder = Utils.getReminderById(intent.getLongExtra(REMINDER_ID, -1));
                 if (reminder != null)
-                    subtitle = TextUtils.isEmpty(reminder.name)
-                            ? ""
-                            : R.string.remindeNow + " " + reminder.name;
+                    subtitle = reminder.name;
             }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,

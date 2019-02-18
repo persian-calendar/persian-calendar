@@ -303,23 +303,13 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="month_overview">Month overview</string>
 
     <!-- Reminder -->
-    <string name="reminderPeriod">Every</string>
-    <string name="reminderUnit">Quantity</string>
-    <string name="ok">OK</string>
-    <string name="reminder">Reminder</string>
-    <string name="reminderInfo">Reminder information</string>
-    <string name="reminderDate">Date</string>
-    <string name="reminderTime">Time</string>
-    <string name="remindeNow">The time has come for the</string>
-    <string name="start">Start from</string>
-    <string name="alertTitle">Alert!</string>
-    <string name="emptyName">Name cannot be empty</string>
-    <string name="turnOFF">Turn OFF</string>
+    <string name="reminder_summary">هر %1$s %2$s</string>
+    <string name="reminder">یادآور</string>
 
     <string-array name="period_units">
-        <item>Minutes</item>
-        <item>Hours</item>
-        <item>Days</item>
-        <item>Weeks</item>
+        <item>دقیقه</item>
+        <item>ساعت</item>
+        <item>روز</item>
+        <item>هفته</item>
     </string-array>
 </resources>
