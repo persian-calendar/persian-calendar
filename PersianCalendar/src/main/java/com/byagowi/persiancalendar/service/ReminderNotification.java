@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.service;
 
-import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -8,21 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
 import com.byagowi.persiancalendar.BuildConfig;
+import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-import static com.byagowi.persiancalendar.Constants.REMINDER_ID;
 
 public class ReminderNotification extends Service {
 
@@ -40,6 +37,14 @@ public class ReminderNotification extends Service {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
+            String title = getString(R.string.reminder);
+            String subtitle = "";
+            if (intent != null) {
+                Reminder reminder = Utils.getReminderById(intent.getIntExtra(Constants.REMINDER_ID, -1));
+                if (reminder != null)
+                    subtitle = reminder.name;
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel =
                         new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
@@ -53,24 +58,16 @@ public class ReminderNotification extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
 
-            String title = getString(R.string.reminder);
-            String subtitle = "";
-            if (intent != null) {
-                Reminder reminder = Utils.getReminderById(intent.getIntExtra(REMINDER_ID, -1));
-                if (reminder != null)
-                    subtitle = reminder.name;
-            }
-
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
-                    NOTIFICATION_CHANNEL_ID);
-            notificationBuilder.setAutoCancel(true)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_alarm_raster)
-                    .setContentTitle(title)
-                    .setContentText(subtitle);
-
-            notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
-            notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                            .setAutoCancel(true)
+                            .setTimeoutAfter(TimeUnit.HOURS.toMillis(12))
+                            .setWhen(System.currentTimeMillis())
+                            .setShowWhen(true)
+                            .setSmallIcon(R.drawable.ic_alarm_raster)
+                            .setContentTitle(title)
+                            .setContentText(subtitle)
+                            .setDefaults(NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND);
 
             Context appContext = getApplicationContext();
             if (appContext != null &&
@@ -86,13 +83,7 @@ public class ReminderNotification extends Service {
                         .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             }
 
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-
-            new Handler().postDelayed(() -> {
-                notificationManager.cancel(NOTIFICATION_ID);
-                stopSelf();
-            }, TimeUnit.MINUTES.toMillis(5));
-
+            notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
         }
         return super.onStartCommand(intent, flags, startId);
     }

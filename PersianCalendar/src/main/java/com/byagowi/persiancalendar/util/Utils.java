@@ -2065,30 +2065,6 @@ public class Utils {
         return result.toString();
     }
 
-    private static TimeUnit timeUnitFromString(String string) {
-        switch (string) {
-            case "m":
-                return TimeUnit.MINUTES;
-            case "h":
-                return TimeUnit.HOURS;
-            default:
-            case "d":
-                return TimeUnit.DAYS;
-        }
-    }
-
-    private static String timeUnitToString(TimeUnit unit) {
-        switch (unit) {
-            case MINUTES:
-                return "m";
-            case HOURS:
-                return "h";
-            default:
-            case DAYS:
-                return "d";
-        }
-    }
-
     private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
 
     private static List<Reminder> updateSavedReminders(Context context) {
@@ -2107,7 +2083,7 @@ public class Utils {
                         jsonObject.getInt("id"),
                         jsonObject.getString("name"),
                         jsonObject.getString("info"),
-                        timeUnitFromString(jsonObject.getString("unit")),
+                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
                         jsonObject.getInt("quantity"),
                         jsonObject.getLong("startTime")
                 ));
@@ -2131,7 +2107,7 @@ public class Utils {
                 object.put("id", reminder.id);
                 object.put("name", reminder.name);
                 object.put("info", reminder.info);
-                object.put("unit", timeUnitToString(reminder.unit));
+                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
                 object.put("quantity", reminder.quantity);
                 object.put("startTime", reminder.startTime);
                 json.put(object);

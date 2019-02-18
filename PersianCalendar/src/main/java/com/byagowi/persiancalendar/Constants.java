@@ -95,6 +95,7 @@ public class Constants {
     public static final int THREE_HOURS_APP_ID = 1010;
     public static final int ALARMS_BASE_ID = 2000;
     public static final int REMINDERS_BASE_ID = 10000; // reserved till 20000
+    public static final int REMINDERS_MAX_ID = 10000;
 
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
     public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";

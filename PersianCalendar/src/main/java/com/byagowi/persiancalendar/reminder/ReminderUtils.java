@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.service.ReminderAlert;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.byagowi.persiancalendar.Constants.REMINDERS_BASE_ID;
+import androidx.annotation.StringRes;
 
 /**
  * @author MEHDI DIMYADI
@@ -39,34 +42,65 @@ public class ReminderUtils {
     }
 
     private static PendingIntent prepareIntent(Context context, long eventId) {
-        int id = (int) (eventId % 10000) + REMINDERS_BASE_ID;
         Intent intent = new Intent(context, ReminderAlert.class);
-        intent.setAction(String.valueOf(id));
-        intent.putExtra(Constants.REMINDER_ID, id);
+        intent.setAction(String.valueOf(eventId));
+        intent.putExtra(Constants.REMINDER_ID, eventId);
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     public static int unitToOrdination(TimeUnit unit) {
         switch (unit) {
-            case MINUTES:
-                return 0;
             case HOURS:
-                return 1;
+                return 0;
             default:
             case DAYS:
-                return 2;
+                return 1;
+        }
+    }
+
+    public static @StringRes
+    int unitToStringId(TimeUnit unit) {
+        switch (unit) {
+            case HOURS:
+                return R.string.reminder_hour;
+            default:
+            case DAYS:
+                return R.string.reminder_day;
         }
     }
 
     public static TimeUnit ordinationToUnit(int ordination) {
         switch (ordination) {
             case 0:
-                return TimeUnit.MINUTES;
-            case 1:
                 return TimeUnit.HOURS;
             default:
-            case 2:
+            case 1:
                 return TimeUnit.DAYS;
         }
+    }
+
+    public static TimeUnit timeUnitFromString(String string) {
+        switch (string) {
+            case "h":
+                return TimeUnit.HOURS;
+            default:
+            case "d":
+                return TimeUnit.DAYS;
+        }
+    }
+
+    public static String timeUnitToString(TimeUnit unit) {
+        switch (unit) {
+            case HOURS:
+                return "h";
+            default:
+            case DAYS:
+                return "d";
+        }
+    }
+
+    public static List<String> timeUnitsStringArray(Context context) {
+        return Arrays.asList(context.getString(R.string.reminder_hour),
+                context.getString(R.string.reminder_day));
     }
 }

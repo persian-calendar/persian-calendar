@@ -50,8 +50,6 @@ public class ReminderFragment extends DaggerFragment {
 
         setHasOptionsMenu(true);
 
-        periodUnits = mainActivityDependency.getMainActivity().getResources().getStringArray(R.array.period_units);
-
         FragmentReminderBinding binding = FragmentReminderBinding.inflate(inflater, container, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
         mReminderAdapter = new ReminderAdapter();
@@ -147,10 +145,9 @@ public class ReminderFragment extends DaggerFragment {
                 id = reminder.id;
                 mBinding.name.setText(reminder.name);
                 mBinding.period.setText(
-                        String.format(
-                                mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
+                        String.format(mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
                                 Utils.formatNumber(reminder.quantity),
-                                periodUnits[ReminderUtils.unitToOrdination(reminder.unit)]));
+                                getString(ReminderUtils.unitToStringId(reminder.unit))));
             }
         }
     }

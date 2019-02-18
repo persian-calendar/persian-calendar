@@ -81,7 +81,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
                 LayoutInflater.from(mainActivity), null, false);
 
         int tmpId = getIdFromArguments();
-        if (tmpId == -1) tmpId = new Random().nextInt();
+        if (tmpId == -1) tmpId = new Random().nextInt() % Constants.REMINDERS_MAX_ID;
         final int id = tmpId;
 
         List<FormattedIntEntity> quantities = new ArrayList<>();
@@ -90,8 +90,9 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         }
         binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
                 android.R.layout.simple_spinner_dropdown_item, quantities));
-        binding.unit.setAdapter(ArrayAdapter.createFromResource(mainActivity,
-                R.array.period_units, android.R.layout.simple_spinner_dropdown_item));
+        binding.unit.setAdapter(new ArrayAdapter<>(mainActivity,
+                android.R.layout.simple_spinner_dropdown_item,
+                ReminderUtils.timeUnitsStringArray(mainActivity)));
 
         Calendar calendar = Calendar.getInstance();
         Reminder reminder = findReminderById(id);
