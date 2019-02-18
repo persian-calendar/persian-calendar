@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="4dp"
                 android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
                 tools:text="Title" />
 
             <TextView
@@ -27,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/colorTextHoliday"
+                android:textIsSelectable="true"
                 tools:text="Content" />
 
             <TextView
@@ -34,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/colorTextNormal"
+                android:textIsSelectable="true"
                 tools:text="Content" />
 
         </LinearLayout>
