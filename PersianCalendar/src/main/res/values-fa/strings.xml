@@ -232,5 +232,6 @@
     <string name="please_enter_a_name">لطفاً نامی وارد کنید</string>
     <string name="reminder_hour">ساعت</string>
     <string name="reminder_day">روز</string>
+    <string name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد</string>
 
 </resources>
