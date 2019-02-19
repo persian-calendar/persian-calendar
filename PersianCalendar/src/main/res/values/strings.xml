@@ -311,7 +311,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="period_starting_time">زمان شروع تناوب</string>
     <string name="please_enter_a_name">لطفاً نامی وارد کنید</string>
     <string name="reminder_hour">ساعت</string>
+    <string name="reminded">بار تاکنون اعلان شده</string>
     <string name="reminder_day">روز</string>
-    <string name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد</string>
+    <string name="no_guaranty">صحت عملکرد این بخش از برنامه بستگی به عدم استفاده از ویژگی‌هایی همچون حالت ذخیره‌ی نیرو، محدود نمودن برنامه ها از سوی شما دارد</string>
 
 </resources>
