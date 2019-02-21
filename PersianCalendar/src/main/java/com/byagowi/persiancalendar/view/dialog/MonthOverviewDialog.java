@@ -40,7 +40,6 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
-    private long baseJdn = -1;
 
     public static MonthOverviewDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -57,7 +56,7 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
         Bundle args = getArguments();
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
 
-        baseJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
+        long baseJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
         if (baseJdn == -1) baseJdn = Utils.getTodayJdn();
 
         List<MonthOverviewRecord> records = new ArrayList<>();
