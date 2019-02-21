@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.StringRes;
+import androidx.preference.PreferenceManager;
 
 /**
  * @author MEHDI DIMYADI
@@ -44,6 +46,13 @@ public class ReminderUtils {
         Intent intent = new Intent(context, ReminderAlert.class);
         intent.setAction(String.valueOf(eventId));
         intent.putExtra(Constants.REMINDER_ID, Constants.REMINDERS_BASE_ID + eventId);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int counter = preferences.getInt(String.valueOf(eventId), 0);
+        counter++;
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putInt(String.valueOf(eventId), counter);
+        edit.apply();
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 

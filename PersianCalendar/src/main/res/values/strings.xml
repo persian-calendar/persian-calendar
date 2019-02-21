@@ -312,6 +312,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string translatable="false" name="please_enter_a_name">لطفاً نامی وارد کنید</string>
     <string translatable="false" name="reminder_hour">ساعت</string>
     <string translatable="false" name="reminder_day">روز</string>
+    <string translatable="false" name="reminded">%1$s بار تاکنون اعلان شده</string>
     <string translatable="false" name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد</string>
 
 </resources>
