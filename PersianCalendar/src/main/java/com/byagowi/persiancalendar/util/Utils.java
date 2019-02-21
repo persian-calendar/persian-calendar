@@ -183,6 +183,7 @@ public class Utils {
     static private final String TAG = Utils.class.getName();
     private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
     private final static long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
+    private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
     static private String[] persianMonths;
     static private String[] islamicMonths;
     static private String[] gregorianMonths;
@@ -1398,10 +1399,6 @@ public class Utils {
         }
     }
 
-    public static String getInitialOfWeekDay(int position) {
-        return weekDaysInitials[position % 7];
-    }
-
     //
     //
     //
@@ -1437,8 +1434,8 @@ public class Utils {
 //                changeDateWorker).enqueue();
 //    }
 
-    public static String getWeekDayName(int position) {
-        return weekDays[position % 7];
+    public static String getInitialOfWeekDay(int position) {
+        return weekDaysInitials[position % 7];
     }
 
 //    public static boolean goForWorker() {
@@ -1446,6 +1443,10 @@ public class Utils {
 //    }
 
 //    private static final String UPDATE_TAG = "update";
+
+    public static String getWeekDayName(int position) {
+        return weekDays[position % 7];
+    }
 
     static public void loadApp(Context context) {
 //        if (!goForWorker()) {
@@ -2064,8 +2065,6 @@ public class Utils {
 
         return result.toString();
     }
-
-    private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
 
     private static List<Reminder> updateSavedReminders(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

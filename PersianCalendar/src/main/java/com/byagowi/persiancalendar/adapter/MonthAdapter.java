@@ -13,10 +13,12 @@ import com.byagowi.persiancalendar.entity.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
 import com.byagowi.persiancalendar.view.itemdayview.ItemDayView;
+import com.byagowi.persiancalendar.viewmodel.CalendarFragmentModel;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
@@ -121,7 +123,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             long jdn = itemDayView.getJdn();
             if (jdn == -1) return;
 
-            calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
+            ViewModelProviders.of(calendarFragmentDependency.getCalendarFragment())
+                    .get(CalendarFragmentModel.class).selectDay(jdn);
             MonthAdapter.this.selectDay(itemDayView.getDayOfMonth());
         }
 

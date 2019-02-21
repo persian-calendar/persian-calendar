@@ -4,6 +4,18 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class CalendarFragmentModel extends ViewModel {
+    public final MutableLiveData<MonthFragmentUpdateCommand> monthFragmentsHandler = new MutableLiveData<>();
+    public final MutableLiveData<Long> selectedDayLiveData = new MutableLiveData<>();
+    public boolean isTheFirstTime = true;
+
+    public void monthFragmentsUpdate(MonthFragmentUpdateCommand command) {
+        monthFragmentsHandler.postValue(command);
+    }
+
+    public void selectDay(long jdn) {
+        selectedDayLiveData.postValue(jdn);
+    }
+
     static public class MonthFragmentUpdateCommand {
         final public int target;
         final public boolean isEventsModification;
@@ -14,11 +26,5 @@ public class CalendarFragmentModel extends ViewModel {
             this.isEventsModification = isEventsModification;
             this.currentlySelectedJdn = currentSelectedJdn;
         }
-    }
-
-    public final MutableLiveData<MonthFragmentUpdateCommand> monthFragmentsHandler = new MutableLiveData<>();
-
-    public void monthFragmentsUpdate(MonthFragmentUpdateCommand command) {
-        monthFragmentsHandler.postValue(command);
     }
 }

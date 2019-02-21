@@ -108,26 +108,27 @@ public class MonthFragment extends DaggerFragment {
         ///////
         ///////
 
+        CalendarFragmentModel calendarFragmentModel = ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel.class);
+
         MonthAdapter adapter = new MonthAdapter(calendarFragmentDependency, days,
                 startingDayOfWeek, weekOfYearStart, weeksCount);
         fragmentMonthBinding.monthDays.setAdapter(adapter);
         fragmentMonthBinding.monthDays.setItemAnimator(null);
 
-        if (calendarFragment.mFirstTime &&
+        if (calendarFragmentModel.isTheFirstTime &&
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
-            calendarFragment.mFirstTime = false;
-            calendarFragment.selectDay(Utils.getTodayJdn());
+            calendarFragmentModel.isTheFirstTime = false;
+            calendarFragmentModel.selectDay(Utils.getTodayJdn());
             updateTitle(date);
         }
 
-        CalendarFragmentModel viewModel = ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel.class);
-        viewModel.monthFragmentsHandler.observe(this, command -> {
+        calendarFragmentModel.monthFragmentsHandler.observe(this, command -> {
             if (command.target == offset) {
                 long jdn = command.currentlySelectedJdn;
 
                 if (command.isEventsModification) {
                     adapter.initializeMonthEvents(mainActivityDependency.getMainActivity());
-                    calendarFragment.selectDay(jdn);
+                    calendarFragmentModel.selectDay(jdn);
                 } else {
                     adapter.selectDay(-1);
                     updateTitle(date);

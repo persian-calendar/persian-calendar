@@ -80,7 +80,7 @@ public class CalendarFragment extends DaggerFragment {
     AppDependency appDependency; // same object from App
     @Inject
     MainActivityDependency mainActivityDependency; // same object from MainActivity
-    boolean mFirstTime = true;
+    private CalendarFragmentModel mCalendarFragmentModel;
     private Calendar mCalendar = Calendar.getInstance();
     private Coordinate mCoordinate;
     private int mViewPagerPosition;
@@ -187,19 +187,20 @@ public class CalendarFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(Utils.getMonthName(today),
                 Utils.formatNumber(today.getYear()));
 
+        mCalendarFragmentModel = ViewModelProviders.of(this).get(CalendarFragmentModel.class);
+        mCalendarFragmentModel.selectedDayLiveData.observe(this, jdn -> {
+            mLastSelectedJdn = jdn;
+            mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
+            setOwghat(jdn, Utils.getTodayJdn() == mLastSelectedJdn);
+            showEvent(jdn);
+        });
+
         return mMainBinding.getRoot();
     }
 
     void changeMonth(int position) {
         mMainBinding.calendarViewPager.setCurrentItem(
                 mMainBinding.calendarViewPager.getCurrentItem() + position, true);
-    }
-
-    public void selectDay(long jdn) {
-        mLastSelectedJdn = jdn;
-        mCalendarsView.showCalendars(jdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
-        setOwghat(jdn, Utils.getTodayJdn() == jdn);
-        showEvent(jdn);
     }
 
     public void addEventOnCalendar(long jdn) {
@@ -447,7 +448,7 @@ public class CalendarFragment extends DaggerFragment {
 
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
-        selectDay(Utils.getTodayJdn());
+        mCalendarFragmentModel.selectDay(Utils.getTodayJdn());
     }
 
     public void afterShiftWorkChange() {
@@ -456,20 +457,17 @@ public class CalendarFragment extends DaggerFragment {
     }
 
     public void bringDate(long jdn) {
-        Context context = getContext();
-        if (context == null) return;
-
         mViewPagerPosition = calculateViewPagerPositionFromJdn(jdn);
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, mViewPagerPosition);
 
-        selectDay(jdn);
+        mCalendarFragmentModel.selectDay(jdn);
         sendUpdateCommandToMonthFragments(mViewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
             long todayJdn = Utils.getTodayJdn();
             if (jdn != todayJdn) {
                 Utils.createAndShowShortSnackbar(getView(),
-                        Utils.getA11yDaySummary(context, jdn,
+                        Utils.getA11yDaySummary(mainActivityDependency.getMainActivity(), jdn,
                                 false, null, true,
                                 true, true));
             }
