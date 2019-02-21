@@ -303,15 +303,15 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="month_overview">Month\'s events</string>
 
     <!-- Reminder -->
-    <string name="reminder_summary">هر %1$s %2$s</string>
-    <string name="reminder">یادآور</string>
-    <string name="reminder_name">نام یادآور</string>
-    <string name="more_information">اطلاعات بیشتر</string>
-    <string name="reminder_period">تناوب یادآور</string>
-    <string name="period_starting_time">زمان شروع تناوب</string>
-    <string name="please_enter_a_name">لطفاً نامی وارد کنید</string>
-    <string name="reminder_hour">ساعت</string>
-    <string name="reminder_day">روز</string>
-    <string name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد</string>
+    <string translatable="false" name="reminder_summary">هر %1$s %2$s</string>
+    <string translatable="false" name="reminder">یادآور</string>
+    <string translatable="false" name="reminder_name">نام یادآور</string>
+    <string translatable="false" name="more_information">اطلاعات بیشتر</string>
+    <string translatable="false" name="reminder_period">تناوب یادآور</string>
+    <string translatable="false" name="period_starting_time">زمان شروع تناوب</string>
+    <string translatable="false" name="please_enter_a_name">لطفاً نامی وارد کنید</string>
+    <string translatable="false" name="reminder_hour">ساعت</string>
+    <string translatable="false" name="reminder_day">روز</string>
+    <string translatable="false" name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد</string>
 
 </resources>
