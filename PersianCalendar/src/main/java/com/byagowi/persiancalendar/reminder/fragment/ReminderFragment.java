@@ -14,7 +14,9 @@ import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.reminder.viewmodel.ReminderModel;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,24 +40,31 @@ public class ReminderFragment extends DaggerFragment {
     @Inject
     MainActivityDependency mainActivityDependency;
 
-    private ReminderAdapter mReminderAdapter;
-    private String[] periodUnits;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.reminder), "");
+        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        mainActivity.setTitleAndSubtitle(getString(R.string.reminder), "");
 
         setHasOptionsMenu(true);
 
         FragmentReminderBinding binding = FragmentReminderBinding.inflate(inflater, container, false);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
-        mReminderAdapter = new ReminderAdapter();
-        binding.recyclerView.setAdapter(mReminderAdapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+        ReminderAdapter reminderAdapter = new ReminderAdapter();
+        binding.recyclerView.setAdapter(reminderAdapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(binding.recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+        ReminderModel viewModel = ViewModelProviders.of(mainActivity).get(ReminderModel.class);
+        viewModel.updateHandler.observe(this, isNew -> {
+            reminderAdapter.refresh();
+            if (isNew)
+                reminderAdapter.notifyItemInserted(reminderAdapter.getItemCount());
+            else
+                reminderAdapter.notifyDataSetChanged();
+        });
 
         return binding.getRoot();
     }
@@ -77,14 +87,6 @@ public class ReminderFragment extends DaggerFragment {
                 break;
         }
         return true;
-    }
-
-    void updateList(boolean isNew) {
-        mReminderAdapter.refresh();
-        if (isNew)
-            mReminderAdapter.notifyItemInserted(mReminderAdapter.getItemCount());
-        else
-            mReminderAdapter.notifyDataSetChanged();
     }
 
     class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.ViewHolder> {

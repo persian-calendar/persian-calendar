@@ -14,11 +14,11 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.di.dependencies.ReminderFragmentDependency;
 import com.byagowi.persiancalendar.entity.FormattedIntEntity;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
+import com.byagowi.persiancalendar.reminder.viewmodel.ReminderModel;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
 
@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 /**
@@ -41,8 +42,6 @@ import dagger.android.support.DaggerAppCompatDialogFragment;
 public class EditReminderDialog extends DaggerAppCompatDialogFragment {
     @Inject
     MainActivityDependency mainActivityDependency;
-    @Inject
-    ReminderFragmentDependency reminderFragmentDependency;
 
     static EditReminderDialog newInstance(int id) {
         Bundle args = new Bundle();
@@ -182,7 +181,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
 
                     Utils.storeReminders(mainActivity, reminders);
 
-                    reminderFragmentDependency.getReminderFragment().updateList(isNew);
+                    ViewModelProviders.of(mainActivity).get(ReminderModel.class).update(isNew);
                 })
                 .create();
     }
