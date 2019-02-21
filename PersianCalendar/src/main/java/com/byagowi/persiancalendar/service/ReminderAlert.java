@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.reminder.activity.ReminderActivity;
 
 import androidx.core.content.ContextCompat;
 

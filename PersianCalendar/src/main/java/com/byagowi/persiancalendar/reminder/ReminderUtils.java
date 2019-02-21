@@ -33,7 +33,6 @@ public class ReminderUtils {
 
         startTime = System.currentTimeMillis() + (System.currentTimeMillis() - startTime) % period;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period, prepareIntent(context, event.id));
-
     }
 
     public static void turnOff(Context context, long eventId) {
@@ -46,7 +45,7 @@ public class ReminderUtils {
     private static PendingIntent prepareIntent(Context context, long eventId) {
         Intent intent = new Intent(context, ReminderAlert.class);
         intent.setAction(String.valueOf(eventId));
-        intent.putExtra(Constants.REMINDER_ID, eventId);
+        intent.putExtra(Constants.REMINDER_ID, Constants.REMINDERS_BASE_ID + eventId);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         int counter = preferences.getInt(String.valueOf(eventId), 0);

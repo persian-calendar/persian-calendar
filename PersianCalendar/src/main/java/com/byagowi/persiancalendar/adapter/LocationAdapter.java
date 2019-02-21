@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding;
 import com.byagowi.persiancalendar.entity.CityEntity;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.preferences.LocationPreferenceDialog;
-import com.byagowi.persiancalendar.viewmodel.LocationAdapterViewModel;
+import com.byagowi.persiancalendar.viewmodel.LocationAdapterModel;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                     country = cityEntity.getCountryFa();
                     break;
             }
-            LocationAdapterViewModel model = new LocationAdapterViewModel(city, country, this);
+            LocationAdapterModel model = new LocationAdapterModel(city, country, this);
             binding.setModel(model);
             binding.executePendingBindings();
         }

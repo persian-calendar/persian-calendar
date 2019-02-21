@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.byagowi.persiancalendar.viewmodel.LocationAdapterViewModel" />
+            type="com.byagowi.persiancalendar.viewmodel.LocationAdapterModel" />
     </data>
 
     <LinearLayout

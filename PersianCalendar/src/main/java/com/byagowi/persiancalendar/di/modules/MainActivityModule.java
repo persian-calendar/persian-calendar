@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.di.modules;
 
 import com.byagowi.persiancalendar.di.scopes.PerFragment;
+import com.byagowi.persiancalendar.reminder.fragment.EditReminderDialog;
+import com.byagowi.persiancalendar.reminder.fragment.ReminderFragment;
 import com.byagowi.persiancalendar.view.dialog.preferredcalendars.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.view.fragment.AboutFragment;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
@@ -11,7 +13,6 @@ import com.byagowi.persiancalendar.view.preferences.FragmentInterfaceCalendar;
 import com.byagowi.persiancalendar.view.preferences.FragmentLocationAthan;
 import com.byagowi.persiancalendar.view.preferences.GPSLocationDialog;
 import com.byagowi.persiancalendar.view.preferences.SettingsFragment;
-import com.byagowi.persiancalendar.reminder.fragment.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 
@@ -46,8 +47,12 @@ public abstract class MainActivityModule {
     abstract DeviceInfoFragment deviceInfoFragmentInjector();
 
     @PerFragment
-    @ContributesAndroidInjector(modules = ReminderFragmentModule.class)
+    @ContributesAndroidInjector
     abstract ReminderFragment reminderFragmentInjector();
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract EditReminderDialog editReminderFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector

@@ -2,10 +2,8 @@ package com.byagowi.persiancalendar.view.preferences;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
@@ -20,12 +18,14 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.viewmodel.MainActivityModel;
 
 import javax.inject.Inject;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import dagger.android.support.AndroidSupportInjection;
@@ -41,12 +41,6 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
     @Inject
     MainActivityDependency mainActivityDependency;
     private Preference categoryAthan;
-    private BroadcastReceiver preferenceUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateAthanPreferencesState();
-        }
-    };
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -60,19 +54,12 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         Context context = getContext();
         if (context == null) return;
 
-        appDependency.getLocalBroadcastManager().registerReceiver(preferenceUpdateReceiver,
-                new IntentFilter(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+        updateAthanPreferencesState();
+        ViewModelProviders.of(mainActivityDependency.getMainActivity()).get(MainActivityModel.class)
+                .preferenceUpdateHandler.observe(this, a -> updateAthanPreferencesState());
 
         putAthanNameOnSummary(appDependency.getSharedPreferences()
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
-    }
-
-    @Override
-    public void onDestroyView() {
-        Context context = getContext();
-        if (context != null)
-            appDependency.getLocalBroadcastManager().unregisterReceiver(preferenceUpdateReceiver);
-        super.onDestroyView();
     }
 
     private void updateAthanPreferencesState() {

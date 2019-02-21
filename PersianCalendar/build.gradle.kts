@@ -79,6 +79,9 @@ dependencies {
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
+    implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
+    annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.0.0")
+
     // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
     // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
 

@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.util.TypefaceUtils;
 import com.byagowi.persiancalendar.util.UpdateUtils;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
+import com.byagowi.persiancalendar.viewmodel.MainActivityModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,6 +49,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import dagger.android.support.DaggerAppCompatActivity;
@@ -398,8 +400,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
 
-        appDependency.getLocalBroadcastManager()
-                .sendBroadcast(new Intent(Constants.LOCAL_INTENT_UPDATE_PREFERENCE));
+        ViewModelProviders.of(this).get(MainActivityModel.class).preferenceIsUpdate();
     }
 
     @Override

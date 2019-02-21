@@ -4,12 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
@@ -19,7 +15,6 @@ import com.byagowi.persiancalendar.databinding.ActivityReminderAlertBinding;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.util.Utils;
 
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
