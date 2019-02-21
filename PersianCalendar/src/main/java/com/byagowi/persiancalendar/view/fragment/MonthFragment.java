@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar.view.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +16,7 @@ import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entity.DayEntity;
 import com.byagowi.persiancalendar.util.CalendarType;
 import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.viewmodel.CalendarFragmentModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,52 +24,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import dagger.android.support.DaggerFragment;
 
-public class MonthFragment extends DaggerFragment implements View.OnClickListener {
+public class MonthFragment extends DaggerFragment {
     @Inject
     AppDependency appDependency;
     @Inject
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
-    // @Inject
-    // MonthFragmentDependency monthFragmentDependency;
-    private boolean isRTL = false;
-    private AbstractDate typedDate;
-    private long baseJdn;
-    private int offset;
-    private MonthAdapter adapter;
-    private int monthLength;
-    private BroadcastReceiver setCurrentMonthReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle extras = intent.getExtras();
-
-            if (extras == null) return;
-
-            int value = extras.getInt(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT);
-            if (value == offset) {
-                long jdn = extras.getLong(Constants.BROADCAST_FIELD_SELECT_DAY_JDN);
-
-                if (extras.getBoolean(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, false)) {
-                    adapter.initializeMonthEvents(context);
-                    calendarFragmentDependency.getCalendarFragment().selectDay(jdn);
-                } else {
-                    adapter.selectDay(-1);
-                    updateTitle();
-                }
-
-                long selectedDay = 1 + jdn - baseJdn;
-                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
-                    adapter.selectDay((int) (1 + jdn - baseJdn));
-                }
-            } else {
-                adapter.selectDay(-1);
-            }
-        }
-    };
 
     static AbstractDate getDateFromOffset(CalendarType calendar, int offset) {
         AbstractDate date = Utils.getTodayOfCalendar(calendar);
@@ -95,19 +57,20 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         FragmentMonthBinding fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
                 container, false);
-        isRTL = Utils.isRTL(mainActivityDependency.getMainActivity());
+        CalendarFragment calendarFragment = calendarFragmentDependency.getCalendarFragment();
+        boolean isRTL = Utils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
-        offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
+        int offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
         fragmentMonthBinding.next.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_left
                 : R.drawable.ic_keyboard_arrow_right);
-        fragmentMonthBinding.next.setOnClickListener(this);
+        fragmentMonthBinding.next.setOnClickListener(v -> calendarFragment.changeMonth(isRTL ? -1 : 1));
 
         fragmentMonthBinding.prev.setImageResource(isRTL
                 ? R.drawable.ic_keyboard_arrow_right
                 : R.drawable.ic_keyboard_arrow_left);
-        fragmentMonthBinding.prev.setOnClickListener(this);
+        fragmentMonthBinding.prev.setOnClickListener(v -> calendarFragment.changeMonth(isRTL ? 1 : -1));
 
         fragmentMonthBinding.monthDays.setHasFixedSize(true);
 
@@ -120,9 +83,9 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         CalendarType mainCalendar = Utils.getMainCalendar();
         List<DayEntity> days = new ArrayList<>();
 
-        typedDate = getDateFromOffset(mainCalendar, offset);
-        baseJdn = typedDate.toJdn();
-        monthLength = Utils.getMonthLength(mainCalendar, typedDate.getYear(), typedDate.getMonth());
+        AbstractDate date = getDateFromOffset(mainCalendar, offset);
+        long baseJdn = date.toJdn();
+        int monthLength = Utils.getMonthLength(mainCalendar, date.getYear(), date.getMonth());
 
         int dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn);
 
@@ -136,7 +99,7 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
             }
         }
 
-        long startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, typedDate.getYear(), 1, 1).toJdn();
+        long startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, date.getYear(), 1, 1).toJdn();
         int weekOfYearStart = Utils.calculateWeekOfYear(baseJdn, startOfYearJdn);
         int weeksCount = 1 + Utils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart;
 
@@ -144,9 +107,8 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
         ///////
         ///////
         ///////
-        CalendarFragment calendarFragment = calendarFragmentDependency.getCalendarFragment();
 
-        adapter = new MonthAdapter(calendarFragmentDependency, days,
+        MonthAdapter adapter = new MonthAdapter(calendarFragmentDependency, days,
                 startingDayOfWeek, weekOfYearStart, weeksCount);
         fragmentMonthBinding.monthDays.setAdapter(adapter);
         fragmentMonthBinding.monthDays.setItemAnimator(null);
@@ -155,37 +117,37 @@ public class MonthFragment extends DaggerFragment implements View.OnClickListene
                 offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragment.mFirstTime = false;
             calendarFragment.selectDay(Utils.getTodayJdn());
-            updateTitle();
+            updateTitle(date);
         }
 
-        appDependency.getLocalBroadcastManager().registerReceiver(setCurrentMonthReceiver,
-                new IntentFilter(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT));
+        CalendarFragmentModel viewModel = ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel.class);
+        viewModel.monthFragmentsHandler.observe(this, command -> {
+            if (command.target == offset) {
+                long jdn = command.currentlySelectedJdn;
+
+                if (command.isEventsModification) {
+                    adapter.initializeMonthEvents(mainActivityDependency.getMainActivity());
+                    calendarFragment.selectDay(jdn);
+                } else {
+                    adapter.selectDay(-1);
+                    updateTitle(date);
+                }
+
+                long selectedDay = 1 + jdn - baseJdn;
+                if (jdn != -1 && jdn >= baseJdn && selectedDay <= monthLength) {
+                    adapter.selectDay((int) (1 + jdn - baseJdn));
+                }
+            } else {
+                adapter.selectDay(-1);
+            }
+        });
 
         return fragmentMonthBinding.getRoot();
     }
 
-    @Override
-    public void onDestroy() {
-        appDependency.getLocalBroadcastManager().unregisterReceiver(setCurrentMonthReceiver);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.next:
-                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? -1 : 1);
-                break;
-
-            case R.id.prev:
-                calendarFragmentDependency.getCalendarFragment().changeMonth(isRTL ? 1 : -1);
-                break;
-        }
-    }
-
-    private void updateTitle() {
+    private void updateTitle(AbstractDate date) {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(
-                Utils.getMonthName(typedDate),
-                Utils.formatNumber(typedDate.getYear()));
+                Utils.getMonthName(date),
+                Utils.formatNumber(date.getYear()));
     }
 }

@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.view.activity.MainActivity;
 import com.byagowi.persiancalendar.view.dialog.MonthOverviewDialog;
 import com.byagowi.persiancalendar.view.dialog.SelectDayDialog;
 import com.byagowi.persiancalendar.view.dialog.ShiftWorkDialog;
+import com.byagowi.persiancalendar.viewmodel.CalendarFragmentModel;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -66,6 +67,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import dagger.android.support.DaggerFragment;
@@ -93,7 +95,7 @@ public class CalendarFragment extends DaggerFragment {
     private ViewPager.OnPageChangeListener mChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            sendBroadcastToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
+            sendUpdateCommandToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
             mMainBinding.todayButton.show();
         }
 
@@ -234,7 +236,7 @@ public class CalendarFragment extends DaggerFragment {
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (Utils.isShowDeviceCalendarEvents()) {
-                sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
+                sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -247,12 +249,9 @@ public class CalendarFragment extends DaggerFragment {
         }
     }
 
-    private void sendBroadcastToMonthFragments(int toWhich, boolean addOrModify) {
-        appDependency.getLocalBroadcastManager().sendBroadcast(
-                new Intent(Constants.BROADCAST_INTENT_TO_MONTH_FRAGMENT)
-                        .putExtra(Constants.BROADCAST_FIELD_TO_MONTH_FRAGMENT, toWhich)
-                        .putExtra(Constants.BROADCAST_FIELD_EVENT_ADD_MODIFY, addOrModify)
-                        .putExtra(Constants.BROADCAST_FIELD_SELECT_DAY_JDN, mLastSelectedJdn));
+    private void sendUpdateCommandToMonthFragments(int toWhich, boolean addOrModify) {
+        ViewModelProviders.of(this).get(CalendarFragmentModel.class).monthFragmentsUpdate(
+                new CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, mLastSelectedJdn));
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
@@ -444,7 +443,7 @@ public class CalendarFragment extends DaggerFragment {
 
     private void bringTodayYearMonth() {
         mLastSelectedJdn = -1;
-        sendBroadcastToMonthFragments(Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
+        sendUpdateCommandToMonthFragments(Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
 
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
@@ -453,7 +452,7 @@ public class CalendarFragment extends DaggerFragment {
 
     public void afterShiftWorkChange() {
         Utils.updateStoredPreference(getContext());
-        sendBroadcastToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
+        sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
     }
 
     public void bringDate(long jdn) {
@@ -464,7 +463,7 @@ public class CalendarFragment extends DaggerFragment {
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, mViewPagerPosition);
 
         selectDay(jdn);
-        sendBroadcastToMonthFragments(mViewPagerPosition, false);
+        sendUpdateCommandToMonthFragments(mViewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
             long todayJdn = Utils.getTodayJdn();

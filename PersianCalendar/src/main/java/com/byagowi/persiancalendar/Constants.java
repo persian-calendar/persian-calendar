@@ -6,8 +6,6 @@ import java.util.Set;
 
 public class Constants {
 
-    public static final String LOCAL_INTENT_UPDATE_PREFERENCE = "update-preference";
-
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 23;
     public static final int ATHAN_RINGTONE_REQUEST_CODE = 19;
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
@@ -98,10 +96,6 @@ public class Constants {
     public static final int REMINDERS_MAX_ID = 10000;
 
     public static final String OFFSET_ARGUMENT = "OFFSET_ARGUMENT";
-    public static final String BROADCAST_INTENT_TO_MONTH_FRAGMENT = "BROADCAST_INTENT_TO_MONTH_FRAGMENT";
-    public static final String BROADCAST_FIELD_TO_MONTH_FRAGMENT = "BROADCAST_FIELD_TO_MONTH_FRAGMENT";
-    public static final String BROADCAST_FIELD_SELECT_DAY_JDN = "BROADCAST_FIELD_SELECT_DAY_JDN";
-    public static final String BROADCAST_FIELD_EVENT_ADD_MODIFY = "BROADCAST_FIELD_EVENT_ADD_MODIFY";
     public static final String BROADCAST_ALARM = "BROADCAST_ALARM";
     public static final String BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP";
     public static final String BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP";
