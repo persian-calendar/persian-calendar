@@ -163,6 +163,7 @@ import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
 import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.REMINDERS_STORE_KEY;
 import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 import static com.byagowi.persiancalendar.Constants.ZWJ;
 
@@ -183,7 +184,6 @@ public class Utils {
     static private final String TAG = Utils.class.getName();
     private static final long twoSeconds = TimeUnit.SECONDS.toMillis(2);
     private final static long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
-    private final static String REMINDERS_STORE_KEY = "REMINDERS_STORE";
     static private String[] persianMonths;
     static private String[] islamicMonths;
     static private String[] gregorianMonths;

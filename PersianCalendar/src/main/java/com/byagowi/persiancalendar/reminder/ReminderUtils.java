@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -13,10 +14,10 @@ import com.byagowi.persiancalendar.service.ReminderAlert;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.StringRes;
-import androidx.preference.PreferenceManager;
 
 /**
  * @author MEHDI DIMYADI
@@ -24,35 +25,28 @@ import androidx.preference.PreferenceManager;
  */
 public class ReminderUtils {
 
-    public static void turnOn(Context context, Reminder event) {
+    public static void turnOn(Context context, Reminder reminder) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        long startTime = event.startTime;
-        long period = event.unit.toMillis(1);
+        long startTime = reminder.startTime;
+        long period = reminder.unit.toMillis(1);
 
         startTime = System.currentTimeMillis() + (System.currentTimeMillis() - startTime) % period;
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period, prepareIntent(context, event.id));
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period, prepareIntent(context, reminder.id));
     }
 
-    public static void turnOff(Context context, long eventId) {
+    public static void turnOff(Context context, long reminderId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        alarmManager.cancel(prepareIntent(context, eventId));
+        alarmManager.cancel(prepareIntent(context, reminderId));
     }
 
-    private static PendingIntent prepareIntent(Context context, long eventId) {
+    private static PendingIntent prepareIntent(Context context, long reminderId) {
         Intent intent = new Intent(context, ReminderAlert.class);
-        intent.setAction(String.valueOf(eventId));
-        intent.putExtra(Constants.REMINDER_ID, Constants.REMINDERS_BASE_ID + eventId);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int counter = preferences.getInt(String.valueOf(eventId), 0);
-        counter++;
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putInt(String.valueOf(eventId), counter);
-        edit.apply();
+        intent.setAction(String.valueOf(reminderId));
+        intent.putExtra(Constants.REMINDER_ID, Constants.REMINDERS_BASE_ID + reminderId);
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
@@ -110,5 +104,18 @@ public class ReminderUtils {
     public static List<String> timeUnitsStringArray(Context context) {
         return Arrays.asList(context.getString(R.string.reminder_hour),
                 context.getString(R.string.reminder_day));
+    }
+
+    public static int getReminderCount(Context context, int reminderId) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), 0);
+    }
+
+    public static void increaseReminderCount(Context context, int reminderId) {
+        int count = getReminderCount(context, reminderId) + 1;
+
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        edit.putInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), count);
+        edit.apply();
     }
 }

@@ -20,8 +20,7 @@ public class ReminderAlert extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent == null) return;
-
+        if (intent == null || context == null) return;
         Log.i("REMINDER", String.valueOf(intent.getIntExtra(Constants.REMINDER_ID, -1)));
 
 //        Intent reminderIntent = new Intent(context, ReminderActivity.class);

@@ -11,6 +11,8 @@ public class Constants {
     public static final int CALENDAR_READ_PERMISSION_REQUEST_CODE = 55;
     public static final int CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63;
 
+    public static final String REMINDERS_STORE_KEY = "REMINDERS_STORE";
+    public static final String REMINDERS_COUNT_KEY = "REMINDER_%d";
     public static final String REMINDER_ID = "reminder_id";
     public static final int SIGNAL_PAUSE = 5;
 

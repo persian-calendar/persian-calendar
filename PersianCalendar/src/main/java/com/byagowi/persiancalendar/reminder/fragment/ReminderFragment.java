@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.reminder.fragment;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
+import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
@@ -21,12 +24,12 @@ import com.byagowi.persiancalendar.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -149,15 +152,14 @@ public class ReminderFragment extends DaggerFragment {
                 id = reminder.id;
                 mBinding.name.setText(reminder.name);
 
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                int counter = preferences.getInt(String.valueOf(id), 0);
-                mBinding.period.setText(
-                        String.format(mainActivityDependency.getMainActivity().getResources().getString(R.string.reminder_summary),
+                MainActivity mainActivity = mainActivityDependency.getMainActivity();
+                Resources resources = mainActivity.getResources();
+                mBinding.period.setText(String.format("%s | %s",
+                        String.format(resources.getString(R.string.reminder_summary),
                                 Utils.formatNumber(reminder.quantity),
-                                getString(ReminderUtils.unitToStringId(reminder.unit))
-                                        + " | "
-                                        + String.valueOf(counter)
-                                        + getString(R.string.reminded))
+                                getString(ReminderUtils.unitToStringId(reminder.unit))),
+                        String.format(resources.getString(R.string.reminded),
+                                Utils.formatNumber(ReminderUtils.getReminderCount(mainActivity, reminder.id))))
                 );
             }
         }
