@@ -74,6 +74,8 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
                 records.add(new MonthOverviewRecord(Utils.dayTitleSummary(
                         Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
         }
+        if (records.size() == 0)
+            records.add(new MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""));
 
         MonthOverviewDialogBinding binding = MonthOverviewDialogBinding.inflate(
                 LayoutInflater.from(mainActivity), null, false);
