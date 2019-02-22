@@ -313,6 +313,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string translatable="false" name="reminder_hour">ساعت</string>
     <string translatable="false" name="reminder_day">روز</string>
     <string translatable="false" name="reminded">%1$s بار تاکنون اعلان شده</string>
-    <string translatable="false" name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن به دستگاه و به عدم استفاده از حالت ذخیرهٔ نیرو خواهد بود</string>
+    <string translatable="false" name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن به دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو خواهد بود</string>
 
 </resources>
