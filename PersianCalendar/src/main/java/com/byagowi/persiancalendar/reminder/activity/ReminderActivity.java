@@ -77,7 +77,7 @@ public class ReminderActivity extends AppCompatActivity {
                 Constants.REMINDER_ID, -1))) != null) {
             binding.name.setText(event.name);
             binding.info.setText(event.info);
-            binding.btnTurnOff.setOnClickListener(v -> {
+            binding.turnOff.setOnClickListener(v -> {
                 scheduler.shutdown();
                 am.setStreamVolume(AudioManager.STREAM_MUSIC,
                         previousVolume, 0);

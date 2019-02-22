@@ -31,7 +31,7 @@
             android:textSize="60sp" />
 
         <Button
-            android:id="@+id/btn_turn_off"
+            android:id="@+id/turn_off"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"

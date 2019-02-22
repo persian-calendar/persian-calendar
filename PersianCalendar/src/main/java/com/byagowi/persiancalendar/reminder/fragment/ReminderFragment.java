@@ -151,6 +151,7 @@ public class ReminderFragment extends DaggerFragment {
                 Reminder reminder = remindersList.get(position);
                 id = reminder.id;
                 mBinding.name.setText(reminder.name);
+                mBinding.info.setText(reminder.info.replaceAll("\n", " "));
 
                 MainActivity mainActivity = mainActivityDependency.getMainActivity();
                 Resources resources = mainActivity.getResources();
