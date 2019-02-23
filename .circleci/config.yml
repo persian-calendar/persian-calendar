@@ -18,7 +18,7 @@ jobs:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "PersianCalendar/build.gradle.kts" }}
       - run:
           name: Run Tests
-          command: ./gradlew lint test
+          command: ./gradlew assemble build lint test
       - store_artifacts:
           path: PersianCalendar/build/reports
           destination: reports
