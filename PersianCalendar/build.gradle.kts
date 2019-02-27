@@ -95,6 +95,8 @@ dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
     debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
 
+    debugImplementation("com.github.pedrovgs:lynx:1.1.0")
+
     testImplementation("junit:junit:4.12")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.ReleaseDebugDifference;
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
@@ -102,6 +103,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        ReleaseDebugDifference.startLynxListenerIfIsDebug(this);
         Utils.initUtils(this);
 
         TypefaceUtils.overrideFont("SERIF",
