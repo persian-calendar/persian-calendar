@@ -1,18 +1,18 @@
 package com.byagowi.persiancalendar.di.modules;
 
 import com.byagowi.persiancalendar.di.scopes.PerFragment;
-import com.byagowi.persiancalendar.ui.compass.CompassFragment;
-import com.byagowi.persiancalendar.ui.converter.ConverterFragment;
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar;
-import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
-import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.ui.about.AboutFragment;
 import com.byagowi.persiancalendar.ui.about.DeviceInfoFragment;
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment;
+import com.byagowi.persiancalendar.ui.compass.CompassFragment;
+import com.byagowi.persiancalendar.ui.converter.ConverterFragment;
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment;
+import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar;
+import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog;
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment;
+import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
+import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 

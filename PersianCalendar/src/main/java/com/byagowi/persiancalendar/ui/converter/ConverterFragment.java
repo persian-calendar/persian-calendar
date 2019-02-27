@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.ui.shared.DayPickerView;
 import com.byagowi.persiancalendar.utils.CalendarType;
 import com.byagowi.persiancalendar.utils.Utils;
-import com.byagowi.persiancalendar.ui.shared.DayPickerView;
 
 import java.util.List;
 

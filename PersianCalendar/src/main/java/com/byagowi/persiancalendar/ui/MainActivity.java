@@ -26,11 +26,11 @@ import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragment;
 import com.byagowi.persiancalendar.utils.CalendarType;
 import com.byagowi.persiancalendar.utils.TypefaceUtils;
 import com.byagowi.persiancalendar.utils.UpdateUtils;
 import com.byagowi.persiancalendar.utils.Utils;
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 

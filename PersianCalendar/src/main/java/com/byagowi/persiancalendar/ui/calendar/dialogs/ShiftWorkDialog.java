@@ -16,8 +16,8 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
-import com.byagowi.persiancalendar.entities.StringWithValueItem;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
+import com.byagowi.persiancalendar.entities.StringWithValueItem;
 import com.byagowi.persiancalendar.ui.MainActivity;
 import com.byagowi.persiancalendar.utils.Utils;
 
@@ -193,12 +193,6 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
             private ShiftWorkItemBinding mBinding;
             private int mPosition;
 
-            void remove() {
-                mRows.remove(mPosition);
-                notifyDataSetChanged();
-                updateShiftWorkResult();
-            }
-
             ViewHolder(@NonNull ShiftWorkItemBinding binding) {
                 super(binding.getRoot());
                 mBinding = binding;
@@ -249,6 +243,12 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     notifyDataSetChanged();
                     updateShiftWorkResult();
                 }));
+            }
+
+            void remove() {
+                mRows.remove(mPosition);
+                notifyDataSetChanged();
+                updateShiftWorkResult();
             }
 
             public void bind(int position) {

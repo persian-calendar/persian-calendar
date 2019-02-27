@@ -184,23 +184,23 @@ public class DeviceInfoFragment extends DaggerFragment {
                     null
             ));
 
-    // If one wants to add kernel related cpu information
-    //        try {
-    //            for (File fileEntry : new File("/sys/devices/system/cpu/cpu0/cpufreq/").listFiles()) {
-    //                if (fileEntry.isDirectory()) continue;
-    //                try {
-    //                    deviceInfoItemsList.add(new DeviceInfoItem(
-    //                            fileEntry.getAbsolutePath(),
-    //                            Utils.readStream(new FileInputStream(fileEntry)),
-    //                            null
-    //                    ));
-    //                } catch (Exception e) {
-    //                    e.printStackTrace();
-    //                }
-    //            }
-    //        } catch (Exception e) {
-    //            e.printStackTrace();
-    //        }
+            // If one wants to add kernel related cpu information
+            //        try {
+            //            for (File fileEntry : new File("/sys/devices/system/cpu/cpu0/cpufreq/").listFiles()) {
+            //                if (fileEntry.isDirectory()) continue;
+            //                try {
+            //                    deviceInfoItemsList.add(new DeviceInfoItem(
+            //                            fileEntry.getAbsolutePath(),
+            //                            Utils.readStream(new FileInputStream(fileEntry)),
+            //                            null
+            //                    ));
+            //                } catch (Exception e) {
+            //                    e.printStackTrace();
+            //                }
+            //            }
+            //        } catch (Exception e) {
+            //            e.printStackTrace();
+            //        }
         }
 
         private String getScreenResolution(WindowManager wm) {

@@ -14,11 +14,11 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.entities.Reminder;
 import com.byagowi.persiancalendar.entities.StringWithValueItem;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.ui.MainActivity;
 import com.byagowi.persiancalendar.utils.ReminderUtils;
-import com.byagowi.persiancalendar.entities.Reminder;
 import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.ArrayList;

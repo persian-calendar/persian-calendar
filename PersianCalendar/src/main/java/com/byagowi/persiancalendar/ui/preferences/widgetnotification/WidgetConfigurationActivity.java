@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding;
 import com.byagowi.persiancalendar.utils.UpdateUtils;
 import com.byagowi.persiancalendar.utils.Utils;
-import com.byagowi.persiancalendar.ui.preferences.widgetnotification.FragmentWidgetNotification;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;

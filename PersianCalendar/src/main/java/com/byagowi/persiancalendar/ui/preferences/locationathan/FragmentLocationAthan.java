@@ -17,17 +17,17 @@ import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.ui.MainActivityModel;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference;
-import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog;
-import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreference;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog;
+import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog;
+import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference;
 import com.byagowi.persiancalendar.utils.Utils;
-import com.byagowi.persiancalendar.ui.MainActivityModel;
 
 import javax.inject.Inject;
 
