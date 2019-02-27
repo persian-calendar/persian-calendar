@@ -190,8 +190,14 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            ShiftWorkItemBinding mBinding;
-            int mPosition;
+            private ShiftWorkItemBinding mBinding;
+            private int mPosition;
+
+            void remove() {
+                mRows.remove(mPosition);
+                notifyDataSetChanged();
+                updateShiftWorkResult();
+            }
 
             ViewHolder(@NonNull ShiftWorkItemBinding binding) {
                 super(binding.getRoot());
@@ -210,11 +216,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                         android.R.layout.simple_spinner_dropdown_item,
                         getResources().getStringArray(R.array.shift_work)));
 
-                binding.remove.setOnClickListener(v -> {
-                    mRows.remove(mPosition);
-                    notifyDataSetChanged();
-                    updateShiftWorkResult();
-                });
+                binding.remove.setOnClickListener(v -> remove());
 
                 binding.lengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override

@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.reminder.fragment;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,17 +12,16 @@ import android.view.ViewGroup;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
-import com.byagowi.persiancalendar.di.dependencies.AppDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.reminder.ReminderUtils;
 import com.byagowi.persiancalendar.reminder.model.Reminder;
 import com.byagowi.persiancalendar.reminder.viewmodel.ReminderModel;
 import com.byagowi.persiancalendar.util.Utils;
 import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -32,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerFragment;
@@ -60,7 +58,21 @@ public class ReminderFragment extends DaggerFragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         ReminderAdapter reminderAdapter = new ReminderAdapter();
         binding.recyclerView.setAdapter(reminderAdapter);
-        binding.recyclerView.addItemDecoration(new DividerItemDecoration(binding.recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        binding.recyclerView.addItemDecoration(new DividerItemDecoration(mainActivity,
+                DividerItemDecoration.VERTICAL));
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                ((ReminderAdapter.ViewHolder) viewHolder).remove();
+            }
+        }).attachToRecyclerView(binding.recyclerView);
 
         ReminderModel viewModel = ViewModelProviders.of(mainActivity).get(ReminderModel.class);
         viewModel.updateHandler.observe(this, isNew -> {
@@ -134,17 +146,9 @@ public class ReminderFragment extends DaggerFragment {
                 super(binding.getRoot());
                 mBinding = binding;
                 mBinding.getRoot().setOnClickListener(
-                        v -> EditReminderDialog.newInstance(id)
-                                .show(getChildFragmentManager(), EditReminderDialog.class.getName()));
-                mBinding.delete.setOnClickListener(v -> {
-                    List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    Reminder reminder = Utils.getReminderById(id);
-                    if (reminder != null && reminders.remove(reminder))
-                        Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
-                    ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
-                    refresh();
-                    notifyDataSetChanged();
-                });
+                        v -> EditReminderDialog.newInstance(id).show(getChildFragmentManager(),
+                                EditReminderDialog.class.getName()));
+                mBinding.delete.setOnClickListener(v -> remove());
             }
 
             public void bind(int position) {
@@ -162,6 +166,17 @@ public class ReminderFragment extends DaggerFragment {
                         String.format(resources.getString(R.string.reminded),
                                 Utils.formatNumber(ReminderUtils.getReminderCount(mainActivity, reminder.id))))
                 );
+            }
+
+            public void remove() {
+                List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
+                Reminder reminder = Utils.getReminderById(id);
+                Utils.createAndShowSnackbar(itemView, "%$1s حذف شد", Snackbar.LENGTH_SHORT);
+                if (reminder != null && reminders.remove(reminder))
+                    Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
+                ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
+                refresh();
+                notifyDataSetChanged();
             }
         }
     }

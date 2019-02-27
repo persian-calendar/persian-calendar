@@ -107,14 +107,14 @@ public class ReminderUtils {
     }
 
     public static int getReminderCount(Context context, int reminderId) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())
                 .getInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), 0);
     }
 
     public static void increaseReminderCount(Context context, int reminderId) {
         int count = getReminderCount(context, reminderId) + 1;
 
-        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()).edit();
         edit.putInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), count);
         edit.apply();
     }
