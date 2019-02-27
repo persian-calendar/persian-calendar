@@ -5,8 +5,7 @@ import android.content.Context;
 
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.calendar.IslamicDate;
-import com.byagowi.persiancalendar.util.CalendarType;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.utils.CalendarType;
 
 import org.junit.Before;
 import org.junit.Rule;

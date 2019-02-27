@@ -35,7 +35,7 @@
         android:theme="@style/LightTheme">
 
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop"
@@ -51,14 +51,14 @@
         </activity>
 
         <activity
-            android:name=".view.activity.AthanActivity"
+            android:name=".ui.AthanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:theme="@style/FullscreenTheme" />
 
         <activity
-            android:name=".reminder.activity.ReminderActivity"
+            android:name=".ui.reminder.ReminderActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
@@ -74,7 +74,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.byagowi.persiancalendar.view.activity.WidgetConfigurationActivity">
+        <activity android:name="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

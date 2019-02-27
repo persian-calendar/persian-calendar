@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.di.modules;
 
 import com.byagowi.persiancalendar.di.scopes.PerActivity;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.ui.MainActivity;
 
 import dagger.Module;
 import dagger.android.AndroidInjectionModule;

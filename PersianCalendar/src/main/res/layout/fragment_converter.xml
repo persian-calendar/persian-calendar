@@ -16,7 +16,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.view.daypickerview.SimpleDayPickerView
+                <com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView
                     android:id="@+id/day_picker_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -27,7 +27,7 @@
                     android:layout_margin="@dimen/card_margin"
                     app:cardBackgroundColor="?attr/colorCard">
 
-                    <com.byagowi.persiancalendar.view.CalendarsView
+                    <com.byagowi.persiancalendar.ui.shared.CalendarsView
                         android:id="@+id/calendars_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

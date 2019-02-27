@@ -9,8 +9,8 @@ import android.service.quicksettings.TileService;
 import android.util.Log;
 
 import com.byagowi.persiancalendar.calendar.AbstractDate;
-import com.byagowi.persiancalendar.util.Utils;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
+import com.byagowi.persiancalendar.ui.MainActivity;
+import com.byagowi.persiancalendar.utils.Utils;
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.

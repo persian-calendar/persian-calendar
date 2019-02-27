@@ -13,9 +13,9 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.reminder.ReminderUtils;
-import com.byagowi.persiancalendar.reminder.model.Reminder;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.utils.ReminderUtils;
+import com.byagowi.persiancalendar.entities.Reminder;
+import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

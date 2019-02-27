@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.telephony.TelephonyManager;
 
 import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.util.UpdateUtils;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.utils.UpdateUtils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 /**
  * Startup broadcast receiver

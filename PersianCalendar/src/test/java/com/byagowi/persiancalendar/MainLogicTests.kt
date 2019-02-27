@@ -8,9 +8,9 @@ import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
-import com.byagowi.persiancalendar.util.AstronomicalUtils
-import com.byagowi.persiancalendar.util.CalendarType
-import com.byagowi.persiancalendar.util.Utils
+import com.byagowi.persiancalendar.utils.AstronomicalUtils
+import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Utils
 import com.cepmuvakkit.times.view.QiblaCompassView
 import org.junit.Assert.*
 import org.junit.Test

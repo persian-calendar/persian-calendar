@@ -14,13 +14,13 @@
             android:title="@string/gps_location"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.LocationPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreference
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
@@ -30,7 +30,7 @@
             android:title="@string/latitude"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
@@ -40,7 +40,7 @@
             android:title="@string/longitude"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
             android:defaultValue="0"
             android:digits="0123456789."
             android:inputType="numberDecimal"
@@ -69,7 +69,7 @@
             android:title="@string/pray_methods"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.NumericPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
             android:inputType="numberSigned"
             android:key="AthanGap"
             android:negativeButtonText="@string/cancel"
@@ -78,7 +78,7 @@
             android:title="@string/athan_gap"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.PrayerSelectPreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
             android:key="AthanAlarm"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/accept"
@@ -107,7 +107,7 @@
             android:title="@string/default_athan"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.view.preferences.AthanVolumePreference
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
             android:dependency="NotificationAthan"
             android:key="AthanVolume"
             android:negativeButtonText="@string/cancel"

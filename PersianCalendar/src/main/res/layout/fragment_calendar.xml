@@ -30,8 +30,8 @@
                     android:layout_height="match_parent"
                     android:background="?attr/colorCard" />
 
-                <com.byagowi.persiancalendar.adapter.CardsViewPager
-                    android:id="@+id/cardsViewPager"
+                <com.byagowi.persiancalendar.ui.calendar.TabsViewPager
+                    android:id="@+id/tabsViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="220sp" />
 

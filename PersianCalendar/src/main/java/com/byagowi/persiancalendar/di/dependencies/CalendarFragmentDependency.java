@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.di.dependencies;
 
 import com.byagowi.persiancalendar.di.scopes.PerFragment;
-import com.byagowi.persiancalendar.view.activity.MainActivity;
-import com.byagowi.persiancalendar.view.fragment.CalendarFragment;
-import com.byagowi.persiancalendar.view.itemdayview.DaysPaintResources;
+import com.byagowi.persiancalendar.ui.MainActivity;
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragment;
+import com.byagowi.persiancalendar.ui.calendar.month.DaysPaintResources;
 
 import javax.inject.Inject;
 

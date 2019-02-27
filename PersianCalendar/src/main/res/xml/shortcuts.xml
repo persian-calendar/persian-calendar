@@ -12,7 +12,7 @@
 
         <intent
             android:action="COMPASS"
-            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetClass="com.byagowi.persiancalendar.ui.MainActivity"
             android:targetPackage="com.byagowi.persiancalendar" />
 
     </shortcut>
@@ -26,7 +26,7 @@
 
         <intent
             android:action="LEVEL"
-            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetClass="com.byagowi.persiancalendar.ui.MainActivity"
             android:targetPackage="com.byagowi.persiancalendar" />
 
     </shortcut>
@@ -40,7 +40,7 @@
 
         <intent
             android:action="CONVERTER"
-            android:targetClass="com.byagowi.persiancalendar.view.activity.MainActivity"
+            android:targetClass="com.byagowi.persiancalendar.ui.MainActivity"
             android:targetPackage="com.byagowi.persiancalendar" />
 
     </shortcut>

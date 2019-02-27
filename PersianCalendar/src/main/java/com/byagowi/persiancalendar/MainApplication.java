@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar;
 
 import com.byagowi.persiancalendar.di.DaggerAppComponent;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;

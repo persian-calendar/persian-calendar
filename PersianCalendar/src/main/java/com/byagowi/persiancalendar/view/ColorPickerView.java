@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.byagowi.persiancalendar.view;
+package com.byagowi.persiancalendar.view; // better to not move it as it is independent from rest of the project
 
 import android.content.Context;
 import android.graphics.Color;

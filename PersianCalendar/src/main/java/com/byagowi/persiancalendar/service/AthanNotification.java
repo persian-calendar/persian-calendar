@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 

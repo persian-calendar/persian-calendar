@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.byagowi.persiancalendar.util.UpdateUtils;
-import com.byagowi.persiancalendar.util.Utils;
+import com.byagowi.persiancalendar.utils.UpdateUtils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 import java.lang.ref.WeakReference;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.byagowi.persiancalendar.view.activity.WidgetConfigurationActivity"
+    android:configure="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"
     android:initialLayout="@layout/widget1x1"
     android:minWidth="40dp"
     android:minHeight="40dp"
