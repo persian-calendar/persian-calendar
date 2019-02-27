@@ -313,6 +313,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string translatable="false" name="reminder_hour">ساعت</string>
     <string translatable="false" name="reminder_day">روز</string>
     <string translatable="false" name="reminded">%1$s بار تاکنون اعلان شده</string>
-    <string translatable="false" name="no_guaranty">تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد</string>
+    <string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>
+    <string translatable="false" name="item_removed">«%1$s» حذف شد</string>
 
 </resources>

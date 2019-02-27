@@ -36,14 +36,14 @@ public class ReminderUtils {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, period, prepareIntent(context, reminder.id));
     }
 
-    public static void turnOff(Context context, long reminderId) {
+    public static void turnOff(Context context, int reminderId) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
         alarmManager.cancel(prepareIntent(context, reminderId));
     }
 
-    private static PendingIntent prepareIntent(Context context, long reminderId) {
+    private static PendingIntent prepareIntent(Context context, int reminderId) {
         Intent intent = new Intent(context, ReminderAlert.class);
         intent.setAction(String.valueOf(reminderId));
         intent.putExtra(Constants.REMINDER_ID, Constants.REMINDERS_BASE_ID + reminderId);

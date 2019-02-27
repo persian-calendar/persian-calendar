@@ -171,9 +171,11 @@ public class ReminderFragment extends DaggerFragment {
             public void remove() {
                 List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
                 Reminder reminder = Utils.getReminderById(id);
-                Utils.createAndShowSnackbar(itemView, "%$1s حذف شد", Snackbar.LENGTH_SHORT);
-                if (reminder != null && reminders.remove(reminder))
+                if (reminder != null && reminders.remove(reminder)) {
                     Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
+                    Utils.createAndShowSnackbar(itemView, String.format(getString(R.string.item_removed),
+                            reminder.name), Snackbar.LENGTH_SHORT);
+                }
                 ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
                 refresh();
                 notifyDataSetChanged();
