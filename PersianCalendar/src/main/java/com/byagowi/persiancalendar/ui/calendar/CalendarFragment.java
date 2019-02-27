@@ -163,7 +163,7 @@ public class CalendarFragment extends DaggerFragment {
             mOwghatBinding.timesRecyclerView.setAdapter(new TimeItemAdapter());
         }
 
-        mMainBinding.tabsViewPager.setAdapter(new TabsAdapter(getChildFragmentManager(),
+        mMainBinding.tabsViewPager.setAdapter(new TabsViewPager.TabsAdapter(getChildFragmentManager(),
                 appDependency, tabs, titles));
         mMainBinding.tabLayout.setupWithViewPager(mMainBinding.tabsViewPager);
 

@@ -33,8 +33,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
     private Context context;
     private int selectedDay = -1;
 
-    public MonthAdapter(CalendarFragmentDependency calendarFragmentDependency, List<DayItem> days,
-                        int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
+    MonthAdapter(CalendarFragmentDependency calendarFragmentDependency, List<DayItem> days,
+                 int startingDayOfWeek, int weekOfYearStart, int weeksCount) {
         this.calendarFragmentDependency = calendarFragmentDependency;
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek);
         totalDays = days.size();
@@ -51,13 +51,13 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         this.daysPaintResources = calendarFragmentDependency.getDaysPaintResources();
     }
 
-    public void initializeMonthEvents(Context context) {
+    void initializeMonthEvents(Context context) {
         if (Utils.isShowDeviceCalendarEvents()) {
             monthEvents = Utils.readMonthDeviceEvents(context, days.get(0).getJdn());
         }
     }
 
-    public void selectDay(int dayOfMonth) {
+    void selectDay(int dayOfMonth) {
         int prevDay = selectedDay;
         selectedDay = -1;
         notifyItemChanged(prevDay);

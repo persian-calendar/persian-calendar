@@ -85,7 +85,7 @@ public class DeviceInfoFragment extends DaggerFragment {
         private final View mRootView;
         private List<DeviceInfoItem> deviceInfoItemsList = new ArrayList<>();
 
-        public DeviceInfoAdapter(Activity activity, View rootView) {
+        DeviceInfoAdapter(Activity activity, View rootView) {
             mRootView = rootView;
 
             deviceInfoItemsList.add(new DeviceInfoItem(
@@ -227,7 +227,7 @@ public class DeviceInfoFragment extends DaggerFragment {
             return deviceInfoItemsList.size();
         }
 
-        static public class DeviceInfoItem {
+        static class DeviceInfoItem {
             final String title, content, version;
 
             DeviceInfoItem(String title, String content, String version) {
