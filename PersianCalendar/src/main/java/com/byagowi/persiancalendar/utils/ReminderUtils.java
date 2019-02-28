@@ -25,7 +25,7 @@ import androidx.annotation.StringRes;
  */
 public class ReminderUtils {
 
-    public static void turnOn(Context context, Reminder reminder) {
+    static void turnOn(Context context, Reminder reminder) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
@@ -81,7 +81,7 @@ public class ReminderUtils {
         }
     }
 
-    public static TimeUnit timeUnitFromString(String string) {
+    static TimeUnit timeUnitFromString(String string) {
         switch (string) {
             case "h":
                 return TimeUnit.HOURS;
@@ -91,7 +91,7 @@ public class ReminderUtils {
         }
     }
 
-    public static String timeUnitToString(TimeUnit unit) {
+    static String timeUnitToString(TimeUnit unit) {
         switch (unit) {
             case HOURS:
                 return "h";

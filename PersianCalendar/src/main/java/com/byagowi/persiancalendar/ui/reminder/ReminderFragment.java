@@ -139,20 +139,20 @@ public class ReminderFragment extends DaggerFragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ReminderAdapterItemBinding mBinding;
-            private int id;
+            private int mId;
 
             public ViewHolder(@NonNull ReminderAdapterItemBinding binding) {
                 super(binding.getRoot());
                 mBinding = binding;
                 mBinding.getRoot().setOnClickListener(
-                        v -> EditReminderDialog.newInstance(id).show(getChildFragmentManager(),
+                        v -> EditReminderDialog.newInstance(mId).show(getChildFragmentManager(),
                                 EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> remove());
             }
 
             public void bind(int position) {
                 Reminder reminder = remindersList.get(position);
-                id = reminder.id;
+                mId = reminder.id;
                 mBinding.name.setText(reminder.name);
                 mBinding.info.setText(reminder.info.replaceAll("\n", " "));
 
@@ -169,13 +169,13 @@ public class ReminderFragment extends DaggerFragment {
 
             public void remove() {
                 List<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
-                Reminder reminder = Utils.getReminderById(id);
+                Reminder reminder = Utils.getReminderById(mId);
                 if (reminder != null && reminders.remove(reminder)) {
                     Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
                     Utils.createAndShowSnackbar(itemView, String.format(getString(R.string.item_removed),
                             reminder.name), Snackbar.LENGTH_SHORT);
                 }
-                ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), id);
+                ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), mId);
                 refresh();
                 notifyDataSetChanged();
             }
