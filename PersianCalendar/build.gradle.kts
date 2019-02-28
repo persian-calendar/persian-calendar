@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 }
 
 // https://stackoverflow.com/a/52441962
@@ -36,6 +37,7 @@ android {
         versionName = "6.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        resConfigs("en", "fa", "ckb", "ar", "ur", "ps")
     }
 
     val appVerboseVersion = defaultConfig.versionName + "-" + arrayOf(
@@ -81,6 +83,11 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.0.0")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
+    implementation("androidx.core:core-ktx:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
 
     // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
     // implementation("android.arch.work:work-runtime:1.0.0-alpha07")
@@ -89,7 +96,9 @@ dependencies {
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
     annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
     annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
+    kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
     val leakCanaryVersion = "1.6.3"
     debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
@@ -98,7 +107,6 @@ dependencies {
     debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
     testImplementation("junit:junit:4.12")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
     androidTestImplementation("androidx.test:runner:1.1.1")
     androidTestImplementation("androidx.test:rules:1.1.1")
