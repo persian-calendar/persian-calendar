@@ -4,27 +4,21 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
-
-import java.util.ArrayList
-import java.util.Locale
-
-import javax.inject.Inject
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
+import java.util.*
+import javax.inject.Inject
 
 /**
  * @author MEHDI DIMYADI
@@ -32,135 +26,142 @@ import dagger.android.support.DaggerFragment
  */
 class DeviceInfoFragment : DaggerFragment() {
     @Inject
-    internal var mainActivityDependency: MainActivityDependency? = null
+    lateinit var mainActivityDependency: MainActivityDependency
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val binding = FragmentDeviceInfoBinding.inflate(inflater,
-                container, false)
+        return FragmentDeviceInfoBinding.inflate(inflater, container, false)
+            .run {
+                mainActivityDependency.mainActivity.setTitleAndSubtitle(
+                    getString(R.string.device_info), "")
 
-        mainActivityDependency!!.mainActivity.setTitleAndSubtitle(
-                getString(R.string.device_info), "")
+                recyclerView.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+                    addItemDecoration(DividerItemDecoration(
+                        mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
+                    adapter = DeviceInfoAdapter(
+                        mainActivityDependency.mainActivity, root)
+                }
 
-        val recyclerView = binding.recyclerView
-        val mAdapter = DeviceInfoAdapter(
-                mainActivityDependency!!.mainActivity, binding.root)
-        recyclerView.setHasFixedSize(true)
-        val mLayoutManager = LinearLayoutManager(mainActivityDependency!!.mainActivity)
-        recyclerView.layoutManager = mLayoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(
-                mainActivityDependency!!.mainActivity, LinearLayoutManager.VERTICAL))
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.adapter = mAdapter
+                bottomNavigation.menu.run {
+                    add(Build.VERSION.RELEASE)
+                    getItem(0).setIcon(R.drawable.ic_developer)
 
-        run {
-            val menu = binding.bottomNavigation.menu
+                    add("API " + Build.VERSION.SDK_INT)
+                    getItem(1).setIcon(R.drawable.ic_settings)
 
-            menu.add(Build.VERSION.RELEASE)
-            menu.getItem(0).setIcon(R.drawable.ic_developer)
+                    add(Build.CPU_ABI)
+                    getItem(2).setIcon(R.drawable.ic_motorcycle)
 
-            menu.add("API " + Build.VERSION.SDK_INT)
-            menu.getItem(1).setIcon(R.drawable.ic_settings)
+                    add(Build.MODEL)
+                    getItem(3).setIcon(R.drawable.ic_device_information)
+                }
 
-            menu.add(Build.CPU_ABI)
-            menu.getItem(2).setIcon(R.drawable.ic_motorcycle)
+                bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
 
-            menu.add(Build.MODEL)
-            menu.getItem(3).setIcon(R.drawable.ic_device_information)
-
-            binding.bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-        }
-
-        return binding.root
+                root
+            }
     }
 }
 
-class DeviceInfoAdapter internal constructor(activity: Activity, private val mRootView: View) : RecyclerView.Adapter<DeviceInfoAdapter.ViewHolder>() {
+class DeviceInfoAdapter constructor(activity: Activity, private val mRootView: View) : RecyclerView.Adapter<DeviceInfoAdapter.ViewHolder>() {
     private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
     init {
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+        deviceInfoItemsList.apply {
+            add(DeviceInfoItem(
                 "Screen Resolution",
                 getScreenResolution(activity.windowManager),
                 ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Android Version",
                 Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
-                Integer.toString(Build.VERSION.SDK_INT)
-        ))
+                Build.VERSION.SDK_INT.toString()
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Manufacturer",
                 Build.MANUFACTURER, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Brand",
                 Build.BRAND, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Model",
                 Build.MODEL, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Product",
                 Build.PRODUCT, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
-                "Instruction CPU 1",
-                Build.CPU_ABI, ""
-        ))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Build.SUPPORTED_ABIS.forEachIndexed { index, s ->
+                    deviceInfoItemsList.add(DeviceInfoItem(
+                        "Instruction CPU ${index + 1}",
+                        s, ""
+                    ))
+                }
+            } else {
+                add(DeviceInfoItem(
+                    "Instruction CPU 1",
+                    Build.CPU_ABI, ""
+                ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
-                "Instruction CPU 2",
-                Build.CPU_ABI2, ""
-        ))
+                add(DeviceInfoItem(
+                    "Instruction CPU 2",
+                    Build.CPU_ABI2, ""
+                ))
+            }
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Instruction Architecture",
                 Build.DEVICE, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Android Id",
                 Build.ID, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Board",
                 Build.BOARD, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Radio Firmware Version",
                 Build.getRadioVersion(), ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Build User",
                 Build.USER, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Host",
                 Build.HOST, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Display",
                 Build.DISPLAY, ""
-        ))
+            ))
 
-        deviceInfoItemsList.add(DeviceInfoItem(
+            add(DeviceInfoItem(
                 "Device Fingerprints",
                 Build.FINGERPRINT, ""
-        ))
+            ))
+        }
 
         // If one wants to add kernel related cpu information
         //        try {
@@ -183,12 +184,12 @@ class DeviceInfoAdapter internal constructor(activity: Activity, private val mRo
 
     private fun getScreenResolution(wm: WindowManager): String {
         return String.format(Locale.ENGLISH, "%d*%d pixels",
-                wm.defaultDisplay.width, wm.defaultDisplay.height)
+            wm.defaultDisplay.width, wm.defaultDisplay.height)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DeviceInfoRowBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+            LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
     }
@@ -204,7 +205,7 @@ class DeviceInfoAdapter internal constructor(activity: Activity, private val mRo
     class DeviceInfoItem(val title: String, val content: String, val version: String)
 
     inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) : RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
-        var mPosition = 0
+        private var mPosition = 0
 
         init {
             mBinding.root.setOnClickListener(this)
