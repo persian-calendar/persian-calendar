@@ -212,10 +212,11 @@ class DeviceInfoAdapter constructor(activity: Activity, private val mRootView: V
 
     fun bind(position: Int) {
       mPosition = position
-      val info = deviceInfoItemsList[position]
-      mBinding.title.text = info.title
-      mBinding.content.text = info.content
-      mBinding.version.text = info.version
+      with(deviceInfoItemsList[position]) {
+        mBinding.title.text = title
+        mBinding.content.text = content
+        mBinding.version.text = version
+      }
     }
 
     override fun onClick(v: View) {
