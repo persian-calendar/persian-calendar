@@ -15,7 +15,9 @@ import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.view.IndeterminateProgressBar
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.DaggerFragment
 import java.util.*
 import javax.inject.Inject
@@ -27,6 +29,8 @@ import javax.inject.Inject
 class DeviceInfoFragment : DaggerFragment() {
   @Inject
   lateinit var mainActivityDependency: MainActivityDependency
+
+  var clickCount: Int = 0
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -43,21 +47,36 @@ class DeviceInfoFragment : DaggerFragment() {
           mainActivityDependency.mainActivity, root)
       }
 
-      bottomNavigation.menu.run {
-        add(Build.VERSION.RELEASE)
-        getItem(0).setIcon(R.drawable.ic_developer)
+      bottomNavigation.run {
+        menu.run {
+          add(Build.VERSION.RELEASE)
+          getItem(0).setIcon(R.drawable.ic_developer)
 
-        add("API " + Build.VERSION.SDK_INT)
-        getItem(1).setIcon(R.drawable.ic_settings)
+          add("API " + Build.VERSION.SDK_INT)
+          getItem(1).setIcon(R.drawable.ic_settings)
 
-        add(Build.CPU_ABI)
-        getItem(2).setIcon(R.drawable.ic_motorcycle)
+          add(Build.CPU_ABI)
+          getItem(2).setIcon(R.drawable.ic_motorcycle)
 
-        add(Build.MODEL)
-        getItem(3).setIcon(R.drawable.ic_device_information)
+          add(Build.MODEL)
+          getItem(3).setIcon(R.drawable.ic_device_information)
+        }
+        labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+        setOnNavigationItemSelectedListener {
+          // Easter egg
+          if (++clickCount >= 4) {
+            BottomSheetDialog(mainActivityDependency.mainActivity).apply {
+              setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+              })
+
+              show()
+            }
+            clickCount = 0
+          }
+          true
+        }
       }
-
-      bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
 
       root
     }
