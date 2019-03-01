@@ -127,3 +127,6 @@ Temporary Items
 
 # secret information
 /app/src/main/res/values/secret_info.xml
+
+PersianCalendar/release/
+*.hprof
