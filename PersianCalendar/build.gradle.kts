@@ -78,8 +78,8 @@ dependencies {
   implementation("androidx.recyclerview:recyclerview:1.0.0")
   implementation("androidx.cardview:cardview:1.0.0")
   implementation("com.google.android.material:material:1.0.0")
-  implementation("android.arch.navigation:navigation-fragment:1.0.0-rc01")
-  implementation("android.arch.navigation:navigation-ui:1.0.0-rc01")
+  implementation("android.arch.navigation:navigation-fragment:1.0.0-rc02")
+  implementation("android.arch.navigation:navigation-ui:1.0.0-rc02")
   implementation("com.google.android:flexbox:1.1.0")
   implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
