@@ -30,38 +30,37 @@ class DeviceInfoFragment : DaggerFragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    return FragmentDeviceInfoBinding.inflate(inflater, container, false)
-      .run {
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(
-          getString(R.string.device_info), "")
+    return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
+      mainActivityDependency.mainActivity.setTitleAndSubtitle(
+        getString(R.string.device_info), "")
 
-        recyclerView.apply {
-          setHasFixedSize(true)
-          layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-          addItemDecoration(DividerItemDecoration(
-            mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
-          adapter = DeviceInfoAdapter(
-            mainActivityDependency.mainActivity, root)
-        }
-
-        bottomNavigation.menu.run {
-          add(Build.VERSION.RELEASE)
-          getItem(0).setIcon(R.drawable.ic_developer)
-
-          add("API " + Build.VERSION.SDK_INT)
-          getItem(1).setIcon(R.drawable.ic_settings)
-
-          add(Build.CPU_ABI)
-          getItem(2).setIcon(R.drawable.ic_motorcycle)
-
-          add(Build.MODEL)
-          getItem(3).setIcon(R.drawable.ic_device_information)
-        }
-
-        bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-
-        root
+      recyclerView.apply {
+        setHasFixedSize(true)
+        layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+        addItemDecoration(DividerItemDecoration(
+          mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
+        adapter = DeviceInfoAdapter(
+          mainActivityDependency.mainActivity, root)
       }
+
+      bottomNavigation.menu.run {
+        add(Build.VERSION.RELEASE)
+        getItem(0).setIcon(R.drawable.ic_developer)
+
+        add("API " + Build.VERSION.SDK_INT)
+        getItem(1).setIcon(R.drawable.ic_settings)
+
+        add(Build.CPU_ABI)
+        getItem(2).setIcon(R.drawable.ic_motorcycle)
+
+        add(Build.MODEL)
+        getItem(3).setIcon(R.drawable.ic_device_information)
+      }
+
+      bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+
+      root
+    }
   }
 }
 
