@@ -86,7 +86,7 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
-    implementation("androidx.core:core-ktx:1.0.0")
+    implementation("androidx.core:core-ktx:1.0.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
 
     // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
