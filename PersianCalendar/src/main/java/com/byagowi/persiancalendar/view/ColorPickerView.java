@@ -129,12 +129,12 @@ public class ColorPickerView extends LinearLayout {
         params.weight = 1;
         seekBars.setLayoutParams(params);
         seekBars.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.addView(colorResultView);
         frameLayout.setLayoutParams(new LayoutParams(seekBars.getMeasuredHeight(),
-                LayoutParams.MATCH_PARENT));
+            LayoutParams.MATCH_PARENT));
         frameLayout.setBackgroundColor(Color.LTGRAY);
         int framePadding = (int) density;
         frameLayout.setPadding(framePadding, framePadding, framePadding, framePadding);
@@ -163,7 +163,7 @@ public class ColorPickerView extends LinearLayout {
             View view = new View(context);
             view.setBackgroundColor(color);
             view.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT));
+                FrameLayout.LayoutParams.MATCH_PARENT));
 
             FrameLayout frameLayout = new FrameLayout(context);
             int rectSize = (int) (40 * density);
@@ -184,11 +184,11 @@ public class ColorPickerView extends LinearLayout {
 
     private void showColor() {
         int color = Color.argb(0xFF, redSeekBar.getProgress(),
-                greenSeekBar.getProgress(), blueSeekBar.getProgress());
+            greenSeekBar.getProgress(), blueSeekBar.getProgress());
         colorResultView.setBackgroundColor(color);
         colorResultView.setText(colorCodeVisibility
-                ? String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF & color)
-                : "");
+            ? String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF & color)
+            : "");
         colorResultView.setTextColor(color ^ 0xFFFFFF);
     }
 
@@ -208,6 +208,6 @@ public class ColorPickerView extends LinearLayout {
     /*@ColorInt*/
     public int getPickerColor() {
         return Color.argb(0xFF,
-                redSeekBar.getProgress(), greenSeekBar.getProgress(), blueSeekBar.getProgress());
+            redSeekBar.getProgress(), greenSeekBar.getProgress(), blueSeekBar.getProgress());
     }
 }
