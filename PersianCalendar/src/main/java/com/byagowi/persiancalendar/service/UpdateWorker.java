@@ -1,7 +1,7 @@
 //package com.byagowi.persiancalendar.service;
 //
-//import com.byagowi.persiancalendar.util.UpdateUtils;
-//import com.byagowi.persiancalendar.util.Utils;
+//import com.byagowi.persiancalendar.utils.UpdateUtils;
+//import com.byagowi.persiancalendar.utils.Utils;
 //
 //import androidx.work.Worker;
 //
