@@ -40,22 +40,24 @@ android {
     resConfigs("en", "fa", "ckb", "ar", "ur", "ps")
   }
 
-  val appVerboseVersion = defaultConfig.versionName + "-" + arrayOf(
-    "git rev-parse --abbrev-ref HEAD",
-    "git rev-list HEAD --count",
-    "git rev-parse --short HEAD"
-  ).map { it.runCommand()?.trim() }.joinToString("-")
+  val appVerboseVersion =
+    defaultConfig.versionName + "-" + arrayOf(
+      "git rev-parse --abbrev-ref HEAD",
+      "git rev-list HEAD --count",
+      "git rev-parse --short HEAD"
+    ).map { it.runCommand()?.trim() }.joinToString("-") +
+      (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
 
   buildTypes {
     getByName("debug") {
       buildOutputs.all {
-        (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-Debug-$appVerboseVersion.apk"
+        (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-debug-$appVerboseVersion.apk"
       }
       versionNameSuffix = "-$appVerboseVersion"
     }
     getByName("release") {
       buildOutputs.all {
-        (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-Release-$appVerboseVersion.apk"
+        (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-release-$appVerboseVersion.apk"
       }
       isMinifyEnabled = true
       isShrinkResources = true
@@ -76,8 +78,8 @@ dependencies {
   implementation("androidx.recyclerview:recyclerview:1.0.0")
   implementation("androidx.cardview:cardview:1.0.0")
   implementation("com.google.android.material:material:1.0.0")
-  implementation("android.arch.navigation:navigation-fragment:1.0.0-rc01")
-  implementation("android.arch.navigation:navigation-ui:1.0.0-rc01")
+  implementation("android.arch.navigation:navigation-fragment:1.0.0-rc02")
+  implementation("android.arch.navigation:navigation-ui:1.0.0-rc02")
   implementation("com.google.android:flexbox:1.1.0")
   implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
