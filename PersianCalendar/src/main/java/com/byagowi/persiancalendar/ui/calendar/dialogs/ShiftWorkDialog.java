@@ -78,7 +78,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         }
 
         ShiftWorkSettingsBinding binding = ShiftWorkSettingsBinding.inflate(
-                LayoutInflater.from(mainActivity), null, false);
+            LayoutInflater.from(mainActivity), null, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 
         List<ShiftWorkRecord> shiftWorks = Utils.getShiftWorks();
@@ -88,47 +88,47 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         binding.recyclerView.setAdapter(shiftWorkItemAdapter);
 
         binding.description.setText(String.format(getString(
-                isFirstSetup ? R.string.shift_work_starting_date : R.string.shift_work_starting_date_edit),
-                Utils.formatDate(
-                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+            isFirstSetup ? R.string.shift_work_starting_date : R.string.shift_work_starting_date_edit),
+            Utils.formatDate(
+                Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
 
         binding.resetLink.setOnClickListener(v -> {
             jdn = selectedJdn;
             binding.description.setText(String.format(getString(R.string.shift_work_starting_date),
-                    Utils.formatDate(
-                            Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
+                Utils.formatDate(
+                    Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn))));
             shiftWorkItemAdapter.reset();
         });
         binding.recurs.setChecked(Utils.getShiftWorkRecurs());
 
         return new AlertDialog.Builder(mainActivity)
-                .setView(binding.getRoot())
-                .setTitle(null)
-                .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-                    StringBuilder result = new StringBuilder();
-                    boolean first = true;
-                    for (ShiftWorkRecord record : shiftWorkItemAdapter.getRows()) {
-                        if (record.length == 0) continue;
+            .setView(binding.getRoot())
+            .setTitle(null)
+            .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                StringBuilder result = new StringBuilder();
+                boolean first = true;
+                for (ShiftWorkRecord record : shiftWorkItemAdapter.getRows()) {
+                    if (record.length == 0) continue;
 
-                        if (first) first = false;
-                        else result.append(",");
-                        result.append(record.type);
-                        result.append("=");
-                        result.append(record.length);
-                    }
+                    if (first) first = false;
+                    else result.append(",");
+                    result.append(record.type);
+                    result.append("=");
+                    result.append(record.length);
+                }
 
-                    SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
-                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, result.length() == 0 ? -1 : jdn);
-                    edit.putString(PREF_SHIFT_WORK_SETTING, result.toString());
-                    edit.putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked());
-                    edit.apply();
+                SharedPreferences.Editor edit = appDependency.getSharedPreferences().edit();
+                edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, result.length() == 0 ? -1 : jdn);
+                edit.putString(PREF_SHIFT_WORK_SETTING, result.toString());
+                edit.putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked());
+                edit.apply();
 
-                    calendarFragmentDependency.getCalendarFragment().afterShiftWorkChange();
-                    mainActivity.restartActivity();
-                })
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel, null)
-                .create();
+                calendarFragmentDependency.getCalendarFragment().afterShiftWorkChange();
+                mainActivity.restartActivity();
+            })
+            .setCancelable(true)
+            .setNegativeButton(R.string.cancel, null)
+            .create();
     }
 
     private class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
@@ -156,7 +156,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 if (first) first = false;
                 else result.append(Utils.getSpacedComma());
                 result.append(String.format(getString(R.string.shift_work_record_title),
-                        Utils.formatNumber(record.length), Utils.getShiftWorkTitles().get(record.type)));
+                    Utils.formatNumber(record.length), Utils.getShiftWorkTitles().get(record.type)));
             }
 
             mBinding.result.setText(result.toString());
@@ -167,7 +167,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             ShiftWorkItemBinding binding = ShiftWorkItemBinding.inflate(
-                    LayoutInflater.from(parent.getContext()), parent, false);
+                LayoutInflater.from(parent.getContext()), parent, false);
 
             return new ViewHolder(binding);
         }
@@ -201,14 +201,14 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                 List<StringWithValueItem> days = new ArrayList<>();
                 for (int i = 0; i <= 7; ++i) {
                     days.add(new StringWithValueItem(i, i == 0 ?
-                            getString(R.string.shift_work_days_head) : Utils.formatNumber(i)));
+                        getString(R.string.shift_work_days_head) : Utils.formatNumber(i)));
                 }
                 binding.lengthSpinner.setAdapter(new ArrayAdapter<>(context,
-                        android.R.layout.simple_spinner_dropdown_item, days));
+                    android.R.layout.simple_spinner_dropdown_item, days));
 
                 binding.typeSpinner.setAdapter(new ArrayAdapter<>(context,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        getResources().getStringArray(R.array.shift_work)));
+                    android.R.layout.simple_spinner_dropdown_item,
+                    getResources().getStringArray(R.array.shift_work)));
 
                 binding.remove.setOnClickListener(v -> remove());
 
@@ -216,7 +216,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
-                                mRows.get(mPosition).type, position));
+                            mRows.get(mPosition).type, position));
                         updateShiftWorkResult();
                     }
 
@@ -229,7 +229,7 @@ public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mRows.set(mPosition, new ShiftWorkRecord(
-                                mShiftWorkKeys.get(position), mRows.get(mPosition).length));
+                            mShiftWorkKeys.get(position), mRows.get(mPosition).length));
                         updateShiftWorkResult();
                     }
 

@@ -33,7 +33,7 @@ public class LocationPreferenceDialog extends PreferenceDialogFragmentCompat {
     public void onDialogClosed(boolean positiveResult) {
     }
 
-    public void selectItem(String city) {
+    void selectItem(String city) {
         ((LocationPreference) getPreference()).setSelected(city);
         dismiss();
     }

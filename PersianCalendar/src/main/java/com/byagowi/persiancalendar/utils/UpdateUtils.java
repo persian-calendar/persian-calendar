@@ -421,14 +421,14 @@ public class UpdateUtils {
 //                if (notificationManager != null)
 //                    notificationManager.notify(NOTIFICATION_ID, builder.build());
 //            } else {
-                try {
-                    ApplicationService applicationService = ApplicationService.getInstance();
-                    if (applicationService != null) {
-                        applicationService.startForeground(NOTIFICATION_ID, builder.build());
-                    }
-                } catch (Exception e) {
-                    Log.e("UpdateUtils", "failed to start service with the notification", e);
+            try {
+                ApplicationService applicationService = ApplicationService.getInstance();
+                if (applicationService != null) {
+                    applicationService.startForeground(NOTIFICATION_ID, builder.build());
                 }
+            } catch (Exception e) {
+                Log.e("UpdateUtils", "failed to start service with the notification", e);
+            }
 //            }
         }
 //        else {

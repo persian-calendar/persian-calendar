@@ -79,7 +79,7 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         textView.setText(R.string.pleasewaitgps);
 
         locationManager = (LocationManager) mainActivityDependency.getMainActivity()
-                .getSystemService(Context.LOCATION_SERVICE);
+            .getSystemService(Context.LOCATION_SERVICE);
 
         getLocation();
         if (lacksPermission) {
@@ -89,10 +89,10 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30));
 
         return new AlertDialog.Builder(mainActivityDependency.getMainActivity())
-                .setPositiveButton("", null)
-                .setNegativeButton("", null)
-                .setView(textView)
-                .create();
+            .setPositiveButton("", null)
+            .setNegativeButton("", null)
+            .setView(textView)
+            .create();
     }
 
     private void checkGPSProvider() {
@@ -100,18 +100,18 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
 
         try {
             LocationManager gps = (LocationManager) mainActivityDependency.getMainActivity()
-                    .getSystemService(Context.LOCATION_SERVICE);
+                .getSystemService(Context.LOCATION_SERVICE);
 
             if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 new AlertDialog.Builder(mainActivityDependency.getMainActivity())
-                        .setMessage(R.string.gps_internet_desc)
-                        .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-                            try {
-                                mainActivityDependency.getMainActivity().startActivity(
-                                        new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                            } catch (Exception ignore) {
-                            }
-                        }).create().show();
+                    .setMessage(R.string.gps_internet_desc)
+                    .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                        try {
+                            mainActivityDependency.getMainActivity().startActivity(
+                                new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        } catch (Exception ignore) {
+                        }
+                    }).create().show();
             }
         } catch (Exception ignore) {
         }
@@ -124,7 +124,7 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         }
 
         if (ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             lacksPermission = true;
             return;
         }
@@ -160,8 +160,8 @@ public class GPSLocationDialog extends DaggerAppCompatDialogFragment {
         }
         // this time, with native digits
         result += Utils.formatCoordinate(mainActivityDependency.getMainActivity(),
-                new Coordinate(location.getLatitude(), location.getLongitude(),
-                        location.getAltitude()), "\n");
+            new Coordinate(location.getLatitude(), location.getLongitude(),
+                location.getAltitude()), "\n");
         textView.setText(result);
     }
 

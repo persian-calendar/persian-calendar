@@ -10,7 +10,7 @@ public class LocationAdapterModel extends ViewModel {
 
     final public View.OnClickListener callback;
 
-    public LocationAdapterModel(String city, String country, View.OnClickListener callback) {
+    LocationAdapterModel(String city, String country, View.OnClickListener callback) {
         this.city = city;
         this.country = country;
 

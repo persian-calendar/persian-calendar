@@ -164,18 +164,18 @@ public class CalendarFragment extends DaggerFragment {
         }
 
         mMainBinding.tabsViewPager.setAdapter(new TabsViewPager.TabsAdapter(getChildFragmentManager(),
-                appDependency, tabs, titles));
+            appDependency, tabs, titles));
         mMainBinding.tabLayout.setupWithViewPager(mMainBinding.tabsViewPager);
 
         mCalendarAdapterHelper = new CalendarAdapter.CalendarAdapterHelper(Utils.isRTL(context));
         mMainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
-                mCalendarAdapterHelper));
+            mCalendarAdapterHelper));
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 
         mMainBinding.calendarViewPager.addOnPageChangeListener(mChangeListener);
 
         int lastTab = appDependency.getSharedPreferences()
-                .getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
+            .getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
         if (lastTab >= tabs.size()) {
             lastTab = Constants.CALENDARS_TAB;
         }
@@ -184,7 +184,7 @@ public class CalendarFragment extends DaggerFragment {
 
         AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(Utils.getMonthName(today),
-                Utils.formatNumber(today.getYear()));
+            Utils.formatNumber(today.getYear()));
 
         mCalendarFragmentModel = ViewModelProviders.of(this).get(CalendarFragmentModel.class);
         mCalendarFragmentModel.selectedDayLiveData.observe(this, jdn -> {
@@ -199,7 +199,7 @@ public class CalendarFragment extends DaggerFragment {
 
     public void changeMonth(int position) {
         mMainBinding.calendarViewPager.setCurrentItem(
-                mMainBinding.calendarViewPager.getCurrentItem() + position, true);
+            mMainBinding.calendarViewPager.getCurrentItem() + position, true);
     }
 
     public void addEventOnCalendar(long jdn) {
@@ -209,21 +209,21 @@ public class CalendarFragment extends DaggerFragment {
         Calendar time = Calendar.getInstance();
         time.set(civil.getYear(), civil.getMonth() - 1, civil.getDayOfMonth());
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED) {
             Utils.askForCalendarPermission(activity);
         } else {
             try {
                 startActivityForResult(
-                        new Intent(Intent.ACTION_INSERT)
-                                .setData(CalendarContract.Events.CONTENT_URI)
-                                .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
-                                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                        time.getTimeInMillis())
-                                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                        time.getTimeInMillis())
-                                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
-                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+                    new Intent(Intent.ACTION_INSERT)
+                        .setData(CalendarContract.Events.CONTENT_URI)
+                        .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                            Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                            time.getTimeInMillis())
+                        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                            time.getTimeInMillis())
+                        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
+                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
             } catch (Exception e) {
                 Utils.createAndShowShortSnackbar(getView(), R.string.device_calendar_does_not_support);
             }
@@ -239,7 +239,7 @@ public class CalendarFragment extends DaggerFragment {
                 sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true);
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED) {
+                    != PackageManager.PERMISSION_GRANTED) {
                     Utils.askForCalendarPermission(activity);
                 } else {
                     Utils.toggleShowDeviceCalendarOnPreference(activity, true);
@@ -251,7 +251,7 @@ public class CalendarFragment extends DaggerFragment {
 
     private void sendUpdateCommandToMonthFragments(int toWhich, boolean addOrModify) {
         ViewModelProviders.of(this).get(CalendarFragmentModel.class).monthFragmentsUpdate(
-                new CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, mLastSelectedJdn));
+            new CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, mLastSelectedJdn));
     }
 
     private SpannableString formatClickableEventTitle(DeviceCalendarEvent event) {
@@ -262,9 +262,9 @@ public class CalendarFragment extends DaggerFragment {
             public void onClick(@NonNull View textView) {
                 try {
                     startActivityForResult(new Intent(Intent.ACTION_VIEW)
-                                    .setData(ContentUris.withAppendedId(
-                                            CalendarContract.Events.CONTENT_URI, event.getId())),
-                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
+                            .setData(ContentUris.withAppendedId(
+                                CalendarContract.Events.CONTENT_URI, event.getId())),
+                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE);
                 } catch (Exception e) { // Should be ActivityNotFoundException but we don't care really
                     Utils.createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support);
                 }
@@ -308,7 +308,7 @@ public class CalendarFragment extends DaggerFragment {
         mEventsBinding.shiftWorkTitle.setText(Utils.getShiftWorkTitle(jdn, false));
 
         List<AbstractEvent> events = Utils.getEvents(jdn,
-                Utils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
+            Utils.readDayDeviceEvents(mainActivityDependency.getMainActivity(), jdn));
         String holidays = Utils.getEventsTitle(events, true, false, false, false);
         String nonHolidays = Utils.getEventsTitle(events, false, false, false, false);
         SpannableStringBuilder deviceEvents = getDeviceEventsTitle(events);
@@ -359,7 +359,7 @@ public class CalendarFragment extends DaggerFragment {
         SpannableStringBuilder messageToShow = new SpannableStringBuilder();
 
         Set<String> enabledTypes = appDependency.getSharedPreferences()
-                .getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+            .getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
         if (enabledTypes == null || enabledTypes.size() == 0) {
             mEventsBinding.noEvent.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(messageToShow))
@@ -400,7 +400,7 @@ public class CalendarFragment extends DaggerFragment {
         Date date = mCalendar.getTime();
 
         PrayTimes prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
-                date, mCoordinate);
+            date, mCoordinate);
         RecyclerView.Adapter adapter = mOwghatBinding.timesRecyclerView.getAdapter();
         if (adapter instanceof TimeItemAdapter) {
             ((TimeItemAdapter) adapter).setTimes(prayTimes);
@@ -409,7 +409,7 @@ public class CalendarFragment extends DaggerFragment {
         double moonPhase = 1;
         try {
             moonPhase = new SunMoonPosition(Utils.getTodayJdn(), mCoordinate.getLatitude(),
-                    mCoordinate.getLongitude(), 0, 0).getMoonPhase();
+                mCoordinate.getLongitude(), 0, 0).getMoonPhase();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -432,8 +432,8 @@ public class CalendarFragment extends DaggerFragment {
             boolean expanded = !timesAdapter.isExpanded();
             timesAdapter.setExpanded(expanded);
             mOwghatBinding.moreOwghat.setImageResource(expanded
-                    ? R.drawable.ic_keyboard_arrow_up
-                    : R.drawable.ic_keyboard_arrow_down);
+                ? R.drawable.ic_keyboard_arrow_up
+                : R.drawable.ic_keyboard_arrow_down);
         }
         mMainBinding.tabsViewPager.measureCurrentView(mOwghatBinding.getRoot());
 
@@ -466,9 +466,9 @@ public class CalendarFragment extends DaggerFragment {
             long todayJdn = Utils.getTodayJdn();
             if (jdn != todayJdn) {
                 Utils.createAndShowShortSnackbar(getView(),
-                        Utils.getA11yDaySummary(mainActivityDependency.getMainActivity(), jdn,
-                                false, null, true,
-                                true, true));
+                    Utils.getA11yDaySummary(mainActivityDependency.getMainActivity(), jdn,
+                        false, null, true,
+                        true, true));
             }
         }
     }
@@ -497,7 +497,7 @@ public class CalendarFragment extends DaggerFragment {
             mSearchAutoComplete.setHint(R.string.search_in_events);
 
             ArrayAdapter<AbstractEvent> eventsAdapter = new ArrayAdapter<>(context,
-                    R.layout.suggestion, android.R.id.text1);
+                R.layout.suggestion, android.R.id.text1);
             eventsAdapter.addAll(Utils.getAllEnabledEvents());
             eventsAdapter.addAll(Utils.getAllEnabledAppointments(context));
             mSearchAutoComplete.setAdapter(eventsAdapter);
@@ -546,7 +546,7 @@ public class CalendarFragment extends DaggerFragment {
         switch (item.getItemId()) {
             case R.id.go_to:
                 SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
-                        SelectDayDialog.class.getName());
+                    SelectDayDialog.class.getName());
                 break;
             case R.id.add_event:
                 if (mLastSelectedJdn == -1)
@@ -556,13 +556,13 @@ public class CalendarFragment extends DaggerFragment {
                 break;
             case R.id.shift_work:
                 ShiftWorkDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
-                        ShiftWorkDialog.class.getName());
+                    ShiftWorkDialog.class.getName());
                 break;
             case R.id.month_overview:
                 long visibleMonthJdn = MonthFragment.getDateFromOffset(Utils.getMainCalendar(),
-                        mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.getCurrentItem())).toJdn();
+                    mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.getCurrentItem())).toJdn();
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(getChildFragmentManager(),
-                        MonthOverviewDialog.class.getName());
+                    MonthOverviewDialog.class.getName());
                 break;
             default:
                 break;

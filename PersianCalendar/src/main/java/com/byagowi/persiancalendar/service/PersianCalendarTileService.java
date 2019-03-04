@@ -21,7 +21,7 @@ public class PersianCalendarTileService extends TileService {
     public void onClick() {
         try {
             startActivityAndCollapse(new Intent(this, MainActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (Exception e) {
             Log.e("TileService", "Tile onClick fail", e);
         }
@@ -35,7 +35,7 @@ public class PersianCalendarTileService extends TileService {
         AbstractDate today = Utils.getTodayOfCalendar(Utils.getMainCalendar());
 
         tile.setIcon(Icon.createWithResource(this,
-                Utils.getDayIconResource(today.getDayOfMonth())));
+            Utils.getDayIconResource(today.getDayOfMonth())));
         tile.setLabel(Utils.getWeekDayName(today));
         tile.setContentDescription(Utils.getMonthName(today));
         // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices

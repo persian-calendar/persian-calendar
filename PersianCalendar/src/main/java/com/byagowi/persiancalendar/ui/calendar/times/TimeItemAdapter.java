@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHolder> {
     @StringRes
     static final private int[] timeNames = new int[]{
-            R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-            R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
+        R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
+        R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
     };
     private PrayTimes mPrayTimes;
     private boolean mExpanded = false;
@@ -27,7 +27,7 @@ public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TimeItemBinding binding = TimeItemBinding.inflate(LayoutInflater.from(parent.getContext()),
-                parent, false);
+            parent, false);
 
         return new ViewHolder(binding);
     }
@@ -59,11 +59,11 @@ public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         private TimeItemBinding binding;
         private FlexboxLayoutManager.LayoutParams emptyLayout =
-                new FlexboxLayoutManager.LayoutParams(0, 0);
+            new FlexboxLayoutManager.LayoutParams(0, 0);
         private FlexboxLayoutManager.LayoutParams wrapContent =
-                new FlexboxLayoutManager.LayoutParams(
-                        FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
-                        FlexboxLayoutManager.LayoutParams.WRAP_CONTENT);
+            new FlexboxLayoutManager.LayoutParams(
+                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
+                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT);
 
         ViewHolder(TimeItemBinding binding) {
             super(binding.getRoot());
@@ -73,8 +73,8 @@ public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHo
         public void bind(int position) {
             int timeName = timeNames[position];
             binding.getRoot().setLayoutParams(!mExpanded && !(timeName == R.string.fajr ||
-                    timeName == R.string.dhuhr || timeName == R.string.maghrib)
-                    ? emptyLayout : wrapContent);
+                timeName == R.string.dhuhr || timeName == R.string.maghrib)
+                ? emptyLayout : wrapContent);
 
             binding.name.setText(timeName);
 

@@ -41,7 +41,7 @@ public class PersianDate extends AbstractDate {
             mdays = (month - 1) * 30 + 6;
 
         return day + mdays + ((epyear * 682) - 110) / 2816 + (epyear - 1) * 365
-                + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
+            + epbase / 2820 * 1029983 + (PERSIAN_EPOCH - 1);
     }
 
     // Converters
@@ -64,7 +64,7 @@ public class PersianDate extends AbstractDate {
             aux1 = cyear / 366;
             aux2 = cyear % 366;
             ycycle = floor(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522d)
-                    + aux1 + 1;
+                + aux1 + 1;
         }
 
         int year, month, day;

@@ -46,8 +46,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         isArabicDigit = Utils.isArabicDigitSelected();
 
         layoutParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                context.getResources().getDimensionPixelSize(R.dimen.day_item_size));
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            context.getResources().getDimensionPixelSize(R.dimen.day_item_size));
         this.daysPaintResources = calendarFragmentDependency.getDaysPaintResources();
     }
 
@@ -122,7 +122,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
             if (jdn == -1) return;
 
             ViewModelProviders.of(calendarFragmentDependency.getCalendarFragment())
-                    .get(CalendarFragmentModel.class).selectDay(jdn);
+                .get(CalendarFragmentModel.class).selectDay(jdn);
             MonthAdapter.this.selectDay(itemDayView.getDayOfMonth());
         }
 
@@ -147,10 +147,10 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     if (row > 0 && row <= weeksCount) {
                         String weekNumber = Utils.formatNumber(weekOfYearStart + row - 1);
                         itemDayView.setNonDayOfMonthItem(weekNumber,
-                                daysPaintResources.weekNumberTextSize);
+                            daysPaintResources.weekNumberTextSize);
                         if (Utils.isTalkBackEnabled()) {
                             itemDayView.setContentDescription(
-                                    String.format(context.getString(R.string.nth_week_of_year), weekNumber));
+                                String.format(context.getString(R.string.nth_week_of_year), weekNumber));
                         }
 
                         itemDayView.setVisibility(View.VISIBLE);
@@ -165,12 +165,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 setEmpty();
             } else if (position < 7) {
                 itemDayView.setNonDayOfMonthItem(
-                        Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)),
-                        daysPaintResources.weekDaysInitialTextSize);
+                    Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)),
+                    daysPaintResources.weekDaysInitialTextSize);
                 if (Utils.isTalkBackEnabled()) {
                     itemDayView.setContentDescription(String.format(
-                            context.getString(R.string.week_days_name_column),
-                            Utils.getWeekDayName(Utils.fixDayOfWeek(position))));
+                        context.getString(R.string.week_days_name_column),
+                        Utils.getWeekDayName(Utils.fixDayOfWeek(position))));
                 }
 
                 itemDayView.setVisibility(View.VISIBLE);
@@ -181,16 +181,16 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                     boolean isHoliday = Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events);
 
                     itemDayView.setDayOfMonthItem(day.isToday(), originalPosition == selectedDay,
-                            events.size() > 0, hasDeviceEvents(events), isHoliday,
-                            isArabicDigit
-                                    ? daysPaintResources.arabicDigitsTextSize
-                                    : daysPaintResources.persianDigitsTextSize,
-                            day.getJdn(), position - 6 - startingDayOfWeek,
-                            Utils.getShiftWorkTitle(day.getJdn(), true));
+                        events.size() > 0, hasDeviceEvents(events), isHoliday,
+                        isArabicDigit
+                            ? daysPaintResources.arabicDigitsTextSize
+                            : daysPaintResources.persianDigitsTextSize,
+                        day.getJdn(), position - 6 - startingDayOfWeek,
+                        Utils.getShiftWorkTitle(day.getJdn(), true));
 
                     itemDayView.setContentDescription(Utils.getA11yDaySummary(context,
-                            day.getJdn(), day.isToday(), monthEvents,
-                            day.isToday(), false, true));
+                        day.getJdn(), day.isToday(), monthEvents,
+                        day.isToday(), false, true));
 
                     itemDayView.setVisibility(View.VISIBLE);
                 } else {

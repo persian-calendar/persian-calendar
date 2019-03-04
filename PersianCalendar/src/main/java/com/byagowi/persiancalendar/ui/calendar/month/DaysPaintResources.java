@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 public class DaysPaintResources {
     @ColorInt
     final int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
-            colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
+        colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
     final int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
     @StyleRes
     final public int style;

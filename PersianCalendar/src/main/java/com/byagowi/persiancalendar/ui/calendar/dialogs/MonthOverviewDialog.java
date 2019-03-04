@@ -72,22 +72,22 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
             String nonHolidays = Utils.getEventsTitle(events, false, false, true, false);
             if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))
                 records.add(new MonthOverviewRecord(Utils.dayTitleSummary(
-                        Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
+                    Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
         }
         if (records.size() == 0)
             records.add(new MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""));
 
         MonthOverviewDialogBinding binding = MonthOverviewDialogBinding.inflate(
-                LayoutInflater.from(mainActivity), null, false);
+            LayoutInflater.from(mainActivity), null, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
         binding.recyclerView.setAdapter(new ItemAdapter(records));
 
         return new AlertDialog.Builder(mainActivity)
-                .setView(binding.getRoot())
-                .setTitle(null)
-                .setCancelable(true)
-                .setNegativeButton(R.string.closeDrawer, null)
-                .create();
+            .setView(binding.getRoot())
+            .setTitle(null)
+            .setCancelable(true)
+            .setNegativeButton(R.string.closeDrawer, null)
+            .create();
     }
 
     static class MonthOverviewRecord {
@@ -113,7 +113,7 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             MonthOverviewItemBinding binding = MonthOverviewItemBinding.inflate(
-                    LayoutInflater.from(parent.getContext()), parent, false);
+                LayoutInflater.from(parent.getContext()), parent, false);
 
             return new ViewHolder(binding);
         }

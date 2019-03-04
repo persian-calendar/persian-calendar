@@ -18,8 +18,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     final private List<CityItem> mCities;
     final private LocationPreferenceDialog mLocationPreferenceDialog;
 
-    public LocationAdapter(LocationPreferenceDialog locationPreferenceDialog,
-                           List<CityItem> cities) {
+    LocationAdapter(LocationPreferenceDialog locationPreferenceDialog,
+                    List<CityItem> cities) {
         mLocationPreferenceDialog = locationPreferenceDialog;
         mCities = cities;
     }
@@ -28,7 +28,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @Override
     public LocationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemCityNameBinding binding = ListItemCityNameBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+            LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 

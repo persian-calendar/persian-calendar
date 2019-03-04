@@ -56,7 +56,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CalendarTypeItemBinding binding = CalendarTypeItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+            LayoutInflater.from(parent.getContext()), parent, false);
 
         return new ItemViewHolder(binding);
     }

@@ -87,7 +87,7 @@ public class CompassFragment extends DaggerFragment {
         coordinate = Utils.getCoordinate(mainActivityDependency.getMainActivity());
 
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.compass),
-                Utils.getCityName(mainActivityDependency.getMainActivity(), true));
+            Utils.getCityName(mainActivityDependency.getMainActivity(), true));
         setCompassMetrics();
 
         if (coordinate != null) {
@@ -104,9 +104,9 @@ public class CompassFragment extends DaggerFragment {
                     break;
                 case R.id.help:
                     Utils.createAndShowSnackbar(getView(), mainActivityDependency.getMainActivity()
-                                    .getString(sensorNotFound
-                                            ? R.string.compass_not_found : R.string.calibrate_compass_summary),
-                            5000);
+                            .getString(sensorNotFound
+                                ? R.string.compass_not_found : R.string.calibrate_compass_summary),
+                        5000);
                 default:
                     break;
             }
@@ -116,7 +116,7 @@ public class CompassFragment extends DaggerFragment {
             stop = !stop;
             binding.fab.setImageResource(stop ? R.drawable.ic_play : R.drawable.ic_stop);
             binding.fab.setContentDescription(mainActivityDependency.getMainActivity()
-                    .getString(stop ? R.string.resume : R.string.stop));
+                .getString(stop ? R.string.resume : R.string.stop));
         });
 
         return binding.getRoot();
@@ -132,13 +132,13 @@ public class CompassFragment extends DaggerFragment {
         DisplayMetrics displayMetrics = new DisplayMetrics();
 
         mainActivityDependency.getMainActivity().getWindowManager()
-                .getDefaultDisplay().getMetrics(displayMetrics);
+            .getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         binding.compassView.setScreenResolution(width, height - 2 * height / 8);
 
         WindowManager wm = (WindowManager) mainActivityDependency.getMainActivity()
-                .getSystemService(Context.WINDOW_SERVICE);
+            .getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) {
             return;
         }
@@ -169,7 +169,7 @@ public class CompassFragment extends DaggerFragment {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
             if (sensor != null) {
                 sensorManager.registerListener(compassListener, sensor,
-                        SensorManager.SENSOR_DELAY_FASTEST);
+                    SensorManager.SENSOR_DELAY_FASTEST);
                 if (coordinate == null) {
                     Utils.createAndShowShortSnackbar(mainActivity.getCoordinator(), R.string.set_location);
                 }

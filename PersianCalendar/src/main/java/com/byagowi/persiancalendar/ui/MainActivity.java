@@ -401,7 +401,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         Utils.updateStoredPreference(this);
         UpdateUtils.update(getApplicationContext(), true);
 
-        ViewModelProviders.of(this).get(MainActivityModel.class).preferenceIsUpdate();
+        ViewModelProviders.of(this).get(MainActivityModel.class).preferenceIsUpdated();
     }
 
     @Override

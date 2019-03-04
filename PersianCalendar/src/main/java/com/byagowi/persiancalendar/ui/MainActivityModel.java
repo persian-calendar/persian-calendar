@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 public class MainActivityModel extends ViewModel {
     public final MutableLiveData<Void> preferenceUpdateHandler = new MutableLiveData<>();
 
-    public void preferenceIsUpdate() {
+    void preferenceIsUpdated() {
         preferenceUpdateHandler.postValue(null);
     }
 }

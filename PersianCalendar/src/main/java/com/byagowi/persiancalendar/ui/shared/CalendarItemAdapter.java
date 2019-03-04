@@ -24,22 +24,22 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
     private boolean mExpanded = false;
     private long mJdn;
 
-    public CalendarItemAdapter(Context context) {
+    CalendarItemAdapter(Context context) {
         mCalendarFont = TypefaceUtils.getCalendarFragmentFont(context);
     }
 
-    public void setDate(List<CalendarType> calendars, long jdn) {
+    void setDate(List<CalendarType> calendars, long jdn) {
         mCalendars = calendars;
         mJdn = jdn;
         for (int i = 0; i < mCalendars.size(); ++i) notifyItemChanged(i);
 //        notifyDataSetChanged();
     }
 
-    public boolean isExpanded() {
+    boolean isExpanded() {
         return mExpanded;
     }
 
-    public void setExpanded(boolean expanded) {
+    void setExpanded(boolean expanded) {
         this.mExpanded = expanded;
         for (int i = 0; i < mCalendars.size(); ++i) notifyItemChanged(i);
     }
@@ -100,5 +100,4 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
             Utils.copyToClipboard(view, "converted date", view.getContentDescription());
         }
     }
-
 }

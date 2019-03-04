@@ -103,12 +103,12 @@ public class ReminderUtils {
 
     public static List<String> timeUnitsStringArray(Context context) {
         return Arrays.asList(context.getString(R.string.reminder_hour),
-                context.getString(R.string.reminder_day));
+            context.getString(R.string.reminder_day));
     }
 
     public static int getReminderCount(Context context, int reminderId) {
         return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())
-                .getInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), 0);
+            .getInt(String.format(Locale.US, Constants.REMINDERS_COUNT_KEY, reminderId), 0);
     }
 
     public static void increaseReminderCount(Context context, int reminderId) {
