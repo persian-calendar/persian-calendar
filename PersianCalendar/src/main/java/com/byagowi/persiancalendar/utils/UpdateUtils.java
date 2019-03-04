@@ -232,7 +232,7 @@ public class UpdateUtils {
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
                     text2 = text2 + "\n" + subtitle + "\n" +
-                        AstronomicalUtils.getZodiacInfo(context, jdn, true);
+                        AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, true);
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 

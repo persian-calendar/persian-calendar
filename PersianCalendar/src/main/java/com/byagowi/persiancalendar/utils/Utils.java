@@ -2058,7 +2058,7 @@ public class Utils {
         }
 
         if (withZodiac) {
-            String zodiac = AstronomicalUtils.getZodiacInfo(context, jdn, false);
+            String zodiac = AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
                 result.append("\n");
                 result.append("\n");

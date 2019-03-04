@@ -92,7 +92,7 @@ public class CalendarsView extends FrameLayout {
         mCalendarItemAdapter.setDate(calendarsToShow, jdn);
         mBinding.weekDayName.setText(Utils.getWeekDayName(new CivilDate(jdn)));
 
-        mBinding.zodiac.setText(AstronomicalUtils.getZodiacInfo(context, jdn, true));
+        mBinding.zodiac.setText(AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, true));
         mBinding.zodiac.setVisibility(TextUtils.isEmpty(mBinding.zodiac.getText()) ? View.GONE : View.VISIBLE);
 
         long diffDays = Math.abs(Utils.getTodayJdn() - jdn);
