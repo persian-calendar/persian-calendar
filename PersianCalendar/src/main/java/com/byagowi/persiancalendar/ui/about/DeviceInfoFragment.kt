@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
@@ -83,11 +81,23 @@ class DeviceInfoFragment : DaggerFragment() {
   }
 }
 
-class DeviceInfoAdapter constructor(activity: Activity, private val mRootView: View) : RecyclerView.Adapter<DeviceInfoAdapter.ViewHolder>() {
+class DeviceInfoAdapter constructor(activity: Activity, private val rootView: View)
+  : ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(DeviceInfoDiffCallback()) {
   private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
-  init {
+  class DeviceInfoItem(val title: String, val content: String, val version: String)
 
+  class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
+    override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean {
+      return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean {
+      return oldItem == newItem
+    }
+  }
+
+  init {
     deviceInfoItemsList.apply {
       add(DeviceInfoItem(
         "Screen Resolution",
@@ -220,8 +230,6 @@ class DeviceInfoAdapter constructor(activity: Activity, private val mRootView: V
     return deviceInfoItemsList.size
   }
 
-  class DeviceInfoItem(val title: String, val content: String, val version: String)
-
   inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) : RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
     private var mPosition = 0
 
@@ -240,7 +248,7 @@ class DeviceInfoAdapter constructor(activity: Activity, private val mRootView: V
 
     override fun onClick(v: View) {
       val info = deviceInfoItemsList[mPosition]
-      Utils.copyToClipboard(mRootView, info.title, info.content)
+      Utils.copyToClipboard(rootView, info.title, info.content)
     }
   }
 }
