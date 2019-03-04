@@ -58,8 +58,8 @@ public class RtlViewPager extends ViewPager {
     public void onRtlPropertiesChanged(int layoutDirection) {
         super.onRtlPropertiesChanged(layoutDirection);
         int viewCompatLayoutDirection = layoutDirection == View.LAYOUT_DIRECTION_RTL
-                ? ViewCompat.LAYOUT_DIRECTION_RTL
-                : ViewCompat.LAYOUT_DIRECTION_LTR;
+            ? ViewCompat.LAYOUT_DIRECTION_RTL
+            : ViewCompat.LAYOUT_DIRECTION_LTR;
         if (viewCompatLayoutDirection != mLayoutDirection) {
             PagerAdapter adapter = super.getAdapter();
             int position = 0;

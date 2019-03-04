@@ -89,7 +89,7 @@ public class QiblaCompassView extends View {
         double ΔT = 0;
         double altitude = 0.0;
         sunMoonPosition = new SunMoonPosition(jd, latitude, longitude,
-                altitude, ΔT);
+            altitude, ΔT);
         sunPosition = sunMoonPosition.getSunPosition();
         moonPosition = sunMoonPosition.getMoonPosition();
     }
@@ -302,7 +302,7 @@ public class QiblaCompassView extends View {
             int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
             moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
             moonOval.set(px - Math.abs(arcWidth) / 2, py + eOffset - radius - r,
-                    px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
+                px + Math.abs(arcWidth) / 2, py + eOffset - radius + r);
             canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
             canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
             moonPaintD.setPathEffect(dashPath);
@@ -323,7 +323,7 @@ public class QiblaCompassView extends View {
         canvas.drawLine(px, py - radius, px, py + radius, qiblaPaint);
         qiblaPaint.setPathEffect(null);
         canvas.drawBitmap(kaaba, px - kaaba.getWidth() / 2, py - radius - kaaba.getHeight() / 2,
-                qiblaPaint);
+            qiblaPaint);
         canvas.restore();
     }
 

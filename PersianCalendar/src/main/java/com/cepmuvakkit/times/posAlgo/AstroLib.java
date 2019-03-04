@@ -47,7 +47,7 @@ public class AstroLib {
         }
 
         julianDay = Math.floor(365.25 * (year + 4716.0))
-                + Math.floor(30.6001 * (month + 1)) + dayDecimal - 1524.5;
+            + Math.floor(30.6001 * (month + 1)) + dayDecimal - 1524.5;
 
         if (julianDay > 2299160.0) {
             a = Math.floor(year / 100);
@@ -89,7 +89,7 @@ public class AstroLib {
         }
 
         julianDay = Math.floor(365.25 * (year + 4716.0))
-                + Math.floor(30.6001 * (month + 1)) + dayDecimal - 1524.5;
+            + Math.floor(30.6001 * (month + 1)) + dayDecimal - 1524.5;
 
         if (julianDay > 2299160.0) {
             a = Math.floor(year / 100);
@@ -180,7 +180,7 @@ public class AstroLib {
         // System.out.println("Year: "+y);
         double t, u, ΔT = 0;
         int[] yearRanges = {500, 1600, 1700, 1800, 1860, 1900, 1920, 1941,
-                1961, 1986, 2005, 2050, 2150};
+            1961, 1986, 2005, 2050, 2150};
         int range = 0;
         while ((yearRanges[range] <= y)) {
             range++;
@@ -189,12 +189,12 @@ public class AstroLib {
             case 1:
                 u = (y - 1000.0) / 100.0;
                 ΔT = 1574.2
-                        + u
-                        * (-556.01 + u
-                        * (71.23472 + u
-                        * (0.319781 + u
-                        * (-0.8503463 + u
-                        * (-0.005050998 + u * (0.0083572073))))));
+                    + u
+                    * (-556.01 + u
+                    * (71.23472 + u
+                    * (0.319781 + u
+                    * (-0.8503463 + u
+                    * (-0.005050998 + u * (0.0083572073))))));
                 break;
             case 2:
                 t = y - 1600;
@@ -203,38 +203,38 @@ public class AstroLib {
             case 3:
                 t = y - 1700;
                 ΔT = 8.83
-                        + t
-                        * (0.1603 + t
-                        * (-0.0059285 + t
-                        * (0.00013336 + t * (-1.0 / 1174000.0))));
+                    + t
+                    * (0.1603 + t
+                    * (-0.0059285 + t
+                    * (0.00013336 + t * (-1.0 / 1174000.0))));
                 break;
             case 4:
                 t = y - 1800;
                 ΔT = 13.72
-                        + t
-                        * (-0.332447 + t
-                        * (0.0068612 + t
-                        * (0.0041116 + t
-                        * (-0.00037436 + t
-                        * (0.0000121272 + t
-                        * (-0.0000001699 + t * (0.000000000875)))))));
+                    + t
+                    * (-0.332447 + t
+                    * (0.0068612 + t
+                    * (0.0041116 + t
+                    * (-0.00037436 + t
+                    * (0.0000121272 + t
+                    * (-0.0000001699 + t * (0.000000000875)))))));
                 break;
             case 5:
                 t = y - 1860;
                 ΔT = 7.62
-                        + t
-                        * (0.5737 + t
-                        * (-0.251754 + t
-                        * (0.01680668 + t
-                        * (-0.0004473624 + t
-                        * (1.0 / 233174.0)))));
+                    + t
+                    * (0.5737 + t
+                    * (-0.251754 + t
+                    * (0.01680668 + t
+                    * (-0.0004473624 + t
+                    * (1.0 / 233174.0)))));
                 break; // t = y - 1860;
             case 6:
                 t = y - 1900;
                 ΔT = -2.79
-                        + t
-                        * (1.494119 + t
-                        * (-0.0598939 + t * (0.0061966 + t * (-0.000197))));
+                    + t
+                    * (1.494119 + t
+                    * (-0.0598939 + t * (0.0061966 + t * (-0.000197))));
                 break;
             case 7:
                 t = y - 1920;
@@ -251,11 +251,11 @@ public class AstroLib {
             case 10:
                 t = y - 2000;
                 ΔT = 63.86
-                        + t
-                        * (0.3345 + t
-                        * (-0.060374 + t
-                        * (0.0017275 + t
-                        * (0.000651814 + t * (0.00002373599)))));
+                    + t
+                    * (0.3345 + t
+                    * (-0.060374 + t
+                    * (0.0017275 + t
+                    * (0.000651814 + t * (0.00002373599)))));
                 break; // 1986 and 2005 t = y - 2000
             case 11:
                 t = y - 2000;
@@ -263,7 +263,7 @@ public class AstroLib {
                 break; // 2005-2050 t = y - 2000
             case 12:
                 ΔT = -20 + 32 * ((y - 1820.0) / 100.0) * ((y - 1820.0) / 100.0)
-                        - 0.5628 * (2150.0 - y);
+                    - 0.5628 * (2150.0 - y);
                 break;
 
         }
@@ -299,7 +299,7 @@ public class AstroLib {
     public static String getStringHHMMSSS(double hour) {
         int[] HHMMSS = convertHour2HHMMSS(hour);
         return intTwoDigit(HHMMSS[0]) + ":" + intTwoDigit(HHMMSS[1]) + ":"
-                + intTwoDigit(HHMMSS[2]);
+            + intTwoDigit(HHMMSS[2]);
     }
 
     /**
@@ -425,7 +425,7 @@ public class AstroLib {
         int seconds = (((int) (Hour * 3600)) % 3600) % 60;
         int minute = ((int) (Hour * 60)) % 60;
         return new GregorianCalendar(year, month - 1, day, hour, minute,
-                seconds);
+            seconds);
     }
 
     /**
@@ -437,24 +437,24 @@ public class AstroLib {
     public static String fromJulianToCalendarStr(double julianDay) {
         int[] julian = getYMDHMSfromJulian(julianDay);
         return "  " + intTwoDigit(julian[2]) + "/" + intTwoDigit(julian[1])
-                + "/" + julian[0] + " " + intTwoDigit(julian[3]) + ":"
-                + intTwoDigit(julian[4]) + ":" + intTwoDigit(julian[5]);
+            + "/" + julian[0] + " " + intTwoDigit(julian[3]) + ":"
+            + intTwoDigit(julian[4]) + ":" + intTwoDigit(julian[5]);
     }
 
     public static String getHHMMSSfromGreCal(GregorianCalendar gdate) {
 
         return gdate.get(Calendar.HOUR_OF_DAY) + ":"
-                + intTwoDigit(gdate.get(Calendar.MINUTE)) + ":"
-                + intTwoDigit(gdate.get(Calendar.SECOND));
+            + intTwoDigit(gdate.get(Calendar.MINUTE)) + ":"
+            + intTwoDigit(gdate.get(Calendar.SECOND));
     }
 
     public static String getDDMMHHMMSSfromGreCal(GregorianCalendar gdate) {
 
         return gdate.get(Calendar.DAY_OF_MONTH) + "/"
-                + gdate.get(Calendar.MONTH) + " "
-                + gdate.get(Calendar.HOUR_OF_DAY) + ":"
-                + intTwoDigit(gdate.get(Calendar.MINUTE)) + ":"
-                + intTwoDigit(gdate.get(Calendar.SECOND));
+            + gdate.get(Calendar.MONTH) + " "
+            + gdate.get(Calendar.HOUR_OF_DAY) + ":"
+            + intTwoDigit(gdate.get(Calendar.MINUTE)) + ":"
+            + intTwoDigit(gdate.get(Calendar.SECOND));
     }
 
     /**
@@ -466,7 +466,7 @@ public class AstroLib {
     public static String fromJulianToCalendarDateStr(double julianDay) {
         int[] julian = getYMDHMSfromJulian(julianDay);
         return "  " + intTwoDigit(julian[2]) + "/" + intTwoDigit(julian[1])
-                + "/" + julian[0];
+            + "/" + julian[0];
     }
 
     static double thirdOrderPolynomial(double a, double b, double c, double d,
@@ -502,7 +502,7 @@ public class AstroLib {
      */
     public static double getAtmosphericRefraction(double h) {
         double R = 1.02 / (Math.tan(Math.toRadians(h + 10.3 / (h + 5.11))))
-                + +0.0019279;
+            + +0.0019279;
         return R / 60;
     }
 
@@ -526,14 +526,14 @@ public class AstroLib {
         final double te = Math.tan(Math.toRadians(exoatmElevation));
         if (exoatmElevation > 5.0) {
             refractionCorrection = 58.1 / te - 0.07 / (te * te * te) + 0.000086
-                    / (te * te * te * te * te);
+                / (te * te * te * te * te);
         } else {
             if (exoatmElevation > -0.575) {
                 refractionCorrection = 1735.0
-                        + exoatmElevation
-                        * (-518.2 + exoatmElevation
-                        * (103.4 + exoatmElevation
-                        * (-12.79 + exoatmElevation * 0.711)));
+                    + exoatmElevation
+                    * (-518.2 + exoatmElevation
+                    * (103.4 + exoatmElevation
+                    * (-12.79 + exoatmElevation * 0.711)));
             } else {
                 refractionCorrection = -20.774 / te;
             }
@@ -658,5 +658,4 @@ public class AstroLib {
 
         return Root;
     }
-
 }

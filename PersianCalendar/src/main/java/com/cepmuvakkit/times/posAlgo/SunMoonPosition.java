@@ -59,11 +59,8 @@ public class SunMoonPosition {
         return qiblaInfo;
     }
 
-
     public double illumunatedFractionofMoon(double jd, double ΔT) {
         return moonPhase;
 
     }
-
-
 }

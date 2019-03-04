@@ -27,7 +27,6 @@ public class PersianCalendarTileService extends TileService {
         }
     }
 
-
     @Override
     public void onStartListening() {
         Tile tile = getQsTile();

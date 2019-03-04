@@ -28,5 +28,4 @@ public class PrayerSelectPreference extends DialogPreference {
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking);
     }
-
 }

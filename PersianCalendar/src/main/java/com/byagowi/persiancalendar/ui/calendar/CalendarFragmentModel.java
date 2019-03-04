@@ -8,7 +8,7 @@ public class CalendarFragmentModel extends ViewModel {
     public final MutableLiveData<Long> selectedDayLiveData = new MutableLiveData<>();
     public boolean isTheFirstTime = true;
 
-    public void monthFragmentsUpdate(MonthFragmentUpdateCommand command) {
+    void monthFragmentsUpdate(MonthFragmentUpdateCommand command) {
         monthFragmentsHandler.postValue(command);
     }
 
@@ -21,7 +21,7 @@ public class CalendarFragmentModel extends ViewModel {
         final public boolean isEventsModification;
         final public long currentlySelectedJdn;
 
-        public MonthFragmentUpdateCommand(int target, boolean isEventsModification, long currentSelectedJdn) {
+        MonthFragmentUpdateCommand(int target, boolean isEventsModification, long currentSelectedJdn) {
             this.target = target;
             this.isEventsModification = isEventsModification;
             this.currentlySelectedJdn = currentSelectedJdn;

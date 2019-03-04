@@ -581,5 +581,4 @@ public class CalendarFragment extends DaggerFragment {
         }
         return false;
     }
-
 }

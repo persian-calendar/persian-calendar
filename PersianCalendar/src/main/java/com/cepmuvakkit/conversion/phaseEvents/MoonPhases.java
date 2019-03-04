@@ -37,12 +37,12 @@ public class MoonPhases {
         double LongDiff, tau_Sun = 8.32 / (1440.0); // 8.32 min [cy]
         moonPos = lunar.calculateMoonEclipticCoordinates(jd, ΔT);
         solarPos = solar.calculateSunEclipticCoordinatesAstronomic(
-                jd - tau_Sun, ΔT);
+            jd - tau_Sun, ΔT);
         LongDiff = moonPos.λ - solarPos.λ;
         if (phase == 8)// Crescent Visibility at 8 degrees Angle
         {
             double elongation = Math.sqrt(LongDiff * LongDiff + moonPos.β
-                    * moonPos.β);
+                * moonPos.β);
             // In case of Small angles of elongation lattitude is
             // taken into root mean square due to accuracy
             return phase - elongation;

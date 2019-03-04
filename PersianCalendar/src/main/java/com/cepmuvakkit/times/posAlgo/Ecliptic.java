@@ -27,5 +27,3 @@ public class Ecliptic {
         this.Δ = radius;
     }
 }
-
-
