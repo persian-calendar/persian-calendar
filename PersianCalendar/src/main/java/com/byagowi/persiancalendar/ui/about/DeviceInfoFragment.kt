@@ -88,13 +88,9 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
   class DeviceInfoItem(val title: String, val content: String, val version: String)
 
   class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
-    override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean {
-      return oldItem == newItem
-    }
+    override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean {
-      return oldItem == newItem
-    }
+    override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
   }
 
   init {
@@ -226,9 +222,7 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     holder.bind(position)
   }
 
-  override fun getItemCount(): Int {
-    return deviceInfoItemsList.size
-  }
+  override fun getItemCount(): Int = deviceInfoItemsList.size
 
   inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) : RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
     private var mPosition = 0
