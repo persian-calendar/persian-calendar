@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar;
 import android.app.Application;
 import android.content.Context;
 
-import com.github.pedrovgs.lynx.LynxShakeDetector;
+//import com.github.pedrovgs.lynx.LynxShakeDetector;
 
 public class ReleaseDebugDifference {
     public static void mainApplication(Application app) {
@@ -21,6 +21,6 @@ public class ReleaseDebugDifference {
     }
 
     public static void startLynxListenerIfIsDebug(Context context) {
-        new LynxShakeDetector(context).init();
+//        new LynxShakeDetector(context).init();
     }
 }
