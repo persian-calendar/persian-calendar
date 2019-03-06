@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.calendar;
 
-import com.byagowi.persiancalendar.calendar.persian.PersianLegacyConverter;
-import com.byagowi.persiancalendar.calendar.persian.PersianLookupTableConverter;
+import com.byagowi.persiancalendar.calendar.persian.AlgorithmicConverter;
+import com.byagowi.persiancalendar.calendar.persian.LookupTableConverter;
 
 public class PersianDate extends AbstractDate {
 
@@ -20,13 +20,13 @@ public class PersianDate extends AbstractDate {
     // Converters
     @Override
     public long toJdn() {
-        long result = PersianLookupTableConverter.toJdn(getYear(), getMonth(), getDayOfMonth());
-        return result == -1 ? PersianLegacyConverter.toJdn(getYear(), getMonth(), getDayOfMonth()) : result;
+        long result = LookupTableConverter.toJdn(getYear(), getMonth(), getDayOfMonth());
+        return result == -1 ? AlgorithmicConverter.toJdn(getYear(), getMonth(), getDayOfMonth()) : result;
     }
 
     @Override
     protected int[] fromJdn(long jdn) {
-        int[] result = PersianLookupTableConverter.fromJdn(jdn);
-        return result == null ? PersianLegacyConverter.fromJdn(jdn) : result;
+        int[] result = LookupTableConverter.fromJdn(jdn);
+        return result == null ? AlgorithmicConverter.fromJdn(jdn) : result;
     }
 }

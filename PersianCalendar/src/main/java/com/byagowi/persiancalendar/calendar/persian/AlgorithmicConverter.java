@@ -4,7 +4,7 @@ package com.byagowi.persiancalendar.calendar.persian;
  * @author Amir
  * @author ebraminio
  */
-public class PersianLegacyConverter {
+public class AlgorithmicConverter {
 
     private static long floor(double d) {
         return (long) Math.floor(d);

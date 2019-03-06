@@ -5,7 +5,7 @@ import java.util.Arrays;
 // Sad that we have to do this but in order to be compatible
 // with https://calendar.ut.ac.ir/Fa/News/Data/Doc/KabiseShamsi1206-1498.pdf
 // I see no other way
-public class PersianLookupTableConverter {
+public class LookupTableConverter {
 
     private static final int startingYear = 1206;
     private static long[] yearsStartingJdn = new long[1498 - startingYear];
