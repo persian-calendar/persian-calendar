@@ -91,7 +91,6 @@ dependencies {
   implementation("androidx.core:core-ktx:1.0.1")
   implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
 
-  // Please apply this https://issuetracker.google.com/issues/112877717 before enabling it again
   implementation("android.arch.work:work-runtime:1.0.0-beta03")
   implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
 

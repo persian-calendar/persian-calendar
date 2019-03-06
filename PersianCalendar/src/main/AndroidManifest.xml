@@ -4,9 +4,9 @@
     package="com.byagowi.persiancalendar">
 
     <!-- remove the permission taken by work manager -->
-    <!--<permission-->
-        <!--android:name="android.permission.ACCESS_NETWORK_STATE"-->
-        <!--tools:node="remove" />-->
+    <permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -38,7 +38,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/LightTheme">
+        android:theme="@style/LightTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".ui.MainActivity"
