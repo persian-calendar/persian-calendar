@@ -21,11 +21,11 @@ public class PersianLookupTableConverter {
         yearsStartingJdn[0] = 2388438; /* jdn of 1206 */
         for (int i = 0; i < yearsStartingJdn.length - 1; ++i)
             yearsStartingJdn[i + 1] = yearsStartingJdn[i] +
-                (Arrays.binarySearch(leapYears, i + startingYear) == -1 ? 365 : 366);
+                (Arrays.binarySearch(leapYears, i + startingYear) < 0 ? 365 : 366);
     }
 
     public static long toJdn(int year, int month, int day) {
-        if (year < startingYear || year > startingYear + yearsStartingJdn.length)
+        if (year < startingYear || year > startingYear + yearsStartingJdn.length - 1)
             return -1;
 
         return yearsStartingJdn[year - startingYear]

@@ -20,15 +20,13 @@ public class PersianDate extends AbstractDate {
     // Converters
     @Override
     public long toJdn() {
-//        long result = PersianLookupTableConverter.toJdn(getYear(), getMonth(), getDayOfMonth());
-//        return result == -1 ? PersianLegacyConverter.toJdn(getYear(), getMonth(), getDayOfMonth()) : result;
-        return PersianLegacyConverter.toJdn(getYear(), getMonth(), getDayOfMonth());
+        long result = PersianLookupTableConverter.toJdn(getYear(), getMonth(), getDayOfMonth());
+        return result == -1 ? PersianLegacyConverter.toJdn(getYear(), getMonth(), getDayOfMonth()) : result;
     }
 
     @Override
     protected int[] fromJdn(long jdn) {
-//        int[] result = PersianLookupTableConverter.fromJdn(jdn);
-//        return result == null ? PersianLegacyConverter.fromJdn(jdn) : result;
-        return PersianLegacyConverter.fromJdn(jdn);
+        int[] result = PersianLookupTableConverter.fromJdn(jdn);
+        return result == null ? PersianLegacyConverter.fromJdn(jdn) : result;
     }
 }
