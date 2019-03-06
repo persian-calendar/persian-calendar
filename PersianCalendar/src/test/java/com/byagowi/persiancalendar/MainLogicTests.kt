@@ -134,31 +134,31 @@ class MainLogicTests {
   @Test
   fun practice_persian_converting_back_and_forth() {
     assertEquals(PersianDate(1398, 1, 1).toJdn(), 2458564)
-    val startJdn = CivilDate(1950, 1, 1).toJdn()
-    val endJdn = CivilDate(2050, 1, 1).toJdn()
+    val startJdn = CivilDate(1750, 1, 1).toJdn()
+    val endJdn = CivilDate(2350, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, PersianDate(it).toJdn()) }
   }
 
   @Test
   fun practice_islamic_converting_back_and_forth() {
-    val startJdn = CivilDate(1950, 1, 1).toJdn()
-    val endJdn = CivilDate(2050, 1, 1).toJdn()
+    val startJdn = CivilDate(1750, 1, 1).toJdn()
+    val endJdn = CivilDate(2350, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, IslamicDate(it).toJdn()) }
   }
 
   @Test
   fun practice_ummalqara_converting_back_and_forth() {
     IslamicDate.useUmmAlQura = true
-    val startJdn = CivilDate(1950, 1, 1).toJdn()
-    val endJdn = CivilDate(2050, 1, 1).toJdn()
+    val startJdn = CivilDate(1750, 1, 1).toJdn()
+    val endJdn = CivilDate(2350, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, IslamicDate(it).toJdn()) }
     IslamicDate.useUmmAlQura = false
   }
 
   @Test
   fun practice_civil_converting_back_and_forth() {
-    val startJdn = CivilDate(1950, 1, 1).toJdn()
-    val endJdn = CivilDate(2050, 1, 1).toJdn()
+    val startJdn = CivilDate(1750, 1, 1).toJdn()
+    val endJdn = CivilDate(2350, 1, 1).toJdn()
     (startJdn..endJdn).forEach { assertEquals(it, CivilDate(it).toJdn()) }
   }
 
