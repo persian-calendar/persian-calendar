@@ -92,7 +92,8 @@ dependencies {
   implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
 
   implementation("android.arch.work:work-runtime:1.0.0")
-//  implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
+  // Unnecessary size addition as it adds co-routine apparently also
+  // implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
 
   val daggerVersion = "2.21"
   implementation("com.google.dagger:dagger-android:$daggerVersion")
