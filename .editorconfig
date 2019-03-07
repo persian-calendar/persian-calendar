@@ -1,3 +1,5 @@
+## IDE-independent coding style via EditorConfig: http://editorconfig.org/
+
 root = true
 
 [*]
