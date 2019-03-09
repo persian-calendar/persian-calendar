@@ -22,8 +22,4 @@ public abstract class CalendarFragmentModule {
     @PerChildFragment
     @ContributesAndroidInjector
     abstract ShiftWorkDialog shiftWorkDialogInjector();
-
-    @PerChildFragment
-    @ContributesAndroidInjector
-    abstract MonthOverviewDialog monthOverviewDialogInjector();
 }

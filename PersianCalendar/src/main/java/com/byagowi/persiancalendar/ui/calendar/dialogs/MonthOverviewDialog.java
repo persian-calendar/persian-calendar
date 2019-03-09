@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -20,6 +21,8 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.ui.MainActivity;
 import com.byagowi.persiancalendar.utils.CalendarType;
 import com.byagowi.persiancalendar.utils.Utils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +34,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerAppCompatDialogFragment;
+import dagger.android.support.HasSupportFragmentInjector;
 
-public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
+public class MonthOverviewDialog extends BottomSheetDialogFragment {
     private static String BUNDLE_KEY = "jdn";
-    @Inject
-    AppDependency appDependency;
-    @Inject
-    MainActivityDependency mainActivityDependency;
-    @Inject
-    CalendarFragmentDependency calendarFragmentDependency;
 
     public static MonthOverviewDialog newInstance(long jdn) {
         Bundle args = new Bundle();
@@ -54,7 +52,7 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        Context context = getContext();
 
         long baseJdn = args == null ? -1 : args.getLong(BUNDLE_KEY, -1);
         if (baseJdn == -1) baseJdn = Utils.getTodayJdn();
@@ -64,7 +62,7 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
         CalendarType mainCalendar = Utils.getMainCalendar();
         AbstractDate date = Utils.getDateFromJdnOfCalendar(mainCalendar, baseJdn);
         long monthLength = Utils.getMonthLength(mainCalendar, date.getYear(), date.getMonth());
-        SparseArray<List<DeviceCalendarEvent>> deviceEvents = Utils.readMonthDeviceEvents(mainActivity, baseJdn);
+        SparseArray<List<DeviceCalendarEvent>> deviceEvents = Utils.readMonthDeviceEvents(context, baseJdn);
         for (long i = 0; i < monthLength; ++i) {
             long jdn = baseJdn + i;
             List<AbstractEvent> events = Utils.getEvents(jdn, deviceEvents);
@@ -78,16 +76,15 @@ public class MonthOverviewDialog extends DaggerAppCompatDialogFragment {
             records.add(new MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""));
 
         MonthOverviewDialogBinding binding = MonthOverviewDialogBinding.inflate(
-            LayoutInflater.from(mainActivity), null, false);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+            LayoutInflater.from(context), null, false);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         binding.recyclerView.setAdapter(new ItemAdapter(records));
 
-        return new AlertDialog.Builder(mainActivity)
-            .setView(binding.getRoot())
-            .setTitle(null)
-            .setCancelable(true)
-            .setNegativeButton(R.string.closeDrawer, null)
-            .create();
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(binding.getRoot());
+        bottomSheetDialog.setCancelable(true);
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        return bottomSheetDialog;
     }
 
     static class MonthOverviewRecord {
