@@ -68,7 +68,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import dagger.android.support.DaggerFragment;
 
@@ -97,7 +96,7 @@ public class CalendarFragment extends DaggerFragment {
         public void onPageSelected(int position) {
             sendUpdateCommandToMonthFragments(mCalendarAdapterHelper.positionToOffset(position), false);
             mMainBinding.todayButton.show();
-            mMainBinding.swipeRefresh.setEnabled(true);
+//            mMainBinding.swipeRefresh.setEnabled(true);
         }
 
     };
@@ -124,10 +123,10 @@ public class CalendarFragment extends DaggerFragment {
         mCalendarsView.setOnShowHideTodayButton(show -> {
             if (show) {
                 mMainBinding.todayButton.show();
-                mMainBinding.swipeRefresh.setEnabled(true);
+//                mMainBinding.swipeRefresh.setEnabled(true);
             } else {
                 mMainBinding.todayButton.hide();
-                mMainBinding.swipeRefresh.setEnabled(false);
+//                mMainBinding.swipeRefresh.setEnabled(false);
             }
         });
         mMainBinding.todayButton.setOnClickListener(v -> bringTodayYearMonth());
@@ -199,11 +198,11 @@ public class CalendarFragment extends DaggerFragment {
             showEvent(jdn);
         });
 
-        mMainBinding.swipeRefresh.setEnabled(false);
-        mMainBinding.swipeRefresh.setOnRefreshListener(() -> {
-            bringTodayYearMonth();
-            mMainBinding.swipeRefresh.setRefreshing(false);
-        });
+//        mMainBinding.swipeRefresh.setEnabled(false);
+//        mMainBinding.swipeRefresh.setOnRefreshListener(() -> {
+//            bringTodayYearMonth();
+//            mMainBinding.swipeRefresh.setRefreshing(false);
+//        });
 
         return mMainBinding.getRoot();
     }
