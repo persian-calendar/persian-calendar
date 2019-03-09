@@ -78,10 +78,12 @@ dependencies {
   implementation("androidx.recyclerview:recyclerview:1.0.0")
   implementation("androidx.cardview:cardview:1.0.0")
   implementation("com.google.android.material:material:1.0.0")
-  implementation("android.arch.navigation:navigation-fragment:1.0.0-rc02")
-  implementation("android.arch.navigation:navigation-ui:1.0.0-rc02")
   implementation("com.google.android:flexbox:1.1.0")
   implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
+
+  val navVersion = "2.0.0-rc02"
+  implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+  implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
   implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
   annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.0.0")
