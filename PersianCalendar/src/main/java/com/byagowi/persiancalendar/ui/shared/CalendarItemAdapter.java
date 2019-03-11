@@ -48,7 +48,7 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CalendarItemBinding binding = CalendarItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+            LayoutInflater.from(parent.getContext()), parent, false);
 
         return new ViewHolder(binding);
     }
@@ -91,8 +91,8 @@ public class CalendarItemAdapter extends RecyclerView.Adapter<CalendarItemAdapte
             binding.day.setText(Utils.formatNumber(date.getDayOfMonth()));
             binding.monthYear.setContentDescription("");
             binding.monthYear.setText(String.format("%s\n%s",
-                    Utils.getMonthName(date),
-                    Utils.formatNumber(date.getYear())));
+                Utils.getMonthName(date),
+                Utils.formatNumber(date.getYear())));
         }
 
         @Override

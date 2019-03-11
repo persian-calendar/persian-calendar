@@ -65,10 +65,10 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
         updateAthanPreferencesState();
         ViewModelProviders.of(mainActivityDependency.getMainActivity()).get(MainActivityModel.class)
-                .preferenceUpdateHandler.observe(this, a -> updateAthanPreferencesState());
+            .preferenceUpdateHandler.observe(this, a -> updateAthanPreferencesState());
 
         putAthanNameOnSummary(appDependency.getSharedPreferences()
-                .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
+            .getString(PREF_ATHAN_NAME, getDefaultAthanName()));
     }
 
     private void updateAthanPreferencesState() {
@@ -119,11 +119,11 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
         switch (preference.getKey()) {
             case "pref_key_ringtone":
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                                Settings.System.DEFAULT_NOTIFICATION_URI);
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                        Settings.System.DEFAULT_NOTIFICATION_URI);
                 Uri customAthanUri = Utils.getCustomAthanUri(context);
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri);
@@ -143,11 +143,11 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                     Activity activity = mainActivityDependency.getMainActivity();
 
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         Utils.askForLocationPermission(activity);
                     } else {
                         new GPSLocationDialog().show(getChildFragmentManager(),
-                                GPSLocationDialog.class.getName());
+                            GPSLocationDialog.class.getName());
                     }
                 } catch (Exception e) {
                     // Do whatever we were doing till now
@@ -169,8 +169,8 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
                     SharedPreferences.Editor editor = appDependency.getSharedPreferences().edit();
 
                     String ringtoneTitle = RingtoneManager
-                            .getRingtone(context, Uri.parse(uri.toString()))
-                            .getTitle(context);
+                        .getRingtone(context, Uri.parse(uri.toString()))
+                        .getTitle(context);
                     if (TextUtils.isEmpty(ringtoneTitle)) {
                         ringtoneTitle = "";
                     }

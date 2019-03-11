@@ -14,12 +14,12 @@ import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
 public class DaysPaintResources {
+    @StyleRes
+    final public int style;
     @ColorInt
     final int colorHoliday, colorHolidaySelected, colorTextHoliday, colorTextDay,
         colorTextDaySelected, colorTextToday, colorTextDayName, colorSelectDay, colorEventLine;
     final int weekNumberTextSize, weekDaysInitialTextSize, arabicDigitsTextSize, persianDigitsTextSize;
-    @StyleRes
-    final public int style;
     final int halfEventBarWidth, appointmentYOffset, eventYOffset;
     final Paint textPaint, eventBarPaint, selectedPaint, todayPaint;
 

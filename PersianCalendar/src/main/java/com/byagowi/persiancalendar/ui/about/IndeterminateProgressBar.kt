@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.view
+package com.byagowi.persiancalendar.ui.about
 
 import android.animation.ValueAnimator
 import android.content.Context

@@ -18,7 +18,7 @@
             android:layout_marginTop="10dp" />
 
         <!-- Times -->
-        <com.byagowi.persiancalendar.view.UntouchableRecyclerView
+        <com.byagowi.persiancalendar.ui.calendar.times.UntouchableRecyclerView
             android:id="@+id/timesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

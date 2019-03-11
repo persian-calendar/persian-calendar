@@ -76,7 +76,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         super.onCreate(savedInstanceState);
         MainActivity mainActivity = mainActivityDependency.getMainActivity();
         EditReminderDialogBinding binding = EditReminderDialogBinding.inflate(
-                LayoutInflater.from(mainActivity), null, false);
+            LayoutInflater.from(mainActivity), null, false);
 
         int tmpId = getIdFromArguments();
         if (tmpId == -1) tmpId = new Random().nextInt() % Constants.REMINDERS_MAX_ID;
@@ -87,10 +87,10 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
             quantities.add(new StringWithValueItem(i, Utils.formatNumber(i)));
         }
         binding.quantity.setAdapter(new ArrayAdapter<>(mainActivity,
-                android.R.layout.simple_spinner_dropdown_item, quantities));
+            android.R.layout.simple_spinner_dropdown_item, quantities));
         binding.unit.setAdapter(new ArrayAdapter<>(mainActivity,
-                android.R.layout.simple_spinner_dropdown_item,
-                ReminderUtils.timeUnitsStringArray(mainActivity)));
+            android.R.layout.simple_spinner_dropdown_item,
+            ReminderUtils.timeUnitsStringArray(mainActivity)));
 
         Calendar calendar = Calendar.getInstance();
         Reminder reminder = findReminderById(id);
@@ -103,30 +103,30 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         }
 
         binding.time.setText(Utils.getFormattedClock(new Clock(calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE)), false));
+            calendar.get(Calendar.MINUTE)), false));
         binding.date.setText(Utils.formatDate(Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(),
-                Utils.calendarToCivilDate(calendar).toJdn())));
+            Utils.calendarToCivilDate(calendar).toJdn())));
         binding.time.setOnClickListener(v ->
-                new TimePickerDialog(mainActivity, (view1, hourOfDay, minute) -> {
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    calendar.set(Calendar.MINUTE, minute);
-                    binding.time.setText(Utils.getFormattedClock(new Clock(calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.MINUTE)), false));
-                },
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true).show());
+            new TimePickerDialog(mainActivity, (view1, hourOfDay, minute) -> {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                binding.time.setText(Utils.getFormattedClock(new Clock(calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE)), false));
+            },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true).show());
         binding.date.setOnClickListener(v ->
-                new DatePickerDialog(mainActivity, (view12, year, monthOfYear, dayOfMonth) -> {
-                    calendar.set(Calendar.YEAR, year);
-                    calendar.set(Calendar.MONTH, monthOfYear);
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    binding.date.setText(Utils.formatDate(Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(),
-                            Utils.calendarToCivilDate(calendar).toJdn())));
-                },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show());
+            new DatePickerDialog(mainActivity, (view12, year, monthOfYear, dayOfMonth) -> {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                binding.date.setText(Utils.formatDate(Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(),
+                    Utils.calendarToCivilDate(calendar).toJdn())));
+            },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
 
         binding.name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,7 +136,7 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.nameLayout.setError(getString(TextUtils.isEmpty(s) ?
-                        R.string.please_enter_a_name : R.string.empty));
+                    R.string.please_enter_a_name : R.string.empty));
                 AlertDialog dialog = (AlertDialog) getDialog();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!TextUtils.isEmpty(s));
             }
@@ -147,42 +147,42 @@ public class EditReminderDialog extends DaggerAppCompatDialogFragment {
         });
 
         return new AlertDialog.Builder(mainActivity)
-                .setView(binding.getRoot())
-                .setPositiveButton(R.string.accept, (d, which) -> {
-                    Editable nameEditable = binding.name.getText();
-                    String name = nameEditable == null ? "" : nameEditable.toString();
-                    Editable infoEditable = binding.info.getText();
-                    String info = infoEditable == null ? "" : infoEditable.toString();
-                    Reminder newReminder = new Reminder(
-                            id,
-                            name,
-                            info,
-                            ReminderUtils.ordinationToUnit(binding.unit.getSelectedItemPosition()),
-                            ((StringWithValueItem) binding.quantity.getSelectedItem()).getValue(),
-                            calendar.getTimeInMillis()
-                    );
+            .setView(binding.getRoot())
+            .setPositiveButton(R.string.accept, (d, which) -> {
+                Editable nameEditable = binding.name.getText();
+                String name = nameEditable == null ? "" : nameEditable.toString();
+                Editable infoEditable = binding.info.getText();
+                String info = infoEditable == null ? "" : infoEditable.toString();
+                Reminder newReminder = new Reminder(
+                    id,
+                    name,
+                    info,
+                    ReminderUtils.ordinationToUnit(binding.unit.getSelectedItemPosition()),
+                    ((StringWithValueItem) binding.quantity.getSelectedItem()).getValue(),
+                    calendar.getTimeInMillis()
+                );
 
-                    ArrayList<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
-                    int length = reminders.size();
-                    int index = -1;
-                    for (int i = 0; i < length; ++i) {
-                        if (id == reminders.get(i).id) {
-                            index = i;
-                            break;
-                        }
+                ArrayList<Reminder> reminders = new ArrayList<>(Utils.getReminderDetails());
+                int length = reminders.size();
+                int index = -1;
+                for (int i = 0; i < length; ++i) {
+                    if (id == reminders.get(i).id) {
+                        index = i;
+                        break;
                     }
+                }
 
-                    boolean isNew = index == -1;
-                    if (isNew)
-                        reminders.add(newReminder);
-                    else
-                        reminders.set(index, newReminder);
+                boolean isNew = index == -1;
+                if (isNew)
+                    reminders.add(newReminder);
+                else
+                    reminders.set(index, newReminder);
 
-                    Utils.storeReminders(mainActivity, reminders);
+                Utils.storeReminders(mainActivity, reminders);
 
-                    ViewModelProviders.of(mainActivity).get(ReminderModel.class).update(isNew);
-                })
-                .create();
+                ViewModelProviders.of(mainActivity).get(ReminderModel.class).update(isNew);
+            })
+            .create();
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
-
+import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.IslamicDate
 import com.byagowi.persiancalendar.calendar.PersianDate
-
-import androidx.annotation.StringRes
 
 // Based on Mehdi's work
 object AstronomicalUtils {

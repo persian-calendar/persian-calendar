@@ -45,7 +45,7 @@ public class ReminderActivity extends AppCompatActivity {
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         previousVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
         am.setStreamVolume(AudioManager.STREAM_MUSIC,
-                am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+            am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
         Window window = this.getWindow();
         window.addFlags(LayoutParams.FLAG_DISMISS_KEYGUARD);
         //window.addFlags(LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -74,13 +74,13 @@ public class ReminderActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && (event = Utils.getReminderById(intent.getIntExtra(
-                Constants.REMINDER_ID, -1))) != null) {
+            Constants.REMINDER_ID, -1))) != null) {
             binding.name.setText(event.name);
             binding.info.setText(event.info);
             binding.turnOff.setOnClickListener(v -> {
                 scheduler.shutdown();
                 am.setStreamVolume(AudioManager.STREAM_MUSIC,
-                        previousVolume, 0);
+                    previousVolume, 0);
                 ReminderActivity.this.finish();
             });
             scheduler = Executors.newSingleThreadScheduledExecutor();

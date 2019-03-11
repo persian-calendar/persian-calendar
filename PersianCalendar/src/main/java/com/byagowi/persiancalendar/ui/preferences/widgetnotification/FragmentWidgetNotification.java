@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.view.ColorPickerView;
 
 import java.util.Locale;
 
@@ -36,29 +35,29 @@ public class FragmentWidgetNotification extends PreferenceFragmentCompat {
 
             ColorPickerView colorPickerView = new ColorPickerView(activity);
             colorPickerView.setColorsToPick(
-                    new int[]{0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020});
+                new int[]{0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020});
             colorPickerView.setPickedColor(Color.parseColor(
-                    sharedPreferences.getString(
-                            PREF_SELECTED_WIDGET_TEXT_COLOR,
-                            DEFAULT_SELECTED_WIDGET_TEXT_COLOR)));
+                sharedPreferences.getString(
+                    PREF_SELECTED_WIDGET_TEXT_COLOR,
+                    DEFAULT_SELECTED_WIDGET_TEXT_COLOR)));
 
             int padding = (int) (activity.getResources().getDisplayMetrics().density * 10);
             colorPickerView.setPadding(padding, padding, padding, padding);
 
             new AlertDialog.Builder(activity)
-                    .setTitle(R.string.widget_text_color)
-                    .setView(colorPickerView)
-                    .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-                        try {
-                            SharedPreferences.Editor edit = sharedPreferences.edit();
-                            edit.putString(PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                    String.format(Locale.ENGLISH, "#%06X",
-                                            0xFFFFFF & colorPickerView.getPickerColor()));
-                            edit.apply();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }).setNegativeButton(R.string.cancel, null).show();
+                .setTitle(R.string.widget_text_color)
+                .setView(colorPickerView)
+                .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
+                    try {
+                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        edit.putString(PREF_SELECTED_WIDGET_TEXT_COLOR,
+                            String.format(Locale.ENGLISH, "#%06X",
+                                0xFFFFFF & colorPickerView.getPickerColor()));
+                        edit.apply();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).setNegativeButton(R.string.cancel, null).show();
             return true;
         }
         return super.onPreferenceTreeClick(preference);

@@ -34,7 +34,7 @@ public class PreferencesFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.settings), "");
 
         FragmentSettingsBinding binding = FragmentSettingsBinding.inflate(
-                LayoutInflater.from(container.getContext()), container, false);
+            LayoutInflater.from(container.getContext()), container, false);
 
         binding.viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), 3));
         binding.tabLayout.setupWithViewPager(binding.viewPager);

@@ -13,12 +13,8 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding;
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding;
-import com.byagowi.persiancalendar.di.dependencies.AppDependency;
-import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 import com.byagowi.persiancalendar.entities.AbstractEvent;
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.ui.MainActivity;
 import com.byagowi.persiancalendar.utils.CalendarType;
 import com.byagowi.persiancalendar.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -27,14 +23,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import dagger.android.support.DaggerAppCompatDialogFragment;
-import dagger.android.support.HasSupportFragmentInjector;
 
 public class MonthOverviewDialog extends BottomSheetDialogFragment {
     private static String BUNDLE_KEY = "jdn";
