@@ -84,6 +84,7 @@ public class AboutFragment extends DaggerFragment {
             Utils.formatNumber(Utils.getMaxSupportedYear())));
         switch (Utils.getAppLanguage()) {
             case Constants.LANG_FA:
+            case Constants.LANG_GLK:
             case Constants.LANG_FA_AF:
             case Constants.LANG_EN_IR: // en. unlike en-US, is for Iranians as indicated also on UI
                 break;

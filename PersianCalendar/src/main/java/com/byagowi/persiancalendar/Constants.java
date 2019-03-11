@@ -19,6 +19,7 @@ public class Constants {
     public static final String LANG_FA = "fa";
     public static final String LANG_FA_AF = "fa-AF";
     public static final String LANG_PS = "ps";
+    public static final String LANG_GLK = "glk";
     public static final String LANG_AR = "ar";
     public static final String LANG_EN_IR = "en";
     public static final String LANG_EN_US = "en-US";

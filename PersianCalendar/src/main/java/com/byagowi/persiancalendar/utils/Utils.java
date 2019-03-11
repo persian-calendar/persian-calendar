@@ -132,6 +132,7 @@ import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
+import static com.byagowi.persiancalendar.Constants.LANG_GLK;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
@@ -732,6 +733,7 @@ public class Utils {
                 return arCodeOrder.indexOf(countryCode);
 
             case LANG_FA:
+            case LANG_GLK:
             default:
                 return irCodeOrder.indexOf(countryCode);
         }
@@ -886,6 +888,7 @@ public class Utils {
         if (enabledTypes == null || enabledTypes.isEmpty()) {
             switch (getAppLanguage()) {
                 case LANG_FA:
+                case LANG_GLK:
                 case LANG_EN_IR:
                 case LANG_CKB:
                     enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
@@ -1349,6 +1352,9 @@ public class Utils {
                 break;
             case LANG_PS:
                 messagesFile = R.raw.messages_ps;
+                break;
+            case LANG_GLK:
+                messagesFile = R.raw.messages_glk;
                 break;
             case LANG_AR:
                 messagesFile = R.raw.messages_ar;

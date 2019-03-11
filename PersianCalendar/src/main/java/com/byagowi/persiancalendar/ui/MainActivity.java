@@ -62,6 +62,7 @@ import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
+import static com.byagowi.persiancalendar.Constants.LANG_GLK;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
@@ -296,6 +297,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
                     changeToGregorianCalendar = true;
                     removeAllEvents = true;
                     break;
+                case LANG_GLK:
                 case LANG_FA:
                     persianDigits = true;
                     changeToPersianCalendar = true;

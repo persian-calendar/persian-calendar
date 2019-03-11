@@ -37,7 +37,7 @@ android {
     versionName = "6.0.1"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
-    resConfigs("en", "fa", "ckb", "ar", "ur", "ps")
+    resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk")
   }
 
   val appVerboseVersion =
