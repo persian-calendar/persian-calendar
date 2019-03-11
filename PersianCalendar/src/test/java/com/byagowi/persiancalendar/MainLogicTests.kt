@@ -470,109 +470,41 @@ class MainLogicTests {
   fun test_equinox_time() {
     val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
 
-    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
-    calendar.time = Equinox.northwardEquinox(2019)
-    assertEquals(13, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
-    assertEquals(28, calendar.get(Calendar.MINUTE))
-    assertEquals(1, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2019, calendar.get(Calendar.YEAR))
+    arrayOf(
+      // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
+      arrayOf(2019, 3, 21, 1, 28, 13/*should be 27*/),
 
-    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
-    calendar.time = Equinox.northwardEquinox(2018)
-    assertEquals(53, calendar.get(Calendar.SECOND)) // It should be 28, but well, is acceptable
-    assertEquals(45, calendar.get(Calendar.MINUTE))
-    assertEquals(19, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2018, calendar.get(Calendar.YEAR))
+      // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
+      arrayOf(2018, 3, 20, 19, 45, 53/*should be 28*/),
 
-    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201396-Full.pdf
-    calendar.time = Equinox.northwardEquinox(2017)
-    assertEquals(38, calendar.get(Calendar.SECOND)) // It should be 40, but well, is acceptable
-    assertEquals(59, calendar.get(Calendar.MINUTE)) // It should be 58
-    assertEquals(13, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2017, calendar.get(Calendar.YEAR))
+      // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201396-Full.pdf
+      arrayOf(2017, 3, 20, 13, 59/*should be 58*/, 38/*should be 40*/),
 
-    // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201395-Full.pdf
-    calendar.time = Equinox.northwardEquinox(2016)
-    assertEquals(55, calendar.get(Calendar.SECOND)) // It should be 12, but well, is acceptable
-    assertEquals(0, calendar.get(Calendar.MINUTE))
-    assertEquals(8, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2016, calendar.get(Calendar.YEAR))
+      // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201395-Full.pdf
+      arrayOf(2016, 3, 20, 8, 0, 55/*should be 12*/),
 
-    // http://vetmed.uk.ac.ir/documents/203998/204600/calendar-1394.pdf
-    calendar.time = Equinox.northwardEquinox(2015)
-    assertEquals(0, calendar.get(Calendar.SECOND)) // It should be 11, but well, is acceptable
-    assertEquals(16, calendar.get(Calendar.MINUTE)) // It should be 15
-    assertEquals(2, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2015, calendar.get(Calendar.YEAR))
+      // http://vetmed.uk.ac.ir/documents/203998/204600/calendar-1394.pdf
+      arrayOf(2015, 3, 21, 2, 16/*shoud be 15*/, 0/*should be 11*/),
 
+      // https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt
+      arrayOf(2014, 3, 20, 20, 27, 41/*should be 7*/),
+      arrayOf(2013, 3, 20, 14, 32/*shoud be 31*/, 41/*should be 56*/),
+      arrayOf(2012, 3, 20, 8, 44, 19/*should be 27*/),
+      arrayOf(2011, 3, 21, 2, 51/*shoud be 50*/, 38/*should be 25*/),
+      arrayOf(2010, 3, 20, 21, 2, 49/*should be 13*/),
+      arrayOf(2009, 3, 20, 15, 14/*shoud be 13*/, 50/*should be 39*/),
+      arrayOf(2008, 3, 20, 9, 18, 17/*should be 19*/)
+    ).forEach {
+      calendar.time = Equinox.northwardEquinox(it[0])
+      assertEquals(it[0].toString(), it[0], calendar.get(Calendar.YEAR))
+      assertEquals(it[0].toString(), it[1], calendar.get(Calendar.MONTH) + 1)
+      assertEquals(it[0].toString(), it[2], calendar.get(Calendar.DAY_OF_MONTH))
+      assertEquals(it[0].toString(), it[3], calendar.get(Calendar.HOUR_OF_DAY))
+      assertEquals(it[0].toString(), it[4], calendar.get(Calendar.MINUTE))
+      assertEquals(it[0].toString(), it[5], calendar.get(Calendar.SECOND))
+    }
 
-    // https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt
-    calendar.time = Equinox.northwardEquinox(2014)
-    assertEquals(41, calendar.get(Calendar.SECOND)) // It should be 7, but well, is acceptable
-    assertEquals(27, calendar.get(Calendar.MINUTE))
-    assertEquals(20, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2014, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2013)
-    assertEquals(41, calendar.get(Calendar.SECOND)) // It should be 56, but well, is acceptable
-    assertEquals(32, calendar.get(Calendar.MINUTE)) // It should be 31
-    assertEquals(14, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2013, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2012)
-    assertEquals(19, calendar.get(Calendar.SECOND)) // It should be 27, but well, is acceptable
-    assertEquals(44, calendar.get(Calendar.MINUTE))
-    assertEquals(8, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2012, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2011)
-    assertEquals(38, calendar.get(Calendar.SECOND)) // It should be 25, but well, is acceptable
-    assertEquals(51, calendar.get(Calendar.MINUTE)) // It should be 50
-    assertEquals(2, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(21, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2011, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2010)
-    assertEquals(49, calendar.get(Calendar.SECOND)) // It should be 13, but well, is acceptable
-    assertEquals(2, calendar.get(Calendar.MINUTE))
-    assertEquals(21, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2010, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2009)
-    assertEquals(50, calendar.get(Calendar.SECOND)) // It should be 39, but well, is acceptable
-    assertEquals(14, calendar.get(Calendar.MINUTE)) // It should be 13
-    assertEquals(15, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2009, calendar.get(Calendar.YEAR))
-    //
-    calendar.time = Equinox.northwardEquinox(2008)
-    assertEquals(17, calendar.get(Calendar.SECOND)) // It should be 19, but well, is acceptable
-    assertEquals(18, calendar.get(Calendar.MINUTE))
-    assertEquals(9, calendar.get(Calendar.HOUR_OF_DAY))
-    assertEquals(20, calendar.get(Calendar.DAY_OF_MONTH))
-    assertEquals(3, calendar.get(Calendar.MONTH) + 1)
-    assertEquals(2008, calendar.get(Calendar.YEAR))
-
+    // And not having random crashes
     (-2000..10000).forEach { Equinox.northwardEquinox(it) }
   }
 }
