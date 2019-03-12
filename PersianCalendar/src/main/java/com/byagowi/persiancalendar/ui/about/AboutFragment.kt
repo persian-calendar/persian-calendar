@@ -30,7 +30,7 @@ import javax.inject.Inject
 class AboutFragment : DaggerFragment() {
 
     @Inject
-    internal var mainActivityDependency: MainActivityDependency? = null
+    lateinit var mainActivityDependency: MainActivityDependency
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,7 +39,7 @@ class AboutFragment : DaggerFragment() {
 
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
 
-        val activity = mainActivityDependency!!.mainActivity
+        val activity = mainActivityDependency.mainActivity
         activity.setTitleAndSubtitle(getString(R.string.about), "")
 
         // version
@@ -48,7 +48,7 @@ class AboutFragment : DaggerFragment() {
         binding.version.text = String.format(getString(R.string.version), TextUtils.join("\n", version))
 
         // licenses
-        binding.licenses.setOnClickListener { arg ->
+        binding.licenses.setOnClickListener {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle(resources.getString(R.string.about_license_title))
             val licenseTextView = TextView(activity)
@@ -76,7 +76,7 @@ class AboutFragment : DaggerFragment() {
         }
 
         // report bug
-        binding.reportBug.setOnClickListener { arg ->
+        binding.reportBug.setOnClickListener {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://github.com/ebraminio/DroidPersianCalendar/issues/new")))
@@ -85,12 +85,12 @@ class AboutFragment : DaggerFragment() {
             }
         }
 
-        binding.email.setOnClickListener { arg ->
+        binding.email.setOnClickListener {
             val emailBinding = DialogEmailBinding.inflate(inflater, container, false)
-            AlertDialog.Builder(mainActivityDependency!!.mainActivity)
+            AlertDialog.Builder(mainActivityDependency.mainActivity)
                 .setView(emailBinding.root)
                 .setTitle(R.string.about_email_sum)
-                .setPositiveButton(R.string.continue_button) { dialog, id ->
+                .setPositiveButton(R.string.continue_button) { _, _ ->
                     val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "ebrahim@gnu.org", null))
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                     try {
@@ -126,31 +126,34 @@ class AboutFragment : DaggerFragment() {
         }
 
         for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-            val chip = Chip(activity)
-            chip.layoutParams = layoutParams
-            chip.setOnClickListener(chipClick)
-            chip.text = line
-            chip.chipIcon = developerIcon
-            chip.setChipIconTintResource(color.resourceId)
+            val chip = Chip(activity).apply {
+                this.layoutParams = layoutParams
+                setOnClickListener(chipClick)
+                text = line
+                chipIcon = developerIcon
+                setChipIconTintResource(color.resourceId)
+            }
             binding.developers.addView(chip)
         }
 
         for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-            val chip = Chip(activity)
-            chip.layoutParams = layoutParams
-            chip.text = line
-            chip.chipIcon = designerIcon
-            chip.setChipIconTintResource(color.resourceId)
+            val chip = Chip(activity).apply {
+                this.layoutParams = layoutParams
+                text = line
+                chipIcon = designerIcon
+                setChipIconTintResource(color.resourceId)
+            }
             binding.developers.addView(chip)
         }
 
         for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-            val chip = Chip(activity)
-            chip.layoutParams = layoutParams
-            chip.setOnClickListener(chipClick)
-            chip.text = line
-            chip.chipIcon = developerIcon
-            chip.setChipIconTintResource(color.resourceId)
+            val chip = Chip(activity).apply {
+                this.layoutParams = layoutParams
+                setOnClickListener(chipClick)
+                text = line
+                chipIcon = developerIcon
+                setChipIconTintResource(color.resourceId)
+            }
             binding.developers.addView(chip)
         }
 
@@ -166,7 +169,7 @@ class AboutFragment : DaggerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.deviceInfo -> mainActivityDependency!!.mainActivity.navigateTo(R.id.deviceInfo)
+            R.id.deviceInfo -> mainActivityDependency.mainActivity.navigateTo(R.id.deviceInfo)
             else -> {
             }
         }
@@ -174,11 +177,11 @@ class AboutFragment : DaggerFragment() {
     }
 
     private fun programVersion(context: Context): String {
-        try {
-            return context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        return try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion")
-            return ""
+            ""
         }
 
     }
