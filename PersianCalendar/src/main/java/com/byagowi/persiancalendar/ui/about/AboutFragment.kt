@@ -49,19 +49,20 @@ class AboutFragment : DaggerFragment() {
 
     // licenses
     binding.licenses.setOnClickListener {
-      val builder = AlertDialog.Builder(activity)
-      builder.setTitle(resources.getString(R.string.about_license_title))
-      val licenseTextView = TextView(activity)
-      licenseTextView.text = Utils.readRawResource(activity, R.raw.credits)
-      licenseTextView.setPadding(20, 20, 20, 20)
-      licenseTextView.typeface = Typeface.MONOSPACE
-      Linkify.addLinks(licenseTextView, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-      val scrollView = ScrollView(activity)
-      scrollView.addView(licenseTextView)
-      builder.setView(scrollView)
-      builder.setCancelable(true)
-      builder.setNegativeButton(R.string.about_license_dialog_close, null)
-      builder.show()
+      AlertDialog.Builder(activity).apply {
+        setTitle(resources.getString(R.string.about_license_title))
+        setView(ScrollView(activity).apply {
+          addView(TextView(activity).apply {
+            text = Utils.readRawResource(activity, R.raw.credits)
+            setPadding(20, 20, 20, 20)
+            typeface = Typeface.MONOSPACE
+            Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+          })
+        })
+        setCancelable(true)
+        setNegativeButton(R.string.about_license_dialog_close, null)
+        show()
+      }
     }
 
     // help
@@ -157,7 +158,6 @@ class AboutFragment : DaggerFragment() {
       binding.developers.addView(chip)
     }
 
-
     return binding.root
   }
 
@@ -183,6 +183,5 @@ class AboutFragment : DaggerFragment() {
       Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion")
       ""
     }
-
   }
 }
