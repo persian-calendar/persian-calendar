@@ -49,9 +49,9 @@ class AboutFragment : DaggerFragment() {
 
     // licenses
     binding.licenses.setOnClickListener {
-      AlertDialog.Builder(activity).apply {
-        setTitle(resources.getString(R.string.about_license_title))
-        setView(ScrollView(activity).apply {
+      AlertDialog.Builder(activity)
+        .setTitle(resources.getString(R.string.about_license_title))
+        .setView(ScrollView(activity).apply {
           addView(TextView(activity).apply {
             text = Utils.readRawResource(activity, R.raw.credits)
             setPadding(20, 20, 20, 20)
@@ -59,10 +59,9 @@ class AboutFragment : DaggerFragment() {
             Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
           })
         })
-        setCancelable(true)
-        setNegativeButton(R.string.about_license_dialog_close, null)
-        show()
-      }
+        .setCancelable(true)
+        .setNegativeButton(R.string.about_license_dialog_close, null)
+        .show()
     }
 
     // help
