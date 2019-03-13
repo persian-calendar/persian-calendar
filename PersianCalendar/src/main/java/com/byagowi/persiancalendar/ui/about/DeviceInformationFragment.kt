@@ -23,7 +23,7 @@ import javax.inject.Inject
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class DeviceInfoFragment : DaggerFragment() {
+class DeviceInformationFragment : DaggerFragment() {
   @Inject
   lateinit var mainActivityDependency: MainActivityDependency
 

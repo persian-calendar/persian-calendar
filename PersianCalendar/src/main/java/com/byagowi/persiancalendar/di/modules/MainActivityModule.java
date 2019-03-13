@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.di.modules;
 
 import com.byagowi.persiancalendar.di.scopes.PerFragment;
 import com.byagowi.persiancalendar.ui.about.AboutFragment;
-import com.byagowi.persiancalendar.ui.about.DeviceInfoFragment;
+import com.byagowi.persiancalendar.ui.about.DeviceInformationFragment;
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment;
 import com.byagowi.persiancalendar.ui.compass.CompassFragment;
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment;
@@ -44,7 +44,7 @@ public abstract class MainActivityModule {
 
     @PerFragment
     @ContributesAndroidInjector
-    abstract DeviceInfoFragment deviceInfoFragmentInjector();
+    abstract DeviceInformationFragment deviceInfoFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector
