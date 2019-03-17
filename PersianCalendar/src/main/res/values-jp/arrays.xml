@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themeNames">
+        <item>明るい</item>
+        <item>暗い</item>
+        <item>モダン</item>
+        <item>青い</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames">
+        <item>十二イマームシーア、ラヴァ社会、コム</item>
+        <item>イスラム世界連合、サウジアラビア</item>
+        <item>アメリカイスラム社会</item>
+        <item>エジプトの総合調査研究</item>
+        <item>オッモルグラー大学、メッカ</item>
+        <item>イスラム研究大学、カラチ</item>
+        <item>地球物理学研究所、テヘラン大学</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>朝</item>
+        <item>昼</item>
+        <item>夕</item>
+        <item>マグレブ</item>
+        <item>エシャー</item>
+    </string-array>
+
+    <string-array name="holidays_types">
+        <item>イラン祝日</item>
+        <item>イスラム教イベント</item>
+        <item>古代イランのイベント</item>
+        <item>他のイランのイベント</item>
+        <item>国際のイベントイベント</item>
+        <item>アフガニスタンの休日</item>
+        <item>他のアフガニスタンのイベント</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>カレンダー</item>
+        <item>月面にスラム暦カレンダー</item>
+        <item>グレゴリオ暦</item>
+    </string-array>
+
+    <string-array name="calendar_type_abbr">
+        <item>太陽イスラム暦</item>
+        <item>月面にスラム暦</item>
+        <item>グレゴリオ暦</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>土曜日</item>
+        <item>日曜日</item>
+        <item>月曜日</item>
+        <item>火曜日</item>
+        <item>水曜日</item>
+        <item>木曜日</item>
+        <item>金曜日</item>
+    </string-array>
+
+    <string-array name="what_to_show">
+        <item>2×2及び1×4ウィジェットの他のカレンダー</item>
+        <item>2×2ウィジェットの非休日祝日と通知</item>
+        <item>2×2ウィジェットでの礼拝時刻と通知（設定されている場合）</item>
+        <item>2×2ウィジェットでの場所と礼拝時刻と通知（設定されている場合）</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>２-</item>
+        <item>１-</item>
+        <item>０</item>
+        <item>１+</item>
+        <item>２+</item>
+    </string-array>
+
+    <string-array name="shift_work">
+        <item>昼勤</item>
+        <item>休み</item>
+        <item>夕方勤</item>
+        <item>夜勤</item>
+    </string-array>
+
+</resources>
