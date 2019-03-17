@@ -18,6 +18,7 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -166,33 +167,27 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
         if (appLanguage == null) appLanguage = "N/A"
         if (appLanguage == "N/A" && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
-            val snackbar = Snackbar.make(coordinator, "✖  Change app language?",
-                7000)
-            val snackbarView = snackbar.view
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                snackbarView.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    view.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                }
+                view.setOnClickListener {
+                    dismiss()
+                }
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
+                setAction("Settings") {
+                    prefs.edit {
+                        putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US)
+                        putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
+                        putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
+                        putStringSet(PREF_HOLIDAY_TYPES, HashSet())
+                    }
+                }
+                setActionTextColor(resources.getColor(R.color.dark_accent))
+            }.show()
+            prefs.edit {
+                putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true)
             }
-            val text = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            text.setTextColor(Color.WHITE)
-
-            snackbarView.setOnClickListener { snackbar.dismiss() }
-            snackbar.setAction("Settings") {
-                val edit = prefs.edit()
-                edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US)
-                edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-                edit.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-                edit.putStringSet(PREF_HOLIDAY_TYPES, HashSet())
-                edit.apply()
-
-                restartToSettings()
-            }
-            snackbar.setActionTextColor(resources.getColor(R.color.dark_accent))
-            snackbar.show()
-
-            // Show this snackbar only once
-            val edit = prefs.edit()
-            edit.putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true)
-            edit.apply()
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -204,21 +199,17 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
             Utils.isIranHolidaysEnabled() &&
             Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > Utils.getMaxSupportedYear()) {
-            val snackbar = Snackbar.make(coordinator, getString(R.string.outdated_app),
-                10000)
-            val text = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            text.setTextColor(Color.WHITE)
-
-            snackbar.setAction(getString(R.string.update)) {
-                val appPackageName = packageName
-                try {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
-                } catch (anfe: android.content.ActivityNotFoundException) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+            Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
+                setAction(getString(R.string.update)) {
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
+                    } catch (anfe: android.content.ActivityNotFoundException) {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                    }
                 }
-            }
-            snackbar.setActionTextColor(resources.getColor(R.color.dark_accent))
-            snackbar.show()
+                setActionTextColor(resources.getColor(R.color.dark_accent))
+            }.show()
         }
 
         Utils.applyAppLanguage(this)
