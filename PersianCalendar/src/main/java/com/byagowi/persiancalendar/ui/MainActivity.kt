@@ -15,7 +15,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
@@ -50,16 +49,15 @@ import javax.inject.Inject
  */
 class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
     @Inject
-    internal var appDependency: AppDependency? = null // same object from App
+    lateinit var appDependency: AppDependency // same object from App
     @Inject
-    internal var mainActivityDependency: MainActivityDependency? = null
+    lateinit var mainActivityDependency: MainActivityDependency
     private var creationDateJdn: Long = 0
-    private var actionBar: ActionBar? = null
     private var settingHasChanged = false
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     val coordinator: CoordinatorLayout
-        get() = binding!!.coordinator
+        get() = binding.coordinator
 
     private val seasonImage: Int
         @DrawableRes
@@ -73,14 +71,12 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             var month = Utils.getTodayOfCalendar(CalendarType.SHAMSI).month
             if (isSouthernHemisphere) month = (month + 6 - 1) % 12 + 1
 
-            return if (month < 4)
-                R.drawable.spring
-            else if (month < 7)
-                R.drawable.summer
-            else if (month < 10)
-                R.drawable.fall
-            else
-                R.drawable.winter
+            return when {
+                month < 4 -> R.drawable.spring
+                month < 7 -> R.drawable.summer
+                month < 10 -> R.drawable.fall
+                else -> R.drawable.winter
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +103,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         UpdateUtils.update(applicationContext, false)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setSupportActionBar(binding!!.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
@@ -120,7 +116,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         val isRTL = Utils.isRTL(this)
 
-        val drawerToggle = object : ActionBarDrawerToggle(this, binding!!.drawer, binding!!.toolbar, R.string.openDrawer, R.string.closeDrawer) {
+        val drawerToggle = object : ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             var slidingDirection = if (isRTL) -1 else +1
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -129,30 +125,26 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
 
             private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-                binding!!.appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-                binding!!.drawer.bringChildToFront(drawerView)
-                binding!!.drawer.requestLayout()
+                binding.appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                binding.drawer.bringChildToFront(drawerView)
+                binding.drawer.requestLayout()
             }
         }
 
-        binding!!.drawer.addDrawerListener(drawerToggle)
+        binding.drawer.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
         val intent = intent
         if (intent != null) {
             val action = intent.action
-            if ("COMPASS" == action)
-                navigateTo(R.id.compass)
-            else if ("LEVEL" == action)
-                navigateTo(R.id.level)
-            else if ("CONVERTER" == action)
-                navigateTo(R.id.converter)
-            else if ("SETTINGS" == action)
-                navigateTo(R.id.settings)
-            else if ("DEVICE" == action)
-                navigateTo(R.id.deviceInfo)
-            else
-                navigateTo(R.id.calendar)
+            when (action) {
+                "COMPASS" -> navigateTo(R.id.compass)
+                "LEVEL" -> navigateTo(R.id.level)
+                "CONVERTER" -> navigateTo(R.id.converter)
+                "SETTINGS" -> navigateTo(R.id.settings)
+                "DEVICE" -> navigateTo(R.id.deviceInfo)
+                else -> navigateTo(R.id.calendar)
+            }
 
             // So it won't happen again if the activity restarted
             intent.action = ""
@@ -166,9 +158,9 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
-        binding!!.navigation.setNavigationItemSelectedListener(this)
+        binding.navigation.setNavigationItemSelectedListener(this)
 
-        (binding!!.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
+        (binding.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
             .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
@@ -183,8 +175,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             val text = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             text.setTextColor(Color.WHITE)
 
-            snackbarView.setOnClickListener { v -> snackbar.dismiss() }
-            snackbar.setAction("Settings") { view ->
+            snackbarView.setOnClickListener { snackbar.dismiss() }
+            snackbar.setAction("Settings") {
                 val edit = prefs.edit()
                 edit.putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US)
                 edit.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
@@ -203,9 +195,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             edit.apply()
         }
 
-        actionBar = supportActionBar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.appbarLayout.outlineProvider = null
+            binding.appbarLayout.outlineProvider = null
         }
 
         creationDateJdn = Utils.getTodayJdn()
@@ -218,7 +209,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             val text = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             text.setTextColor(Color.WHITE)
 
-            snackbar.setAction(getString(R.string.update)) { view ->
+            snackbar.setAction(getString(R.string.update)) {
                 val appPackageName = packageName
                 try {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
@@ -234,7 +225,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     }
 
     fun navigateTo(@IdRes id: Int) {
-        val menuItem = binding!!.navigation.menu.findItem(
+        val menuItem = binding.navigation.menu.findItem(
             if (id == R.id.level) R.id.compass else id) // We don't have a menu entry for compass, so
         if (menuItem != null) {
             menuItem.isCheckable = true
@@ -328,21 +319,25 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                     editor.putStringSet(PREF_HOLIDAY_TYPES, HashSet())
                 }
             }
-            if (changeToGregorianCalendar) {
-                editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-                editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-                editor.putString(PREF_WEEK_START, "1")
-                editor.putStringSet(PREF_WEEK_ENDS, HashSet(listOf("1")))
-            } else if (changeToIslamicCalendar) {
-                editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
-                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
-                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-            } else if (changeToPersianCalendar) {
-                editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
-                editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
-                editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-                editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
+            when {
+                changeToGregorianCalendar -> {
+                    editor.putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
+                    editor.putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
+                    editor.putString(PREF_WEEK_START, "1")
+                    editor.putStringSet(PREF_WEEK_ENDS, HashSet(listOf("1")))
+                }
+                changeToIslamicCalendar -> {
+                    editor.putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
+                    editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
+                    editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START)
+                    editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
+                }
+                changeToPersianCalendar -> {
+                    editor.putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
+                    editor.putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
+                    editor.putString(PREF_WEEK_START, DEFAULT_WEEK_START)
+                    editor.putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
+                }
             }
             editor.apply()
         }
@@ -393,7 +388,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onConfigurationChanged(newConfig)
         Utils.initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding!!.drawer.layoutDirection = if (Utils.isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            binding.drawer.layoutDirection = if (Utils.isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }
     }
 
@@ -408,15 +403,15 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // Checking for the "menu" key
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (binding!!.drawer.isDrawerOpen(GravityCompat.START)) {
-                binding!!.drawer.closeDrawers()
+        return if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                binding.drawer.closeDrawers()
             } else {
-                binding!!.drawer.openDrawer(GravityCompat.START)
+                binding.drawer.openDrawer(GravityCompat.START)
             }
-            return true
+            true
         } else {
-            return super.onKeyDown(keyCode, event)
+            super.onKeyDown(keyCode, event)
         }
     }
 
@@ -426,7 +421,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         startActivity(intent)
     }
 
-    fun restartToSettings() {
+    private fun restartToSettings() {
         val intent = intent
         intent.action = "SETTINGS"
         finish()
@@ -439,19 +434,22 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             return true
         }
 
-        binding!!.drawer.closeDrawers()
+        binding.drawer.closeDrawers()
         navigateTo(menuItem.itemId)
         return true
     }
 
     fun setTitleAndSubtitle(title: String, subtitle: String) {
-        actionBar!!.title = title
-        actionBar!!.subtitle = subtitle
+        if (supportActionBar == null) {
+            return
+        }
+        supportActionBar!!.title = title
+        supportActionBar!!.subtitle = subtitle
     }
 
     override fun onBackPressed() {
-        if (binding!!.drawer.isDrawerOpen(GravityCompat.START)) {
-            binding!!.drawer.closeDrawers()
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawers()
         } else {
             val calendarFragment = supportFragmentManager
                 .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
