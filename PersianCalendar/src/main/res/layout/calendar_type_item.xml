@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/icon_margin"
-            app:srcCompat="@drawable/ic_reorder_black" />
+            app:srcCompat="@drawable/ic_drag_handle" />
 
     </LinearLayout>
 </layout>
