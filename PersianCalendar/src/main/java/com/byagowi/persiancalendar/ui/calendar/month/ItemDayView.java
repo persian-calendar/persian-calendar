@@ -71,7 +71,7 @@ public class ItemDayView extends View {
                 canvas.drawRoundRect(drawingRect, 0, 0, resource.selectedPaint);
             } else {
                 canvas.drawCircle(width / 2f, height / 2f, radius - 5,
-                    resource.selectedPaint);
+                        resource.selectedPaint);
             }
         }
 
@@ -80,15 +80,15 @@ public class ItemDayView extends View {
                 canvas.drawRoundRect(drawingRect, 0, 0, resource.todayPaint);
             } else {
                 canvas.drawCircle(width / 2f, height / 2f, radius - 5,
-                    resource.todayPaint);
+                        resource.todayPaint);
             }
         }
 
         int color;
         if (isNumber) {
             color = holiday
-                ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
-                : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
+                    ? (selected ? resource.colorHolidaySelected : resource.colorHoliday)
+                    : (selected ? resource.colorTextDaySelected : resource.colorTextDay);
 //            if (today && !selected) {
 //                color = resource.colorTextToday;
 //            }
@@ -100,16 +100,16 @@ public class ItemDayView extends View {
 
         if (hasEvent) {
             canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                height - resource.eventYOffset + yOffsetToApply,
-                width / 2f + resource.halfEventBarWidth,
-                height - resource.eventYOffset + yOffsetToApply, resource.eventBarPaint);
+                    height - resource.eventYOffset + yOffsetToApply,
+                    width / 2f + resource.halfEventBarWidth,
+                    height - resource.eventYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
         if (hasAppointment) {
             canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                height - resource.appointmentYOffset + yOffsetToApply,
-                width / 2f + resource.halfEventBarWidth,
-                height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
+                    height - resource.appointmentYOffset + yOffsetToApply,
+                    width / 2f + resource.halfEventBarWidth,
+                    height - resource.appointmentYOffset + yOffsetToApply, resource.eventBarPaint);
         }
 
         // TODO: Better to not change resource's paint objects, but for now
@@ -123,7 +123,7 @@ public class ItemDayView extends View {
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
         String textToMeasureHeight =
-            isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
+                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
         resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
         yPos += yOffsetToApply;
@@ -160,12 +160,12 @@ public class ItemDayView extends View {
                                   int textSize, long jdn, int dayOfMonth, String header) {
         String dayOfMonthString = Utils.formatNumber(dayOfMonth);
         setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
-            isHoliday, textSize, jdn, dayOfMonth, true, header);
+                isHoliday, textSize, jdn, dayOfMonth, true, header);
     }
 
     public void setNonDayOfMonthItem(String text, int textSize) {
         setAll(text, false, false, false, false, false,
-            textSize, -1, -1, false, "");
+                textSize, -1, -1, false, "");
     }
 
     public long getJdn() {

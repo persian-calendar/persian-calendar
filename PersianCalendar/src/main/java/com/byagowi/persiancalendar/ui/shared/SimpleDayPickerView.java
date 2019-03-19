@@ -23,7 +23,7 @@ import java.util.List;
 import androidx.databinding.DataBindingUtil;
 
 public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnItemSelectedListener,
-    DayPickerView {
+        DayPickerView {
     SimpleDayPickerViewBinding binding;
     private long jdn = -1;
     private OnSelectedDayChangedListener selectedDayListener = jdn -> {
@@ -46,11 +46,11 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
 
     private void init(Context context) {
         binding = DataBindingUtil.inflate(LayoutInflater.from(context),
-            R.layout.simple_day_picker_view, this, true);
+                R.layout.simple_day_picker_view, this, true);
 
         binding.calendarTypeSpinner.setAdapter(new ArrayAdapter<>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            Utils.getOrderedCalendarEntities(getContext())));
+                android.R.layout.simple_spinner_dropdown_item,
+                Utils.getOrderedCalendarEntities(getContext())));
 
         binding.calendarTypeSpinner.setSelection(0);
         binding.calendarTypeSpinner.setOnItemSelectedListener(this);
@@ -90,8 +90,8 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
         }
 
         AbstractDate date = Utils.getDateFromJdnOfCalendar(
-            getSelectedCalendarType(),
-            jdn);
+                getSelectedCalendarType(),
+                jdn);
 
         // years spinner init.
         List<StringWithValueItem> years = new ArrayList<>();
@@ -99,10 +99,10 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
         int startingYearOnYearSpinner = date.getYear() - YEARS / 2;
         for (int i = 0; i < YEARS; ++i) {
             years.add(new StringWithValueItem(i + startingYearOnYearSpinner,
-                Utils.formatNumber(i + startingYearOnYearSpinner)));
+                    Utils.formatNumber(i + startingYearOnYearSpinner)));
         }
         binding.yearSpinner.setAdapter(new ArrayAdapter<>(context,
-            android.R.layout.simple_spinner_dropdown_item, years));
+                android.R.layout.simple_spinner_dropdown_item, years));
         binding.yearSpinner.setSelection(YEARS / 2);
         //
 
@@ -111,10 +111,10 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
         String[] monthsTitle = Utils.monthsNamesOfCalendar(date);
         for (int i = 1; i <= 12; ++i) {
             months.add(new StringWithValueItem(i,
-                monthsTitle[i - 1] + " / " + Utils.formatNumber(i)));
+                    monthsTitle[i - 1] + " / " + Utils.formatNumber(i)));
         }
         binding.monthSpinner.setAdapter(new ArrayAdapter<>(context,
-            android.R.layout.simple_spinner_dropdown_item, months));
+                android.R.layout.simple_spinner_dropdown_item, months));
         binding.monthSpinner.setSelection(date.getMonth() - 1);
         //
 
@@ -124,7 +124,7 @@ public class SimpleDayPickerView extends FrameLayout implements AdapterView.OnIt
             days.add(new StringWithValueItem(i, Utils.formatNumber(i)));
         }
         binding.daySpinner.setAdapter(new ArrayAdapter<>(context,
-            android.R.layout.simple_spinner_dropdown_item, days));
+                android.R.layout.simple_spinner_dropdown_item, days));
         binding.daySpinner.setSelection(date.getDayOfMonth() - 1);
     }
 

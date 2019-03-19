@@ -56,27 +56,27 @@ public class MonthFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentMonthBinding fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
-            container, false);
+                container, false);
         CalendarFragment calendarFragment = calendarFragmentDependency.getCalendarFragment();
         boolean isRTL = Utils.isRTL(mainActivityDependency.getMainActivity());
         Bundle args = getArguments();
         int offset = args == null ? 0 : args.getInt(Constants.OFFSET_ARGUMENT);
 
         fragmentMonthBinding.next.setImageResource(isRTL
-            ? R.drawable.ic_keyboard_arrow_left
-            : R.drawable.ic_keyboard_arrow_right);
+                ? R.drawable.ic_keyboard_arrow_left
+                : R.drawable.ic_keyboard_arrow_right);
         fragmentMonthBinding.next.setOnClickListener(v -> calendarFragment.changeMonth(isRTL ? -1 : 1));
 
         fragmentMonthBinding.prev.setImageResource(isRTL
-            ? R.drawable.ic_keyboard_arrow_right
-            : R.drawable.ic_keyboard_arrow_left);
+                ? R.drawable.ic_keyboard_arrow_right
+                : R.drawable.ic_keyboard_arrow_left);
         fragmentMonthBinding.prev.setOnClickListener(v -> calendarFragment.changeMonth(isRTL ? 1 : -1));
 
         fragmentMonthBinding.monthDays.setHasFixedSize(true);
 
 
         fragmentMonthBinding.monthDays.setLayoutManager(new GridLayoutManager(mainActivityDependency.getMainActivity(),
-            Utils.isWeekOfYearEnabled() ? 8 : 7));
+                Utils.isWeekOfYearEnabled() ? 8 : 7));
         ///////
         ///////
         ///////
@@ -111,12 +111,12 @@ public class MonthFragment extends DaggerFragment {
         CalendarFragmentModel calendarFragmentModel = ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel.class);
 
         MonthAdapter adapter = new MonthAdapter(calendarFragmentDependency, days,
-            startingDayOfWeek, weekOfYearStart, weeksCount);
+                startingDayOfWeek, weekOfYearStart, weeksCount);
         fragmentMonthBinding.monthDays.setAdapter(adapter);
         fragmentMonthBinding.monthDays.setItemAnimator(null);
 
         if (calendarFragmentModel.isTheFirstTime &&
-            offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
+                offset == 0 && calendarFragment.getViewPagerPosition() == offset) {
             calendarFragmentModel.isTheFirstTime = false;
             calendarFragmentModel.selectDay(Utils.getTodayJdn());
             updateTitle(date);
@@ -148,7 +148,7 @@ public class MonthFragment extends DaggerFragment {
 
     private void updateTitle(AbstractDate date) {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(
-            Utils.getMonthName(date),
-            Utils.formatNumber(date.getYear()));
+                Utils.getMonthName(date),
+                Utils.formatNumber(date.getYear()));
     }
 }

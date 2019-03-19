@@ -47,12 +47,12 @@ public class SelectDayDialog extends DaggerAppCompatDialogFragment {
         dayPickerView.setDayJdnOnView(jdn);
 
         return new AlertDialog.Builder(mainActivity)
-            .setView((View) dayPickerView)
-            .setCustomTitle(null)
-            .setPositiveButton(R.string.go, (dialogInterface, i) -> {
-                long resultJdn = dayPickerView.getDayJdnFromView();
-                if (resultJdn != -1)
-                    calendarFragmentDependency.getCalendarFragment().bringDate(resultJdn);
-            }).create();
+                .setView((View) dayPickerView)
+                .setCustomTitle(null)
+                .setPositiveButton(R.string.go, (dialogInterface, i) -> {
+                    long resultJdn = dayPickerView.getDayJdnFromView();
+                    if (resultJdn != -1)
+                        calendarFragmentDependency.getCalendarFragment().bringDate(resultJdn);
+                }).create();
     }
 }

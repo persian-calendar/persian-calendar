@@ -36,51 +36,51 @@ public class FallbackIslamicConverter {
         double t2 = T * T;
         double t3 = t2 * T;
         double jd = 2415020.75933 + 29.53058868 * k - 0.0001178 * t2
-            - 0.000000155 * t3 + 0.00033
-            * Math.sin(RPD * (166.56 + 132.87 * T - 0.009173 * t2));
+                - 0.000000155 * t3 + 0.00033
+                * Math.sin(RPD * (166.56 + 132.87 * T - 0.009173 * t2));
 
         // Sun's mean anomaly
         double sa = RPD
-            * (359.2242 + 29.10535608 * k - 0.0000333 * t2 - 0.00000347 * t3);
+                * (359.2242 + 29.10535608 * k - 0.0000333 * t2 - 0.00000347 * t3);
 
         // Moon's mean anomaly
         double ma = RPD
-            * (306.0253 + 385.81691806 * k + 0.0107306 * t2 + 0.00001236 * t3);
+                * (306.0253 + 385.81691806 * k + 0.0107306 * t2 + 0.00001236 * t3);
 
         // Moon's argument of latitude
         double tf = RPD
-            * 2d
-            * (21.2964 + 390.67050646 * k - 0.0016528 * t2 - 0.00000239 * t3);
+                * 2d
+                * (21.2964 + 390.67050646 * k - 0.0016528 * t2 - 0.00000239 * t3);
 
         // should reduce to interval 0-1.0 before calculating further
         switch (nph) {
             case 0:
             case 2:
                 xtra = (0.1734 - 0.000393 * T) * Math.sin(sa) + 0.0021
-                    * Math.sin(sa * 2) - 0.4068 * Math.sin(ma) + 0.0161
-                    * Math.sin(2 * ma) - 0.0004 * Math.sin(3 * ma) + 0.0104
-                    * Math.sin(tf) - 0.0051 * Math.sin(sa + ma) - 0.0074
-                    * Math.sin(sa - ma) + 0.0004 * Math.sin(tf + sa) - 0.0004
-                    * Math.sin(tf - sa) - 0.0006 * Math.sin(tf + ma) + 0.001
-                    * Math.sin(tf - ma) + 0.0005 * Math.sin(sa + 2 * ma);
+                        * Math.sin(sa * 2) - 0.4068 * Math.sin(ma) + 0.0161
+                        * Math.sin(2 * ma) - 0.0004 * Math.sin(3 * ma) + 0.0104
+                        * Math.sin(tf) - 0.0051 * Math.sin(sa + ma) - 0.0074
+                        * Math.sin(sa - ma) + 0.0004 * Math.sin(tf + sa) - 0.0004
+                        * Math.sin(tf - sa) - 0.0006 * Math.sin(tf + ma) + 0.001
+                        * Math.sin(tf - ma) + 0.0005 * Math.sin(sa + 2 * ma);
                 break;
             case 1:
             case 3:
                 xtra = (0.1721 - 0.0004 * T) * Math.sin(sa) + 0.0021
-                    * Math.sin(sa * 2) - 0.628 * Math.sin(ma) + 0.0089
-                    * Math.sin(2 * ma) - 0.0004 * Math.sin(3 * ma) + 0.0079
-                    * Math.sin(tf) - 0.0119 * Math.sin(sa + ma) - 0.0047
-                    * Math.sin(sa - ma) + 0.0003 * Math.sin(tf + sa) - 0.0004
-                    * Math.sin(tf - sa) - 0.0006 * Math.sin(tf + ma) + 0.0021
-                    * Math.sin(tf - ma) + 0.0003 * Math.sin(sa + 2 * ma)
-                    + 0.0004 * Math.sin(sa - 2 * ma) - 0.0003
-                    * Math.sin(2 * sa + ma);
+                        * Math.sin(sa * 2) - 0.628 * Math.sin(ma) + 0.0089
+                        * Math.sin(2 * ma) - 0.0004 * Math.sin(3 * ma) + 0.0079
+                        * Math.sin(tf) - 0.0119 * Math.sin(sa + ma) - 0.0047
+                        * Math.sin(sa - ma) + 0.0003 * Math.sin(tf + sa) - 0.0004
+                        * Math.sin(tf - sa) - 0.0006 * Math.sin(tf + ma) + 0.0021
+                        * Math.sin(tf - ma) + 0.0003 * Math.sin(sa + 2 * ma)
+                        + 0.0004 * Math.sin(sa - 2 * ma) - 0.0003
+                        * Math.sin(2 * sa + ma);
                 if (nph == 1)
                     xtra = xtra + 0.0028 - 0.0004 * Math.cos(sa) + 0.0003
-                        * Math.cos(ma);
+                            * Math.cos(ma);
                 else
                     xtra = xtra - 0.0028 + 0.0004 * Math.cos(sa) - 0.0003
-                        * Math.cos(ma);
+                            * Math.cos(ma);
 
                 break;
             default:
@@ -96,7 +96,7 @@ public class FallbackIslamicConverter {
         // a the same day in which it started, it has to have started before
         // (SUNSET-MINAGE)-TIMZ=3 A.M. local time.
         final float TIMZ = 3f, MINAGE = 13.5f, SUNSET = 19.5f, // approximate
-            TIMDIF = (SUNSET - MINAGE);
+                TIMDIF = (SUNSET - MINAGE);
 
         double jd = tmoonphase(n, 0);
         long d = floor(jd);
@@ -121,7 +121,7 @@ public class FallbackIslamicConverter {
         int day = civil.getDayOfMonth();
 
         long k = floor(0.6 + (year + (month % 2 == 0 ? month : month - 1) / 12d
-            + day / 365f - 1900) * 12.3685);
+                + day / 365f - 1900) * 12.3685);
 
         double mjd;
         do {

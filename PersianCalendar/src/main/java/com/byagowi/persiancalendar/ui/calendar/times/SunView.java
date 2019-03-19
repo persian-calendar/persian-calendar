@@ -46,8 +46,8 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
     Paint mPaint, mSunPaint, mSunRaisePaint, mDayPaint;
     @ColorInt
     int horizonColor, timelineColor, taggingColor, nightColor, dayColor, daySecondColor, sunColor,
-        sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
-        middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
+            sunBeforeMiddayColor, sunAfterMiddayColor, sunEveningColor, sunriseTextColor,
+            middayTextColor, sunsetTextColor, colorTextNormal, colorTextSecond;
     int width, height;
     Path curvePath, nightPath;
     float current = 0;
@@ -261,7 +261,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
 
             @ColorInt
             int color = (int) argbEvaluator.evaluate(current,
-                sunBeforeMiddayColor, sunAfterMiddayColor);
+                    sunBeforeMiddayColor, sunAfterMiddayColor);
 
             mSunPaint.setColor(color);
             //mSunRaisePaint.setColor(color);
@@ -306,7 +306,7 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         int arcWidth = (int) ((moonPhase - 0.5) * (4 * r));
         moonPaintO.setColor(arcWidth < 0 ? Color.BLACK : Color.WHITE);
         moonOval.set(px - Math.abs(arcWidth) / 2f, py + eOffset - radius - r,
-            px + Math.abs(arcWidth) / 2f, py + eOffset - radius + r);
+                px + Math.abs(arcWidth) / 2f, py + eOffset - radius + r);
         canvas.drawArc(moonOval, 0, 360, false, moonPaintO);
         canvas.drawArc(moonRect, 0, 360, false, moonPaintD);
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD);
@@ -359,20 +359,20 @@ public class SunView extends View implements ValueAnimator.AnimatorUpdateListene
         Clock dayLength = Clock.fromInt((int) (sunset - sunrise));
         Clock remaining = Clock.fromInt(now > sunset || now < sunrise ? 0 : (int) (sunset - now));
         dayLengthString = String.format(context.getString(R.string.length_of_day),
-            Utils.formatNumber(dayLength.getHour()),
-            Utils.formatNumber(dayLength.getMinute()));
+                Utils.formatNumber(dayLength.getHour()),
+                Utils.formatNumber(dayLength.getMinute()));
         if (remaining.toInt() == 0) {
             remainingString = "";
         } else {
             remainingString = String.format(context.getString(R.string.remaining_daylight),
-                Utils.formatNumber(remaining.getHour()),
-                Utils.formatNumber(remaining.getMinute()));
+                    Utils.formatNumber(remaining.getHour()),
+                    Utils.formatNumber(remaining.getMinute()));
         }
 
         argbEvaluator = new ArgbEvaluator();
 
         linearGradient = new LinearGradient(getWidth() * 0.17f, 0, getWidth() * 0.5f, 0,
-            dayColor, daySecondColor, Shader.TileMode.MIRROR);
+                dayColor, daySecondColor, Shader.TileMode.MIRROR);
 
         if (immediate) {
             current = c;

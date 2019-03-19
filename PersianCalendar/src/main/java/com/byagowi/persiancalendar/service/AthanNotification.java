@@ -35,13 +35,13 @@ public class AthanNotification extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         NotificationManager notificationManager =
-            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel notificationChannel =
-                    new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        new NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
+                                NotificationManager.IMPORTANCE_DEFAULT);
 
                 notificationChannel.setDescription(getString(R.string.app_name));
                 notificationChannel.enableLights(true);
@@ -52,30 +52,30 @@ public class AthanNotification extends Service {
             }
 
             String title = intent == null
-                ? ""
-                : getString(Utils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
+                    ? ""
+                    : getString(Utils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)));
             String cityName = Utils.getCityName(this, false);
             String subtitle = TextUtils.isEmpty(cityName)
-                ? ""
-                : getString(R.string.in_city_time) + " " + cityName;
+                    ? ""
+                    : getString(R.string.in_city_time) + " " + cityName;
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
-                NOTIFICATION_CHANNEL_ID);
+                    NOTIFICATION_CHANNEL_ID);
             notificationBuilder.setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.sun)
-                .setContentTitle(title)
-                .setContentText(subtitle);
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.sun)
+                    .setContentTitle(title)
+                    .setContentText(subtitle);
 
             notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
             notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
 
             Context appContext = getApplicationContext();
             if (appContext != null &&
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 RemoteViews cv = new RemoteViews(appContext.getPackageName(), Utils.isLocaleRTL()
-                    ? R.layout.custom_notification
-                    : R.layout.custom_notification_ltr);
+                        ? R.layout.custom_notification
+                        : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
                 if (TextUtils.isEmpty(subtitle)) {
                     cv.setViewVisibility(R.id.body, View.GONE);
@@ -84,8 +84,8 @@ public class AthanNotification extends Service {
                 }
 
                 notificationBuilder = notificationBuilder
-                    .setCustomContentView(cv)
-                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+                        .setCustomContentView(cv)
+                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             }
 
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());

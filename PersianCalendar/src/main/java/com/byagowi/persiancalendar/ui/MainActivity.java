@@ -107,7 +107,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         Utils.initUtils(this);
 
         TypefaceUtils.overrideFont("SERIF",
-            TypefaceUtils.getAppFont(getApplicationContext()));
+                TypefaceUtils.getAppFont(getApplicationContext()));
 
         Utils.startEitherServiceOrWorker(this);
 
@@ -175,14 +175,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         binding.navigation.setNavigationItemSelectedListener(this);
 
         ((ImageView) binding.navigation.getHeaderView(0).findViewById(R.id.season_image))
-            .setImageResource(getSeasonImage());
+                .setImageResource(getSeasonImage());
 
         String appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A");
         if (appLanguage == null) appLanguage = "N/A";
         if (appLanguage.equals("N/A")
-            && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
+                && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
             Snackbar snackbar = Snackbar.make(getCoordinator(), "✖  Change app language?",
-                7000);
+                    7000);
             View snackbarView = snackbar.getView();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -218,10 +218,10 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         creationDateJdn = Utils.getTodayJdn();
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
-            Utils.isIranHolidaysEnabled() &&
-            (Utils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
+                Utils.isIranHolidaysEnabled() &&
+                (Utils.getTodayOfCalendar(CalendarType.SHAMSI).getYear() > Utils.getMaxSupportedYear())) {
             Snackbar snackbar = Snackbar.make(getCoordinator(), getString(R.string.outdated_app),
-                10000);
+                    10000);
             TextView text = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
             text.setTextColor(Color.WHITE);
 
@@ -242,7 +242,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
 
     public void navigateTo(@IdRes int id) {
         MenuItem menuItem = binding.navigation.getMenu().findItem(
-            id == R.id.level ? R.id.compass : id); // We don't have a menu entry for compass, so
+                id == R.id.level ? R.id.compass : id); // We don't have a menu entry for compass, so
         if (menuItem != null) {
             menuItem.setCheckable(true);
             menuItem.setChecked(true);
@@ -255,7 +255,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment)
-            .navigate(id, null, null);
+                .navigate(id, null, null);
     }
 
     public CoordinatorLayout getCoordinator() {
@@ -335,30 +335,30 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             // Enable Afghanistan holidays when Dari or Pashto is set
             if (changeToAfghanistanHolidays) {
                 Set<String> currentHolidays =
-                    sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
-                        new HashSet<>(Collections.singletonList("afghanistan_holidays")));
+                            new HashSet<>(Collections.singletonList("afghanistan_holidays")));
                 }
             }
             if (changeToIranEvents) {
                 Set<String> currentHolidays =
-                    sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
+                        (currentHolidays.size() == 1 && currentHolidays.contains("afghanistan_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
-                        new HashSet<>(Collections.singletonList("iran_holidays")));
+                            new HashSet<>(Collections.singletonList("iran_holidays")));
                 }
             }
             if (removeAllEvents) {
                 Set<String> currentHolidays =
-                    sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
+                        (currentHolidays.size() == 1 && currentHolidays.contains("iran_holidays"))) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
                 }
             }
@@ -411,11 +411,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
-                == PackageManager.PERMISSION_GRANTED) {
+                    == PackageManager.PERMISSION_GRANTED) {
                 Utils.toggleShowDeviceCalendarOnPreference(this, true);
                 NavDestination currentDestination = Navigation
-                    .findNavController(this, R.id.nav_host_fragment)
-                    .getCurrentDestination();
+                        .findNavController(this, R.id.nav_host_fragment)
+                        .getCurrentDestination();
                 if (currentDestination != null && currentDestination.getId() == R.id.calendar) {
                     restartActivity();
                 }
@@ -495,7 +495,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             binding.drawer.closeDrawers();
         } else {
             CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager()
-                .findFragmentByTag(CalendarFragment.class.getName());
+                    .findFragmentByTag(CalendarFragment.class.getName());
 
             if (calendarFragment != null) {
                 if (calendarFragment.closeSearch())
@@ -503,8 +503,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SharedPrefe
             }
 
             NavDestination currentDestination = Navigation
-                .findNavController(this, R.id.nav_host_fragment)
-                .getCurrentDestination();
+                    .findNavController(this, R.id.nav_host_fragment)
+                    .getCurrentDestination();
             if (currentDestination == null || (currentDestination.getId() == R.id.calendar))
                 finish();
             else

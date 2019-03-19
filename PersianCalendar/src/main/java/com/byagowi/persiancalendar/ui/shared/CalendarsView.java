@@ -48,7 +48,7 @@ public class CalendarsView extends FrameLayout {
 
     public void init(Context context) {
         mBinding = CalendarsViewBinding.inflate(LayoutInflater.from(context), this,
-            true);
+                true);
 
         mBinding.getRoot().setOnClickListener(v -> expand(!mCalendarItemAdapter.isExpanded()));
         mBinding.extraInformationContainer.setVisibility(View.GONE);
@@ -76,8 +76,8 @@ public class CalendarsView extends FrameLayout {
         mCalendarItemAdapter.setExpanded(expanded);
 
         mBinding.moreCalendar.setImageResource(expanded
-            ? R.drawable.ic_keyboard_arrow_up
-            : R.drawable.ic_keyboard_arrow_down);
+                ? R.drawable.ic_keyboard_arrow_up
+                : R.drawable.ic_keyboard_arrow_down);
         mBinding.extraInformationContainer.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
         mCalendarsViewExpandListener.onCalendarsViewExpand();
@@ -100,8 +100,8 @@ public class CalendarsView extends FrameLayout {
         if (diffDays == 0) {
             if (Utils.isIranTime()) {
                 mBinding.weekDayName.setText(String.format("%s (%s)",
-                    mBinding.weekDayName.getText(),
-                    context.getString(R.string.iran_time)));
+                        mBinding.weekDayName.getText(),
+                        context.getString(R.string.iran_time)));
             }
             mOnShowHideTodayButton.onShowHideTodayButton(false);
             mBinding.diffDate.setVisibility(View.GONE);
@@ -115,10 +115,10 @@ public class CalendarsView extends FrameLayout {
             int monthDiff = civilOffset.getMonth() - 1;
             int dayOfMonthDiff = civilOffset.getDayOfMonth() - 1;
             String text = String.format(context.getString(R.string.date_diff_text),
-                Utils.formatNumber((int) diffDays),
-                Utils.formatNumber(yearDiff),
-                Utils.formatNumber(monthDiff),
-                Utils.formatNumber(dayOfMonthDiff));
+                    Utils.formatNumber((int) diffDays),
+                    Utils.formatNumber(yearDiff),
+                    Utils.formatNumber(monthDiff),
+                    Utils.formatNumber(dayOfMonthDiff));
             if (diffDays <= 30) {
                 text = text.split("\\(")[0];
             }
@@ -128,36 +128,36 @@ public class CalendarsView extends FrameLayout {
         {
             AbstractDate mainDate = Utils.getDateFromJdnOfCalendar(chosenCalendarType, jdn);
             AbstractDate startOfYear = Utils.getDateOfCalendar(chosenCalendarType,
-                mainDate.getYear(), 1, 1);
+                    mainDate.getYear(), 1, 1);
             AbstractDate startOfNextYear = Utils.getDateOfCalendar(
-                chosenCalendarType, mainDate.getYear() + 1, 1, 1);
+                    chosenCalendarType, mainDate.getYear() + 1, 1, 1);
             long startOfYearJdn = startOfYear.toJdn();
             long endOfYearJdn = startOfNextYear.toJdn() - 1;
             int currentWeek = Utils.calculateWeekOfYear(jdn, startOfYearJdn);
             int weeksCount = Utils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn);
 
             String startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
-                Utils.formatNumber((int) (jdn - startOfYearJdn)),
-                Utils.formatNumber(currentWeek),
-                Utils.formatNumber(mainDate.getMonth()));
+                    Utils.formatNumber((int) (jdn - startOfYearJdn)),
+                    Utils.formatNumber(currentWeek),
+                    Utils.formatNumber(mainDate.getMonth()));
             String endOfYearText = String.format(context.getString(R.string.end_of_year_diff),
-                Utils.formatNumber((int) (endOfYearJdn - jdn)),
-                Utils.formatNumber(weeksCount - currentWeek),
-                Utils.formatNumber(12 - mainDate.getMonth()));
+                    Utils.formatNumber((int) (endOfYearJdn - jdn)),
+                    Utils.formatNumber(weeksCount - currentWeek),
+                    Utils.formatNumber(12 - mainDate.getMonth()));
             mBinding.startAndEndOfYearDiff.setText(String.format("%s\n%s", startOfYearText, endOfYearText));
 
             String equinox = "";
             if (Utils.getMainCalendar() == chosenCalendarType &&
-                chosenCalendarType == CalendarType.SHAMSI) {
+                    chosenCalendarType == CalendarType.SHAMSI) {
                 if ((mainDate.getMonth() == 12 && mainDate.getDayOfMonth() >= 20) ||
-                    (mainDate.getMonth() == 1 && mainDate.getDayOfMonth() == 1)) {
+                        (mainDate.getMonth() == 1 && mainDate.getDayOfMonth() == 1)) {
                     int addition = mainDate.getMonth() == 12 ? 1 : 0;
                     Calendar springEquinox = Utils.getSpringEquinox(mainDate.toJdn());
                     equinox = String.format(context.getString(R.string.spring_equinox),
-                        Utils.formatNumber(mainDate.getYear() + addition),
-                        Utils.getFormattedClock(
-                            new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
-                                springEquinox.get(Calendar.MINUTE)), true));
+                            Utils.formatNumber(mainDate.getYear() + addition),
+                            Utils.getFormattedClock(
+                                    new Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
+                                            springEquinox.get(Calendar.MINUTE)), true));
                 }
             }
             mBinding.equinox.setText(equinox);
@@ -165,8 +165,8 @@ public class CalendarsView extends FrameLayout {
         }
 
         mBinding.getRoot().setContentDescription(Utils.getA11yDaySummary(context, jdn,
-            diffDays == 0,
-            null, true, true, true));
+                diffDays == 0,
+                null, true, true, true));
     }
 
     public interface OnShowHideTodayButton {

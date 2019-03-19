@@ -31,8 +31,8 @@ public class TypefaceUtils {
 
     public static Typeface getCalendarFragmentFont(Context context) {
         return isCustomFontEnabled()
-            ? Typeface.create("sans-serif-light", Typeface.NORMAL)
-            : getAppFont(context);
+                ? Typeface.create("sans-serif-light", Typeface.NORMAL)
+                : getAppFont(context);
     }
 
     public static boolean isCustomFontEnabled() {

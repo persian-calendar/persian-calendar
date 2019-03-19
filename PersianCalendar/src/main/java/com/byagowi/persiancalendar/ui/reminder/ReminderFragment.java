@@ -58,7 +58,7 @@ public class ReminderFragment extends DaggerFragment {
         ItemsAdapter reminderAdapter = new ItemsAdapter();
         binding.recyclerView.setAdapter(reminderAdapter);
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(mainActivity,
-            DividerItemDecoration.VERTICAL));
+                DividerItemDecoration.VERTICAL));
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
@@ -97,7 +97,7 @@ public class ReminderFragment extends DaggerFragment {
         switch (item.getItemId()) {
             case R.id.action_add:
                 EditReminderDialog.newInstance(-1).show(getChildFragmentManager(),
-                    EditReminderDialog.class.getName());
+                        EditReminderDialog.class.getName());
                 break;
             default:
                 break;
@@ -122,7 +122,7 @@ public class ReminderFragment extends DaggerFragment {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             ReminderAdapterItemBinding binding = ReminderAdapterItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+                    LayoutInflater.from(parent.getContext()), parent, false);
 
             return new ViewHolder(binding);
         }
@@ -145,8 +145,8 @@ public class ReminderFragment extends DaggerFragment {
                 super(binding.getRoot());
                 mBinding = binding;
                 mBinding.getRoot().setOnClickListener(
-                    v -> EditReminderDialog.newInstance(mId).show(getChildFragmentManager(),
-                        EditReminderDialog.class.getName()));
+                        v -> EditReminderDialog.newInstance(mId).show(getChildFragmentManager(),
+                                EditReminderDialog.class.getName()));
                 mBinding.delete.setOnClickListener(v -> remove());
             }
 
@@ -159,11 +159,11 @@ public class ReminderFragment extends DaggerFragment {
                 MainActivity mainActivity = mainActivityDependency.getMainActivity();
                 Resources resources = mainActivity.getResources();
                 mBinding.period.setText(String.format("%s | %s",
-                    String.format(resources.getString(R.string.reminder_summary),
-                        Utils.formatNumber(reminder.quantity),
-                        getString(ReminderUtils.unitToStringId(reminder.unit))),
-                    String.format(resources.getString(R.string.reminded),
-                        Utils.formatNumber(ReminderUtils.getReminderCount(mainActivity, reminder.id))))
+                        String.format(resources.getString(R.string.reminder_summary),
+                                Utils.formatNumber(reminder.quantity),
+                                getString(ReminderUtils.unitToStringId(reminder.unit))),
+                        String.format(resources.getString(R.string.reminded),
+                                Utils.formatNumber(ReminderUtils.getReminderCount(mainActivity, reminder.id))))
                 );
             }
 
@@ -173,7 +173,7 @@ public class ReminderFragment extends DaggerFragment {
                 if (reminder != null && reminders.remove(reminder)) {
                     Utils.storeReminders(mainActivityDependency.getMainActivity(), reminders);
                     Utils.createAndShowSnackbar(itemView, String.format(getString(R.string.item_removed),
-                        reminder.name), Snackbar.LENGTH_SHORT);
+                            reminder.name), Snackbar.LENGTH_SHORT);
                 }
                 ReminderUtils.turnOff(mainActivityDependency.getMainActivity(), mId);
                 refresh();

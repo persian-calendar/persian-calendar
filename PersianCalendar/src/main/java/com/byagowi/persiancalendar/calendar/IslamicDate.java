@@ -32,8 +32,8 @@ public class IslamicDate extends AbstractDate {
         int year = getYear(), month = getMonth(), day = getDayOfMonth();
 
         long tableResult = useUmmAlQura
-            ? UmmAlQuraConverter.toJdn(year, month, day)
-            : IranianIslamicDateConverter.toJdn(year, month, day);
+                ? UmmAlQuraConverter.toJdn(year, month, day)
+                : IranianIslamicDateConverter.toJdn(year, month, day);
 
         if (tableResult != -1)
             return tableResult - islamicOffset;
@@ -45,8 +45,8 @@ public class IslamicDate extends AbstractDate {
     protected int[] fromJdn(long jdn) {
         jdn += islamicOffset;
         int[] result = useUmmAlQura
-            ? UmmAlQuraConverter.fromJdn(jdn)
-            : IranianIslamicDateConverter.fromJdn(jdn);
+                ? UmmAlQuraConverter.fromJdn(jdn)
+                : IranianIslamicDateConverter.fromJdn(jdn);
 
         if (result == null) result = FallbackIslamicConverter.fromJdn(jdn);
 

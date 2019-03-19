@@ -51,9 +51,9 @@ public class UpdateUtils {
     private static int[] timesOn4x2Sunna = {R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha};
     @IdRes
     private static int[] owghatPlaceHolderId = {
-        R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
-        R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
-        R.id.textPlaceholder4owghat_5_4x2
+            R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
+            R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
+            R.id.textPlaceholder4owghat_5_4x2
     };
 
     public static void setDeviceCalendarEvents(Context context) {
@@ -73,8 +73,8 @@ public class UpdateUtils {
         long jdn = date.toJdn();
 
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
-            new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-            PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         //
         // Widgets
@@ -89,18 +89,18 @@ public class UpdateUtils {
 
         // Widget 1x1
         ComponentName widget1x1 = new ComponentName(context, Widget1x1.class),
-            widget4x1 = new ComponentName(context, Widget4x1.class),
-            widget4x2 = new ComponentName(context, Widget4x2.class),
-            widget2x2 = new ComponentName(context, Widget2x2.class);
+                widget4x1 = new ComponentName(context, Widget4x1.class),
+                widget4x2 = new ComponentName(context, Widget4x2.class),
+                widget2x2 = new ComponentName(context, Widget2x2.class);
 
         if (manager.getAppWidgetIds(widget1x1).length != 0) {
             RemoteViews remoteViews1 = new RemoteViews(context.getPackageName(), R.layout.widget1x1);
             remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color);
             remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color);
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                Utils.formatNumber(date.getDayOfMonth()));
+                    Utils.formatNumber(date.getDayOfMonth()));
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
-                Utils.getMonthName(date));
+                    Utils.getMonthName(date));
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent);
             manager.updateAppWidget(widget1x1, remoteViews1);
         }
@@ -127,7 +127,7 @@ public class UpdateUtils {
         int nextOwghatId = Utils.getNextOwghatTimeId(currentClock, updateDate);
         if (nextOwghatId != 0) {
             owghat = context.getString(nextOwghatId) + ": " +
-                Utils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false);
+                    Utils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false);
             if (Utils.isShownOnWidgets("owghat_location")) {
                 String cityName = Utils.getCityName(context, false);
                 if (!TextUtils.isEmpty(cityName)) {
@@ -141,7 +141,7 @@ public class UpdateUtils {
         boolean isCenterAligned = Utils.isCenterAlignWidgets();
 
         if (manager.getAppWidgetIds(widget4x1).length != 0 ||
-            manager.getAppWidgetIds(widget2x2).length != 0) {
+                manager.getAppWidgetIds(widget2x2).length != 0) {
             RemoteViews remoteViews4, remoteViews2;
             if (enableClock) {
                 if (!Utils.isIranTime()) {
@@ -206,8 +206,8 @@ public class UpdateUtils {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays);
                     if (Utils.isTalkBackEnabled()) {
                         remoteViews2.setContentDescription(R.id.holiday_2x2,
-                            context.getString(R.string.holiday_reason) + " " +
-                                holidays);
+                                context.getString(R.string.holiday_reason) + " " +
+                                        holidays);
                     }
                     remoteViews2.setViewVisibility(R.id.holiday_2x2, View.VISIBLE);
                 } else {
@@ -216,7 +216,7 @@ public class UpdateUtils {
 
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (Utils.isShownOnWidgets("non_holiday_events") &&
-                    !TextUtils.isEmpty(nonHolidays)) {
+                        !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays);
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE);
                 } else {
@@ -232,7 +232,7 @@ public class UpdateUtils {
 
                 if (Utils.isShownOnWidgets("other_calendars")) {
                     text2 = text2 + "\n" + subtitle + "\n" +
-                        AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, true);
+                            AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, true);
                 }
                 remoteViews2.setTextViewText(R.id.date_2x2, text2);
 
@@ -276,11 +276,11 @@ public class UpdateUtils {
                 // Set text of owghats
                 for (int i = 0; i < owghatPlaceHolderId.length; ++i) {
                     remoteViews4x2.setTextViewText(owghatPlaceHolderId[i],
-                        context.getString(timesOn4x2[i]) + "\n" +
-                            Utils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false));
+                            context.getString(timesOn4x2[i]) + "\n" +
+                                    Utils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false));
                     remoteViews4x2.setTextColor(owghatPlaceHolderId[i],
-                        timesOn4x2[i] == nextOwghatId ?
-                            Color.RED : color);
+                            timesOn4x2[i] == nextOwghatId ?
+                                    Color.RED : color);
                 }
 
                 int difference = Utils.getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt();
@@ -298,8 +298,8 @@ public class UpdateUtils {
                     remainingTime = String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min));
 
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2,
-                    String.format(context.getString(R.string.n_till),
-                        remainingTime, context.getString(nextOwghatId)));
+                        String.format(context.getString(R.string.n_till),
+                                remainingTime, context.getString(nextOwghatId)));
                 remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color);
             } else {
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location));
@@ -322,7 +322,7 @@ public class UpdateUtils {
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
         if (isRTL && (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
-            (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
             title = Constants.RLM + title;
             if (!TextUtils.isEmpty(subtitle)) {
                 subtitle = Constants.RLM + subtitle;
@@ -331,11 +331,11 @@ public class UpdateUtils {
 
         if (Utils.isNotifyDate()) {
             NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(String.valueOf(NOTIFICATION_ID),
-                    context.getString(R.string.app_name), importance);
+                        context.getString(R.string.app_name), importance);
                 channel.setShowBadge(false);
                 if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
@@ -346,8 +346,8 @@ public class UpdateUtils {
             if (Utils.isTalkBackEnabled()) {
                 // Don't use isToday, per a feedback
                 subtitle = Utils.getA11yDaySummary(context, jdn, false,
-                    deviceCalendarEvents,
-                    true, true, false);
+                        deviceCalendarEvents,
+                        true, true, false);
                 if (!TextUtils.isEmpty(owghat)) {
                     subtitle += getSpacedComma();
                     subtitle += owghat;
@@ -355,30 +355,30 @@ public class UpdateUtils {
             }
 
             NotificationCompat.Builder builder = new NotificationCompat
-                .Builder(context, String.valueOf(NOTIFICATION_ID))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setSmallIcon(Utils.getDayIconResource(date.getDayOfMonth()))
-                .setOngoing(true)
-                .setWhen(0)
-                .setContentIntent(launchAppPendingIntent)
-                .setVisibility(Utils.isNotifyDateOnLockScreen()
-                    ? NotificationCompat.VISIBILITY_PUBLIC
-                    : NotificationCompat.VISIBILITY_SECRET)
-                .setColor(0xFF607D8B)
-                .setContentTitle(title)
-                .setContentText(subtitle);
+                    .Builder(context, String.valueOf(NOTIFICATION_ID))
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setSmallIcon(Utils.getDayIconResource(date.getDayOfMonth()))
+                    .setOngoing(true)
+                    .setWhen(0)
+                    .setContentIntent(launchAppPendingIntent)
+                    .setVisibility(Utils.isNotifyDateOnLockScreen()
+                            ? NotificationCompat.VISIBILITY_PUBLIC
+                            : NotificationCompat.VISIBILITY_SECRET)
+                    .setColor(0xFF607D8B)
+                    .setContentTitle(title)
+                    .setContentText(subtitle);
 
             if (!Utils.isTalkBackEnabled() &&
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
-                    ? R.layout.custom_notification
-                    : R.layout.custom_notification_ltr);
+                        ? R.layout.custom_notification
+                        : R.layout.custom_notification_ltr);
                 cv.setTextViewText(R.id.title, title);
                 cv.setTextViewText(R.id.body, subtitle);
 
                 RemoteViews bcv = new RemoteViews(context.getPackageName(), isRTL
-                    ? R.layout.custom_notification_big
-                    : R.layout.custom_notification_big_ltr);
+                        ? R.layout.custom_notification_big
+                        : R.layout.custom_notification_big_ltr);
                 bcv.setTextViewText(R.id.title, title);
 
                 if (!TextUtils.isEmpty(subtitle)) {
@@ -395,7 +395,7 @@ public class UpdateUtils {
                 }
                 String nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL);
                 if (Utils.isShownOnWidgets("non_holiday_events") &&
-                    !TextUtils.isEmpty(nonHolidays)) {
+                        !TextUtils.isEmpty(nonHolidays)) {
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays.trim());
                 } else {
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE);
@@ -408,9 +408,9 @@ public class UpdateUtils {
                 }
 
                 builder = builder
-                    .setCustomContentView(cv)
-                    .setCustomBigContentView(bcv)
-                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+                        .setCustomContentView(cv)
+                        .setCustomBigContentView(bcv)
+                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
             }
 
             if (BuildConfig.DEBUG) {

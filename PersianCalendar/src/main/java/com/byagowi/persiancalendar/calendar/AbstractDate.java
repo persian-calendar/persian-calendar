@@ -62,8 +62,8 @@ public abstract class AbstractDate {
         if (obj instanceof AbstractDate) {
             AbstractDate date = (AbstractDate) obj;
             return getYear() == date.getYear() &&
-                getMonth() == date.getMonth() &&
-                getDayOfMonth() == date.getDayOfMonth();
+                    getMonth() == date.getMonth() &&
+                    getDayOfMonth() == date.getDayOfMonth();
         }
         return false;
     }

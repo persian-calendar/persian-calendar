@@ -48,16 +48,16 @@ public enum Orientation {
             case BOTTOM:
             case TOP:
                 return balance <= sensibility
-                    && balance >= -sensibility;
+                        && balance >= -sensibility;
             case LANDING:
                 return roll <= sensibility
-                    && roll >= -sensibility
-                    && (Math.abs(pitch) <= sensibility
-                    || Math.abs(pitch) >= 180 - sensibility);
+                        && roll >= -sensibility
+                        && (Math.abs(pitch) <= sensibility
+                        || Math.abs(pitch) >= 180 - sensibility);
             case LEFT:
             case RIGHT:
                 return Math.abs(pitch) <= sensibility
-                    || Math.abs(pitch) >= 180 - sensibility;
+                        || Math.abs(pitch) >= 180 - sensibility;
         }
         return false;
     }

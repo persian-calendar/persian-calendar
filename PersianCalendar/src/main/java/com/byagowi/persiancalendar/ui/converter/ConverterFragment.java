@@ -32,7 +32,7 @@ public class ConverterFragment extends DaggerFragment {
         mainActivityDependency.getMainActivity().setTitleAndSubtitle(getString(R.string.date_converter), "");
 
         FragmentConverterBinding binding = FragmentConverterBinding.inflate(inflater,
-            container, false);
+                container, false);
         DayPickerView dayPickerView = binding.dayPickerView;
 
         binding.calendarsView.expand(true);

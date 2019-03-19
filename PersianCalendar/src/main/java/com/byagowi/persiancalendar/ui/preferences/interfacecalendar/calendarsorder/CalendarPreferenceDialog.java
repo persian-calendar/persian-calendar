@@ -36,7 +36,7 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder =
-            new AlertDialog.Builder(mainActivityDependency.getMainActivity());
+                new AlertDialog.Builder(mainActivityDependency.getMainActivity());
 
         List<String> values = new ArrayList<>();
         List<String> titles = new ArrayList<>();
@@ -45,7 +45,7 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
         Utils.updateStoredPreference(mainActivityDependency.getMainActivity());
         List<CalendarType> enabledCalendarTypes = Utils.getEnabledCalendarTypes();
         List<CalendarTypeItem> orderedCalendarTypes =
-            Utils.getOrderedCalendarEntities(mainActivityDependency.getMainActivity());
+                Utils.getOrderedCalendarEntities(mainActivityDependency.getMainActivity());
         for (CalendarTypeItem entity : orderedCalendarTypes) {
             values.add(entity.getType().toString());
             titles.add(entity.toString());
@@ -56,7 +56,7 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivityDependency.getMainActivity()));
         RecyclerListAdapter adapter = new RecyclerListAdapter(this,
-            mainActivityDependency, titles, values, enabled);
+                mainActivityDependency, titles, values, enabled);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
@@ -71,7 +71,7 @@ public class CalendarPreferenceDialog extends DaggerAppCompatDialogFragment {
             if (ordering.size() != 0) {
                 edit.putString(Constants.PREF_MAIN_CALENDAR_KEY, ordering.get(0));
                 edit.putString(Constants.PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
-                    ordering.subList(1, ordering.size())));
+                        ordering.subList(1, ordering.size())));
             }
             edit.apply();
         });

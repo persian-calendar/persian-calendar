@@ -37,7 +37,7 @@ public class CivilDate extends AbstractDate {
 
     private static long julianToJdn(long lYear, long lMonth, long lDay) {
         return 367 * lYear - ((7 * (lYear + 5001 + ((lMonth - 9) / 7))) / 4)
-            + ((275 * lMonth) / 9) + lDay + 1729777;
+                + ((275 * lMonth) / 9) + lDay + 1729777;
     }
 
     // Converters
@@ -46,13 +46,13 @@ public class CivilDate extends AbstractDate {
         long lYear = getYear(), lMonth = getMonth(), lDay = getDayOfMonth();
 
         if ((lYear > 1582)
-            || ((lYear == 1582) && (lMonth > 10))
-            || ((lYear == 1582) && (lMonth == 10) && (lDay > 14))) {
+                || ((lYear == 1582) && (lMonth > 10))
+                || ((lYear == 1582) && (lMonth == 10) && (lDay > 14))) {
 
             return ((1461 * (lYear + 4800 + ((lMonth - 14) / 12))) / 4)
-                + ((367 * (lMonth - 2 - 12 * (((lMonth - 14) / 12)))) / 12)
-                - ((3 * (((lYear + 4900 + ((lMonth - 14) / 12)) / 100))) / 4)
-                + lDay - 32075;
+                    + ((367 * (lMonth - 2 - 12 * (((lMonth - 14) / 12)))) / 12)
+                    - ((3 * (((lYear + 4900 + ((lMonth - 14) / 12)) / 100))) / 4)
+                    + lDay - 32075;
         } else
             return julianToJdn(lYear, lMonth, lDay);
     }

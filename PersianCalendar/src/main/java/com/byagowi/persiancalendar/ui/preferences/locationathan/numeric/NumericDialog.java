@@ -18,7 +18,7 @@ public class NumericDialog extends EditTextPreferenceDialogFragmentCompat {
 
         EditText editText = view.findViewById(android.R.id.edit);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED |
-            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // on platforms supporting direction as LTR direction is more handy on editing numbers
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

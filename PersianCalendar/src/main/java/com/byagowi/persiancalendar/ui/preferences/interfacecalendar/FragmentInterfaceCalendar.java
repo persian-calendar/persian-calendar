@@ -33,7 +33,7 @@ public class FragmentInterfaceCalendar extends PreferenceFragmentCompat {
         switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
 
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.getMainActivity(), Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
+                    != PackageManager.PERMISSION_GRANTED) {
                 Utils.askForCalendarPermission(mainActivityDependency.getMainActivity());
                 switchPreference.setChecked(false);
             } else {

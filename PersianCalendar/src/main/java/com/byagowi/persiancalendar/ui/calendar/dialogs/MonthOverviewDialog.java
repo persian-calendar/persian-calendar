@@ -61,13 +61,13 @@ public class MonthOverviewDialog extends BottomSheetDialogFragment {
             String nonHolidays = Utils.getEventsTitle(events, false, false, true, false);
             if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))
                 records.add(new MonthOverviewRecord(Utils.dayTitleSummary(
-                    Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
+                        Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays));
         }
         if (records.size() == 0)
             records.add(new MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""));
 
         MonthOverviewDialogBinding binding = MonthOverviewDialogBinding.inflate(
-            LayoutInflater.from(context), null, false);
+                LayoutInflater.from(context), null, false);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         binding.recyclerView.setAdapter(new ItemAdapter(records));
 
@@ -101,7 +101,7 @@ public class MonthOverviewDialog extends BottomSheetDialogFragment {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             MonthOverviewItemBinding binding = MonthOverviewItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
+                    LayoutInflater.from(parent.getContext()), parent, false);
 
             return new ViewHolder(binding);
         }

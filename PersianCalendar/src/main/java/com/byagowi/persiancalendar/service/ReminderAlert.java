@@ -32,7 +32,7 @@ public class ReminderAlert extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             ContextCompat.startForegroundService(context,
-                new Intent(context, ReminderNotification.class));
+                    new Intent(context, ReminderNotification.class));
 
         Intent i = new Intent(context, ReminderNotification.class);
         Bundle extras = intent.getExtras();

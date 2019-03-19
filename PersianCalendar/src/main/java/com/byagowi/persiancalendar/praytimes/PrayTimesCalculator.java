@@ -89,8 +89,8 @@ public class PrayTimesCalculator {
 
         // add midnight time
         double midnight = method.getMidnight() == CalculationMethod.MidnightType.Jafari
-            ? sunset + timeDiff(sunset, fajr) / 2
-            : sunset + timeDiff(sunset, sunrise) / 2;
+                ? sunset + timeDiff(sunset, fajr) / 2
+                : sunset + timeDiff(sunset, sunrise) / 2;
 
         return new PrayTimes(imsak, fajr, sunrise, dhuhr, asr, sunset, maghrib, isha, midnight);
     }
@@ -112,8 +112,8 @@ public class PrayTimesCalculator {
         double decl = sunPosition(jdate + time).getDeclination();
         double noon = dtr(midDay(jdate, time));
         double t = Math.acos((-Math.sin(dtr(angle.getValue())) - Math.sin(decl)
-            * Math.sin(dtr(coordinate.getLatitude())))
-            / (Math.cos(decl) * Math.cos(dtr(coordinate.getLatitude())))) / 15d;
+                * Math.sin(dtr(coordinate.getLatitude())))
+                / (Math.cos(decl) * Math.cos(dtr(coordinate.getLatitude())))) / 15d;
         return rtd(noon + (ccw ? -t : t));
     }
 

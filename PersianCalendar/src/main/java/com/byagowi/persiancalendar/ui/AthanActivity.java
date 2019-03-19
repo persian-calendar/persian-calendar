@@ -62,7 +62,7 @@ public class AthanActivity extends AppCompatActivity {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (state == TelephonyManager.CALL_STATE_RINGING ||
-                state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 stop();
             }
         }
@@ -108,8 +108,8 @@ public class AthanActivity extends AppCompatActivity {
         ActivityAthanBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_athan);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         String prayerKey = getIntent().getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY);
         binding.athanName.setText(Utils.getPrayTimeText(prayerKey));
@@ -119,8 +119,8 @@ public class AthanActivity extends AppCompatActivity {
         root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey));
 
         binding.place.setText(String.format("%s %s",
-            getString(R.string.in_city_time),
-            Utils.getCityName(this, true)));
+                getString(R.string.in_city_time),
+                Utils.getCityName(this, true)));
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10));
 
         try {

@@ -20,7 +20,7 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         if (extras != null) {
             int appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
             setResult(RESULT_OK, new Intent()
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId));
+                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId));
         }
         Utils.updateStoredPreference(this);
         UpdateUtils.update(this, false);
@@ -37,11 +37,11 @@ public class WidgetConfigurationActivity extends AppCompatActivity {
         Utils.applyAppLanguage(this);
         super.onCreate(savedInstanceState);
         WidgetPreferenceLayoutBinding binding =
-            DataBindingUtil.setContentView(this, R.layout.widget_preference_layout);
+                DataBindingUtil.setContentView(this, R.layout.widget_preference_layout);
 
         getSupportFragmentManager().beginTransaction().add(
-            R.id.preference_fragment_holder,
-            new FragmentWidgetNotification(), "TAG").commit();
+                R.id.preference_fragment_holder,
+                new FragmentWidgetNotification(), "TAG").commit();
 
         binding.addWidgetButton.setOnClickListener(v -> finishAndSuccess());
     }

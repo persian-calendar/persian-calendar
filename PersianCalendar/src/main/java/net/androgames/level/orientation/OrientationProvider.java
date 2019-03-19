@@ -117,32 +117,32 @@ public final class OrientationProvider implements SensorEventListener {
         switch (displayOrientation) {
             case Surface.ROTATION_270:
                 SensorManager.remapCoordinateSystem(
-                    R,
-                    SensorManager.AXIS_MINUS_Y,
-                    SensorManager.AXIS_X,
-                    outR);
+                        R,
+                        SensorManager.AXIS_MINUS_Y,
+                        SensorManager.AXIS_X,
+                        outR);
                 break;
             case Surface.ROTATION_180:
                 SensorManager.remapCoordinateSystem(
-                    R,
-                    SensorManager.AXIS_MINUS_X,
-                    SensorManager.AXIS_MINUS_Y,
-                    outR);
+                        R,
+                        SensorManager.AXIS_MINUS_X,
+                        SensorManager.AXIS_MINUS_Y,
+                        outR);
                 break;
             case Surface.ROTATION_90:
                 SensorManager.remapCoordinateSystem(
-                    R,
-                    SensorManager.AXIS_Y,
-                    SensorManager.AXIS_MINUS_X,
-                    outR);
+                        R,
+                        SensorManager.AXIS_Y,
+                        SensorManager.AXIS_MINUS_X,
+                        outR);
                 break;
             case Surface.ROTATION_0:
             default:
                 SensorManager.remapCoordinateSystem(
-                    R,
-                    SensorManager.AXIS_X,
-                    SensorManager.AXIS_Y,
-                    outR);
+                        R,
+                        SensorManager.AXIS_X,
+                        SensorManager.AXIS_Y,
+                        outR);
                 break;
         }
 
