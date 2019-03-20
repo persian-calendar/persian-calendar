@@ -194,8 +194,9 @@ public class CalendarFragment extends DaggerFragment {
         mCalendarFragmentModel.selectedDayLiveData.observe(this, jdn -> {
             mLastSelectedJdn = jdn;
             mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
-            setOwghat(jdn, Utils.getTodayJdn() == mLastSelectedJdn);
-            showEvent(jdn);
+            boolean isToday = Utils.getTodayJdn() == mLastSelectedJdn;
+            setOwghat(jdn, isToday);
+            showEvent(jdn, isToday);
         });
 
 //        mMainBinding.swipeRefresh.setEnabled(false);
@@ -314,7 +315,7 @@ public class CalendarFragment extends DaggerFragment {
         return titles;
     }
 
-    private void showEvent(long jdn) {
+    private void showEvent(long jdn, boolean isToday) {
         mEventsBinding.shiftWorkTitle.setText(Utils.getShiftWorkTitle(jdn, false));
 
         List<AbstractEvent> events = Utils.getEvents(jdn,
@@ -396,6 +397,8 @@ public class CalendarFragment extends DaggerFragment {
 
             mEventsBinding.eventMessage.setVisibility(View.VISIBLE);
         }
+
+        mEventsBinding.todayButtonSpace.setVisibility(isToday ? View.GONE : View.VISIBLE);
 
         mEventsBinding.getRoot().setContentDescription(contentDescription);
     }
