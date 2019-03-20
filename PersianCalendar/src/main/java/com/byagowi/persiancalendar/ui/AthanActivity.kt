@@ -1,52 +1,43 @@
 package com.byagowi.persiancalendar.ui
 
-import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
+import androidx.databinding.DataBindingUtil
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.Utils
-
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 
 class AthanActivity : AppCompatActivity() {
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
     private val handler = Handler()
-    internal var stopTask: Runnable = object : Runnable {
+    private var stopTask: Runnable = object : Runnable {
         override fun run() {
             if (ringtone == null && mediaPlayer == null) {
                 this@AthanActivity.finish()
                 return
             }
             try {
-                if (ringtone != null) {
-                    if (!ringtone!!.isPlaying) {
-                        this@AthanActivity.finish()
-                        return
-                    }
+                if (ringtone?.isPlaying == false) {
+                    this@AthanActivity.finish()
+                    return
                 }
-                if (mediaPlayer != null) {
-                    if (!mediaPlayer!!.isPlaying) {
-                        this@AthanActivity.finish()
-                        return
-                    }
+                if (mediaPlayer?.isPlaying == false) {
+                    this@AthanActivity.finish()
+                    return
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -67,33 +58,29 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0)
-
+        getSystemService<AudioManager>()?.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0)
         val customAthanUri = Utils.getCustomAthanUri(this)
         if (customAthanUri != null) {
             try {
-                ringtone = RingtoneManager.getRingtone(this, customAthanUri)
-                ringtone!!.streamType = AudioManager.STREAM_ALARM
-                ringtone!!.play()
+                ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
+                    streamType = AudioManager.STREAM_ALARM
+                    play()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         } else {
-            val player = MediaPlayer()
             try {
-                player.setDataSource(this, Utils.getDefaultAthanUri(this))
-                player.setAudioStreamType(AudioManager.STREAM_ALARM)
-                player.prepare()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            try {
-                player.start()
-                mediaPlayer = player
+                mediaPlayer = MediaPlayer().apply {
+                    try {
+                        setDataSource(this@AthanActivity, Utils.getDefaultAthanUri(this@AthanActivity))
+                        setAudioStreamType(AudioManager.STREAM_ALARM)
+                        prepare()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                    start()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -112,7 +99,7 @@ class AthanActivity : AppCompatActivity() {
         binding.athanName.setText(Utils.getPrayTimeText(prayerKey))
 
         val root = binding.root
-        root.setOnClickListener { v -> stop() }
+        root.setOnClickListener { stop() }
         root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
 
         binding.place.text = String.format("%s %s",
@@ -121,8 +108,7 @@ class AthanActivity : AppCompatActivity() {
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
 
         try {
-            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            telephonyManager?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
         } catch (e: Exception) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
@@ -142,27 +128,25 @@ class AthanActivity : AppCompatActivity() {
 
     private fun stop() {
         try {
-            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            telephonyManager?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
             phoneStateListener = null
         } catch (e: RuntimeException) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
 
-        if (ringtone != null) {
-            ringtone!!.stop()
-        }
-        if (mediaPlayer != null) {
-            try {
-                if (mediaPlayer!!.isPlaying) {
-                    mediaPlayer!!.stop()
-                    mediaPlayer!!.release()
-                }
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
-            }
+        ringtone?.stop()
 
+        try {
+            mediaPlayer?.apply {
+                if (isPlaying) {
+                    stop()
+                    release()
+                }
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
+
         handler.removeCallbacks(stopTask)
         finish()
     }
