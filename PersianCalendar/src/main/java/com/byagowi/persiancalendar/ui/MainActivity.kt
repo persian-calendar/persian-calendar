@@ -94,7 +94,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         Utils.initUtils(this)
 
         TypefaceUtils.overrideFont("SERIF",
-            TypefaceUtils.getAppFont(applicationContext))
+                TypefaceUtils.getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 
@@ -162,7 +162,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         binding.navigation.setNavigationItemSelectedListener(this)
 
         (binding.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
-            .setImageResource(seasonImage)
+                .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
         if (appLanguage == null) appLanguage = "N/A"
@@ -197,8 +197,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         creationDateJdn = Utils.getTodayJdn()
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
-            Utils.isIranHolidaysEnabled() &&
-            Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > Utils.getMaxSupportedYear()) {
+                Utils.isIranHolidaysEnabled() &&
+                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > Utils.getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
@@ -217,7 +217,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     fun navigateTo(@IdRes id: Int) {
         val menuItem = binding.navigation.menu.findItem(
-            if (id == R.id.level) R.id.compass else id) // We don't have a menu entry for compass, so
+                if (id == R.id.level) R.id.compass else id) // We don't have a menu entry for compass, so
         if (menuItem != null) {
             menuItem.isCheckable = true
             menuItem.isChecked = true
@@ -230,7 +230,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment)
-            .navigate(id, null, null)
+                .navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -288,25 +288,25 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
+                        currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
-                        HashSet(listOf("afghanistan_holidays")))
+                            HashSet(listOf("afghanistan_holidays")))
                 }
             }
             if (changeToIranEvents) {
                 val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays")) {
+                        currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays")) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES,
-                        HashSet(listOf("iran_holidays")))
+                            HashSet(listOf("iran_holidays")))
                 }
             }
             if (removeAllEvents) {
                 val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
 
                 if (currentHolidays == null || currentHolidays.isEmpty() ||
-                    currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
+                        currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
                     editor.putStringSet(PREF_HOLIDAY_TYPES, HashSet())
                 }
             }
@@ -364,8 +364,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                 Utils.toggleShowDeviceCalendarOnPreference(this, true)
                 val currentDestination = Navigation
-                    .findNavController(this, R.id.nav_host_fragment)
-                    .currentDestination
+                        .findNavController(this, R.id.nav_host_fragment)
+                        .currentDestination
                 if (currentDestination != null && currentDestination.id == R.id.calendar) {
                     restartActivity()
                 }
@@ -431,11 +431,10 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     }
 
     fun setTitleAndSubtitle(title: String, subtitle: String) {
-        if (supportActionBar == null) {
-            return
+        supportActionBar?.apply {
+            this.title = title
+            this.subtitle = subtitle
         }
-        supportActionBar!!.title = title
-        supportActionBar!!.subtitle = subtitle
     }
 
     override fun onBackPressed() {
@@ -443,7 +442,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             binding.drawer.closeDrawers()
         } else {
             val calendarFragment = supportFragmentManager
-                .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
+                    .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
 
             if (calendarFragment != null) {
                 if (calendarFragment.closeSearch())
@@ -451,8 +450,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
 
             val currentDestination = Navigation
-                .findNavController(this, R.id.nav_host_fragment)
-                .currentDestination
+                    .findNavController(this, R.id.nav_host_fragment)
+                    .currentDestination
             if (currentDestination == null || currentDestination.id == R.id.calendar)
                 finish()
             else
