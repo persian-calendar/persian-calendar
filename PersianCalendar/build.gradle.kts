@@ -93,7 +93,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.0.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
 
-    implementation("androidx.work:work-runtime:2.0.0-rc01")
+    implementation("androidx.work:work-runtime:2.0.0")
     // Unnecessary size addition as it adds co-routine apparently also
     // implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
 
