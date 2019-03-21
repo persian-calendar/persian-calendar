@@ -27,7 +27,7 @@ class DeviceInformationFragment : DaggerFragment() {
   @Inject
   lateinit var mainActivityDependency: MainActivityDependency
 
-  var clickCount: Int = 0
+  private var clickCount: Int = 0
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
