@@ -37,8 +37,8 @@ public class LookupTableConverter {
         if (jdn < yearsStartingJdn[0] || jdn > yearsStartingJdn[yearsStartingJdn.length - 1])
             return null;
 
-        int year;
-        for (year = 0; year < yearsStartingJdn.length - 1; ++year)
+        int year = (int) (jdn - yearsStartingJdn[0]) / 366;
+        for (; year < yearsStartingJdn.length - 1; ++year)
             if (jdn < yearsStartingJdn[year + 1])
                 break;
 
