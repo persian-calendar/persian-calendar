@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -502,6 +503,9 @@ public class CalendarFragment extends DaggerFragment {
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setOnSearchClickListener(v -> {
             if (mSearchAutoComplete != null) mSearchAutoComplete.setOnItemClickListener(null);
+
+            mSearchView.findViewById(androidx.appcompat.R.id.search_plate)
+                    .setBackgroundColor(Color.TRANSPARENT);
 
             Context context = getContext();
             if (context == null) return;
