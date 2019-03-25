@@ -4,8 +4,8 @@
     <color name="widget_holiday">#ff8a65</color>
     <color name="widget_divider">#46ffffff</color>
 
-    <color name="dark_primary">#000000</color>
-    <color name="dark_primary_dark">#000000</color>
+    <color name="dark_primary">#272727</color>
+    <color name="dark_primary_dark">#272727</color>
     <color name="dark_accent">#1DE9B6</color>
     <color name="dark_text_normal">#ffffff</color>
     <color name="dark_text_second">#cfcfcf</color>
@@ -19,13 +19,13 @@
     <color name="dark_month_switch">#1de9b6</color>
     <color name="dark_text_athan">#ffffff</color>
     <color name="dark_divider">#272727</color>
-    <color name="dark_background">#000000</color>
-    <color name="dark_card_background">#000000</color>
+    <color name="dark_background">#272727</color>
+    <color name="dark_card_background">#202020</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
     <color name="dark_event_line">#e0e0e0</color>
-    <color name="dark_drawer_background">#000000</color>
-    <color name="dark_drawer_select">#080808</color>
+    <color name="dark_drawer_background">#212121</color>
+    <color name="dark_drawer_select">#282828</color>
     <color name="dark_icon">#00bfa5</color>
     <color name="dark_icon_drawer">#00bfa5</color>
     <color name="dark_menu_icon_color">#88ffffff</color>
@@ -82,7 +82,7 @@
     <color name="blue_icon_drawer">#1a237e</color>
     <color name="blue_menu_icon_color">#88ffffff</color>
 
-    <color name="modern_primary">#fafafa</color>
+    <color name="modern_primary">#FFFFFF</color>
     <color name="modern_primary_dark">#191919</color>
     <color name="modern_accent">#42AFBF</color>
     <color name="modern_text_normal">#232323</color>
