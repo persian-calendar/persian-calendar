@@ -82,7 +82,7 @@
     <color name="blue_icon_drawer">#1a237e</color>
     <color name="blue_menu_icon_color">#88ffffff</color>
 
-    <color name="modern_primary">#FFFFFF</color>
+    <color name="modern_primary">#fafafa</color>
     <color name="modern_primary_dark">#191919</color>
     <color name="modern_accent">#42AFBF</color>
     <color name="modern_text_normal">#232323</color>
