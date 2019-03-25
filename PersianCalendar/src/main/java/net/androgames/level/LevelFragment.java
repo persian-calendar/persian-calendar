@@ -53,12 +53,12 @@ public class LevelFragment extends DaggerFragment {
         mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
         FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
-        provider = new OrientationProvider(mainActivityDependency.getMainActivity(), binding.levelView);
+        provider = new OrientationProvider(mainActivity, binding.levelView);
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
         binding.bottomAppbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.compass)
-                mainActivityDependency.getMainActivity().navigateTo(R.id.compass);
+                mainActivity.navigateTo(R.id.compass);
             return true;
         });
         binding.fab.setOnClickListener(v -> {
