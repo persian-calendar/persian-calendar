@@ -572,7 +572,13 @@ public class Utils {
     }
 
     static public boolean isNonArabicScriptSelected() {
-        return !isLocaleRTL();
+        switch (getAppLanguage()) {
+            case LANG_EN_US:
+            case LANG_JA:
+                return true;
+            default:
+                return false;
+        }
     }
 
     static public boolean isLocaleRTL() {
