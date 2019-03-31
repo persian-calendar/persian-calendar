@@ -90,7 +90,7 @@
     <string name="calendar">暦</string>
     <string name="week_start">週の初日</string>
     <string name="week_start_summary">週の初日を選ぶ</string>
-    <string name="week_ends">روزهای تعطیل هفته</string>
+    <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Select weekends days</string>
     <string name="search_in_events">Search in events</string>
     <string name="show_device_calendar_events_summary">Show personal calendar events</string>
@@ -159,7 +159,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="year10">巳</string>
     <string name="year11">午</string>
     <string name="year12">未</string>
-    <string name="level">تراز</string>
+    <string name="level">Level</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
     <string name="moonInScorpio">Moon is in Scorpio</string>
