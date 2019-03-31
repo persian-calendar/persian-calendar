@@ -24,50 +24,54 @@ import javax.inject.Inject
  * MEHDIMYADI
  */
 class DeviceInformationFragment : DaggerFragment() {
-  @Inject
-  lateinit var mainActivityDependency: MainActivityDependency
+    @Inject
+    lateinit var mainActivityDependency: MainActivityDependency
 
-  private var clickCount: Int = 0
+    private var clickCount: Int = 0
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? {
-    return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
-      mainActivityDependency.mainActivity.setTitleAndSubtitle(
-        getString(R.string.device_info), "")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
+            mainActivityDependency.mainActivity.setTitleAndSubtitle(
+                    getString(R.string.device_info), "")
 
-      recyclerView.apply {
-        setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-        addItemDecoration(DividerItemDecoration(
-          mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
-        adapter = DeviceInfoAdapter(
-          mainActivityDependency.mainActivity, root)
-      }
+            recyclerView.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+                addItemDecoration(DividerItemDecoration(
+                        mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
+                adapter = DeviceInfoAdapter(
+                        mainActivityDependency.mainActivity, root)
+            }
 
-      bottomNavigation.run {
-        menu.run {
-          add(Build.VERSION.RELEASE)
-          getItem(0).setIcon(R.drawable.ic_developer)
+            bottomNavigation.run {
+                menu.run {
+                    add(Build.VERSION.RELEASE)
+                    getItem(0).setIcon(R.drawable.ic_developer)
 
-          add("API " + Build.VERSION.SDK_INT)
-          getItem(1).setIcon(R.drawable.ic_settings)
+                    add("API " + Build.VERSION.SDK_INT)
+                    getItem(1).setIcon(R.drawable.ic_settings)
 
-          add(Build.CPU_ABI)
-          getItem(2).setIcon(R.drawable.ic_motorcycle)
+                    add(Build.CPU_ABI)
+                    getItem(2).setIcon(R.drawable.ic_motorcycle)
 
-          add(Build.MODEL)
-          getItem(3).setIcon(R.drawable.ic_device_information)
-        }
-        labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-        setOnNavigationItemSelectedListener {
-          // Easter egg
-          if (++clickCount >= 4) {
-            BottomSheetDialog(mainActivityDependency.mainActivity).apply {
-              setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
-                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
-              })
+                    add(Build.MODEL)
+                    getItem(3).setIcon(R.drawable.ic_device_information)
+                }
+                labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+                setOnNavigationItemSelectedListener {
+                    // Easter egg
+                    if (++clickCount % 10 == 0) {
+                        BottomSheetDialog(mainActivityDependency.mainActivity).apply {
+                            setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
+                                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                            })
 
-              show()
+                            show()
+                        }
+                    }
+                    true
+                }
             }
 
             root
