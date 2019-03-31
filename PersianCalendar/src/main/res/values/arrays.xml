@@ -44,6 +44,7 @@
         <item>اردو</item>
         <item>English (Iran)</item>
         <item>English</item>
+        <item>日本語</item>
     </string-array>
 
     <string-array name="languageKeys" translatable="false">
@@ -56,6 +57,7 @@
         <item>ur</item>
         <item>en</item>
         <item>en-US</item>
+        <item>ja</item>
     </string-array>
 
     <string-array name="prayerTimeNames">

@@ -106,6 +106,7 @@ class AboutFragment : DaggerFragment() {
         }
 
         val developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer)
+        val translatorIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_translator)
         val designerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_designer)
         val theme = activity.theme
         val color = TypedValue()
@@ -141,6 +142,17 @@ class AboutFragment : DaggerFragment() {
                 this.layoutParams = layoutParams
                 text = line
                 chipIcon = designerIcon
+                setChipIconTintResource(color.resourceId)
+            }
+            binding.developers.addView(chip)
+        }
+
+        for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+            val chip = Chip(activity).apply {
+                this.layoutParams = layoutParams
+                setOnClickListener(chipClick)
+                text = line
+                chipIcon = translatorIcon
                 setChipIconTintResource(color.resourceId)
             }
             binding.developers.addView(chip)

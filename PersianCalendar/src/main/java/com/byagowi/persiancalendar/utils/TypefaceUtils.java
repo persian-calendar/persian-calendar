@@ -36,6 +36,6 @@ public class TypefaceUtils {
     }
 
     public static boolean isCustomFontEnabled() {
-        return Utils.isArabicDigitSelected() || Utils.getAppLanguage().equals(Constants.LANG_EN_US);
+        return Utils.isArabicDigitSelected() || Utils.isNonArabicScriptSelected();
     }
 }

@@ -23,6 +23,7 @@ public class Constants {
     public static final String LANG_AR = "ar";
     public static final String LANG_EN_IR = "en";
     public static final String LANG_EN_US = "en-US";
+    public static final String LANG_JA = "ja";
     public static final String LANG_CKB = "ckb";
     public static final String LANG_UR = "ur";
 
@@ -114,6 +115,11 @@ public class Constants {
             '7', '8', '9'};
     public static final char[] PERSIAN_DIGITS = {'۰', '۱', '۲', '۳', '۴', '۵', '۶',
             '۷', '۸', '۹'};
+
+    // for now
+    public static final char[] CJK_DIGITS = ARABIC_DIGITS;
+//    public static final char[] CJK_DIGITS = {'０', '１', '２', '３', '４', '５', '６',
+//        '７', '８', '９'};
 
     public static final String DEFAULT_AM = "ق.ظ";
     public static final String DEFAULT_PM = "ب.ظ";

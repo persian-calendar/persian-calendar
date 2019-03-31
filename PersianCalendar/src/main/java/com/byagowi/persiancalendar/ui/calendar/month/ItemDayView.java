@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.utils.Utils;
 
@@ -123,7 +122,7 @@ public class ItemDayView extends View {
 
         int xPos = (width - (int) resource.textPaint.measureText(text)) / 2;
         String textToMeasureHeight =
-                isNumber ? text : (Utils.getAppLanguage().equals(Constants.LANG_EN_US) ? "Y" : "شچ");
+                isNumber ? text : (Utils.isNonArabicScriptSelected() ? "Y" : "شچ");
         resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length(), bounds);
         int yPos = (height + bounds.height()) / 2;
         yPos += yOffsetToApply;

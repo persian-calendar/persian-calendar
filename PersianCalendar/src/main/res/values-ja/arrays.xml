@@ -65,11 +65,11 @@
     </string-array>
 
     <string-array name="islamicOffsetNames">
-        <item>２-</item>
-        <item>１-</item>
+        <item>-２</item>
+        <item>-１</item>
         <item>０</item>
-        <item>１+</item>
-        <item>２+</item>
+        <item>+１</item>
+        <item>+２</item>
     </string-array>
 
     <string-array name="shift_work">

@@ -125,6 +125,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.Constants.CJK_DIGITS;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
@@ -133,6 +134,7 @@ import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
 import static com.byagowi.persiancalendar.Constants.LANG_FA;
 import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
 import static com.byagowi.persiancalendar.Constants.LANG_GLK;
+import static com.byagowi.persiancalendar.Constants.LANG_JA;
 import static com.byagowi.persiancalendar.Constants.LANG_PS;
 import static com.byagowi.persiancalendar.Constants.LANG_UR;
 import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
@@ -328,6 +330,8 @@ public class Utils {
                 : ARABIC_DIGITS;
         if ((language.equals(LANG_AR) || language.equals(LANG_CKB)) && preferredDigits == PERSIAN_DIGITS)
             preferredDigits = ARABIC_INDIC_DIGITS;
+        if (language.equals(LANG_JA) && preferredDigits == PERSIAN_DIGITS)
+            preferredDigits = CJK_DIGITS;
 
         clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24);
         iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME);
@@ -362,7 +366,7 @@ public class Utils {
             mainCalendar = CalendarType.SHAMSI;
             otherCalendars = new CalendarType[]{CalendarType.GREGORIAN, CalendarType.ISLAMIC};
         }
-        spacedComma = language.equals(LANG_EN_US) ? ", " : "، ";
+        spacedComma = isNonArabicScriptSelected() ? ", " : "، ";
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
         String weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START);
@@ -422,7 +426,7 @@ public class Utils {
         switch (getAppLanguage()) {
             case LANG_FA:
             case LANG_FA_AF:
-            case LANG_EN_US:
+            case LANG_EN_IR:
                 sAM = DEFAULT_AM;
                 sPM = DEFAULT_PM;
                 break;
@@ -565,6 +569,11 @@ public class Utils {
 
     static public String getAppLanguage() {
         return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
+    }
+
+    static public boolean isNonArabicScriptSelected() {
+        return getAppLanguage().equals(Constants.LANG_EN_US) ||
+            getAppLanguage().equals(Constants.LANG_JA);
     }
 
     static public boolean isLocaleRTL() {
@@ -801,6 +810,7 @@ public class Utils {
 
             switch (language) {
                 case LANG_EN_US:
+                case LANG_JA:
                 case LANG_EN_IR:
                     return l.getEn().compareTo(r.getEn());
                 case LANG_AR:
@@ -850,7 +860,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityItem cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
-            if (language.equals(LANG_EN_IR) || language.equals(LANG_EN_US))
+            if (language.equals(LANG_EN_IR) || language.equals(LANG_EN_US) || language.equals(LANG_JA))
                 return cityEntity.getEn();
             else if (language.equals(LANG_CKB))
                 return cityEntity.getCkb();
@@ -920,6 +930,7 @@ public class Utils {
                 case LANG_AR:
                 case LANG_CKB:
                 case LANG_EN_US:
+                case LANG_JA:
                     IslamicDate.useUmmAlQura = true;
             }
         }
@@ -1376,6 +1387,9 @@ public class Utils {
                 break;
             case LANG_EN_US:
                 messagesFile = R.raw.messages_en;
+                break;
+            case LANG_JA:
+                messagesFile = R.raw.messages_ja;
                 break;
             case LANG_EN_IR:
             case LANG_FA:
