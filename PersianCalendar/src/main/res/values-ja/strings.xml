@@ -84,7 +84,7 @@
     <string name="date_diff_text">Distance: %1$s days (~%2$s years and %3$s months and %4$s days)</string>
     <string name="calendars_priority">Calendars Priority</string>
     <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
-    <string name="week_of_year">هفتهٔ سال</string>
+    <string name="week_of_year">Week of Year</string>
     <string name="week_of_year_summary">Show week of year on calendar</string>
     <string name="accept">確認する</string>
     <string name="calendar">暦</string>
