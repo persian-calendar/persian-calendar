@@ -65,7 +65,7 @@ public class FragmentLocationAthan extends PreferenceFragmentCompat {
 
         updateAthanPreferencesState();
         ViewModelProviders.of(mainActivityDependency.getMainActivity()).get(MainActivityModel.class)
-                .preferenceUpdateHandler.observe(this, a -> updateAthanPreferencesState());
+                .getPreferenceUpdateHandler().observe(this, a -> updateAthanPreferencesState());
 
         putAthanNameOnSummary(appDependency.getSharedPreferences()
                 .getString(PREF_ATHAN_NAME, getDefaultAthanName()));

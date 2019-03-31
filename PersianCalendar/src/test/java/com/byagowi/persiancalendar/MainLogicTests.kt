@@ -484,15 +484,15 @@ class MainLogicTests {
                 arrayOf(2016, 3, 20, 8, 0, 55/*should be 12*/),
 
                 // http://vetmed.uk.ac.ir/documents/203998/204600/calendar-1394.pdf
-                arrayOf(2015, 3, 21, 2, 16/*shoud be 15*/, 0/*should be 11*/),
+                arrayOf(2015, 3, 21, 2, 16/*should be 15*/, 0/*should be 11*/),
 
                 // https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt
                 arrayOf(2014, 3, 20, 20, 27, 41/*should be 7*/),
-                arrayOf(2013, 3, 20, 14, 32/*shoud be 31*/, 41/*should be 56*/),
+                arrayOf(2013, 3, 20, 14, 32/*should be 31*/, 41/*should be 56*/),
                 arrayOf(2012, 3, 20, 8, 44, 19/*should be 27*/),
-                arrayOf(2011, 3, 21, 2, 51/*shoud be 50*/, 38/*should be 25*/),
+                arrayOf(2011, 3, 21, 2, 51/*should be 50*/, 38/*should be 25*/),
                 arrayOf(2010, 3, 20, 21, 2, 49/*should be 13*/),
-                arrayOf(2009, 3, 20, 15, 14/*shoud be 13*/, 50/*should be 39*/),
+                arrayOf(2009, 3, 20, 15, 14/*should be 13*/, 50/*should be 39*/),
                 arrayOf(2008, 3, 20, 9, 18, 17/*should be 19*/)
         ).forEach {
             calendar.time = Equinox.northwardEquinox(it[0])

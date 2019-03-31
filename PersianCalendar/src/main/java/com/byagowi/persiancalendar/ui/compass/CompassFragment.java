@@ -143,7 +143,7 @@ public class CompassFragment extends DaggerFragment {
             return;
         }
 
-        switch (wm.getDefaultDisplay().getOrientation()) {
+        switch (wm.getDefaultDisplay().getRotation()) {
             case Surface.ROTATION_0:
                 orientation = 0;
                 break;
