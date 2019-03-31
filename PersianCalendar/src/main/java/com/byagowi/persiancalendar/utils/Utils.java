@@ -101,6 +101,7 @@ import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
 import static com.byagowi.persiancalendar.Constants.BROADCAST_UPDATE_APP;
+import static com.byagowi.persiancalendar.Constants.CJK_DIGITS;
 import static com.byagowi.persiancalendar.Constants.DARK_THEME;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
 import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
@@ -125,7 +126,6 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.CJK_DIGITS;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
@@ -572,13 +572,18 @@ public class Utils {
     }
 
     static public boolean isNonArabicScriptSelected() {
-        return getAppLanguage().equals(Constants.LANG_EN_US) ||
-            getAppLanguage().equals(Constants.LANG_JA);
+        return !isLocaleRTL();
     }
 
     static public boolean isLocaleRTL() {
-        // en-US is our only real LTR language for now
-        return !getAppLanguage().equals("en-US");
+        // en-US and ja are our only real LTR locales for now
+        switch (getAppLanguage()) {
+            case LANG_EN_US:
+            case LANG_JA:
+                return false;
+            default:
+                return true;
+        }
     }
 
     static String getSelectedWidgetTextColor() {
