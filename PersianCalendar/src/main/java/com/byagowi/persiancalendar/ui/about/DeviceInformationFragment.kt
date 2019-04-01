@@ -18,6 +18,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.DaggerFragment
 import java.util.*
 import javax.inject.Inject
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.text.DecimalFormat
+import java.util.regex.Pattern
+
 
 /**
  * @author MEHDI DIMYADI
@@ -180,6 +185,11 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
             ))
 
             add(DeviceInfoItem(
+                    "Usable RAM Memory",
+                    getTotalRAM(), ""
+            ))
+
+            add(DeviceInfoItem(
                     "Device Fingerprints",
                     Build.FINGERPRINT, ""
             ))
@@ -207,6 +217,45 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     private fun getScreenResolution(wm: WindowManager): String {
         return String.format(Locale.ENGLISH, "%d*%d pixels",
                 wm.defaultDisplay.width, wm.defaultDisplay.height)
+    }
+
+    private fun getTotalRAM(): String {
+
+        val reader: RandomAccessFile?
+        val load: String?
+        val twoDecimalForm = DecimalFormat("#.##")
+        val totRam: Double
+        var lastValue = ""
+        try {
+            reader = RandomAccessFile("/proc/meminfo", "r")
+            load = reader.readLine()
+
+            val p = Pattern.compile("(\\d+)")
+            val m = p.matcher(load)
+            var value = ""
+            while (m.find()) {
+                value = m.group(1)
+            }
+            reader.close()
+            totRam = java.lang.Double.parseDouble(value)
+
+            val mb = totRam / 1024.0
+            val gb = totRam / 1048576.0
+            val tb = totRam / 1073741824.0
+
+            lastValue = when {
+                tb > 1 -> twoDecimalForm.format(tb) + (" TB")
+                gb > 1 -> twoDecimalForm.format(gb) + (" GB")
+                mb > 1 -> twoDecimalForm.format(mb) + (" MB")
+                else -> twoDecimalForm.format(totRam) + (" KB")
+            }
+
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        } finally {
+        }
+
+        return lastValue
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
