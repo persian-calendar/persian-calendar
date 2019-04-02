@@ -106,6 +106,7 @@
     <string name="returned_to_default">Returned to default</string>
     <string name="custom_notification_is_set">Custom notification is just set</string>
     <string name="custom_athan">Select Athan</string>
+    <string name="default_athan">Default Athan</string>
     <string name="default_athan_summary">Return to default Athan</string>
     <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
     <string name="about_license">許可</string>
