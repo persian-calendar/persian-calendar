@@ -11,8 +11,8 @@ import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInte
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog;
-import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
-import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
+//import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
+//import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 
@@ -46,13 +46,13 @@ public abstract class MainActivityModule {
     @ContributesAndroidInjector
     abstract DeviceInformationFragment deviceInfoFragmentInjector();
 
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract ReminderFragment reminderFragmentInjector();
-
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract EditReminderDialog editReminderFragmentInjector();
+//    @PerFragment
+//    @ContributesAndroidInjector
+//    abstract ReminderFragment reminderFragmentInjector();
+//
+//    @PerFragment
+//    @ContributesAndroidInjector
+//    abstract EditReminderDialog editReminderFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector

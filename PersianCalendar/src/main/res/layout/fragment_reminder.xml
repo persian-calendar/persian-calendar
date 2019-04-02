@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:textAlignment="center"
-            android:text="@string/no_guaranty" />
+            android:text="string/no_guaranty" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

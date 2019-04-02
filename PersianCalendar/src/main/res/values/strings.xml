@@ -307,17 +307,17 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="month_overview">Month\'s events</string>
 
     <!-- Reminder -->
-    <string translatable="false" name="reminder_summary">هر %1$s %2$s</string>
-    <string translatable="false" name="reminder">یادآور</string>
-    <string translatable="false" name="reminder_name">نام یادآور</string>
-    <string translatable="false" name="more_information">اطلاعات بیشتر</string>
-    <string translatable="false" name="reminder_period">تناوب یادآور</string>
-    <string translatable="false" name="period_starting_time">زمان شروع تناوب</string>
-    <string translatable="false" name="please_enter_a_name">لطفاً نامی وارد کنید</string>
-    <string translatable="false" name="reminder_hour">ساعت</string>
-    <string translatable="false" name="reminder_day">روز</string>
-    <string translatable="false" name="reminded">%1$s بار تاکنون اعلان شده</string>
-    <string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>
-    <string translatable="false" name="item_removed">«%1$s» حذف شد</string>
+    <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->
+    <!--<string translatable="false" name="reminder">یادآور</string>-->
+    <!--<string translatable="false" name="reminder_name">نام یادآور</string>-->
+    <!--<string translatable="false" name="more_information">اطلاعات بیشتر</string>-->
+    <!--<string translatable="false" name="reminder_period">تناوب یادآور</string>-->
+    <!--<string translatable="false" name="period_starting_time">زمان شروع تناوب</string>-->
+    <!--<string translatable="false" name="please_enter_a_name">لطفاً نامی وارد کنید</string>-->
+    <!--<string translatable="false" name="reminder_hour">ساعت</string>-->
+    <!--<string translatable="false" name="reminder_day">روز</string>-->
+    <!--<string translatable="false" name="reminded">%1$s بار تاکنون اعلان شده</string>-->
+    <!--<string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>-->
+    <!--<string translatable="false" name="item_removed">«%1$s» حذف شد</string>-->
 
 </resources>

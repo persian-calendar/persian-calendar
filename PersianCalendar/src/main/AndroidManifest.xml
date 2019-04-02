@@ -62,13 +62,13 @@
             android:launchMode="singleTop"
             android:theme="@style/FullscreenTheme" />
 
-        <activity
-            android:name=".ui.reminder.ReminderActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullscreenTheme" />
+        <!--<activity-->
+            <!--android:name=".ui.reminder.ReminderActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"-->
+            <!--android:excludeFromRecents="true"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/FullscreenTheme" />-->
 
         <receiver
             android:name=".service.BroadcastReceivers"
@@ -168,9 +168,9 @@
             android:name=".service.AthanNotification"
             android:label="Athan Service" />
 
-        <receiver
-            android:name=".service.ReminderAlert"
-            android:label="@string/widget_name" />
+        <!--<receiver-->
+            <!--android:name=".service.ReminderAlert"-->
+            <!--android:label="@string/widget_name" />-->
 
         <service
             android:name=".service.PersianCalendarTileService"
@@ -182,9 +182,9 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".service.ReminderNotification"
-            android:label="Reminder Service" />
+        <!--<service-->
+            <!--android:name=".service.ReminderNotification"-->
+            <!--android:label="Reminder Service" />-->
 
     </application>
 

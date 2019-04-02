@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
-import com.byagowi.persiancalendar.entities.Reminder;
+//import com.byagowi.persiancalendar.entities.Reminder;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
 import com.byagowi.persiancalendar.equinox.Equinox;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
@@ -244,11 +244,11 @@ public class Utils {
     private static long latestToastShowTime = -1;
     private static boolean numericalDatePreferred = false;
     private static String[] calendarTypesTitleAbbr = new String[]{};
-    private static List<Reminder> sReminderDetails = Collections.emptyList();
-
-    public static List<Reminder> getReminderDetails() {
-        return sReminderDetails;
-    }
+//    private static List<Reminder> sReminderDetails = Collections.emptyList();
+//
+//    public static List<Reminder> getReminderDetails() {
+//        return sReminderDetails;
+//    }
 
     static public int getMaxSupportedYear() {
         return 1398;
@@ -421,7 +421,7 @@ public class Utils {
             sShiftWorkRecurs = true;
         }
 
-        sReminderDetails = updateSavedReminders(context);
+//        sReminderDetails = updateSavedReminders(context);
 
         switch (getAppLanguage()) {
             case LANG_FA:
@@ -1282,9 +1282,9 @@ public class Utils {
             }
         }
 
-        for (Reminder event : Utils.getReminderDetails()) {
-            ReminderUtils.turnOn(context, event);
-        }
+//        for (Reminder event : Utils.getReminderDetails()) {
+//            ReminderUtils.turnOn(context, event);
+//        }
     }
 
     static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
@@ -2105,74 +2105,74 @@ public class Utils {
         return result.toString();
     }
 
-    private static List<Reminder> updateSavedReminders(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
-        if (TextUtils.isEmpty(storedJson))
-            storedJson = "[]";
-
-        List<Reminder> reminders = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(storedJson);
-            int length = jsonArray.length();
-            for (int i = 0; i < length; ++i) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                reminders.add(new Reminder(
-                        jsonObject.getInt("id"),
-                        jsonObject.getString("name"),
-                        jsonObject.getString("info"),
-                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
-                        jsonObject.getInt("quantity"),
-                        jsonObject.getLong("startTime")
-                ));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return reminders;
-    }
-
-    public static void storeReminders(Context context, List<Reminder> reminders) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        try {
-            JSONArray json = new JSONArray();
-            for (Reminder reminder : reminders) {
-                JSONObject object = new JSONObject();
-                object.put("id", reminder.id);
-                object.put("name", reminder.name);
-                object.put("info", reminder.info);
-                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
-                object.put("quantity", reminder.quantity);
-                object.put("startTime", reminder.startTime);
-                json.put(object);
-            }
-
-            String serializedJson = json.toString();
-
-            // Just don't store huge objects
-            if (serializedJson.length() > 8000)
-                return;
-
-            SharedPreferences.Editor edit = prefs.edit();
-            edit.putString(REMINDERS_STORE_KEY, serializedJson);
-            edit.apply();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Nullable
-    public static Reminder getReminderById(int id) {
-        for (Reminder reminder : sReminderDetails) {
-            if (reminder.id == id) return reminder;
-        }
-        return null;
-    }
+//    private static List<Reminder> updateSavedReminders(Context context) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
+//        if (TextUtils.isEmpty(storedJson))
+//            storedJson = "[]";
+//
+//        List<Reminder> reminders = new ArrayList<>();
+//        try {
+//            JSONArray jsonArray = new JSONArray(storedJson);
+//            int length = jsonArray.length();
+//            for (int i = 0; i < length; ++i) {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                reminders.add(new Reminder(
+//                        jsonObject.getInt("id"),
+//                        jsonObject.getString("name"),
+//                        jsonObject.getString("info"),
+//                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
+//                        jsonObject.getInt("quantity"),
+//                        jsonObject.getLong("startTime")
+//                ));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return reminders;
+//    }
+//
+//    public static void storeReminders(Context context, List<Reminder> reminders) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//
+//        try {
+//            JSONArray json = new JSONArray();
+//            for (Reminder reminder : reminders) {
+//                JSONObject object = new JSONObject();
+//                object.put("id", reminder.id);
+//                object.put("name", reminder.name);
+//                object.put("info", reminder.info);
+//                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
+//                object.put("quantity", reminder.quantity);
+//                object.put("startTime", reminder.startTime);
+//                json.put(object);
+//            }
+//
+//            String serializedJson = json.toString();
+//
+//            // Just don't store huge objects
+//            if (serializedJson.length() > 8000)
+//                return;
+//
+//            SharedPreferences.Editor edit = prefs.edit();
+//            edit.putString(REMINDERS_STORE_KEY, serializedJson);
+//            edit.apply();
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Nullable
+//    public static Reminder getReminderById(int id) {
+//        for (Reminder reminder : sReminderDetails) {
+//            if (reminder.id == id) return reminder;
+//        }
+//        return null;
+//    }
 }
