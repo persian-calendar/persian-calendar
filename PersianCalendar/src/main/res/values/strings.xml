@@ -16,7 +16,7 @@
     <string name="cancel">Cancel</string>
     <string name="continue_button">Continue</string>
 
-    <string name="outdated_app">Due to being outdated, things may are incorrect</string>
+    <string name="outdated_app">Due to being outdated, things may are be incorrect</string>
     <string name="update">Update</string>
 
     <!-- No need for translation, remove the section from your translation -->
