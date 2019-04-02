@@ -39,7 +39,7 @@
     <string name="compass">羅針盤</string>
     <string name="compass_not_found">羅針盤センサーが見つかりませんでした</string>
     <string name="language">言葉</string>
-    <string name="version">%1字体$s</string>
+    <string name="version">%1$s字体</string>
     <string name="athan">アダン</string>
     <string name="athan_alarm_summary">これらの祈りの アダン</string>
     <string name="athan_alarm">アダン</string>
