@@ -197,7 +197,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="west">西</string>
     <string name="qibla">キブラ</string>
 
-    <string name="outdated_app">Due to being outdated, things may are be incorrect</string>
+    <string name="outdated_app">Due to being outdated, things may be incorrect</string>
     <string name="update">Update</string>
     <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
     <string name="shift_work_settings">Shift work settings</string>
