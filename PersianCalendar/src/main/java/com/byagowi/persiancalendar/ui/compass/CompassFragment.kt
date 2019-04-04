@@ -74,11 +74,6 @@ class CompassFragment : DaggerFragment() {
 
             mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.compass),
                     Utils.getCityName(mainActivityDependency.mainActivity, true))
-            setCompassMetrics()
-
-            coordinate?.longitude?.let { compassView.setLongitude(it) }
-            coordinate?.latitude?.let { compassView.setLatitude(it) }
-            compassView.initCompassView()
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->
@@ -101,6 +96,12 @@ class CompassFragment : DaggerFragment() {
                         .getString(if (stop) R.string.resume else R.string.stop)
             }
         }
+
+        setCompassMetrics()
+        coordinate?.longitude?.let { binding.compassView.setLongitude(it) }
+        coordinate?.latitude?.let { binding.compassView.setLatitude(it) }
+        binding.compassView.initCompassView()
+
         return binding.root
     }
 
