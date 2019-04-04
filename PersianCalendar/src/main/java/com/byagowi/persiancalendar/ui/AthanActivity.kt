@@ -64,6 +64,7 @@ class AthanActivity : AppCompatActivity() {
             try {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
                     streamType = AudioManager.STREAM_ALARM
+                    volumeControlStream = AudioManager.STREAM_ALARM
                     play()
                 }
             } catch (e: Exception) {
@@ -75,6 +76,7 @@ class AthanActivity : AppCompatActivity() {
                     try {
                         setDataSource(this@AthanActivity, Utils.getDefaultAthanUri(this@AthanActivity))
                         setAudioStreamType(AudioManager.STREAM_ALARM)
+                        volumeControlStream = AudioManager.STREAM_ALARM
                         prepare()
                     } catch (e: IOException) {
                         e.printStackTrace()
