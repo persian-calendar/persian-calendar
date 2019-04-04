@@ -108,9 +108,8 @@ class AboutFragment : DaggerFragment() {
         val developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer)
         val translatorIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_translator)
         val designerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_designer)
-        val theme = activity.theme
         val color = TypedValue()
-        theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
+        activity.theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
 
         val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
