@@ -21,10 +21,11 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : AppCompatActivity() {
+    private val handler = Handler()
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
-    private val handler = Handler()
-    private var stopTask: Runnable = object : Runnable {
+    private var alreadyStopped = false
+    private var stopTask = object : Runnable {
         override fun run() {
             if (ringtone == null && mediaPlayer == null) {
                 this@AthanActivity.finish()
@@ -48,6 +49,7 @@ class AthanActivity : AppCompatActivity() {
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
         }
     }
+
     private var phoneStateListener: PhoneStateListener? = object : PhoneStateListener() {
         override fun onCallStateChanged(state: Int, incomingNumber: String) {
             if (state == TelephonyManager.CALL_STATE_RINGING || state == TelephonyManager.CALL_STATE_OFFHOOK) {
@@ -86,27 +88,27 @@ class AthanActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
 
         Utils.applyAppLanguage(this)
-
-        val binding = DataBindingUtil.setContentView<ActivityAthanBinding>(this, R.layout.activity_athan)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val prayerKey = intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)
-        binding.athanName.setText(Utils.getPrayTimeText(prayerKey))
 
-        val root = binding.root
-        root.setOnClickListener { stop() }
-        root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
+        DataBindingUtil.setContentView<ActivityAthanBinding>(this, R.layout.activity_athan).apply {
+            athanName.setText(Utils.getPrayTimeText(prayerKey))
 
-        binding.place.text = String.format("%s %s",
-                getString(R.string.in_city_time),
-                Utils.getCityName(this, true))
+            root.setOnClickListener { stop() }
+            root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
+
+            place.text = String.format("%s %s",
+                    getString(R.string.in_city_time),
+                    Utils.getCityName(this@AthanActivity, true))
+        }
+
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
 
         try {
@@ -114,7 +116,6 @@ class AthanActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
-
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -127,8 +128,6 @@ class AthanActivity : AppCompatActivity() {
     override fun onBackPressed() {
         stop()
     }
-
-    private var alreadyStopped = false
 
     private fun stop() {
         if (alreadyStopped) return
