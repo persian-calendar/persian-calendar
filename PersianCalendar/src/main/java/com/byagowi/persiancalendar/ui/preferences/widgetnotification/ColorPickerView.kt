@@ -87,17 +87,17 @@ class ColorPickerView : LinearLayout {
         redSeekBar = SeekBar(context).apply {
             max = 255
             progressDrawable.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
-            redSeekBar.updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
         }
         greenSeekBar = SeekBar(context).apply {
             max = 255
             progressDrawable.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
-            greenSeekBar.updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
         }
         blueSeekBar = SeekBar(context).apply {
             max = 255
             progressDrawable.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
-            blueSeekBar.updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
