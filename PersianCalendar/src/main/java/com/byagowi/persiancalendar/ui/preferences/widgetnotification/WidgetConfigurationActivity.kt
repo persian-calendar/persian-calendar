@@ -37,9 +37,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<WidgetPreferenceLayoutBinding>(this, R.layout.widget_preference_layout)
 
         supportFragmentManager.transaction {
-            add(
-                    R.id.preference_fragment_holder,
-                    FragmentWidgetNotification(), "TAG")
+            add(R.id.preference_fragment_holder, FragmentWidgetNotification(), "TAG")
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
     }
