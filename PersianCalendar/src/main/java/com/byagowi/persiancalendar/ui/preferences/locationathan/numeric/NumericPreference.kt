@@ -12,34 +12,34 @@ class NumericPreference : EditTextPreference {
 
     private var mDouble: Double? = null
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {}
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
     override fun getText(): String? {
-        return if (mDouble != null) mDouble!!.toString() else null
+        return mDouble.toString()
     }
 
     // http://stackoverflow.com/a/10848393
     override fun setText(text: String) {
         val wasBlocking = shouldDisableDependents()
         mDouble = parseDouble(text)
-        persistString(if (mDouble != null) mDouble!!.toString() else null)
+        persistString(mDouble.toString())
         val isBlocking = shouldDisableDependents()
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking)
     }
 
     private fun parseDouble(text: String): Double? {
-        try {
-            return java.lang.Double.parseDouble(text)
+        return try {
+            java.lang.Double.parseDouble(text)
         } catch (e: NumberFormatException) {
-            return null
+            null
         } catch (e: NullPointerException) {
-            return null
+            null
         }
 
     }
