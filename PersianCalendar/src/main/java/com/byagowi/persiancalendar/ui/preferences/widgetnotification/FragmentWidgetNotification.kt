@@ -14,16 +14,16 @@ import java.util.*
 
 // Don't use dagger in this class
 class FragmentWidgetNotification : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(bundle: Bundle, s: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_widget_notification)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val activity = activity ?: return false
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
 
-        if (preference.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
+        if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
                     intArrayOf(-0x1, -0x19af00, -0xff8695, -0x10e00, -0xdfdfe0))

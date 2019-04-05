@@ -49,7 +49,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             return context.getString(R.string.default_athan_name)
         }
 
-    override fun onCreatePreferences(bundle: Bundle, s: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         AndroidSupportInjection.inject(this)
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
@@ -77,7 +77,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onDisplayPreferenceDialog(preference: Preference) {
+    override fun onDisplayPreferenceDialog(preference: Preference?) {
         var fragment: DialogFragment? = null
         when (preference) {
             is PrayerSelectPreference -> fragment = PrayerSelectDialog()
@@ -87,7 +87,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             else -> super.onDisplayPreferenceDialog(preference)
         }
         fragment?.apply {
-            arguments = Bundle(1).apply { putString("key", preference.key) }
+            arguments = Bundle(1).apply { putString("key", preference?.key) }
             setTargetFragment(this, 0)
             val fragmentManager = fragmentManager
             if (fragmentManager != null) {
@@ -96,10 +96,10 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val context = context ?: return true
 
-        when (preference.key) {
+        when (preference?.key) {
             "pref_key_ringtone" -> {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
