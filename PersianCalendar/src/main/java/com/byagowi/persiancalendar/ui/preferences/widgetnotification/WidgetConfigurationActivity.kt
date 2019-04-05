@@ -7,13 +7,14 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.transaction
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
 
 class WidgetConfigurationActivity : AppCompatActivity() {
-    protected fun finishAndSuccess() {
+    private fun finishAndSuccess() {
         val extras = intent.extras
         if (extras != null) {
             val appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
@@ -35,10 +36,11 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<WidgetPreferenceLayoutBinding>(this, R.layout.widget_preference_layout)
 
-        supportFragmentManager.beginTransaction().add(
-                R.id.preference_fragment_holder,
-                FragmentWidgetNotification(), "TAG").commit()
-
-        binding.addWidgetButton.setOnClickListener { v -> finishAndSuccess() }
+        supportFragmentManager.transaction {
+            add(
+                    R.id.preference_fragment_holder,
+                    FragmentWidgetNotification(), "TAG")
+        }
+        binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
     }
 }
