@@ -92,6 +92,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
     implementation("androidx.core:core-ktx:1.0.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
+    implementation("androidx.fragment:fragment-ktx:1.0.0")
 
     implementation("androidx.work:work-runtime:2.0.0")
     // Unnecessary size addition as it adds co-routine apparently also
