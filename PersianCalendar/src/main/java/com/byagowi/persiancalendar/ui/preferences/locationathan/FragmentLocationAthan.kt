@@ -5,12 +5,13 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
 import android.text.TextUtils
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -37,15 +38,14 @@ import javax.inject.Inject
 
 class FragmentLocationAthan : PreferenceFragmentCompat() {
     @Inject
-    internal var appDependency: AppDependency? = null
+    lateinit var appDependency: AppDependency
     @Inject
-    internal var mainActivityDependency: MainActivityDependency? = null
+    lateinit var mainActivityDependency: MainActivityDependency
     private var categoryAthan: Preference? = null
 
     private val defaultAthanName: String
         get() {
             val context = context ?: return ""
-
             return context.getString(R.string.default_athan_name)
         }
 
@@ -57,13 +57,11 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         categoryAthan = findPreference(Constants.PREF_KEY_ATHAN)
         updateAthanPreferencesState()
 
-        val context = context ?: return
-
         updateAthanPreferencesState()
-        ViewModelProviders.of(mainActivityDependency!!.mainActivity).get(MainActivityModel::class.java)
+        ViewModelProviders.of(mainActivityDependency.mainActivity).get(MainActivityModel::class.java)
                 .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
-        putAthanNameOnSummary(appDependency!!.sharedPreferences
+        putAthanNameOnSummary(appDependency.sharedPreferences
                 .getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 
@@ -71,36 +69,29 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         val context = context ?: return
 
         val locationEmpty = Utils.getCoordinate(context) == null
-        categoryAthan!!.isEnabled = !locationEmpty
+        categoryAthan?.isEnabled = !locationEmpty
         if (locationEmpty) {
-            categoryAthan!!.setSummary(R.string.athan_disabled_summary)
+            categoryAthan?.setSummary(R.string.athan_disabled_summary)
         } else {
-            categoryAthan!!.summary = ""
+            categoryAthan?.summary = ""
         }
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
         var fragment: DialogFragment? = null
-        if (preference is PrayerSelectPreference) {
-            fragment = PrayerSelectDialog()
-        } else if (preference is AthanVolumePreference) {
-            fragment = AthanVolumeDialog()
-        } else if (preference is LocationPreference) {
-            fragment = LocationPreferenceDialog()
-        } else if (preference is NumericPreference) {
-            fragment = NumericDialog()
-        } else {
-            super.onDisplayPreferenceDialog(preference)
+        when (preference) {
+            is PrayerSelectPreference -> fragment = PrayerSelectDialog()
+            is AthanVolumePreference -> fragment = AthanVolumeDialog()
+            is LocationPreference -> fragment = LocationPreferenceDialog()
+            is NumericPreference -> fragment = NumericDialog()
+            else -> super.onDisplayPreferenceDialog(preference)
         }
-
-        if (fragment != null) {
-            val bundle = Bundle(1)
-            bundle.putString("key", preference.key)
-            fragment.arguments = bundle
-            fragment.setTargetFragment(this, 0)
+        fragment?.apply {
+            arguments = Bundle(1).apply { putString("key", preference.key) }
+            setTargetFragment(this, 0)
             val fragmentManager = fragmentManager
             if (fragmentManager != null) {
-                fragment.show(fragmentManager, fragment.javaClass.name)
+                show(fragmentManager, javaClass.name)
             }
         }
     }
@@ -124,17 +115,17 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 return true
             }
             "pref_key_ringtone_default" -> {
-                val editor = appDependency!!.sharedPreferences.edit()
-                editor.remove(PREF_ATHAN_URI)
-                editor.remove(PREF_ATHAN_NAME)
-                editor.apply()
+                appDependency.sharedPreferences.edit {
+                    remove(PREF_ATHAN_URI)
+                    remove(PREF_ATHAN_NAME)
+                }
                 Utils.createAndShowShortSnackbar(view, R.string.returned_to_default)
                 putAthanNameOnSummary(defaultAthanName)
                 return true
             }
             "pref_gps_location" -> {
                 try {
-                    val activity = mainActivityDependency!!.mainActivity
+                    val activity = mainActivityDependency.mainActivity
 
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         Utils.askForLocationPermission(activity)
@@ -157,19 +148,20 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
 
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                val uri = data!!.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                val uri: Parcelable? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                 if (uri != null) {
-                    val editor = appDependency!!.sharedPreferences.edit()
-
                     var ringtoneTitle = RingtoneManager
-                            .getRingtone(context, Uri.parse(uri.toString()))
+                            .getRingtone(context, uri.toString().toUri())
                             .getTitle(context)
                     if (TextUtils.isEmpty(ringtoneTitle)) {
                         ringtoneTitle = ""
                     }
-                    editor.putString(PREF_ATHAN_NAME, ringtoneTitle)
-                    editor.putString(PREF_ATHAN_URI, uri.toString())
-                    editor.apply()
+
+                    appDependency.sharedPreferences.edit {
+                        putString(PREF_ATHAN_NAME, ringtoneTitle)
+                        putString(PREF_ATHAN_URI, uri.toString())
+                    }
+
                     Utils.createAndShowShortSnackbar(view, R.string.custom_notification_is_set)
                     putAthanNameOnSummary(ringtoneTitle)
                 }
