@@ -26,7 +26,8 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    intArrayOf(-0x1, -0x19af00, -0xff8695, -0x10e00, -0xdfdfe0))
+                    intArrayOf(0xFFFFFFFF.toInt(), 0xFFE65100.toInt(), 0xFF00796b.toInt(),
+                            0xFFFEF200.toInt(), 0xFF202020.toInt()))
             colorPickerView.setPickedColor(Color.parseColor(
                     sharedPreferences.getString(
                             PREF_SELECTED_WIDGET_TEXT_COLOR,
