@@ -20,9 +20,7 @@ class NumericPreference : EditTextPreference {
 
     constructor(context: Context) : super(context)
 
-    override fun getText(): String? {
-        return mDouble.toString()
-    }
+    override fun getText(): String? = mDouble.toString()
 
     // http://stackoverflow.com/a/10848393
     override fun setText(text: String) {

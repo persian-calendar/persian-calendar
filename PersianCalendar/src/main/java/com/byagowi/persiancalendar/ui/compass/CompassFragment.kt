@@ -60,10 +60,9 @@ class CompassFragment : DaggerFragment() {
          * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
          * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
          */
-        private fun lowPass(input: Float, output: Float): Float {
-            return if (Math.abs(180 - input) > 170) {
-                input
-            } else output + ALPHA * (input - output)
+        private fun lowPass(input: Float, output: Float): Float = when {
+            Math.abs(180 - input) > 170 -> input
+            else -> output + ALPHA * (input - output)
         }
     }
 
@@ -98,8 +97,8 @@ class CompassFragment : DaggerFragment() {
         }
 
         setCompassMetrics()
-        coordinate?.longitude?.let { binding.compassView.setLongitude(it) }
-        coordinate?.latitude?.let { binding.compassView.setLatitude(it) }
+        coordinate?.longitude?.let(binding.compassView::setLongitude)
+        coordinate?.latitude?.let(binding.compassView::setLatitude)
         binding.compassView.initCompassView()
 
         return binding.root

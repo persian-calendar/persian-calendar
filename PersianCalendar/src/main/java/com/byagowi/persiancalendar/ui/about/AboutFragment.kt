@@ -43,7 +43,7 @@ class AboutFragment : DaggerFragment() {
         activity.setTitleAndSubtitle(getString(R.string.about), "")
 
         // version
-        val version = programVersion(activity).split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val version = programVersion(activity).split("-".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
         version[0] = Utils.formatNumber(version[0])
         binding.version.text = String.format(getString(R.string.version), TextUtils.join("\n", version))
 
@@ -119,13 +119,13 @@ class AboutFragment : DaggerFragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW,
                         Uri.parse("https://github.com/" + (view as Chip).text.toString()
-                                .split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].split("\\)".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])))
+                                .split("@".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[1].split("\\)".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[0])))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-        for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+        for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
             val chip = Chip(activity).apply {
                 this.layoutParams = layoutParams
                 setOnClickListener(chipClick)
@@ -136,7 +136,7 @@ class AboutFragment : DaggerFragment() {
             binding.developers.addView(chip)
         }
 
-        for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+        for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
             val chip = Chip(activity).apply {
                 this.layoutParams = layoutParams
                 text = line
@@ -146,7 +146,7 @@ class AboutFragment : DaggerFragment() {
             binding.developers.addView(chip)
         }
 
-        for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+        for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
             val chip = Chip(activity).apply {
                 this.layoutParams = layoutParams
                 setOnClickListener(chipClick)
@@ -157,7 +157,7 @@ class AboutFragment : DaggerFragment() {
             binding.developers.addView(chip)
         }
 
-        for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+        for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
             val chip = Chip(activity).apply {
                 this.layoutParams = layoutParams
                 setOnClickListener(chipClick)
@@ -186,12 +186,10 @@ class AboutFragment : DaggerFragment() {
         return true
     }
 
-    private fun programVersion(context: Context): String {
-        return try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion")
-            ""
-        }
+    private fun programVersion(context: Context): String = try {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion")
+        ""
     }
 }

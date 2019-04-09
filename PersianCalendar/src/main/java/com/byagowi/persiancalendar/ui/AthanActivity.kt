@@ -125,9 +125,7 @@ class AthanActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        stop()
-    }
+    override fun onBackPressed() = stop()
 
     private fun stop() {
         if (alreadyStopped) return

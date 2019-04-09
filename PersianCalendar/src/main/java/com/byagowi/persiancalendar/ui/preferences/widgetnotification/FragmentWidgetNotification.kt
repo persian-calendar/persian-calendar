@@ -14,9 +14,8 @@ import java.util.*
 
 // Don't use dagger in this class
 class FragmentWidgetNotification : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.preferences_widget_notification)
-    }
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
+            addPreferencesFromResource(R.xml.preferences_widget_notification)
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val activity = activity ?: return false
@@ -26,8 +25,8 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    intArrayOf(0xFFFFFFFF.toInt(), 0xFFE65100.toInt(), 0xFF00796b.toInt(),
-                            0xFFFEF200.toInt(), 0xFF202020.toInt()))
+                    arrayOf(0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020)
+                            .map(Long::toInt).toIntArray())
             colorPickerView.setPickedColor(Color.parseColor(
                     sharedPreferences.getString(
                             PREF_SELECTED_WIDGET_TEXT_COLOR,

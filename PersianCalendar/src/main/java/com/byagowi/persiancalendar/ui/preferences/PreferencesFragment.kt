@@ -51,9 +51,7 @@ class PreferencesFragment : DaggerFragment() {
             return fragment
         }
 
-        override fun getCount(): Int {
-            return pageCount
-        }
+        override fun getCount(): Int = pageCount
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
