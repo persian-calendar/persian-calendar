@@ -982,6 +982,12 @@
     { "holiday": false, "month": 12, "day": 29, "type": "Ancient Iran",
       "title": "گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان (در آخرین روز سال) / زادروز زرتشت / جشن اوشیدر (نجات‌بخش ایرانی) در دریاچهٔ هامون و کوه خواجه / آتش‌افروزی بر بام‌ها در استقبال از نوروز" },
 
+    { "holiday": false, "month": 1, "day": 6, "type": "Ancient Iran",
+      "title": "روز تولد اشوزرتشت" },
+
+    { "holiday": false, "month": 10, "day": 5, "type": "Ancient Iran",
+      "title": "روز درگذشت اشوزرتشت" },
+
     { "holiday": false, "year": 1397, "month": 3, "day": 18, "type": "Islamic Iran",
       "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
 
