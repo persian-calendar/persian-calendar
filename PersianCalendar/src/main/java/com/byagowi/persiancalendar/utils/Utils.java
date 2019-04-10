@@ -193,11 +193,12 @@ public class Utils {
     private static final long DAY_IN_SECOND = 86400;
     private static final String CHANGE_DATE_TAG = "changeDate";
     private static final String UPDATE_TAG = "update";
-    static private String[] persianMonths;
-    static private String[] islamicMonths;
-    static private String[] gregorianMonths;
-    static private String[] weekDays;
-    static private String[] weekDaysInitials;
+    static private String[] emptyStringList = {"", "", "", "", "", "", "", "", "", "", "", "", ""};
+    static private String[] persianMonths = emptyStringList;
+    static private String[] islamicMonths = emptyStringList;
+    static private String[] gregorianMonths = emptyStringList
+    static private String[] weekDays = emptyStringList;
+    static private String[] weekDaysInitials = emptyStringList;
     static private char[] preferredDigits = PERSIAN_DIGITS;
     static private boolean clockIn24 = DEFAULT_WIDGET_IN_24;
     static private boolean iranTime = DEFAULT_IRAN_TIME;
@@ -210,15 +211,16 @@ public class Utils {
     static private String calculationMethod = DEFAULT_PRAY_TIME_METHOD;
     static private String language = DEFAULT_APP_LANGUAGE;
     static private Coordinate coordinate;
-    static private CalendarType mainCalendar;
-    static private CalendarType[] otherCalendars;
-    static private String spacedComma;
+    static private CalendarType mainCalendar = CalendarType.SHAMSI;
+    static private CalendarType[] otherCalendars =
+            new CalendarType[]{CalendarType.GREGORIAN, CalendarType.ISLAMIC};
+    static private String spacedComma = "، ";
     static private boolean showWeekOfYear;
     static private boolean centerAlignWidgets;
     static private int weekStartOffset;
-    static private boolean[] weekEnds;
+    static private boolean[] weekEnds = new boolean[];
     static private boolean showDeviceCalendarEvents;
-    static private Set<String> whatToShowOnWidgets;
+    static private Set<String> whatToShowOnWidgets = Collections.emptySet();
     static private boolean astronomicalFeaturesEnabled;
     @StyleRes
     static private int appTheme = R.style.LightTheme;
@@ -229,10 +231,10 @@ public class Utils {
     static private List<String> arCodeOrder = Arrays.asList("zz", "iq", "ir", "af");
     static private String cachedCityKey = "";
     static private CityItem cachedCity;
-    static private SparseArray<List<PersianCalendarEvent>> sPersianCalendarEvents;
-    static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents;
-    static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents;
-    static private List<AbstractEvent> sAllEnabledEvents;
+    static private SparseArray<List<PersianCalendarEvent>> sPersianCalendarEvents = new SparseArray<>();
+    static private SparseArray<List<IslamicCalendarEvent>> sIslamicCalendarEvents = new SparseArray<>();
+    static private SparseArray<List<GregorianCalendarEvent>> sGregorianCalendarEvents = new SparseArray<>();
+    static private List<AbstractEvent> sAllEnabledEvents = new ArrayList<>();
     static private Map<String, String> sShiftWorkTitles = new HashMap<>();
     static private long sShiftWorkStartingJdn = -1;
     static private boolean sShiftWorkRecurs = true;
@@ -243,7 +245,7 @@ public class Utils {
     static private String sPM = DEFAULT_PM;
     private static long latestToastShowTime = -1;
     private static boolean numericalDatePreferred = false;
-    private static String[] calendarTypesTitleAbbr = new String[]{};
+    private static String[] calendarTypesTitleAbbr = {};
 //    private static List<Reminder> sReminderDetails = Collections.emptyList();
 //
 //    public static List<Reminder> getReminderDetails() {
