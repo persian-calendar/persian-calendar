@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.Utils
@@ -60,7 +61,14 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getSystemService<AudioManager?>()?.setStreamVolume(AudioManager.STREAM_ALARM, Utils.getAthanVolume(this), 0)
+        val settingsVol = Utils.getAthanVolume(this)
+        val audioManager = getSystemService<AudioManager?>()
+        if (settingsVol != DEFAULT_ATHAN_VOLUME) {
+            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, settingsVol, 0)
+        } else {
+            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamVolume(AudioManager.STREAM_ALARM), 0)
+        }
+
         val customAthanUri = Utils.getCustomAthanUri(this)
         if (customAthanUri != null) {
             try {
