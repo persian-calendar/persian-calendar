@@ -5,35 +5,30 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
-import android.net.Uri
 import android.view.View
 import android.widget.SeekBar
-
-import com.byagowi.persiancalendar.utils.Utils
-
-import java.io.IOException
-
+import androidx.core.content.getSystemService
 import androidx.preference.PreferenceDialogFragmentCompat
+import com.byagowi.persiancalendar.utils.Utils
+import java.io.IOException
 
 class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
     private var volume: Int = 0
-    private var audioManager: AudioManager? = null
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateDialogView(context: Context): View {
         val athanPref = preference as AthanVolumePreference
 
-        audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        if (audioManager != null) {
-            audioManager!!.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
-        }
+        val audioManager = context.getSystemService<AudioManager?>()
+        audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
 
         val customAthanUri = Utils.getCustomAthanUri(context)
         if (customAthanUri != null) {
-            ringtone = RingtoneManager.getRingtone(context, customAthanUri)
-            ringtone!!.streamType = AudioManager.STREAM_ALARM
-            ringtone!!.play()
+            ringtone = RingtoneManager.getRingtone(context, customAthanUri).apply {
+                streamType = AudioManager.STREAM_ALARM
+                play()
+            }
         } else {
             val player = MediaPlayer()
             try {
@@ -43,7 +38,6 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
             try {
                 player.start()
                 mediaPlayer = player
@@ -53,58 +47,48 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
         }
 
-        val seekBar = SeekBar(context)
-        seekBar.max = 7
+        return SeekBar(context).apply {
+            max = audioManager?.getStreamMaxVolume(AudioManager.STREAM_ALARM) ?: 7
+            volume = athanPref.volume
+            progress = volume
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
-        volume = athanPref.volume
-        seekBar.progress = volume
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                volume = progress
-                audioManager!!.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (ringtone != null && !ringtone!!.isPlaying) {
-                    ringtone!!.play()
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    volume = progress
+                    audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)
                 }
-                if (mediaPlayer != null) {
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    if (ringtone?.isPlaying == false) {
+                        ringtone?.play()
+                    }
                     try {
-                        if (!mediaPlayer!!.isPlaying) {
-                            mediaPlayer!!.prepare()
-                            mediaPlayer!!.start()
+                        if (mediaPlayer?.isPlaying == false) {
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()
                     } catch (e: IllegalStateException) {
                         e.printStackTrace()
                     }
-
                 }
-            }
-        })
-
-        return seekBar
+            })
+        }
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         val athanPref = preference as AthanVolumePreference
-        if (ringtone != null) {
-            ringtone!!.stop()
-        }
-        if (mediaPlayer != null) {
-            try {
-                if (mediaPlayer!!.isPlaying) {
-                    mediaPlayer!!.stop()
-                    mediaPlayer!!.release()
-                }
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
+        ringtone?.stop()
+        try {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
             }
-
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
         if (positiveResult) {
             athanPref.volume = volume
