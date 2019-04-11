@@ -196,7 +196,7 @@ public class Utils {
     static private String[] emptyStringList = {"", "", "", "", "", "", "", "", "", "", "", "", ""};
     static private String[] persianMonths = emptyStringList;
     static private String[] islamicMonths = emptyStringList;
-    static private String[] gregorianMonths = emptyStringList
+    static private String[] gregorianMonths = emptyStringList;
     static private String[] weekDays = emptyStringList;
     static private String[] weekDaysInitials = emptyStringList;
     static private char[] preferredDigits = PERSIAN_DIGITS;
@@ -218,7 +218,7 @@ public class Utils {
     static private boolean showWeekOfYear;
     static private boolean centerAlignWidgets;
     static private int weekStartOffset;
-    static private boolean[] weekEnds = new boolean[];
+    static private boolean[] weekEnds = {};
     static private boolean showDeviceCalendarEvents;
     static private Set<String> whatToShowOnWidgets = Collections.emptySet();
     static private boolean astronomicalFeaturesEnabled;
