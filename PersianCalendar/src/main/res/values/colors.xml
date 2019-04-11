@@ -157,4 +157,20 @@
     <color name="display_border">#FF333333</color>
     <color name="display_dark">@color/black</color>
     <color name="display_reflect">@color/black_reflect</color>
+
+    <!-- Accounting -->
+    <color name="accents">#ff5252</color>
+    <color name="expense">#ff5252</color>
+    <color name="result">#ff8a65</color>
+    <color name="income">#00796b</color>
+    <color name="button_color">#ffed0000</color>
+    <color name="caption_color">#b71c1c</color>
+    <color name="gray_dark">#ff353535</color>
+    <color name="date_button_background">#bdbdbd</color>
+    <color name="date_picker_select">#0277bd</color>
+    <color name="date_picker_select_dark">#01579b</color>
+    <color name="transparent">#00F44336</color>
+    <color name="gray">#9e9e9e</color>
+    <color name="brown_dark">#411213</color>
+
 </resources>

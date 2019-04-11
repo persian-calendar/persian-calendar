@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewRangeReport"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayoutDateStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:textSize="@dimen/date_textsize"
+                android:gravity="center_horizontal"
+                android:id="@+id/textViewDateStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/from_to_date"
+                android:layout_weight="0.2"
+                android:layout_alignRight="@+id/linearLayoutDateStart"/>
+
+            <Button
+                android:textSize="@dimen/date_textsize"
+                android:id="@+id/buttonDateStart"
+                android:padding="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="0.5"
+                android:layout_centerHorizontal="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayoutDateEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margintop_caption"
+            android:weightSum="1"
+            android:layout_below="@+id/linearLayoutDateStart"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:textSize="@dimen/date_textsize"
+                android:gravity="center_horizontal"
+                android:id="@+id/textViewDateEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/up_to_date"
+                android:layout_weight="0.2"
+                android:layout_alignParentRight="true"/>
+
+            <Button
+                android:textSize="@dimen/date_textsize"
+                android:id="@+id/buttonDateEnd"
+                android:padding="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="0.5"
+                android:layout_centerHorizontal="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/layoutRangeReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutDateEnd">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReport"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/range_report_caption"
+                android:layout_weight="9"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReportPlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/layoutRangeReportContent"
+            android:background="@drawable/background_border_result"
+            android:padding="@dimen/content_padding"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/layoutRangeReport">
+
+            <TextView
+                android:textSize="@dimen/date_textsize"
+                android:id="@+id/textViewReportCost"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <TextView
+                android:textSize="@dimen/date_textsize"
+                android:id="@+id/textViewReportIncome"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <LinearLayout
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="@dimen/date_textsize"
+                    android:id="@+id/textViewReportDetection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="" android:layout_weight="5"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:textSize="@dimen/date_textsize"
+                    android:id="@+id/textViewReportSum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="" android:layout_weight="5"
+                    android:layout_centerHorizontal="true"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/layoutRangeReportDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutRangeReportContent">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReportDetails"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/range_report_details_caption"
+                android:layout_weight="9"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReportDetailsPlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/layoutRangeReportDetailsContent"
+            android:background="@drawable/background_border_result"
+            android:padding="@dimen/content_padding"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/layoutRangeReportDetails"/>
+
+    </RelativeLayout>
+</ScrollView>

@@ -15,4 +15,16 @@
         <attr name="SunViewAfterMiddayColor" format="color" />
         <attr name="SunViewEveningColor" format="color" />
     </declare-styleable>
+
+    <!-- Accounting -->
+    <declare-styleable name="PersianDatePicker">
+        <attr name="minYear" format="integer" />
+        <attr name="maxYear" format="integer" />
+        <attr name="selectedYear" format="integer" />
+        <attr name="selectedMonth" format="integer" />
+        <attr name="selectedDay" format="integer" />
+        <attr name="displayMonthNames" format="boolean" />
+        <attr name="yearRange" format="integer" />
+        <attr name="displayDescription" format="boolean" />
+    </declare-styleable>
 </resources>
