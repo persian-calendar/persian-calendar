@@ -23,6 +23,9 @@
             android:id="@+id/navigate_to_about"
             app:destination="@id/about" />
         <action
+            android:id="@+id/navigate_to_accounting"
+            app:destination="@id/accounting" />
+        <action
             android:id="@+id/navigate_to_reminder"
             app:destination="@id/reminder" />
         <action
@@ -78,6 +81,11 @@
     <fragment
         android:id="@+id/reminder"
         android:name="com.byagowi.persiancalendar.ui.reminder.ReminderFragment"
+        android:label="Reminder Fragment" />
+
+    <fragment
+        android:id="@+id/accounting"
+        android:name="com.byagowi.persiancalendar.ui.accounting.AccountingFragment"
         android:label="Reminder Fragment" />
 
 </navigation>

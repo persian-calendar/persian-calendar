@@ -57,4 +57,21 @@
     <!-- INFO -->
     <dimen name="info_text">12dip</dimen>
 
+    <!-- Accounting -->
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="button_minheight">25dp</dimen>
+    <dimen name="button_minwidth">25dp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="caption_text_size">18dp</dimen>
+    <dimen name="content_padding">12dp</dimen>
+    <dimen name="date_textsize">16sp</dimen>
+    <dimen name="edittext_textsize">14sp</dimen>
+    <dimen name="margin_top_setting_buttons">25dp</dimen>
+    <dimen name="margintop_caption">15dp</dimen>
+    <dimen name="paddingright_caption">15dp</dimen>
+    <dimen name="report_caption_size">11sp</dimen>
+    <dimen name="report_elements_padding">8dp</dimen>
+    <dimen name="report_text_size">9sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
 </resources>

@@ -236,4 +236,48 @@
     <!--<string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>-->
     <!--<string translatable="false" name="item_removed">«%1$s» حذف شد</string>-->
 
+    <!-- Accounting -->
+    <string name="accounting">حسابرسی</string>
+    <string name="add_date_see_report">برای مشاهده گزارش تاریخ مورد نظرتان را وارد کنید</string>
+    <string name="cost_sum">جمع کل هزینه ها :  </string>
+    <string name="costs">هزینه ها</string>
+    <string name="costs_colon">هزینه ها:</string>
+    <string name="daily_report">گزارش روز</string>
+    <string name="date_pick">انتخاب تاریخ</string>
+    <string name="enter_caption">عنوان مورد نظر خود را وارد کنید</string>
+    <string name="income">درآمد</string>
+    <string name="income_colon">درامد:</string>
+    <string name="income_sum">جمع کل درآمد:</string>
+    <string name="insert">افزودن</string>
+    <string name="minus_sign">-</string>
+    <string name="total_report">گزارش کل</string>
+    <string name="no_info">اطلاعاتی جهت نمایش وجود ندارد</string>
+    <string name="plus_sign">+</string>
+    <string name="range_report">گزارش بازه ای</string>
+    <string name="range_report_caption">گزارش در بازه انتخابی</string>
+    <string name="range_report_details_caption">جزییات گزارش</string>
+    <string name="report_sum">مانده:</string>
+    <string name="report_detection">تشخیص:</string>
+    <string name="record">ثبت</string>
+    <string name="save">ذخیره</string>
+    <string name="select">انتخاب</string>
+    <string name="title_activity_add_cost">مخارج</string>
+    <string name="title_activity_add_cost_param">افزودن عنوان هزینه</string>
+    <string name="title_activity_add_income">درآمدها</string>
+    <string name="title_activity_add_income_param">افزودن عنوان درآمد</string>
+    <string name="title_activity_pick_date">انتخاب تاریخ</string>
+    <string name="title_activity_range_report">گزارش بازه ای</string>
+    <string name="underscore">_</string>
+    <string name="please_add_correct_date">لطفا تاریخ را صحیح وارد کنید</string>
+    <string name="please_add_first_value">لطفا جهت ویرایش ابتدا مقداری وارد کنید</string>
+    <string name="cost">هزینه</string>
+    <string name="dont_added_value">مقداری وارد نکرده اید</string>
+    <string name="please_add_subtitle">لطفا عنوانی را وارد کنید</string>
+    <string name="note_for_date">تاریخ شروع باید از تاریخ پایان کمتر بوده و یا دو تاریخ برابر باشند.</string>
+    <string name="all_today_result">گزارش کلی روز</string>
+    <string name="all_result">گزارش کل</string>
+    <string name="not_valid_a_month">مقدار نامعتبر برای ماه</string>
+    <string name="up_to_date">تا تاریخ:</string>
+    <string name="from_to_date">از تاریخ:</string>
+
 </resources>

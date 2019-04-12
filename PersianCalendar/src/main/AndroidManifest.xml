@@ -70,6 +70,13 @@
             <!--android:screenOrientation="portrait"-->
             <!--android:theme="@style/FullscreenTheme" />-->
 
+        <activity android:label="@string/title_activity_add_cost_param" android:name="com.byagowi.persiancalendar.ui.accounting.activity.AddCostParamActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+        <activity android:label="@string/title_activity_add_income_param" android:name="com.byagowi.persiancalendar.ui.accounting.activity.AddIncomeParamActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+        <activity android:label="@string/title_activity_add_income" android:name="com.byagowi.persiancalendar.ui.accounting.activity.AddIncomeActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+        <activity android:label="@string/title_activity_add_cost" android:name="com.byagowi.persiancalendar.ui.accounting.activity.AddCostActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+        <activity android:label="@string/title_activity_pick_date" android:name="com.byagowi.persiancalendar.ui.accounting.activity.PickDateActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+        <activity android:label="@string/title_activity_range_report" android:name="com.byagowi.persiancalendar.ui.accounting.activity.RangeReportActivity" android:theme="@android:style/Theme.Holo.Light.Dialog"/>
+
         <receiver
             android:name=".service.BroadcastReceivers"
             android:exported="false">

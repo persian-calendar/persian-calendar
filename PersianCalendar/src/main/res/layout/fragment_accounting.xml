@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentBottom="true">
+
+    <RelativeLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:textSize="@dimen/edittext_textsize"
+            android:id="@+id/editTextPickDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/date_pick"
+            android:layout_alignParentTop="true"/>
+
+        <LinearLayout
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:id="@+id/layoutCosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextPickDate">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/expense"
+                android:textColor="@color/white"
+                android:id="@+id/textViewCosts"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/costs"
+                android:layout_weight="9"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/expense"
+                android:textColor="@color/white"
+                android:id="@+id/textViewCostsPlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"
+                android:layout_alignParentLeft="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="left"
+            android:orientation="vertical"
+            android:id="@+id/layoutCostsContent"
+            android:background="@drawable/background_border_expense"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutCosts"
+            android:layout_alignParentRight="true">
+
+            <Button
+                android:id="@+id/buttonAddCostParam"
+                android:background="@color/gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginRight="10dp"
+                android:minWidth="@dimen/button_minwidth"
+                android:minHeight="@dimen/button_minheight"
+                android:text="@string/plus_sign"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                style="?android:attr/buttonStyleSmall"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:id="@+id/layoutIncome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutCostsContent">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/income"
+                android:textColor="@color/white"
+                android:id="@+id/textViewIncome"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/income"
+                android:layout_weight="9"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/income"
+                android:textColor="@color/white"
+                android:id="@+id/textViewIncomePlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"
+                android:layout_alignParentLeft="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="left"
+            android:orientation="vertical"
+            android:id="@+id/layoutIncomeContent"
+            android:background="@drawable/background_border_income"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/layoutIncome">
+
+            <Button
+                android:id="@+id/buttonAddIncomeParam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginRight="10dp"
+                android:minWidth="@dimen/button_minwidth"
+                android:minHeight="@dimen/button_minheight"
+                android:text="@string/plus_sign"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                style="?android:attr/buttonStyleSmall"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:id="@+id/layoutDailyReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutIncomeContent">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReport"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/daily_report"
+                android:layout_weight="9"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewReportPlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"
+                android:layout_alignParentLeft="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/layoutRangeReportContent"
+            android:background="@drawable/background_border_result"
+            android:padding="@dimen/content_padding"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/layoutDailyReport">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:textColor="@color/brown_dark"
+                android:layout_gravity="right"
+                android:id="@+id/textViewReportCaption"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_date_see_report"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/textViewReportCost"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/textViewReportIncome"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <LinearLayout
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textViewReportDetection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="5"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/textViewReportSum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="5"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:id="@+id/layoutTotalReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutRangeReportContent">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewMonthReport"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/total_report"
+                android:layout_weight="9"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:background="@color/result"
+                android:textColor="@color/white"
+                android:id="@+id/textViewTotalReportPlusSign"
+                android:paddingRight="@dimen/paddingright_caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margintop_caption"
+                android:text="@string/plus_sign"
+                android:layout_weight="1"
+                android:layout_alignParentLeft="true"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/layoutTotalRangeReportContent"
+            android:background="@drawable/background_border_result"
+            android:padding="@dimen/content_padding"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/layoutTotalReport">
+
+            <TextView
+                android:textSize="@dimen/caption_text_size"
+                android:textColor="@color/brown_dark"
+                android:layout_gravity="right"
+                android:id="@+id/textViewTotalReportCaption"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_date_see_report"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/textViewTotalReportCost"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/textViewTotalReportIncome"
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <LinearLayout
+                android:padding="@dimen/report_elements_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textViewTotalReportDetection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="5"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/textViewTotalReportSum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="5"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <com.byagowi.persiancalendar.ui.accounting.calendar.PersianDatePicker
+        android:gravity="center"
+        android:id="@+id/persianDatePick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:displayMonthNames="true"/>
+
+    <Button
+        android:id="@+id/buttonSelectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/select"
+        android:layout_below="@+id/persianDatePick"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

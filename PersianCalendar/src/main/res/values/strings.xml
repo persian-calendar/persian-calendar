@@ -320,4 +320,48 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--<string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>-->
     <!--<string translatable="false" name="item_removed">«%1$s» حذف شد</string>-->
 
+    <!-- Accounting -->
+    <string name="accounting">Accounting</string>
+    <string name="add_date_see_report">برای مشاهده گزارش تاریخ مورد نظرتان را وارد کنید</string>
+    <string name="cost_sum">جمع کل هزینه ها :  </string>
+    <string name="costs">Cost</string>
+    <string name="costs_colon">Cost:</string>
+    <string name="daily_report">Today report</string>
+    <string name="date_pick">Select date</string>
+    <string name="enter_caption">Enter your title</string>
+    <string name="income">Income</string>
+    <string name="income_colon">Income:</string>
+    <string name="income_sum">Total income:</string>
+    <string name="insert">Add</string>
+    <string name="minus_sign">-</string>
+    <string name="total_report">Total report</string>
+    <string name="no_info">There is no information to display</string>
+    <string name="plus_sign">+</string>
+    <string name="range_report">Interim report</string>
+    <string name="range_report_caption">Report in Selection Period</string>
+    <string name="range_report_details_caption">Report Details</string>
+    <string name="report_sum">Current money</string>
+    <string name="report_detection">Detection:</string>
+    <string name="record">Record</string>
+    <string name="save">Save</string>
+    <string name="select">Select</string>
+    <string name="title_activity_add_cost">Expenditure</string>
+    <string name="title_activity_add_cost_param">Add cost title</string>
+    <string name="title_activity_add_income">Income</string>
+    <string name="title_activity_add_income_param">Add income title</string>
+    <string name="title_activity_pick_date">Select date</string>
+    <string name="title_activity_range_report">Interim report</string>
+    <string name="underscore">_</string>
+    <string name="please_add_correct_date">Please enter the correct date</string>
+    <string name="please_add_first_value">Please enter a value to edit first</string>
+    <string name="cost">Cost</string>
+    <string name="dont_added_value">You have not entered anything</string>
+    <string name="please_add_subtitle">Please enter a title</string>
+    <string name="note_for_date">Starting dates must be less than the end date or two dates equal</string>
+    <string name="all_today_result">All report of the day</string>
+    <string name="all_result">Total report</string>
+    <string name="not_valid_a_month">Invalid value for month</string>
+    <string name="up_to_date">Up to date</string>
+    <string name="from_to_date">From to date</string>
+
 </resources>
