@@ -1,26 +1,21 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
 import android.app.Dialog
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
-
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.dependencies.AppDependency
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
-import com.byagowi.persiancalendar.entities.CalendarTypeItem
-import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerAppCompatDialogFragment
+import java.util.*
+import javax.inject.Inject
 
 class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
     @Inject
@@ -30,8 +25,6 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
     private var mItemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(mainActivityDependency.mainActivity)
-
         val values = ArrayList<String>()
         val titles = ArrayList<String>()
         val enabled = ArrayList<Boolean>()
@@ -44,35 +37,36 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
             titles.add(entity.toString())
             enabled.add(enabledCalendarTypes.contains(entity.type))
         }
-
-        val recyclerView = RecyclerView(mainActivityDependency.mainActivity)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-        val adapter = RecyclerListAdapter(this,
-                mainActivityDependency, titles, values, enabled)
-        recyclerView.adapter = adapter
-
-        val callback = SimpleItemTouchHelperCallback(adapter)
-        mItemTouchHelper = ItemTouchHelper(callback)
-        mItemTouchHelper!!.attachToRecyclerView(recyclerView)
-        builder.setView(recyclerView)
-        builder.setTitle(R.string.calendars_priority)
-        builder.setNegativeButton(R.string.cancel, null)
-        builder.setPositiveButton(R.string.accept) { dialogInterface, i ->
-            val edit = appDependency.sharedPreferences.edit()
-            val ordering = adapter.result
-            if (ordering.size != 0) {
-                edit.putString(Constants.PREF_MAIN_CALENDAR_KEY, ordering[0])
-                edit.putString(Constants.PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
-                        ordering.subList(1, ordering.size)))
-            }
-            edit.apply()
+        val adapter = RecyclerListAdapter(this, mainActivityDependency, titles, values, enabled)
+        val recyclerView = RecyclerView(mainActivityDependency.mainActivity).apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+            this.adapter = adapter
         }
 
-        return builder.create()
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        mItemTouchHelper = ItemTouchHelper(callback).apply {
+            attachToRecyclerView(recyclerView)
+        }
+
+        return AlertDialog.Builder(mainActivityDependency.mainActivity).apply {
+            setView(recyclerView)
+            setTitle(R.string.calendars_priority)
+            setNegativeButton(R.string.cancel, null)
+            setPositiveButton(R.string.accept) { _, _ ->
+                val ordering = adapter.result
+                appDependency.sharedPreferences.edit {
+                    if (ordering.isNotEmpty()) {
+                        putString(Constants.PREF_MAIN_CALENDAR_KEY, ordering[0])
+                        putString(Constants.PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
+                                ordering.subList(1, ordering.size)))
+                    }
+                }
+            }
+        }.create()
     }
 
-    internal fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        mItemTouchHelper!!.startDrag(viewHolder)
+    fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        mItemTouchHelper?.startDrag(viewHolder)
     }
 }

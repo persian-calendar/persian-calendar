@@ -20,21 +20,17 @@ import android.animation.ValueAnimator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-
-import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
-
-import java.util.ArrayList
-import java.util.Collections
 import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import java.util.*
 
 class RecyclerListAdapter constructor(private val calendarPreferenceDialog: CalendarPreferenceDialog,
-                                               private val mainActivityDependency: MainActivityDependency,
-                                               titles: List<String>, values: List<String>, enabled: List<Boolean>) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
+                                      private val mainActivityDependency: MainActivityDependency,
+                                      titles: List<String>, values: List<String>, enabled: List<Boolean>) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     private val titles: MutableList<String>
     private val values: MutableList<String>
@@ -68,7 +64,7 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
         holder.bind(position)
 
         // Start a drag whenever the handle view it touched
-        holder.itemView.setOnTouchListener { v, event ->
+        holder.itemView.setOnTouchListener { _, event ->
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                 calendarPreferenceDialog.onStartDrag(holder)
             }
@@ -76,14 +72,14 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
         }
     }
 
-    internal fun onItemMoved(fromPosition: Int, toPosition: Int) {
+    fun onItemMoved(fromPosition: Int, toPosition: Int) {
         Collections.swap(titles, fromPosition, toPosition)
         Collections.swap(values, fromPosition, toPosition)
         Collections.swap(enabled, fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    internal fun onItemDismissed(position: Int) {
+    fun onItemDismissed(position: Int) {
         titles.removeAt(position)
         values.removeAt(position)
         enabled.removeAt(position)
@@ -127,24 +123,24 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
         return titles.size
     }
 
-    inner class ItemViewHolder internal constructor(private val binding: CalendarTypeItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder constructor(private val binding: CalendarTypeItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(position: Int) {
             binding.checkTextView.text = titles[position]
             binding.checkTextView.isChecked = enabled[position]
 
-            binding.checkTextView.setOnClickListener { v ->
+            binding.checkTextView.setOnClickListener {
                 val newState = !binding.checkTextView.isChecked
                 binding.checkTextView.isChecked = newState
                 enabled[position] = newState
             }
         }
 
-        internal fun onItemSelected() {
+        fun onItemSelected() {
             binding.root.setBackgroundColor(Color.LTGRAY)
         }
 
-        internal fun onItemCleared() {
+        fun onItemCleared() {
             binding.root.setBackgroundColor(0)
         }
     }
