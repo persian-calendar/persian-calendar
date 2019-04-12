@@ -1,11 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import com.byagowi.persiancalendar.utils.Utils
-
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceDialogFragmentCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.utils.Utils
 
 /**
  * persian_calendar
@@ -16,12 +15,15 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
         super.onPrepareDialogBuilder(builder)
+        if (builder == null) return
 
-        val recyclerView = RecyclerView(builder!!.context)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = LocationAdapter(this,
-                Utils.getAllCities(context, true))
+        val recyclerView = RecyclerView(builder.context).apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = LocationAdapter(this@LocationPreferenceDialog,
+                    Utils.getAllCities(context, true))
+        }
+
         builder.setView(recyclerView)
 
         builder.setPositiveButton("", null)

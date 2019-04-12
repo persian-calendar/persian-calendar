@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.Manifest
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +13,9 @@ import android.text.TextUtils
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
+import androidx.core.content.getSystemService
+import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.dependencies.AppDependency
@@ -32,7 +34,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
     private var locationManager: LocationManager? = null
-    private var textView: TextView? = null
+    private lateinit var textView: TextView
     private val handler = Handler()
     private var latitude: String? = null
     private var longitude: String? = null
@@ -42,24 +44,28 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     private var everRegisteredCallback = false
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location?) {
-            if (location != null)
-                showLocation(location)
+            location?.let { showLocation(it) }
         }
 
-        override fun onStatusChanged(s: String, i: Int, bundle: Bundle) {}
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
 
-        override fun onProviderEnabled(s: String) {}
+        override fun onProviderEnabled(provider: String?) {
 
-        override fun onProviderDisabled(s: String) {}
+        }
+
+        override fun onProviderDisabled(provider: String?) {
+
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        textView = TextView(mainActivityDependency.mainActivity)
-        textView!!.setPadding(32, 32, 32, 32)
-        textView!!.setText(R.string.pleasewaitgps)
+        textView = TextView(mainActivityDependency.mainActivity).apply {
+            updatePadding(32)
+            setText(R.string.pleasewaitgps)
+        }
 
-        locationManager = mainActivityDependency.mainActivity
-                .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager = mainActivityDependency.mainActivity.getSystemService()
 
         getLocation()
         if (lacksPermission) {
@@ -79,13 +85,12 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         if (latitude != null && longitude != null) return
 
         try {
-            val gps = mainActivityDependency.mainActivity
-                    .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val gps = mainActivityDependency.mainActivity.getSystemService<LocationManager?>()
 
-            if (gps != null && !gps.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                 AlertDialog.Builder(mainActivityDependency.mainActivity)
                         .setMessage(R.string.gps_internet_desc)
-                        .setPositiveButton(R.string.accept) { dialogInterface, i ->
+                        .setPositiveButton(R.string.accept) { _, _ ->
                             try {
                                 mainActivityDependency.mainActivity.startActivity(
                                         Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
@@ -99,23 +104,21 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     }
 
     private fun getLocation() {
-        if (locationManager == null) {
-            return
-        }
-
         if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             lacksPermission = true
             return
         }
 
-        if (locationManager!!.allProviders.contains(LocationManager.GPS_PROVIDER)) {
-            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
-            everRegisteredCallback = true
-        }
+        locationManager?.apply {
+            if (allProviders.contains(LocationManager.GPS_PROVIDER)) {
+                requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
+                everRegisteredCallback = true
+            }
 
-        if (locationManager!!.allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
-            locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
-            everRegisteredCallback = true
+            if (allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+                requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
+                everRegisteredCallback = true
+            }
         }
     }
 
@@ -126,7 +129,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         val addresses: List<Address>
         try {
             addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
-            if (addresses.size > 0) {
+            if (addresses.isNotEmpty()) {
                 cityName = addresses[0].locality
             }
         } catch (e: IOException) {
@@ -134,32 +137,32 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         }
 
         var result = ""
-        if (!TextUtils.isEmpty(cityName)) {
-            result = cityName!! + "\n\n"
+        if (cityName != null && !TextUtils.isEmpty(cityName)) {
+            result = cityName + "\n\n"
         }
         // this time, with native digits
         result += Utils.formatCoordinate(mainActivityDependency.mainActivity,
                 Coordinate(location.latitude, location.longitude,
                         location.altitude), "\n")
-        textView!!.text = result
+        textView.text = result
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
+    override fun onDismiss(dialog: DialogInterface?) {
         if (latitude != null && longitude != null) {
-            val editor = appDependency.sharedPreferences.edit()
-            editor.putString(Constants.PREF_LATITUDE, latitude)
-            editor.putString(Constants.PREF_LONGITUDE, longitude)
-            if (cityName != null) {
-                editor.putString(Constants.PREF_GEOCODED_CITYNAME, cityName)
-            } else {
-                editor.putString(Constants.PREF_GEOCODED_CITYNAME, "")
+            appDependency.sharedPreferences.edit {
+                putString(Constants.PREF_LATITUDE, latitude)
+                putString(Constants.PREF_LONGITUDE, longitude)
+                if (cityName != null) {
+                    putString(Constants.PREF_GEOCODED_CITYNAME, cityName)
+                } else {
+                    putString(Constants.PREF_GEOCODED_CITYNAME, "")
+                }
+                putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY)
             }
-            editor.putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY)
-            editor.apply()
         }
 
-        if (everRegisteredCallback && locationManager != null) {
-            locationManager!!.removeUpdates(locationListener)
+        if (everRegisteredCallback) {
+            locationManager?.removeUpdates(locationListener)
         }
 
         handler.removeCallbacks(checkGPSProviderCallback)
@@ -172,9 +175,8 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         super.onPause()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
             getLocation()
             if (lacksPermission)
