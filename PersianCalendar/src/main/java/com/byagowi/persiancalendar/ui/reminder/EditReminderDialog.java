@@ -17,7 +17,7 @@
 //import com.byagowi.persiancalendar.entities.Reminder;
 //import com.byagowi.persiancalendar.entities.StringWithValueItem;
 //import com.byagowi.persiancalendar.praytimes.Clock;
-//import com.byagowi.persiancalendar.ui.MainActivity;
+//import com.byagowi.persiancalendar.ui.AccountingFragment;
 //import com.byagowi.persiancalendar.utils.ReminderUtils;
 //import com.byagowi.persiancalendar.utils.Utils;
 //
@@ -74,7 +74,7 @@
 //    @Override
 //    public Dialog onCreateDialog(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+//        AccountingFragment mainActivity = mainActivityDependency.getMainActivity();
 //        EditReminderDialogBinding binding = EditReminderDialogBinding.inflate(
 //                LayoutInflater.from(mainActivity), null, false);
 //

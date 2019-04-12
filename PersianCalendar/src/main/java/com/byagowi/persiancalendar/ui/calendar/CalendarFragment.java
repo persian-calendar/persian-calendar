@@ -79,7 +79,7 @@ public class CalendarFragment extends DaggerFragment {
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
-    MainActivityDependency mainActivityDependency; // same object from MainActivity
+    MainActivityDependency mainActivityDependency; // same object from AccountingFragment
     private CalendarFragmentModel mCalendarFragmentModel;
     private Calendar mCalendar = Calendar.getInstance();
     private Coordinate mCoordinate;

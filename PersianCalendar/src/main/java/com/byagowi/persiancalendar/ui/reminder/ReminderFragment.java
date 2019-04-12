@@ -14,7 +14,7 @@
 //import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
 //import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
 //import com.byagowi.persiancalendar.entities.Reminder;
-//import com.byagowi.persiancalendar.ui.MainActivity;
+//import com.byagowi.persiancalendar.ui.AccountingFragment;
 //import com.byagowi.persiancalendar.utils.ReminderUtils;
 //import com.byagowi.persiancalendar.utils.Utils;
 //import com.google.android.material.snackbar.Snackbar;
@@ -48,7 +48,7 @@
 //                             @Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //
-//        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+//        AccountingFragment mainActivity = mainActivityDependency.getMainActivity();
 //        mainActivity.setTitleAndSubtitle(getString(R.string.reminder), "");
 //
 //        setHasOptionsMenu(true);
@@ -156,7 +156,7 @@
 //                mBinding.name.setText(reminder.name);
 //                mBinding.info.setText(reminder.info.replaceAll("\n", " "));
 //
-//                MainActivity mainActivity = mainActivityDependency.getMainActivity();
+//                AccountingFragment mainActivity = mainActivityDependency.getMainActivity();
 //                Resources resources = mainActivity.getResources();
 //                mBinding.period.setText(String.format("%s | %s",
 //                        String.format(resources.getString(R.string.reminder_summary),

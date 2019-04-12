@@ -82,24 +82,24 @@ public class RangeReportActivity extends Activity implements OnTouchListener {
     @SuppressLint("SetTextI18n")
     private void showTodayDate() {
         PersianCalendar today = new PersianCalendar();
-        String dayS = null;
-        String monthS = null;
+        String mToday = null;
+        String mMonth = null;
         if (today.getPersianDay() < 10) {
-            dayS = "0" + Integer.toString(today.getPersianDay());
+            mToday = "0" + Integer.toString(today.getPersianDay());
         } else if (today.getPersianDay() >= 10) {
-            dayS = Integer.toString(today.getPersianDay());
+            mToday = Integer.toString(today.getPersianDay());
         }
         if (today.getPersianMonth() < 10) {
-            monthS = "0" + Integer.toString(today.getPersianMonth());
+            mMonth = "0" + Integer.toString(today.getPersianMonth());
         } else if (today.getPersianMonth() >= 10) {
-            monthS = Integer.toString(today.getPersianMonth());
+            mMonth = Integer.toString(today.getPersianMonth());
         }
-        calDateStart = today.getPersianYear() + "/" + monthS + "/" + dayS;
+        calDateStart = today.getPersianYear() + "/" + mMonth + "/" + mToday;
         calWeekDayStart = today.getPersianWeekDayName();
-        calDateEnd = today.getPersianYear() + "/" + monthS + "/" + dayS;
+        calDateEnd = today.getPersianYear() + "/" + mMonth + "/" + mToday;
         calWeekDayEnd = today.getPersianWeekDayName();
-        dateStart.setText(calWeekDayStart + "   " + this.calDateStart);
-        dateEnd.setText(calWeekDayEnd + "   " + this.calDateEnd);
+        dateStart.setText(calWeekDayStart + "   " + calDateStart);
+        dateEnd.setText(calWeekDayEnd + "   " + calDateEnd);
     }
 
     public void onResume() {
@@ -240,22 +240,22 @@ public class RangeReportActivity extends Activity implements OnTouchListener {
         incomesCaption.setTextColor(getResources().getColor(R.color.caption_color));
         textView.addView(incomesCaption);
         for (i = 0; i < incomesDetails.size(); i += 2) {
-            textView = new LinearLayout(this);
-            textView.setOrientation(LinearLayout.HORIZONTAL);
-            textView.setWeightSum(1.0f);
-            TextView textView2 = new TextView(this);
-            textView2.setText(incomesDetails.get(i + 1));
-            textView2.setPadding(10, 10, 0, 10);
-            textView2.setTextColor(getResources().getColor(R.color.black));
-            textView2.setTextSize(getResources().getDimension(R.dimen.report_text_size));
-            textView.addView(textView2, PriceLayoutParams);
-            TextView textView3 = new TextView(this);
-            textView3.setText(incomesDetails.get(i));
-            textView3.setGravity(5);
-            textView3.setPadding(10, 10, 0, 10);
-            textView3.setTextSize(getResources().getDimension(R.dimen.report_text_size));
-            textView.addView(textView3, ParamLayputParams);
-            //textView.addView(textView3);
+            LinearLayout incomeLayout = new LinearLayout(this);
+            incomeLayout.setOrientation(LinearLayout.HORIZONTAL);
+            incomeLayout.setWeightSum(1.0f);
+            TextView incomePrice = new TextView(this);
+            incomePrice.setText(incomesDetails.get(i + 1));
+            incomePrice.setPadding(10, 10, 0, 10);
+            incomePrice.setTextColor(getResources().getColor(R.color.black));
+            incomePrice.setTextSize(getResources().getDimension(R.dimen.report_text_size));
+            incomeLayout.addView(incomePrice, PriceLayoutParams);
+            TextView incomeParam = new TextView(this);
+            incomeParam.setText(incomesDetails.get(i));
+            incomeParam.setGravity(5);
+            incomeParam.setPadding(10, 10, 0, 10);
+            incomeParam.setTextSize(getResources().getDimension(R.dimen.report_text_size));
+            incomeLayout.addView(incomeParam, ParamLayputParams);
+            textView.addView(incomeLayout);
         }
     }
 }
