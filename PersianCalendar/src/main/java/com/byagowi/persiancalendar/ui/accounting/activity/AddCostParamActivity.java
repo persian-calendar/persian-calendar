@@ -26,7 +26,7 @@ public class AddCostParamActivity extends Activity {
 
         Button button = findViewById(R.id.buttonAddCostParamSave);
         button.setOnClickListener(v -> {
-            this.captionText = findViewById(R.id.editTextAddCostParam);
+            captionText = findViewById(R.id.editTextAddCostParam);
             if (captionText.getText().toString().trim().length() > 0) {
                 db.insertCostCaption(captionText.getText().toString());
                 Intent returnCost = new Intent();

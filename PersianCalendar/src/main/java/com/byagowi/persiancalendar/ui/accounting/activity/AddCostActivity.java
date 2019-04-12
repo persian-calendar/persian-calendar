@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.ui.accounting.AccountingFragment;
 import com.byagowi.persiancalendar.ui.accounting.database.DatabaseHandler;
+import com.byagowi.persiancalendar.ui.accounting.tool.ThousandsSeparators;
 
 /**
  * @author MEHDI DIMYADI
@@ -27,6 +28,7 @@ public class AddCostActivity extends Activity {
         db = new DatabaseHandler(this);
         db.open();
         costText = findViewById(R.id.editTextAddCost);
+        costText.addTextChangedListener(new ThousandsSeparators(costText));
         Intent mainInt = getIntent();
         date = mainInt.getStringExtra("Date");
         paramId = mainInt.getIntExtra("ParamId", 0);
@@ -38,18 +40,19 @@ public class AddCostActivity extends Activity {
 
         Button button = findViewById(R.id.buttonAddCostInsert);
         button.setOnClickListener(v -> {
+            String mCostText = costText.getText().toString().replace(",","");
             if (this.costText.getText().toString().isEmpty()) {
                 Toast.makeText(getApplicationContext(), getString(R.string.dont_added_value), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (paramId >= 1000) {
-                db.editCost(this.paramId - 1000, Integer.parseInt(this.costText.getText().toString()), this.date);
+                db.editCost(this.paramId - 1000, Integer.parseInt(mCostText), date);
             } else {
-                db.insertCost(this.paramId, Integer.parseInt(this.costText.getText().toString()), this.date);
+                db.insertCost(this.paramId, Integer.parseInt(mCostText), date);
             }
             db.close();
             Intent costResInt = new Intent();
-            costResInt.putExtra("priceAdded", this.costText.getText().toString());
+            costResInt.putExtra("priceAdded", mCostText);
             setResult(-1, costResInt);
             finish();
         });
