@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.ui.accounting.database.DatabaseHandler;
@@ -36,7 +35,7 @@ public class AddCostParamActivity extends Activity {
                 finish();
                 return;
             }
-            Toast.makeText(getApplicationContext(), getString(R.string.please_add_subtitle), Toast.LENGTH_SHORT).show();
+            captionText.setError(getString(R.string.please_add_subtitle));
         });
     }
 

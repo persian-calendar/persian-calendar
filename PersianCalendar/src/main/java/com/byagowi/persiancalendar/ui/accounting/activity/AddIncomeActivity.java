@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.ui.accounting.AccountingFragment;
@@ -42,7 +41,7 @@ public class AddIncomeActivity extends Activity {
         button.setOnClickListener(v -> {
             String mIncomeText = incomeText.getText().toString().replace(",","");
             if (incomeText.getText().toString().isEmpty()) {
-                Toast.makeText(getApplicationContext(), R.string.dont_added_value, Toast.LENGTH_SHORT).show();
+                incomeText.setError(getString(R.string.dont_added_value));
                 return;
             }
             if (paramId >= 1000) {

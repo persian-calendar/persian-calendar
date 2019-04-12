@@ -195,7 +195,7 @@ public class AccountingFragment extends Fragment implements OnTouchListener, OnC
         reportTotalCaption.setText(getString(R.string.all_result));
         reportTotalCost.setText(getResources().getString(R.string.cost_sum) + db.calculateTotalCost(Integer.toString(today.getPersianMonth())));
         reportTotalIncome.setText(getResources().getString(R.string.income_sum) + db.calculateTotalIncome(Integer.toString(today.getPersianMonth())));
-        int sum = db.calculateTotalIncome(dateText.getText().toString()) - db.calculateTotalCost(Integer.toString(today.getPersianMonth()));
+        int sum = db.calculateTotalIncome(Integer.toString(today.getPersianMonth())) - db.calculateTotalCost(Integer.toString(today.getPersianMonth()));
         reportTotalSum.setText(getResources().getString(R.string.report_sum) + sum);
         String Detection;
         if (sum < 0) {
