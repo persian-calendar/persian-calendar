@@ -32,16 +32,13 @@ class DeviceInformationFragment : DaggerFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
-            mainActivityDependency.mainActivity.setTitleAndSubtitle(
-                    getString(R.string.device_info), "")
+            mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
             recyclerView.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-                addItemDecoration(DividerItemDecoration(
-                        mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
-                adapter = DeviceInfoAdapter(
-                        mainActivityDependency.mainActivity, root)
+                addItemDecoration(DividerItemDecoration(mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
+                adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
             }
 
             bottomNavigation.run {
@@ -52,7 +49,11 @@ class DeviceInformationFragment : DaggerFragment() {
                     add("API " + Build.VERSION.SDK_INT)
                     getItem(1).setIcon(R.drawable.ic_settings)
 
-                    add(Build.CPU_ABI)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        add(Build.SUPPORTED_ABIS[0])
+                    } else {
+                        add(Build.CPU_ABI)
+                    }
                     getItem(2).setIcon(R.drawable.ic_motorcycle)
 
                     add(Build.MODEL)
@@ -66,9 +67,7 @@ class DeviceInformationFragment : DaggerFragment() {
                             setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
                                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                             })
-
-                            show()
-                        }
+                        }.show()
                     }
                     true
                 }
@@ -126,11 +125,9 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
             ))
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Build.SUPPORTED_ABIS.forEachIndexed { index, s ->
-                    deviceInfoItemsList.add(DeviceInfoItem(
-                            "Instruction CPU ${index + 1}",
-                            s, ""
-                    ))
+                Build.SUPPORTED_ABIS.forEachIndexed { index, abi ->
+                    deviceInfoItemsList.add(DeviceInfoItem("Instruction CPU ${index + 1}",
+                            abi, ""))
                 }
             } else {
                 add(DeviceInfoItem(
@@ -238,7 +235,7 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
             }
         }
 
-        override fun onClick(v: View) {
+        override fun onClick(v: View?) {
             val info = deviceInfoItemsList[mPosition]
             Utils.copyToClipboard(rootView, info.title, info.content)
         }
