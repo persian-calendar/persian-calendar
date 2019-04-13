@@ -29,10 +29,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GPSLocationDialog : DaggerAppCompatDialogFragment() {
+
     @Inject
     lateinit var appDependency: AppDependency
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
+
     private var locationManager: LocationManager? = null
     private lateinit var textView: TextView
     private val handler = Handler()
@@ -47,16 +49,9 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
             location?.let { showLocation(it) }
         }
 
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        }
-
-        override fun onProviderEnabled(provider: String?) {
-
-        }
-
-        override fun onProviderDisabled(provider: String?) {
-
-        }
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+        override fun onProviderEnabled(provider: String?) {}
+        override fun onProviderDisabled(provider: String?) {}
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

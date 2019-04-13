@@ -7,6 +7,7 @@ import com.google.android.apps.dashclock.api.DashClockExtension
 import com.google.android.apps.dashclock.api.ExtensionData
 
 class DashClockUpdate : DashClockExtension() {
+
     override fun onUpdateData(reason: Int) {
         setUpdateWhenScreenOn(true)
         val mainCalendar = Utils.getMainCalendar()

@@ -24,6 +24,7 @@ import javax.inject.Inject
  * MEHDIMYADI
  */
 class DeviceInformationFragment : DaggerFragment() {
+
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
@@ -236,8 +237,9 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
         }
 
         override fun onClick(v: View?) {
-            val info = deviceInfoItemsList[mPosition]
-            Utils.copyToClipboard(rootView, info.title, info.content)
+            deviceInfoItemsList[mPosition].apply {
+                Utils.copyToClipboard(rootView, title, content)
+            }
         }
     }
 }

@@ -89,11 +89,11 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
         if (titles.size == 0) {
             try {
                 val view = mainActivityDependency.mainActivity.coordinator
-                val animator = ValueAnimator.ofFloat(0f, 360f)
-                animator.duration = 3000L
-                animator.interpolator = AccelerateDecelerateInterpolator()
-                animator.addUpdateListener { value -> view.rotation = value.animatedValue as Float }
-                animator.start()
+                ValueAnimator.ofFloat(0f, 360f).apply {
+                    duration = 3000L
+                    interpolator = AccelerateDecelerateInterpolator()
+                    addUpdateListener { value -> view.rotation = value.animatedValue as Float }
+                }.start()
                 //                Context context = calendarPreferenceDialog.getContext();
                 //                MediaPlayer mediaPlayer = MediaPlayer.create(context,
                 //                        R.raw.bach_invention_01);
@@ -136,12 +136,8 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
             }
         }
 
-        fun onItemSelected() {
-            binding.root.setBackgroundColor(Color.LTGRAY)
-        }
+        fun onItemSelected() = binding.root.setBackgroundColor(Color.LTGRAY)
 
-        fun onItemCleared() {
-            binding.root.setBackgroundColor(0)
-        }
+        fun onItemCleared() = binding.root.setBackgroundColor(0)
     }
 }

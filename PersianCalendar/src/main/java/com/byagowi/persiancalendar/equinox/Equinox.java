@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.equinox;
 
 // Adopted from https://github.com/xyproto/calendar/blob/master/equinox.go
 //// Equinox and solstice algorithms from Astronomical Algorithms by Jean Meeus
-//// Adapted from jgiesen.de/astro/astroJS/seasons/seasons.js
+//// Adapted from http://jgiesen.de/astro/astroJS/seasons/seasons.js
 ////// Equinoxes and Solstices
 ////// algorithm from Meeus
 ////// adapted by Juergen Giesen

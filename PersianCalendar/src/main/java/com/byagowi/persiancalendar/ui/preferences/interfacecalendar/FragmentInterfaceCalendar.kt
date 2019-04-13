@@ -15,6 +15,7 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
+
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
@@ -26,7 +27,6 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
         val switchPreference = findPreference("showDeviceCalendarEvents") as SwitchPreferenceCompat
 
         switchPreference.setOnPreferenceChangeListener { _, _ ->
-
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 Utils.askForCalendarPermission(mainActivityDependency.mainActivity)
                 switchPreference.isChecked = false

@@ -49,10 +49,12 @@ import javax.inject.Inject
  * @author ebraminio
  */
 class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+
     @Inject
     lateinit var appDependency: AppDependency // same object from App
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
+
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding

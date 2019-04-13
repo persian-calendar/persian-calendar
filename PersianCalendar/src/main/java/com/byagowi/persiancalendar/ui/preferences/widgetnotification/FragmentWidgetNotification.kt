@@ -12,8 +12,9 @@ import com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import java.util.*
 
-// Don't use dagger in this class
+// Don't use dagger in this class as it is used in WidgetConfigurationActivity also
 class FragmentWidgetNotification : PreferenceFragmentCompat() {
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
             addPreferencesFromResource(R.xml.preferences_widget_notification)
 

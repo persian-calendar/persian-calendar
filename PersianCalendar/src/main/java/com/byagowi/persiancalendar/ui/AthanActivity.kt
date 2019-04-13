@@ -22,6 +22,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : AppCompatActivity() {
+
     private val handler = Handler()
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null

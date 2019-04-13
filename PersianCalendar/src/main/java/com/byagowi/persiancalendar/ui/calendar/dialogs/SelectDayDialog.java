@@ -22,6 +22,7 @@ import dagger.android.support.DaggerAppCompatDialogFragment;
  */
 public class SelectDayDialog extends DaggerAppCompatDialogFragment {
     private static String BUNDLE_KEY = "jdn";
+
     @Inject
     MainActivityDependency mainActivityDependency;
     @Inject

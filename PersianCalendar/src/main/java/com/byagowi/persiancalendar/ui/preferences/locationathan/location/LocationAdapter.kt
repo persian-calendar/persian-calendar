@@ -18,13 +18,10 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mCities[position])
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+            holder.bind(mCities[position])
 
-    override fun getItemCount(): Int {
-        return mCities.size
-    }
+    override fun getItemCount(): Int = mCities.size
 
     inner class ViewHolder(private val binding: ListItemCityNameBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
@@ -54,8 +51,7 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
             binding.executePendingBindings()
         }
 
-        override fun onClick(view: View) {
-            mLocationPreferenceDialog.selectItem(mCities[adapterPosition].key)
-        }
+        override fun onClick(view: View) =
+                mLocationPreferenceDialog.selectItem(mCities[adapterPosition].key)
     }
 }

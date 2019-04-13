@@ -23,9 +23,11 @@ import javax.inject.Inject
  * @author ebraminio
  */
 class CompassFragment : DaggerFragment() {
-    var stop = false
+
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
+
+    var stopped = false
     private lateinit var binding: FragmentCompassBinding
     private var sensorManager: SensorManager? = null
     private var sensor: Sensor? = null
@@ -47,7 +49,7 @@ class CompassFragment : DaggerFragment() {
             // angle between the magnetic north direction
             // 0=North, 90=East, 180=South, 270=West
             var angle = event.values[0] + orientation
-            if (stop)
+            if (stopped)
                 angle = 0f
             else
                 binding.compassView.isOnDirectionAction()
@@ -89,10 +91,10 @@ class CompassFragment : DaggerFragment() {
                 true
             }
             fab.setOnClickListener {
-                stop = !stop
-                fab.setImageResource(if (stop) R.drawable.ic_play else R.drawable.ic_stop)
+                stopped = !stopped
+                fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
                 fab.contentDescription = mainActivityDependency.mainActivity
-                        .getString(if (stop) R.string.resume else R.string.stop)
+                        .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
 

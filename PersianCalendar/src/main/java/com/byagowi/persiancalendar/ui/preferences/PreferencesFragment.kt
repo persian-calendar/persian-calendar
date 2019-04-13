@@ -21,6 +21,7 @@ import javax.inject.Inject
  * MEHDIMYADI
  */
 class PreferencesFragment : DaggerFragment() {
+
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
@@ -35,7 +36,6 @@ class PreferencesFragment : DaggerFragment() {
             return root
         }
     }
-
 
     internal inner class ViewPagerAdapter(manager: FragmentManager, private var pageCount: Int) : FragmentPagerAdapter(manager) {
 

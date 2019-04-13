@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import dagger.android.support.DaggerFragment;
 
 public class MonthFragment extends DaggerFragment {
+
     @Inject
     AppDependency appDependency;
     @Inject

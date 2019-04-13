@@ -18,10 +18,12 @@ import java.util.*
 import javax.inject.Inject
 
 class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
+
     @Inject
     lateinit var appDependency: AppDependency
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
+
     private var mItemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

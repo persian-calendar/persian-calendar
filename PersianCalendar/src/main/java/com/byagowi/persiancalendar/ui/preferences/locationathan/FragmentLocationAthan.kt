@@ -37,10 +37,12 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class FragmentLocationAthan : PreferenceFragmentCompat() {
+
     @Inject
     lateinit var appDependency: AppDependency
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
+
     private var categoryAthan: Preference? = null
 
     private val defaultAthanName: String

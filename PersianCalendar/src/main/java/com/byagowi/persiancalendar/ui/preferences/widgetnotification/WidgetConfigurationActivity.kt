@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
 
 class WidgetConfigurationActivity : AppCompatActivity() {
+
     private fun finishAndSuccess() {
         val extras = intent.extras
         if (extras != null) {

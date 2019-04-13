@@ -23,13 +23,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerListAdapter) : ItemTouchHelper.Callback() {
 
-    override fun isLongPressDragEnabled(): Boolean {
-        return true
-    }
+    override fun isLongPressDragEnabled(): Boolean = true
 
-    override fun isItemViewSwipeEnabled(): Boolean {
-        return true
-    }
+    override fun isItemViewSwipeEnabled(): Boolean = true
 
     override fun getMovementFlags(recyclerView: RecyclerView,
                                   viewHolder: RecyclerView.ViewHolder): Int {
@@ -56,10 +52,8 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
         return true
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
-        // Notify the adapter of the dismissal
-        mAdapter.onItemDismissed(viewHolder.adapterPosition)
-    }
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) =
+            mAdapter.onItemDismissed(viewHolder.adapterPosition) // Notify the adapter of the dismissal
 
     override fun onChildDraw(c: Canvas, recyclerView: RecyclerView,
                              viewHolder: RecyclerView.ViewHolder,

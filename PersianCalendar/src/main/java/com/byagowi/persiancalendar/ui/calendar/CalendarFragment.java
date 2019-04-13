@@ -76,10 +76,12 @@ import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_RE
 import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends DaggerFragment {
+
     @Inject
     AppDependency appDependency; // same object from App
     @Inject
     MainActivityDependency mainActivityDependency; // same object from MainActivity
+
     private CalendarFragmentModel mCalendarFragmentModel;
     private Calendar mCalendar = Calendar.getInstance();
     private Coordinate mCoordinate;

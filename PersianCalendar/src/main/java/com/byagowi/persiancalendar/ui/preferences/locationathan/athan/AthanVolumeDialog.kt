@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.utils.Utils
 import java.io.IOException
 
 class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
+
     private var volume: Int = 0
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null

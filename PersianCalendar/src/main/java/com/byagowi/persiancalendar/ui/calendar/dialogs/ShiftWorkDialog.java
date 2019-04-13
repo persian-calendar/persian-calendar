@@ -40,12 +40,14 @@ import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN
 
 public class ShiftWorkDialog extends DaggerAppCompatDialogFragment {
     private static String BUNDLE_KEY = "jdn";
+
     @Inject
     AppDependency appDependency;
     @Inject
     MainActivityDependency mainActivityDependency;
     @Inject
     CalendarFragmentDependency calendarFragmentDependency;
+
     private long jdn = -1;
     private long selectedJdn = -1;
 

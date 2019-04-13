@@ -12,6 +12,7 @@ import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 class ConverterFragment : DaggerFragment() {
+
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 

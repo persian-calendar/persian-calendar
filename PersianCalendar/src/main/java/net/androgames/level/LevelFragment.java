@@ -41,6 +41,7 @@ import dagger.android.support.DaggerFragment;
  *  along with Level. If not, see <http://www.gnu.org/licenses/>
  */
 public class LevelFragment extends DaggerFragment {
+
     @Inject
     MainActivityDependency mainActivityDependency;
 
