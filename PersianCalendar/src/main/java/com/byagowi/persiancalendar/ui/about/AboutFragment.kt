@@ -17,6 +17,9 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.net.toUri
+import androidx.core.view.setMargins
+import androidx.core.view.setPadding
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
@@ -54,7 +57,7 @@ class AboutFragment : DaggerFragment() {
                     .setView(ScrollView(activity).apply {
                         addView(TextView(activity).apply {
                             text = Utils.readRawResource(activity, R.raw.credits)
-                            setPadding(20, 20, 20, 20)
+                            setPadding(20)
                             typeface = Typeface.MONOSPACE
                             Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                         })
@@ -78,8 +81,7 @@ class AboutFragment : DaggerFragment() {
         // report bug
         binding.reportBug.setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/ebraminio/DroidPersianCalendar/issues/new")))
+                startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/ebraminio/DroidPersianCalendar/issues/new".toUri()))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -111,9 +113,8 @@ class AboutFragment : DaggerFragment() {
         val color = TypedValue()
         activity.theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
 
-        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
-        layoutParams.setMargins(8, 8, 8, 8)
+        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        layoutParams.setMargins(8)
 
         val chipClick = View.OnClickListener { view ->
             try {
@@ -167,18 +168,17 @@ class AboutFragment : DaggerFragment() {
             }
             binding.developers.addView(chip)
         }
-
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.about_menu_buttons, menu)
+        menu?.clear()
+        inflater?.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
             R.id.deviceInfo -> mainActivityDependency.mainActivity.navigateTo(R.id.deviceInfo)
             else -> {
             }

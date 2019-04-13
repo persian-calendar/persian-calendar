@@ -30,8 +30,7 @@ class IndeterminateProgressBar : ProgressBar {
                 interpolator = LinearInterpolator()
                 repeatMode = ValueAnimator.RESTART
                 repeatCount = ValueAnimator.INFINITE
-                val indeterminateDrawable = indeterminateDrawable
-                addUpdateListener { indeterminateDrawable.setColorFilter(it.animatedValue as Int, PorterDuff.Mode.SRC_ATOP) }
+                addUpdateListener { indeterminateDrawable?.setColorFilter(it.animatedValue as Int, PorterDuff.Mode.SRC_ATOP) }
                 start()
             }
     }
