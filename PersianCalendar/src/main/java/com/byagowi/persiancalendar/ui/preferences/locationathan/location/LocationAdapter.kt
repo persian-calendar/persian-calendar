@@ -18,8 +18,7 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-            holder.bind(mCities[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(mCities[position])
 
     override fun getItemCount(): Int = mCities.size
 

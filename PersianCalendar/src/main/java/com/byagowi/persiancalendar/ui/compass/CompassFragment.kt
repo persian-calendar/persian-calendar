@@ -43,11 +43,12 @@ class CompassFragment : DaggerFragment() {
         val ALPHA = 0.15f
         var azimuth: Float = 0f
 
-        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-        override fun onSensorChanged(event: SensorEvent) {
+        override fun onSensorChanged(event: SensorEvent?) {
             // angle between the magnetic north direction
             // 0=North, 90=East, 180=South, 270=West
+            if (event == null) return
             var angle = event.values[0] + orientation
             if (stopped)
                 angle = 0f
@@ -106,7 +107,7 @@ class CompassFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
+    override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         setCompassMetrics()
     }

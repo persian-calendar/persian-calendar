@@ -23,9 +23,9 @@ class NumericPreference : EditTextPreference {
     override fun getText(): String? = mDouble.toString()
 
     // http://stackoverflow.com/a/10848393
-    override fun setText(text: String) {
+    override fun setText(text: String?) {
         val wasBlocking = shouldDisableDependents()
-        mDouble = parseDouble(text)
+        mDouble = text?.let { parseDouble(it) }
         persistString(mDouble.toString())
         val isBlocking = shouldDisableDependents()
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking)
