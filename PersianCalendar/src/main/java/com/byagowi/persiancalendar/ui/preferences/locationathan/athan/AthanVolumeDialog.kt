@@ -18,10 +18,9 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
 
-    override fun onCreateDialogView(context: Context): View {
+    override fun onCreateDialogView(context: Context?): View {
         val athanPref = preference as AthanVolumePreference
-
-        val audioManager = context.getSystemService<AudioManager?>()
+        val audioManager = context?.getSystemService<AudioManager?>()
         audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
 
         val customAthanUri = Utils.getCustomAthanUri(context)

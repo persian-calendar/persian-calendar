@@ -235,7 +235,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 .navigate(id, null, null)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         settingHasChanged = true
         if (key == PREF_APP_LANGUAGE) {
             var persianDigits = false
@@ -245,7 +245,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             var changeToPersianCalendar = false
             var changeToIranEvents = false
             var removeAllEvents = false
-            var lang = sharedPreferences.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)
+            var lang = sharedPreferences?.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)
             if (lang == null) lang = ""
             when (lang) {
                 LANG_EN_US -> {
@@ -288,7 +288,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 else -> persianDigits = true
             }
 
-            sharedPreferences.edit {
+            sharedPreferences?.edit {
                 putBoolean(PREF_PERSIAN_DIGITS, persianDigits)
                 // Enable Afghanistan holidays when Dari or Pashto is set
                 if (changeToAfghanistanHolidays) {
@@ -341,7 +341,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS) {
-            if (sharedPreferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true)) {
+            if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                     Utils.askForCalendarPermission(this)
                 }
@@ -353,7 +353,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         if (key == PREF_NOTIFY_DATE) {
-            if (!sharedPreferences.getBoolean(PREF_NOTIFY_DATE, true)) {
+            if (sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
                 stopService(Intent(this, ApplicationService::class.java))
                 Utils.startEitherServiceOrWorker(applicationContext)
             }
@@ -382,7 +382,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
+    override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         Utils.initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -399,7 +399,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // Checking for the "menu" key
         return if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
@@ -450,7 +450,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         } else {
             val calendarFragment = supportFragmentManager
                     .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
-
             if (calendarFragment != null) {
                 if (calendarFragment.closeSearch())
                     return

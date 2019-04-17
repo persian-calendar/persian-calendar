@@ -11,10 +11,10 @@ import androidx.preference.EditTextPreferenceDialogFragmentCompat
  * Created by ebraminio on 2/21/16.
  */
 class NumericDialog : EditTextPreferenceDialogFragmentCompat() {
-    override fun onBindDialogView(view: View) {
+    override fun onBindDialogView(view: View?) {
         super.onBindDialogView(view)
 
-        view.findViewById<EditText>(android.R.id.edit).apply {
+        view?.findViewById<EditText>(android.R.id.edit)?.apply {
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED or
                     InputType.TYPE_NUMBER_FLAG_DECIMAL
 
