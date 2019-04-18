@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.dependencies.AppDependency
@@ -56,7 +55,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
 
-        categoryAthan = findPreference(Constants.PREF_KEY_ATHAN)
+        categoryAthan = findPreference(PREF_KEY_ATHAN)
         updateAthanPreferencesState()
 
         updateAthanPreferencesState()

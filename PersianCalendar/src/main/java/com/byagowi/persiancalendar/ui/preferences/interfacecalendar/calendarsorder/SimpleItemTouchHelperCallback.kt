@@ -33,11 +33,11 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
         return if (recyclerView.layoutManager is GridLayoutManager) {
             val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             val swipeFlags = 0
-            ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+            makeMovementFlags(dragFlags, swipeFlags)
         } else {
             val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
             val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-            ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+            makeMovementFlags(dragFlags, swipeFlags)
         }
     }
 

@@ -23,7 +23,6 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference
@@ -139,8 +138,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         val intent = intent
         if (intent != null) {
-            val action = intent.action
-            when (action) {
+            when (intent.action) {
                 "COMPASS" -> navigateTo(R.id.compass)
                 "LEVEL" -> navigateTo(R.id.level)
                 "CONVERTER" -> navigateTo(R.id.converter)
@@ -168,7 +166,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
         if (appLanguage == null) appLanguage = "N/A"
-        if (appLanguage == "N/A" && !prefs.getBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
+        if (appLanguage == "N/A" && !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
             Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     view.layoutDirection = View.LAYOUT_DIRECTION_LTR
@@ -179,7 +177,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
                 setAction("Settings") {
                     prefs.edit {
-                        putString(Constants.PREF_APP_LANGUAGE, Constants.LANG_EN_US)
+                        putString(PREF_APP_LANGUAGE, LANG_EN_US)
                         putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
                         putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
                         putStringSet(PREF_HOLIDAY_TYPES, HashSet())
@@ -188,7 +186,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 setActionTextColor(resources.getColor(R.color.dark_accent))
             }.show()
             prefs.edit {
-                putBoolean(Constants.CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true)
+                putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true)
             }
         }
 
@@ -367,7 +365,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE) {
+        if (requestCode == CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                 Utils.toggleShowDeviceCalendarOnPreference(this, true)
                 val currentDestination = Navigation
@@ -437,12 +435,11 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         return true
     }
 
-    fun setTitleAndSubtitle(title: String, subtitle: String) {
-        supportActionBar?.apply {
-            this.title = title
-            this.subtitle = subtitle
-        }
+    fun setTitleAndSubtitle(title: String, subtitle: String) = supportActionBar?.apply {
+        this.title = title
+        this.subtitle = subtitle
     }
+
 
     override fun onBackPressed() {
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
