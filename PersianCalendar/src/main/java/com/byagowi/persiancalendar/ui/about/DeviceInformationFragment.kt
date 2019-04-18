@@ -83,14 +83,12 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     : ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(DeviceInfoDiffCallback()) {
     private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
-    class DeviceInfoItem(val title: String, val content: String, val version: String)
+    data class DeviceInfoItem(val title: String, val content: String, val version: String)
 
     class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
         override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean =
-                oldItem.title == newItem.title && oldItem.content == newItem.content &&
-                        oldItem.version == newItem.version
+        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
     }
 
     init {
