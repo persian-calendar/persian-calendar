@@ -88,7 +88,9 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
         override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean =
+                oldItem.title == newItem.title && oldItem.content == newItem.content &&
+                        oldItem.version == newItem.version
     }
 
     init {
