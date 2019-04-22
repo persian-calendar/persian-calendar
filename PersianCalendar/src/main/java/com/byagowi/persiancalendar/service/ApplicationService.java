@@ -6,12 +6,12 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.byagowi.persiancalendar.utils.UpdateUtils;
 import com.byagowi.persiancalendar.utils.Utils;
 
 import java.lang.ref.WeakReference;
-
-import androidx.annotation.Nullable;
 
 /**
  * The Calendar Service that updates widget time and clock and build/update
@@ -56,7 +56,11 @@ public class ApplicationService extends Service {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(receiver);
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception ignore) {
+            // Really can't do much here
+        }
         super.onDestroy();
     }
 }
