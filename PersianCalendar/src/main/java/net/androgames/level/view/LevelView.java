@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.utils.Utils;
 
@@ -17,8 +19,6 @@ import net.androgames.level.orientation.Orientation;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
-
-import androidx.annotation.Nullable;
 
 /*
  *  This file is part of Level (an Android Bubble Level).

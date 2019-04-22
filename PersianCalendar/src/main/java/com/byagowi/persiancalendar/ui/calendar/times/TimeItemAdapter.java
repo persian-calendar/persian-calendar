@@ -3,16 +3,16 @@ package com.byagowi.persiancalendar.ui.calendar.times;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.TimeItemBinding;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.utils.Utils;
 import com.google.android.flexbox.FlexboxLayoutManager;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class TimeItemAdapter extends RecyclerView.Adapter<TimeItemAdapter.ViewHolder> {
     @StringRes

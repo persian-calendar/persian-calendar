@@ -15,6 +15,10 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
+import androidx.core.app.NotificationCompat;
+
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -32,10 +36,6 @@ import com.byagowi.persiancalendar.ui.MainActivity;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import androidx.annotation.IdRes;
-import androidx.annotation.StringRes;
-import androidx.core.app.NotificationCompat;
 
 import static com.byagowi.persiancalendar.utils.Utils.getClockFromStringId;
 import static com.byagowi.persiancalendar.utils.Utils.getSpacedComma;

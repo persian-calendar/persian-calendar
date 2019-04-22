@@ -14,6 +14,9 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.utils.Utils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
@@ -22,9 +25,6 @@ import com.cepmuvakkit.times.posAlgo.Horizontal;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
-
-import androidx.annotation.ColorInt;
-import androidx.core.content.ContextCompat;
 
 public class QiblaCompassView extends View {
     @ColorInt

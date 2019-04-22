@@ -13,14 +13,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import androidx.core.app.NotificationCompat;
+
 import com.byagowi.persiancalendar.BuildConfig;
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
-
-import androidx.core.app.NotificationCompat;
 
 public class AthanNotification extends Service {
 

@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
@@ -13,8 +16,6 @@ import com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 /**

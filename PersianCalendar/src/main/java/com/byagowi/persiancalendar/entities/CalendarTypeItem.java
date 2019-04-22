@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.entities;
 
-import com.byagowi.persiancalendar.utils.CalendarType;
-
 import androidx.annotation.NonNull;
+
+import com.byagowi.persiancalendar.utils.CalendarType;
 
 public class CalendarTypeItem {
     private final CalendarType type;

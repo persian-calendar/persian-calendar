@@ -5,13 +5,13 @@ import android.content.res.Resources;
 import android.graphics.Paint;
 import android.util.TypedValue;
 
-import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.utils.TypefaceUtils;
-import com.byagowi.persiancalendar.utils.Utils;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
+
+import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.utils.TypefaceUtils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 public class DaysPaintResources {
     @StyleRes

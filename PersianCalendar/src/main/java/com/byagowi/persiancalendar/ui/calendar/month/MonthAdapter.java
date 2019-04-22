@@ -5,6 +5,10 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency;
 import com.byagowi.persiancalendar.entities.AbstractEvent;
@@ -14,10 +18,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel;
 import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
     private final int startingDayOfWeek;

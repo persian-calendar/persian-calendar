@@ -11,13 +11,14 @@ import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInte
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan;
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog;
-//import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
-//import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
 
 import net.androgames.level.LevelFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+
+//import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
+//import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
 
 @Module
 public abstract class MainActivityModule {

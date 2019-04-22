@@ -7,6 +7,10 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
@@ -16,9 +20,6 @@ import net.androgames.level.orientation.OrientationProvider;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import dagger.android.support.DaggerFragment;
 
 /*

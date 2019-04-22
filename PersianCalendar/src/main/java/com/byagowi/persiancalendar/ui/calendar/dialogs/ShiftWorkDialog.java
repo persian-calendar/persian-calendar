@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding;
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding;
@@ -28,10 +33,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.DaggerAppCompatDialogFragment;
 
 import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_RECURS;

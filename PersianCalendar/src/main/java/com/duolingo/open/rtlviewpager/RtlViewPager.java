@@ -23,14 +23,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-
 import androidx.annotation.NonNull;
 import androidx.core.os.ParcelableCompat;
 import androidx.core.os.ParcelableCompatCreatorCallbacks;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import java.util.HashMap;
 
 /**
  * <code>RtlViewPager</code> is an API-compatible implemetation of <code>ViewPager</code> which

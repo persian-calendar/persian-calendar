@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.entities;
 
-import com.byagowi.persiancalendar.calendar.AbstractDate;
-
 import androidx.annotation.NonNull;
+
+import com.byagowi.persiancalendar.calendar.AbstractDate;
 
 abstract public class AbstractEvent<T extends AbstractDate> {
     T date;

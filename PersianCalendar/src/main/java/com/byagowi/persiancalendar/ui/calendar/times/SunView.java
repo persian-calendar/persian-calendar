@@ -22,6 +22,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
@@ -30,9 +33,6 @@ import com.byagowi.persiancalendar.utils.Utils;
 
 import java.util.Calendar;
 import java.util.Locale;
-
-import androidx.annotation.ColorInt;
-import androidx.core.content.ContextCompat;
 
 /**
  * @author MEHDI DIMYADI

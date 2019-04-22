@@ -2,12 +2,12 @@ package com.byagowi.persiancalendar.service;
 
 import android.content.Context;
 
-import com.byagowi.persiancalendar.utils.UpdateUtils;
-import com.byagowi.persiancalendar.utils.Utils;
-
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import com.byagowi.persiancalendar.utils.UpdateUtils;
+import com.byagowi.persiancalendar.utils.Utils;
 
 public class UpdateWorker extends Worker {
     public UpdateWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {

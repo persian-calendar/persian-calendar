@@ -2,14 +2,14 @@ package com.byagowi.persiancalendar.ui.calendar.calendar;
 
 import android.os.Bundle;
 
-import com.byagowi.persiancalendar.Constants;
-import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.byagowi.persiancalendar.Constants;
+import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment;
 
 public class CalendarAdapter extends FragmentStatePagerAdapter {
     private CalendarAdapterHelper mCalendarAdapterHelper;

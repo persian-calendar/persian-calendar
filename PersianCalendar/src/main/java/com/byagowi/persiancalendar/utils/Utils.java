@@ -30,6 +30,20 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
@@ -43,7 +57,6 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
-//import com.byagowi.persiancalendar.entities.Reminder;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
 import com.byagowi.persiancalendar.equinox.Equinox;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
@@ -78,20 +91,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
-import androidx.annotation.StringRes;
-import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.Constants.ALARMS_BASE_ID;
@@ -171,9 +170,10 @@ import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
 import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.REMINDERS_STORE_KEY;
 import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
 import static com.byagowi.persiancalendar.Constants.ZWJ;
+
+//import com.byagowi.persiancalendar.entities.Reminder;
 
 /**
  * Common utilities that needed for this calendar
