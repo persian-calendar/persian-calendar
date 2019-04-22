@@ -12,13 +12,13 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:textSize="12sp"
-            android:padding="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
+            android:padding="20dp"
+            android:text="string/no_guaranty"
             android:textAlignment="center"
-            android:text="string/no_guaranty" />
+            android:textSize="12sp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
