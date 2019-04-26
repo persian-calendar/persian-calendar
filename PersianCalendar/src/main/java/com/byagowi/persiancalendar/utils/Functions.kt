@@ -9,6 +9,7 @@ import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 
 
+// https://stackoverflow.com/a/52557989
 fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : CircularRevealWidget {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         circularRevealWidget.post {
