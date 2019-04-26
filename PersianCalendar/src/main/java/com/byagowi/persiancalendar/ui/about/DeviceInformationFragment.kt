@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.DaggerFragment
@@ -34,6 +35,8 @@ class DeviceInformationFragment : DaggerFragment() {
                               savedInstanceState: Bundle?): View? {
         return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
             mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+
+            circularRevealFromMiddle(circularReveal)
 
             recyclerView.apply {
                 setHasFixedSize(true)

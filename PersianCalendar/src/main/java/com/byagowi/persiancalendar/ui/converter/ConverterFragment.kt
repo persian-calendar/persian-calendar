@@ -8,7 +8,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -25,8 +24,6 @@ class ConverterFragment : DaggerFragment() {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.date_converter), "")
 
         FragmentConverterBinding.inflate(inflater, container, false).apply {
-
-            circularRevealFromMiddle(circularReveal)
 
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
