@@ -2,7 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout
+        android:id="@+id/circular_reveal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -55,6 +56,6 @@
             android:visibility="gone"
             app:srcCompat="@drawable/ic_restore_modified" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
 
 </layout>
