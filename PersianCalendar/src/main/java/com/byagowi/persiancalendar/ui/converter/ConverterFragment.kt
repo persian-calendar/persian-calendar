@@ -31,6 +31,10 @@ class ConverterFragment : DaggerFragment() {
             }
 
             todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(Utils.getTodayJdn()) }
+            swipeToRefresh.setOnRefreshListener {
+                dayPickerView.setDayJdnOnView(Utils.getTodayJdn())
+                swipeToRefresh.isRefreshing = false
+            }
 
             dayPickerView.setOnSelectedDayChangedListener { jdn ->
                 if (jdn == -1L) {
