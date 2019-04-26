@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themeNames">
+        <item>ایشیق</item>
+        <item>قارانلیق</item>
+        <item>معاصیر</item>
+        <item>گوی</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames">
+        <item>اون ایکی ایمام شیعه لری، قم</item>
+        <item>ایسلام بین الخالق بیرلیغی، عربیستان سعودی</item>
+        <item>قوزئی آمریکا ایسلام اهالیسی</item>
+        <item>میصر مدنیت مرکزی</item>
+        <item>مکه ام القرا بیلی یوردو</item>
+        <item>کراچی ایسلام بیلی یوردو</item>
+        <item>تهران ژئوفیزیک بیلی یوردومو</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>صوبح</item>
+        <item>گون اورتا</item>
+        <item>آغشام</item>
+        <item>گون باتیمی</item>
+        <item>ایشا</item>
+    </string-array>
+
+    <string-array name="holidays_types">
+        <item>ایران خصوصی گونلری</item>
+        <item>ایران ایسلام خصوصی گونلری</item>
+        <item>ایران تاریخی خصوصی گونلری</item>
+        <item>ایران دیگر خصوصی گونلری</item>
+        <item>بین الخالق خصوصی گونلری</item>
+        <item>افغانیستان خصوصی گونلری</item>
+        <item>افغانیستان دیگر خصوصی گونلری</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>گونش تقویمی</item>
+        <item>هیجری تقویمی</item>
+        <item>میلادی تقویمی</item>
+    </string-array>
+
+    <string-array name="calendar_type_abbr">
+        <item>گونش</item>
+        <item>هیجری</item>
+        <item>میلادی</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>يئل گونو</item>
+        <item>سودگونو</item>
+        <item>دوزگونو</item>
+        <item>آراگون</item>
+        <item>اودگونو</item>
+        <item>سوگونو</item>
+        <item>آینی گون</item>
+    </string-array>
+
+    <string-array name="what_to_show">
+        <item>دیگر تقویم لر ویجت ده ۴×۱ و ۲×۲</item>
+        <item>غیر تعطیل گونلری ویجت ۲×۲ و اعلان</item>
+        <item>شرعی واختلار ویجت ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
+        <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>۲-</item>
+        <item>۱-</item>
+        <item>۰</item>
+        <item>۱+</item>
+        <item>۲+</item>
+    </string-array>
+
+    <string-array name="shift_work">
+        <item>ایش گونو</item>
+        <item>دینجلمه</item>
+        <item>آخشاملار</item>
+        <item>گئجه لر</item>
+    </string-array>
+
+</resources>
