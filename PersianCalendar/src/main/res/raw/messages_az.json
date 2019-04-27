@@ -1,0 +1,53 @@
+{
+  "PersianCalendarMonths": [
+    "Fərvərdin",
+    "Ürdibehişt",
+    "Xürdad",
+    "Tir",
+    "Mürdad",
+    "Şəhrivər",
+    "Mehr",
+    "Aban",
+    "Azər",
+    "Dey",
+    "Bəhmən",
+    "İsfənd"
+  ],
+  "IslamicCalendarMonths": [
+    "Məhərrəm",
+    "Səfər",
+    "Rəbi' əl-əvəl",
+    "Rəbi' əl-Sani",
+    "Jümadi əl-əvəl",
+    "Jümadi əl-Sani",
+    "Rəcəb",
+    "Şə'ban",
+    "Rəməzan",
+    "Şaval",
+    "Zül-Qədə",
+    "Zül-Hicə"
+  ],
+  "GregorianCalendarMonths": [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "İyun",
+    "İyul",
+    "Avqust",
+    "Sentyabr",
+    "Oktyabr",
+    "Noyabr",
+    "Dekabr"
+  ],
+  "WeekDays": [
+    "Şənbə",
+    "Bazar",
+    "Bazar ertəsi",
+    "Çərşənbə axşamı",
+    "Çərşənbə",
+    "Cümə axşamı",
+    "Cümə"
+  ]
+}
