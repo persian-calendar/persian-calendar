@@ -209,7 +209,7 @@
     <string name="n_minutes">%1$s دیقه</string>
     <string name="n_hours">%1$s ساعات</string>
     <string name="n_minutes_and_hours">%1$s ساعات و %2$s دیقه</string>
-    <string name="device_info>دستگاهین اطلاعاتی</string>
+    <string name="device_info">دستگاهین اطلاعاتی</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
     <string name="n_till">%1$s تا %2$s</string>
