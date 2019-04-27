@@ -24,6 +24,7 @@ public class Constants {
     public static final String LANG_EN_IR = "en";
     public static final String LANG_EN_US = "en-US";
     public static final String LANG_JA = "ja";
+    public static final String LANG_AZB = "azb";
     public static final String LANG_CKB = "ckb";
     public static final String LANG_UR = "ur";
 

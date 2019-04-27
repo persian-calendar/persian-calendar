@@ -127,6 +127,7 @@ import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
 import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
 import static com.byagowi.persiancalendar.Constants.LANG_AR;
+import static com.byagowi.persiancalendar.Constants.LANG_AZB;
 import static com.byagowi.persiancalendar.Constants.LANG_CKB;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
 import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
@@ -756,6 +757,7 @@ public class Utils {
 
             case LANG_FA:
             case LANG_GLK:
+            case LANG_AZB:
             default:
                 return irCodeOrder.indexOf(countryCode);
         }
@@ -912,6 +914,7 @@ public class Utils {
             switch (getAppLanguage()) {
                 case LANG_FA:
                 case LANG_GLK:
+                case LANG_AZB:
                 case LANG_EN_IR:
                 case LANG_CKB:
                     enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
@@ -1358,13 +1361,8 @@ public class Utils {
     static public void applyAppLanguage(Context context) {
         String localeCode = getOnlyLanguage(language);
         // To resolve this issue, https://issuetracker.google.com/issues/128908783
-        if (language.equals(LANG_GLK) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            boolean supported = false;
-            for (Locale locale : Locale.getAvailableLocales())
-                if (locale.getLanguage().equals(LANG_GLK))
-                    supported = true;
-            if (!supported)
-                localeCode = LANG_FA;
+        if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+            localeCode = LANG_FA;
         }
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
@@ -1372,7 +1370,10 @@ public class Utils {
         Configuration config = resources.getConfiguration();
         config.locale = locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            config.setLayoutDirection(config.locale);
+            if (language.equals(LANG_AZB)) {
+                locale = new Locale(LANG_FA);
+            }
+            config.setLayoutDirection(locale);
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
@@ -1403,6 +1404,9 @@ public class Utils {
                 break;
             case LANG_JA:
                 messagesFile = R.raw.messages_ja;
+                break;
+            case LANG_AZB:
+                messagesFile = R.raw.messages_azb;
                 break;
             case LANG_EN_IR:
             case LANG_FA:
@@ -1437,6 +1441,8 @@ public class Utils {
                 weekDays[i] = weekDaysArray.getString(i);
                 if (language.equals(LANG_AR)) {
                     weekDaysInitials[i] = weekDays[i].substring(2, 4);
+                } else if (language.equals(LANG_AZB)) {
+                    weekDaysInitials[i] = weekDays[i].substring(0, 2);
                 } else {
                     weekDaysInitials[i] = weekDays[i].substring(0, 1);
                 }

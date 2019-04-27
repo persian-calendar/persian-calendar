@@ -257,7 +257,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                     removeAllEvents = true
                     persianDigits = true
                 }
-                LANG_GLK, LANG_FA -> {
+                LANG_AZB, LANG_GLK, LANG_FA -> {
                     persianDigits = true
                     changeToPersianCalendar = true
                     changeToIranEvents = true
