@@ -1360,10 +1360,10 @@ public class Utils {
     // Context preferably should be activity context not application
     static public void applyAppLanguage(Context context) {
         String localeCode = getOnlyLanguage(language);
-        // To resolve this issue, https://issuetracker.google.com/issues/128908783
-        if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-            localeCode = LANG_FA;
-        }
+        // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
+        // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+        //    localeCode = LANG_FA;
+        // }
         Locale locale = new Locale(localeCode);
         Locale.setDefault(locale);
         Resources resources = context.getResources();

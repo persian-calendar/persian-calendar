@@ -78,6 +78,8 @@ class AboutFragment : DaggerFragment() {
             else -> binding.helpCard.visibility = View.GONE
         }
 
+        Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+
         // report bug
         binding.reportBug.setOnClickListener {
             try {
