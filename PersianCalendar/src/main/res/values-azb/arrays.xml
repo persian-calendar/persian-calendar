@@ -2,37 +2,37 @@
 <resources>
     <string-array name="themeNames">
         <item>ایشیق</item>
-        <item>قارانلیق</item>
+        <item>قارا</item>
         <item>معاصیر</item>
-        <item>گوی</item>
+        <item>آراز</item>
     </string-array>
 
     <string-array name="prayMethodsNames">
-        <item>اون ایکی ایمام شیعه لری، قم</item>
-        <item>ایسلام بین الخالق بیرلیغی، عربیستان سعودی</item>
+        <item>اون‌ایکی ایمام شیعه‌لری، لوا انجمنی، قم</item>
+        <item>ایسلام بین‌الخالق بیرلیگی، عربیستان سعودی</item>
         <item>قوزئی آمریکا ایسلام اهالیسی</item>
         <item>میصر مدنیت مرکزی</item>
-        <item>مکه ام القرا بیلی یوردو</item>
-        <item>کراچی ایسلام بیلی یوردو</item>
-        <item>تهران ژئوفیزیک بیلی یوردومو</item>
+        <item>مکه ام‌القرا بیلیم‌یوردو</item>
+        <item>کراچی ایسلام بیلیم‌یوردو</item>
+        <item>تهران ژئوفیزیک بیلیم‌یوردو</item>
     </string-array>
 
     <string-array name="prayerTimeNames">
         <item>صوبح</item>
-        <item>گون اورتا</item>
-        <item>آغشام</item>
+        <item>گون‌اورتا</item>
+        <item>آخشام</item>
         <item>گون باتیمی</item>
         <item>ایشا</item>
     </string-array>
 
     <string-array name="holidays_types">
-        <item>ایران خصوصی گونلری</item>
-        <item>ایران ایسلام خصوصی گونلری</item>
-        <item>ایران تاریخی خصوصی گونلری</item>
-        <item>ایران دیگر خصوصی گونلری</item>
-        <item>بین الخالق خصوصی گونلری</item>
-        <item>افغانیستان خصوصی گونلری</item>
-        <item>افغانیستان دیگر خصوصی گونلری</item>
+        <item>ایران خصوصی گون‌لری</item>
+        <item>ایران ایسلام خصوصی گون‌لری</item>
+        <item>ایران تاریخی خصوصی گون‌لری</item>
+        <item>ایران دیگر خصوصی گون‌لری</item>
+        <item>بین‌الخالق خصوصی گون‌لری</item>
+        <item>افغانیستان خصوصی گون‌لری</item>
+        <item>افغانیستان دیگر خصوصی گون‌لری</item>
     </string-array>
 
     <string-array name="calendar_type">
@@ -48,20 +48,20 @@
     </string-array>
 
     <string-array name="week_days">
-        <item>يئل گونو</item>
+        <item>يئل‌گونو</item>
         <item>سودگونو</item>
         <item>دوزگونو</item>
         <item>آراگون</item>
         <item>اودگونو</item>
         <item>سوگونو</item>
-        <item>آینی گون</item>
+        <item>آینی‌گون</item>
     </string-array>
 
     <string-array name="what_to_show">
         <item>دیگر تقویم لر ویجت ده ۴×۱ و ۲×۲</item>
-        <item>غیر تعطیل گونلری ویجت ۲×۲ و اعلان</item>
+        <item>تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</item>
         <item>شرعی واختلار ویجت ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
-        <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
+        <item>مکان شرعی اوقات کناریندا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
     </string-array>
 
     <string-array name="islamicOffsetNames">
@@ -74,8 +74,8 @@
 
     <string-array name="shift_work">
         <item>ایش گونو</item>
-        <item>دینجلمه</item>
-        <item>آخشاملار</item>
+        <item>ایستراحت گونو</item>
+        <item>آخشام لار</item>
         <item>گئجه لر</item>
     </string-array>
 
