@@ -477,6 +477,7 @@ public class CalendarFragment extends DaggerFragment {
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, mViewPagerPosition);
 
         mCalendarFragmentModel.selectDay(jdn);
+        mLastSelectedJdn = jdn;
         sendUpdateCommandToMonthFragments(mViewPagerPosition, false);
 
         if (Utils.isTalkBackEnabled()) {
