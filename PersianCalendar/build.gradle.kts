@@ -90,7 +90,7 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
-    implementation("androidx.core:core-ktx:1.0.1")
+    implementation("androidx.core:core-ktx:1.0.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
     implementation("androidx.fragment:fragment-ktx:1.0.0")
 
@@ -114,8 +114,8 @@ dependencies {
 
     testImplementation("junit:junit:4.12")
 
-    androidTestImplementation("androidx.test:runner:1.1.1")
-    androidTestImplementation("androidx.test:rules:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")
+    androidTestImplementation("androidx.test:runner:1.2.0")
+    androidTestImplementation("androidx.test:rules:1.2.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.2.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 }
