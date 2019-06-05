@@ -79,7 +79,7 @@
     <string name="go">گئت</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">اعلانلاری قیفیل صفحه‌ده گورست</string>
-    <string name="notify_date_lock_screen_summary">اگر موبایلین تنظیم اولسا ایشلیئر</string>
+    <string name="notify_date_lock_screen_summary">موبایلین تنظیم اولسا ایشلیئر</string>
     <string name="warn_if_events_not_set">مناسبتلری فعال الماخ اوچون تنظیماتا گئدین</string>
     <string name="date_diff_text">اوزونلوق: %1$s گون (~%2$s ایل و %3$s آی و %4$s گون)</string>
     <string name="calendars_priority">تقویملرین نومایش اولویتی</string>
