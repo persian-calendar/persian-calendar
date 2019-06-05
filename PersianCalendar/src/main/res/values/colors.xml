@@ -99,7 +99,7 @@
     <color name="modern_divider">#e0e0e0</color>
     <color name="modern_background">#f4f4f4</color>
     <color name="modern_card_background">#fafafa</color>
-    <color name="modern_current_day">#42AFBF</color>
+    <color name="modern_current_day">#DDDEE2</color>
     <color name="modern_select_day">#F5F5F5</color>
     <color name="modern_event_line">#4CB5DE</color>
     <color name="modern_drawer_background">#f4f4f4</color>
