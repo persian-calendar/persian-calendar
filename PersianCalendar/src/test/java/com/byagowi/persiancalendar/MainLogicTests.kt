@@ -288,6 +288,17 @@ class MainLogicTests {
         assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
         assertEquals(Clock(20, 8).toInt(), prayTimes.maghribClock.toInt())
         assertEquals(Clock(21, 3).toInt(), prayTimes.ishaClock.toInt())
+
+        prayTimes = PrayTimesCalculator.calculate(CalculationMethod.Tehran,
+                Utils.civilDateToCalendar(CivilDate(2019, 6, 9)).time,
+                Coordinate(3.147778, 101.695278, 0.0),
+                8.0, false)
+        assertEquals(Clock(5, 49).toInt(), prayTimes.fajrClock.toInt())
+        assertEquals(Clock(7, 3).toInt(), prayTimes.sunriseClock.toInt())
+        assertEquals(Clock(13, 12).toInt(), prayTimes.dhuhrClock.toInt())
+        assertEquals(Clock(16, 39).toInt(), prayTimes.asrClock.toInt())
+        assertEquals(Clock(19, 37).toInt(), prayTimes.maghribClock.toInt())
+        assertEquals(Clock(20, 19).toInt(), prayTimes.ishaClock.toInt())
     }
 
     @Test

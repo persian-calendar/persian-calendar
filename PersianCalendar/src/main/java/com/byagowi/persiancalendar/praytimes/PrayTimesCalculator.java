@@ -124,7 +124,7 @@ public class PrayTimesCalculator {
     // compute asr time
     private static double asrTime(double jdate, double factor, double time, Coordinate coordinate) {
         double decl = sunPosition(jdate + time).getDeclination();
-        double angle = -Math.atan(1 / (factor + Math.tan(dtr(coordinate.getLatitude()) - decl)));
+        double angle = -Math.atan(1 / (factor + Math.tan(Math.abs(dtr(coordinate.getLatitude()) - decl))));
         return sunAngleTime(jdate, deg(rtd(angle)), time, coordinate);
     }
 
