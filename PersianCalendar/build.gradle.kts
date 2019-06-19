@@ -86,8 +86,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.0.0")
-    kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
+    annotationProcessor("androidx.lifecycle:lifecycle-common-java8:2.0.0")
+    kapt("androidx.lifecycle:lifecycle-common-java8:2.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
     implementation("androidx.core:core-ktx:1.0.2")
@@ -106,9 +106,7 @@ dependencies {
     annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
-    val leakCanaryVersion = "1.6.3"
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
-    debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 
 //  debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
