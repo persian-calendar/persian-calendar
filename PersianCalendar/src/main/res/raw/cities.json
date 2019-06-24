@@ -7,7 +7,7 @@
     "cities": {
       "CUSTOM": {
         "en": "None",
-        "fa": "هیچ کدام",
+        "fa": "هیچ‌کدام",
         "ckb": "ھیچیان",
         "ar": "لا تختار",
         "latitude": 0,
@@ -27,8 +27,8 @@
         "fa": "اهواز",
         "ckb": "ئەھواز",
         "ar": "أهواز",
-        "latitude": 31.52,
-        "longitude": 48.68,
+        "latitude": 31.30,
+        "longitude": 48.65,
         "elevation": 23.872
       },
       "ALBORZ": {
@@ -55,7 +55,7 @@
         "ckb": "ئەردەوێڵ",
         "ar": "أردبيل",
         "latitude": 38.25,
-        "longitude": 48.28,
+        "longitude": 48.30,
         "elevation": 1350
       },
       "BANDAR_ABAS": {
@@ -63,8 +63,8 @@
         "fa": "بندرعباس",
         "ckb": "بەندەرعەبباس",
         "ar": "بندر عباس",
-        "latitude": 27.18,
-        "longitude": 56.27,
+        "latitude": 27.1883,
+        "longitude": 56.2766,
         "elevation": 9
       },
       "BIRJAND": {
@@ -72,8 +72,8 @@
         "fa": "بیرجند",
         "ckb": "بیرجەند",
         "ar": "بيرجند",
-        "latitude": 32.88,
-        "longitude": 59.22,
+        "latitude": 32.87,
+        "longitude": 59.21,
         "elevation": 1476.299
       },
       "BOJNURD": {
@@ -81,8 +81,8 @@
         "fa": "بجنورد",
         "ckb": "بوژنوورت",
         "ar": "بوجنورد",
-        "latitude": 37.47,
-        "longitude": 57.33,
+        "latitude": 37.4702,
+        "longitude": 57.3143,
         "elevation": 1070.864
       },
       "BUSHEHR": {
@@ -90,8 +90,8 @@
         "fa": "بوشهر",
         "ckb": "بووشەھر",
         "ar": "بوشهر",
-        "latitude": 28.96,
-        "longitude": 50.84,
+        "latitude": 28.9576,
+        "longitude": 50.8371,
         "elevation": 12.883
       },
       "ESFEHAN": {
@@ -108,7 +108,7 @@
         "fa": "قزوین",
         "ckb": "قەزوین",
         "ar": "قزوين",
-        "latitude": 36.45,
+        "latitude": 36.16,
         "longitude": 50,
         "elevation": 1834.857
       },
@@ -117,8 +117,8 @@
         "fa": "قم",
         "ckb": "قوم",
         "ar": "قم",
-        "latitude": 34.65,
-        "longitude": 50.95,
+        "latitude": 34.66,
+        "longitude": 50.88,
         "elevation": 906
       },
       "GORGAN": {
@@ -135,8 +135,8 @@
         "fa": "همدان",
         "ckb": "ھەمەدان",
         "ar": "همدان",
-        "latitude": 34.77,
-        "longitude": 48.58,
+        "latitude": 34.80,
+        "longitude": 48.52,
         "elevation": 1902.787
       },
       "ILAM": {
@@ -144,8 +144,8 @@
         "fa": "ایلام",
         "ckb": "ئیلام",
         "ar": "إيلام",
-        "latitude": 33.63,
-        "longitude": 46.42,
+        "latitude": 33.38,
+        "longitude": 46.26,
         "elevation": 1382.518
       },
       "KERMAN": {
@@ -153,7 +153,7 @@
         "fa": "کرمان",
         "ckb": "کرمان",
         "ar": "كرمان",
-        "latitude": 30.28,
+        "latitude": 30.29,
         "longitude": 57.06,
         "elevation": 1760.289
       },
@@ -162,8 +162,8 @@
         "fa": "کرمانشاه",
         "ckb": "کرماشان",
         "ar": "كرمنشاه",
-        "latitude": 34.32,
-        "longitude": 47.06,
+        "latitude": 34.3142,
+        "longitude": 47.0650,
         "elevation": 1368.254
       },
       "KHORAM_ABAD": {
@@ -180,8 +180,8 @@
         "fa": "مشهد",
         "ckb": "مەشھەد",
         "ar": "مشهد",
-        "latitude": 34.3,
-        "longitude": 59.57,
+        "latitude": 36.305729,
+        "longitude": 59.578370,
         "elevation": 939.205
       },
       "ORUMIYEH": {
@@ -190,7 +190,7 @@
         "ckb": "ورمێ",
         "ar": "ارومية",
         "latitude": 37.33,
-        "longitude": 45.05,
+        "longitude": 45.04,
         "elevation": 1942.324
       },
       "RASHT": {
@@ -198,8 +198,8 @@
         "fa": "رشت",
         "ckb": "ڕەشت",
         "ar": "رشت",
-        "latitude": 37.3,
-        "longitude": 49.63,
+        "latitude": 37.2794,
+        "longitude": 49.5858,
         "elevation": -8.209
       },
       "SANANDAJ": {
@@ -207,8 +207,8 @@
         "fa": "سنندج",
         "ckb": "سنە",
         "ar": "سنندج",
-        "latitude": 35.3,
-        "longitude": 47.02,
+        "latitude": 35.3172,
+        "longitude": 46.9989,
         "elevation": 1439.104
       },
       "SARI": {
@@ -225,8 +225,8 @@
         "fa": "سمنان",
         "ckb": "سمنان",
         "ar": "سمنان",
-        "latitude": 35.57,
-        "longitude": 53.38,
+        "latitude": 35.34,
+        "longitude": 53.23,
         "elevation": 1145.160
       },
       "SHAHREKORD": {
@@ -234,8 +234,8 @@
         "fa": "شهرکرد",
         "ckb": "شاری کورد",
         "ar": "شهركرد",
-        "latitude": 32.32,
-        "longitude": 50.85,
+        "latitude": 32.325022,
+        "longitude": 50.864910,
         "elevation": 2047.091
       },
       "SHIRAZ": {
@@ -243,8 +243,8 @@
         "fa": "شیراز",
         "ckb": "شیراز",
         "ar": "شیراز",
-        "latitude": 29.62,
-        "longitude": 52.53,
+        "latitude": 29.617248,
+        "longitude": 52.543423,
         "elevation": 1549.642
       },
       "TABRIZ": {
@@ -253,7 +253,7 @@
         "ckb": "تەورێز",
         "ar": "تبريز",
         "latitude": 38.08,
-        "longitude": 46.3,
+        "longitude": 46.30,
         "elevation": 1395.315
       },
       "TEHRAN": {
@@ -270,8 +270,8 @@
         "fa": "یاسوج",
         "ckb": "یاسووج",
         "ar": "ياسوج",
-        "latitude": 30.82,
-        "longitude": 51.68,
+        "latitude": 30.7167,
+        "longitude": 51.5667,
         "elevation": 2957.312
       },
       "YAZD": {
@@ -279,8 +279,8 @@
         "fa": "یزد",
         "ckb": "یەزد",
         "ar": "يزد",
-        "latitude": 31.9,
-        "longitude": 54.37,
+        "latitude": 31.8972,
+        "longitude": 54.3675,
         "elevation": 1211.690
       },
       "ZAHEDAN": {
@@ -297,8 +297,8 @@
         "fa": "زنجان",
         "ckb": "زەنگان",
         "ar": "زنجان",
-        "latitude": 36.67,
-        "longitude": 48.48,
+        "latitude": 36.6644,
+        "longitude": 48.4856,
         "elevation": 1649.065
       }
     }
@@ -333,7 +333,7 @@
         "ckb": "دایکوندی",
         "ar": "دايكندي",
         "latitude": 33.75,
-        "longitude": 66.24,
+        "longitude": 66.25,
         "elevation": 2234.5
       },
       "GHAZNI": {
@@ -403,8 +403,8 @@
         "fa": "کربلا",
         "ckb": "کەربەلا",
         "ar": "كربلاء",
-        "latitude": 32.60,
-        "longitude": 44.01,
+        "latitude": 32.370,
+        "longitude": 44.020,
         "elevation": 34.00
       },
       "NAJAF": {
@@ -412,8 +412,8 @@
         "fa": "نجف",
         "ckb": "نەجەف",
         "ar": "النجف",
-        "latitude": 32.03,
-        "longitude": 44.33,
+        "latitude": 32,
+        "longitude": 44.20,
         "elevation": 46.00
       },
       "BAGHDAD": {
@@ -421,8 +421,8 @@
         "fa": "بغداد",
         "ckb": "بەغدا",
         "ar": "بغداد",
-        "latitude": 33.31,
-        "longitude": 44.36,
+        "latitude": 33.325,
+        "longitude": 44.422,
         "elevation": 38.00
       },
       "BASRAH": {
@@ -439,8 +439,8 @@
         "fa": "تکریت",
         "ckb": "سەڵاحەدین",
         "ar": "تكريت",
-        "latitude": 34.61,
-        "longitude": 43.65,
+        "latitude": 34.3636,
+        "longitude": 43.4048,
         "elevation": 114.00
       },
       "KIRKUK": {
