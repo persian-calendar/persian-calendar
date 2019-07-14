@@ -142,7 +142,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         textView.text = result
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         if (latitude != null && longitude != null) {
             appDependency.sharedPreferences.edit {
                 putString(Constants.PREF_LATITUDE, latitude)
