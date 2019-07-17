@@ -29,11 +29,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
@@ -63,8 +61,6 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -109,24 +105,6 @@ public class CalendarFragment extends DaggerFragment {
 
     };
 
-    // don't remove public ever
-    public static class TabFragment extends Fragment {
-        private View view;
-
-        static TabFragment newInstance(View view) {
-            TabFragment tabFragment = new TabFragment();
-            tabFragment.view = view;
-            return tabFragment;
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, Bundle savedInstanceState) {
-            return view;
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -145,7 +123,7 @@ public class CalendarFragment extends DaggerFragment {
 
         titles.add(getString(R.string.calendar));
         mCalendarsView = new CalendarsView(context);
-//        mCalendarsView.setOnCalendarsViewExpandListener(() -> mMainBinding.tabsViewPager.measureCurrentView(mCalendarsView));
+        mCalendarsView.setOnCalendarsViewExpandListener(() -> mMainBinding.tabsViewPager.measureCurrentView(mCalendarsView));
         mCalendarsView.setOnShowHideTodayButton(show -> {
             if (show) {
                 mMainBinding.todayButton.show();
@@ -193,21 +171,9 @@ public class CalendarFragment extends DaggerFragment {
             mOwghatBinding.timesRecyclerView.setAdapter(new TimeItemAdapter());
         }
 
-        mMainBinding.tabsViewPager.setAdapter(new FragmentStateAdapter(this) {
-            @Override
-            public int getItemCount() {
-                return tabs.size();
-            }
-
-            @NonNull
-            @Override
-            public Fragment createFragment(int position) {
-                return TabFragment.newInstance(tabs.get(position));
-            }
-        });
-        new TabLayoutMediator(mMainBinding.tabLayout, mMainBinding.tabsViewPager, (tab, position) -> {
-            tab.setText(titles.get(position));
-        }).attach();
+        mMainBinding.tabsViewPager.setAdapter(new TabsViewPager.TabsAdapter(getChildFragmentManager(),
+                appDependency, tabs, titles));
+        mMainBinding.tabLayout.setupWithViewPager(mMainBinding.tabsViewPager);
 
         mCalendarAdapterHelper = new CalendarAdapter.CalendarAdapterHelper(Utils.isRTL(context));
         mMainBinding.calendarViewPager.setAdapter(new CalendarAdapter(getChildFragmentManager(),
@@ -486,7 +452,7 @@ public class CalendarFragment extends DaggerFragment {
                     ? R.drawable.ic_keyboard_arrow_up
                     : R.drawable.ic_keyboard_arrow_down);
         }
-//        mMainBinding.tabsViewPager.measureCurrentView(mOwghatBinding.getRoot());
+        mMainBinding.tabsViewPager.measureCurrentView(mOwghatBinding.getRoot());
 
         if (mLastSelectedJdn == -1)
             mLastSelectedJdn = Utils.getTodayJdn();

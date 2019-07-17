@@ -30,10 +30,10 @@
                     android:layout_height="match_parent"
                     android:background="?attr/colorCard" />
 
-                <androidx.viewpager2.widget.ViewPager2
+                <com.byagowi.persiancalendar.ui.calendar.TabsViewPager
                     android:id="@+id/tabsViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="220sp" />
 
             </LinearLayout>
 

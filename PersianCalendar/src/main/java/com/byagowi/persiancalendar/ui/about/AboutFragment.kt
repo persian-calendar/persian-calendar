@@ -173,13 +173,13 @@ class AboutFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
         inflater?.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.deviceInfo -> mainActivityDependency.mainActivity.navigateTo(R.id.deviceInfo)
             else -> {

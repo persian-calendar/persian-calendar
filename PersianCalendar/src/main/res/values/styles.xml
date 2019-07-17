@@ -77,6 +77,7 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
+        <item name="android:itemBackground">@color/dark_background</item>
         <item name="android:textColor">@color/dark_text_normal</item>
 
         <item name="coloredTabBackground">@color/dark_card_background</item>
@@ -136,6 +137,7 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
+        <item name="android:itemBackground">@color/light_background</item>
         <item name="android:textColor">@color/light_text_normal</item>
 
         <item name="coloredTabBackground">@color/light_accent</item>
@@ -196,6 +198,7 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
+        <item name="android:itemBackground">@color/blue_background</item>
         <item name="android:textColor">@color/blue_text_normal</item>
 
         <item name="coloredTabBackground">@color/blue_primary</item>
