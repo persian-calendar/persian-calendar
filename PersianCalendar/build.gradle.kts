@@ -86,19 +86,19 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.0.0")
-    kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
+    annotationProcessor("androidx.lifecycle:lifecycle-common-java8:2.0.0")
+    kapt("androidx.lifecycle:lifecycle-common-java8:2.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
     implementation("androidx.core:core-ktx:1.0.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
     implementation("androidx.fragment:fragment-ktx:1.0.0")
 
-    implementation("androidx.work:work-runtime:2.0.1")
+    implementation("androidx.work:work-runtime:2.1.0")
     // Unnecessary size addition as it adds co-routine apparently also
     // implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
 
-    val daggerVersion = "2.22.1"
+    val daggerVersion = "2.23.2"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
     annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
@@ -106,9 +106,7 @@ dependencies {
     annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
-    val leakCanaryVersion = "1.6.3"
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
-    debugImplementation("com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion")
+//    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 
 //  debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
