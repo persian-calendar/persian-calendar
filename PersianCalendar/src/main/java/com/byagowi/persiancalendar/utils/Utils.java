@@ -2113,6 +2113,15 @@ public class Utils {
         return result.toString();
     }
 
+    public static boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
+        for (AbstractEvent event : dayEvents) {
+            if (event.isHoliday()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 //    private static List<Reminder> updateSavedReminders(Context context) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 //        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");

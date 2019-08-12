@@ -80,15 +80,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
         return new ViewHolder(itemDayView);
     }
 
-    private boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
-        for (AbstractEvent event : dayEvents) {
-            if (event.isHoliday()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean hasDeviceEvents(List<AbstractEvent> dayEvents) {
         for (AbstractEvent event : dayEvents) {
             if (event instanceof DeviceCalendarEvent) {
@@ -178,7 +169,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> 
                 if (position - 7 - startingDayOfWeek >= 0) {
                     DayItem day = days.get(position - 7 - startingDayOfWeek);
                     List<AbstractEvent> events = Utils.getEvents(day.getJdn(), monthEvents);
-                    boolean isHoliday = Utils.isWeekEnd(day.getDayOfWeek()) || hasAnyHolidays(events);
+                    boolean isHoliday = Utils.isWeekEnd(day.getDayOfWeek()) || Utils.hasAnyHolidays(events);
 
                     itemDayView.setDayOfMonthItem(day.isToday(), originalPosition == selectedDay,
                             events.size() > 0, hasDeviceEvents(events), isHoliday,
