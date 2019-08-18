@@ -16,13 +16,14 @@ import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
 import java.util.*
+import kotlin.math.abs
 
 class CalendarsView : FrameLayout {
 
     private lateinit var mBinding: CalendarsViewBinding
-    private var mCalendarsViewExpandListener : OnCalendarsViewExpandListener? = null
-    private var mOnShowHideTodayButton : OnShowHideTodayButton? = null
-    private var mCalendarItemAdapter: CalendarItemAdapter? = null
+    private var mCalendarsViewExpandListener: OnCalendarsViewExpandListener? = null
+    private var mOnShowHideTodayButton: OnShowHideTodayButton? = null
+    private val mCalendarItemAdapter by lazy { CalendarItemAdapter(context) }
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -40,13 +41,12 @@ class CalendarsView : FrameLayout {
         mBinding = CalendarsViewBinding.inflate(LayoutInflater.from(context), this,
                 true)
 
-        mBinding.root.setOnClickListener { v -> expand(!mCalendarItemAdapter!!.isExpanded) }
+        mBinding.root.setOnClickListener { expand(!mCalendarItemAdapter.isExpanded) }
         mBinding.extraInformationContainer.visibility = View.GONE
 
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.HORIZONTAL
         mBinding.calendarsRecyclerView.layoutManager = linearLayoutManager
-        mCalendarItemAdapter = CalendarItemAdapter(context)
         mBinding.calendarsRecyclerView.adapter = mCalendarItemAdapter
     }
 
@@ -54,16 +54,16 @@ class CalendarsView : FrameLayout {
         mBinding.moreCalendar.visibility = View.GONE
     }
 
-    fun setOnCalendarsViewExpandListener(listener: OnCalendarsViewExpandListener) : Unit {
+    fun setOnCalendarsViewExpandListener(listener: OnCalendarsViewExpandListener) {
         mCalendarsViewExpandListener = listener
     }
 
-    fun setOnShowHideTodayButton(listener: OnShowHideTodayButton) : Unit {
+    fun setOnShowHideTodayButton(listener: OnShowHideTodayButton) {
         mOnShowHideTodayButton = listener
     }
 
     fun expand(expanded: Boolean) {
-        mCalendarItemAdapter!!.isExpanded = expanded
+        mCalendarItemAdapter.isExpanded = expanded
 
         mBinding.moreCalendar.setImageResource(if (expanded)
             R.drawable.ic_keyboard_arrow_up
@@ -79,13 +79,13 @@ class CalendarsView : FrameLayout {
                       calendarsToShow: List<CalendarType>) {
         val context = context ?: return
 
-        mCalendarItemAdapter!!.setDate(calendarsToShow, jdn)
+        mCalendarItemAdapter.setDate(calendarsToShow, jdn)
         mBinding.weekDayName.text = Utils.getWeekDayName(CivilDate(jdn))
 
         mBinding.zodiac.text = AstronomicalUtils.getZodiacInfo(context, jdn, true)
         mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
 
-        val diffDays = Math.abs(Utils.getTodayJdn() - jdn)
+        val diffDays = abs(Utils.getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
             if (Utils.isIranTime()) {

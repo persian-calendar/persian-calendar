@@ -73,8 +73,8 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
                     Utils.formatNumber(date.year))
         }
 
-        override fun onClick(view: View) {
-            Utils.copyToClipboard(view, "converted date", view.contentDescription)
+        override fun onClick(view: View?) {
+            Utils.copyToClipboard(view, "converted date", view?.contentDescription)
         }
     }
 }
