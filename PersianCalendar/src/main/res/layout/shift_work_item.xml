@@ -38,13 +38,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/remove"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/remove"
-                app:srcCompat="@drawable/ic_remove_button" />
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/remove"
+                    app:srcCompat="@drawable/ic_remove_button" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
