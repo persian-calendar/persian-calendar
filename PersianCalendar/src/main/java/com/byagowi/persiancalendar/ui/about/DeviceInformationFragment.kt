@@ -86,7 +86,7 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     : ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(DeviceInfoDiffCallback()) {
     private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
-    data class DeviceInfoItem(val title: String, val content: String, val version: String)
+    data class DeviceInfoItem(val title: String, val content: String?, val version: String)
 
     class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
         override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
@@ -96,94 +96,89 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
 
     init {
         deviceInfoItemsList.apply {
-            add(DeviceInfoItem(
-                    "Screen Resolution",
+            addIfNotNull("Screen Resolution",
                     getScreenResolution(activity.windowManager),
-                    ""
-            ))
+                    "")
 
-            add(DeviceInfoItem(
-                    "Android Version",
+            addIfNotNull("Android Version",
                     Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
-                    Build.VERSION.SDK_INT.toString()
-            ))
+                    Build.VERSION.SDK_INT.toString())
 
-            add(DeviceInfoItem(
-                    "Manufacturer",
+            addIfNotNull("Manufacturer",
                     Build.MANUFACTURER, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Brand",
                     Build.BRAND, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Model",
                     Build.MODEL, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Product",
                     Build.PRODUCT, ""
-            ))
+            )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Build.SUPPORTED_ABIS.forEachIndexed { index, abi ->
-                    deviceInfoItemsList.add(DeviceInfoItem("Instruction CPU ${index + 1}",
-                            abi, ""))
+                    addIfNotNull("Instruction CPU ${index + 1}",
+                            abi, "")
                 }
             } else {
-                add(DeviceInfoItem(
+                addIfNotNull(
                         "Instruction CPU 1",
                         Build.CPU_ABI, ""
-                ))
+                )
 
-                add(DeviceInfoItem(
+                addIfNotNull(
                         "Instruction CPU 2",
                         Build.CPU_ABI2, ""
-                ))
+                )
             }
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Instruction Architecture",
                     Build.DEVICE, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Android Id",
                     Build.ID, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Board",
                     Build.BOARD, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Radio Firmware Version",
                     Build.getRadioVersion(), ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Build User",
                     Build.USER, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Host",
                     Build.HOST, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Display",
                     Build.DISPLAY, ""
-            ))
+            )
 
-            add(DeviceInfoItem(
+            addIfNotNull(
                     "Device Fingerprints",
                     Build.FINGERPRINT, ""
-            ))
+            )
         }
 
         // If one wants to add kernel related cpu information
@@ -203,6 +198,13 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
         //   } catch (Exception e) {
         //       e.printStackTrace();
         //   }
+    }
+
+    private fun addIfNotNull(title: String, content: String?, version: String) {
+        deviceInfoItemsList.add(DeviceInfoItem(
+                title,
+                content ?: "Unknown", version
+        ))
     }
 
     private fun getScreenResolution(wm: WindowManager): String {
