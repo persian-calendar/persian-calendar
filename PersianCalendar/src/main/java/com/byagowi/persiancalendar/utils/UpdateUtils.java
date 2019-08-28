@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
@@ -365,10 +366,15 @@ public class UpdateUtils {
                             ? NotificationCompat.VISIBILITY_PUBLIC
                             : NotificationCompat.VISIBILITY_SECRET)
                     .setColor(0xFF607D8B)
+                    .setColorized(true)
                     .setContentTitle(title)
                     .setContentText(subtitle);
 
-            if (!Utils.isTalkBackEnabled() &&
+            // Night mode doesn't our custom notification in Samsung, let's detect it
+            boolean isSamsungNightMode = Build.BRAND.equals("samsung") &&
+                    (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != 0;
+
+            if (!Utils.isTalkBackEnabled() && !isSamsungNightMode &&
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 RemoteViews cv = new RemoteViews(context.getPackageName(), isRTL
                         ? R.layout.custom_notification
