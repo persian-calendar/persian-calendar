@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
+import kotlin.math.abs
 
 /**
  * Compass/Qibla activity
@@ -64,7 +65,7 @@ class CompassFragment : DaggerFragment() {
          * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
          */
         private fun lowPass(input: Float, output: Float): Float = when {
-            Math.abs(180 - input) > 170 -> input
+            abs(180 - input) > 170 -> input
             else -> output + ALPHA * (input - output)
         }
     }

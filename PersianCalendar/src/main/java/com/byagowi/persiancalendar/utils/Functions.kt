@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.View
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
+import kotlin.math.sqrt
 
 
 // https://stackoverflow.com/a/52557989
@@ -16,7 +17,7 @@ fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : Ci
             val viewWidth = circularRevealWidget.width
             val viewHeight = circularRevealWidget.height
 
-            val viewDiagonal = Math.sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+            val viewDiagonal = sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
 
             AnimatorSet().apply {
                 playTogether(
