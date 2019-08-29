@@ -1,6 +1,6 @@
 # Android Persian Calendar
 
-[![CircleCI](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master.svg?style=svg)](https://circleci.com/gh/ebraminio/DroidPersianCalendar/tree/master)
+[![GitHub Actions](https://action-badges.now.sh/ebraminio/DroidPersianCalendar?workflow=android)](https://github.com/ebraminio/DroidPersianCalendar/actions)
 
 <div dir=rtl>
 
