@@ -11,20 +11,17 @@ import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 
 class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: CalendarAdapterHelper) : FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment {
-        val fragment = MonthFragment()
-        val bundle = Bundle()
-        bundle.putInt(Constants.OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
-        fragment.arguments = bundle
-        return fragment
-    }
+    override fun getItem(position: Int): Fragment =
+            MonthFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(Constants.OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
+                }
+            }
 
-    override fun getCount(): Int {
-        return mCalendarAdapterHelper.monthsLimit
-    }
+    override fun getCount() = mCalendarAdapterHelper.monthsLimit
 
     class CalendarAdapterHelper(private val isRTL: Boolean) {
-        internal val monthsLimit = 5000 // this should be an even number
+        val monthsLimit = 5000 // this should be an even number
 
         fun gotoOffset(monthViewPager: ViewPager, offset: Int) {
             if (monthViewPager.currentItem != offsetToPosition(offset)) {
@@ -32,12 +29,8 @@ class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: C
             }
         }
 
-        fun positionToOffset(position: Int): Int {
-            return if (isRTL) position - monthsLimit / 2 else monthsLimit / 2 - position
-        }
+        fun positionToOffset(position: Int) = if (isRTL) position - monthsLimit / 2 else monthsLimit / 2 - position
 
-        internal fun offsetToPosition(position: Int): Int {
-            return (if (isRTL) position else -position) + monthsLimit / 2
-        }
+        private fun offsetToPosition(position: Int) = (if (isRTL) position else -position) + monthsLimit / 2
     }
 }

@@ -33,17 +33,16 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
     @Inject
     lateinit var calendarFragmentDependency: CalendarFragmentDependency
 
-    private var jdn: Long = -1
-    private var selectedJdn: Long = -1
+    private var jdn: Long = -1L
+    private var selectedJdn: Long = -1L
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val args = arguments
         val mainActivity = mainActivityDependency.mainActivity
 
         Utils.applyAppLanguage(mainActivity)
         Utils.updateStoredPreference(mainActivity)
 
-        selectedJdn = args?.getLong(BUNDLE_KEY, -1) ?: -1
+        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = Utils.getTodayJdn()
 
         jdn = Utils.getShiftWorkStartingJdn()
@@ -58,7 +57,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
 
         var shiftWorks: List<ShiftWorkRecord> = Utils.getShiftWorks()
-        if (shiftWorks.size == 0)
+        if (shiftWorks.isEmpty())
             shiftWorks = listOf(ShiftWorkRecord("d", 0))
         val shiftWorkItemAdapter = ItemsAdapter(shiftWorks, binding)
         binding.recyclerView.adapter = shiftWorkItemAdapter
@@ -68,7 +67,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 Utils.formatDate(
                         Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
 
-        binding.resetLink.setOnClickListener { v ->
+        binding.resetLink.setOnClickListener {
             jdn = selectedJdn
             binding.description.text = String.format(getString(R.string.shift_work_starting_date),
                     Utils.formatDate(
@@ -80,7 +79,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         return AlertDialog.Builder(mainActivity)
                 .setView(binding.root)
                 .setTitle(null)
-                .setPositiveButton(R.string.accept) { dialogInterface, i ->
+                .setPositiveButton(R.string.accept) { _, _ ->
                     val result = StringBuilder()
                     var first = true
                     for (record in shiftWorkItemAdapter.rows) {
@@ -96,7 +95,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     }
 
                     val edit = appDependency.sharedPreferences.edit()
-                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.length == 0) -1 else jdn)
+                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
                     edit.putString(PREF_SHIFT_WORK_SETTING, result.toString())
                     edit.putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                     edit.apply()
@@ -118,7 +117,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         init {
             mRows.addAll(initialItems)
-            mShiftWorkKeys = Arrays.asList(*resources.getStringArray(R.array.shift_work_keys))
+            mShiftWorkKeys = listOf(*resources.getStringArray(R.array.shift_work_keys))
             updateShiftWorkResult()
         }
 
@@ -137,7 +136,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             }
 
             mBinding.result.text = result.toString()
-            mBinding.result.visibility = if (result.length == 0) View.GONE else View.VISIBLE
+            mBinding.result.visibility = if (result.isEmpty()) View.GONE else View.VISIBLE
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -151,9 +150,8 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             holder.bind(position)
         }
 
-        override fun getItemCount(): Int {
-            return mRows.size + 1
-        }
+        override fun getItemCount(): Int = mRows.size + 1
+
 
         internal fun reset() {
             mRows.clear()
@@ -182,7 +180,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                         android.R.layout.simple_spinner_dropdown_item,
                         resources.getStringArray(R.array.shift_work))
 
-                mBinding.remove.setOnClickListener { v -> remove() }
+                mBinding.remove.setOnClickListener { remove() }
 
                 mBinding.lengthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -204,7 +202,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     override fun onNothingSelected(parent: AdapterView<*>) {}
                 }
 
-                mBinding.addButton.setOnClickListener { v ->
+                mBinding.addButton.setOnClickListener {
                     mRows.add(ShiftWorkRecord("r", 0))
                     notifyDataSetChanged()
                     updateShiftWorkResult()
@@ -235,15 +233,12 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
     }
 
     companion object {
-        private val BUNDLE_KEY = "jdn"
+        private const val BUNDLE_KEY = "jdn"
 
-        fun newInstance(jdn: Long): ShiftWorkDialog {
-            val args = Bundle()
-            args.putLong(BUNDLE_KEY, jdn)
-
-            val fragment = ShiftWorkDialog()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(jdn: Long) = ShiftWorkDialog().apply {
+            arguments = Bundle().apply {
+                putLong(BUNDLE_KEY, jdn)
+            }
         }
     }
 }

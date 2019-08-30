@@ -22,8 +22,7 @@ class SelectDayDialog : DaggerAppCompatDialogFragment() {
     lateinit var calendarFragmentDependency: CalendarFragmentDependency
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val args = arguments
-        val jdn = args?.getLong(BUNDLE_KEY, -1) ?: -1
+        val jdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
 
         val mainActivity = mainActivityDependency.mainActivity
         val dayPickerView = SimpleDayPickerView(mainActivity)
@@ -32,23 +31,20 @@ class SelectDayDialog : DaggerAppCompatDialogFragment() {
         return AlertDialog.Builder(mainActivity)
                 .setView(dayPickerView as View)
                 .setCustomTitle(null)
-                .setPositiveButton(R.string.go) { dialogInterface, i ->
+                .setPositiveButton(R.string.go) { _, _ ->
                     val resultJdn = dayPickerView.dayJdnFromView
                     if (resultJdn != -1L)
-                        calendarFragmentDependency!!.calendarFragment.bringDate(resultJdn)
+                        calendarFragmentDependency.calendarFragment.bringDate(resultJdn)
                 }.create()
     }
 
     companion object {
-        private val BUNDLE_KEY = "jdn"
+        private const val BUNDLE_KEY = "jdn"
 
-        fun newInstance(jdn: Long): SelectDayDialog {
-            val args = Bundle()
-            args.putLong(BUNDLE_KEY, jdn)
-
-            val fragment = SelectDayDialog()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(jdn: Long) = SelectDayDialog().apply {
+            arguments = Bundle().apply {
+                putLong(BUNDLE_KEY, jdn)
+            }
         }
     }
 }

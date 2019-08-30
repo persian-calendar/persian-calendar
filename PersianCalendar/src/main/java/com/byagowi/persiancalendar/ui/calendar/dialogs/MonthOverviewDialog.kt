@@ -19,10 +19,9 @@ import java.util.*
 class MonthOverviewDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val args = arguments
         val context = context
 
-        var baseJdn = args?.getLong(BUNDLE_KEY, -1) ?: -1
+        var baseJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (baseJdn == -1L) baseJdn = Utils.getTodayJdn()
 
         val records = ArrayList<MonthOverviewRecord>()
@@ -70,9 +69,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             holder.bind(position)
         }
 
-        override fun getItemCount(): Int {
-            return mRows.size
-        }
+        override fun getItemCount(): Int = mRows.size
 
         internal inner class ViewHolder(var mBinding: MonthOverviewItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
@@ -88,15 +85,12 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private val BUNDLE_KEY = "jdn"
+        private const val BUNDLE_KEY = "jdn"
 
-        fun newInstance(jdn: Long): MonthOverviewDialog {
-            val args = Bundle()
-            args.putLong(BUNDLE_KEY, jdn)
-
-            val fragment = MonthOverviewDialog()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(jdn: Long) = MonthOverviewDialog().apply {
+            arguments = Bundle().apply {
+                putLong(BUNDLE_KEY, jdn)
+            }
         }
     }
 }
