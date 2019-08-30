@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
@@ -50,8 +51,12 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             return context.getString(R.string.default_athan_name)
         }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
 
