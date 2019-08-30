@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -11,16 +12,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.AndroidSupportInjection
 import java.util.*
+import javax.inject.Inject
 
 class MonthOverviewDialog : BottomSheetDialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val context = context
+    @Inject
+    lateinit var mainActivityDependency: MainActivityDependency
 
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val context = mainActivityDependency.mainActivity
         var baseJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (baseJdn == -1L) baseJdn = Utils.getTodayJdn()
 
@@ -47,7 +58,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = ItemAdapter(records)
 
-        val bottomSheetDialog = BottomSheetDialog(context!!)
+        val bottomSheetDialog = BottomSheetDialog(context)
         bottomSheetDialog.setContentView(binding.root)
         bottomSheetDialog.setCancelable(true)
         bottomSheetDialog.setCanceledOnTouchOutside(true)
