@@ -566,7 +566,7 @@ public class CalendarFragment extends DaggerFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.go_to:
-                SelectDayDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
+                SelectDayDialog.Companion.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         SelectDayDialog.class.getName());
                 break;
             case R.id.add_event:
@@ -576,13 +576,13 @@ public class CalendarFragment extends DaggerFragment {
                 addEventOnCalendar(mLastSelectedJdn);
                 break;
             case R.id.shift_work:
-                ShiftWorkDialog.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
+                ShiftWorkDialog.Companion.newInstance(mLastSelectedJdn).show(getChildFragmentManager(),
                         ShiftWorkDialog.class.getName());
                 break;
             case R.id.month_overview:
                 long visibleMonthJdn = MonthFragment.getDateFromOffset(Utils.getMainCalendar(),
                         mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.getCurrentItem())).toJdn();
-                MonthOverviewDialog.newInstance(visibleMonthJdn).show(getChildFragmentManager(),
+                MonthOverviewDialog.Companion.newInstance(visibleMonthJdn).show(getChildFragmentManager(),
                         MonthOverviewDialog.class.getName());
                 break;
             default:
