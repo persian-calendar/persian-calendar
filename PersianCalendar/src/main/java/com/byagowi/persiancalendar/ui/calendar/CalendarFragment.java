@@ -580,7 +580,7 @@ public class CalendarFragment extends DaggerFragment {
                         ShiftWorkDialog.class.getName());
                 break;
             case R.id.month_overview:
-                long visibleMonthJdn = MonthFragment.getDateFromOffset(Utils.getMainCalendar(),
+                long visibleMonthJdn = MonthFragment.Companion.getDateFromOffset(Utils.getMainCalendar(),
                         mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.getCurrentItem())).toJdn();
                 MonthOverviewDialog.Companion.newInstance(visibleMonthJdn).show(getChildFragmentManager(),
                         MonthOverviewDialog.class.getName());
