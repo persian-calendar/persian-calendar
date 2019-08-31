@@ -9,33 +9,37 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency
+import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
 import com.byagowi.persiancalendar.entities.AbstractEvent
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.Utils
 
-class MonthAdapter internal constructor(private val calendarFragmentDependency: CalendarFragmentDependency, private val days: List<DayItem>,
-                                        startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
+class MonthAdapter internal constructor(private val mainActivityDependency: MainActivityDependency,
+                                        private val calendarFragmentDependency: CalendarFragmentDependency,
+                                        private val days: List<DayItem>,
+                                        startingDayOfWeek: Int, private val weekOfYearStart: Int,
+                                        private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
     private val startingDayOfWeek: Int
     private val totalDays: Int
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
     private var monthEvents = SparseArray<List<DeviceCalendarEvent>>()
     private val isArabicDigit: Boolean
-    private val context: Context?
+    private val context: Context
     private var selectedDay = -1
 
     init {
         this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek)
         totalDays = days.size
-        this.context = calendarFragmentDependency.calendarFragment.context
+        this.context = mainActivityDependency.mainActivity
         initializeMonthEvents(context)
         isArabicDigit = Utils.isArabicDigitSelected()
 
         layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                context!!.resources.getDimensionPixelSize(R.dimen.day_item_size))
+                context.resources.getDimensionPixelSize(R.dimen.day_item_size))
         this.daysPaintResources = calendarFragmentDependency.daysPaintResources
     }
 
@@ -122,7 +126,7 @@ class MonthAdapter internal constructor(private val calendarFragmentDependency: 
                         itemDayView.setNonDayOfMonthItem(weekNumber,
                                 daysPaintResources.weekNumberTextSize)
                         if (Utils.isTalkBackEnabled()) {
-                            itemDayView.contentDescription = String.format(context!!.getString(R.string.nth_week_of_year), weekNumber)
+                            itemDayView.contentDescription = String.format(context.getString(R.string.nth_week_of_year), weekNumber)
                         }
 
                         itemDayView.visibility = View.VISIBLE
@@ -142,7 +146,7 @@ class MonthAdapter internal constructor(private val calendarFragmentDependency: 
                         daysPaintResources.weekDaysInitialTextSize)
                 if (Utils.isTalkBackEnabled()) {
                     itemDayView.contentDescription = String.format(
-                            context!!.getString(R.string.week_days_name_column),
+                            context.getString(R.string.week_days_name_column),
                             Utils.getWeekDayName(Utils.fixDayOfWeek(position)))
                 }
 
