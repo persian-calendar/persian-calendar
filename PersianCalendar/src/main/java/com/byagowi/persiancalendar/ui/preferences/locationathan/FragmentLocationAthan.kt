@@ -20,8 +20,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.ui.MainActivityModel
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference

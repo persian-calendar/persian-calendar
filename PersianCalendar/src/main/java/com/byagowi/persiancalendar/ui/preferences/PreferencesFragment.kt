@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.FragmentWidgetNotification

@@ -12,7 +12,7 @@
 //import com.byagowi.persiancalendar.R;
 //import com.byagowi.persiancalendar.databinding.FragmentReminderBinding;
 //import com.byagowi.persiancalendar.databinding.ReminderAdapterItemBinding;
-//import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+//import com.byagowi.persiancalendar.di.MainActivityDependency;
 //import com.byagowi.persiancalendar.entities.Reminder;
 //import com.byagowi.persiancalendar.ui.MainActivity;
 //import com.byagowi.persiancalendar.utils.ReminderUtils;

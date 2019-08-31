@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+import com.byagowi.persiancalendar.di.MainActivityDependency;
 import com.byagowi.persiancalendar.ui.MainActivity;
 
 import net.androgames.level.orientation.OrientationProvider;

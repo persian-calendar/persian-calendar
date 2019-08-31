@@ -18,8 +18,8 @@ import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerAppCompatDialogFragment

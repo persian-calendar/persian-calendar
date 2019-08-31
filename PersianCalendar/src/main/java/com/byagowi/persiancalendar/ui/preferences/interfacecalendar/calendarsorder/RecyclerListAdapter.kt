@@ -25,7 +25,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import java.util.*
 
 class RecyclerListAdapter constructor(private val calendarPreferenceDialog: CalendarPreferenceDialog,

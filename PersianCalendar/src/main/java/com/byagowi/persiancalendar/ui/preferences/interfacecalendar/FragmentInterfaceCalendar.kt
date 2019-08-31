@@ -9,7 +9,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.AndroidSupportInjection

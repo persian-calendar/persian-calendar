@@ -27,8 +27,8 @@ import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.CalendarType

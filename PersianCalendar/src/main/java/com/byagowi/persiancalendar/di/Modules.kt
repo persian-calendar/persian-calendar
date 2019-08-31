@@ -1,9 +1,13 @@
-package com.byagowi.persiancalendar.di.modules
+package com.byagowi.persiancalendar.di
 
-import com.byagowi.persiancalendar.di.scopes.PerFragment
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.about.AboutFragment
 import com.byagowi.persiancalendar.ui.about.DeviceInformationFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
+import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
+import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
@@ -11,12 +15,39 @@ import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInte
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
+
 import dagger.Module
+import dagger.android.AndroidInjectionModule
 import dagger.android.ContributesAndroidInjector
+
 import net.androgames.level.LevelFragment
 
-//import com.byagowi.persiancalendar.ui.reminder.EditReminderDialog;
-//import com.byagowi.persiancalendar.ui.reminder.ReminderFragment;
+
+@Module(includes = [AndroidInjectionModule::class])
+abstract class AppModule {
+    @PerActivity
+    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    internal abstract fun mainActivityInjector(): MainActivity
+}
+
+@Module
+abstract class CalendarFragmentModule {
+    @PerChildFragment
+    @ContributesAndroidInjector(modules = [MainChildFragmentModule::class])
+    internal abstract fun monthFragmentInjector(): MonthFragment
+
+    @PerChildFragment
+    @ContributesAndroidInjector
+    internal abstract fun selectDayDialogInjector(): SelectDayDialog
+
+    @PerChildFragment
+    @ContributesAndroidInjector
+    internal abstract fun shiftWorkDialogInjector(): ShiftWorkDialog
+
+    @PerChildFragment
+    @ContributesAndroidInjector
+    internal abstract fun monthOverviewDialogInjector(): MonthOverviewDialog
+}
 
 @Module
 abstract class MainActivityModule {
@@ -73,3 +104,6 @@ abstract class MainActivityModule {
     @ContributesAndroidInjector
     internal abstract fun gpsLocationDialogInjector(): GPSLocationDialog
 }
+
+@Module
+abstract class MainChildFragmentModule

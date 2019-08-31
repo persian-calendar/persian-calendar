@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.di.dependencies.AppDependency;
+import com.byagowi.persiancalendar.di.AppDependency;
 import com.byagowi.persiancalendar.ui.calendar.times.SunView;
 import com.duolingo.open.rtlviewpager.RtlViewPager;
 

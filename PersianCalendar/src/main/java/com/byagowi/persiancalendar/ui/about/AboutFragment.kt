@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
 import com.google.android.material.chip.Chip
 import dagger.android.support.DaggerFragment

@@ -13,7 +13,7 @@
 //import com.byagowi.persiancalendar.Constants;
 //import com.byagowi.persiancalendar.R;
 //import com.byagowi.persiancalendar.databinding.EditReminderDialogBinding;
-//import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency;
+//import com.byagowi.persiancalendar.di.MainActivityDependency;
 //import com.byagowi.persiancalendar.entities.Reminder;
 //import com.byagowi.persiancalendar.entities.StringWithValueItem;
 //import com.byagowi.persiancalendar.praytimes.Clock;

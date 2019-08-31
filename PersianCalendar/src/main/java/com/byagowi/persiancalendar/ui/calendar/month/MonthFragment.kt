@@ -11,9 +11,9 @@ import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.CalendarFragmentDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.CalendarType

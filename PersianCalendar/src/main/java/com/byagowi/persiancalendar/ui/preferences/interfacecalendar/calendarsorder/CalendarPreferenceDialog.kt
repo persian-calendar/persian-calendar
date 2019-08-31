@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*

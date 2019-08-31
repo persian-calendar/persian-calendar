@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.google.android.material.bottomnavigation.LabelVisibilityMode

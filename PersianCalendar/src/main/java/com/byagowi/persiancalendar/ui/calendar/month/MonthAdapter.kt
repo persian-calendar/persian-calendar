@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.CalendarFragmentDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.AbstractEvent
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent

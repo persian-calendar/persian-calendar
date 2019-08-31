@@ -11,7 +11,7 @@ import android.view.*
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerFragment

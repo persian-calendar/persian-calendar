@@ -14,9 +14,9 @@ import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
-import com.byagowi.persiancalendar.di.dependencies.AppDependency
-import com.byagowi.persiancalendar.di.dependencies.CalendarFragmentDependency
-import com.byagowi.persiancalendar.di.dependencies.MainActivityDependency
+import com.byagowi.persiancalendar.di.AppDependency
+import com.byagowi.persiancalendar.di.CalendarFragmentDependency
+import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.Utils
