@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
@@ -19,9 +20,12 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
 
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
         val switchPreference = findPreference("showDeviceCalendarEvents") as SwitchPreferenceCompat

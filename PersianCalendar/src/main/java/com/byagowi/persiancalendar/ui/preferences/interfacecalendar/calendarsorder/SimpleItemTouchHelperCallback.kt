@@ -20,6 +20,7 @@ import android.graphics.Canvas
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.abs
 
 class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerListAdapter) : ItemTouchHelper.Callback() {
 
@@ -60,7 +61,7 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
                              dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             // Fade out the view as it is swiped out of the parent's bounds
-            val alpha = ALPHA_FULL - Math.abs(dX) / viewHolder.itemView.width.toFloat()
+            val alpha = ALPHA_FULL - abs(dX) / viewHolder.itemView.width.toFloat()
             viewHolder.itemView.alpha = alpha
             viewHolder.itemView.translationX = dX
         } else {
