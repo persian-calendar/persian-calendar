@@ -40,9 +40,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
         holder.bind(position)
     }
 
-    override fun getItemCount(): Int {
-        return mCalendars.size
-    }
+    override fun getItemCount(): Int = mCalendars.size
 
     inner class ViewHolder(private val binding: CalendarItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 

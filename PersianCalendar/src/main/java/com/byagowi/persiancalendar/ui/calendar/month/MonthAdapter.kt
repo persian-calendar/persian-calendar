@@ -79,13 +79,10 @@ class MonthAdapter internal constructor(private val mainActivityDependency: Main
         return false
     }
 
-    override fun onBindViewHolder(holder: MonthAdapter.ViewHolder, position: Int) {
-        holder.bind(position)
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    override fun getItemCount(): Int {
-        return 7 * if (Utils.isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
-    }
+    override fun getItemCount(): Int =
+            7 * if (Utils.isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
 
     inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
         init {

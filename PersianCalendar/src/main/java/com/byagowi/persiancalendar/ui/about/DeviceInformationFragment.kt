@@ -207,21 +207,15 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
         ))
     }
 
-    private fun getScreenResolution(wm: WindowManager): String {
-        return String.format(Locale.ENGLISH, "%d*%d pixels",
-                wm.defaultDisplay.width, wm.defaultDisplay.height)
-    }
+    private fun getScreenResolution(wm: WindowManager): String =
+            String.format(Locale.ENGLISH, "%d*%d pixels",
+                    wm.defaultDisplay.width, wm.defaultDisplay.height)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DeviceInfoRowBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DeviceInfoRowBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
 
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int = deviceInfoItemsList.size
 

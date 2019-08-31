@@ -119,9 +119,7 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
         }
     }
 
-    override fun getItemCount(): Int {
-        return titles.size
-    }
+    override fun getItemCount(): Int = titles.size
 
     inner class ItemViewHolder constructor(private val binding: CalendarTypeItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
