@@ -58,7 +58,7 @@ class MonthAdapter internal constructor(private val mainActivityDependency: Main
 
         selectedDay = dayOfMonth + 6 + startingDayOfWeek
         if (Utils.isWeekOfYearEnabled()) {
-            selectedDay = selectedDay + selectedDay / 7 + 1
+            selectedDay += selectedDay / 7 + 1
         }
 
         notifyItemChanged(selectedDay)
@@ -118,7 +118,7 @@ class MonthAdapter internal constructor(private val mainActivityDependency: Main
             if (Utils.isWeekOfYearEnabled()) {
                 if (position % 8 == 0) {
                     val row = position / 8
-                    if (row > 0 && row <= weeksCount) {
+                    if (row in 1..weeksCount) {
                         val weekNumber = Utils.formatNumber(weekOfYearStart + row - 1)
                         itemDayView.setNonDayOfMonthItem(weekNumber,
                                 daysPaintResources.weekNumberTextSize)

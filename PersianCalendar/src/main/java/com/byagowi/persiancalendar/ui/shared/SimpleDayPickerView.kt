@@ -79,7 +79,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
         val context = context ?: return
 
-        if (jdn.equals(-1)) {
+        if (jdn == -1L) {
             jdn = Utils.getTodayJdn()
         }
 
