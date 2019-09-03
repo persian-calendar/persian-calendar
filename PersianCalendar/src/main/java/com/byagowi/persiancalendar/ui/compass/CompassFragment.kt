@@ -108,7 +108,7 @@ class CompassFragment : DaggerFragment() {
         return binding.root
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         setCompassMetrics()
     }
