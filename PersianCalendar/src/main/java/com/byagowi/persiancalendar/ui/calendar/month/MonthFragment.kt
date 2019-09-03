@@ -37,20 +37,19 @@ class MonthFragment : DaggerFragment() {
                 container, false)
         val calendarFragment = calendarFragmentDependency.calendarFragment
         val isRTL = Utils.isRTL(mainActivityDependency.mainActivity)
-        val args = arguments
-        val offset = args?.getInt(Constants.OFFSET_ARGUMENT) ?: 0
+        val offset = arguments?.getInt(Constants.OFFSET_ARGUMENT) ?: 0
 
         fragmentMonthBinding.next.setImageResource(if (isRTL)
             R.drawable.ic_keyboard_arrow_left
         else
             R.drawable.ic_keyboard_arrow_right)
-        fragmentMonthBinding.next.setOnClickListener { v -> calendarFragment.changeMonth(if (isRTL) -1 else 1) }
+        fragmentMonthBinding.next.setOnClickListener { calendarFragment.changeMonth(if (isRTL) -1 else 1) }
 
         fragmentMonthBinding.prev.setImageResource(if (isRTL)
             R.drawable.ic_keyboard_arrow_right
         else
             R.drawable.ic_keyboard_arrow_left)
-        fragmentMonthBinding.prev.setOnClickListener { v -> calendarFragment.changeMonth(if (isRTL) 1 else -1) }
+        fragmentMonthBinding.prev.setOnClickListener { calendarFragment.changeMonth(if (isRTL) 1 else -1) }
 
         fragmentMonthBinding.monthDays.setHasFixedSize(true)
 
@@ -140,8 +139,8 @@ class MonthFragment : DaggerFragment() {
             month -= 1
             var year = date.year
 
-            year = year + month / 12
-            month = month % 12
+            year += month / 12
+            month %= 12
             if (month < 0) {
                 year -= 1
                 month += 12

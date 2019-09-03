@@ -86,8 +86,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    annotationProcessor("androidx.lifecycle:lifecycle-common-java8:2.0.0")
-    kapt("androidx.lifecycle:lifecycle-common-java8:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
     implementation("androidx.core:core-ktx:1.0.2")
