@@ -195,7 +195,7 @@ public class CalendarFragment extends DaggerFragment {
                 Utils.formatNumber(today.getYear()));
 
         mCalendarFragmentModel = ViewModelProviders.of(this).get(CalendarFragmentModel.class);
-        mCalendarFragmentModel.selectedDayLiveData.observe(this, jdn -> {
+        mCalendarFragmentModel.getSelectedDayLiveData().observe(this, jdn -> {
             mLastSelectedJdn = jdn;
             mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes());
             boolean isToday = Utils.getTodayJdn() == mLastSelectedJdn;
