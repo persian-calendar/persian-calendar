@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.praytimes.PrayTimes
 import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
 import java.util.*
+import kotlin.math.cos
 
 /**
  * @author MEHDI DIMYADI
@@ -68,20 +69,20 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
     internal var height: Int = 0
     lateinit var curvePath: Path
     lateinit var nightPath: Path
-    internal var current = 0f
-    internal var linearGradient = LinearGradient(0f, 0f, 1f, 0f, 0, 0, Shader.TileMode.MIRROR)
-    internal var moonPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    internal var moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG)
-    internal var moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG)
-    internal var moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG)
-    internal var moonRect = RectF()
-    internal var moonOval = RectF()
-    internal var dayLengthString = ""
-    internal var remainingString = ""
-    internal var sunriseString = ""
-    internal var middayString = ""
-    internal var sunsetString = ""
-    internal var isRTL = false
+    private var current = 0f
+    private var linearGradient = LinearGradient(0f, 0f, 1f, 0f, 0, 0, Shader.TileMode.MIRROR)
+    private var moonPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var moonRect = RectF()
+    private var moonOval = RectF()
+    private var dayLengthString = ""
+    private var remainingString = ""
+    private var sunriseString = ""
+    private var middayString = ""
+    private var sunsetString = ""
+    private var isRTL = false
     private var segmentByPixel: Double = 0.toDouble()
     private var argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
@@ -269,7 +270,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         }
 
         // draw sun
-        if (current >= 0.17f && current <= 0.83f) {
+        if (current in 0.17f..0.83f) {
 
             @ColorInt
             val color = argbEvaluator.evaluate(current,
@@ -286,7 +287,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         }
     }
 
-    fun drawMoon(canvas: Canvas) {
+    private fun drawMoon(canvas: Canvas) {
         // This is brought from QiblaCompassView with some modifications
         val r = height * 0.08f
         val radius = 1f
@@ -326,7 +327,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
     }
 
     private fun getY(x: Int, segment: Double, height: Int): Float {
-        val cos = (Math.cos(-Math.PI + x * segment) + 1) / 2
+        val cos = (cos(-Math.PI + x * segment) + 1) / 2
         return height - height * cos.toFloat() + height * 0.1f
     }
 
@@ -350,7 +351,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         val sunrise = prayTimes!!.sunriseClock.toInt().toFloat()
         var midnight = prayTimes!!.midnightClock.toInt().toFloat()
 
-        if (midnight > HALF_DAY) midnight = midnight - FULL_DAY
+        if (midnight > HALF_DAY) midnight -= FULL_DAY
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
 
         var c = 0f
@@ -373,10 +374,10 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         dayLengthString = String.format(context.getString(R.string.length_of_day),
                 Utils.formatNumber(dayLength.hour),
                 Utils.formatNumber(dayLength.minute))
-        if (remaining.toInt() == 0) {
-            remainingString = ""
+        remainingString = if (remaining.toInt() == 0) {
+            ""
         } else {
-            remainingString = String.format(context.getString(R.string.remaining_daylight),
+            String.format(context.getString(R.string.remaining_daylight),
                     Utils.formatNumber(remaining.hour),
                     Utils.formatNumber(remaining.minute))
         }
