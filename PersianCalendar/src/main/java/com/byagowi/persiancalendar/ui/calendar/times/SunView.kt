@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.praytimes.PrayTimes
 import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.cos
 
 /**
@@ -91,23 +92,19 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
     private var fontSize: Int = 0
 
     constructor(context: Context) : super(context) {
-
         init(context, null)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-
         init(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-
         init(context, attrs)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-
         init(context, attrs)
     }
 
@@ -318,8 +315,8 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
         val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
         moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-        moonOval.set(px - Math.abs(arcWidth) / 2f, py + eOffset - radius - r,
-                px + Math.abs(arcWidth) / 2f, py + eOffset - radius + r)
+        moonOval.set(px - abs(arcWidth) / 2f, py + eOffset - radius - r,
+                px + abs(arcWidth) / 2f, py + eOffset - radius + r)
         canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
         canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD)
