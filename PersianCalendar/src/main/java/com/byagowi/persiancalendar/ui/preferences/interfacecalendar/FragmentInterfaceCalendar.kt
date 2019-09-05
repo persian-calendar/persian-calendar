@@ -20,7 +20,7 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

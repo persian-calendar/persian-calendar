@@ -51,7 +51,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             return context.getString(R.string.default_athan_name)
         }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

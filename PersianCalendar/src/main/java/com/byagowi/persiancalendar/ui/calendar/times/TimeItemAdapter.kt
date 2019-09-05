@@ -56,24 +56,24 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
 
             binding.name.setText(timeName)
 
-            if (mPrayTimes == null) {
+            val clock: Clock? = when (timeName) {
+                R.string.imsak -> mPrayTimes?.imsakClock
+                R.string.fajr -> mPrayTimes?.fajrClock
+                R.string.sunrise -> mPrayTimes?.sunriseClock
+                R.string.dhuhr -> mPrayTimes?.dhuhrClock
+                R.string.asr -> mPrayTimes?.asrClock
+                R.string.sunset -> mPrayTimes?.sunsetClock
+                R.string.maghrib -> mPrayTimes?.maghribClock
+                R.string.isha -> mPrayTimes?.ishaClock
+                R.string.midnight -> mPrayTimes?.midnightClock
+                else -> mPrayTimes?.midnightClock
+            }
+
+            if (clock == null) {
                 binding.time.text = ""
                 return
             }
 
-            val clock: Clock
-            clock = when (timeName) {
-                R.string.imsak -> mPrayTimes!!.imsakClock
-                R.string.fajr -> mPrayTimes!!.fajrClock
-                R.string.sunrise -> mPrayTimes!!.sunriseClock
-                R.string.dhuhr -> mPrayTimes!!.dhuhrClock
-                R.string.asr -> mPrayTimes!!.asrClock
-                R.string.sunset -> mPrayTimes!!.sunsetClock
-                R.string.maghrib -> mPrayTimes!!.maghribClock
-                R.string.isha -> mPrayTimes!!.ishaClock
-                R.string.midnight -> mPrayTimes!!.midnightClock
-                else -> mPrayTimes!!.midnightClock
-            }
             binding.time.text = Utils.getFormattedClock(clock, false)
         }
     }
