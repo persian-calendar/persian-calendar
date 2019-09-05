@@ -347,9 +347,13 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         middayString = context.getString(R.string.middaySunView)
         sunsetString = context.getString(R.string.sunsetSunView)
 
-        val sunset = prayTimes!!.sunsetClock.toInt().toFloat()
-        val sunrise = prayTimes!!.sunriseClock.toInt().toFloat()
-        var midnight = prayTimes!!.midnightClock.toInt().toFloat()
+        val sunset = prayTimes?.sunsetClock?.toInt()?.toFloat()
+        val sunrise = prayTimes?.sunriseClock?.toInt()?.toFloat()
+        var midnight = prayTimes?.midnightClock?.toInt()?.toFloat()
+
+        sunset ?: return
+        sunrise ?: return
+        midnight ?: return
 
         if (midnight > HALF_DAY) midnight -= FULL_DAY
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
