@@ -179,6 +179,6 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {
-        findPreference("pref_key_ringtone").summary = athanName
+        findPreference<Preference>("pref_key_ringtone")?.summary = athanName
     }
 }

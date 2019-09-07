@@ -28,9 +28,9 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        val switchPreference = findPreference("showDeviceCalendarEvents") as SwitchPreferenceCompat
+        val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
 
-        switchPreference.setOnPreferenceChangeListener { _, _ ->
+        switchPreference?.setOnPreferenceChangeListener { _, _ ->
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 Utils.askForCalendarPermission(mainActivityDependency.mainActivity)
                 switchPreference.isChecked = false

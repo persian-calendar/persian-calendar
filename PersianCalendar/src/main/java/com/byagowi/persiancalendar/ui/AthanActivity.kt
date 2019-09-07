@@ -64,7 +64,7 @@ class AthanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val settingsVol = Utils.getAthanVolume(this)
-        val audioManager = getSystemService<AudioManager?>()
+        val audioManager = getSystemService<AudioManager>()
         if (settingsVol != DEFAULT_ATHAN_VOLUME) {
             audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, settingsVol, 0)
         } else {
@@ -128,7 +128,7 @@ class AthanActivity : AppCompatActivity() {
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
 
         try {
-            getSystemService<TelephonyManager?>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
         } catch (e: Exception) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
@@ -148,7 +148,7 @@ class AthanActivity : AppCompatActivity() {
         alreadyStopped = true
 
         try {
-            getSystemService<TelephonyManager?>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
             phoneStateListener = null
         } catch (e: RuntimeException) {
             Log.e(TAG, "TelephonyManager handling fail", e)
