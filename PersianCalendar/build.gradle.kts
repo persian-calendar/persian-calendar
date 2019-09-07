@@ -106,9 +106,7 @@ dependencies {
     val daggerVersion = "2.24"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
-    annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
-    annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
 //    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
