@@ -46,7 +46,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
 
         init {
 
-            val applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled()
+            val applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled
 
             binding.monthYear.typeface = mCalendarFont
             binding.day.typeface = mCalendarFont
