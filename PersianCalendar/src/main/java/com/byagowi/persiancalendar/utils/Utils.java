@@ -407,7 +407,7 @@ public class Utils {
             sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1);
 
             sShiftWorkPeriod = 0;
-            for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.length;
+            for (ShiftWorkRecord shift : sShiftWorks) sShiftWorkPeriod += shift.getLength();
 
             sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true);
 
@@ -1134,12 +1134,12 @@ public class Utils {
         int dayInPeriod = (int) (passedDays % sShiftWorkPeriod);
         int accumulation = 0;
         for (ShiftWorkRecord shift : sShiftWorks) {
-            accumulation += shift.length;
+            accumulation += shift.getLength();
             if (accumulation > dayInPeriod) {
                 // Skip rests on abbreviated mode
-                if (sShiftWorkRecurs && abbreviated && shift.type.equals("r")) return "";
+                if (sShiftWorkRecurs && abbreviated && shift.getType().equals("r")) return "";
 
-                String title = sShiftWorkTitles.get(shift.type);
+                String title = sShiftWorkTitles.get(shift.getType());
                 if (title == null) return "";
                 return abbreviated ?
                         (title.substring(0, 1) +
