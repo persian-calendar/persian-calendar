@@ -67,7 +67,8 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/pray_methods_calculation"
             android:title="@string/pray_methods"
-            settings:iconSpaceReserved="false" />
+            settings:iconSpaceReserved="false"
+            settings:useSimpleSummaryProvider="true" />
 
         <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
             android:inputType="numberSigned"

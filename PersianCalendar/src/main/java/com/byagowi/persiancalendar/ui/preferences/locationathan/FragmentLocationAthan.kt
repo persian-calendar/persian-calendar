@@ -16,6 +16,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.Constants.*
@@ -59,6 +60,8 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
+
+        findPreference<ListPreference>("SelectedPrayTimeMethod")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
 
         categoryAthan = findPreference(PREF_KEY_ATHAN)
         updateAthanPreferencesState()
