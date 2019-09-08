@@ -28,19 +28,20 @@ class ApplicationService : Service() {
         instance = WeakReference(this)
         Log.d(ApplicationService::class.java.name, "start")
 
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(Intent.ACTION_DATE_CHANGED)
-        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
-        intentFilter.addAction(Intent.ACTION_TIME_CHANGED)
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON)
-        //        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_DATE_CHANGED)
+            addAction(Intent.ACTION_TIMEZONE_CHANGED)
+            addAction(Intent.ACTION_TIME_CHANGED)
+            addAction(Intent.ACTION_SCREEN_ON)
+            //        addAction(Intent.ACTION_TIME_TICK)
+        }
         registerReceiver(receiver, intentFilter)
 
         Utils.updateStoredPreference(applicationContext)
         Utils.loadApp(this)
         UpdateUtils.update(applicationContext, true)
 
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onDestroy() {
@@ -54,11 +55,8 @@ class ApplicationService : Service() {
     }
 
     companion object {
-
         private var instance: WeakReference<ApplicationService>? = null
 
-        fun getInstance(): ApplicationService? {
-            return if (instance == null) null else instance!!.get()
-        }
+        fun getInstance(): ApplicationService? = instance?.get()
     }
 }
