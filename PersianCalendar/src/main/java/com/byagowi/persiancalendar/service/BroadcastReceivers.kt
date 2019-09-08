@@ -16,7 +16,8 @@ import com.byagowi.persiancalendar.utils.Utils
  */
 class BroadcastReceivers : BroadcastReceiver() {
 
-    override fun onReceive(context: Context, intent: Intent?) {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        context ?: return
         when (intent?.action) {
             Intent.ACTION_BOOT_COMPLETED, TelephonyManager.ACTION_PHONE_STATE_CHANGED, Constants.BROADCAST_RESTART_APP -> Utils.startEitherServiceOrWorker(context)
 
