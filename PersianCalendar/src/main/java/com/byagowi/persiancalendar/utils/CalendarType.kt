@@ -1,6 +1,6 @@
-package com.byagowi.persiancalendar.utils;
+package com.byagowi.persiancalendar.utils
 
 // So vital, don't ever change names of these
-public enum CalendarType {
+enum class CalendarType {
     SHAMSI, ISLAMIC, GREGORIAN
 }
