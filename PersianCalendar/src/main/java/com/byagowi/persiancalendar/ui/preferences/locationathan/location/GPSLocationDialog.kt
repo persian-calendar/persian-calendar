@@ -80,7 +80,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         if (latitude != null && longitude != null) return
 
         try {
-            val gps = mainActivityDependency.mainActivity.getSystemService<LocationManager?>()
+            val gps = mainActivityDependency.mainActivity.getSystemService<LocationManager>()
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                 AlertDialog.Builder(mainActivityDependency.mainActivity)

@@ -78,25 +78,26 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.preference:preference:1.0.0")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.preference:preference-ktx:1.1.0")
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.0.0")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
-    val navVersion = "2.0.0"
+    val navVersion = "2.1.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
-    implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.1.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
-    implementation("androidx.core:core-ktx:1.0.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0")
-    implementation("androidx.fragment:fragment-ktx:1.1.0-rc04")
+    implementation("androidx.core:core-ktx:1.1.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0")
+    implementation("androidx.fragment:fragment-ktx:1.1.0")
+    implementation("androidx.activity:activity-ktx:1.0.0")
 
     implementation("androidx.work:work-runtime:2.2.0")
     // Unnecessary size addition as it adds co-routine apparently also
@@ -105,9 +106,7 @@ dependencies {
     val daggerVersion = "2.24"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
-    annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
-    annotationProcessor("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
 //    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")

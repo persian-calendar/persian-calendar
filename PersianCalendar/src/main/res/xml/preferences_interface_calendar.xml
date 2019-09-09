@@ -14,7 +14,8 @@
             android:key="AppLanguage"
             android:negativeButtonText="@string/cancel"
             android:title="@string/language"
-            settings:iconSpaceReserved="false" />
+            settings:iconSpaceReserved="false"
+            settings:useSimpleSummaryProvider="true" />
 
         <androidx.preference.ListPreference
             android:defaultValue="LightTheme"
@@ -24,7 +25,8 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/select_skin"
             android:title="@string/skin"
-            settings:iconSpaceReserved="false" />
+            settings:iconSpaceReserved="false"
+            settings:useSimpleSummaryProvider="true" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
@@ -106,7 +108,8 @@
             android:negativeButtonText="@string/cancel"
             android:summary="@string/week_start_summary"
             android:title="@string/week_start"
-            settings:iconSpaceReserved="false" />
+            settings:iconSpaceReserved="false"
+            settings:useSimpleSummaryProvider="true" />
 
         <androidx.preference.MultiSelectListPreference
             android:defaultValue="@array/default_weekends"

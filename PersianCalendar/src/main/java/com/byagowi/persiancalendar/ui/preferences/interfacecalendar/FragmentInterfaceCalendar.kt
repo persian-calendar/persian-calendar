@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -28,9 +29,13 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        val switchPreference = findPreference("showDeviceCalendarEvents") as SwitchPreferenceCompat
+        findPreference<ListPreference>("AppLanguage")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("Theme")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("WeekStart")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
 
-        switchPreference.setOnPreferenceChangeListener { _, _ ->
+        val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
+
+        switchPreference?.setOnPreferenceChangeListener { _, _ ->
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 Utils.askForCalendarPermission(mainActivityDependency.mainActivity)
                 switchPreference.isChecked = false

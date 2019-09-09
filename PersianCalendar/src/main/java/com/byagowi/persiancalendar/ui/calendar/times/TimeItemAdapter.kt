@@ -31,9 +31,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         holder.bind(position)
     }
 
-    override fun getItemCount(): Int {
-        return timeNames.size
-    }
+    override fun getItemCount(): Int = timeNames.size
 
     fun setTimes(prayTimes: PrayTimes) {
         mPrayTimes = prayTimes
