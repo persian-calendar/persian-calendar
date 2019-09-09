@@ -23,13 +23,13 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
         val audioManager = context?.getSystemService<AudioManager>()
         audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
 
-        val customAthanUri = Utils.getCustomAthanUri(context)
+        val customAthanUri = context?.let { Utils.getCustomAthanUri(it) }
         if (customAthanUri != null) {
             ringtone = RingtoneManager.getRingtone(context, customAthanUri).apply {
                 streamType = AudioManager.STREAM_ALARM
                 play()
             }
-        } else {
+        } else if(context != null){
             val player = MediaPlayer()
             try {
                 player.setDataSource(context, Utils.getDefaultAthanUri(context))
