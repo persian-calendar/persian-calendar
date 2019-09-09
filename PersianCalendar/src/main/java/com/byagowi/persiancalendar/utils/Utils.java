@@ -31,6 +31,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
@@ -282,7 +283,7 @@ public class Utils {
     }
 
     // This should be called before any use of Utils on the activity and services
-    static public void initUtils(Context context) {
+    static public void initUtils(@NonNull Context context) {
         updateStoredPreference(context);
         applyAppLanguage(context);
         loadLanguageResource(context);
@@ -291,7 +292,7 @@ public class Utils {
     }
 
     @Nullable
-    static public Coordinate getCoordinate(Context context) {
+    static public Coordinate getCoordinate(@NonNull Context context) {
         CityItem cityEntity = getCityFromPreference(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -324,7 +325,7 @@ public class Utils {
         }
     }
 
-    static public void updateStoredPreference(Context context) {
+    static public void updateStoredPreference(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
@@ -459,12 +460,12 @@ public class Utils {
         else return "";
     }
 
-    static boolean isNightModeEnabled(Context context) {
+    static boolean isNightModeEnabled(@NonNull Context context) {
         return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;
     }
 
-    public static String getThemeFromPreference(Context context, SharedPreferences prefs) {
+    public static String getThemeFromPreference(@NonNull Context context, SharedPreferences prefs) {
         String result = prefs.getString(PREF_THEME, LIGHT_THEME);
         result = result == null ? LIGHT_THEME : result;
         if (result.equals(LIGHT_THEME) && isNightModeEnabled(context))
@@ -477,7 +478,7 @@ public class Utils {
         return appTheme;
     }
 
-    private static int getIslamicOffset(Context context) {
+    private static int getIslamicOffset(@NonNull Context context) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
@@ -512,7 +513,7 @@ public class Utils {
         return result;
     }
 
-    static public List<CalendarTypeItem> getOrderedCalendarEntities(Context context) {
+    static public List<CalendarTypeItem> getOrderedCalendarEntities(@NonNull Context context) {
         applyAppLanguage(context);
 
         String[] values = context.getResources().getStringArray(R.array.calendar_values);
@@ -564,7 +565,7 @@ public class Utils {
         return showWeekOfYear;
     }
 
-    static public int getAthanVolume(Context context) {
+    static public int getAthanVolume(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
@@ -733,7 +734,7 @@ public class Utils {
         return s.hasNext() ? s.next() : "";
     }
 
-    public static String readRawResource(Context context, @RawRes int res) {
+    public static String readRawResource(@NonNull Context context, @RawRes int res) {
         return readStream(context.getResources().openRawResource(res));
     }
 
@@ -775,7 +776,7 @@ public class Utils {
         return () -> iterator;
     }
 
-    static public List<CityItem> getAllCities(Context context, boolean needsSort) {
+    static public List<CityItem> getAllCities(@NonNull Context context, boolean needsSort) {
         List<CityItem> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(readRawResource(context, R.raw.cities));
@@ -850,7 +851,7 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    static private CityItem getCityFromPreference(Context context) {
+    static private CityItem getCityFromPreference(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
@@ -873,13 +874,13 @@ public class Utils {
         return cachedCity = null;
     }
 
-    static public String formatCoordinate(Context context, Coordinate coordinate, String separator) {
+    static public String formatCoordinate(@NonNull Context context, Coordinate coordinate, String separator) {
         return String.format(Locale.getDefault(), "%s: %.4f%s%s: %.4f",
                 context.getString(R.string.latitude), coordinate.getLatitude(), separator,
                 context.getString(R.string.longitude), coordinate.getLongitude());
     }
 
-    static public String getCityName(Context context, boolean fallbackToCoord) {
+    static public String getCityName(@NonNull Context context, boolean fallbackToCoord) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityItem cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
@@ -914,7 +915,7 @@ public class Utils {
         return sIsIranHolidaysEnabled;
     }
 
-    static private void loadEvents(Context context) {
+    static private void loadEvents(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
@@ -1243,7 +1244,7 @@ public class Utils {
         return titles.toString();
     }
 
-    static void loadAlarms(Context context) {
+    static void loadAlarms(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
@@ -1300,7 +1301,7 @@ public class Utils {
 //        }
     }
 
-    static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
+    static private void setAlarm(@NonNull Context context, String alarmTimeName, Clock clock, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
@@ -1308,7 +1309,7 @@ public class Utils {
         setAlarm(context, alarmTimeName, triggerTime.getTimeInMillis(), ord, athanGap);
     }
 
-    static private void setAlarm(Context context, String alarmTimeName, long timeInMillis, int ord,
+    static private void setAlarm(@NonNull Context context, String alarmTimeName, long timeInMillis, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.setTimeInMillis(timeInMillis - athanGap);
@@ -1335,7 +1336,7 @@ public class Utils {
         }
     }
 
-    static public Uri getCustomAthanUri(Context context) {
+    static public Uri getCustomAthanUri(@NonNull Context context) {
         String uri = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_ATHAN_URI, "");
         return TextUtils.isEmpty(uri) ? null : Uri.parse(uri);
@@ -1366,7 +1367,7 @@ public class Utils {
     }
 
     // Context preferably should be activity context not application
-    static public void applyAppLanguage(Context context) {
+    static public void applyAppLanguage(@NonNull Context context) {
         String localeCode = getOnlyLanguage(language);
         // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
         // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
@@ -1386,7 +1387,7 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    static private void loadLanguageResource(Context context) {
+    static private void loadLanguageResource(@NonNull Context context) {
         @RawRes int messagesFile;
         switch (language) {
             case LANG_FA_AF:
@@ -1538,7 +1539,7 @@ public class Utils {
         }
     }
 
-    public static void startEitherServiceOrWorker(Context context) {
+    public static void startEitherServiceOrWorker(@NonNull Context context) {
         WorkManager workManager = WorkManager.getInstance();
         if (goForWorker()) {
             PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
@@ -1676,7 +1677,7 @@ public class Utils {
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    public static void toggleShowDeviceCalendarOnPreference(Context context, boolean enable) {
+    public static void toggleShowDeviceCalendarOnPreference(@NonNull Context context, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
@@ -1696,7 +1697,7 @@ public class Utils {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
-    public static boolean isRTL(Context context) {
+    public static boolean isRTL(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         }
@@ -1779,7 +1780,7 @@ public class Utils {
     }
 
     // https://stackoverflow.com/a/27788209
-    static public Uri getDefaultAthanUri(Context context) {
+    static public Uri getDefaultAthanUri(@NonNull Context context) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(R.raw.abdulbasit) + '/' +
                 context.getResources().getResourceTypeName(R.raw.abdulbasit) + '/' +
@@ -1899,7 +1900,7 @@ public class Utils {
                         formatNumber(date.getYear())));
     }
 
-    public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {
+    public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {
         Calendar startingDate = Calendar.getInstance();
         startingDate.add(Calendar.YEAR, -1);
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
@@ -1909,7 +1910,7 @@ public class Utils {
         return allEnabledAppointments;
     }
 
-    public static SparseArray<List<DeviceCalendarEvent>> readDayDeviceEvents(Context context, long jdn) {
+    public static SparseArray<List<DeviceCalendarEvent>> readDayDeviceEvents(@NonNull Context context, long jdn) {
         if (jdn == -1) {
             jdn = getTodayJdn();
         }
@@ -1920,7 +1921,7 @@ public class Utils {
         return deviceCalendarEvent;
     }
 
-    public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(Context context, long jdn) {
+    public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(@NonNull Context context, long jdn) {
         Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
@@ -1928,7 +1929,7 @@ public class Utils {
         return deviceCalendarEvent;
     }
 
-    private static void readDeviceEvents(Context context,
+    private static void readDeviceEvents(@NonNull Context context,
                                          SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                          List<DeviceCalendarEvent> allEnabledAppointments,
                                          Calendar startingDate,
@@ -2043,7 +2044,7 @@ public class Utils {
                 calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
+    static public String getA11yDaySummary(@NonNull Context context, long jdn, boolean isToday,
                                            SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                            boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
         // It has some expensive calculations, lets not do that when not needed
