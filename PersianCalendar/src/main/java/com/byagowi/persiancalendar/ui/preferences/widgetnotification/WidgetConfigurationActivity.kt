@@ -31,7 +31,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(prefs)))
+        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(this, prefs)))
 
         Utils.applyAppLanguage(this)
         super.onCreate(savedInstanceState)

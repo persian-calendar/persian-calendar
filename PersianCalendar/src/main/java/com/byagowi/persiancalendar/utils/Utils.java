@@ -439,7 +439,7 @@ public class Utils {
         }
 
         try {
-            appTheme = getThemeFromName(getThemeFromPreference(prefs));
+            appTheme = getThemeFromName(getThemeFromPreference(context, prefs));
         } catch (Exception e) {
             e.printStackTrace();
             appTheme = R.style.LightTheme;
@@ -459,9 +459,17 @@ public class Utils {
         else return "";
     }
 
-    public static String getThemeFromPreference(SharedPreferences prefs) {
+    static boolean isNightModeEnabled(Context context) {
+        return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public static String getThemeFromPreference(Context context, SharedPreferences prefs) {
         String result = prefs.getString(PREF_THEME, LIGHT_THEME);
-        return result == null ? LIGHT_THEME : result;
+        result = result == null ? LIGHT_THEME : result;
+        if (result.equals(LIGHT_THEME) && isNightModeEnabled(context))
+            result = DARK_THEME;
+        return result;
     }
 
     @StyleRes

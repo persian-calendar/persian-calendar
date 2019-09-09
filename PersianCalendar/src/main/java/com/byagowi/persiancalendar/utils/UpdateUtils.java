@@ -372,7 +372,7 @@ public class UpdateUtils {
 
             // Night mode doesn't our custom notification in Samsung, let's detect it
             boolean isSamsungNightMode = Build.BRAND.equals("samsung") &&
-                    (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+                    Utils.isNightModeEnabled(context);
 
             if (!Utils.isTalkBackEnabled() && !isSamsungNightMode &&
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
