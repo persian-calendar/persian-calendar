@@ -44,7 +44,7 @@ class MonthAdapter internal constructor(private val mainActivityDependency: Main
     }
 
     internal fun initializeMonthEvents(context: Context?) {
-        if (Utils.isShowDeviceCalendarEvents()) {
+        if (Utils.isShowDeviceCalendarEvents() && context != null) {
             monthEvents = Utils.readMonthDeviceEvents(context, days[0].jdn)
         }
     }
