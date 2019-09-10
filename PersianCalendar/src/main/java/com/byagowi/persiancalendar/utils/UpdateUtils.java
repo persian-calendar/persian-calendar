@@ -7,7 +7,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
@@ -57,7 +57,7 @@ public class UpdateUtils {
             R.id.textPlaceholder4owghat_5_4x2
     };
 
-    public static void setDeviceCalendarEvents(Context context) {
+    public static void setDeviceCalendarEvents(@NonNull Context context) {
         try {
             deviceCalendarEvents = Utils.readDayDeviceEvents(context, -1);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class UpdateUtils {
         }
     }
 
-    public static void update(Context context, boolean updateDate) {
+    public static void update(@NonNull Context context, boolean updateDate) {
         Log.d("UpdateUtils", "update");
         Utils.applyAppLanguage(context);
         Calendar calendar = Utils.makeCalendarFromDate(new Date());
