@@ -1476,14 +1476,14 @@ public class Utils {
         return start - current;
     }
 
-    public static void setChangeDateWorker() {
+    public static void setChangeDateWorker(@NonNull Context context) {
         long remainedSeconds = calculateDiffToChangeDate();
         OneTimeWorkRequest changeDateWorker =
                 new OneTimeWorkRequest.Builder(UpdateWorker.class)
                         .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
                         .build();
 
-        WorkManager.getInstance().beginUniqueWork(
+        WorkManager.getInstance(context).beginUniqueWork(
                 CHANGE_DATE_TAG,
                 ExistingWorkPolicy.REPLACE,
                 changeDateWorker).enqueue();
@@ -1540,7 +1540,7 @@ public class Utils {
     }
 
     public static void startEitherServiceOrWorker(@NonNull Context context) {
-        WorkManager workManager = WorkManager.getInstance();
+        WorkManager workManager = WorkManager.getInstance(context);
         if (goForWorker()) {
             PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
                     .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
