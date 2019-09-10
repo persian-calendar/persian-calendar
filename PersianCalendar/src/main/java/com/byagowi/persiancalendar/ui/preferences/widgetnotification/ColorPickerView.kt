@@ -36,6 +36,8 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.view.setPadding
+import androidx.core.view.updatePadding
 import java.util.*
 
 class ColorPickerView : LinearLayout {
@@ -68,40 +70,19 @@ class ColorPickerView : LinearLayout {
 
         val context = context ?: return
 
-        colorResultView = TextView(context)
-        colorResultView.setTextIsSelectable(true)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            colorResultView.gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+        colorResultView = TextView(context).apply {
+            setTextIsSelectable(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+            }
+            setOnClickListener {
+                colorCodeVisibility = !colorCodeVisibility
+                showColor()
+            }
         }
-        colorResultView.setOnClickListener {
-            colorCodeVisibility = !colorCodeVisibility
-            showColor()
-        }
-
-        redSeekBar = SeekBar(context)
-        greenSeekBar = SeekBar(context)
-        blueSeekBar = SeekBar(context)
 
         val density = context.resources.displayMetrics.density
         val seekBarPadding = density.toInt() * 8
-        val currentSidePad = redSeekBar.paddingLeft
-        redSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding)
-        greenSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding)
-        blueSeekBar.setPadding(currentSidePad, seekBarPadding, currentSidePad, seekBarPadding)
-
-        redSeekBar.max = 255
-        greenSeekBar.max = 255
-        blueSeekBar.max = 255
-
-        redSeekBar.progressDrawable.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
-        greenSeekBar.progressDrawable.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
-        blueSeekBar.progressDrawable.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            redSeekBar.thumb.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
-            greenSeekBar.thumb.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
-            blueSeekBar.thumb.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
-        }
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -113,36 +94,63 @@ class ColorPickerView : LinearLayout {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
 
-        redSeekBar.setOnSeekBarChangeListener(listener)
-        greenSeekBar.setOnSeekBarChangeListener(listener)
-        blueSeekBar.setOnSeekBarChangeListener(listener)
+        redSeekBar = SeekBar(context).apply {
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            max = 255
+            progressDrawable.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
+            setOnSeekBarChangeListener(listener)
+        }
 
-        val seekBars = LinearLayout(context)
-        seekBars.orientation = VERTICAL
-        seekBars.addView(redSeekBar)
-        seekBars.addView(greenSeekBar)
-        seekBars.addView(blueSeekBar)
-        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        params.weight = 1f
-        seekBars.layoutParams = params
-        seekBars.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+        greenSeekBar = SeekBar(context).apply {
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            max = 255
+            progressDrawable.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
+            setOnSeekBarChangeListener(listener)
+        }
 
-        val frameLayout = FrameLayout(context)
-        frameLayout.addView(colorResultView)
-        frameLayout.layoutParams = LayoutParams(seekBars.measuredHeight,
-                LayoutParams.MATCH_PARENT)
-        frameLayout.setBackgroundColor(Color.LTGRAY)
-        val framePadding = density.toInt()
-        frameLayout.setPadding(framePadding, framePadding, framePadding, framePadding)
+        blueSeekBar = SeekBar(context).apply {
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            max = 255
+            progressDrawable.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
+            setOnSeekBarChangeListener(listener)
+        }
 
-        val widgetMain = LinearLayout(context)
-        widgetMain.addView(seekBars)
-        widgetMain.addView(frameLayout)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            redSeekBar.thumb.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
+            greenSeekBar.thumb.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
+            blueSeekBar.thumb.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
+        }
 
-        colorsToPick = LinearLayout(context)
-        colorsToPick.gravity = Gravity.CENTER
-        colorsToPick.orientation = HORIZONTAL
+        val seekBars = LinearLayout(context).apply {
+            orientation = VERTICAL
+            addView(redSeekBar)
+            addView(greenSeekBar)
+            addView(blueSeekBar)
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                weight = 1f
+            }
+            measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+        }
+
+        val frameLayout = FrameLayout(context).apply {
+            addView(colorResultView)
+            layoutParams = LayoutParams(seekBars.measuredHeight,
+                    LayoutParams.MATCH_PARENT)
+            setBackgroundColor(Color.LTGRAY)
+            val framePadding = density.toInt()
+            setPadding(framePadding, framePadding, framePadding, framePadding)
+        }
+
+        val widgetMain = LinearLayout(context).apply {
+            addView(seekBars)
+            addView(frameLayout)
+        }
+
+        colorsToPick = LinearLayout(context).apply {
+            gravity = Gravity.CENTER
+            orientation = HORIZONTAL
+        }
 
         addView(widgetMain)
         addView(colorsToPick)
@@ -156,24 +164,23 @@ class ColorPickerView : LinearLayout {
         val density = context.resources.displayMetrics.density
 
         for (color in colors) {
-            val view = View(context)
-            view.setBackgroundColor(color)
-            view.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT)
+            val view = View(context).apply {
+                setBackgroundColor(color)
+                layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT)
+            }
 
-            val frameLayout = FrameLayout(context)
-            val rectSize = (40 * density).toInt()
-            val margin = (5 * density).toInt()
-            val layoutParams = LayoutParams(rectSize, rectSize)
-            layoutParams.setMargins(margin, margin * 2, margin, margin)
-            frameLayout.setBackgroundColor(Color.LTGRAY)
-            frameLayout.layoutParams = layoutParams
-            frameLayout.addView(view)
-            val framePadding = density.toInt()
-            frameLayout.setPadding(framePadding, framePadding, framePadding, framePadding)
-
-            frameLayout.setOnClickListener { setPickedColor(color) }
-
+            val frameLayout = FrameLayout(context).apply {
+                val rectSize = (40 * density).toInt()
+                val margin = (5 * density).toInt()
+                setBackgroundColor(Color.LTGRAY)
+                layoutParams = LayoutParams(rectSize, rectSize).apply {
+                    setMargins(margin, margin * 2, margin, margin)
+                }
+                addView(view)
+                setPadding(density.toInt())
+                setOnClickListener { setPickedColor(color) }
+            }
             colorsToPick.addView(frameLayout)
         }
     }
@@ -181,12 +188,14 @@ class ColorPickerView : LinearLayout {
     private fun showColor() {
         val color = Color.argb(0xFF, redSeekBar.progress,
                 greenSeekBar.progress, blueSeekBar.progress)
-        colorResultView.setBackgroundColor(color)
-        colorResultView.text = if (colorCodeVisibility)
-            String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF and color)
-        else
-            ""
-        colorResultView.setTextColor(color xor 0xFFFFFF)
+        colorResultView.apply {
+            setBackgroundColor(color)
+            text = if (colorCodeVisibility)
+                String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF and color)
+            else
+                ""
+            setTextColor(color xor 0xFFFFFF)
+        }
     }
 
     fun setPickedColor(/*@ColorInt*/color: Int) {
