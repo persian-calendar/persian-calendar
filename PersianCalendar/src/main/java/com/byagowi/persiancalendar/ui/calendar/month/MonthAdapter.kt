@@ -16,13 +16,13 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.Utils
 
-class MonthAdapter internal constructor(private val mainActivityDependency: MainActivityDependency,
+class MonthAdapter internal constructor(mainActivityDependency: MainActivityDependency,
                                         private val calendarFragmentDependency: CalendarFragmentDependency,
                                         private val days: List<DayItem>,
                                         startingDayOfWeek: Int, private val weekOfYearStart: Int,
                                         private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
-    private val startingDayOfWeek: Int
-    private val totalDays: Int
+    private val startingDayOfWeek: Int = Utils.fixDayOfWeekReverse(startingDayOfWeek)
+    private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
     private var monthEvents = SparseArray<List<DeviceCalendarEvent>>()
@@ -31,8 +31,6 @@ class MonthAdapter internal constructor(private val mainActivityDependency: Main
     private var selectedDay = -1
 
     init {
-        this.startingDayOfWeek = Utils.fixDayOfWeekReverse(startingDayOfWeek)
-        totalDays = days.size
         this.context = mainActivityDependency.mainActivity
         initializeMonthEvents(context)
         isArabicDigit = Utils.isArabicDigitSelected()
