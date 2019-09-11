@@ -220,5 +220,6 @@
     <string name="prefer_linear_date_summary">بەکارھێنانی ١٣٩٠/١/١ ک.ھ لە بڕی ١ی خاکەلێوەی ١٣٩٠ لە ویجیت و ئاگاداریدا</string>
     <string name="prefer_linear_date">نیشاندانی ڕێککەوت بە ژمارە</string>
     <string name="month_overview">بۆنەکانی مانگ</string>
+    <string name="map">نەخشە</string>
 
 </resources>

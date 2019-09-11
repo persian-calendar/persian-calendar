@@ -220,6 +220,7 @@
     <string name="prefer_linear_date_summary">۱۳۹۰/۱/۱شمسی جأ ايستفاده کۊدن ۱ فرودینˇ۱۳۹۰ جأ ویجت ؤ اعلانˇدۊرۊن</string>
     <string name="prefer_linear_date">عددي تاريخ</string>
     <string name="month_overview">أ ما مۊناسبتان</string>
+    <string name="map">Map</string>
 
     <!-- Reminder -->
     <!--<string name="reminder_summary">هر %1$s %2$s</string>-->

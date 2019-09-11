@@ -222,6 +222,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
     <string name="month_overview">Month\'s events</string>
+    <string name="map">地図</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->

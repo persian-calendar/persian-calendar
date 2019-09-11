@@ -221,6 +221,7 @@
     <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
     <string name="prefer_linear_date">تاریخی یازی گورست</string>
     <string name="month_overview">آی خصوصی گونلری</string>
+    <string name="map">Map</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->

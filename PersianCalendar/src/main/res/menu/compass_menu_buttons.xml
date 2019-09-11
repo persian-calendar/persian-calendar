@@ -9,6 +9,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/map"
+        android:icon="@drawable/ic_map"
+        android:title="@string/map"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/level"
         android:icon="@drawable/ic_level"
         android:title="@string/level"

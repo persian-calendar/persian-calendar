@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui.compass
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
@@ -15,6 +17,7 @@ import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerFragment
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -82,6 +85,10 @@ class CompassFragment : DaggerFragment() {
             bottomAppbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.level -> mainActivityDependency.mainActivity.navigateTo(R.id.level)
+                    R.id.map -> try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://g.co/qiblafinder")))
+                    } catch (ignore: Exception) {
+                    }
                     R.id.help -> Utils.createAndShowSnackbar(view, mainActivityDependency.mainActivity
                             .getString(if (sensorNotFound)
                                 R.string.compass_not_found
