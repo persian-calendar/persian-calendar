@@ -26,13 +26,13 @@ fun String.runCommand(workingDir: File = File("."),
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(29)
     dataBinding.isEnabled = true
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdkVersion(15)
-        targetSdkVersion(28)
+        targetSdkVersion(29)
         versionCode = 611
         versionName = "6.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
