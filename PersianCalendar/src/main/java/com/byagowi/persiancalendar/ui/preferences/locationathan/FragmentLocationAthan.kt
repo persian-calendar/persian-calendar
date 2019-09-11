@@ -122,7 +122,10 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
                 }
-                startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
+                try {
+                    startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
+                } catch (ignore: Exception) {
+                }
                 return true
             }
             "pref_key_ringtone_default" -> {
