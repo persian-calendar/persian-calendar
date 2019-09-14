@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +22,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.Constants.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference

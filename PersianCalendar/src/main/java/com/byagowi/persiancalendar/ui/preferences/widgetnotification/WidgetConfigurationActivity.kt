@@ -4,10 +4,10 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.transaction
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.utils.UpdateUtils
