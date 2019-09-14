@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.Constants.*
@@ -94,11 +95,11 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                         result.append(record.length)
                     }
 
-                    val edit = appDependency.sharedPreferences.edit()
-                    edit.putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
-                    edit.putString(PREF_SHIFT_WORK_SETTING, result.toString())
-                    edit.putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
-                    edit.apply()
+                    appDependency.sharedPreferences.edit {
+                        putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
+                        putString(PREF_SHIFT_WORK_SETTING, result.toString())
+                        putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
+                    }
 
                     calendarFragmentDependency.calendarFragment.afterShiftWorkChange()
                     mainActivity.restartActivity()
