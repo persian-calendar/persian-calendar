@@ -99,6 +99,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.1.0")
     implementation("androidx.activity:activity-ktx:1.0.0")
 
+    implementation("androidx.browser:browser:1.0.0")
+
     implementation("androidx.work:work-runtime:2.2.0")
     // Unnecessary size addition as it adds co-routine apparently also
     // implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")

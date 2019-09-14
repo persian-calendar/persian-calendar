@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
@@ -86,7 +87,8 @@ class CompassFragment : DaggerFragment() {
                 when (item.itemId) {
                     R.id.level -> mainActivityDependency.mainActivity.navigateTo(R.id.level)
                     R.id.map -> try {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://g.co/qiblafinder")))
+                        CustomTabsIntent.Builder().build().launchUrl(mainActivityDependency.mainActivity,
+                                Uri.parse("https://g.co/qiblafinder"))
                     } catch (ignore: Exception) {
                     }
                     R.id.help -> Utils.createAndShowSnackbar(view, mainActivityDependency.mainActivity
