@@ -7,7 +7,5 @@ abstract class AbstractEvent<T : AbstractDate> {
     lateinit var title: String
     var isHoliday: Boolean = false
 
-    override fun toString(): String {
-        return title
-    }
+    override fun toString(): String = title
 }
