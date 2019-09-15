@@ -14,7 +14,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Utils
 import java.util.concurrent.TimeUnit
@@ -44,7 +44,7 @@ class AthanNotification : Service() {
         val title = if (intent == null)
             ""
         else
-            getString(Utils.getPrayTimeText(intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)))
+            getString(Utils.getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
         val cityName = Utils.getCityName(this, false)
         val subtitle = if (TextUtils.isEmpty(cityName))
             ""

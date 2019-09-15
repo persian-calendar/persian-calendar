@@ -11,7 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.Constants.*
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
+import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
