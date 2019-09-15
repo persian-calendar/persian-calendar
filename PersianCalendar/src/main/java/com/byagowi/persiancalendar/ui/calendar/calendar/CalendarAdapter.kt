@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.byagowi.persiancalendar.OFFSET_ARGUMENT
 
-import com.byagowi.persiancalendar.Constants
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 
 class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: CalendarAdapterHelper) : FragmentStatePagerAdapter(fm) {
@@ -14,7 +14,7 @@ class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: C
     override fun getItem(position: Int): Fragment =
             MonthFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(Constants.OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
+                    putInt(OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
                 }
             }
 

@@ -23,9 +23,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
-import com.byagowi.persiancalendar.Constants.*
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency

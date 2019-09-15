@@ -21,7 +21,6 @@ import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
 import com.byagowi.persiancalendar.BuildConfig;
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.Widget1x1;
 import com.byagowi.persiancalendar.Widget2x2;
@@ -38,6 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.byagowi.persiancalendar.ConstantsKt.RLM;
 import static com.byagowi.persiancalendar.utils.Utils.getClockFromStringId;
 import static com.byagowi.persiancalendar.utils.Utils.getSpacedComma;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -324,9 +324,9 @@ public class UpdateUtils {
         // digits being at the first of string on
         if (isRTL && (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) &&
                 (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)) {
-            title = Constants.RLM + title;
+            title = RLM + title;
             if (!TextUtils.isEmpty(subtitle)) {
-                subtitle = Constants.RLM + subtitle;
+                subtitle = RLM + subtitle;
             }
         }
 

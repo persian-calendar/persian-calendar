@@ -16,8 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
@@ -145,14 +144,14 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         if (latitude != null && longitude != null) {
             appDependency.sharedPreferences.edit {
-                putString(Constants.PREF_LATITUDE, latitude)
-                putString(Constants.PREF_LONGITUDE, longitude)
+                putString(PREF_LATITUDE, latitude)
+                putString(PREF_LONGITUDE, longitude)
                 if (cityName != null) {
-                    putString(Constants.PREF_GEOCODED_CITYNAME, cityName)
+                    putString(PREF_GEOCODED_CITYNAME, cityName)
                 } else {
-                    putString(Constants.PREF_GEOCODED_CITYNAME, "")
+                    putString(PREF_GEOCODED_CITYNAME, "")
                 }
-                putString(Constants.PREF_SELECTED_LOCATION, Constants.DEFAULT_CITY)
+                putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
             }
         }
 
@@ -172,7 +171,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             getLocation()
             if (lacksPermission)
             // request for permission is rejected

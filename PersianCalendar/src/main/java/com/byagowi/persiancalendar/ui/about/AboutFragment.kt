@@ -20,8 +20,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
@@ -72,7 +71,7 @@ class AboutFragment : DaggerFragment() {
                 Utils.formatNumber(Utils.getMaxSupportedYear() - 1),
                 Utils.formatNumber(Utils.getMaxSupportedYear()))
         when (Utils.getAppLanguage()) {
-            Constants.LANG_FA, Constants.LANG_GLK, Constants.LANG_AZB, Constants.LANG_FA_AF, Constants.LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
+            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {
             }
             else -> binding.helpCard.visibility = View.GONE
