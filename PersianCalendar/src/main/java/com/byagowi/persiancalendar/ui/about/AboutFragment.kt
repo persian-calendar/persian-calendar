@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getMaxSupportedYear
 import com.google.android.material.chip.Chip
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -68,8 +69,8 @@ class AboutFragment : DaggerFragment() {
 
         // help
         binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
-                Utils.formatNumber(Utils.getMaxSupportedYear() - 1),
-                Utils.formatNumber(Utils.getMaxSupportedYear()))
+                Utils.formatNumber(getMaxSupportedYear() - 1),
+                Utils.formatNumber(getMaxSupportedYear()))
         when (Utils.getAppLanguage()) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {

@@ -29,10 +29,7 @@ import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.TypefaceUtils
-import com.byagowi.persiancalendar.utils.UpdateUtils
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
@@ -196,7 +193,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
                 Utils.isIranHolidaysEnabled() &&
-                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > Utils.getMaxSupportedYear()) {
+                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
