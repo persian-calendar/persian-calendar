@@ -256,10 +256,6 @@ public class Utils {
 //        return sReminderDetails;
 //    }
 
-    static public int getMaxSupportedYear() {
-        return 1398;
-    }
-
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
     }
