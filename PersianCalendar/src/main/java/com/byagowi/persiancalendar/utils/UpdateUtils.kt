@@ -17,6 +17,7 @@ import android.widget.RemoteViews
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
@@ -45,7 +46,6 @@ object UpdateUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun update(context: Context, updateDate: Boolean) {
@@ -78,7 +78,7 @@ object UpdateUtils {
         val widget4x2 = ComponentName(context, Widget4x2::class.java)
         val widget2x2 = ComponentName(context, Widget2x2::class.java)
 
-        if (manager.getAppWidgetIds(widget1x1).size != 0) {
+        if (manager.getAppWidgetIds(widget1x1).isNotEmpty()) {
             val remoteViews1 = RemoteViews(context.packageName, R.layout.widget1x1)
             remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color)
             remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color)
@@ -112,7 +112,7 @@ object UpdateUtils {
         val nextOwghatId = Utils.getNextOwghatTimeId(currentClock, updateDate)
         if (nextOwghatId != 0) {
             owghat = context.getString(nextOwghatId) + ": " +
-                    Utils.getFormattedClock(Utils.getClockFromStringId(nextOwghatId), false)
+                    Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
             if (Utils.isShownOnWidgets("owghat_location")) {
                 val cityName = Utils.getCityName(context, false)
                 if (!TextUtils.isEmpty(cityName)) {
@@ -125,7 +125,7 @@ object UpdateUtils {
         val enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
         val isCenterAligned = Utils.isCenterAlignWidgets()
 
-        if (manager.getAppWidgetIds(widget4x1).size != 0 || manager.getAppWidgetIds(widget2x2).size != 0) {
+        if (manager.getAppWidgetIds(widget4x1).isNotEmpty() || manager.getAppWidgetIds(widget2x2).isNotEmpty()) {
             val remoteViews4: RemoteViews
             val remoteViews2: RemoteViews
             if (enableClock) {
@@ -179,11 +179,11 @@ object UpdateUtils {
                 remoteViews2.setTextColor(R.id.event_2x2, color)
                 remoteViews2.setTextColor(R.id.owghat_2x2, color)
 
-                if (enableClock) {
-                    text2 = title
+                text2 = if (enableClock) {
+                    title
                 } else {
                     remoteViews2.setTextViewText(R.id.time_2x2, weekDayName)
-                    text2 = mainDateString
+                    mainDateString
                 }
 
                 val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)
@@ -226,16 +226,15 @@ object UpdateUtils {
         }
 
         //region Widget 4x2
-        if (manager.getAppWidgetIds(widget4x2).size != 0) {
-            val remoteViews4x2: RemoteViews
-            if (enableClock) {
+        if (manager.getAppWidgetIds(widget4x2).isNotEmpty()) {
+            val remoteViews4x2: RemoteViews = if (enableClock) {
                 if (!Utils.isIranTime()) {
-                    remoteViews4x2 = RemoteViews(context.packageName, R.layout.widget4x2_clock)
+                    RemoteViews(context.packageName, R.layout.widget4x2_clock)
                 } else {
-                    remoteViews4x2 = RemoteViews(context.packageName, R.layout.widget4x2_clock_iran)
+                    RemoteViews(context.packageName, R.layout.widget4x2_clock_iran)
                 }
             } else {
-                remoteViews4x2 = RemoteViews(context.packageName, R.layout.widget4x2)
+                RemoteViews(context.packageName, R.layout.widget4x2)
             }
 
             remoteViews4x2.setTextColor(R.id.textPlaceholder0_4x2, color)
@@ -269,19 +268,18 @@ object UpdateUtils {
                                 color)
                 }
 
-                var difference = Utils.getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt()
+                var difference = getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt()
                 if (difference < 0) difference = 60 * 24 - difference
 
                 val hrs = (MINUTES.toHours(difference.toLong()) % 24).toInt()
                 val min = (MINUTES.toMinutes(difference.toLong()) % 60).toInt()
 
                 val remainingTime: String
-                if (hrs == 0)
-                    remainingTime = String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min))
-                else if (min == 0)
-                    remainingTime = String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs))
-                else
-                    remainingTime = String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min))
+                remainingTime = when {
+                    hrs == 0 -> String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min))
+                    min == 0 -> String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs))
+                    else -> String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min))
+                }
 
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2,
                         String.format(context.getString(R.string.n_till),
@@ -317,7 +315,7 @@ object UpdateUtils {
 
         if (Utils.isNotifyDate()) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_LOW
                 val channel = NotificationChannel(NOTIFICATION_ID.toString(),
                         context.getString(R.string.app_name), importance)
@@ -418,8 +416,8 @@ object UpdateUtils {
             }
         } else {
             if (Utils.goForWorker()) {
-                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.cancel(NOTIFICATION_ID)
+                val notificationManager = context.getSystemService<NotificationManager>()
+                notificationManager?.cancel(NOTIFICATION_ID)
             }
         }
     }
