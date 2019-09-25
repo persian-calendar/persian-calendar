@@ -33,7 +33,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
@@ -73,8 +72,12 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
-import static com.byagowi.persiancalendar.Constants.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
-import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
+import static com.byagowi.persiancalendar.ConstantsKt.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY;
+import static com.byagowi.persiancalendar.ConstantsKt.CALENDARS_TAB;
+import static com.byagowi.persiancalendar.ConstantsKt.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE;
+import static com.byagowi.persiancalendar.ConstantsKt.LAST_CHOSEN_TAB_KEY;
+import static com.byagowi.persiancalendar.ConstantsKt.OWGHAT_TAB;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_HOLIDAY_TYPES;
 
 public class CalendarFragment extends DaggerFragment {
 
@@ -183,9 +186,9 @@ public class CalendarFragment extends DaggerFragment {
         mMainBinding.calendarViewPager.addOnPageChangeListener(mChangeListener);
 
         int lastTab = appDependency.getSharedPreferences()
-                .getInt(Constants.LAST_CHOSEN_TAB_KEY, Constants.CALENDARS_TAB);
+                .getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB);
         if (lastTab >= tabs.size()) {
-            lastTab = Constants.CALENDARS_TAB;
+            lastTab = CALENDARS_TAB;
         }
 
         mMainBinding.tabsViewPager.setCurrentItem(lastTab, false);
@@ -434,7 +437,7 @@ public class CalendarFragment extends DaggerFragment {
         mOwghatBinding.sunView.setSunriseSunsetMoonPhase(prayTimes, moonPhase);
         if (isToday) {
             mOwghatBinding.sunView.setVisibility(View.VISIBLE);
-            if (mMainBinding.tabsViewPager.getCurrentItem() == Constants.OWGHAT_TAB) {
+            if (mMainBinding.tabsViewPager.getCurrentItem() == OWGHAT_TAB) {
                 mOwghatBinding.sunView.startAnimate(true);
             }
         } else {
@@ -460,7 +463,7 @@ public class CalendarFragment extends DaggerFragment {
 
     private void bringTodayYearMonth() {
         mLastSelectedJdn = -1;
-        sendUpdateCommandToMonthFragments(Constants.BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
+        sendUpdateCommandToMonthFragments(BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false);
 
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0);
 

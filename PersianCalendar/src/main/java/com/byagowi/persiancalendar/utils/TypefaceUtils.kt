@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.graphics.Typeface
 import android.util.Log
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.FONT_PATH
 
 // https://gist.github.com/artem-zinnatullin/7749076
 object TypefaceUtils {
@@ -26,7 +26,7 @@ object TypefaceUtils {
 
     }
 
-    fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, Constants.FONT_PATH)
+    fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 
     fun getCalendarFragmentFont(context: Context): Typeface =
             if (isCustomFontEnabled)

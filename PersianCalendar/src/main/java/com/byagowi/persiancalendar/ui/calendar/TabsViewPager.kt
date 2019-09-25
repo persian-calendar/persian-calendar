@@ -10,7 +10,8 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.OWGHAT_TAB
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
@@ -60,9 +61,9 @@ class TabsViewPager : RtlViewPager {
                 fragment.view?.let {
                     container.measureCurrentView(it)
                     if (mTabs.size > 2) {
-                        val sunView = mTabs[Constants.OWGHAT_TAB].findViewById<View>(R.id.sunView)
+                        val sunView = mTabs[OWGHAT_TAB].findViewById<View>(R.id.sunView)
                         if (sunView is SunView) {
-                            if (position == Constants.OWGHAT_TAB)
+                            if (position == OWGHAT_TAB)
                                 sunView.startAnimate(false)
                             else
                                 sunView.clear()
@@ -73,7 +74,7 @@ class TabsViewPager : RtlViewPager {
                 }
             }
 
-            mAppDependency.sharedPreferences.edit { putInt(Constants.LAST_CHOSEN_TAB_KEY, position) }
+            mAppDependency.sharedPreferences.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
         }
 
         // don't remove public ever

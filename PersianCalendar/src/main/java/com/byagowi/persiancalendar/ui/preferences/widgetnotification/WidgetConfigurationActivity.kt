@@ -4,10 +4,10 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.utils.UpdateUtils
@@ -37,7 +37,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<WidgetPreferenceLayoutBinding>(this, R.layout.widget_preference_layout)
 
-        supportFragmentManager.transaction {
+        supportFragmentManager.commit {
             add(R.id.preference_fragment_holder, FragmentWidgetNotification(), "TAG")
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }

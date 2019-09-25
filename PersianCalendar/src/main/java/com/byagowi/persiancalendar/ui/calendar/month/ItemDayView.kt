@@ -84,9 +84,8 @@ class ItemDayView : View {
             }
         }
 
-        val color: Int
-        if (isNumber) {
-            color = if (holiday)
+        val color: Int = if (isNumber) {
+            if (holiday)
                 if (IsSelected) resource.colorHolidaySelected else resource.colorHoliday
             else
                 if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
@@ -94,7 +93,7 @@ class ItemDayView : View {
             //                color = resource.colorTextToday;
             //            }
         } else {
-            color = resource.colorTextDayName
+            resource.colorTextDayName
         }
 
         resource.eventBarPaint.color = if (IsSelected && !isModernTheme) color else resource.colorEventLine

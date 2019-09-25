@@ -2,13 +2,13 @@ package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-import com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR
+import androidx.preference.PreferenceManager
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import java.util.*
 

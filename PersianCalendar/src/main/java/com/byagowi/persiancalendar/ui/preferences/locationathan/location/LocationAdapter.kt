@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.utils.Utils
@@ -28,15 +28,15 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
             val city: String
             val country: String
             when (Utils.getAppLanguage()) {
-                Constants.LANG_EN_IR, Constants.LANG_EN_US, Constants.LANG_JA -> {
+                LANG_EN_IR, LANG_EN_US, LANG_JA -> {
                     city = cityEntity.en
                     country = cityEntity.countryEn
                 }
-                Constants.LANG_CKB -> {
+                LANG_CKB -> {
                     city = cityEntity.ckb
                     country = cityEntity.countryCkb
                 }
-                Constants.LANG_AR -> {
+                LANG_AR -> {
                     city = cityEntity.ar
                     country = cityEntity.countryAr
                 }

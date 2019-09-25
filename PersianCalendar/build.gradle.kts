@@ -26,13 +26,13 @@ fun String.runCommand(workingDir: File = File("."),
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(29)
     dataBinding.isEnabled = true
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdkVersion(15)
-        targetSdkVersion(28)
+        targetSdkVersion(29)
         versionCode = 611
         versionName = "6.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -100,10 +100,8 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.0.0")
 
     implementation("androidx.browser:browser:1.0.0")
-
-    implementation("androidx.work:work-runtime:2.2.0")
-    // Unnecessary size addition as it adds co-routine apparently also
-    // implementation("android.arch.work:work-runtime-ktx:1.0.0-beta03")
+    
+    implementation("androidx.work:work-runtime-ktx:2.2.0")
 
     val daggerVersion = "2.24"
     implementation("com.google.dagger:dagger-android:$daggerVersion")

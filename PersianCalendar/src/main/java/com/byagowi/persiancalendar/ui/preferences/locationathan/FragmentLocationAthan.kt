@@ -19,8 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.byagowi.persiancalendar.Constants.*
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.ui.MainActivityModel

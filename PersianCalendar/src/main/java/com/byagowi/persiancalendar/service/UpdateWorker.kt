@@ -6,10 +6,10 @@ import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
 
-class UpdateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class UpdateWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        Utils.setChangeDateWorker()
+        Utils.setChangeDateWorker(context)
         Utils.updateStoredPreference(applicationContext)
         UpdateUtils.update(applicationContext, true)
         return Result.success()
