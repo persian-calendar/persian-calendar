@@ -189,10 +189,7 @@ class CalendarFragment : DaggerFragment() {
         return mMainBinding.root
     }
 
-    fun changeMonth(position: Int) {
-        mMainBinding.calendarViewPager.setCurrentItem(
-                mMainBinding.calendarViewPager.currentItem + position, true)
-    }
+    fun changeMonth(position: Int) = mMainBinding.calendarViewPager.setCurrentItem(mMainBinding.calendarViewPager.currentItem + position, true)
 
     fun addEventOnCalendar(jdn: Long) {
         val activity = mainActivityDependency.mainActivity
@@ -493,7 +490,7 @@ class CalendarFragment : DaggerFragment() {
                 eventsAdapter.addAll(Utils.getAllEnabledEvents())
                 eventsAdapter.addAll(Utils.getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
-                mSearchAutoComplete?.setOnItemClickListener { parent, view, position, id ->
+                mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
                     val date = ev.date
                     val type = Utils.getCalendarTypeFromDate(date)
