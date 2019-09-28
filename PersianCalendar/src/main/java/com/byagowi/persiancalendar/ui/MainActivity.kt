@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -156,7 +157,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        (binding.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
+        (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
                 .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
@@ -199,7 +200,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 setAction(getString(R.string.update)) {
                     try {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
-                    } catch (anfe: android.content.ActivityNotFoundException) {
+                    } catch (anfe: ActivityNotFoundException) {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
                     }
                 }
