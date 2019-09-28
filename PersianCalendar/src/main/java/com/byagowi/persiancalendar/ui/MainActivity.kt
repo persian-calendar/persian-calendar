@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -75,6 +76,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
+    private var clickedItem = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
@@ -124,6 +127,15 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 binding.appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
                 binding.drawer.bringChildToFront(drawerView)
                 binding.drawer.requestLayout()
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                if (clickedItem != 0) {
+                    navigateTo(clickedItem)
+                    clickedItem = 0
+                }
+
             }
         }
 
@@ -423,7 +435,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         binding.drawer.closeDrawers()
-        navigateTo(menuItem.itemId)
+        clickedItem = menuItem.itemId
+        Log.d("ITEMID", menuItem.itemId.toString())
         return true
     }
 
