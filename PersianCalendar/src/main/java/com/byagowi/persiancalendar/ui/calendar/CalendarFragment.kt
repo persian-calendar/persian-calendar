@@ -19,8 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.byagowi.persiancalendar.Constants.*
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
@@ -440,8 +439,8 @@ class CalendarFragment : DaggerFragment() {
         mCalendarFragmentModel.selectDay(Utils.getTodayJdn())
     }
 
-    fun afterShiftWorkChange() {
-        Utils.updateStoredPreference(context)
+    fun afterShiftWorkChange() = context?.run {
+        Utils.updateStoredPreference(this)
         sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
     }
 
