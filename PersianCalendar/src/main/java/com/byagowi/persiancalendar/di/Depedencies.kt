@@ -1,15 +1,13 @@
 package com.byagowi.persiancalendar.di
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
-
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.MainApplication
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.month.DaysPaintResources
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 @PerFragment

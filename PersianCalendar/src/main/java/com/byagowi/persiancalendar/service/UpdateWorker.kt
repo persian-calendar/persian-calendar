@@ -1,17 +1,24 @@
 package com.byagowi.persiancalendar.service
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class UpdateWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class UpdateWorker(val context: Context, workerParams: WorkerParameters) : CoroutineWorker(context, workerParams) {
 
-    override fun doWork(): Result {
-        Utils.setChangeDateWorker()
-        Utils.updateStoredPreference(applicationContext)
-        UpdateUtils.update(applicationContext, true)
-        return Result.success()
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        try {
+            Utils.setChangeDateWorker(context)
+            Utils.updateStoredPreference(applicationContext)
+            UpdateUtils.update(applicationContext, true)
+            Result.success()
+        } catch (error: Throwable) {
+            Result.failure()
+        }
     }
+
 }

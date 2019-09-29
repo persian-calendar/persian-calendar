@@ -14,8 +14,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
-import com.byagowi.persiancalendar.Constants
-import com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME
+import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.Utils
@@ -112,7 +112,7 @@ class AthanActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
-        val prayerKey = intent.getStringExtra(Constants.KEY_EXTRA_PRAYER_KEY)
+        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
 
         DataBindingUtil.setContentView<ActivityAthanBinding>(this, R.layout.activity_athan).apply {
             athanName.setText(Utils.getPrayTimeText(prayerKey))

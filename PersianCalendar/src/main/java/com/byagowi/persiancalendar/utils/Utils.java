@@ -20,7 +20,6 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.text.Html;
 import android.text.TextUtils;
@@ -31,6 +30,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
@@ -38,13 +38,13 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.byagowi.persiancalendar.Constants;
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.calendar.AbstractDate;
 import com.byagowi.persiancalendar.calendar.CivilDate;
@@ -93,86 +93,89 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
-import static com.byagowi.persiancalendar.Constants.ALARMS_BASE_ID;
-import static com.byagowi.persiancalendar.Constants.ARABIC_DIGITS;
-import static com.byagowi.persiancalendar.Constants.ARABIC_INDIC_DIGITS;
-import static com.byagowi.persiancalendar.Constants.BLUE_THEME;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_ALARM;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_RESTART_APP;
-import static com.byagowi.persiancalendar.Constants.BROADCAST_UPDATE_APP;
-import static com.byagowi.persiancalendar.Constants.CJK_DIGITS;
-import static com.byagowi.persiancalendar.Constants.DARK_THEME;
-import static com.byagowi.persiancalendar.Constants.DAYS_ICONS;
-import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_AR;
-import static com.byagowi.persiancalendar.Constants.DAYS_ICONS_CKB;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ALTITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_AM;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ATHAN_VOLUME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_CITY;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_ISLAMIC_OFFSET;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_LATITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_LONGITUDE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFICATION_ATHAN;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_PM;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_PRAY_TIME_METHOD;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_ENDS;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WEEK_START;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_CLOCK;
-import static com.byagowi.persiancalendar.Constants.DEFAULT_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.KEY_EXTRA_PRAYER_KEY;
-import static com.byagowi.persiancalendar.Constants.LANG_AR;
-import static com.byagowi.persiancalendar.Constants.LANG_AZB;
-import static com.byagowi.persiancalendar.Constants.LANG_CKB;
-import static com.byagowi.persiancalendar.Constants.LANG_EN_IR;
-import static com.byagowi.persiancalendar.Constants.LANG_EN_US;
-import static com.byagowi.persiancalendar.Constants.LANG_FA;
-import static com.byagowi.persiancalendar.Constants.LANG_FA_AF;
-import static com.byagowi.persiancalendar.Constants.LANG_GLK;
-import static com.byagowi.persiancalendar.Constants.LANG_JA;
-import static com.byagowi.persiancalendar.Constants.LANG_PS;
-import static com.byagowi.persiancalendar.Constants.LANG_UR;
-import static com.byagowi.persiancalendar.Constants.LIGHT_THEME;
-import static com.byagowi.persiancalendar.Constants.LOAD_APP_ID;
-import static com.byagowi.persiancalendar.Constants.MODERN_THEME;
-import static com.byagowi.persiancalendar.Constants.PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.PREF_ALTITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_APP_LANGUAGE;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_ALARM;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_GAP;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_URI;
-import static com.byagowi.persiancalendar.Constants.PREF_ATHAN_VOLUME;
-import static com.byagowi.persiancalendar.Constants.PREF_GEOCODED_CITYNAME;
-import static com.byagowi.persiancalendar.Constants.PREF_HOLIDAY_TYPES;
-import static com.byagowi.persiancalendar.Constants.PREF_IRAN_TIME;
-import static com.byagowi.persiancalendar.Constants.PREF_ISLAMIC_OFFSET;
-import static com.byagowi.persiancalendar.Constants.PREF_LATITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_LONGITUDE;
-import static com.byagowi.persiancalendar.Constants.PREF_MAIN_CALENDAR_KEY;
-import static com.byagowi.persiancalendar.Constants.PREF_NOTIFICATION_ATHAN;
-import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE;
-import static com.byagowi.persiancalendar.Constants.PREF_NOTIFY_DATE_LOCK_SCREEN;
-import static com.byagowi.persiancalendar.Constants.PREF_OTHER_CALENDARS_KEY;
-import static com.byagowi.persiancalendar.Constants.PREF_PERSIAN_DIGITS;
-import static com.byagowi.persiancalendar.Constants.PREF_PRAY_TIME_METHOD;
-import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_LOCATION;
-import static com.byagowi.persiancalendar.Constants.PREF_SELECTED_WIDGET_TEXT_COLOR;
-import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_RECURS;
-import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_SETTING;
-import static com.byagowi.persiancalendar.Constants.PREF_SHIFT_WORK_STARTING_JDN;
-import static com.byagowi.persiancalendar.Constants.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
-import static com.byagowi.persiancalendar.Constants.PREF_THEME;
-import static com.byagowi.persiancalendar.Constants.PREF_WEEK_ENDS;
-import static com.byagowi.persiancalendar.Constants.PREF_WEEK_START;
-import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_CLOCK;
-import static com.byagowi.persiancalendar.Constants.PREF_WIDGET_IN_24;
-import static com.byagowi.persiancalendar.Constants.THREE_HOURS_APP_ID;
-import static com.byagowi.persiancalendar.Constants.ZWJ;
+import static com.byagowi.persiancalendar.ConstantsKt.ALARMS_BASE_ID;
+import static com.byagowi.persiancalendar.ConstantsKt.ARABIC_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.ARABIC_INDIC_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.BLUE_THEME;
+import static com.byagowi.persiancalendar.ConstantsKt.BROADCAST_ALARM;
+import static com.byagowi.persiancalendar.ConstantsKt.BROADCAST_RESTART_APP;
+import static com.byagowi.persiancalendar.ConstantsKt.BROADCAST_UPDATE_APP;
+import static com.byagowi.persiancalendar.ConstantsKt.CALENDAR_READ_PERMISSION_REQUEST_CODE;
+import static com.byagowi.persiancalendar.ConstantsKt.CJK_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.DARK_THEME;
+import static com.byagowi.persiancalendar.ConstantsKt.DAYS_ICONS;
+import static com.byagowi.persiancalendar.ConstantsKt.DAYS_ICONS_AR;
+import static com.byagowi.persiancalendar.ConstantsKt.DAYS_ICONS_CKB;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_ALTITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_AM;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_ATHAN_VOLUME;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_CITY;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_IRAN_TIME;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_ISLAMIC_OFFSET;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_LATITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_LONGITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_NOTIFICATION_ATHAN;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_NOTIFY_DATE_LOCK_SCREEN;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_PM;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_PRAY_TIME_METHOD;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_WEEK_ENDS;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_WEEK_START;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_WIDGET_CLOCK;
+import static com.byagowi.persiancalendar.ConstantsKt.DEFAULT_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.ConstantsKt.KEY_EXTRA_PRAYER_KEY;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_AR;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_AZB;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_CKB;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_EN_IR;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_EN_US;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_FA;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_FA_AF;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_GLK;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_JA;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_PS;
+import static com.byagowi.persiancalendar.ConstantsKt.LANG_UR;
+import static com.byagowi.persiancalendar.ConstantsKt.LIGHT_THEME;
+import static com.byagowi.persiancalendar.ConstantsKt.LOAD_APP_ID;
+import static com.byagowi.persiancalendar.ConstantsKt.LOCATION_PERMISSION_REQUEST_CODE;
+import static com.byagowi.persiancalendar.ConstantsKt.MODERN_THEME;
+import static com.byagowi.persiancalendar.ConstantsKt.PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ALTITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_ALARM;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_GAP;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_URI;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_VOLUME;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_GEOCODED_CITYNAME;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_HOLIDAY_TYPES;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_IRAN_TIME;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ISLAMIC_OFFSET;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_LATITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_LONGITUDE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_MAIN_CALENDAR_KEY;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_NOTIFICATION_ATHAN;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_NOTIFY_DATE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_NOTIFY_DATE_LOCK_SCREEN;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_OTHER_CALENDARS_KEY;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_PERSIAN_DIGITS;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_PRAY_TIME_METHOD;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SELECTED_LOCATION;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SELECTED_WIDGET_TEXT_COLOR;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SHIFT_WORK_RECURS;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SHIFT_WORK_SETTING;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SHIFT_WORK_STARTING_JDN;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_SHOW_DEVICE_CALENDAR_EVENTS;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_THEME;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_WEEK_ENDS;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_WEEK_START;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_WIDGET_CLOCK;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_WIDGET_IN_24;
+import static com.byagowi.persiancalendar.ConstantsKt.RLM;
+import static com.byagowi.persiancalendar.ConstantsKt.THREE_HOURS_APP_ID;
+import static com.byagowi.persiancalendar.ConstantsKt.ZWJ;
 
 //import com.byagowi.persiancalendar.entities.Reminder;
 
@@ -253,10 +256,6 @@ public class Utils {
 //        return sReminderDetails;
 //    }
 
-    static public int getMaxSupportedYear() {
-        return 1398;
-    }
-
     static public ArrayList<ShiftWorkRecord> getShiftWorks() {
         return new ArrayList<>(sShiftWorks);
     }
@@ -282,7 +281,7 @@ public class Utils {
     }
 
     // This should be called before any use of Utils on the activity and services
-    static public void initUtils(Context context) {
+    static public void initUtils(@NonNull Context context) {
         updateStoredPreference(context);
         applyAppLanguage(context);
         loadLanguageResource(context);
@@ -291,7 +290,7 @@ public class Utils {
     }
 
     @Nullable
-    static public Coordinate getCoordinate(Context context) {
+    static public Coordinate getCoordinate(@NonNull Context context) {
         CityItem cityEntity = getCityFromPreference(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -324,7 +323,7 @@ public class Utils {
         }
     }
 
-    static public void updateStoredPreference(Context context) {
+    static public void updateStoredPreference(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE);
@@ -459,12 +458,12 @@ public class Utils {
         else return "";
     }
 
-    static boolean isNightModeEnabled(Context context) {
+    static boolean isNightModeEnabled(@NonNull Context context) {
         return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;
     }
 
-    public static String getThemeFromPreference(Context context, SharedPreferences prefs) {
+    public static String getThemeFromPreference(@NonNull Context context, SharedPreferences prefs) {
         String result = prefs.getString(PREF_THEME, LIGHT_THEME);
         result = result == null ? LIGHT_THEME : result;
         if (result.equals(LIGHT_THEME) && isNightModeEnabled(context))
@@ -477,7 +476,7 @@ public class Utils {
         return appTheme;
     }
 
-    private static int getIslamicOffset(Context context) {
+    private static int getIslamicOffset(@NonNull Context context) {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
@@ -512,7 +511,7 @@ public class Utils {
         return result;
     }
 
-    static public List<CalendarTypeItem> getOrderedCalendarEntities(Context context) {
+    static public List<CalendarTypeItem> getOrderedCalendarEntities(@NonNull Context context) {
         applyAppLanguage(context);
 
         String[] values = context.getResources().getStringArray(R.array.calendar_values);
@@ -564,7 +563,7 @@ public class Utils {
         return showWeekOfYear;
     }
 
-    static public int getAthanVolume(Context context) {
+    static public int getAthanVolume(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
@@ -733,7 +732,7 @@ public class Utils {
         return s.hasNext() ? s.next() : "";
     }
 
-    public static String readRawResource(Context context, @RawRes int res) {
+    public static String readRawResource(@NonNull Context context, @RawRes int res) {
         return readStream(context.getResources().openRawResource(res));
     }
 
@@ -775,7 +774,7 @@ public class Utils {
         return () -> iterator;
     }
 
-    static public List<CityItem> getAllCities(Context context, boolean needsSort) {
+    static public List<CityItem> getAllCities(@NonNull Context context, boolean needsSort) {
         List<CityItem> result = new ArrayList<>();
         try {
             JSONObject countries = new JSONObject(readRawResource(context, R.raw.cities));
@@ -850,7 +849,7 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    static private CityItem getCityFromPreference(Context context) {
+    static private CityItem getCityFromPreference(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
@@ -873,13 +872,13 @@ public class Utils {
         return cachedCity = null;
     }
 
-    static public String formatCoordinate(Context context, Coordinate coordinate, String separator) {
+    static public String formatCoordinate(@NonNull Context context, Coordinate coordinate, String separator) {
         return String.format(Locale.getDefault(), "%s: %.4f%s%s: %.4f",
                 context.getString(R.string.latitude), coordinate.getLatitude(), separator,
                 context.getString(R.string.longitude), coordinate.getLongitude());
     }
 
-    static public String getCityName(Context context, boolean fallbackToCoord) {
+    static public String getCityName(@NonNull Context context, boolean fallbackToCoord) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityItem cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
@@ -914,7 +913,7 @@ public class Utils {
         return sIsIranHolidaysEnabled;
     }
 
-    static private void loadEvents(Context context) {
+    static private void loadEvents(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
@@ -1219,7 +1218,7 @@ public class Utils {
             if (event.isHoliday() == holiday) {
                 String title = event.getTitle();
                 if (insertRLM) {
-                    title = Constants.RLM + title;
+                    title = RLM + title;
                 }
                 if (event instanceof DeviceCalendarEvent) {
                     if (!showDeviceCalendarEvents)
@@ -1243,7 +1242,7 @@ public class Utils {
         return titles.toString();
     }
 
-    static void loadAlarms(Context context) {
+    static void loadAlarms(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
@@ -1300,7 +1299,7 @@ public class Utils {
 //        }
     }
 
-    static private void setAlarm(Context context, String alarmTimeName, Clock clock, int ord,
+    static private void setAlarm(@NonNull Context context, String alarmTimeName, Clock clock, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
@@ -1308,7 +1307,7 @@ public class Utils {
         setAlarm(context, alarmTimeName, triggerTime.getTimeInMillis(), ord, athanGap);
     }
 
-    static private void setAlarm(Context context, String alarmTimeName, long timeInMillis, int ord,
+    static private void setAlarm(@NonNull Context context, String alarmTimeName, long timeInMillis, int ord,
                                  long athanGap) {
         Calendar triggerTime = Calendar.getInstance();
         triggerTime.setTimeInMillis(timeInMillis - athanGap);
@@ -1335,7 +1334,7 @@ public class Utils {
         }
     }
 
-    static public Uri getCustomAthanUri(Context context) {
+    static public Uri getCustomAthanUri(@NonNull Context context) {
         String uri = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_ATHAN_URI, "");
         return TextUtils.isEmpty(uri) ? null : Uri.parse(uri);
@@ -1349,11 +1348,11 @@ public class Utils {
 //                        new Intent(context, AthanNotification.class));
 
             context.startService(new Intent(context, AthanNotification.class)
-                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+                    .putExtra(KEY_EXTRA_PRAYER_KEY, prayTimeKey));
         } else {
             context.startActivity(new Intent(context, AthanActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(Constants.KEY_EXTRA_PRAYER_KEY, prayTimeKey));
+                    .putExtra(KEY_EXTRA_PRAYER_KEY, prayTimeKey));
         }
     }
 
@@ -1366,7 +1365,7 @@ public class Utils {
     }
 
     // Context preferably should be activity context not application
-    static public void applyAppLanguage(Context context) {
+    static public void applyAppLanguage(@NonNull Context context) {
         String localeCode = getOnlyLanguage(language);
         // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
         // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
@@ -1386,7 +1385,7 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-    static private void loadLanguageResource(Context context) {
+    static private void loadLanguageResource(@NonNull Context context) {
         @RawRes int messagesFile;
         switch (language) {
             case LANG_FA_AF:
@@ -1475,14 +1474,14 @@ public class Utils {
         return start - current;
     }
 
-    public static void setChangeDateWorker() {
+    public static void setChangeDateWorker(@NonNull Context context) {
         long remainedSeconds = calculateDiffToChangeDate();
         OneTimeWorkRequest changeDateWorker =
                 new OneTimeWorkRequest.Builder(UpdateWorker.class)
                         .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
                         .build();
 
-        WorkManager.getInstance().beginUniqueWork(
+        WorkManager.getInstance(context).beginUniqueWork(
                 CHANGE_DATE_TAG,
                 ExistingWorkPolicy.REPLACE,
                 changeDateWorker).enqueue();
@@ -1538,8 +1537,8 @@ public class Utils {
         }
     }
 
-    public static void startEitherServiceOrWorker(Context context) {
-        WorkManager workManager = WorkManager.getInstance();
+    public static void startEitherServiceOrWorker(@NonNull Context context) {
+        WorkManager workManager = WorkManager.getInstance(context);
         if (goForWorker()) {
             PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
                     .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
@@ -1658,7 +1657,7 @@ public class Utils {
                 .setPositiveButton(R.string.continue_button, (dialog, id) -> activity.requestPermissions(new String[]{
                                 Manifest.permission.READ_CALENDAR
                         },
-                        Constants.CALENDAR_READ_PERMISSION_REQUEST_CODE))
+                        CALENDAR_READ_PERMISSION_REQUEST_CODE))
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
@@ -1672,11 +1671,11 @@ public class Utils {
                                 Manifest.permission.ACCESS_COARSE_LOCATION,
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         },
-                        Constants.LOCATION_PERMISSION_REQUEST_CODE))
+                        LOCATION_PERMISSION_REQUEST_CODE))
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    public static void toggleShowDeviceCalendarOnPreference(Context context, boolean enable) {
+    public static void toggleShowDeviceCalendarOnPreference(@NonNull Context context, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
@@ -1696,7 +1695,7 @@ public class Utils {
         return formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute));
     }
 
-    public static boolean isRTL(Context context) {
+    public static boolean isRTL(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         }
@@ -1779,7 +1778,7 @@ public class Utils {
     }
 
     // https://stackoverflow.com/a/27788209
-    static public Uri getDefaultAthanUri(Context context) {
+    static public Uri getDefaultAthanUri(@NonNull Context context) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(R.raw.abdulbasit) + '/' +
                 context.getResources().getResourceTypeName(R.raw.abdulbasit) + '/' +
@@ -1899,7 +1898,7 @@ public class Utils {
                         formatNumber(date.getYear())));
     }
 
-    public static List<DeviceCalendarEvent> getAllEnabledAppointments(Context context) {
+    public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {
         Calendar startingDate = Calendar.getInstance();
         startingDate.add(Calendar.YEAR, -1);
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
@@ -1909,7 +1908,7 @@ public class Utils {
         return allEnabledAppointments;
     }
 
-    public static SparseArray<List<DeviceCalendarEvent>> readDayDeviceEvents(Context context, long jdn) {
+    public static SparseArray<List<DeviceCalendarEvent>> readDayDeviceEvents(@NonNull Context context, long jdn) {
         if (jdn == -1) {
             jdn = getTodayJdn();
         }
@@ -1920,7 +1919,7 @@ public class Utils {
         return deviceCalendarEvent;
     }
 
-    public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(Context context, long jdn) {
+    public static SparseArray<List<DeviceCalendarEvent>> readMonthDeviceEvents(@NonNull Context context, long jdn) {
         Calendar startingDate = civilDateToCalendar(new CivilDate(jdn));
         SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvent = new SparseArray<>();
         List<DeviceCalendarEvent> allEnabledAppointments = new ArrayList<>();
@@ -1928,7 +1927,7 @@ public class Utils {
         return deviceCalendarEvent;
     }
 
-    private static void readDeviceEvents(Context context,
+    private static void readDeviceEvents(@NonNull Context context,
                                          SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                          List<DeviceCalendarEvent> allEnabledAppointments,
                                          Calendar startingDate,
@@ -2043,7 +2042,7 @@ public class Utils {
                 calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    static public String getA11yDaySummary(Context context, long jdn, boolean isToday,
+    static public String getA11yDaySummary(@NonNull Context context, long jdn, boolean isToday,
                                            SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                            boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
         // It has some expensive calculations, lets not do that when not needed

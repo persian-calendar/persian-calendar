@@ -8,7 +8,8 @@ import androidx.core.content.edit
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
+import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
@@ -59,8 +60,8 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
                 val ordering = adapter.result
                 appDependency.sharedPreferences.edit {
                     if (ordering.isNotEmpty()) {
-                        putString(Constants.PREF_MAIN_CALENDAR_KEY, ordering[0])
-                        putString(Constants.PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
+                        putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
+                        putString(PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
                                 ordering.subList(1, ordering.size)))
                     }
                 }

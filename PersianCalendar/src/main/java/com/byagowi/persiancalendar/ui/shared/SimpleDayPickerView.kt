@@ -20,7 +20,7 @@ import java.util.*
 class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, DayPickerView {
     lateinit var binding: SimpleDayPickerViewBinding
     private var jdn: Long = -1
-    private var selectedDayListener : DayPickerView.OnSelectedDayChangedListener? = null
+    private var selectedDayListener: DayPickerView.OnSelectedDayChangedListener? = null
 
     override val dayJdnFromView: Long
         get() {

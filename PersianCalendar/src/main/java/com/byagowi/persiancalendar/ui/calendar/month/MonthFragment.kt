@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import com.byagowi.persiancalendar.Constants
+import com.byagowi.persiancalendar.OFFSET_ARGUMENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
@@ -37,7 +37,7 @@ class MonthFragment : DaggerFragment() {
                 container, false)
         val calendarFragment = calendarFragmentDependency.calendarFragment
         val isRTL = Utils.isRTL(mainActivityDependency.mainActivity)
-        val offset = arguments?.getInt(Constants.OFFSET_ARGUMENT) ?: 0
+        val offset = arguments?.getInt(OFFSET_ARGUMENT) ?: 0
 
         fragmentMonthBinding.next.setImageResource(if (isRTL)
             R.drawable.ic_keyboard_arrow_left

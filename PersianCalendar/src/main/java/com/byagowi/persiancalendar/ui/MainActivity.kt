@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -9,7 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,18 +24,14 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import com.byagowi.persiancalendar.Constants.*
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference
+import androidx.preference.PreferenceManager
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.TypefaceUtils
-import com.byagowi.persiancalendar.utils.UpdateUtils
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
@@ -80,6 +77,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 else -> R.drawable.winter
             }
         }
+
+    private var clickedItem = 2131296346
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Don't replace below with appDependency.getSharedPreferences() ever
@@ -131,6 +130,11 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 binding.drawer.bringChildToFront(drawerView)
                 binding.drawer.requestLayout()
             }
+
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                navigateTo(clickedItem)
+            }
         }
 
         binding.drawer.addDrawerListener(drawerToggle)
@@ -161,7 +165,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        (binding.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
+        (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
                 .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
@@ -198,13 +202,13 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
                 Utils.isIranHolidaysEnabled() &&
-                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > Utils.getMaxSupportedYear()) {
+                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
                     try {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
-                    } catch (anfe: android.content.ActivityNotFoundException) {
+                    } catch (anfe: ActivityNotFoundException) {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
                     }
                 }
@@ -431,7 +435,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         binding.drawer.closeDrawers()
-        navigateTo(menuItem.itemId)
+        clickedItem = menuItem.itemId
+        Log.d("ITEMID", menuItem.itemId.toString())
         return true
     }
 
