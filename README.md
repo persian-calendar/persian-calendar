@@ -1,6 +1,6 @@
 # Android Persian Calendar
 
-[![GitHub Actions](https://action-badges.now.sh/ebraminio/DroidPersianCalendar?workflow=android)](https://github.com/ebraminio/DroidPersianCalendar/actions)
+[![GitHub Actions](https://action-badges.now.sh/persian-calendar/DroidPersianCalendar?workflow=android)](https://github.com/persian-calendar/DroidPersianCalendar/actions)
 
 <div dir=rtl>
 
@@ -15,12 +15,12 @@
 
 - [F-Droid](https://f-droid.org/app/com.byagowi.persiancalendar)
 - [Google Play](https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar)
-- [Github](https://github.com/ebraminio/DroidPersianCalendar/releases/)
+- [Github](https://github.com/persian-calendar/DroidPersianCalendar/releases/)
 - [Bazaar](http://cafebazaar.ir/app/com.byagowi.persiancalendar)
 
 ## License
 
-Copyright (C) 2012-2019  ebrahim@gnu.org
+Copyright (C) 2012-2019  Android Persian Calendar Developers
 
 This program is free software: you can redistribute it and/or modify 
 it under the terms of the GNU General Public License as published by 
@@ -37,6 +37,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ## Build
 
-1. `git clone https://github.com/ebraminio/DroidPersianCalendar`
+1. `git clone https://github.com/persian-calendar/DroidPersianCalendar`
 1. Import the project on Android Studio
 
