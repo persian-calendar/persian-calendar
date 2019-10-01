@@ -4,7 +4,6 @@ package com.byagowi.persiancalendar.calendar;
  * Abstract class representing a date.
  *
  * @author Amir
- * @author ebraminio
  */
 
 public abstract class AbstractDate {

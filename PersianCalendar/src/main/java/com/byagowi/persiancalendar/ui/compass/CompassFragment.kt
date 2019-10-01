@@ -24,8 +24,6 @@ import kotlin.math.abs
 
 /**
  * Compass/Qibla activity
- *
- * @author ebraminio
  */
 class CompassFragment : DaggerFragment() {
 

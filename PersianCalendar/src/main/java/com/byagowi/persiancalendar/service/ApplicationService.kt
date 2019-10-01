@@ -14,8 +14,6 @@ import java.lang.ref.WeakReference
 /**
  * The Calendar Service that updates widget time and clock and build/update
  * calendar notification.
- *
- * @author Ebrahim Byagowi <ebrahim></ebrahim>@byagowi.com>
  */
 class ApplicationService : Service() {
     private val receiver = BroadcastReceivers()

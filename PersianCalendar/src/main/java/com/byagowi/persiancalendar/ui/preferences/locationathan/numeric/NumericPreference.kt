@@ -5,9 +5,6 @@ import android.util.AttributeSet
 
 import androidx.preference.EditTextPreference
 
-/**
- * Created by ebraminio on 2/16/16.
- */
 class NumericPreference : EditTextPreference {
 
     private var mDouble: Double? = null

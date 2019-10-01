@@ -11,9 +11,6 @@ import com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView
 import dagger.android.support.DaggerAppCompatDialogFragment
 import javax.inject.Inject
 
-/**
- * Created by ebrahim on 3/20/16.
- */
 class SelectDayDialog : DaggerAppCompatDialogFragment() {
 
     @Inject

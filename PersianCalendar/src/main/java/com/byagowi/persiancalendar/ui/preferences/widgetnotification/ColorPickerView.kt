@@ -3,8 +3,6 @@
  * Unlike the rest of the project is released under MIT license.
  * Feel free to copy and use it wherever you like or suggest improvements to it
  *
- * Copyright (c) 2018 Ebrahim Byagowi
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights

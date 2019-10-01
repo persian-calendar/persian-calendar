@@ -179,11 +179,6 @@ import static com.byagowi.persiancalendar.ConstantsKt.ZWJ;
 
 //import com.byagowi.persiancalendar.entities.Reminder;
 
-/**
- * Common utilities that needed for this calendar
- *
- * @author ebraminio
- */
 
 public class Utils {
     static private final String TAG = Utils.class.getName();

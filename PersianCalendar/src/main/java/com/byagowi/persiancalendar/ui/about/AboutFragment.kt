@@ -83,7 +83,7 @@ class AboutFragment : DaggerFragment() {
         // report bug
         binding.reportBug.setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/ebraminio/DroidPersianCalendar/issues/new".toUri()))
+                startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -95,7 +95,7 @@ class AboutFragment : DaggerFragment() {
                     .setView(emailBinding.root)
                     .setTitle(R.string.about_email_sum)
                     .setPositiveButton(R.string.continue_button) { _, _ ->
-                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "ebrahim@gnu.org", null))
+                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null))
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                         try {
                             emailIntent.putExtra(Intent.EXTRA_TEXT,

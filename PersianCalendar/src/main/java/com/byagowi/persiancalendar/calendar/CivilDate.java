@@ -1,8 +1,7 @@
 package com.byagowi.persiancalendar.calendar;
 
 /**
- * @author Amir
- * @author ebraminio
+ * @author Amirebraminio
  */
 
 public class CivilDate extends AbstractDate {

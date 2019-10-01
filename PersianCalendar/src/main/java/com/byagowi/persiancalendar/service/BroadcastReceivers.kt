@@ -14,8 +14,6 @@ import com.byagowi.persiancalendar.utils.Utils
 
 /**
  * Startup broadcast receiver
- *
- * @author ebraminio
  */
 class BroadcastReceivers : BroadcastReceiver() {
 

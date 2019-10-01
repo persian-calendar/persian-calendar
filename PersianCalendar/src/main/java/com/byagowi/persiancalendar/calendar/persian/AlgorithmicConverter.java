@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.calendar.persian;
 
 /**
  * @author Amir
- * @author ebraminio
  */
 public class AlgorithmicConverter {
 

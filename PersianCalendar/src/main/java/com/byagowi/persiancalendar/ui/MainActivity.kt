@@ -39,8 +39,6 @@ import javax.inject.Inject
 
 /**
  * Program activity for android
- *
- * @author ebraminio
  */
 class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
 

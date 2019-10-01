@@ -6,7 +6,6 @@ import com.byagowi.persiancalendar.calendar.islamic.UmmAlQuraConverter;
 
 /**
  * @author Amir
- * @author ebraminio
  */
 
 public class IslamicDate extends AbstractDate {
