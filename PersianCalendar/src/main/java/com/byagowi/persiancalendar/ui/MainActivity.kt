@@ -91,8 +91,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         Utils.initUtils(this)
 
-        TypefaceUtils.overrideFont("SERIF",
-                TypefaceUtils.getAppFont(applicationContext))
+        TypefaceUtils.overrideFont("SERIF", TypefaceUtils.getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 
@@ -123,11 +122,13 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 slidingAnimation(drawerView, slideOffset / 1.5f)
             }
 
-            private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-                binding.appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-                binding.drawer.bringChildToFront(drawerView)
-                binding.drawer.requestLayout()
-            }
+            private fun slidingAnimation(drawerView: View, slideOffset: Float) =
+                    binding.apply {
+                        appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                        drawer.bringChildToFront(drawerView)
+                        drawer.requestLayout()
+                    }
+
 
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
