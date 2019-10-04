@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.equinox;
+package com.persian_calendar.equinox;
 
 // Adopted from https://github.com/xyproto/calendar/blob/master/equinox.go
 //// Equinox and solstice algorithms from Astronomical Algorithms by Jean Meeus

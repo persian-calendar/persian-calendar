@@ -58,7 +58,6 @@ import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
-import com.byagowi.persiancalendar.equinox.Equinox;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
@@ -70,6 +69,7 @@ import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.byagowi.persiancalendar.ui.AthanActivity;
 import com.google.android.material.snackbar.Snackbar;
+import com.persian_calendar.equinox.Equinox;
 
 import org.json.JSONArray;
 import org.json.JSONException;
