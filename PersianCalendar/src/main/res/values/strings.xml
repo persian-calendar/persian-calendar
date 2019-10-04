@@ -248,6 +248,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
     <string name="notification_athan">Athan Notification</string>
     <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
+    <string name="ascending_athan_volume">Ascending athan volume</string>
+    <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
     <string name="custom_athan">Select Athan</string>
     <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">Custom notification is just set</string>

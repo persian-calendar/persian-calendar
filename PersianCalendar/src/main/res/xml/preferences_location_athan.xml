@@ -108,8 +108,17 @@
             android:title="@string/default_athan"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
+        <androidx.preference.SwitchPreferenceCompat
             android:dependency="NotificationAthan"
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="AscendingAthanVolume"
+            android:summary="@string/enable_ascending_athan_volume"
+            android:title="@string/ascending_athan_volume"
+            settings:iconSpaceReserved="false" />
+
+        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
+            android:dependency="AscendingAthanVolume"
             android:key="AthanVolume"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/accept"

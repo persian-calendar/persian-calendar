@@ -221,5 +221,7 @@
     <string name="prefer_linear_date">نیشاندانی ڕێککەوت بە ژمارە</string>
     <string name="month_overview">بۆنەکانی مانگ</string>
     <string name="map">نەخشە</string>
+    <string name="ascending_athan_volume">Ascending athan volume</string>
+    <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
 
 </resources>

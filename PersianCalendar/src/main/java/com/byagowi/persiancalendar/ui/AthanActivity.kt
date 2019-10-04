@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit
 
 class AthanActivity : AppCompatActivity() {
 
+    private val ascendingVolumeStep = 6
+    private var currentVolumeSteps = 0
+    private var audioManager: AudioManager? = null
     private val handler = Handler()
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -53,6 +56,15 @@ class AthanActivity : AppCompatActivity() {
         }
     }
 
+    private var ascendVolume = object : Runnable {
+        override fun run() {
+            currentVolumeSteps++
+            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)
+            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(ascendingVolumeStep.toLong()))
+            if (currentVolumeSteps == 10) handler.removeCallbacks(this)
+        }
+    }
+
     private var phoneStateListener: PhoneStateListener? = object : PhoneStateListener() {
         override fun onCallStateChanged(state: Int, incomingNumber: String) {
             if (state == TelephonyManager.CALL_STATE_RINGING || state == TelephonyManager.CALL_STATE_OFFHOOK) {
@@ -63,12 +75,13 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val ascendingVolume = Utils.isAscendingAthanVolumeEnabled(this)
         val settingsVol = Utils.getAthanVolume(this)
-        val audioManager = getSystemService<AudioManager>()
-        if (settingsVol != DEFAULT_ATHAN_VOLUME) {
-            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, settingsVol, 0)
-        } else {
-            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamVolume(AudioManager.STREAM_ALARM), 0)
+        audioManager = getSystemService<AudioManager>()
+        audioManager?.let { am ->
+            am.setStreamVolume(AudioManager.STREAM_ALARM,
+                    if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
+                    else am.getStreamVolume(AudioManager.STREAM_ALARM), 0)
         }
 
         val customAthanUri = Utils.getCustomAthanUri(this)
@@ -127,6 +140,8 @@ class AthanActivity : AppCompatActivity() {
 
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
 
+        if (ascendingVolume) handler.post(ascendVolume)
+
         try {
             getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
         } catch (e: Exception) {
@@ -168,6 +183,7 @@ class AthanActivity : AppCompatActivity() {
         }
 
         handler.removeCallbacks(stopTask)
+        handler.removeCallbacks(ascendVolume)
         finish()
     }
 
