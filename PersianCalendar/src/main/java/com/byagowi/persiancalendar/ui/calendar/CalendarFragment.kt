@@ -16,6 +16,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
@@ -53,7 +54,7 @@ class CalendarFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency // same object from MainActivity
 
-    private lateinit var mCalendarFragmentModel: CalendarFragmentModel
+    private val mCalendarFragmentModel by viewModels<CalendarFragmentModel>()
     private val mCalendar = Calendar.getInstance()
     private var mCoordinate: Coordinate? = null
     var viewPagerPosition: Int = 0
@@ -171,7 +172,6 @@ class CalendarFragment : DaggerFragment() {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(Utils.getMonthName(today),
                 Utils.formatNumber(today.year))
 
-        mCalendarFragmentModel = ViewModelProviders.of(this).get(CalendarFragmentModel::class.java)
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
             mLastSelectedJdn = jdn
             mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes())
@@ -189,10 +189,7 @@ class CalendarFragment : DaggerFragment() {
         return mMainBinding.root
     }
 
-    fun changeMonth(position: Int) {
-        mMainBinding.calendarViewPager.setCurrentItem(
-                mMainBinding.calendarViewPager.currentItem + position, true)
-    }
+    fun changeMonth(position: Int) = mMainBinding.calendarViewPager.setCurrentItem(mMainBinding.calendarViewPager.currentItem + position, true)
 
     fun addEventOnCalendar(jdn: Long) {
         val activity = mainActivityDependency.mainActivity
@@ -493,7 +490,7 @@ class CalendarFragment : DaggerFragment() {
                 eventsAdapter.addAll(Utils.getAllEnabledEvents())
                 eventsAdapter.addAll(Utils.getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
-                mSearchAutoComplete?.setOnItemClickListener { parent, view, position, id ->
+                mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
                     val date = ev.date
                     val type = Utils.getCalendarTypeFromDate(date)

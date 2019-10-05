@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -9,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -74,6 +76,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
+    private var clickedItem = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
@@ -87,8 +91,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         Utils.initUtils(this)
 
-        TypefaceUtils.overrideFont("SERIF",
-                TypefaceUtils.getAppFont(applicationContext))
+        TypefaceUtils.overrideFont("SERIF", TypefaceUtils.getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 
@@ -119,10 +122,21 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 slidingAnimation(drawerView, slideOffset / 1.5f)
             }
 
-            private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-                binding.appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-                binding.drawer.bringChildToFront(drawerView)
-                binding.drawer.requestLayout()
+            private fun slidingAnimation(drawerView: View, slideOffset: Float) =
+                    binding.apply {
+                        appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                        drawer.bringChildToFront(drawerView)
+                        drawer.requestLayout()
+                    }
+
+
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                if (clickedItem != 0) {
+                    navigateTo(clickedItem)
+                    clickedItem = 0
+                }
+
             }
         }
 
@@ -154,7 +168,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        (binding.navigation.getHeaderView(0).findViewById<View>(R.id.season_image) as ImageView)
+        (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
                 .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
@@ -197,7 +211,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 setAction(getString(R.string.update)) {
                     try {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
-                    } catch (anfe: android.content.ActivityNotFoundException) {
+                    } catch (anfe: ActivityNotFoundException) {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
                     }
                 }
@@ -287,8 +301,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
                     if (currentHolidays == null || currentHolidays.isEmpty() ||
                             currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
-                        putStringSet(PREF_HOLIDAY_TYPES,
-                                HashSet(listOf("afghanistan_holidays")))
+                        putStringSet(PREF_HOLIDAY_TYPES, HashSet(listOf("afghanistan_holidays")))
                     }
                 }
                 if (changeToIranEvents) {
@@ -296,8 +309,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
                     if (currentHolidays == null || currentHolidays.isEmpty() ||
                             currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays")) {
-                        putStringSet(PREF_HOLIDAY_TYPES,
-                                HashSet(listOf("iran_holidays")))
+                        putStringSet(PREF_HOLIDAY_TYPES, HashSet(listOf("iran_holidays")))
                     }
                 }
                 if (removeAllEvents) {
@@ -424,7 +436,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         binding.drawer.closeDrawers()
-        navigateTo(menuItem.itemId)
+        clickedItem = menuItem.itemId
+        Log.d("ITEMID", menuItem.itemId.toString())
         return true
     }
 
