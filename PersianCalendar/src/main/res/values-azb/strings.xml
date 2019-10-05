@@ -222,6 +222,8 @@
     <string name="prefer_linear_date">تاریخی یازی گورست</string>
     <string name="month_overview">آی خصوصی گونلری</string>
     <string name="map">Map</string>
+    <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
+    <string name="ascending_athan_volume">اذان سسینی آرتیریر</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->

@@ -220,5 +220,7 @@
     <string name="prefer_linear_date">ترجیح نمایش عددی تاریخ</string>
     <string name="month_overview">مناسبت‌های ماه</string>
     <string name="map">Map</string>
+    <string name="enable_ascending_athan_volume">اذان کی آواز ایک منٹ میں عروج پر پہنچ جاتی ہے</string>
+    <string name="ascending_athan_volume">اذان کی بڑھتی ہوئی آواز</string>
 
 </resources>

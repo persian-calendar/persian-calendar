@@ -223,6 +223,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
     <string name="month_overview">Month\'s events</string>
     <string name="map">地図</string>
+    <string name="enable_ascending_athan_volume">アザンの声は1分以内にピークに達します</string>
+    <string name="ascending_athan_volume">アザンの音の増加</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->

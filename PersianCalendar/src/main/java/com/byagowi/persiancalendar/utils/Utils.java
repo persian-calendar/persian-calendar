@@ -145,6 +145,7 @@ import static com.byagowi.persiancalendar.ConstantsKt.MODERN_THEME;
 import static com.byagowi.persiancalendar.ConstantsKt.PERSIAN_DIGITS;
 import static com.byagowi.persiancalendar.ConstantsKt.PREF_ALTITUDE;
 import static com.byagowi.persiancalendar.ConstantsKt.PREF_APP_LANGUAGE;
+import static com.byagowi.persiancalendar.ConstantsKt.PREF_ASCENDING_ATHAN_VOLUME;
 import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_ALARM;
 import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_GAP;
 import static com.byagowi.persiancalendar.ConstantsKt.PREF_ATHAN_URI;
@@ -562,6 +563,10 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
+    }
+
+    static public boolean isAscendingAthanVolumeEnabled(@NonNull Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ASCENDING_ATHAN_VOLUME, true);
     }
 
     static boolean isNotifyDateOnLockScreen() {
