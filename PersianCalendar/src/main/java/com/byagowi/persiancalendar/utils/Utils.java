@@ -461,8 +461,8 @@ public class Utils {
 
     public static String getThemeFromPreference(@NonNull Context context, SharedPreferences prefs) {
         String result = prefs.getString(PREF_THEME, "");
-        result = TextUtils.isEmpty(result) ?
-                (isNightModeEnabled(context) ? DARK_THEME : LIGHT_THEME) : result;
+        if (TextUtils.isEmpty(result))
+            result = isNightModeEnabled(context) ? DARK_THEME : LIGHT_THEME;
         return result;
     }
 
