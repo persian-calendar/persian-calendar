@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
 import com.cepmuvakkit.times.view.QiblaCompassView
-import com.persian_calendar.equinox.Equinox
+import io.github.persiancalendar.Equinox
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
