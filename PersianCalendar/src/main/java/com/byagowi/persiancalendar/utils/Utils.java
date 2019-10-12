@@ -69,7 +69,6 @@ import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
 import com.byagowi.persiancalendar.ui.AthanActivity;
 import com.google.android.material.snackbar.Snackbar;
-import com.persian_calendar.equinox.Equinox;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +90,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import io.github.persiancalendar.Equinox;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.ALARMS_BASE_ID;
