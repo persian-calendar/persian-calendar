@@ -58,7 +58,6 @@ import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
-import com.byagowi.persiancalendar.equinox.Equinox;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
@@ -91,6 +90,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import io.github.persiancalendar.Equinox;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.ALARMS_BASE_ID;

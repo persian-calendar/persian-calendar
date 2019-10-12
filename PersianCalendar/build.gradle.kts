@@ -78,6 +78,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":equinox"))
+
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.preference:preference-ktx:1.1.0")
     implementation("androidx.recyclerview:recyclerview:1.0.0")
