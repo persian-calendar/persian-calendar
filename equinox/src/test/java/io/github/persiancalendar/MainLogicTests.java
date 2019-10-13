@@ -1,6 +1,4 @@
-package com.byagowi.persiancalendar;
-
-import com.persian_calendar.equinox.Equinox;
+package io.github.persiancalendar;
 
 import org.junit.Assert;
 import org.junit.Test;
