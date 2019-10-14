@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.byagowi.persiancalendar.OFFSET_ARGUMENT
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.CalendarFragmentDependency
@@ -19,6 +18,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerFragment
+import io.github.persiancalendar.calendar.AbstractDate
 import java.util.*
 import javax.inject.Inject
 

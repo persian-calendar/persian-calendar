@@ -1,7 +1,7 @@
-package com.byagowi.persiancalendar.calendar;
+package io.github.persiancalendar.calendar;
 
-import com.byagowi.persiancalendar.calendar.persian.AlgorithmicConverter;
-import com.byagowi.persiancalendar.calendar.persian.LookupTableConverter;
+import io.github.persiancalendar.calendar.persian.AlgorithmicConverter;
+import io.github.persiancalendar.calendar.persian.LookupTableConverter;
 
 public class PersianDate extends AbstractDate {
 

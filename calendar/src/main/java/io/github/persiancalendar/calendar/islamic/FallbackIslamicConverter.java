@@ -1,6 +1,6 @@
-package com.byagowi.persiancalendar.calendar.islamic;
+package io.github.persiancalendar.calendar.islamic;
 
-import com.byagowi.persiancalendar.calendar.CivilDate;
+import io.github.persiancalendar.calendar.CivilDate;
 
 public class FallbackIslamicConverter {
 
