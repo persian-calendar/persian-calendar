@@ -2,6 +2,10 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -92,7 +97,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             first = false
                         else
                             result.append(",")
-                        result.append(record.type)
+                        result.append(record.type.replace(Regex("[=,]"), ""))
                         result.append("=")
                         result.append(record.length)
                     }
@@ -124,6 +129,8 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             updateShiftWorkResult()
         }
 
+        fun shiftWorkKeyToString(type: String): String = Utils.getShiftWorkTitles()[type] ?: type
+
         private fun updateShiftWorkResult() {
             val result = StringBuilder()
             var first = true
@@ -135,7 +142,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 else
                     result.append(Utils.getSpacedComma())
                 result.append(String.format(getString(R.string.shift_work_record_title),
-                        Utils.formatNumber(record.length), Utils.getShiftWorkTitles()[record.type]))
+                        Utils.formatNumber(record.length), shiftWorkKeyToString(record.type)))
             }
 
             mBinding.result.text = result.toString()
@@ -149,12 +156,9 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             return ViewHolder(binding)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(position)
-        }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
         override fun getItemCount(): Int = mRows.size + 1
-
 
         internal fun reset() {
             mRows.clear()
@@ -179,9 +183,39 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 mBinding.lengthSpinner.adapter = ArrayAdapter(context,
                         android.R.layout.simple_spinner_dropdown_item, days)
 
-                mBinding.typeSpinner.adapter = ArrayAdapter(context,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        resources.getStringArray(R.array.shift_work))
+                mBinding.typeAutoCompleteTextView.run {
+                    val adapter = ArrayAdapter(context,
+                            android.R.layout.simple_spinner_dropdown_item,
+                            resources.getStringArray(R.array.shift_work))
+                    setAdapter(adapter)
+                    setOnClickListener {
+                        if (text.toString().isNotEmpty()) adapter.filter.filter(null)
+                        showDropDown()
+                    }
+                    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                            mRows[mPosition] = ShiftWorkRecord(text.toString(), mRows[mPosition].length)
+                            updateShiftWorkResult()
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {}
+                    }
+                    addTextChangedListener(object : TextWatcher {
+                        override fun afterTextChanged(s: Editable?) {}
+
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                            mRows[mPosition] = ShiftWorkRecord(text.toString(), mRows[mPosition].length)
+                            updateShiftWorkResult()
+                        }
+                    })
+                    filters = arrayOf(object : InputFilter {
+                        override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence? {
+                            return if (source?.contains("[=,]".toRegex()) == true) "" else null
+                        }
+                    })
+                }
 
                 mBinding.remove.setOnClickListener { remove() }
 
@@ -189,16 +223,6 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                         mRows[mPosition] = ShiftWorkRecord(
                                 mRows[mPosition].type, position)
-                        updateShiftWorkResult()
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>) {}
-                }
-
-                mBinding.typeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                        mRows[mPosition] = ShiftWorkRecord(
-                                mShiftWorkKeys[position], mRows[mPosition].length)
                         updateShiftWorkResult()
                     }
 
@@ -224,7 +248,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     mPosition = position
                     mBinding.rowNumber.text = String.format("%s:", Utils.formatNumber(position + 1))
                     mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
-                    mBinding.typeSpinner.setSelection(mShiftWorkKeys.indexOf(shiftWorkRecord.type))
+                    mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
                     mBinding.detail.visibility = View.VISIBLE
                     mBinding.addButton.visibility = View.GONE
                 } else {

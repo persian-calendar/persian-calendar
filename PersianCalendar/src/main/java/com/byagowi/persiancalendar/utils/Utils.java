@@ -393,7 +393,6 @@ public class Utils {
         try {
             sShiftWorks = new ArrayList<>();
             String shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "");
-            if (shiftWork == null) shiftWork = "";
             String[] parts = shiftWork.split(",");
             for (String p : parts) {
                 String[] v = p.split("=");
@@ -1136,10 +1135,12 @@ public class Utils {
             accumulation += shift.getLength();
             if (accumulation > dayInPeriod) {
                 // Skip rests on abbreviated mode
-                if (sShiftWorkRecurs && abbreviated && shift.getType().equals("r")) return "";
+                if (sShiftWorkRecurs && abbreviated &&
+                        (shift.getType().equals("r") || shift.getType().equals(sShiftWorkTitles.get("r"))))
+                    return "";
 
                 String title = sShiftWorkTitles.get(shift.getType());
-                if (title == null) return "";
+                if (title == null) title = shift.getType();
                 return abbreviated ?
                         (title.substring(0, 1) +
                                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
