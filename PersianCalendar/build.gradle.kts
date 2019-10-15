@@ -92,13 +92,14 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
-    implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.1.0")
+    val lifeCycleVersion = "2.1.0"
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
     implementation("androidx.core:core-ktx:1.1.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.1.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0")
     implementation("androidx.fragment:fragment-ktx:1.1.0")
     implementation("androidx.activity:activity-ktx:1.0.0")
 
