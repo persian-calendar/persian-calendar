@@ -9,7 +9,7 @@ interface DayPickerView {
     val selectedCalendarType: CalendarType
     fun setDayJdnOnView(jdn: Long)
 
-    fun setOnSelectedDayChangedListener(listener: OnSelectedDayChangedListener)
+    fun setOnSelectedDayChangedListener(listener: (Long) -> Unit)
 
     interface OnSelectedDayChangedListener {
         fun onSelectedDayChanged(jdn: Long)
