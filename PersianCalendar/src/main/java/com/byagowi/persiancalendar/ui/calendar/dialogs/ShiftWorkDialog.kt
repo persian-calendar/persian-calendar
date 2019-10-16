@@ -9,10 +9,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*
 import javax.inject.Inject
+
 
 class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
@@ -84,50 +85,48 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         }
         binding.recurs.isChecked = Utils.getShiftWorkRecurs()
 
-        val dialog = Dialog(binding.root.context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(binding.root)
+        return AlertDialog.Builder(mainActivity)
+                .setView(binding.root)
+                .setTitle(null)
+                .setPositiveButton(R.string.accept) { _, _ ->
+                    val result = StringBuilder()
+                    var first = true
+                    for (record in shiftWorkItemAdapter.rows) {
+                        if (record.length == 0) continue
 
-        val btnOk = dialog.findViewById<TextView>(R.id.btn_ok)
-        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
+                        if (first)
+                            first = false
+                        else
+                            result.append(",")
+                        result.append(record.type.replace(Regex("[=,]"), ""))
+                        result.append("=")
+                        result.append(record.length)
+                    }
 
+                    appDependency.sharedPreferences.edit {
+                        putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
+                        putString(PREF_SHIFT_WORK_SETTING, result.toString())
+                        putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
+                    }
 
-
-        btnOk.setOnClickListener {
-
-            val result = StringBuilder()
-            var first = true
-            for (record in shiftWorkItemAdapter.rows) {
-                if (record.length == 0) continue
-
-                if (first)
-                    first = false
-                else
-                    result.append(",")
-                result.append(record.type.replace(Regex("[=,]"), ""))
-                result.append("=")
-                result.append(record.length)
-            }
-
-            appDependency.sharedPreferences.edit {
-                putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
-                putString(PREF_SHIFT_WORK_SETTING, result.toString())
-                putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
-            }
-
-            calendarFragmentDependency.calendarFragment.afterShiftWorkChange()
-            mainActivity.restartActivity()
-
-            dialog.dismiss()
-        }
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        return dialog
+                    calendarFragmentDependency.calendarFragment.afterShiftWorkChange()
+                    mainActivity.restartActivity()
+                }
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, null)
+                .create()
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        // https://stackoverflow.com/a/46248107
+        dialog?.window?.run {
+            clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+    }
+
 
     private inner class ItemsAdapter internal constructor(initialItems: List<ShiftWorkRecord>, private val mBinding: ShiftWorkSettingsBinding) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
         internal var mShiftWorkKeys: List<String>
