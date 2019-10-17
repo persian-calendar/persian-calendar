@@ -297,11 +297,8 @@ public class Utils {
 
         try {
             String latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE);
-            if (latitudeString == null) latitudeString = DEFAULT_LATITUDE;
             String longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE);
-            if (longtitudeString == null) longtitudeString = DEFAULT_LONGITUDE;
             String altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE);
-            if (altitudeString == null) altitudeString = DEFAULT_ALTITUDE;
 
             Coordinate coord = new Coordinate(
                     Double.parseDouble(latitudeString),
@@ -349,7 +346,6 @@ public class Utils {
         try {
             mainCalendar = CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI"));
             String otherCalendarsString = prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC");
-            if (otherCalendarsString == null) otherCalendarsString = "GREGORIAN,ISLAMIC";
             otherCalendarsString = otherCalendarsString.trim();
             if (TextUtils.isEmpty(otherCalendarsString)) {
                 otherCalendars = new CalendarType[0];
@@ -369,11 +365,9 @@ public class Utils {
         showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false);
 
         String weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START);
-        if (weekStart == null) weekStart = DEFAULT_WEEK_START;
         weekStartOffset = Integer.parseInt(weekStart);
         weekEnds = new boolean[7];
         Set<String> weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS);
-        if (weekEndsSet == null) weekEndsSet = DEFAULT_WEEK_ENDS;
         for (String s : weekEndsSet)
             weekEnds[Integer.parseInt(s)] = true;
 
@@ -475,7 +469,6 @@ public class Utils {
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
-            if (islamicOffset == null) islamicOffset = DEFAULT_ISLAMIC_OFFSET;
             return Integer.parseInt(islamicOffset.replace("+", ""));
         } catch (Exception ignore) {
             return 0;
@@ -807,8 +800,7 @@ public class Utils {
                             countryEn, countryFa, countryCkb, countryAr, coordinate));
                 }
             }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
+        } catch (JSONException ignore) {
         }
 
         if (!needsSort) {
@@ -852,8 +844,6 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         String key = prefs.getString(PREF_SELECTED_LOCATION, "");
-        if (key == null) key = "";
-
         if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
             return null;
 
@@ -916,7 +906,7 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
 
-        if (enabledTypes == null || enabledTypes.isEmpty()) {
+        if (enabledTypes.isEmpty()) {
             switch (getAppLanguage()) {
                 case LANG_FA:
                 case LANG_GLK:
@@ -1105,8 +1095,7 @@ public class Utils {
                 }
             }
 
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
+        } catch (JSONException ignore) {
         }
 
         sPersianCalendarEvents = persianCalendarEvents;
@@ -1254,7 +1243,6 @@ public class Utils {
             long athanGap;
             try {
                 String athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0");
-                if (athanGapStr == null) athanGapStr = "0";
                 athanGap = (long) (Double.parseDouble(athanGapStr) * 60 * 1000);
             } catch (NumberFormatException e) {
                 athanGap = 0;
@@ -1456,8 +1444,7 @@ public class Utils {
                 }
             }
 
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
+        } catch (JSONException ignore) {
         }
     }
 
@@ -2037,7 +2024,7 @@ public class Utils {
         return cal;
     }
 
-    public static CivilDate calendarToCivilDate(Calendar calendar) {
+    private static CivilDate calendarToCivilDate(Calendar calendar) {
         return new CivilDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH));
