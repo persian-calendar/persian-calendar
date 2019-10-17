@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.Utils
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -28,11 +27,9 @@ class ConverterFragment : DaggerFragment() {
 
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
-            calendarsView.setOnShowHideTodayButton(object : CalendarsView.OnShowHideTodayButton {
-                override fun onShowHideTodayButton(show: Boolean) {
-                    if (show) todayButton.show() else todayButton.hide()
-                }
-            })
+            calendarsView.setOnShowHideTodayButton { show ->
+                if (show) todayButton.show() else todayButton.hide()
+            }
 
             todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(Utils.getTodayJdn()) }
             swipeToRefresh.setOnRefreshListener {
