@@ -28,6 +28,8 @@ import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getShiftWorks
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*
 import javax.inject.Inject
@@ -54,7 +56,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = Utils.getTodayJdn()
 
-        jdn = Utils.getShiftWorkStartingJdn()
+        jdn = getShiftWorkStartingJdn()
         var isFirstSetup = false
         if (jdn == -1L) {
             isFirstSetup = true
@@ -65,7 +67,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 LayoutInflater.from(mainActivity), null, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
 
-        var shiftWorks: List<ShiftWorkRecord> = Utils.getShiftWorks()
+        var shiftWorks: List<ShiftWorkRecord> = getShiftWorks()
         if (shiftWorks.isEmpty())
             shiftWorks = listOf(ShiftWorkRecord("d", 0))
         val shiftWorkItemAdapter = ItemsAdapter(shiftWorks, binding)
@@ -83,7 +85,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
             shiftWorkItemAdapter.reset()
         }
-        binding.recurs.isChecked = Utils.getShiftWorkRecurs()
+        binding.recurs.isChecked = getShiftWorkRecurs()
 
         return AlertDialog.Builder(mainActivity)
                 .setView(binding.root)
@@ -141,7 +143,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             updateShiftWorkResult()
         }
 
-        fun shiftWorkKeyToString(type: String): String = Utils.getShiftWorkTitles()[type] ?: type
+        fun shiftWorkKeyToString(type: String): String = getShiftWorkTitles()[type] ?: type
 
         private fun updateShiftWorkResult() {
             val result = StringBuilder()
