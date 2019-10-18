@@ -37,7 +37,6 @@ private val timesOn4x2Shia = intArrayOf(R.string.fajr, R.string.dhuhr, R.string.
 private val timesOn4x2Sunna = intArrayOf(R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha)
 @IdRes
 private val owghatPlaceHolderId = intArrayOf(R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2, R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2, R.id.textPlaceholder4owghat_5_4x2)
-var shouldUpdateDate = false
 
 fun setDeviceCalendarEvents(context: Context) {
     try {
@@ -48,7 +47,6 @@ fun setDeviceCalendarEvents(context: Context) {
 }
 
 fun update(context: Context, updateDate: Boolean) {
-    shouldUpdateDate = updateDate
     Log.d("UpdateUtils", "update")
     Utils.applyAppLanguage(context)
     val calendar = Utils.makeCalendarFromDate(Date())
@@ -78,7 +76,7 @@ fun update(context: Context, updateDate: Boolean) {
     val widget4x2 = ComponentName(context, Widget4x2::class.java)
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
 
-    if (manager.getAppWidgetIds(widget1x1).isNotEmpty()) {
+    if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
         RemoteViews(context.packageName, R.layout.widget1x1).apply {
             setTextColor(R.id.textPlaceholder1_1x1, color)
             setTextColor(R.id.textPlaceholder2_1x1, color)
@@ -91,12 +89,13 @@ fun update(context: Context, updateDate: Boolean) {
         }
     }
 
-    if (pastDate == null || pastDate != date || shouldUpdateDate) {
+    var dateHasChanged = false
+    if (pastDate == null || pastDate != date || updateDate) {
         Log.d("UpdateUtils", "date has changed")
 
         Utils.loadAlarms(context)
         pastDate = date
-        shouldUpdateDate = true
+        dateHasChanged = true
         setDeviceCalendarEvents(context)
     }
 
@@ -110,7 +109,7 @@ fun update(context: Context, updateDate: Boolean) {
     val currentClock = Clock(calendar)
     var owghat = ""
     @StringRes
-    val nextOwghatId = Utils.getNextOwghatTimeId(currentClock, shouldUpdateDate)
+    val nextOwghatId = Utils.getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
@@ -126,7 +125,7 @@ fun update(context: Context, updateDate: Boolean) {
     val enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
     val isCenterAligned = Utils.isCenterAlignWidgets()
 
-    if (manager.getAppWidgetIds(widget4x1).isNotEmpty() || manager.getAppWidgetIds(widget2x2).isNotEmpty()) {
+    if (manager.getAppWidgetIds(widget4x1)?.isNotEmpty() == true || manager.getAppWidgetIds(widget2x2)?.isNotEmpty() == true) {
         val remoteViews4: RemoteViews
         val remoteViews2: RemoteViews
         if (enableClock) {
@@ -227,7 +226,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     //region Widget 4x2
-    if (manager.getAppWidgetIds(widget4x2).isNotEmpty()) {
+    if (manager.getAppWidgetIds(widget4x2)?.isNotEmpty() == true) {
         val remoteViews4x2: RemoteViews = if (enableClock) {
             if (!Utils.isIranTime()) {
                 RemoteViews(context.packageName, R.layout.widget4x2_clock)
