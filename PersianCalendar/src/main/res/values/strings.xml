@@ -315,6 +315,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="prefer_linear_date">Prefer numerical form of dates</string>
     <string name="month_overview">Month\'s events</string>
     <string name="map">Map</string>
+    <string name="widget_background_color">Widget Background Color</string>
+    <string name="select_widgets_background_color">Select custom color for widgets background</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->

@@ -222,5 +222,7 @@
     <string name="map">Map</string>
     <string name="enable_ascending_athan_volume">اذان کی آواز ایک منٹ میں عروج پر پہنچ جاتی ہے</string>
     <string name="ascending_athan_volume">اذان کی بڑھتی ہوئی آواز</string>
+    <string name="widget_background_color">رنگ پس زمینه ویجت</string>
+    <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس زمینه ویجت</string>
 
 </resources>

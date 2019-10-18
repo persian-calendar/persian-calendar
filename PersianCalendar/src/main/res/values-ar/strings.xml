@@ -257,5 +257,7 @@
     <string name="map">خريطة</string>
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
+    <string name="widget_background_color">Widget Background Color</string>
+    <string name="select_widgets_background_color">Select custom color for widgets background</string>
 
 </resources>
