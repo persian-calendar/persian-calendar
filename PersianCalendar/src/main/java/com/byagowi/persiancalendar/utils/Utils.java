@@ -868,7 +868,7 @@ public class Utils {
                 context.getString(R.string.longitude), coordinate.getLongitude());
     }
 
-    static public String getCityName(@NonNull Context context, boolean fallbackToCoord) {
+    static public @NonNull String getCityName(@NonNull Context context, boolean fallbackToCoord) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         CityItem cityEntity = getCityFromPreference(context);
         if (cityEntity != null) {
@@ -1111,7 +1111,7 @@ public class Utils {
                 && (event.getYear() == -1 || event.getYear() == date.getYear());
     }
 
-    static public String getShiftWorkTitle(long jdn, boolean abbreviated) {
+    static public @NonNull String getShiftWorkTitle(long jdn, boolean abbreviated) {
         if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
             return "";
 
@@ -1199,7 +1199,7 @@ public class Utils {
         return result;
     }
 
-    static public String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
+    static public @NonNull String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
                                         boolean compact, boolean showDeviceCalendarEvents,
                                         boolean insertRLM) {
         StringBuilder titles = new StringBuilder();
@@ -1572,7 +1572,7 @@ public class Utils {
         }
     }
 
-    static public String dateStringOfOtherCalendars(long jdn, String separator) {
+    static public @NonNull String dateStringOfOtherCalendars(long jdn, String separator) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (CalendarType type : otherCalendars) {
