@@ -12,9 +12,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getZodiacInfo
 import java.util.*
 import kotlin.math.abs
 
@@ -86,7 +86,7 @@ class CalendarsView : FrameLayout {
         mCalendarItemAdapter.setDate(calendarsToShow, jdn)
         mBinding.weekDayName.text = Utils.getWeekDayName(CivilDate(jdn))
 
-        mBinding.zodiac.text = AstronomicalUtils.getZodiacInfo(context, jdn, true)
+        mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
         mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
 
         val diffDays = abs(Utils.getTodayJdn() - jdn)

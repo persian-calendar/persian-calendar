@@ -178,6 +178,7 @@ import static com.byagowi.persiancalendar.ConstantsKt.PREF_WIDGET_IN_24;
 import static com.byagowi.persiancalendar.ConstantsKt.RLM;
 import static com.byagowi.persiancalendar.ConstantsKt.THREE_HOURS_APP_ID;
 import static com.byagowi.persiancalendar.ConstantsKt.ZWJ;
+import static com.byagowi.persiancalendar.utils.AstronomicalUtilsKt.getZodiacInfo;
 
 //import com.byagowi.persiancalendar.entities.Reminder;
 
@@ -2097,7 +2098,7 @@ public class Utils {
         }
 
         if (withZodiac) {
-            String zodiac = AstronomicalUtils.INSTANCE.getZodiacInfo(context, jdn, false);
+            String zodiac = getZodiacInfo(context, jdn, false);
             if (!TextUtils.isEmpty(zodiac)) {
                 result.append("\n");
                 result.append("\n");
