@@ -313,13 +313,13 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     if (Utils.isNotifyDate()) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService<NotificationManager>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(NOTIFICATION_ID.toString(),
                     context.getString(R.string.app_name), importance)
             channel.setShowBadge(false)
-            notificationManager.createNotificationChannel(channel)
+            notificationManager?.createNotificationChannel(channel)
         }
 
         // Don't remove this condition checking ever
@@ -403,7 +403,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
 
         if (Utils.goForWorker()) {
-            notificationManager.notify(NOTIFICATION_ID, builder.build())
+            notificationManager?.notify(NOTIFICATION_ID, builder.build())
         } else {
             try {
                 val applicationService = ApplicationService.getInstance()
