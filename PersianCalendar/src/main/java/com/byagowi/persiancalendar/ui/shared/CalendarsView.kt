@@ -54,12 +54,16 @@ class CalendarsView : FrameLayout {
         mBinding.moreCalendar.visibility = View.GONE
     }
 
-    fun setOnCalendarsViewExpandListener(listener: OnCalendarsViewExpandListener) {
-        mCalendarsViewExpandListener = listener
+    fun setOnCalendarsViewExpandListener(listener: () -> Unit) {
+        mCalendarsViewExpandListener = object : OnCalendarsViewExpandListener {
+            override fun onCalendarsViewExpand() = listener()
+        }
     }
 
-    fun setOnShowHideTodayButton(listener: OnShowHideTodayButton) {
-        mOnShowHideTodayButton = listener
+    fun setOnShowHideTodayButton(listener: (Boolean) -> Unit) {
+        mOnShowHideTodayButton = object : OnShowHideTodayButton {
+            override fun onShowHideTodayButton(show: Boolean) = listener(show)
+        }
     }
 
     fun expand(expanded: Boolean) {

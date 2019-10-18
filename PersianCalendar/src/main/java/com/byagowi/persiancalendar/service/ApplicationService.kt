@@ -6,8 +6,8 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 
-import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.update
 
 import java.lang.ref.WeakReference
 
@@ -37,7 +37,7 @@ class ApplicationService : Service() {
 
         Utils.updateStoredPreference(applicationContext)
         Utils.loadApp(this)
-        UpdateUtils.update(applicationContext, true)
+        update(applicationContext, true)
 
         return START_STICKY
     }

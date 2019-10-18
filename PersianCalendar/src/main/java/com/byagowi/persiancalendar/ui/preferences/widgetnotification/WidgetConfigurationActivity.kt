@@ -10,8 +10,8 @@ import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
-import com.byagowi.persiancalendar.utils.UpdateUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.update
 
 class WidgetConfigurationActivity : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId))
         }
         Utils.updateStoredPreference(this)
-        UpdateUtils.update(this, false)
+        update(this, false)
         finish()
     }
 
