@@ -95,6 +95,7 @@ import io.github.persiancalendar.Equinox;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.*;
+import static com.byagowi.persiancalendar.utils.FunctionsKt.*;
 import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
 //import com.byagowi.persiancalendar.entities.Reminder;
@@ -102,7 +103,6 @@ import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
 public class Utils {
     static private List<AbstractEvent> sAllEnabledEvents = new ArrayList<>();
-
     // This should be called before any use of Utils on the activity and services
     static public void initUtils(@NonNull Context context) {
         updateStoredPreference(context);
@@ -264,53 +264,7 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    private static String getCalendarNameAbbr(AbstractDate date) {
-        if (calendarTypesTitleAbbr.length < 3) return "";
 
-        // It should match with calendar_type array
-        if (date instanceof PersianDate) return calendarTypesTitleAbbr[0];
-        else if (date instanceof IslamicDate) return calendarTypesTitleAbbr[1];
-        else if (date instanceof CivilDate) return calendarTypesTitleAbbr[2];
-        else return "";
-    }
-
-    static boolean isNightModeEnabled(@NonNull Context context) {
-        return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES;
-    }
-
-    public static String getThemeFromPreference(@NonNull Context context, SharedPreferences prefs) {
-        String result = prefs.getString(PREF_THEME, "");
-        if (TextUtils.isEmpty(result))
-            result = isNightModeEnabled(context) ? DARK_THEME : LIGHT_THEME;
-        return result;
-    }
-
-    @StyleRes
-    public static int getAppTheme() {
-        return appTheme;
-    }
-
-    private static int getIslamicOffset(@NonNull Context context) {
-        try {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            String islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET);
-            return Integer.parseInt(islamicOffset.replace("+", ""));
-        } catch (Exception ignore) {
-            return 0;
-        }
-    }
-
-    static boolean isAstronomicalFeaturesEnabled() {
-        return astronomicalFeaturesEnabled;
-    }
-
-    static public List<CalendarType> getEnabledCalendarTypes() {
-        List<CalendarType> result = new ArrayList<>();
-        result.add(getMainCalendar());
-        result.addAll(Arrays.asList(otherCalendars));
-        return result;
-    }
 
     static public List<CalendarType> getOrderedCalendarTypes() {
         List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();

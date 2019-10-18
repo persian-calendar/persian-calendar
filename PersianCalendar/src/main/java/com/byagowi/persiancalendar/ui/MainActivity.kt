@@ -82,7 +82,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(this, prefs)))
+        setTheme(Utils.getThemeFromName(getThemeFromPreference(this, prefs)))
 
         Utils.applyAppLanguage(this)
 

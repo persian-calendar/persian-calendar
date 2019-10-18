@@ -351,7 +351,7 @@ object UpdateUtils {
                     .setContentText(subtitle)
 
             // Night mode doesn't our custom notification in Samsung, let's detect it
-            val isSamsungNightMode = Build.BRAND == "samsung" && Utils.isNightModeEnabled(context)
+            val isSamsungNightMode = Build.BRAND == "samsung" && isNightModeEnabled(context)
 
             if (!Utils.isTalkBackEnabled() && !isSamsungNightMode &&
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {

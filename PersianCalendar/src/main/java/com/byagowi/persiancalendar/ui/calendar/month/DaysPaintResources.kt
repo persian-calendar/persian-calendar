@@ -8,7 +8,7 @@ import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.TypefaceUtils
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 
 class DaysPaintResources(activity: Activity) {
     @StyleRes
@@ -74,7 +74,7 @@ class DaysPaintResources(activity: Activity) {
         theme.resolveAttribute(R.attr.colorSelectDay, value, true)
         colorSelectDay = ContextCompat.getColor(activity, value.resourceId)
 
-        style = Utils.getAppTheme()
+        style = getAppTheme()
 
         textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG)

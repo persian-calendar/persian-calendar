@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 import com.byagowi.persiancalendar.ui.calendar.times.TimeItemAdapter
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -174,7 +175,7 @@ class CalendarFragment : DaggerFragment() {
 
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
             mLastSelectedJdn = jdn
-            mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), Utils.getEnabledCalendarTypes())
+            mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), getEnabledCalendarTypes())
             val isToday = Utils.getTodayJdn() == mLastSelectedJdn
             setOwghat(jdn, isToday)
             showEvent(jdn, isToday)

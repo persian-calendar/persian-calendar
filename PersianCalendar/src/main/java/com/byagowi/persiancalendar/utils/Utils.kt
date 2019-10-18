@@ -1,12 +1,12 @@
 package com.byagowi.persiancalendar.utils
+
 import android.util.SparseArray
 import androidx.annotation.StyleRes
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimes
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 @kotlin.jvm.JvmField
@@ -127,13 +127,3 @@ var numericalDatePreferred = false
 var calendarTypesTitleAbbr = arrayOf<String>()
 //    private static List<Reminder> sReminderDetails = Collections.emptyList();
 //
-//    public static List<Reminder> getReminderDetails() {
-//        return sReminderDetails;
-//    }
-fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
-fun getAmString(): String = sAM
-fun getPmString(): String = sPM
-fun getShiftWorkStartingJdn(): Long = sShiftWorkStartingJdn
-fun getShiftWorkRecurs(): Boolean = sShiftWorkRecurs
-fun getShiftWorkTitles(): Map<String, String> = sShiftWorkTitles
-fun getMaxSupportedYear(): Int = 1398
