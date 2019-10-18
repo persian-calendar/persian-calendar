@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 
@@ -88,7 +89,7 @@ class CalendarsView : FrameLayout {
         val diffDays = abs(Utils.getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
-            if (Utils.isIranTime()) {
+            if (isIranTime()) {
                 mBinding.weekDayName.text = String.format("%s (%s)",
                         mBinding.weekDayName.text,
                         context.getString(R.string.iran_time))
@@ -137,7 +138,7 @@ class CalendarsView : FrameLayout {
             mBinding.startAndEndOfYearDiff.text = String.format("%s\n%s", startOfYearText, endOfYearText)
 
             var equinox = ""
-            if (Utils.getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
+            if (getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
                 if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                     val addition = if (mainDate.month == 12) 1 else 0
                     val springEquinox = Utils.getSpringEquinox(mainDate.toJdn())

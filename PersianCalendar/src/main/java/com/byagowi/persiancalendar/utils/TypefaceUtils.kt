@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.FONT_PATH
 object TypefaceUtils {
 
     val isCustomFontEnabled: Boolean
-        get() = Utils.isArabicDigitSelected() || Utils.isNonArabicScriptSelected()
+        get() = isArabicDigitSelected() || Utils.isNonArabicScriptSelected()
 
     /**
      * Using reflection to override default typeface

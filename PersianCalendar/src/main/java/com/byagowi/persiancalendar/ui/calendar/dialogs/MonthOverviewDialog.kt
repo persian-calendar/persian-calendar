@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getMainCalendar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
@@ -37,7 +38,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         val records = ArrayList<MonthOverviewRecord>()
 
-        val mainCalendar = Utils.getMainCalendar()
+        val mainCalendar = getMainCalendar()
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val monthLength = Utils.getMonthLength(mainCalendar, date.year, date.month).toLong()
         val deviceEvents = Utils.readMonthDeviceEvents(context, baseJdn)

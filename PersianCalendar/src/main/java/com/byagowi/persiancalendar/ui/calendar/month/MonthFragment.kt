@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import java.util.*
 import javax.inject.Inject
@@ -55,11 +56,11 @@ class MonthFragment : DaggerFragment() {
 
 
         fragmentMonthBinding.monthDays.layoutManager = GridLayoutManager(mainActivityDependency.mainActivity,
-                if (Utils.isWeekOfYearEnabled()) 8 else 7)
+                if (isWeekOfYearEnabled()) 8 else 7)
         ///////
         ///////
         ///////
-        val mainCalendar = Utils.getMainCalendar()
+        val mainCalendar = getMainCalendar()
         val days = ArrayList<DayItem>()
 
         val date = getDateFromOffset(mainCalendar, offset)

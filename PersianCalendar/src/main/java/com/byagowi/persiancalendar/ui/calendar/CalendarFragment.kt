@@ -169,13 +169,13 @@ class CalendarFragment : DaggerFragment() {
             tabsViewPager.setCurrentItem(lastTab, false)
         }
 
-        val today = Utils.getTodayOfCalendar(Utils.getMainCalendar())
+        val today = Utils.getTodayOfCalendar(getMainCalendar())
         mainActivityDependency.mainActivity.setTitleAndSubtitle(Utils.getMonthName(today),
                 Utils.formatNumber(today.year))
 
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
             mLastSelectedJdn = jdn
-            mCalendarsView.showCalendars(mLastSelectedJdn, Utils.getMainCalendar(), getEnabledCalendarTypes())
+            mCalendarsView.showCalendars(mLastSelectedJdn, getMainCalendar(), getEnabledCalendarTypes())
             val isToday = Utils.getTodayJdn() == mLastSelectedJdn
             setOwghat(jdn, isToday)
             showEvent(jdn, isToday)
@@ -206,7 +206,7 @@ class CalendarFragment : DaggerFragment() {
                         Intent(Intent.ACTION_INSERT)
                                 .setData(CalendarContract.Events.CONTENT_URI)
                                 .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
-                                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                                        Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                         time.timeInMillis)
                                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -224,7 +224,7 @@ class CalendarFragment : DaggerFragment() {
         val activity = mainActivityDependency.mainActivity
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-            if (Utils.isShowDeviceCalendarEvents()) {
+            if (isShowDeviceCalendarEvents()) {
                 sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
@@ -462,7 +462,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
-        val mainCalendar = Utils.getMainCalendar()
+        val mainCalendar = getMainCalendar()
         val today = Utils.getTodayOfCalendar(mainCalendar)
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
         return (today.year - date.year) * 12 + today.month - date.month
@@ -543,7 +543,7 @@ class CalendarFragment : DaggerFragment() {
             R.id.shift_work -> ShiftWorkDialog.newInstance(mLastSelectedJdn).show(childFragmentManager,
                     ShiftWorkDialog::class.java.name)
             R.id.month_overview -> {
-                val visibleMonthJdn = MonthFragment.getDateFromOffset(Utils.getMainCalendar(),
+                val visibleMonthJdn = MonthFragment.getDateFromOffset(getMainCalendar(),
                         mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.currentItem)).toJdn()
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(childFragmentManager,
                         MonthOverviewDialog::class.java.name)

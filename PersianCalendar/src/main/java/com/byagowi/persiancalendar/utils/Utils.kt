@@ -75,7 +75,7 @@ var weekEnds = booleanArrayOf()
 @kotlin.jvm.JvmField
 var showDeviceCalendarEvents: Boolean = false
 @kotlin.jvm.JvmField
-var whatToShowOnWidgets: Set<String>? = emptySet()
+var whatToShowOnWidgets: Set<String> = emptySet()
 @kotlin.jvm.JvmField
 var astronomicalFeaturesEnabled: Boolean = false
 @kotlin.jvm.JvmField

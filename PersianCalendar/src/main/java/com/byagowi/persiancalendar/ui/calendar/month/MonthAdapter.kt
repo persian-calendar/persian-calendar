@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.entities.AbstractEvent
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 
 class MonthAdapter internal constructor(mainActivityDependency: MainActivityDependency,
                                         private val calendarFragmentDependency: CalendarFragmentDependency,
@@ -33,7 +33,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
     init {
         this.context = mainActivityDependency.mainActivity
         initializeMonthEvents(context)
-        isArabicDigit = Utils.isArabicDigitSelected()
+        isArabicDigit = isArabicDigitSelected()
 
         layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -42,7 +42,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
     }
 
     internal fun initializeMonthEvents(context: Context?) {
-        if (Utils.isShowDeviceCalendarEvents() && context != null) {
+        if (isShowDeviceCalendarEvents() && context != null) {
             monthEvents = Utils.readMonthDeviceEvents(context, days[0].jdn)
         }
     }
@@ -55,7 +55,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
         if (dayOfMonth == -1) return
 
         selectedDay = dayOfMonth + 6 + startingDayOfWeek
-        if (Utils.isWeekOfYearEnabled()) {
+        if (isWeekOfYearEnabled()) {
             selectedDay += selectedDay / 7 + 1
         }
 
@@ -80,7 +80,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int =
-            7 * if (Utils.isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
+            7 * if (isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
 
     inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
         init {
@@ -113,7 +113,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
             var position = position
             val originalPosition = position
             val itemDayView = itemView as ItemDayView
-            if (Utils.isWeekOfYearEnabled()) {
+            if (isWeekOfYearEnabled()) {
                 if (position % 8 == 0) {
                     val row = position / 8
                     if (row in 1..weeksCount) {
@@ -150,7 +150,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                 if (position - 7 - startingDayOfWeek >= 0) {
                     val day = days[position - 7 - startingDayOfWeek]
                     val events = Utils.getEvents(day.jdn, monthEvents)
-                    val isHoliday = Utils.isWeekEnd(day.dayOfWeek) || Utils.hasAnyHolidays(events)
+                    val isHoliday = isWeekEnd(day.dayOfWeek) || Utils.hasAnyHolidays(events)
 
                     itemDayView.setDayOfMonthItem(day.isToday, originalPosition == selectedDay,
                             events.size > 0, hasDeviceEvents(events), isHoliday,

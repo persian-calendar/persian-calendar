@@ -53,7 +53,7 @@ object UpdateUtils {
         Log.d("UpdateUtils", "update")
         Utils.applyAppLanguage(context)
         val calendar = Utils.makeCalendarFromDate(Date())
-        val mainCalendar = Utils.getMainCalendar()
+        val mainCalendar = getMainCalendar()
         val date = Utils.getTodayOfCalendar(mainCalendar)
         val jdn = date.toJdn()
 
@@ -113,7 +113,7 @@ object UpdateUtils {
         if (nextOwghatId != 0) {
             owghat = context.getString(nextOwghatId) + ": " +
                     Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
-            if (Utils.isShownOnWidgets("owghat_location")) {
+            if (isShownOnWidgets("owghat_location")) {
                 val cityName = Utils.getCityName(context, false)
                 if (!TextUtils.isEmpty(cityName)) {
                     owghat = "$owghat ($cityName)"
@@ -122,14 +122,14 @@ object UpdateUtils {
         }
         val events = Utils.getEvents(jdn, deviceCalendarEvents)
 
-        val enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
+        val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
         val isCenterAligned = Utils.isCenterAlignWidgets()
 
         if (manager.getAppWidgetIds(widget4x1).isNotEmpty() || manager.getAppWidgetIds(widget2x2).isNotEmpty()) {
             val remoteViews4: RemoteViews
             val remoteViews2: RemoteViews
             if (enableClock) {
-                if (!Utils.isIranTime()) {
+                if (!isIranTime()) {
                     remoteViews4 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock)
                     remoteViews2 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock)
                 } else {
@@ -154,14 +154,14 @@ object UpdateUtils {
 
                 if (enableClock) {
                     text2 = title
-                    if (Utils.isIranTime()) {
+                    if (isIranTime()) {
                         text3 = "(" + context.getString(R.string.iran_time) + ")"
                     }
                 } else {
                     remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
                     text2 = mainDateString
                 }
-                if (Utils.isShownOnWidgets("other_calendars")) {
+                if (isShownOnWidgets("other_calendars")) {
                     text2 += getSpacedComma() + subtitle
                 }
 
@@ -200,21 +200,21 @@ object UpdateUtils {
                 }
 
                 val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
-                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
+                if (isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
                     remoteViews2.setTextViewText(R.id.event_2x2, nonHolidays)
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.VISIBLE)
                 } else {
                     remoteViews2.setViewVisibility(R.id.event_2x2, View.GONE)
                 }
 
-                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
+                if (isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
                     remoteViews2.setTextViewText(R.id.owghat_2x2, owghat)
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
                 } else {
                     remoteViews2.setViewVisibility(R.id.owghat_2x2, View.GONE)
                 }
 
-                if (Utils.isShownOnWidgets("other_calendars")) {
+                if (isShownOnWidgets("other_calendars")) {
                     text2 = text2 + "\n" + subtitle + "\n" +
                             AstronomicalUtils.getZodiacInfo(context, jdn, true)
                 }
@@ -228,7 +228,7 @@ object UpdateUtils {
         //region Widget 4x2
         if (manager.getAppWidgetIds(widget4x2).isNotEmpty()) {
             val remoteViews4x2: RemoteViews = if (enableClock) {
-                if (!Utils.isIranTime()) {
+                if (!isIranTime()) {
                     RemoteViews(context.packageName, R.layout.widget4x2_clock)
                 } else {
                     RemoteViews(context.packageName, R.layout.widget4x2_clock_iran)
@@ -247,7 +247,7 @@ object UpdateUtils {
             else
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
-            if (Utils.isShownOnWidgets("other_calendars")) {
+            if (isShownOnWidgets("other_calendars")) {
                 text2 = text2 + "\n" + Utils.dateStringOfOtherCalendars(jdn, "\n")
             }
 
@@ -313,7 +313,7 @@ object UpdateUtils {
             }
         }
 
-        if (Utils.isNotifyDate()) {
+        if (isNotifyDate()) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val importance = NotificationManager.IMPORTANCE_LOW
@@ -381,13 +381,13 @@ object UpdateUtils {
                     bcv.setViewVisibility(R.id.holidays, View.GONE)
                 }
                 val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
-                if (Utils.isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
+                if (isShownOnWidgets("non_holiday_events") && !TextUtils.isEmpty(nonHolidays)) {
                     bcv.setTextViewText(R.id.nonholidays, nonHolidays.trim { it <= ' ' })
                 } else {
                     bcv.setViewVisibility(R.id.nonholidays, View.GONE)
                 }
 
-                if (Utils.isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
+                if (isShownOnWidgets("owghat") && !TextUtils.isEmpty(owghat)) {
                     bcv.setTextViewText(R.id.owghat, owghat)
                 } else {
                     bcv.setViewVisibility(R.id.owghat, View.GONE)

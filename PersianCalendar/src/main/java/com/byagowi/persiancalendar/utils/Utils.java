@@ -264,8 +264,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-
-
     static public List<CalendarType> getOrderedCalendarTypes() {
         List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
 
@@ -297,38 +295,6 @@ public class Utils {
         }
 
         return result;
-    }
-
-    static boolean isShownOnWidgets(String infoType) {
-        return whatToShowOnWidgets.contains(infoType);
-    }
-
-    public static boolean isShowDeviceCalendarEvents() {
-        return showDeviceCalendarEvents;
-    }
-
-    public static boolean isWeekEnd(int dayOfWeek) {
-        return weekEnds[dayOfWeek];
-    }
-
-    static public boolean isIranTime() {
-        return iranTime;
-    }
-
-    static public boolean isArabicDigitSelected() {
-        return preferredDigits == ARABIC_DIGITS;
-    }
-
-    static boolean isWidgetClock() {
-        return widgetClock;
-    }
-
-    static boolean isNotifyDate() {
-        return notifyDate;
-    }
-
-    static public boolean isWeekOfYearEnabled() {
-        return showWeekOfYear;
     }
 
     static public int getAthanVolume(@NonNull Context context) {
@@ -376,10 +342,6 @@ public class Utils {
 
     static String getSelectedWidgetTextColor() {
         return selectedWidgetTextColor;
-    }
-
-    static public CalendarType getMainCalendar() {
-        return mainCalendar;
     }
 
     @StringRes

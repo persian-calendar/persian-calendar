@@ -22,6 +22,45 @@ import com.google.android.material.circularreveal.CircularRevealWidget
 import java.util.ArrayList
 import kotlin.math.sqrt
 
+@StyleRes
+fun getAppTheme(): Int = appTheme
+
+fun getMaxSupportedYear(): Int = 1398
+
+fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
+
+fun getAmString(): String = sAM
+
+fun getPmString(): String = sPM
+
+fun getShiftWorkStartingJdn(): Long = sShiftWorkStartingJdn
+
+fun getShiftWorkRecurs(): Boolean = sShiftWorkRecurs
+
+fun getShiftWorkTitles(): Map<String, String> = sShiftWorkTitles
+
+fun getMainCalendar(): CalendarType = mainCalendar
+
+fun isShowDeviceCalendarEvents(): Boolean = showDeviceCalendarEvents
+
+fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
+
+fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
+
+fun isIranTime(): Boolean = iranTime
+
+fun isAstronomicalFeaturesEnabled(): Boolean = astronomicalFeaturesEnabled
+
+fun isArabicDigitSelected(): Boolean = preferredDigits.contentEquals(ARABIC_DIGITS)
+
+fun isWidgetClock(): Boolean = widgetClock
+
+fun isNotifyDate(): Boolean = notifyDate
+
+fun isWeekOfYearEnabled(): Boolean = showWeekOfYear
+
+fun isNightModeEnabled(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
 // https://stackoverflow.com/a/52557989
 fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : CircularRevealWidget {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -46,24 +85,6 @@ fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : Ci
     }
 }
 
-//    public static List<Reminder> getReminderDetails() {
-//        return sReminderDetails;
-//    }
-
-fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
-
-fun getAmString(): String = sAM
-
-fun getPmString(): String = sPM
-
-fun getShiftWorkStartingJdn(): Long = sShiftWorkStartingJdn
-
-fun getShiftWorkRecurs(): Boolean = sShiftWorkRecurs
-
-fun getShiftWorkTitles(): Map<String, String> = sShiftWorkTitles
-
-fun getMaxSupportedYear(): Int = 1398
-
 fun getCalendarNameAbbr(date: AbstractDate): String {
     if (calendarTypesTitleAbbr.size < 3) return ""
     // It should match with calendar_type array
@@ -75,17 +96,12 @@ fun getCalendarNameAbbr(date: AbstractDate): String {
     }
 }
 
-fun isNightModeEnabled(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
 fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String? {
     var result = prefs.getString(PREF_THEME, "")
     if (TextUtils.isEmpty(result))
         result = if (isNightModeEnabled(context)) DARK_THEME else LIGHT_THEME
     return result
 }
-
-@StyleRes
-fun getAppTheme(): Int = appTheme
 
 fun getIslamicOffset(context: Context): Int {
     return try {
@@ -96,11 +112,15 @@ fun getIslamicOffset(context: Context): Int {
         0
     }
 }
-fun isAstronomicalFeaturesEnabled(): Boolean = astronomicalFeaturesEnabled
 
 fun getEnabledCalendarTypes(): List<CalendarType> {
     val result = ArrayList<CalendarType>()
-    result.add(Utils.getMainCalendar())
+    result.add(getMainCalendar())
     result.addAll(listOf(*otherCalendars))
     return result
 }
+
+
+//    public static List<Reminder> getReminderDetails() {
+//        return sReminderDetails;
+//    }
