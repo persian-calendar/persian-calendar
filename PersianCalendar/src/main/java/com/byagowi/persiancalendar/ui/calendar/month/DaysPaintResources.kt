@@ -7,8 +7,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 
 class DaysPaintResources(activity: Activity) {
     @StyleRes
@@ -101,6 +101,6 @@ class DaysPaintResources(activity: Activity) {
         arabicDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
         persianDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
-        textPaint.typeface = TypefaceUtils.getCalendarFragmentFont(activity)
+        textPaint.typeface = getCalendarFragmentFont(activity)
     }
 }

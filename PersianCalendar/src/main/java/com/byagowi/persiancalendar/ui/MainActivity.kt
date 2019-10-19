@@ -91,7 +91,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         Utils.initUtils(this)
 
-        TypefaceUtils.overrideFont("SERIF", TypefaceUtils.getAppFont(applicationContext))
+        overrideFont("SERIF", getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 

@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
+import com.byagowi.persiancalendar.utils.isCustomFontEnabled
 import java.util.*
 
 class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
-    private val mCalendarFont: Typeface = TypefaceUtils.getCalendarFragmentFont(context)
+    private val mCalendarFont: Typeface = getCalendarFragmentFont(context)
     private var mCalendars: List<CalendarType> = ArrayList()
     internal var isExpanded = false
         set(expanded) {
@@ -46,7 +47,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
 
         init {
 
-            val applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled
+            val applyLineMultiplier = !isCustomFontEnabled
 
             binding.monthYear.typeface = mCalendarFont
             binding.day.typeface = mCalendarFont
