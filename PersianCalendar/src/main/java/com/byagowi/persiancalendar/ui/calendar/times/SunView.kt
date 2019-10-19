@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimes
 import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getAppFont
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos

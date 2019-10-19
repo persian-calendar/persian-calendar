@@ -416,14 +416,8 @@ fun update(context: Context, updateDate: Boolean) {
                 Log.e("UpdateUtils", "failed to start service with the notification", e)
             }
 
-            }
-        } else {
-            if (goForWorker()) {
-                val notificationManager = context.getSystemService<NotificationManager>()
-                notificationManager?.cancel(NOTIFICATION_ID)
-            }
         }
-    } else if (Utils.goForWorker()) {
+    } else if (goForWorker()) {
         context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
     }
 }
