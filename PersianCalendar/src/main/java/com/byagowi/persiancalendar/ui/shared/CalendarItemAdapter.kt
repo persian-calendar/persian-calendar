@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.TypefaceUtils
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
 class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
-    private val mCalendarFont: Typeface = TypefaceUtils.getCalendarFragmentFont(context)
+    private val mCalendarFont: Typeface = getCalendarFragmentFont(context)
     private var mCalendars: List<CalendarType> = ArrayList()
     internal var isExpanded = false
         set(expanded) {
@@ -46,7 +44,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
 
         init {
 
-            val applyLineMultiplier = !TypefaceUtils.isCustomFontEnabled
+            val applyLineMultiplier = !isCustomFontEnabled
 
             binding.monthYear.typeface = mCalendarFont
             binding.day.typeface = mCalendarFont
@@ -59,16 +57,16 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
         fun bind(position: Int) {
             val date = Utils.getDateFromJdnOfCalendar(mCalendars[position], mJdn)
 
-            binding.linear.text = Utils.toLinearDate(date)
-            binding.linear.contentDescription = Utils.toLinearDate(date)
-            val firstCalendarString = Utils.formatDate(date)
+            binding.linear.text = toLinearDate(date)
+            binding.linear.contentDescription = toLinearDate(date)
+            val firstCalendarString = formatDate(date)
             binding.container.contentDescription = firstCalendarString
             binding.day.contentDescription = ""
-            binding.day.text = Utils.formatNumber(date.dayOfMonth)
+            binding.day.text = formatNumber(date.dayOfMonth)
             binding.monthYear.contentDescription = ""
             binding.monthYear.text = String.format("%s\n%s",
                     Utils.getMonthName(date),
-                    Utils.formatNumber(date.year))
+                    formatNumber(date.year))
         }
 
         override fun onClick(view: View?) {

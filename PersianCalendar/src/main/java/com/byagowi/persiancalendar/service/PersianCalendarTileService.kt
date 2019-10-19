@@ -9,6 +9,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getMainCalendar
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
@@ -26,7 +27,7 @@ class PersianCalendarTileService : TileService() {
 
     override fun onStartListening() {
         val tile = qsTile ?: return
-        val today = Utils.getTodayOfCalendar(Utils.getMainCalendar())
+        val today = Utils.getTodayOfCalendar(getMainCalendar())
 
         tile.icon = Icon.createWithResource(this,
                 Utils.getDayIconResource(today.dayOfMonth))

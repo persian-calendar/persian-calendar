@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
 
 class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, DayPickerView {
@@ -93,7 +94,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
         val startingYearOnYearSpinner = date.year - YEARS / 2
         for (i in 0 until YEARS) {
             years.add(StringWithValueItem(i + startingYearOnYearSpinner,
-                    Utils.formatNumber(i + startingYearOnYearSpinner)))
+                    formatNumber(i + startingYearOnYearSpinner)))
         }
         binding.yearSpinner.adapter = ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, years)
@@ -105,7 +106,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
         val monthsTitle = Utils.monthsNamesOfCalendar(date)
         for (i in 1..12) {
             months.add(StringWithValueItem(i,
-                    monthsTitle[i - 1] + " / " + Utils.formatNumber(i)))
+                    monthsTitle[i - 1] + " / " + formatNumber(i)))
         }
         binding.monthSpinner.adapter = ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, months)
@@ -115,7 +116,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
         // days spinner init.
         val days = ArrayList<StringWithValueItem>()
         for (i in 1..31) {
-            days.add(StringWithValueItem(i, Utils.formatNumber(i)))
+            days.add(StringWithValueItem(i, formatNumber(i)))
         }
         binding.daySpinner.adapter = ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, days)

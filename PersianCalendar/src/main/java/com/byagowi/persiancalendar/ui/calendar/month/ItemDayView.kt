@@ -11,6 +11,7 @@ import android.view.View
 
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.formatNumber
 
 class ItemDayView : View {
     private lateinit var resource: DaysPaintResources
@@ -157,7 +158,7 @@ class ItemDayView : View {
     fun setDayOfMonthItem(isToday: Boolean, isSelected: Boolean,
                           hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
                           textSize: Int, jdn: Long, dayOfMonth: Int, header: String) {
-        val dayOfMonthString = Utils.formatNumber(dayOfMonth)
+        val dayOfMonthString = formatNumber(dayOfMonth)
         setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
                 isHoliday, textSize, jdn, dayOfMonth, true, header)
     }

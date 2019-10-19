@@ -11,7 +11,7 @@ import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.*
 
 class WidgetConfigurationActivity : AppCompatActivity() {
 
@@ -31,7 +31,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(this, prefs)))
+        setTheme(Utils.getThemeFromName(getThemeFromPreference(this, prefs)))
 
         Utils.applyAppLanguage(this)
         super.onCreate(savedInstanceState)

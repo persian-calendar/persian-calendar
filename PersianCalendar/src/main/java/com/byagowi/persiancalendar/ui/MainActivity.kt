@@ -82,7 +82,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(Utils.getThemeFromName(Utils.getThemeFromPreference(this, prefs)))
+        setTheme(Utils.getThemeFromName(getThemeFromPreference(this, prefs)))
 
         Utils.applyAppLanguage(this)
 
@@ -91,7 +91,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         Utils.initUtils(this)
 
-        TypefaceUtils.overrideFont("SERIF", TypefaceUtils.getAppFont(applicationContext))
+        overrideFont("SERIF", getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 
@@ -160,7 +160,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         prefs.registerOnSharedPreferenceChangeListener(this)
 
-        if (Utils.isShowDeviceCalendarEvents()) {
+        if (isShowDeviceCalendarEvents()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                 Utils.askForCalendarPermission(this)
             }
@@ -203,8 +203,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         creationDateJdn = Utils.getTodayJdn()
 
-        if (Utils.getMainCalendar() == CalendarType.SHAMSI &&
-                Utils.isIranHolidaysEnabled() &&
+        if (getMainCalendar() == CalendarType.SHAMSI &&
+                isIranHolidaysEnabled() &&
                 Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)

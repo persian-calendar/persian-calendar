@@ -21,7 +21,7 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean
 }
 
 fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean): String {
-    if (!Utils.isAstronomicalFeaturesEnabled()) return ""
+    if (!isAstronomicalFeaturesEnabled()) return ""
 
     val persianDate = PersianDate(jdn)
     val islamicDate = IslamicDate(jdn)

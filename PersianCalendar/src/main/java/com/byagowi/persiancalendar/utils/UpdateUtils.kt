@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Utils.getClockFromStringId
-import com.byagowi.persiancalendar.utils.Utils.getSpacedComma
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -50,7 +49,7 @@ fun update(context: Context, updateDate: Boolean) {
     Log.d("UpdateUtils", "update")
     Utils.applyAppLanguage(context)
     val calendar = Utils.makeCalendarFromDate(Date())
-    val mainCalendar = Utils.getMainCalendar()
+    val mainCalendar = getMainCalendar()
     val date = Utils.getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
@@ -62,9 +61,8 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     //
     //
-    val manager = context.getSystemService<AppWidgetManager>()
-    manager ?: return
-    val colorInt = Utils.getSelectedWidgetTextColor()
+    val manager = context.getSystemService<AppWidgetManager>() ?: return
+    val colorInt = getSelectedWidgetTextColor()
     val color = Color.parseColor(colorInt)
 
     // en-US is our only real LTR language for now
@@ -81,7 +79,7 @@ fun update(context: Context, updateDate: Boolean) {
             setTextColor(R.id.textPlaceholder1_1x1, color)
             setTextColor(R.id.textPlaceholder2_1x1, color)
             setTextViewText(R.id.textPlaceholder1_1x1,
-                    Utils.formatNumber(date.dayOfMonth))
+                    formatNumber(date.dayOfMonth))
             setTextViewText(R.id.textPlaceholder2_1x1,
                     Utils.getMonthName(date))
             setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
@@ -113,7 +111,7 @@ fun update(context: Context, updateDate: Boolean) {
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
-        if (Utils.isShownOnWidgets("owghat_location")) {
+        if (isShownOnWidgets("owghat_location")) {
             val cityName = Utils.getCityName(context, false)
             if (cityName.isNotEmpty()) {
                 owghat = "$owghat ($cityName)"
@@ -122,14 +120,14 @@ fun update(context: Context, updateDate: Boolean) {
     }
     val events = Utils.getEvents(jdn, deviceCalendarEvents)
 
-    val enableClock = Utils.isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
-    val isCenterAligned = Utils.isCenterAlignWidgets()
+    val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
+    val isCenterAligned = isCenterAlignWidgets()
 
     if (manager.getAppWidgetIds(widget4x1)?.isNotEmpty() == true || manager.getAppWidgetIds(widget2x2)?.isNotEmpty() == true) {
         val remoteViews4: RemoteViews
         val remoteViews2: RemoteViews
         if (enableClock) {
-            if (!Utils.isIranTime()) {
+            if (!isIranTime()) {
                 remoteViews4 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock)
                 remoteViews2 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock)
             } else {
@@ -141,7 +139,7 @@ fun update(context: Context, updateDate: Boolean) {
             remoteViews2 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget2x2_center else R.layout.widget2x2)
         }
 
-        val mainDateString = Utils.formatDate(date)
+        val mainDateString = formatDate(date)
 
         remoteViews4.run {
             // Widget 4x1
@@ -154,14 +152,14 @@ fun update(context: Context, updateDate: Boolean) {
 
             if (enableClock) {
                 text2 = title
-                if (Utils.isIranTime()) {
+                if (isIranTime()) {
                     text3 = "(" + context.getString(R.string.iran_time) + ")"
                 }
             } else {
                 remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
                 text2 = mainDateString
             }
-            if (Utils.isShownOnWidgets("other_calendars")) {
+            if (isShownOnWidgets("other_calendars")) {
                 text2 += getSpacedComma() + subtitle
             }
 
@@ -189,7 +187,7 @@ fun update(context: Context, updateDate: Boolean) {
             val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)
             if (holidays.isNotEmpty()) {
                 setTextViewText(R.id.holiday_2x2, holidays)
-                if (Utils.isTalkBackEnabled()) {
+                if (isTalkBackEnabled()) {
                     setContentDescription(R.id.holiday_2x2,
                             context.getString(R.string.holiday_reason) + " " +
                                     holidays)
@@ -200,21 +198,21 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
             val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
-            if (Utils.isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
+            if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
                 setTextViewText(R.id.event_2x2, nonHolidays)
                 setViewVisibility(R.id.event_2x2, View.VISIBLE)
             } else {
                 setViewVisibility(R.id.event_2x2, View.GONE)
             }
 
-            if (Utils.isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
+            if (isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
                 setTextViewText(R.id.owghat_2x2, owghat)
                 setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
             } else {
                 setViewVisibility(R.id.owghat_2x2, View.GONE)
             }
 
-            if (Utils.isShownOnWidgets("other_calendars")) {
+            if (isShownOnWidgets("other_calendars")) {
                 text2 = text2 + "\n" + subtitle + "\n" + getZodiacInfo(context, jdn, true)
             }
             setTextViewText(R.id.date_2x2, text2)
@@ -227,7 +225,7 @@ fun update(context: Context, updateDate: Boolean) {
     //region Widget 4x2
     if (manager.getAppWidgetIds(widget4x2)?.isNotEmpty() == true) {
         val remoteViews4x2: RemoteViews = if (enableClock) {
-            if (!Utils.isIranTime()) {
+            if (!isIranTime()) {
                 RemoteViews(context.packageName, R.layout.widget4x2_clock)
             } else {
                 RemoteViews(context.packageName, R.layout.widget4x2_clock_iran)
@@ -241,13 +239,13 @@ fun update(context: Context, updateDate: Boolean) {
             setTextColor(R.id.textPlaceholder1_4x2, color)
             setTextColor(R.id.textPlaceholder2_4x2, color)
 
-            var text2 = Utils.formatDate(date)
+            var text2 = formatDate(date)
             if (enableClock)
                 text2 = Utils.getWeekDayName(date) + "\n" + text2
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
-            if (Utils.isShownOnWidgets("other_calendars")) {
+            if (isShownOnWidgets("other_calendars")) {
                 text2 = text2 + "\n" + Utils.dateStringOfOtherCalendars(jdn, "\n")
             }
 
@@ -275,9 +273,9 @@ fun update(context: Context, updateDate: Boolean) {
                 val min = (MINUTES.toMinutes(difference.toLong()) % 60).toInt()
 
                 val remainingTime = when {
-                    hrs == 0 -> String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min))
-                    min == 0 -> String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs))
-                    else -> String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min))
+                    hrs == 0 -> String.format(context.getString(R.string.n_minutes), formatNumber(min))
+                    min == 0 -> String.format(context.getString(R.string.n_hours), formatNumber(hrs))
+                    else -> String.format(context.getString(R.string.n_minutes_and_hours), formatNumber(hrs), formatNumber(min))
                 }
 
                 setTextViewText(R.id.textPlaceholder2_4x2,
@@ -313,7 +311,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
     }
 
-    if (Utils.isNotifyDate()) {
+    if (isNotifyDate()) {
         val notificationManager = context.getSystemService<NotificationManager>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
@@ -324,7 +322,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
 
         // Don't remove this condition checking ever
-        if (Utils.isTalkBackEnabled()) {
+        if (isTalkBackEnabled()) {
             // Don't use isToday, per a feedback
             subtitle = Utils.getA11yDaySummary(context, jdn, false,
                     deviceCalendarEvents,
@@ -341,7 +339,7 @@ fun update(context: Context, updateDate: Boolean) {
                 .setOngoing(true)
                 .setWhen(0)
                 .setContentIntent(launchAppPendingIntent)
-                .setVisibility(if (Utils.isNotifyDateOnLockScreen())
+                .setVisibility(if (isNotifyDateOnLockScreen())
                     NotificationCompat.VISIBILITY_PUBLIC
                 else
                     NotificationCompat.VISIBILITY_SECRET)
@@ -351,9 +349,9 @@ fun update(context: Context, updateDate: Boolean) {
                 .setContentText(subtitle)
 
         // Night mode doesn't our custom notification in Samsung, let's detect it
-        val isSamsungNightMode = Build.BRAND == "samsung" && Utils.isNightModeEnabled(context)
+        val isSamsungNightMode = Build.BRAND == "samsung" && isNightModeEnabled(context)
 
-        if (!Utils.isTalkBackEnabled() && !isSamsungNightMode &&
+        if (!isTalkBackEnabled() && !isSamsungNightMode &&
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
             val cv = RemoteViews(context.packageName, if (isRTL) {
                 R.layout.custom_notification
@@ -386,13 +384,13 @@ fun update(context: Context, updateDate: Boolean) {
                 }
 
                 val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
-                if (Utils.isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
+                if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
                     setTextViewText(R.id.nonholidays, nonHolidays.trim { it <= ' ' })
                 } else {
                     setViewVisibility(R.id.nonholidays, View.GONE)
                 }
 
-                if (Utils.isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
+                if (isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
                     setTextViewText(R.id.owghat, owghat)
                 } else {
                     setViewVisibility(R.id.owghat, View.GONE)
@@ -409,7 +407,7 @@ fun update(context: Context, updateDate: Boolean) {
             builder = builder.setWhen(Calendar.getInstance().timeInMillis)
         }
 
-        if (Utils.goForWorker()) {
+        if (goForWorker()) {
             notificationManager?.notify(NOTIFICATION_ID, builder.build())
         } else {
             try {
@@ -419,7 +417,7 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
         }
-    } else if (Utils.goForWorker()) {
+    } else if (goForWorker()) {
         context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
     }
 }

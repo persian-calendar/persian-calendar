@@ -17,8 +17,9 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimes
-import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getAppFont
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos
@@ -153,7 +154,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         }
 
         mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mPaint.typeface = TypefaceUtils.getAppFont(context)
+        mPaint.typeface = getAppFont(context)
 
         mSunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mSunPaint.color = sunColor
@@ -373,14 +374,14 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
         val remaining = Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
         dayLengthString = String.format(context.getString(R.string.length_of_day),
-                Utils.formatNumber(dayLength.hour),
-                Utils.formatNumber(dayLength.minute))
+                formatNumber(dayLength.hour),
+                formatNumber(dayLength.minute))
         remainingString = if (remaining.toInt() == 0) {
             ""
         } else {
             String.format(context.getString(R.string.remaining_daylight),
-                    Utils.formatNumber(remaining.hour),
-                    Utils.formatNumber(remaining.minute))
+                    formatNumber(remaining.hour),
+                    formatNumber(remaining.minute))
         }
 
         argbEvaluator = ArgbEvaluator()

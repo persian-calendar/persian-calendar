@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.utils.update
 
 abstract class WidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (context == null) return
+        context ?: return
         Utils.startEitherServiceOrWorker(context)
         update(context, false)
     }

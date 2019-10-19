@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.getZodiacInfo
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 
@@ -92,7 +92,7 @@ class CalendarsView : FrameLayout {
         val diffDays = abs(Utils.getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
-            if (Utils.isIranTime()) {
+            if (isIranTime()) {
                 mBinding.weekDayName.text = String.format("%s (%s)",
                         mBinding.weekDayName.text,
                         context.getString(R.string.iran_time))
@@ -109,10 +109,10 @@ class CalendarsView : FrameLayout {
             val monthDiff = civilOffset.month - 1
             val dayOfMonthDiff = civilOffset.dayOfMonth - 1
             var text = String.format(context.getString(R.string.date_diff_text),
-                    Utils.formatNumber(diffDays.toInt()),
-                    Utils.formatNumber(yearDiff),
-                    Utils.formatNumber(monthDiff),
-                    Utils.formatNumber(dayOfMonthDiff))
+                    formatNumber(diffDays.toInt()),
+                    formatNumber(yearDiff),
+                    formatNumber(monthDiff),
+                    formatNumber(dayOfMonthDiff))
             if (diffDays <= 30) {
                 text = text.split("\\(".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
             }
@@ -131,22 +131,22 @@ class CalendarsView : FrameLayout {
             val weeksCount = Utils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
             val startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
-                    Utils.formatNumber((jdn - startOfYearJdn).toInt()),
-                    Utils.formatNumber(currentWeek),
-                    Utils.formatNumber(mainDate.month))
+                    formatNumber((jdn - startOfYearJdn).toInt()),
+                    formatNumber(currentWeek),
+                    formatNumber(mainDate.month))
             val endOfYearText = String.format(context.getString(R.string.end_of_year_diff),
-                    Utils.formatNumber((endOfYearJdn - jdn).toInt()),
-                    Utils.formatNumber(weeksCount - currentWeek),
-                    Utils.formatNumber(12 - mainDate.month))
+                    formatNumber((endOfYearJdn - jdn).toInt()),
+                    formatNumber(weeksCount - currentWeek),
+                    formatNumber(12 - mainDate.month))
             mBinding.startAndEndOfYearDiff.text = String.format("%s\n%s", startOfYearText, endOfYearText)
 
             var equinox = ""
-            if (Utils.getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
+            if (getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
                 if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                     val addition = if (mainDate.month == 12) 1 else 0
                     val springEquinox = Utils.getSpringEquinox(mainDate.toJdn())
                     equinox = String.format(context.getString(R.string.spring_equinox),
-                            Utils.formatNumber(mainDate.year + addition),
+                            formatNumber(mainDate.year + addition),
                             Utils.getFormattedClock(
                                     Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
                                             springEquinox.get(Calendar.MINUTE)), true))

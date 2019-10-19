@@ -28,6 +28,8 @@ import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getShiftWorks
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*
 import javax.inject.Inject
@@ -54,7 +56,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = Utils.getTodayJdn()
 
-        jdn = Utils.getShiftWorkStartingJdn()
+        jdn = getShiftWorkStartingJdn()
         var isFirstSetup = false
         if (jdn == -1L) {
             isFirstSetup = true
@@ -65,7 +67,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 LayoutInflater.from(mainActivity), null, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
 
-        var shiftWorks: List<ShiftWorkRecord> = Utils.getShiftWorks()
+        var shiftWorks: List<ShiftWorkRecord> = getShiftWorks()
         if (shiftWorks.isEmpty())
             shiftWorks = listOf(ShiftWorkRecord("d", 0))
         val shiftWorkItemAdapter = ItemsAdapter(shiftWorks, binding)
@@ -73,17 +75,17 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         binding.description.text = String.format(getString(
                 if (isFirstSetup) R.string.shift_work_starting_date else R.string.shift_work_starting_date_edit),
-                Utils.formatDate(
-                        Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                formatDate(
+                        Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
 
         binding.resetLink.setOnClickListener {
             jdn = selectedJdn
             binding.description.text = String.format(getString(R.string.shift_work_starting_date),
-                    Utils.formatDate(
-                            Utils.getDateFromJdnOfCalendar(Utils.getMainCalendar(), jdn)))
+                    formatDate(
+                            Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
             shiftWorkItemAdapter.reset()
         }
-        binding.recurs.isChecked = Utils.getShiftWorkRecurs()
+        binding.recurs.isChecked = getShiftWorkRecurs()
 
         return AlertDialog.Builder(mainActivity)
                 .setView(binding.root)
@@ -141,7 +143,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             updateShiftWorkResult()
         }
 
-        fun shiftWorkKeyToString(type: String): String = Utils.getShiftWorkTitles()[type] ?: type
+        fun shiftWorkKeyToString(type: String): String = getShiftWorkTitles()[type] ?: type
 
         private fun updateShiftWorkResult() {
             val result = StringBuilder()
@@ -152,9 +154,9 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (first)
                     first = false
                 else
-                    result.append(Utils.getSpacedComma())
+                    result.append(getSpacedComma())
                 result.append(String.format(getString(R.string.shift_work_record_title),
-                        Utils.formatNumber(record.length), shiftWorkKeyToString(record.type)))
+                        formatNumber(record.length), shiftWorkKeyToString(record.type)))
             }
 
             mBinding.result.text = result.toString()
@@ -190,7 +192,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     days.add(StringWithValueItem(i, if (i == 0)
                         getString(R.string.shift_work_days_head)
                     else
-                        Utils.formatNumber(i)))
+                        formatNumber(i)))
                 }
                 mBinding.lengthSpinner.adapter = ArrayAdapter(context,
                         android.R.layout.simple_spinner_dropdown_item, days)
@@ -258,7 +260,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (position < mRows.size) {
                     val shiftWorkRecord = mRows[position]
                     mPosition = position
-                    mBinding.rowNumber.text = String.format("%s:", Utils.formatNumber(position + 1))
+                    mBinding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
                     mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
                     mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
                     mBinding.detail.visibility = View.VISIBLE
