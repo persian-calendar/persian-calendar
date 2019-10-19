@@ -125,6 +125,10 @@ fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
+fun isAscendingAthanVolumeEnabled(context: Context): Boolean = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ASCENDING_ATHAN_VOLUME, true)
+
+fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+
 fun toLinearDate(date: AbstractDate): String = String.format(
     "%s/%s/%s", formatNumber(date.year),
     formatNumber(date.month), formatNumber(date.dayOfMonth)
@@ -564,6 +568,12 @@ fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
             result.add(key)
 
     return result
+}
+
+fun getAthanVolume(context: Context): Int {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 }
 
 //    public static List<Reminder> getReminderDetails() {
