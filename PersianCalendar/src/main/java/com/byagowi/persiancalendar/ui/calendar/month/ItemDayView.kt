@@ -8,10 +8,9 @@ import android.graphics.RectF
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
-
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 
 class ItemDayView : View {
     private lateinit var resource: DaysPaintResources
@@ -123,7 +122,7 @@ class ItemDayView : View {
         }
 
         val xPos = (width - resource.textPaint.measureText(text).toInt()) / 2
-        val textToMeasureHeight = if (isNumber) text else if (Utils.isNonArabicScriptSelected()) "Y" else "شچ"
+        val textToMeasureHeight = if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
         var yPos = (height + bounds.height()) / 2
         yPos += yOffsetToApply

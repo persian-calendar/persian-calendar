@@ -7,7 +7,7 @@ import com.byagowi.persiancalendar.FONT_PATH
 
 // https://gist.github.com/artem-zinnatullin/7749076
 val isCustomFontEnabled: Boolean
-    get() = isArabicDigitSelected() || Utils.isNonArabicScriptSelected()
+    get() = isArabicDigitSelected() || isNonArabicScriptSelected()
 
 /**
  * Using reflection to override default typeface

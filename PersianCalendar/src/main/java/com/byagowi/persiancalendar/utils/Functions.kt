@@ -11,6 +11,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.text.TextUtils
 import android.util.SparseArray
 import android.view.View
 import androidx.annotation.RawRes
@@ -26,6 +27,7 @@ import com.byagowi.persiancalendar.calendar.IslamicDate
 import com.byagowi.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
@@ -138,14 +140,42 @@ fun isNightModeEnabled(context: Context): Boolean =
     context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun formatDate(date: AbstractDate): String =
-    if (numericalDatePreferred)
-        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
-    else
-        String.format(
-            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-            formatNumber(date.dayOfMonth), getMonthName(date),
-            formatNumber(date.year)
-        )
+        if (numericalDatePreferred)
+            (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+        else
+            String.format(if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+                    formatNumber(date.dayOfMonth), getMonthName(date),
+                    formatNumber(date.year))
+
+fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
+
+fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
+
+fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
+        LANG_EN_US, LANG_JA -> true
+        else -> false
+    }
+
+// en-US and ja are our only real LTR locales for now
+fun isLocaleRTL(): Boolean = when (getAppLanguage()) {
+        LANG_EN_US, LANG_JA -> false
+        else -> true
+    }
+
+fun formatNumber(number: Int): String = formatNumber(number.toString())
+
+fun formatNumber(number: String): String {
+    if (preferredDigits.contentEquals(ARABIC_DIGITS))
+        return number
+
+    val result = number.toCharArray()
+    for (i in result.indices) {
+        val c = number[i]
+        if (Character.isDigit(c))
+            result[i] = preferredDigits[Character.getNumericValue(c)]
+    }
+    return String(result)
+}
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)

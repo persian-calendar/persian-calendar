@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.isLocaleRTL
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002

@@ -54,9 +54,9 @@ var selectedWidgetTextColor: String = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 var selectedWidgetBackgroundColor: String = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
 @kotlin.jvm.JvmField
-var calculationMethod: String? = DEFAULT_PRAY_TIME_METHOD
+var calculationMethod: String = DEFAULT_PRAY_TIME_METHOD
 @kotlin.jvm.JvmField
-var language: String? = DEFAULT_APP_LANGUAGE
+var language: String = DEFAULT_APP_LANGUAGE
 @kotlin.jvm.JvmField
 var coordinate: Coordinate? = null
 @kotlin.jvm.JvmField

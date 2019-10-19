@@ -74,7 +74,7 @@ class AboutFragment : DaggerFragment() {
         binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
                 formatNumber(getMaxSupportedYear() - 1),
                 formatNumber(getMaxSupportedYear()))
-        when (Utils.getAppLanguage()) {
+        when (getAppLanguage()) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {
             }

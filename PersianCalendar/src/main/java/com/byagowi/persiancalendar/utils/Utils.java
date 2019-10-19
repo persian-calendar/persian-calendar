@@ -271,35 +271,6 @@ public class Utils {
         return result;
     }
 
-    static public CalculationMethod getCalculationMethod() {
-        return CalculationMethod.valueOf(calculationMethod);
-    }
-
-    static public String getAppLanguage() {
-        return TextUtils.isEmpty(language) ? DEFAULT_APP_LANGUAGE : language;
-    }
-
-    static public boolean isNonArabicScriptSelected() {
-        switch (getAppLanguage()) {
-            case LANG_EN_US:
-            case LANG_JA:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    static public boolean isLocaleRTL() {
-        // en-US and ja are our only real LTR locales for now
-        switch (getAppLanguage()) {
-            case LANG_EN_US:
-            case LANG_JA:
-                return false;
-            default:
-                return true;
-        }
-    }
-
     @StringRes
     static int getNextOwghatTimeId(Clock current, boolean dateHasChanged) {
         if (coordinate == null) return 0;

@@ -380,7 +380,7 @@ class CalendarFragment : DaggerFragment() {
         mCalendar.set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
         val date = mCalendar.time
 
-        val prayTimes = PrayTimesCalculator.calculate(Utils.getCalculationMethod(),
+        val prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(),
                 date, mCoordinate)
         val adapter = mOwghatBinding.timesRecyclerView.adapter
         if (adapter is TimeItemAdapter)
