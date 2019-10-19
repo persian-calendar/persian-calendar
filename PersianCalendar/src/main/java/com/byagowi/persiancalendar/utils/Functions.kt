@@ -555,6 +555,17 @@ fun loadApp(context: Context) {
 
 }
 
+fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
+    val enabledCalendarTypes = getEnabledCalendarTypes()
+
+    val result = ArrayList(enabledCalendarTypes)
+    for (key in CalendarType.values())
+        if (!enabledCalendarTypes.contains(key))
+            result.add(key)
+
+    return result
+}
+
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
 //    }

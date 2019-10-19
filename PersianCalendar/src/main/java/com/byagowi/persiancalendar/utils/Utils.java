@@ -251,19 +251,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    static public List<CalendarType> getOrderedCalendarTypes() {
-        List<CalendarType> enabledCalendarTypes = getEnabledCalendarTypes();
-
-        List<CalendarType> result = new ArrayList<>(enabledCalendarTypes);
-        for (CalendarType key : CalendarType.values()) {
-            if (!enabledCalendarTypes.contains(key)) {
-                result.add(key);
-            }
-        }
-
-        return result;
-    }
-
     static public List<CalendarTypeItem> getOrderedCalendarEntities(@NonNull Context context) {
         applyAppLanguage(context);
 
