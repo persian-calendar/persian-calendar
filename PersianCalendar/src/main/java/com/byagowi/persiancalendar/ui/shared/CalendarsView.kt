@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
@@ -55,12 +54,16 @@ class CalendarsView : FrameLayout {
         mBinding.moreCalendar.visibility = View.GONE
     }
 
-    fun setOnCalendarsViewExpandListener(listener: OnCalendarsViewExpandListener) {
-        mCalendarsViewExpandListener = listener
+    fun setOnCalendarsViewExpandListener(listener: () -> Unit) {
+        mCalendarsViewExpandListener = object : OnCalendarsViewExpandListener {
+            override fun onCalendarsViewExpand() = listener()
+        }
     }
 
-    fun setOnShowHideTodayButton(listener: OnShowHideTodayButton) {
-        mOnShowHideTodayButton = listener
+    fun setOnShowHideTodayButton(listener: (Boolean) -> Unit) {
+        mOnShowHideTodayButton = object : OnShowHideTodayButton {
+            override fun onShowHideTodayButton(show: Boolean) = listener(show)
+        }
     }
 
     fun expand(expanded: Boolean) {
@@ -83,7 +86,7 @@ class CalendarsView : FrameLayout {
         mCalendarItemAdapter.setDate(calendarsToShow, jdn)
         mBinding.weekDayName.text = Utils.getWeekDayName(CivilDate(jdn))
 
-        mBinding.zodiac.text = AstronomicalUtils.getZodiacInfo(context, jdn, true)
+        mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
         mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
 
         val diffDays = abs(Utils.getTodayJdn() - jdn)

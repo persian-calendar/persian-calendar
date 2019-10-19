@@ -91,14 +91,14 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         Utils.initUtils(this)
 
-        TypefaceUtils.overrideFont("SERIF", TypefaceUtils.getAppFont(applicationContext))
+        overrideFont("SERIF", getAppFont(applicationContext))
 
         Utils.startEitherServiceOrWorker(this)
 
         // Doesn't matter apparently
         // oneTimeClockDisablingForAndroid5LE();
-        UpdateUtils.setDeviceCalendarEvents(applicationContext)
-        UpdateUtils.update(applicationContext, false)
+        setDeviceCalendarEvents(applicationContext)
+        update(applicationContext, false)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
@@ -232,7 +232,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (settingHasChanged) { // update when checked menu item is changed
             Utils.initUtils(this)
-            UpdateUtils.update(applicationContext, true)
+            update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
 
@@ -363,7 +363,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         Utils.updateStoredPreference(this)
-        UpdateUtils.update(applicationContext, true)
+        update(applicationContext, true)
 
         ViewModelProviders.of(this).get(MainActivityModel::class.java).preferenceIsUpdated()
     }
@@ -396,7 +396,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     override fun onResume() {
         super.onResume()
         Utils.applyAppLanguage(this)
-        UpdateUtils.update(applicationContext, false)
+        update(applicationContext, false)
         if (creationDateJdn != Utils.getTodayJdn()) {
             restartActivity()
         }

@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimes
-import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
@@ -154,7 +153,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         }
 
         mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mPaint.typeface = TypefaceUtils.getAppFont(context)
+        mPaint.typeface = getAppFont(context)
 
         mSunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mSunPaint.color = sunColor

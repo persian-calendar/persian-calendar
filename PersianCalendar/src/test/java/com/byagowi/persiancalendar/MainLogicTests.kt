@@ -7,9 +7,9 @@ import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
-import com.byagowi.persiancalendar.utils.AstronomicalUtils
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.cepmuvakkit.times.view.QiblaCompassView
 import io.github.persiancalendar.Equinox
 import org.junit.Assert.*
@@ -186,7 +186,7 @@ class MainLogicTests {
 
             assertEquals(String.format("%d %d %d", year, month, day),
                     positiveJdn.contains(jdn),
-                    AstronomicalUtils.isMoonInScorpio(persian, IslamicDate(jdn)))
+                    isMoonInScorpio(persian, IslamicDate(jdn)))
         }
     }
 

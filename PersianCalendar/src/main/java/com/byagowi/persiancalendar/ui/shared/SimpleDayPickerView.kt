@@ -136,7 +136,9 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
     }
 
-    override fun setOnSelectedDayChangedListener(listener: DayPickerView.OnSelectedDayChangedListener) {
-        selectedDayListener = listener
+    override fun setOnSelectedDayChangedListener(listener: (Long) -> Unit) {
+        selectedDayListener = object : DayPickerView.OnSelectedDayChangedListener {
+            override fun onSelectedDayChanged(jdn: Long) = listener(jdn)
+        }
     }
 }

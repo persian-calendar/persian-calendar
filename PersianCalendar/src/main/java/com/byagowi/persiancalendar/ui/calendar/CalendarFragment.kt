@@ -92,22 +92,18 @@ class CalendarFragment : DaggerFragment() {
 
         titles.add(getString(R.string.calendar))
         mCalendarsView = CalendarsView(context).apply {
-            setOnCalendarsViewExpandListener(object : CalendarsView.OnCalendarsViewExpandListener {
-                override fun onCalendarsViewExpand() {
-                    mMainBinding.tabsViewPager.measureCurrentView(this@apply)
+            setOnCalendarsViewExpandListener {
+                mMainBinding.tabsViewPager.measureCurrentView(this@apply)
+            }
+            setOnShowHideTodayButton { show ->
+                if (show) {
+                    mMainBinding.todayButton.show()
+                    //                mMainBinding.swipeRefresh.setEnabled(true);
+                } else {
+                    mMainBinding.todayButton.hide()
+                    //                mMainBinding.swipeRefresh.setEnabled(false);
                 }
-            })
-            setOnShowHideTodayButton(object : CalendarsView.OnShowHideTodayButton {
-                override fun onShowHideTodayButton(show: Boolean) {
-                    if (show) {
-                        mMainBinding.todayButton.show()
-                        //                mMainBinding.swipeRefresh.setEnabled(true);
-                    } else {
-                        mMainBinding.todayButton.hide()
-                        //                mMainBinding.swipeRefresh.setEnabled(false);
-                    }
-                }
-            })
+            }
         }
         mMainBinding.todayButton.setOnClickListener { bringTodayYearMonth() }
         tabs.add(mCalendarsView)
