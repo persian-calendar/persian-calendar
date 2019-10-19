@@ -96,20 +96,23 @@ fun getCalendarNameAbbr(date: AbstractDate): String {
     }
 }
 
-fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String? {
+fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String {
     var result = prefs.getString(PREF_THEME, "")
-    if (TextUtils.isEmpty(result))
+    if (result == null)
         result = if (isNightModeEnabled(context)) DARK_THEME else LIGHT_THEME
     return result
 }
 
 fun getIslamicOffset(context: Context): Int {
-    return try {
+    try {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
-        Integer.parseInt(islamicOffset!!.replace("+", ""))
+        islamicOffset?.run {
+            return Integer.parseInt(replace("+", ""))
+        }
+        return 0
     } catch (ignore: Exception) {
-        0
+        return 0
     }
 }
 

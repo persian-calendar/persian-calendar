@@ -50,7 +50,7 @@ var notifyDate = DEFAULT_NOTIFY_DATE
 @kotlin.jvm.JvmField
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
 @kotlin.jvm.JvmField
-var selectedWidgetTextColor: String? = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+var selectedWidgetTextColor: String = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
 @kotlin.jvm.JvmField
 var calculationMethod: String? = DEFAULT_PRAY_TIME_METHOD
