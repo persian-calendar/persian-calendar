@@ -129,7 +129,7 @@ class MonthFragment : DaggerFragment() {
     private fun updateTitle(date: AbstractDate) {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
                 Utils.getMonthName(date),
-                Utils.formatNumber(date.year))
+                formatNumber(date.year))
     }
 
     companion object {

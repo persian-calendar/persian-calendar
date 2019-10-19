@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.TypefaceUtils
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
 
 class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
@@ -64,11 +65,11 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
             val firstCalendarString = Utils.formatDate(date)
             binding.container.contentDescription = firstCalendarString
             binding.day.contentDescription = ""
-            binding.day.text = Utils.formatNumber(date.dayOfMonth)
+            binding.day.text = formatNumber(date.dayOfMonth)
             binding.monthYear.contentDescription = ""
             binding.monthYear.text = String.format("%s\n%s",
                     Utils.getMonthName(date),
-                    Utils.formatNumber(date.year))
+                    formatNumber(date.year))
         }
 
         override fun onClick(view: View?) {

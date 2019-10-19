@@ -171,7 +171,7 @@ class CalendarFragment : DaggerFragment() {
 
         val today = Utils.getTodayOfCalendar(getMainCalendar())
         mainActivityDependency.mainActivity.setTitleAndSubtitle(Utils.getMonthName(today),
-                Utils.formatNumber(today.year))
+                formatNumber(today.year))
 
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
             mLastSelectedJdn = jdn

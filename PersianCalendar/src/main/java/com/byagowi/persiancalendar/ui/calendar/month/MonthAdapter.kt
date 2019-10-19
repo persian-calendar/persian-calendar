@@ -117,7 +117,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                 if (position % 8 == 0) {
                     val row = position / 8
                     if (row in 1..weeksCount) {
-                        val weekNumber = Utils.formatNumber(weekOfYearStart + row - 1)
+                        val weekNumber = formatNumber(weekOfYearStart + row - 1)
                         itemDayView.setNonDayOfMonthItem(weekNumber,
                                 daysPaintResources.weekNumberTextSize)
                         if (Utils.isTalkBackEnabled()) {

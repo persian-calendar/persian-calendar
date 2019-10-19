@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.getMaxSupportedYear
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -47,7 +47,7 @@ class AboutFragment : DaggerFragment() {
 
         // version
         val version = programVersion(activity).split("-".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-        version[0] = Utils.formatNumber(version[0])
+        version[0] = formatNumber(version[0])
         binding.version.text = String.format(getString(R.string.version), TextUtils.join("\n", version))
 
         // licenses
@@ -69,8 +69,8 @@ class AboutFragment : DaggerFragment() {
 
         // help
         binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
-                Utils.formatNumber(getMaxSupportedYear() - 1),
-                Utils.formatNumber(getMaxSupportedYear()))
+                formatNumber(getMaxSupportedYear() - 1),
+                formatNumber(getMaxSupportedYear()))
         when (Utils.getAppLanguage()) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {

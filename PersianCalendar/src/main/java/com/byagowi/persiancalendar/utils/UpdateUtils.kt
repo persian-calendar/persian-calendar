@@ -83,7 +83,7 @@ object UpdateUtils {
             remoteViews1.setTextColor(R.id.textPlaceholder1_1x1, color)
             remoteViews1.setTextColor(R.id.textPlaceholder2_1x1, color)
             remoteViews1.setTextViewText(R.id.textPlaceholder1_1x1,
-                    Utils.formatNumber(date.dayOfMonth))
+                    formatNumber(date.dayOfMonth))
             remoteViews1.setTextViewText(R.id.textPlaceholder2_1x1,
                     Utils.getMonthName(date))
             remoteViews1.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
@@ -276,9 +276,9 @@ object UpdateUtils {
 
                 val remainingTime: String
                 remainingTime = when {
-                    hrs == 0 -> String.format(context.getString(R.string.n_minutes), Utils.formatNumber(min))
-                    min == 0 -> String.format(context.getString(R.string.n_hours), Utils.formatNumber(hrs))
-                    else -> String.format(context.getString(R.string.n_minutes_and_hours), Utils.formatNumber(hrs), Utils.formatNumber(min))
+                    hrs == 0 -> String.format(context.getString(R.string.n_minutes), formatNumber(min))
+                    min == 0 -> String.format(context.getString(R.string.n_hours), formatNumber(hrs))
+                    else -> String.format(context.getString(R.string.n_minutes_and_hours), formatNumber(hrs), formatNumber(min))
                 }
 
                 remoteViews4x2.setTextViewText(R.id.textPlaceholder2_4x2,

@@ -156,7 +156,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 else
                     result.append(Utils.getSpacedComma())
                 result.append(String.format(getString(R.string.shift_work_record_title),
-                        Utils.formatNumber(record.length), shiftWorkKeyToString(record.type)))
+                        formatNumber(record.length), shiftWorkKeyToString(record.type)))
             }
 
             mBinding.result.text = result.toString()
@@ -192,7 +192,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     days.add(StringWithValueItem(i, if (i == 0)
                         getString(R.string.shift_work_days_head)
                     else
-                        Utils.formatNumber(i)))
+                        formatNumber(i)))
                 }
                 mBinding.lengthSpinner.adapter = ArrayAdapter(context,
                         android.R.layout.simple_spinner_dropdown_item, days)
@@ -260,7 +260,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (position < mRows.size) {
                     val shiftWorkRecord = mRows[position]
                     mPosition = position
-                    mBinding.rowNumber.text = String.format("%s:", Utils.formatNumber(position + 1))
+                    mBinding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
                     mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
                     mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
                     mBinding.detail.visibility = View.VISIBLE

@@ -106,10 +106,10 @@ class CalendarsView : FrameLayout {
             val monthDiff = civilOffset.month - 1
             val dayOfMonthDiff = civilOffset.dayOfMonth - 1
             var text = String.format(context.getString(R.string.date_diff_text),
-                    Utils.formatNumber(diffDays.toInt()),
-                    Utils.formatNumber(yearDiff),
-                    Utils.formatNumber(monthDiff),
-                    Utils.formatNumber(dayOfMonthDiff))
+                    formatNumber(diffDays.toInt()),
+                    formatNumber(yearDiff),
+                    formatNumber(monthDiff),
+                    formatNumber(dayOfMonthDiff))
             if (diffDays <= 30) {
                 text = text.split("\\(".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
             }
@@ -128,13 +128,13 @@ class CalendarsView : FrameLayout {
             val weeksCount = Utils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
             val startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
-                    Utils.formatNumber((jdn - startOfYearJdn).toInt()),
-                    Utils.formatNumber(currentWeek),
-                    Utils.formatNumber(mainDate.month))
+                    formatNumber((jdn - startOfYearJdn).toInt()),
+                    formatNumber(currentWeek),
+                    formatNumber(mainDate.month))
             val endOfYearText = String.format(context.getString(R.string.end_of_year_diff),
-                    Utils.formatNumber((endOfYearJdn - jdn).toInt()),
-                    Utils.formatNumber(weeksCount - currentWeek),
-                    Utils.formatNumber(12 - mainDate.month))
+                    formatNumber((endOfYearJdn - jdn).toInt()),
+                    formatNumber(weeksCount - currentWeek),
+                    formatNumber(12 - mainDate.month))
             mBinding.startAndEndOfYearDiff.text = String.format("%s\n%s", startOfYearText, endOfYearText)
 
             var equinox = ""
@@ -143,7 +143,7 @@ class CalendarsView : FrameLayout {
                     val addition = if (mainDate.month == 12) 1 else 0
                     val springEquinox = Utils.getSpringEquinox(mainDate.toJdn())
                     equinox = String.format(context.getString(R.string.spring_equinox),
-                            Utils.formatNumber(mainDate.year + addition),
+                            formatNumber(mainDate.year + addition),
                             Utils.getFormattedClock(
                                     Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
                                             springEquinox.get(Calendar.MINUTE)), true))

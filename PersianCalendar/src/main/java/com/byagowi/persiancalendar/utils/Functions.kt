@@ -59,6 +59,21 @@ fun isNotifyDate(): Boolean = notifyDate
 
 fun isWeekOfYearEnabled(): Boolean = showWeekOfYear
 
+fun formatNumber(number: Int): String = formatNumber(Integer.toString(number))
+
+fun formatNumber(number: String): String {
+    if (preferredDigits.contentEquals(ARABIC_DIGITS))
+        return number
+
+    val result = number.toCharArray()
+    for (i in result.indices) {
+        val c = number[i]
+        if (Character.isDigit(c))
+            result[i] = preferredDigits[Character.getNumericValue(c)]
+    }
+    return String(result)
+}
+
 fun isNightModeEnabled(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 // https://stackoverflow.com/a/52557989
