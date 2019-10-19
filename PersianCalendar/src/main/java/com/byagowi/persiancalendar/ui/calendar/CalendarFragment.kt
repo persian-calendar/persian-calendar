@@ -450,7 +450,7 @@ class CalendarFragment : DaggerFragment() {
         mLastSelectedJdn = jdn
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 
-        if (Utils.isTalkBackEnabled()) {
+        if (isTalkBackEnabled()) {
             val todayJdn = Utils.getTodayJdn()
             if (jdn != todayJdn) {
                 Utils.createAndShowShortSnackbar(view,
@@ -488,7 +488,7 @@ class CalendarFragment : DaggerFragment() {
 
                 val eventsAdapter = ArrayAdapter<AbstractEvent<*>>(context,
                         R.layout.suggestion, android.R.id.text1)
-                eventsAdapter.addAll(Utils.getAllEnabledEvents())
+                eventsAdapter.addAll(getAllEnabledEvents())
                 eventsAdapter.addAll(Utils.getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
                 mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->

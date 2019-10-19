@@ -102,7 +102,6 @@ import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
 
 public class Utils {
-    static private List<AbstractEvent> sAllEnabledEvents = new ArrayList<>();
     // This should be called before any use of Utils on the activity and services
     static public void initUtils(@NonNull Context context) {
         updateStoredPreference(context);
@@ -307,10 +306,6 @@ public class Utils {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ASCENDING_ATHAN_VOLUME, true);
     }
 
-    static boolean isNotifyDateOnLockScreen() {
-        return notifyInLockScreen;
-    }
-
     static public CalculationMethod getCalculationMethod() {
         return CalculationMethod.valueOf(calculationMethod);
     }
@@ -338,10 +333,6 @@ public class Utils {
             default:
                 return true;
         }
-    }
-
-    static String getSelectedWidgetTextColor() {
-        return selectedWidgetTextColor;
     }
 
     @StringRes
@@ -407,10 +398,6 @@ public class Utils {
             default:
                 return Clock.fromInt(0);
         }
-    }
-
-    static public String getSpacedComma() {
-        return spacedComma;
     }
 
     static public String[] monthsNamesOfCalendar(AbstractDate date) {
@@ -612,221 +599,6 @@ public class Utils {
                 return formatCoordinate(context, coordinate, spacedComma);
 
         return "";
-    }
-
-    public static List<AbstractEvent> getAllEnabledEvents() {
-        return sAllEnabledEvents;
-    }
-
-    static private String formatDayAndMonth(int day, String month) {
-        return String.format(language.equals(LANG_CKB) ? "%sی %s" : "%s %s", formatNumber(day),
-                month);
-    }
-
-    public static boolean isIranHolidaysEnabled() {
-        return sIsIranHolidaysEnabled;
-    }
-
-    static private void loadEvents(@NonNull Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Set<String> enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, new HashSet<>());
-
-        if (enabledTypes.isEmpty()) {
-            switch (getAppLanguage()) {
-                case LANG_FA:
-                case LANG_GLK:
-                case LANG_AZB:
-                case LANG_EN_IR:
-                case LANG_CKB:
-                    enabledTypes = new HashSet<>(Collections.singletonList("iran_holidays"));
-                    break;
-                default:
-                    enabledTypes = new HashSet<>();
-            }
-        }
-
-        boolean afghanistanHolidays = enabledTypes.contains("afghanistan_holidays");
-        boolean afghanistanOthers = enabledTypes.contains("afghanistan_others");
-        boolean iranHolidays = enabledTypes.contains("iran_holidays");
-        boolean iranIslamic = enabledTypes.contains("iran_islamic");
-        boolean iranAncient = enabledTypes.contains("iran_ancient");
-        boolean iranOthers = enabledTypes.contains("iran_others");
-        boolean international = enabledTypes.contains("international");
-
-        sIsIranHolidaysEnabled = iranHolidays;
-
-        IslamicDate.useUmmAlQura = false;
-        if (!iranHolidays) {
-            if (afghanistanHolidays) {
-                IslamicDate.useUmmAlQura = true;
-            }
-            switch (getAppLanguage()) {
-                case LANG_FA_AF:
-                case LANG_PS:
-                case LANG_UR:
-                case LANG_AR:
-                case LANG_CKB:
-                case LANG_EN_US:
-                case LANG_JA:
-                    IslamicDate.useUmmAlQura = true;
-            }
-        }
-        // Now that we are configuring converter's algorithm above, lets set the offset also
-        IslamicDate.islamicOffset = getIslamicOffset(context);
-
-        SparseArray<List<PersianCalendarEvent>> persianCalendarEvents = new SparseArray<>();
-        SparseArray<List<IslamicCalendarEvent>> islamicCalendarEvents = new SparseArray<>();
-        SparseArray<List<GregorianCalendarEvent>> gregorianCalendarEvents = new SparseArray<>();
-        ArrayList<AbstractEvent> allEnabledEvents = new ArrayList<>();
-
-        try {
-            JSONArray days;
-            int length;
-            JSONObject allTheEvents = new JSONObject(readRawResource(context, R.raw.events));
-
-            days = allTheEvents.getJSONArray("Persian Calendar");
-            length = days.length();
-            for (int i = 0; i < length; ++i) {
-                JSONObject event = days.getJSONObject(i);
-
-                int month = event.getInt("month");
-                int day = event.getInt("day");
-                int year = event.has("year") ? event.getInt("year") : -1;
-                String title = event.getString("title");
-                boolean holiday = event.getBoolean("holiday");
-
-                boolean addOrNot = false;
-                String type = event.getString("type");
-
-                if (holiday && iranHolidays && (type.equals("Islamic Iran") ||
-                        type.equals("Iran") || type.equals("Ancient Iran")))
-                    addOrNot = true;
-
-                if (!iranHolidays && type.equals("Islamic Iran"))
-                    holiday = false;
-
-                if (iranIslamic && type.equals("Islamic Iran"))
-                    addOrNot = true;
-
-                if (iranAncient && type.equals("Ancient Iran"))
-                    addOrNot = true;
-
-                if (iranOthers && type.equals("Iran"))
-                    addOrNot = true;
-
-                if (afghanistanHolidays && type.equals("Afghanistan") && holiday)
-                    addOrNot = true;
-
-                if (!afghanistanHolidays && type.equals("Afghanistan"))
-                    holiday = false;
-
-                if (afghanistanOthers && type.equals("Afghanistan"))
-                    addOrNot = true;
-
-                if (addOrNot) {
-                    title += " (";
-                    if (holiday && afghanistanHolidays && iranHolidays) {
-                        if (type.equals("Islamic Iran") || type.equals("Iran"))
-                            title += "ایران، ";
-                        else if (type.equals("Afghanistan"))
-                            title += "افغانستان، ";
-                    }
-                    title += formatDayAndMonth(day, persianMonths[month - 1]) + ")";
-
-                    List<PersianCalendarEvent> list = persianCalendarEvents.get(month * 100 + day);
-                    if (list == null) {
-                        list = new ArrayList<>();
-                        persianCalendarEvents.put(month * 100 + day, list);
-                    }
-                    PersianCalendarEvent ev = new PersianCalendarEvent(new PersianDate(year, month, day), title, holiday);
-                    list.add(ev);
-                    allEnabledEvents.add(ev);
-                }
-            }
-
-            days = allTheEvents.getJSONArray("Hijri Calendar");
-            length = days.length();
-            for (int i = 0; i < length; ++i) {
-                JSONObject event = days.getJSONObject(i);
-
-                int month = event.getInt("month");
-                int day = event.getInt("day");
-                String title = event.getString("title");
-                boolean holiday = event.getBoolean("holiday");
-
-                boolean addOrNot = false;
-                String type = event.getString("type");
-
-                if (afghanistanHolidays && holiday && type.equals("Islamic Afghanistan"))
-                    addOrNot = true;
-
-                if (!afghanistanHolidays && type.equals("Islamic Afghanistan"))
-                    holiday = false;
-
-                if (afghanistanOthers && type.equals("Islamic Afghanistan"))
-                    addOrNot = true;
-
-                if (iranHolidays && holiday && type.equals("Islamic Iran"))
-                    addOrNot = true;
-
-                if (!iranHolidays && type.equals("Islamic Iran"))
-                    holiday = false;
-
-                if (iranIslamic && type.equals("Islamic Iran"))
-                    addOrNot = true;
-
-                if (iranOthers && type.equals("Islamic Iran"))
-                    addOrNot = true;
-
-                if (addOrNot) {
-                    title += " (";
-                    if (holiday && afghanistanHolidays && iranHolidays) {
-                        if (type.equals("Islamic Iran"))
-                            title += "ایران، ";
-                        else if (type.equals("Islamic Afghanistan"))
-                            title += "افغانستان، ";
-                    }
-                    title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")";
-                    List<IslamicCalendarEvent> list = islamicCalendarEvents.get(month * 100 + day);
-                    if (list == null) {
-                        list = new ArrayList<>();
-                        islamicCalendarEvents.put(month * 100 + day, list);
-                    }
-                    IslamicCalendarEvent ev = new IslamicCalendarEvent(new IslamicDate(-1, month, day), title, holiday);
-                    list.add(ev);
-                    allEnabledEvents.add(ev);
-                }
-            }
-
-            days = allTheEvents.getJSONArray("Gregorian Calendar");
-            length = days.length();
-            for (int i = 0; i < length; ++i) {
-                JSONObject event = days.getJSONObject(i);
-
-                int month = event.getInt("month");
-                int day = event.getInt("day");
-                String title = event.getString("title");
-
-                if (international) {
-                    title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")";
-                    List<GregorianCalendarEvent> list = gregorianCalendarEvents.get(month * 100 + day);
-                    if (list == null) {
-                        list = new ArrayList<>();
-                        gregorianCalendarEvents.put(month * 100 + day, list);
-                    }
-                    GregorianCalendarEvent ev = new GregorianCalendarEvent(new CivilDate(-1, month, day), title, false);
-                    list.add(ev);
-                    allEnabledEvents.add(ev);
-                }
-            }
-
-        } catch (JSONException ignore) {
-        }
-
-        sPersianCalendarEvents = persianCalendarEvents;
-        sIslamicCalendarEvents = islamicCalendarEvents;
-        sGregorianCalendarEvents = gregorianCalendarEvents;
-        sAllEnabledEvents = allEnabledEvents;
     }
 
     private static <T extends AbstractDate> boolean holidayAwareEqualCheck(T event, T date) {
@@ -1070,10 +842,6 @@ public class Utils {
         }
     }
 
-    static public int fixDayOfWeek(int dayOfWeek) {
-        return (dayOfWeek + weekStartOffset) % 7;
-    }
-
     static public int fixDayOfWeekReverse(int dayOfWeek) {
         return (dayOfWeek + 7 - weekStartOffset) % 7;
     }
@@ -1203,14 +971,6 @@ public class Utils {
     public static String getInitialOfWeekDay(int position) {
         if (weekDaysInitials == null) return "";
         return weekDaysInitials[position % 7];
-    }
-
-    static boolean goForWorker() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
-
-    public static String getWeekDayName(int position) {
-        return weekDays[position % 7];
     }
 
     static public void loadApp(Context context) {
@@ -1345,14 +1105,6 @@ public class Utils {
         if (view == null) return;
 
         createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT);
-    }
-
-    public static boolean isTalkBackEnabled() {
-        return talkBackEnabled;
-    }
-
-    static boolean isCenterAlignWidgets() {
-        return centerAlignWidgets;
     }
 
     static boolean isShiaPrayTimeCalculationSelected() {
@@ -1572,11 +1324,6 @@ public class Utils {
         return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
     }
 
-    static public String toLinearDate(AbstractDate date) {
-        return String.format("%s/%s/%s", formatNumber(date.getYear()),
-                formatNumber(date.getMonth()), formatNumber(date.getDayOfMonth()));
-    }
-
     static public String dayTitleSummary(AbstractDate date) {
         return getWeekDayName(date) + getSpacedComma() + formatDate(date);
     }
@@ -1602,13 +1349,6 @@ public class Utils {
     public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
         long dayOfYear = jdn - startOfYearJdn;
         return (int) Math.ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
-    }
-
-    static public String formatDate(AbstractDate date) {
-        return numericalDatePreferred ? (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim() : (
-                String.format(getAppLanguage().equals(LANG_CKB) ? "%sی %sی %s" : "%s %s %s",
-                        formatNumber(date.getDayOfMonth()), getMonthName(date),
-                        formatNumber(date.getYear())));
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {

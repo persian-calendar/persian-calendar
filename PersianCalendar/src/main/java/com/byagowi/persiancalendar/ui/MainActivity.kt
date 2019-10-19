@@ -204,7 +204,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         creationDateJdn = Utils.getTodayJdn()
 
         if (getMainCalendar() == CalendarType.SHAMSI &&
-                Utils.isIranHolidaysEnabled() &&
+                isIranHolidaysEnabled() &&
                 Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)

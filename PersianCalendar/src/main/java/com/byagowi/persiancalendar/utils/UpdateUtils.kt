@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Utils.getClockFromStringId
-import com.byagowi.persiancalendar.utils.Utils.getSpacedComma
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -66,7 +65,7 @@ object UpdateUtils {
         //
         //
         val manager = AppWidgetManager.getInstance(context)
-        val colorInt = Utils.getSelectedWidgetTextColor()
+        val colorInt = getSelectedWidgetTextColor()
         val color = Color.parseColor(colorInt)
 
         // en-US is our only real LTR language for now
@@ -123,7 +122,7 @@ object UpdateUtils {
         val events = Utils.getEvents(jdn, deviceCalendarEvents)
 
         val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
-        val isCenterAligned = Utils.isCenterAlignWidgets()
+        val isCenterAligned = isCenterAlignWidgets()
 
         if (manager.getAppWidgetIds(widget4x1).isNotEmpty() || manager.getAppWidgetIds(widget2x2).isNotEmpty()) {
             val remoteViews4: RemoteViews
@@ -141,7 +140,7 @@ object UpdateUtils {
                 remoteViews2 = RemoteViews(context.packageName, if (isCenterAligned) R.layout.widget2x2_center else R.layout.widget2x2)
             }
 
-            val mainDateString = Utils.formatDate(date)
+            val mainDateString = formatDate(date)
 
             run {
                 // Widget 4x1
@@ -189,7 +188,7 @@ object UpdateUtils {
                 val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)
                 if (!TextUtils.isEmpty(holidays)) {
                     remoteViews2.setTextViewText(R.id.holiday_2x2, holidays)
-                    if (Utils.isTalkBackEnabled()) {
+                    if (isTalkBackEnabled()) {
                         remoteViews2.setContentDescription(R.id.holiday_2x2,
                                 context.getString(R.string.holiday_reason) + " " +
                                         holidays)
@@ -241,7 +240,7 @@ object UpdateUtils {
             remoteViews4x2.setTextColor(R.id.textPlaceholder1_4x2, color)
             remoteViews4x2.setTextColor(R.id.textPlaceholder2_4x2, color)
 
-            var text2 = Utils.formatDate(date)
+            var text2 = formatDate(date)
             if (enableClock)
                 text2 = Utils.getWeekDayName(date) + "\n" + text2
             else
@@ -324,7 +323,7 @@ object UpdateUtils {
             }
 
             // Don't remove this condition checking ever
-            if (Utils.isTalkBackEnabled()) {
+            if (isTalkBackEnabled()) {
                 // Don't use isToday, per a feedback
                 subtitle = Utils.getA11yDaySummary(context, jdn, false,
                         deviceCalendarEvents,
@@ -341,7 +340,7 @@ object UpdateUtils {
                     .setOngoing(true)
                     .setWhen(0)
                     .setContentIntent(launchAppPendingIntent)
-                    .setVisibility(if (Utils.isNotifyDateOnLockScreen())
+                    .setVisibility(if (isNotifyDateOnLockScreen())
                         NotificationCompat.VISIBILITY_PUBLIC
                     else
                         NotificationCompat.VISIBILITY_SECRET)
@@ -353,7 +352,7 @@ object UpdateUtils {
             // Night mode doesn't our custom notification in Samsung, let's detect it
             val isSamsungNightMode = Build.BRAND == "samsung" && isNightModeEnabled(context)
 
-            if (!Utils.isTalkBackEnabled() && !isSamsungNightMode &&
+            if (!isTalkBackEnabled() && !isSamsungNightMode &&
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
                 val cv = RemoteViews(context.packageName, if (isRTL)
                     R.layout.custom_notification
@@ -403,7 +402,7 @@ object UpdateUtils {
                 builder = builder.setWhen(Calendar.getInstance().timeInMillis)
             }
 
-            if (Utils.goForWorker()) {
+            if (goForWorker()) {
                 notificationManager.notify(NOTIFICATION_ID, builder.build())
             } else {
                 try {
@@ -415,7 +414,7 @@ object UpdateUtils {
 
             }
         } else {
-            if (Utils.goForWorker()) {
+            if (goForWorker()) {
                 val notificationManager = context.getSystemService<NotificationManager>()
                 notificationManager?.cancel(NOTIFICATION_ID)
             }

@@ -7,10 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.TypefaceUtils
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
 class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
@@ -60,9 +57,9 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
         fun bind(position: Int) {
             val date = Utils.getDateFromJdnOfCalendar(mCalendars[position], mJdn)
 
-            binding.linear.text = Utils.toLinearDate(date)
-            binding.linear.contentDescription = Utils.toLinearDate(date)
-            val firstCalendarString = Utils.formatDate(date)
+            binding.linear.text = toLinearDate(date)
+            binding.linear.contentDescription = toLinearDate(date)
+            val firstCalendarString = formatDate(date)
             binding.container.contentDescription = firstCalendarString
             binding.day.contentDescription = ""
             binding.day.text = formatNumber(date.dayOfMonth)

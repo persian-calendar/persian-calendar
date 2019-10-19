@@ -75,13 +75,13 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         binding.description.text = String.format(getString(
                 if (isFirstSetup) R.string.shift_work_starting_date else R.string.shift_work_starting_date_edit),
-                Utils.formatDate(
+                formatDate(
                         Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
 
         binding.resetLink.setOnClickListener {
             jdn = selectedJdn
             binding.description.text = String.format(getString(R.string.shift_work_starting_date),
-                    Utils.formatDate(
+                    formatDate(
                             Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
             shiftWorkItemAdapter.reset()
         }
@@ -154,7 +154,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (first)
                     first = false
                 else
-                    result.append(Utils.getSpacedComma())
+                    result.append(getSpacedComma())
                 result.append(String.format(getString(R.string.shift_work_record_title),
                         formatNumber(record.length), shiftWorkKeyToString(record.type)))
             }

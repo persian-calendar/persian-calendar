@@ -32,7 +32,7 @@ var islamicMonths = emptyStringList
 @kotlin.jvm.JvmField
 var gregorianMonths = emptyStringList
 @kotlin.jvm.JvmField
-var weekDays: Array<String>? = emptyStringList
+var weekDays: Array<String> = emptyStringList
 @kotlin.jvm.JvmField
 var weekDaysInitials: Array<String>? = emptyStringList
 @kotlin.jvm.JvmField
@@ -96,11 +96,11 @@ var cachedCityKey = ""
 @kotlin.jvm.JvmField
 var cachedCity: CityItem? = null
 @kotlin.jvm.JvmField
-var sPersianCalendarEvents = SparseArray<List<PersianCalendarEvent>>()
+var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
 @kotlin.jvm.JvmField
-var sIslamicCalendarEvents = SparseArray<List<IslamicCalendarEvent>>()
+var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
 @kotlin.jvm.JvmField
-var sGregorianCalendarEvents = SparseArray<List<GregorianCalendarEvent>>()
+var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
 //@kotlin.jvm.JvmField
 //var sAllEnabledEvents: ArrayList<AbstractEvent<*>> = ArrayList() //..........
 @kotlin.jvm.JvmField

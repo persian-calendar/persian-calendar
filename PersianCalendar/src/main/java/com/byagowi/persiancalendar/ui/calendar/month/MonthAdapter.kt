@@ -120,7 +120,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
                         itemDayView.setNonDayOfMonthItem(weekNumber,
                                 daysPaintResources.weekNumberTextSize)
-                        if (Utils.isTalkBackEnabled()) {
+                        if (isTalkBackEnabled()) {
                             itemDayView.contentDescription = String.format(context.getString(R.string.nth_week_of_year), weekNumber)
                         }
 
@@ -137,12 +137,12 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                 setEmpty()
             } else if (position < 7) {
                 itemDayView.setNonDayOfMonthItem(
-                        Utils.getInitialOfWeekDay(Utils.fixDayOfWeek(position)),
+                        Utils.getInitialOfWeekDay(fixDayOfWeek(position)),
                         daysPaintResources.weekDaysInitialTextSize)
-                if (Utils.isTalkBackEnabled()) {
+                if (isTalkBackEnabled()) {
                     itemDayView.contentDescription = String.format(
                             context.getString(R.string.week_days_name_column),
-                            Utils.getWeekDayName(Utils.fixDayOfWeek(position)))
+                            getWeekDayName(fixDayOfWeek(position)))
                 }
 
                 itemDayView.visibility = View.VISIBLE
