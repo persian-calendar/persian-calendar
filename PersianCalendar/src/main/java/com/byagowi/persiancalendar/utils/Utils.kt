@@ -23,7 +23,6 @@ val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-@kotlin.jvm.JvmField
 val emptyStringList = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
 @kotlin.jvm.JvmField
 var persianMonths = emptyStringList
@@ -103,8 +102,6 @@ var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
 var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
 @kotlin.jvm.JvmField
 var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
-//@kotlin.jvm.JvmField
-//var sAllEnabledEvents: ArrayList<AbstractEvent<*>> = ArrayList() //..........
 @kotlin.jvm.JvmField
 var sShiftWorkTitles: MutableMap<String, String> = HashMap()
 @kotlin.jvm.JvmField

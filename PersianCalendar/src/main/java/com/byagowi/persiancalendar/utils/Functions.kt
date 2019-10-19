@@ -38,12 +38,12 @@ import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
 
-fun getAllEnabledEvents(): List<AbstractEvent<*>> = sAllEnabledEvents
-
 @StyleRes
 fun getAppTheme(): Int = appTheme
 
 fun getMaxSupportedYear(): Int = 1398
+
+fun getAllEnabledEvents(): List<AbstractEvent<*>> = sAllEnabledEvents
 
 fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
 
