@@ -64,7 +64,6 @@ import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,14 +96,6 @@ import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
 
 public class Utils {
-    // This should be called before any use of Utils on the activity and services
-    static public void initUtils(@NonNull Context context) {
-        updateStoredPreference(context);
-        applyAppLanguage(context);
-        loadLanguageResource(context);
-        loadAlarms(context);
-        loadEvents(context);
-    }
 
     @Nullable
     static public Coordinate getCoordinate(@NonNull Context context) {
@@ -834,80 +825,6 @@ public class Utils {
             config.setLayoutDirection(locale);
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-    }
-
-    static private void loadLanguageResource(@NonNull Context context) {
-        @RawRes int messagesFile;
-        switch (language) {
-            case LANG_FA_AF:
-                messagesFile = R.raw.messages_fa_af;
-                break;
-            case LANG_PS:
-                messagesFile = R.raw.messages_ps;
-                break;
-            case LANG_GLK:
-                messagesFile = R.raw.messages_glk;
-                break;
-            case LANG_AR:
-                messagesFile = R.raw.messages_ar;
-                break;
-            case LANG_CKB:
-                messagesFile = R.raw.messages_ckb;
-                break;
-            case LANG_UR:
-                messagesFile = R.raw.messages_ur;
-                break;
-            case LANG_EN_US:
-                messagesFile = R.raw.messages_en;
-                break;
-            case LANG_JA:
-                messagesFile = R.raw.messages_ja;
-                break;
-            case LANG_AZB:
-                messagesFile = R.raw.messages_azb;
-                break;
-            case LANG_EN_IR:
-            case LANG_FA:
-            default:
-                messagesFile = R.raw.messages_fa;
-                break;
-        }
-
-        persianMonths = new String[12];
-        islamicMonths = new String[12];
-        gregorianMonths = new String[12];
-        weekDays = new String[7];
-        weekDaysInitials = new String[7];
-
-        try {
-            JSONObject messages = new JSONObject(readRawResource(context, messagesFile));
-
-            JSONArray persianMonthsArray = messages.getJSONArray("PersianCalendarMonths");
-            for (int i = 0; i < 12; ++i)
-                persianMonths[i] = persianMonthsArray.getString(i);
-
-            JSONArray islamicMonthsArray = messages.getJSONArray("IslamicCalendarMonths");
-            for (int i = 0; i < 12; ++i)
-                islamicMonths[i] = islamicMonthsArray.getString(i);
-
-            JSONArray gregorianMonthsArray = messages.getJSONArray("GregorianCalendarMonths");
-            for (int i = 0; i < 12; ++i)
-                gregorianMonths[i] = gregorianMonthsArray.getString(i);
-
-            JSONArray weekDaysArray = messages.getJSONArray("WeekDays");
-            for (int i = 0; i < 7; ++i) {
-                weekDays[i] = weekDaysArray.getString(i);
-                if (language.equals(LANG_AR)) {
-                    weekDaysInitials[i] = weekDays[i].substring(2, 4);
-                } else if (language.equals(LANG_AZB)) {
-                    weekDaysInitials[i] = weekDays[i].substring(0, 2);
-                } else {
-                    weekDaysInitials[i] = weekDays[i].substring(0, 1);
-                }
-            }
-
-        } catch (JSONException ignore) {
-        }
     }
 
     private static long calculateDiffToChangeDate() {

@@ -89,7 +89,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
-        Utils.initUtils(this)
+        initUtils(this)
 
         overrideFont("SERIF", getAppFont(applicationContext))
 
@@ -231,7 +231,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
-            Utils.initUtils(this)
+            initUtils(this)
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
@@ -387,7 +387,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        Utils.initUtils(this)
+        initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             binding.drawer.layoutDirection = if (Utils.isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }

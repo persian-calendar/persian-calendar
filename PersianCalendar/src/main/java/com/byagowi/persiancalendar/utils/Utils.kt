@@ -23,7 +23,7 @@ val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-val emptyStringList = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
+val emptyStringList: Array<String?> = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
 @kotlin.jvm.JvmField
 var persianMonths = emptyStringList
 @kotlin.jvm.JvmField
@@ -31,9 +31,9 @@ var islamicMonths = emptyStringList
 @kotlin.jvm.JvmField
 var gregorianMonths = emptyStringList
 @kotlin.jvm.JvmField
-var weekDays: Array<String> = emptyStringList
+var weekDays = emptyStringList
 @kotlin.jvm.JvmField
-var weekDaysInitials: Array<String>? = emptyStringList
+var weekDaysInitials = emptyStringList
 @kotlin.jvm.JvmField
 var preferredDigits = PERSIAN_DIGITS
 @kotlin.jvm.JvmField
