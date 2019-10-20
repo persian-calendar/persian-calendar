@@ -34,6 +34,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
@@ -43,13 +44,15 @@ class ColorPickerView : LinearLayout {
     private lateinit var redSeekBar: SeekBar
     private lateinit var greenSeekBar: SeekBar
     private lateinit var blueSeekBar: SeekBar
+    private lateinit var alphaSeekBar: SeekBar
     private lateinit var colorsToPick: LinearLayout
+    private lateinit var seekBars: LinearLayout
+    private lateinit var colorFrame: FrameLayout
     private var colorCodeVisibility = false
 
-    /*@ColorInt*/
     val pickerColor: Int
-        get() = Color.argb(0xFF,
-                redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+        @ColorInt
+        get() = Color.argb(alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
 
     constructor(context: Context) : super(context) {
         init()
@@ -83,9 +86,8 @@ class ColorPickerView : LinearLayout {
         val seekBarPadding = density.toInt() * 8
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                showColor()
-            }
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
+                    showColor()
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
@@ -113,17 +115,26 @@ class ColorPickerView : LinearLayout {
             setOnSeekBarChangeListener(listener)
         }
 
+        alphaSeekBar = SeekBar(context).apply {
+            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
+            max = 255
+            progressDrawable.setColorFilter(-0xa0a0a0, PorterDuff.Mode.SRC_IN)
+            setOnSeekBarChangeListener(listener)
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             redSeekBar.thumb.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
             greenSeekBar.thumb.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
             blueSeekBar.thumb.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
+            alphaSeekBar.thumb.setColorFilter(-0xa0a0a0, PorterDuff.Mode.SRC_IN)
         }
 
-        val seekBars = LinearLayout(context).apply {
+        seekBars = LinearLayout(context).apply {
             orientation = VERTICAL
             addView(redSeekBar)
             addView(greenSeekBar)
             addView(blueSeekBar)
+            addView(alphaSeekBar)
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
                 weight = 1f
             }
@@ -131,7 +142,7 @@ class ColorPickerView : LinearLayout {
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
         }
 
-        val frameLayout = FrameLayout(context).apply {
+        colorFrame = FrameLayout(context).apply {
             addView(colorResultView)
             layoutParams = LayoutParams(seekBars.measuredHeight,
                     LayoutParams.MATCH_PARENT)
@@ -142,7 +153,7 @@ class ColorPickerView : LinearLayout {
 
         val widgetMain = LinearLayout(context).apply {
             addView(seekBars)
-            addView(frameLayout)
+            addView(colorFrame)
         }
 
         colorsToPick = LinearLayout(context).apply {
@@ -154,7 +165,7 @@ class ColorPickerView : LinearLayout {
         addView(colorsToPick)
     }
 
-    fun setColorsToPick(/*@ColorInt*/colors: IntArray) {
+    fun setColorsToPick(@ColorInt colors: IntArray) {
         colorsToPick.removeAllViews()
 
         val context = context ?: return
@@ -184,28 +195,38 @@ class ColorPickerView : LinearLayout {
     }
 
     private fun showColor() {
-        val color = Color.argb(0xFF, redSeekBar.progress,
+        val color = Color.argb(alphaSeekBar.progress, redSeekBar.progress,
                 greenSeekBar.progress, blueSeekBar.progress)
         colorResultView.apply {
             setBackgroundColor(color)
             text = if (colorCodeVisibility)
-                String.format(Locale.ENGLISH, "#%06X", 0xFFFFFF and color)
+                String.format(Locale.ENGLISH, "#%08X", color)
             else
                 ""
             setTextColor(color xor 0xFFFFFF)
         }
     }
 
-    fun setPickedColor(/*@ColorInt*/color: Int) {
+    fun setPickedColor(@ColorInt color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             redSeekBar.setProgress(Color.red(color), true)
             greenSeekBar.setProgress(Color.green(color), true)
             blueSeekBar.setProgress(Color.blue(color), true)
+            alphaSeekBar.setProgress(Color.alpha(color), true)
         } else {
             redSeekBar.progress = Color.red(color)
             greenSeekBar.progress = Color.green(color)
             blueSeekBar.progress = Color.blue(color)
+            alphaSeekBar.progress = Color.alpha(color)
         }
         showColor()
+    }
+
+    fun hideAlphaSeekbar() {
+        alphaSeekBar.visibility = GONE
+        seekBars.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+        colorFrame.layoutParams = LayoutParams(seekBars.measuredHeight,
+                LayoutParams.MATCH_PARENT)
     }
 }

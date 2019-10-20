@@ -7,7 +7,8 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import java.util.*
 
@@ -31,6 +32,7 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
                     sharedPreferences.getString(
                             PREF_SELECTED_WIDGET_TEXT_COLOR,
                             DEFAULT_SELECTED_WIDGET_TEXT_COLOR)))
+            colorPickerView.hideAlphaSeekbar()
 
             val padding = (activity.resources.displayMetrics.density * 10).toInt()
             colorPickerView.setPadding(padding, padding, padding, padding)
