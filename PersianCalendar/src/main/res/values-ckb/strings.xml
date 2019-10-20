@@ -223,5 +223,7 @@
     <string name="map">نەخشە</string>
     <string name="ascending_athan_volume">Ascending athan volume</string>
     <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
+    <string name="widget_background_color">Widget Background Color</string>
+    <string name="select_widgets_background_color">Select custom color for widgets background</string>
 
 </resources>

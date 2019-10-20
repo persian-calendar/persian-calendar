@@ -9,6 +9,13 @@
         android:title="@string/widget_text_color"
         settings:iconSpaceReserved="false" />
 
+    <androidx.preference.Preference
+        android:defaultValue="#00000000"
+        android:key="SelectedWidgetBackgroundColor"
+        android:summary="@string/select_widgets_background_color"
+        android:title="@string/widget_background_color"
+        settings:iconSpaceReserved="false" />
+
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="numericalDatePreferred"

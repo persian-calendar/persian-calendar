@@ -7,9 +7,7 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import java.util.*
 
 // Don't use dagger in this class as it is used in WidgetConfigurationActivity also
@@ -46,6 +44,38 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
                             putString(PREF_SELECTED_WIDGET_TEXT_COLOR,
                                     String.format(Locale.ENGLISH, "#%06X",
                                             0xFFFFFF and colorPickerView.pickerColor))
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                setNegativeButton(R.string.cancel, null)
+            }.show()
+            return true
+        }
+
+        if (preference?.key == PREF_SELECTED_WIDGET_BACKGROUND_COLOR) {
+            val colorPickerView = ColorPickerView(activity)
+            colorPickerView.setColorsToPick(
+                    arrayOf(0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020)
+                            .map(Long::toInt).toIntArray())
+            colorPickerView.setPickedColor(Color.parseColor(
+                    sharedPreferences.getString(
+                            PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                            DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR)))
+
+            val padding = (activity.resources.displayMetrics.density * 10).toInt()
+            colorPickerView.setPadding(padding, padding, padding, padding)
+
+            AlertDialog.Builder(activity).apply {
+                setTitle(R.string.widget_background_color)
+                setView(colorPickerView)
+                setPositiveButton(R.string.accept) { _, _ ->
+                    try {
+                        sharedPreferences.edit {
+                            putString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                                    String.format(Locale.ENGLISH, "#%08X",
+                                            0xFFFFFFFF and colorPickerView.pickerColor.toLong()))
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
