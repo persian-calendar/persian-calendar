@@ -224,8 +224,8 @@
     <string name="map">نقشه</string>
     <string name="ascending_athan_volume">صدای افزایشی اذان</string>
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
-    <string name="widget_background_color">رنگ پس زمینه ویجت</string>
-    <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس زمینه ویجت</string>
+    <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
+    <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
 
     <!-- Reminder -->
     <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->
