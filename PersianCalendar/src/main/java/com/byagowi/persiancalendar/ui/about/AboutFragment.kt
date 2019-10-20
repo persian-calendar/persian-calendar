@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.text.util.Linkify
 import android.util.Log
@@ -129,48 +130,62 @@ class AboutFragment : DaggerFragment() {
             }
         }
 
-        for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
-            val chip = Chip(activity).apply {
-                this.layoutParams = layoutParams
-                setOnClickListener(chipClick)
-                text = line
-                chipIcon = developerIcon
-                setChipIconTintResource(color.resourceId)
-            }
-            binding.developers.addView(chip)
-        }
 
-        for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
-            val chip = Chip(activity).apply {
-                this.layoutParams = layoutParams
-                text = line
-                chipIcon = designerIcon
-                setChipIconTintResource(color.resourceId)
-            }
-            binding.developers.addView(chip)
-        }
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                try {
+                    binding.developers.removeAllViews()
 
-        for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
-            val chip = Chip(activity).apply {
-                this.layoutParams = layoutParams
-                setOnClickListener(chipClick)
-                text = line
-                chipIcon = translatorIcon
-                setChipIconTintResource(color.resourceId)
-            }
-            binding.developers.addView(chip)
-        }
+                    for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
+                        val chip = Chip(activity).apply {
+                            this.layoutParams = layoutParams
+                            setOnClickListener(chipClick)
+                            text = line
+                            chipIcon = developerIcon
+                            setChipIconTintResource(color.resourceId)
+                        }
+                        binding.developers.addView(chip)
+                    }
 
-        for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()) {
-            val chip = Chip(activity).apply {
-                this.layoutParams = layoutParams
-                setOnClickListener(chipClick)
-                text = line
-                chipIcon = developerIcon
-                setChipIconTintResource(color.resourceId)
+                    for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
+                        val chip = Chip(activity).apply {
+                            this.layoutParams = layoutParams
+                            text = line
+                            chipIcon = designerIcon
+                            setChipIconTintResource(color.resourceId)
+                        }
+                        binding.developers.addView(chip)
+                    }
+
+                    for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
+                        val chip = Chip(activity).apply {
+                            this.layoutParams = layoutParams
+                            setOnClickListener(chipClick)
+                            text = line
+                            chipIcon = translatorIcon
+                            setChipIconTintResource(color.resourceId)
+                        }
+                        binding.developers.addView(chip)
+                    }
+
+                    for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
+                        val chip = Chip(activity).apply {
+                            this.layoutParams = layoutParams
+                            setOnClickListener(chipClick)
+                            text = line
+                            chipIcon = developerIcon
+                            setChipIconTintResource(color.resourceId)
+                        }
+                        binding.developers.addView(chip)
+                    }
+
+                    handler.postDelayed(this, 10000)
+                } catch (ignore: Exception) {
+                }
             }
-            binding.developers.addView(chip)
-        }
+        })
+
         return binding.root
     }
 
