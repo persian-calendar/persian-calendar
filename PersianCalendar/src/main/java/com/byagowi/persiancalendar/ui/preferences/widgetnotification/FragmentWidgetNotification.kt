@@ -57,7 +57,7 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_BACKGROUND_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    arrayOf(0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020)
+                    arrayOf(0x00000000L, 0x50000000L, 0xFF000000L)
                             .map(Long::toInt).toIntArray())
             colorPickerView.setPickedColor(Color.parseColor(
                     sharedPreferences.getString(
