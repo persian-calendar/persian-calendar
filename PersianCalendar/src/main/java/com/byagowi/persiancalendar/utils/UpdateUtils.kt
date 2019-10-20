@@ -238,6 +238,11 @@ fun update(context: Context, updateDate: Boolean) {
             setTextColor(R.id.textPlaceholder0_4x2, color)
             setTextColor(R.id.textPlaceholder1_4x2, color)
             setTextColor(R.id.textPlaceholder2_4x2, color)
+            setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
+            setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
+            setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
+            setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
+            setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
 
             var text2 = formatDate(date)
             if (enableClock)

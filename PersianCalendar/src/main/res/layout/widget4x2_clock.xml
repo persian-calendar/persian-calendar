@@ -19,6 +19,7 @@
         android:orientation="horizontal">
 
         <TextClock
+            android:id="@+id/textPlaceholder0_4x2"
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
