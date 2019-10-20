@@ -38,7 +38,6 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 import com.byagowi.persiancalendar.ui.calendar.times.TimeItemAdapter
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.flexbox.FlexWrap

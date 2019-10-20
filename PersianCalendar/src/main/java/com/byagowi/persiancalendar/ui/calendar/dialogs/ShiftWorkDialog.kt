@@ -27,9 +27,7 @@ import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.StringWithValueItem
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
-import com.byagowi.persiancalendar.utils.getShiftWorks
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*
 import javax.inject.Inject

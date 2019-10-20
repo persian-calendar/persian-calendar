@@ -16,8 +16,6 @@ import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import java.util.*

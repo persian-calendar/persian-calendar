@@ -29,7 +29,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
                 streamType = AudioManager.STREAM_ALARM
                 play()
             }
-        } else if(context != null){
+        } else if (context != null) {
             val player = MediaPlayer()
             try {
                 player.setDataSource(context, Utils.getDefaultAthanUri(context))

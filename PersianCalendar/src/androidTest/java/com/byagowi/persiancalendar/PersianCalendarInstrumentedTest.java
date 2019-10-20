@@ -3,6 +3,11 @@ package com.byagowi.persiancalendar;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+import androidx.test.InstrumentationRegistry;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+
 import com.byagowi.persiancalendar.calendar.CivilDate;
 import com.byagowi.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.utils.CalendarType;
@@ -14,11 +19,6 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-
-import androidx.test.InstrumentationRegistry;
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;
@@ -81,7 +81,7 @@ public class PersianCalendarInstrumentedTest {
     @Test
     public void test_hijri() {
         // Copied from TestDateCalendar
-        int tests2[][][] = {
+        int[][][] tests2 = {
                 {{2016, 10, 3}, {1438, 1, 1}},
                 {{2016, 11, 1}, {1438, 2, 1}},
                 {{2016, 12, 1}, {1438, 3, 1}}
@@ -96,7 +96,7 @@ public class PersianCalendarInstrumentedTest {
         }
 
         IslamicDate.useUmmAlQura = true;
-        int tests3[][][] = {
+        int[][][] tests3 = {
                 {{2015, 3, 14}, {1436, 5, 23}},
                 {{1999, 4, 1}, {1419, 12, 15}},
                 {{1989, 2, 25}, {1409, 7, 19}}

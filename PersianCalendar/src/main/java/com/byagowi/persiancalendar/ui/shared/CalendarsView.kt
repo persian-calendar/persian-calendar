@@ -12,8 +12,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs

@@ -7,7 +7,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getAppTheme
+import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 
 class DaysPaintResources(activity: Activity) {
     @StyleRes
