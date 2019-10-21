@@ -2,16 +2,21 @@ package com.byagowi.persiancalendar.utils
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.calendar.AbstractDate
@@ -19,6 +24,7 @@ import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.calendar.IslamicDate
 import com.byagowi.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
@@ -27,6 +33,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
@@ -437,6 +444,51 @@ fun hasAnyHolidays(dayEvents: List<AbstractEvent<*>>): Boolean {
         }
     }
     return false
+}
+
+fun loadApp(context: Context) {
+    if (goForWorker()) return
+
+    try {
+        val alarmManager = context.getSystemService<AlarmManager>() ?: return
+
+        val startTime = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 1)
+            add(Calendar.DATE, 1)
+        }
+
+
+        val dailyPendingIntent = PendingIntent.getBroadcast(
+            context, LOAD_APP_ID,
+            Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_RESTART_APP),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        alarmManager.set(AlarmManager.RTC, startTime.timeInMillis, dailyPendingIntent)
+
+        // There are simpler triggers on older Androids like SCREEN_ON but they
+        // are not available anymore, lets register an hourly alarm for >= Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val threeHoursPendingIntent = PendingIntent.getBroadcast(
+                context,
+                THREE_HOURS_APP_ID,
+                Intent(context, BroadcastReceivers::class.java)
+                    .setAction(BROADCAST_UPDATE_APP),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+            alarmManager.setInexactRepeating(
+                AlarmManager.RTC,
+                // Start from one hour from now
+                Calendar.getInstance().timeInMillis + TimeUnit.HOURS.toMillis(1),
+                TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
+            )
+        }
+    } catch (e: Exception) {
+        Log.e(TAG, "loadApp fail", e)
+    }
+
 }
 
 //    public static List<Reminder> getReminderDetails() {

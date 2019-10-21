@@ -942,43 +942,6 @@ public class Utils {
         return weekDaysInitials[position % 7];
     }
 
-    static public void loadApp(Context context) {
-        if (goForWorker()) return;
-
-        try {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            if (alarmManager == null) return;
-
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.HOUR_OF_DAY, 0);
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.SECOND, 1);
-            startTime.add(Calendar.DATE, 1);
-
-            PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(context, LOAD_APP_ID,
-                    new Intent(context, BroadcastReceivers.class).setAction(BROADCAST_RESTART_APP),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), dailyPendingIntent);
-
-            // There are simpler triggers on older Androids like SCREEN_ON but they
-            // are not available anymore, lets register an hourly alarm for >= Oreo
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                PendingIntent threeHoursPendingIntent = PendingIntent.getBroadcast(context,
-                        THREE_HOURS_APP_ID,
-                        new Intent(context, BroadcastReceivers.class)
-                                .setAction(BROADCAST_UPDATE_APP),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                alarmManager.setInexactRepeating(AlarmManager.RTC,
-                        // Start from one hour from now
-                        Calendar.getInstance().getTimeInMillis() + TimeUnit.HOURS.toMillis(1),
-                        TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "loadApp fail", e);
-        }
-    }
-
     public static void startEitherServiceOrWorker(@NonNull Context context) {
         WorkManager workManager = WorkManager.getInstance(context);
         if (goForWorker()) {
