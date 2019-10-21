@@ -1085,35 +1085,6 @@ public class Utils {
                 String.format(view.getContext().getString(R.string.date_copied_clipboard), text));
     }
 
-    public static void createAndShowSnackbar(@Nullable View view, String message, int duration) {
-        if (view == null) return;
-
-        Snackbar snackbar = Snackbar.make(view, message, duration);
-
-        View snackbarView = snackbar.getView();
-        snackbarView.setOnClickListener(v -> snackbar.dismiss());
-
-        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setTextColor(Color.WHITE);
-        text.setMaxLines(5);
-
-        snackbar.show();
-    }
-
-    public static void createAndShowShortSnackbar(@Nullable View view, @StringRes int messageId) {
-        if (view == null) return;
-        Context context = view.getContext();
-        if (context == null) return;
-
-        createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT);
-    }
-
-    public static void createAndShowShortSnackbar(@Nullable View view, String message) {
-        if (view == null) return;
-
-        createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT);
-    }
-
     static boolean isShiaPrayTimeCalculationSelected() {
         CalculationMethod calculationMethod = getCalculationMethod();
         return calculationMethod.equals(CalculationMethod.Tehran) ||

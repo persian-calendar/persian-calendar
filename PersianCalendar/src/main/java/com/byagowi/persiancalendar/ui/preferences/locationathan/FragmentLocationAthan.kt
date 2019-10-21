@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -132,7 +133,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                     remove(PREF_ATHAN_URI)
                     remove(PREF_ATHAN_NAME)
                 }
-                Utils.createAndShowShortSnackbar(view, R.string.returned_to_default)
+                createAndShowShortSnackbar(view, R.string.returned_to_default)
                 putAthanNameOnSummary(defaultAthanName)
                 return true
             }
@@ -175,7 +176,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                         putString(PREF_ATHAN_URI, uri.toString())
                     }
 
-                    Utils.createAndShowShortSnackbar(view, R.string.custom_notification_is_set)
+                    createAndShowShortSnackbar(view, R.string.custom_notification_is_set)
                     putAthanNameOnSummary(ringtoneTitle)
                 }
             }

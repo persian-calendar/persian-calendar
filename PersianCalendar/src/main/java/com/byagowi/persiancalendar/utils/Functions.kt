@@ -9,6 +9,8 @@ import android.graphics.Color
 import android.os.Build
 import android.util.SparseArray
 import android.view.View
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -20,6 +22,7 @@ import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -367,6 +370,33 @@ fun getEnabledCalendarTypes(): List<CalendarType> {
     return result
 }
 
+fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
+    view ?: return
+
+    val snackbar = Snackbar.make(view, message, duration)
+
+    val snackbarView = snackbar.view
+    snackbarView.setOnClickListener { snackbar.dismiss() }
+
+    val text = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+    text.setTextColor(Color.WHITE)
+    text.maxLines = 5
+
+    snackbar.show()
+}
+
+fun createAndShowShortSnackbar(view: View?, @StringRes messageId: Int) {
+    view ?: return
+    val context = view.context ?: return
+
+    createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT)
+}
+
+fun createAndShowShortSnackbar(view: View?, message: String) {
+    view ?: return
+
+    createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT)
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

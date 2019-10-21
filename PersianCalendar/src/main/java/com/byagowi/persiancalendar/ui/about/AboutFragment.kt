@@ -105,7 +105,7 @@ class AboutFragment : DaggerFragment() {
                                             Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]))
                             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
                         } catch (ex: android.content.ActivityNotFoundException) {
-                            Utils.createAndShowShortSnackbar(view, R.string.about_noClient)
+                            createAndShowShortSnackbar(view, R.string.about_noClient)
                         }
                     }
                     .setNegativeButton(R.string.cancel, null).show()
