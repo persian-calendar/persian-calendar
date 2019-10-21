@@ -74,7 +74,7 @@ fun getSelectedWidgetTextColor(): String = selectedWidgetTextColor
 
 fun getSelectedWidgetBackgroundColor(): String = selectedWidgetBackgroundColor
 
-fun formatNumber(number: Int): String = formatNumber(Integer.toString(number))
+fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String {
     if (preferredDigits.contentEquals(ARABIC_DIGITS))
