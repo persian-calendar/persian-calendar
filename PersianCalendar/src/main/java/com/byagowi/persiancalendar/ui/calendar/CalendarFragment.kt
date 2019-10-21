@@ -127,7 +127,7 @@ class CalendarFragment : DaggerFragment() {
                     setOnClickListener { onOwghatClick(it) }
                     // Easter egg to test AthanActivity
                     setOnLongClickListener {
-                        Utils.startAthan(context, "FAJR")
+                        startAthan(context, "FAJR")
                         true
                     }
                     val cityName = Utils.getCityName(context, false)

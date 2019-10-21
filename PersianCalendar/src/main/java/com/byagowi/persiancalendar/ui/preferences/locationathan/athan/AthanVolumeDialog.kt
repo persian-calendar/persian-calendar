@@ -10,6 +10,8 @@ import android.widget.SeekBar
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceDialogFragmentCompat
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import java.io.IOException
 
 class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
@@ -23,7 +25,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
         val audioManager = context?.getSystemService<AudioManager>()
         audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
 
-        val customAthanUri = context?.let { Utils.getCustomAthanUri(it) }
+        val customAthanUri = context?.let { getCustomAthanUri(it) }
         if (customAthanUri != null) {
             ringtone = RingtoneManager.getRingtone(context, customAthanUri).apply {
                 streamType = AudioManager.STREAM_ALARM
@@ -32,7 +34,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
         } else if (context != null) {
             val player = MediaPlayer()
             try {
-                player.setDataSource(context, Utils.getDefaultAthanUri(context))
+                player.setDataSource(context, getDefaultAthanUri(context))
                 player.setAudioStreamType(AudioManager.STREAM_ALARM)
                 player.prepare()
             } catch (e: IOException) {

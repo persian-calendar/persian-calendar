@@ -105,20 +105,26 @@ fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
-fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+fun formatDayAndMonth(day: Int, month: String): String =
+    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
-fun toLinearDate(date: AbstractDate): String = String.format("%s/%s/%s", formatNumber(date.year),
-        formatNumber(date.month), formatNumber(date.dayOfMonth))
+fun toLinearDate(date: AbstractDate): String = String.format(
+    "%s/%s/%s", formatNumber(date.year),
+    formatNumber(date.month), formatNumber(date.dayOfMonth)
+)
 
-fun isNightModeEnabled(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+fun isNightModeEnabled(context: Context): Boolean =
+    context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun formatDate(date: AbstractDate): String =
-        if (numericalDatePreferred)
-            (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
-        else
-            String.format(if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-                    formatNumber(date.dayOfMonth), getMonthName(date),
-                    formatNumber(date.year))
+    if (numericalDatePreferred)
+        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+    else
+        String.format(
+            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+            formatNumber(date.dayOfMonth), getMonthName(date),
+            formatNumber(date.year)
+        )
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -147,7 +153,8 @@ fun loadEvents(context: Context) {
             IslamicDate.useUmmAlQura = true
         }
         when (getAppLanguage()) {
-            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura = true
+            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura =
+                true
         }
     }
     // Now that we are configuring converter's algorithm above, lets set the offset also
@@ -178,7 +185,8 @@ fun loadEvents(context: Context) {
             val type = event.getString("type")
 
             if (holiday && iranHolidays && (type == "Islamic Iran" ||
-                            type == "Iran" || type == "Ancient Iran"))
+                        type == "Iran" || type == "Ancient Iran")
+            )
                 addOrNot = true
 
             if (!iranHolidays && type == "Islamic Iran")
@@ -212,7 +220,8 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
 
-                var list: ArrayList<PersianCalendarEvent>? = persianCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<PersianCalendarEvent>? =
+                    persianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     persianCalendarEvents.put(month * 100 + day, list)
@@ -266,7 +275,8 @@ fun loadEvents(context: Context) {
                         title += "افغانستان، "
                 }
                 title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
-                var list: ArrayList<IslamicCalendarEvent>? = islamicCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<IslamicCalendarEvent>? =
+                    islamicCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     islamicCalendarEvents.put(month * 100 + day, list)
@@ -288,7 +298,8 @@ fun loadEvents(context: Context) {
 
             if (international) {
                 title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
-                var list: ArrayList<GregorianCalendarEvent>? = gregorianCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<GregorianCalendarEvent>? =
+                    gregorianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     gregorianCalendarEvents.put(month * 100 + day, list)
@@ -315,17 +326,23 @@ fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : Ci
             val viewWidth = circularRevealWidget.width
             val viewHeight = circularRevealWidget.height
 
-            val viewDiagonal = sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+            val viewDiagonal =
+                sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
 
             AnimatorSet().apply {
                 playTogether(
-                        CircularRevealCompat.createCircularReveal(circularRevealWidget,
-                                (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
-                                10f, (viewDiagonal / 2).toFloat()),
-                        ObjectAnimator.ofArgb(circularRevealWidget,
-                                CircularRevealWidget.CircularRevealScrimColorProperty
-                                        .CIRCULAR_REVEAL_SCRIM_COLOR,
-                                Color.GRAY, Color.TRANSPARENT))
+                    CircularRevealCompat.createCircularReveal(
+                        circularRevealWidget,
+                        (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
+                        10f, (viewDiagonal / 2).toFloat()
+                    ),
+                    ObjectAnimator.ofArgb(
+                        circularRevealWidget,
+                        CircularRevealWidget.CircularRevealScrimColorProperty
+                            .CIRCULAR_REVEAL_SCRIM_COLOR,
+                        Color.GRAY, Color.TRANSPARENT
+                    )
+                )
                 duration = 500
             }.start()
         }
@@ -396,6 +413,30 @@ fun createAndShowShortSnackbar(view: View?, message: String) {
     view ?: return
 
     createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT)
+}
+
+
+fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance().apply {
+    set(Calendar.YEAR, civilDate.year)
+    set(Calendar.MONTH, civilDate.month - 1)
+    set(Calendar.DAY_OF_MONTH, civilDate.dayOfMonth)
+}
+
+fun calendarToCivilDate(calendar: Calendar): CivilDate {
+    return CivilDate(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH) + 1,
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+}
+
+fun hasAnyHolidays(dayEvents: List<AbstractEvent<*>>): Boolean {
+    for (event in dayEvents) {
+        if (event.isHoliday) {
+            return true
+        }
+    }
+    return false
 }
 
 //    public static List<Reminder> getReminderDetails() {

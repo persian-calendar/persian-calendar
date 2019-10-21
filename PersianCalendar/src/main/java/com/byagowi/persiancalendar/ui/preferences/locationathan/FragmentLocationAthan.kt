@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericD
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -118,7 +119,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                                 Settings.System.DEFAULT_NOTIFICATION_URI)
-                val customAthanUri = Utils.getCustomAthanUri(context)
+                val customAthanUri = getCustomAthanUri(context)
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
                 }

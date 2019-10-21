@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -75,8 +75,8 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val ascendingVolume = Utils.isAscendingAthanVolumeEnabled(this)
-        val settingsVol = Utils.getAthanVolume(this)
+        val ascendingVolume = isAscendingAthanVolumeEnabled(this)
+        val settingsVol = getAthanVolume(this)
         audioManager = getSystemService<AudioManager>()
         audioManager?.let { am ->
             am.setStreamVolume(AudioManager.STREAM_ALARM,
@@ -84,7 +84,7 @@ class AthanActivity : AppCompatActivity() {
                     else am.getStreamVolume(AudioManager.STREAM_ALARM), 0)
         }
 
-        val customAthanUri = Utils.getCustomAthanUri(this)
+        val customAthanUri = getCustomAthanUri(this)
         if (customAthanUri != null) {
             try {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
@@ -99,7 +99,7 @@ class AthanActivity : AppCompatActivity() {
             try {
                 mediaPlayer = MediaPlayer().apply {
                     try {
-                        setDataSource(this@AthanActivity, Utils.getDefaultAthanUri(this@AthanActivity))
+                        setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
                         setAudioStreamType(AudioManager.STREAM_ALARM)
                         volumeControlStream = AudioManager.STREAM_ALARM
                         prepare()

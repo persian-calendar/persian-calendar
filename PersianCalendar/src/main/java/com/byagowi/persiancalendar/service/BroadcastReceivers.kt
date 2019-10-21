@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
 import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.update
 
 /**
@@ -31,7 +32,7 @@ class BroadcastReceivers : BroadcastReceiver() {
                 Utils.loadApp(context)
             }
 
-            BROADCAST_ALARM -> Utils.startAthan(context, intent.getStringExtra(KEY_EXTRA_PRAYER_KEY))
+            BROADCAST_ALARM -> startAthan(context, intent.getStringExtra(KEY_EXTRA_PRAYER_KEY))
         }
     }
 }
