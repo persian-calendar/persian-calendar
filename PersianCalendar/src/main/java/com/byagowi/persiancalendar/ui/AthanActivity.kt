@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.media.Ringtone
-import android.media.RingtoneManager
+import android.media.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -92,7 +89,16 @@ class AthanActivity : AppCompatActivity() {
         if (customAthanUri != null) {
             try {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
-                    streamType = AudioManager.STREAM_ALARM
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        audioAttributes = AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                            .build()
+                    } else {
+                        @Suppress("DEPRECATION")
+                        streamType = AudioManager.STREAM_ALARM
+                    }
                     volumeControlStream = AudioManager.STREAM_ALARM
                     play()
                 }
@@ -104,7 +110,17 @@ class AthanActivity : AppCompatActivity() {
                 mediaPlayer = MediaPlayer().apply {
                     try {
                         setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
-                        setAudioStreamType(AudioManager.STREAM_ALARM)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            setAudioAttributes(
+                                AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_ALARM)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                    .build()
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            setAudioStreamType(AudioManager.STREAM_ALARM)
+                        }
                         volumeControlStream = AudioManager.STREAM_ALARM
                         prepare()
                     } catch (e: IOException) {
