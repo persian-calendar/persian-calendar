@@ -93,21 +93,6 @@ fun getSelectedWidgetTextColor(): String = selectedWidgetTextColor
 
 fun getSelectedWidgetBackgroundColor(): String = selectedWidgetBackgroundColor
 
-fun formatNumber(number: Int): String = formatNumber(number.toString())
-
-fun formatNumber(number: String): String {
-    if (preferredDigits.contentEquals(ARABIC_DIGITS))
-        return number
-
-    val result = number.toCharArray()
-    for (i in result.indices) {
-        val c = number[i]
-        if (Character.isDigit(c))
-            result[i] = preferredDigits[Character.getNumericValue(c)]
-    }
-    return String(result)
-}
-
 fun isIranHolidaysEnabled(): Boolean = sIsIranHolidaysEnabled
 
 fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
@@ -123,11 +108,6 @@ fun isCenterAlignWidgets(): Boolean = centerAlignWidgets
 fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
-
-fun formatDayAndMonth(day: Int, month: String): String =
-    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
-
-fun isAscendingAthanVolumeEnabled(context: Context): Boolean = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ASCENDING_ATHAN_VOLUME, true)
 
 fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
@@ -598,12 +578,6 @@ fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
             result.add(key)
 
     return result
-}
-
-fun getAthanVolume(context: Context): Int {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-    return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 }
 
 //    public static List<Reminder> getReminderDetails() {

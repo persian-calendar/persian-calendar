@@ -72,7 +72,7 @@ class AthanNotification : Service() {
 
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
             val cv = RemoteViews(
-                applicationContext?.packageName, if (Utils.isLocaleRTL())
+                applicationContext?.packageName, if (isLocaleRTL())
                     R.layout.custom_notification
                 else
                     R.layout.custom_notification_ltr
