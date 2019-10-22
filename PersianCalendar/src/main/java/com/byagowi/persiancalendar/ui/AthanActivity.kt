@@ -22,6 +22,8 @@ import com.byagowi.persiancalendar.utils.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+private val TAG = AthanActivity::class.java.name
+
 class AthanActivity : AppCompatActivity() {
 
     private val ascendingVolumeStep = 6
@@ -77,11 +79,13 @@ class AthanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val ascendingVolume = isAscendingAthanVolumeEnabled(this)
         val settingsVol = getAthanVolume(this)
-        audioManager = getSystemService<AudioManager>()
+        audioManager = getSystemService()
         audioManager?.let { am ->
-            am.setStreamVolume(AudioManager.STREAM_ALARM,
-                    if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
-                    else am.getStreamVolume(AudioManager.STREAM_ALARM), 0)
+            am.setStreamVolume(
+                AudioManager.STREAM_ALARM,
+                if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
+                else am.getStreamVolume(AudioManager.STREAM_ALARM), 0
+            )
         }
 
         val customAthanUri = getCustomAthanUri(this)
@@ -120,9 +124,11 @@ class AthanActivity : AppCompatActivity() {
             this.setTurnScreenOn(true)
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
         }
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
@@ -133,9 +139,11 @@ class AthanActivity : AppCompatActivity() {
             root.setOnClickListener { stop() }
             root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
 
-            place.text = String.format("%s %s",
-                    getString(R.string.in_city_time),
-                    Utils.getCityName(this@AthanActivity, true))
+            place.text = String.format(
+                "%s %s",
+                getString(R.string.in_city_time),
+                Utils.getCityName(this@AthanActivity, true)
+            )
         }
 
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
@@ -143,7 +151,10 @@ class AthanActivity : AppCompatActivity() {
         if (ascendingVolume) handler.post(ascendVolume)
 
         try {
-            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            getSystemService<TelephonyManager>()?.listen(
+                phoneStateListener,
+                PhoneStateListener.LISTEN_CALL_STATE
+            )
         } catch (e: Exception) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
@@ -163,7 +174,10 @@ class AthanActivity : AppCompatActivity() {
         alreadyStopped = true
 
         try {
-            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            getSystemService<TelephonyManager>()?.listen(
+                phoneStateListener,
+                PhoneStateListener.LISTEN_NONE
+            )
             phoneStateListener = null
         } catch (e: RuntimeException) {
             Log.e(TAG, "TelephonyManager handling fail", e)
@@ -187,7 +201,4 @@ class AthanActivity : AppCompatActivity() {
         finish()
     }
 
-    companion object {
-        private val TAG = AthanActivity::class.java.name
-    }
 }

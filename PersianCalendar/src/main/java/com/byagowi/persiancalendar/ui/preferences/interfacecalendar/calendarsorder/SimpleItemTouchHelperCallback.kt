@@ -22,17 +22,23 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
-class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerListAdapter) : ItemTouchHelper.Callback() {
+private const val ALPHA_FULL = 1.0f
+
+class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerListAdapter) :
+    ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled(): Boolean = true
 
     override fun isItemViewSwipeEnabled(): Boolean = true
 
-    override fun getMovementFlags(recyclerView: RecyclerView,
-                                  viewHolder: RecyclerView.ViewHolder): Int {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
         // Set movement flags based on the layout manager
         return if (recyclerView.layoutManager is GridLayoutManager) {
-            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            val dragFlags =
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             val swipeFlags = 0
             makeMovementFlags(dragFlags, swipeFlags)
         } else {
@@ -42,8 +48,10 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
         }
     }
 
-    override fun onMove(recyclerView: RecyclerView, source: RecyclerView.ViewHolder,
-                        target: RecyclerView.ViewHolder): Boolean {
+    override fun onMove(
+        recyclerView: RecyclerView, source: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         if (source.itemViewType != target.itemViewType) {
             return false
         }
@@ -54,11 +62,13 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) =
-            mAdapter.onItemDismissed(viewHolder.adapterPosition) // Notify the adapter of the dismissal
+        mAdapter.onItemDismissed(viewHolder.adapterPosition) // Notify the adapter of the dismissal
 
-    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView,
-                             viewHolder: RecyclerView.ViewHolder,
-                             dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+    override fun onChildDraw(
+        c: Canvas, recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+    ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             // Fade out the view as it is swiped out of the parent's bounds
             val alpha = ALPHA_FULL - abs(dX) / viewHolder.itemView.width.toFloat()
@@ -91,9 +101,5 @@ class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerLi
             // Tell the view holder it's time to restore the idle state
             viewHolder.onItemCleared()
         }
-    }
-
-    companion object {
-        private const val ALPHA_FULL = 1.0f
     }
 }
