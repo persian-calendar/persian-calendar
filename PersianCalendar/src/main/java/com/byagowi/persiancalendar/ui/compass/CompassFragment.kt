@@ -16,6 +16,8 @@ import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
+import com.byagowi.persiancalendar.utils.createAndShowSnackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import kotlin.math.abs
@@ -87,7 +89,7 @@ class CompassFragment : DaggerFragment() {
                                 Uri.parse("https://g.co/qiblafinder"))
                     } catch (ignore: Exception) {
                     }
-                    R.id.help -> Utils.createAndShowSnackbar(view, mainActivityDependency.mainActivity
+                    R.id.help -> createAndShowSnackbar(view, mainActivityDependency.mainActivity
                             .getString(if (sensorNotFound)
                                 R.string.compass_not_found
                             else
@@ -145,10 +147,10 @@ class CompassFragment : DaggerFragment() {
         if (sensor != null) {
             sensorManager?.registerListener(compassListener, sensor, SensorManager.SENSOR_DELAY_FASTEST)
             if (coordinate == null) {
-                Utils.createAndShowShortSnackbar(mainActivity.coordinator, R.string.set_location)
+                createAndShowShortSnackbar(mainActivity.coordinator, R.string.set_location)
             }
         } else {
-            Utils.createAndShowShortSnackbar(view, R.string.compass_not_found)
+            createAndShowShortSnackbar(view, R.string.compass_not_found)
             sensorNotFound = true
         }
     }

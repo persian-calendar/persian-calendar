@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
 
@@ -36,7 +37,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
                 return Utils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
             } catch (e: Exception) {
-                Utils.createAndShowShortSnackbar(rootView, R.string.date_exception)
+                createAndShowShortSnackbar(rootView, R.string.date_exception)
                 Log.e("SelectDayDialog", "", e)
             }
 

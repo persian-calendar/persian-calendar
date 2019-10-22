@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMaxSupportedYear
 import com.google.android.material.chip.Chip
@@ -105,7 +106,7 @@ class AboutFragment : DaggerFragment() {
                                             Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]))
                             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
                         } catch (ex: android.content.ActivityNotFoundException) {
-                            Utils.createAndShowShortSnackbar(view, R.string.about_noClient)
+                            createAndShowShortSnackbar(view, R.string.about_noClient)
                         }
                     }
                     .setNegativeButton(R.string.cancel, null).show()

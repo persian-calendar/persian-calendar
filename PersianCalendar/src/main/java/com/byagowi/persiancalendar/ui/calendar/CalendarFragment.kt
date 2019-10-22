@@ -127,7 +127,7 @@ class CalendarFragment : DaggerFragment() {
                     setOnClickListener { onOwghatClick(it) }
                     // Easter egg to test AthanActivity
                     setOnLongClickListener {
-                        Utils.startAthan(context, "FAJR")
+                        startAthan(context, "FAJR")
                         true
                     }
                     val cityName = Utils.getCityName(context, false)
@@ -209,7 +209,7 @@ class CalendarFragment : DaggerFragment() {
                                 .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                         CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE)
             } catch (e: Exception) {
-                Utils.createAndShowShortSnackbar(view, R.string.device_calendar_does_not_support)
+                createAndShowShortSnackbar(view, R.string.device_calendar_does_not_support)
             }
 
         }
@@ -248,7 +248,7 @@ class CalendarFragment : DaggerFragment() {
                                     CalendarContract.Events.CONTENT_URI, event.id.toLong())),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE)
                 } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                    Utils.createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support)
+                    createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support)
                 }
 
             }
@@ -448,7 +448,7 @@ class CalendarFragment : DaggerFragment() {
         if (isTalkBackEnabled()) {
             val todayJdn = Utils.getTodayJdn()
             if (jdn != todayJdn) {
-                Utils.createAndShowShortSnackbar(view,
+                createAndShowShortSnackbar(view,
                         Utils.getA11yDaySummary(mainActivityDependency.mainActivity, jdn,
                                 false, null, true,
                                 true, true))

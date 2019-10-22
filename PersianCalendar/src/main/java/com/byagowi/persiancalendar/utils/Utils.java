@@ -7,7 +7,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -27,7 +25,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
-import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -64,11 +61,8 @@ import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.praytimes.PrayTimes;
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
 import com.byagowi.persiancalendar.service.ApplicationService;
-import com.byagowi.persiancalendar.service.AthanNotification;
 import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
-import com.byagowi.persiancalendar.ui.AthanActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -297,16 +291,6 @@ public class Utils {
         }
 
         return result;
-    }
-
-    static public int getAthanVolume(@NonNull Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME);
-    }
-
-    static public boolean isAscendingAthanVolumeEnabled(@NonNull Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ASCENDING_ATHAN_VOLUME, true);
     }
 
     static public CalculationMethod getCalculationMethod() {
@@ -826,27 +810,6 @@ public class Utils {
         }
     }
 
-    static public Uri getCustomAthanUri(@NonNull Context context) {
-        String uri = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_ATHAN_URI, "");
-        return TextUtils.isEmpty(uri) ? null : Uri.parse(uri);
-    }
-
-    static public void startAthan(Context context, String prayTimeKey) {
-        if (notificationAthan) {
-            // Is this needed?
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//                ContextCompat.startForegroundService(context,
-//                        new Intent(context, AthanNotification.class));
-
-            context.startService(new Intent(context, AthanNotification.class)
-                    .putExtra(KEY_EXTRA_PRAYER_KEY, prayTimeKey));
-        } else {
-            context.startActivity(new Intent(context, AthanActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(KEY_EXTRA_PRAYER_KEY, prayTimeKey));
-        }
-    }
 
     static public int fixDayOfWeekReverse(int dayOfWeek) {
         return (dayOfWeek + 7 - weekStartOffset) % 7;
@@ -979,43 +942,6 @@ public class Utils {
         return weekDaysInitials[position % 7];
     }
 
-    static public void loadApp(Context context) {
-        if (goForWorker()) return;
-
-        try {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            if (alarmManager == null) return;
-
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.HOUR_OF_DAY, 0);
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.SECOND, 1);
-            startTime.add(Calendar.DATE, 1);
-
-            PendingIntent dailyPendingIntent = PendingIntent.getBroadcast(context, LOAD_APP_ID,
-                    new Intent(context, BroadcastReceivers.class).setAction(BROADCAST_RESTART_APP),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC, startTime.getTimeInMillis(), dailyPendingIntent);
-
-            // There are simpler triggers on older Androids like SCREEN_ON but they
-            // are not available anymore, lets register an hourly alarm for >= Oreo
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                PendingIntent threeHoursPendingIntent = PendingIntent.getBroadcast(context,
-                        THREE_HOURS_APP_ID,
-                        new Intent(context, BroadcastReceivers.class)
-                                .setAction(BROADCAST_UPDATE_APP),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                alarmManager.setInexactRepeating(AlarmManager.RTC,
-                        // Start from one hour from now
-                        Calendar.getInstance().getTimeInMillis() + TimeUnit.HOURS.toMillis(1),
-                        TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "loadApp fail", e);
-        }
-    }
-
     public static void startEitherServiceOrWorker(@NonNull Context context) {
         WorkManager workManager = WorkManager.getInstance(context);
         if (goForWorker()) {
@@ -1083,35 +1009,6 @@ public class Utils {
         clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
         createAndShowShortSnackbar(view,
                 String.format(view.getContext().getString(R.string.date_copied_clipboard), text));
-    }
-
-    public static void createAndShowSnackbar(@Nullable View view, String message, int duration) {
-        if (view == null) return;
-
-        Snackbar snackbar = Snackbar.make(view, message, duration);
-
-        View snackbarView = snackbar.getView();
-        snackbarView.setOnClickListener(v -> snackbar.dismiss());
-
-        TextView text = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setTextColor(Color.WHITE);
-        text.setMaxLines(5);
-
-        snackbar.show();
-    }
-
-    public static void createAndShowShortSnackbar(@Nullable View view, @StringRes int messageId) {
-        if (view == null) return;
-        Context context = view.getContext();
-        if (context == null) return;
-
-        createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT);
-    }
-
-    public static void createAndShowShortSnackbar(@Nullable View view, String message) {
-        if (view == null) return;
-
-        createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT);
     }
 
     static boolean isShiaPrayTimeCalculationSelected() {
@@ -1247,14 +1144,6 @@ public class Utils {
             case LIGHT_THEME:
                 return R.style.LightTheme;
         }
-    }
-
-    // https://stackoverflow.com/a/27788209
-    static public Uri getDefaultAthanUri(@NonNull Context context) {
-        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                context.getResources().getResourcePackageName(R.raw.abdulbasit) + '/' +
-                context.getResources().getResourceTypeName(R.raw.abdulbasit) + '/' +
-                context.getResources().getResourceEntryName(R.raw.abdulbasit));
     }
 
     private static String getOnlyLanguage(String string) {
@@ -1488,20 +1377,6 @@ public class Utils {
     }
 
     // Extra helpers
-    public static Calendar civilDateToCalendar(CivilDate civilDate) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, civilDate.getYear());
-        cal.set(Calendar.MONTH, civilDate.getMonth() - 1);
-        cal.set(Calendar.DAY_OF_MONTH, civilDate.getDayOfMonth());
-        return cal;
-    }
-
-    private static CivilDate calendarToCivilDate(Calendar calendar) {
-        return new CivilDate(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH));
-    }
-
     static public String getA11yDaySummary(@NonNull Context context, long jdn, boolean isToday,
                                            SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
                                            boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
@@ -1578,15 +1453,6 @@ public class Utils {
         }
 
         return result.toString();
-    }
-
-    public static boolean hasAnyHolidays(List<AbstractEvent> dayEvents) {
-        for (AbstractEvent event : dayEvents) {
-            if (event.isHoliday()) {
-                return true;
-            }
-        }
-        return false;
     }
 
 //    private static List<Reminder> updateSavedReminders(Context context) {

@@ -9,6 +9,8 @@ import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
 import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.loadApp
+import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.update
 
 /**
@@ -23,15 +25,18 @@ class BroadcastReceivers : BroadcastReceiver() {
 
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> {
                 update(context, true)
-                Utils.loadApp(context)
+                loadApp(context)
             }
 
             Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON, BROADCAST_UPDATE_APP -> {
                 update(context, false)
-                Utils.loadApp(context)
+                loadApp(context)
             }
 
-            BROADCAST_ALARM -> Utils.startAthan(context, intent.getStringExtra(KEY_EXTRA_PRAYER_KEY))
+            BROADCAST_ALARM -> {
+                val prayTimeKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY) ?: return
+                startAthan(context, prayTimeKey)
+            }
         }
     }
 }

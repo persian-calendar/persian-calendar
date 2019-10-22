@@ -33,6 +33,8 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -117,7 +119,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
                         .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                                 Settings.System.DEFAULT_NOTIFICATION_URI)
-                val customAthanUri = Utils.getCustomAthanUri(context)
+                val customAthanUri = getCustomAthanUri(context)
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
                 }
@@ -132,7 +134,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                     remove(PREF_ATHAN_URI)
                     remove(PREF_ATHAN_NAME)
                 }
-                Utils.createAndShowShortSnackbar(view, R.string.returned_to_default)
+                createAndShowShortSnackbar(view, R.string.returned_to_default)
                 putAthanNameOnSummary(defaultAthanName)
                 return true
             }
@@ -175,7 +177,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                         putString(PREF_ATHAN_URI, uri.toString())
                     }
 
-                    Utils.createAndShowShortSnackbar(view, R.string.custom_notification_is_set)
+                    createAndShowShortSnackbar(view, R.string.custom_notification_is_set)
                     putAthanNameOnSummary(ringtoneTitle)
                 }
             }

@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.media.Ringtone
-import android.media.RingtoneManager
+import android.media.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,9 +15,11 @@ import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+
+private val TAG = AthanActivity::class.java.name
 
 class AthanActivity : AppCompatActivity() {
 
@@ -75,20 +74,31 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val ascendingVolume = Utils.isAscendingAthanVolumeEnabled(this)
-        val settingsVol = Utils.getAthanVolume(this)
-        audioManager = getSystemService<AudioManager>()
+        val ascendingVolume = isAscendingAthanVolumeEnabled(this)
+        val settingsVol = getAthanVolume(this)
+        audioManager = getSystemService()
         audioManager?.let { am ->
-            am.setStreamVolume(AudioManager.STREAM_ALARM,
-                    if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
-                    else am.getStreamVolume(AudioManager.STREAM_ALARM), 0)
+            am.setStreamVolume(
+                AudioManager.STREAM_ALARM,
+                if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
+                else am.getStreamVolume(AudioManager.STREAM_ALARM), 0
+            )
         }
 
-        val customAthanUri = Utils.getCustomAthanUri(this)
+        val customAthanUri = getCustomAthanUri(this)
         if (customAthanUri != null) {
             try {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
-                    streamType = AudioManager.STREAM_ALARM
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        audioAttributes = AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                            .build()
+                    } else {
+                        @Suppress("DEPRECATION")
+                        streamType = AudioManager.STREAM_ALARM
+                    }
                     volumeControlStream = AudioManager.STREAM_ALARM
                     play()
                 }
@@ -99,8 +109,18 @@ class AthanActivity : AppCompatActivity() {
             try {
                 mediaPlayer = MediaPlayer().apply {
                     try {
-                        setDataSource(this@AthanActivity, Utils.getDefaultAthanUri(this@AthanActivity))
-                        setAudioStreamType(AudioManager.STREAM_ALARM)
+                        setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            setAudioAttributes(
+                                AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_ALARM)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                    .build()
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            setAudioStreamType(AudioManager.STREAM_ALARM)
+                        }
                         volumeControlStream = AudioManager.STREAM_ALARM
                         prepare()
                     } catch (e: IOException) {
@@ -116,13 +136,16 @@ class AthanActivity : AppCompatActivity() {
         Utils.applyAppLanguage(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            this.setShowWhenLocked(true)
-            this.setTurnScreenOn(true)
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            @Suppress("DEPRECATION")
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
         }
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
@@ -133,9 +156,11 @@ class AthanActivity : AppCompatActivity() {
             root.setOnClickListener { stop() }
             root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
 
-            place.text = String.format("%s %s",
-                    getString(R.string.in_city_time),
-                    Utils.getCityName(this@AthanActivity, true))
+            place.text = String.format(
+                "%s %s",
+                getString(R.string.in_city_time),
+                Utils.getCityName(this@AthanActivity, true)
+            )
         }
 
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
@@ -143,7 +168,10 @@ class AthanActivity : AppCompatActivity() {
         if (ascendingVolume) handler.post(ascendVolume)
 
         try {
-            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            getSystemService<TelephonyManager>()?.listen(
+                phoneStateListener,
+                PhoneStateListener.LISTEN_CALL_STATE
+            )
         } catch (e: Exception) {
             Log.e(TAG, "TelephonyManager handling fail", e)
         }
@@ -163,7 +191,10 @@ class AthanActivity : AppCompatActivity() {
         alreadyStopped = true
 
         try {
-            getSystemService<TelephonyManager>()?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+            getSystemService<TelephonyManager>()?.listen(
+                phoneStateListener,
+                PhoneStateListener.LISTEN_NONE
+            )
             phoneStateListener = null
         } catch (e: RuntimeException) {
             Log.e(TAG, "TelephonyManager handling fail", e)
@@ -187,7 +218,4 @@ class AthanActivity : AppCompatActivity() {
         finish()
     }
 
-    companion object {
-        private val TAG = AthanActivity::class.java.name
-    }
 }

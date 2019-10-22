@@ -2,14 +2,21 @@ package com.byagowi.persiancalendar.utils
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.util.SparseArray
 import android.view.View
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.calendar.AbstractDate
@@ -17,13 +24,16 @@ import com.byagowi.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.calendar.IslamicDate
 import com.byagowi.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
@@ -71,7 +81,7 @@ fun getSelectedWidgetTextColor(): String = selectedWidgetTextColor
 
 fun getSelectedWidgetBackgroundColor(): String = selectedWidgetBackgroundColor
 
-fun formatNumber(number: Int): String = formatNumber(Integer.toString(number))
+fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String {
     if (preferredDigits.contentEquals(ARABIC_DIGITS))
@@ -102,20 +112,26 @@ fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
-fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+fun formatDayAndMonth(day: Int, month: String): String =
+    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
-fun toLinearDate(date: AbstractDate): String = String.format("%s/%s/%s", formatNumber(date.year),
-        formatNumber(date.month), formatNumber(date.dayOfMonth))
+fun toLinearDate(date: AbstractDate): String = String.format(
+    "%s/%s/%s", formatNumber(date.year),
+    formatNumber(date.month), formatNumber(date.dayOfMonth)
+)
 
-fun isNightModeEnabled(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+fun isNightModeEnabled(context: Context): Boolean =
+    context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun formatDate(date: AbstractDate): String =
-        if (numericalDatePreferred)
-            (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
-        else
-            String.format(if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-                    formatNumber(date.dayOfMonth), getMonthName(date),
-                    formatNumber(date.year))
+    if (numericalDatePreferred)
+        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+    else
+        String.format(
+            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+            formatNumber(date.dayOfMonth), getMonthName(date),
+            formatNumber(date.year)
+        )
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -144,7 +160,8 @@ fun loadEvents(context: Context) {
             IslamicDate.useUmmAlQura = true
         }
         when (getAppLanguage()) {
-            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura = true
+            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura =
+                true
         }
     }
     // Now that we are configuring converter's algorithm above, lets set the offset also
@@ -175,7 +192,8 @@ fun loadEvents(context: Context) {
             val type = event.getString("type")
 
             if (holiday && iranHolidays && (type == "Islamic Iran" ||
-                            type == "Iran" || type == "Ancient Iran"))
+                        type == "Iran" || type == "Ancient Iran")
+            )
                 addOrNot = true
 
             if (!iranHolidays && type == "Islamic Iran")
@@ -209,7 +227,8 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
 
-                var list: ArrayList<PersianCalendarEvent>? = persianCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<PersianCalendarEvent>? =
+                    persianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     persianCalendarEvents.put(month * 100 + day, list)
@@ -263,7 +282,8 @@ fun loadEvents(context: Context) {
                         title += "افغانستان، "
                 }
                 title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
-                var list: ArrayList<IslamicCalendarEvent>? = islamicCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<IslamicCalendarEvent>? =
+                    islamicCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     islamicCalendarEvents.put(month * 100 + day, list)
@@ -285,7 +305,8 @@ fun loadEvents(context: Context) {
 
             if (international) {
                 title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
-                var list: ArrayList<GregorianCalendarEvent>? = gregorianCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<GregorianCalendarEvent>? =
+                    gregorianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     gregorianCalendarEvents.put(month * 100 + day, list)
@@ -312,17 +333,23 @@ fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : Ci
             val viewWidth = circularRevealWidget.width
             val viewHeight = circularRevealWidget.height
 
-            val viewDiagonal = sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+            val viewDiagonal =
+                sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
 
             AnimatorSet().apply {
                 playTogether(
-                        CircularRevealCompat.createCircularReveal(circularRevealWidget,
-                                (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
-                                10f, (viewDiagonal / 2).toFloat()),
-                        ObjectAnimator.ofArgb(circularRevealWidget,
-                                CircularRevealWidget.CircularRevealScrimColorProperty
-                                        .CIRCULAR_REVEAL_SCRIM_COLOR,
-                                Color.GRAY, Color.TRANSPARENT))
+                    CircularRevealCompat.createCircularReveal(
+                        circularRevealWidget,
+                        (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
+                        10f, (viewDiagonal / 2).toFloat()
+                    ),
+                    ObjectAnimator.ofArgb(
+                        circularRevealWidget,
+                        CircularRevealWidget.CircularRevealScrimColorProperty
+                            .CIRCULAR_REVEAL_SCRIM_COLOR,
+                        Color.GRAY, Color.TRANSPARENT
+                    )
+                )
                 duration = 500
             }.start()
         }
@@ -367,6 +394,102 @@ fun getEnabledCalendarTypes(): List<CalendarType> {
     return result
 }
 
+fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
+    view ?: return
+
+    val snackbar = Snackbar.make(view, message, duration)
+
+    val snackbarView = snackbar.view
+    snackbarView.setOnClickListener { snackbar.dismiss() }
+
+    val text = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+    text.setTextColor(Color.WHITE)
+    text.maxLines = 5
+
+    snackbar.show()
+}
+
+fun createAndShowShortSnackbar(view: View?, @StringRes messageId: Int) {
+    view ?: return
+    val context = view.context ?: return
+
+    createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT)
+}
+
+fun createAndShowShortSnackbar(view: View?, message: String) {
+    view ?: return
+
+    createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT)
+}
+
+
+fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance().apply {
+    set(Calendar.YEAR, civilDate.year)
+    set(Calendar.MONTH, civilDate.month - 1)
+    set(Calendar.DAY_OF_MONTH, civilDate.dayOfMonth)
+}
+
+fun calendarToCivilDate(calendar: Calendar): CivilDate {
+    return CivilDate(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH) + 1,
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+}
+
+fun hasAnyHolidays(dayEvents: List<AbstractEvent<*>>): Boolean {
+    for (event in dayEvents) {
+        if (event.isHoliday) {
+            return true
+        }
+    }
+    return false
+}
+
+fun loadApp(context: Context) {
+    if (goForWorker()) return
+
+    try {
+        val alarmManager = context.getSystemService<AlarmManager>() ?: return
+
+        val startTime = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 1)
+            add(Calendar.DATE, 1)
+        }
+
+
+        val dailyPendingIntent = PendingIntent.getBroadcast(
+            context, LOAD_APP_ID,
+            Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_RESTART_APP),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        alarmManager.set(AlarmManager.RTC, startTime.timeInMillis, dailyPendingIntent)
+
+        // There are simpler triggers on older Androids like SCREEN_ON but they
+        // are not available anymore, lets register an hourly alarm for >= Oreo
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val threeHoursPendingIntent = PendingIntent.getBroadcast(
+                context,
+                THREE_HOURS_APP_ID,
+                Intent(context, BroadcastReceivers::class.java)
+                    .setAction(BROADCAST_UPDATE_APP),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+            alarmManager.setInexactRepeating(
+                AlarmManager.RTC,
+                // Start from one hour from now
+                Calendar.getInstance().timeInMillis + TimeUnit.HOURS.toMillis(1),
+                TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
+            )
+        }
+    } catch (e: Exception) {
+        Log.e(TAG, "loadApp fail", e)
+    }
+
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
