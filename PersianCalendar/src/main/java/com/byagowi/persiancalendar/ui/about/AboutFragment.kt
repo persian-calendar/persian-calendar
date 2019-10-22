@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMaxSupportedYear
 import com.google.android.material.chip.Chip
