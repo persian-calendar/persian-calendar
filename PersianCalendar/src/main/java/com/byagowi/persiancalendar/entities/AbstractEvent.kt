@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
-import com.byagowi.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.calendar.AbstractDate
 
 abstract class AbstractEvent<T : AbstractDate> {
     lateinit var date: T

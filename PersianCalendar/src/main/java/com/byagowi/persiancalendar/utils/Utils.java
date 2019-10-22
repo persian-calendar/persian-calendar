@@ -43,10 +43,10 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.calendar.AbstractDate;
-import com.byagowi.persiancalendar.calendar.CivilDate;
-import com.byagowi.persiancalendar.calendar.IslamicDate;
-import com.byagowi.persiancalendar.calendar.PersianDate;
+import io.github.persiancalendar.calendar.AbstractDate;
+import io.github.persiancalendar.calendar.CivilDate;
+import io.github.persiancalendar.calendar.IslamicDate;
+import io.github.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entities.AbstractEvent;
 import com.byagowi.persiancalendar.entities.CalendarTypeItem;
 import com.byagowi.persiancalendar.entities.CityItem;

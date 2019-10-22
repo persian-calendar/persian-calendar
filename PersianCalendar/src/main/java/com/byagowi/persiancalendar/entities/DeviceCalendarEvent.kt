@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
-import com.byagowi.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.calendar.CivilDate
 import java.util.*
 
 class DeviceCalendarEvent(val id: Int, title: String, val description: String,

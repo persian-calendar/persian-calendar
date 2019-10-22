@@ -1,8 +1,8 @@
-package com.byagowi.persiancalendar.calendar;
+package io.github.persiancalendar.calendar;
 
-import com.byagowi.persiancalendar.calendar.islamic.FallbackIslamicConverter;
-import com.byagowi.persiancalendar.calendar.islamic.IranianIslamicDateConverter;
-import com.byagowi.persiancalendar.calendar.islamic.UmmAlQuraConverter;
+import io.github.persiancalendar.calendar.islamic.FallbackIslamicConverter;
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter;
+import io.github.persiancalendar.calendar.islamic.UmmAlQuraConverter;
 
 /**
  * @author Amir

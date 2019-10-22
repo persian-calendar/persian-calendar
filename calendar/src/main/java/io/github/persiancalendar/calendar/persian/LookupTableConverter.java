@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.calendar.persian;
+package io.github.persiancalendar.calendar.persian;
 
 import java.util.Arrays;
 

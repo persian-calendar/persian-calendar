@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
-import com.byagowi.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.IslamicDate
 
 class IslamicCalendarEvent(date: IslamicDate, title: String, holiday: Boolean) : AbstractEvent<IslamicDate>() {
     init {
