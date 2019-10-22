@@ -33,7 +33,10 @@ class BroadcastReceivers : BroadcastReceiver() {
                 loadApp(context)
             }
 
-            BROADCAST_ALARM -> startAthan(context, intent.getStringExtra(KEY_EXTRA_PRAYER_KEY))
+            BROADCAST_ALARM -> {
+                val prayTimeKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY) ?: return
+                startAthan(context, prayTimeKey)
+            }
         }
     }
 }
