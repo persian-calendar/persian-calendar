@@ -23,8 +23,7 @@ val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-@kotlin.jvm.JvmField
-val emptyStringList = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
+val emptyStringList: Array<String?> = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
 @kotlin.jvm.JvmField
 var persianMonths = emptyStringList
 @kotlin.jvm.JvmField
@@ -32,9 +31,9 @@ var islamicMonths = emptyStringList
 @kotlin.jvm.JvmField
 var gregorianMonths = emptyStringList
 @kotlin.jvm.JvmField
-var weekDays: Array<String> = emptyStringList
+var weekDays = emptyStringList
 @kotlin.jvm.JvmField
-var weekDaysInitials: Array<String>? = emptyStringList
+var weekDaysInitials = emptyStringList
 @kotlin.jvm.JvmField
 var preferredDigits = PERSIAN_DIGITS
 @kotlin.jvm.JvmField
@@ -55,9 +54,9 @@ var selectedWidgetTextColor: String = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 var selectedWidgetBackgroundColor: String = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
 @kotlin.jvm.JvmField
-var calculationMethod: String? = DEFAULT_PRAY_TIME_METHOD
+var calculationMethod: String = DEFAULT_PRAY_TIME_METHOD
 @kotlin.jvm.JvmField
-var language: String? = DEFAULT_APP_LANGUAGE
+var language: String = DEFAULT_APP_LANGUAGE
 @kotlin.jvm.JvmField
 var coordinate: Coordinate? = null
 @kotlin.jvm.JvmField
@@ -103,8 +102,6 @@ var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
 var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
 @kotlin.jvm.JvmField
 var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
-//@kotlin.jvm.JvmField
-//var sAllEnabledEvents: ArrayList<AbstractEvent<*>> = ArrayList() //..........
 @kotlin.jvm.JvmField
 var sShiftWorkTitles: MutableMap<String, String> = HashMap()
 @kotlin.jvm.JvmField

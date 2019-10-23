@@ -66,7 +66,7 @@ fun update(context: Context, updateDate: Boolean) {
     val color = Color.parseColor(colorInt)
 
     // en-US is our only real LTR language for now
-    val isRTL = Utils.isLocaleRTL()
+    val isRTL = isLocaleRTL()
 
     // Widget 1x1
     val widget1x1 = ComponentName(context, Widget1x1::class.java)

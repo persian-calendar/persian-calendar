@@ -218,4 +218,7 @@ class AthanActivity : AppCompatActivity() {
         finish()
     }
 
+    companion object {
+        private val TAG = AthanActivity::class.java.name
+    }
 }

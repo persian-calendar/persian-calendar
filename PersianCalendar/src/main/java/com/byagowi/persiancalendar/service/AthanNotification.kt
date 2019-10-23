@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.isLocaleRTL
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002
@@ -71,7 +72,7 @@ class AthanNotification : Service() {
 
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
             val cv = RemoteViews(
-                applicationContext?.packageName, if (Utils.isLocaleRTL())
+                applicationContext?.packageName, if (isLocaleRTL())
                     R.layout.custom_notification
                 else
                     R.layout.custom_notification_ltr

@@ -11,8 +11,10 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.text.TextUtils
 import android.util.SparseArray
 import android.view.View
+import androidx.annotation.RawRes
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -25,6 +27,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
@@ -38,12 +41,21 @@ import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
 
-fun getAllEnabledEvents(): List<AbstractEvent<*>> = sAllEnabledEvents
+// This should be called before any use of Utils on the activity and services
+fun initUtils(context: Context) {
+    updateStoredPreference(context)
+    applyAppLanguage(context)
+    loadLanguageResource(context)
+    loadAlarms(context)
+    loadEvents(context)
+}
 
 @StyleRes
 fun getAppTheme(): Int = appTheme
 
 fun getMaxSupportedYear(): Int = 1398
+
+fun getAllEnabledEvents(): List<AbstractEvent<*>> = sAllEnabledEvents
 
 fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
 
@@ -81,6 +93,55 @@ fun getSelectedWidgetTextColor(): String = selectedWidgetTextColor
 
 fun getSelectedWidgetBackgroundColor(): String = selectedWidgetBackgroundColor
 
+fun isIranHolidaysEnabled(): Boolean = sIsIranHolidaysEnabled
+
+fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
+
+fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+fun getWeekDayName(position: Int): String? = weekDays[position % 7]
+
+fun isTalkBackEnabled(): Boolean = talkBackEnabled
+
+fun isCenterAlignWidgets(): Boolean = centerAlignWidgets
+
+fun getSpacedComma(): String = spacedComma
+
+fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
+
+fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+
+fun toLinearDate(date: AbstractDate): String = String.format(
+    "%s/%s/%s", formatNumber(date.year),
+    formatNumber(date.month), formatNumber(date.dayOfMonth)
+)
+
+fun isNightModeEnabled(context: Context): Boolean =
+    context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+fun formatDate(date: AbstractDate): String =
+        if (numericalDatePreferred)
+            (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+        else
+            String.format(if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+                    formatNumber(date.dayOfMonth), getMonthName(date),
+                    formatNumber(date.year))
+
+fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
+
+fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
+
+fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
+        LANG_EN_US, LANG_JA -> true
+        else -> false
+    }
+
+// en-US and ja are our only real LTR locales for now
+fun isLocaleRTL(): Boolean = when (getAppLanguage()) {
+        LANG_EN_US, LANG_JA -> false
+        else -> true
+    }
+
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String {
@@ -95,43 +156,6 @@ fun formatNumber(number: String): String {
     }
     return String(result)
 }
-
-fun isIranHolidaysEnabled(): Boolean = sIsIranHolidaysEnabled
-
-fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
-
-fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-fun getWeekDayName(position: Int): String = weekDays[position % 7]
-
-fun isTalkBackEnabled(): Boolean = talkBackEnabled
-
-fun isCenterAlignWidgets(): Boolean = centerAlignWidgets
-
-fun getSpacedComma(): String = spacedComma
-
-fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
-
-fun formatDayAndMonth(day: Int, month: String): String =
-    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
-
-fun toLinearDate(date: AbstractDate): String = String.format(
-    "%s/%s/%s", formatNumber(date.year),
-    formatNumber(date.month), formatNumber(date.dayOfMonth)
-)
-
-fun isNightModeEnabled(context: Context): Boolean =
-    context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-fun formatDate(date: AbstractDate): String =
-    if (numericalDatePreferred)
-        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
-    else
-        String.format(
-            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-            formatNumber(date.dayOfMonth), getMonthName(date),
-            formatNumber(date.year)
-        )
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -225,7 +249,9 @@ fun loadEvents(context: Context) {
                     else if (type == "Afghanistan")
                         title += "افغانستان، "
                 }
-                title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
+                persianMonths[month - 1]?.let {
+                    title += formatDayAndMonth(day, it) + ")"
+                }
 
                 var list: ArrayList<PersianCalendarEvent>? =
                     persianCalendarEvents.get(month * 100 + day)
@@ -281,9 +307,10 @@ fun loadEvents(context: Context) {
                     else if (type == "Islamic Afghanistan")
                         title += "افغانستان، "
                 }
-                title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
-                var list: ArrayList<IslamicCalendarEvent>? =
-                    islamicCalendarEvents.get(month * 100 + day)
+                islamicMonths[month - 1]?.let {
+                    title += formatDayAndMonth(day, it) + ")"
+                }
+                var list: ArrayList<IslamicCalendarEvent>? = islamicCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     islamicCalendarEvents.put(month * 100 + day, list)
@@ -304,9 +331,10 @@ fun loadEvents(context: Context) {
             var title = event.getString("title")
 
             if (international) {
-                title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
-                var list: ArrayList<GregorianCalendarEvent>? =
-                    gregorianCalendarEvents.get(month * 100 + day)
+                gregorianMonths[month - 1]?.let {
+                    title += " (" + formatDayAndMonth(day, it) + ")"
+                }
+                var list: ArrayList<GregorianCalendarEvent>? = gregorianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     gregorianCalendarEvents.put(month * 100 + day, list)
@@ -394,6 +422,56 @@ fun getEnabledCalendarTypes(): List<CalendarType> {
     return result
 }
 
+private fun loadLanguageResource(context: Context) {
+    @RawRes val messagesFile: Int = when (language) {
+        LANG_FA_AF -> R.raw.messages_fa_af
+        LANG_PS -> R.raw.messages_ps
+        LANG_GLK -> R.raw.messages_glk
+        LANG_AR -> R.raw.messages_ar
+        LANG_CKB -> R.raw.messages_ckb
+        LANG_UR -> R.raw.messages_ur
+        LANG_EN_US -> R.raw.messages_en
+        LANG_JA -> R.raw.messages_ja
+        LANG_AZB -> R.raw.messages_azb
+        LANG_EN_IR, LANG_FA -> R.raw.messages_fa
+        else -> R.raw.messages_fa
+    }
+
+    persianMonths = arrayOfNulls(12)
+    islamicMonths = arrayOfNulls(12)
+    gregorianMonths = arrayOfNulls(12)
+    weekDays = arrayOfNulls(7)
+    weekDaysInitials = arrayOfNulls(7)
+
+    try {
+        val messages = JSONObject(readRawResource(context, messagesFile))
+
+        val persianMonthsArray = messages.getJSONArray("PersianCalendarMonths")
+        for (i in 0..11)
+            persianMonths[i] = persianMonthsArray.getString(i)
+
+        val islamicMonthsArray = messages.getJSONArray("IslamicCalendarMonths")
+        for (i in 0..11)
+            islamicMonths[i] = islamicMonthsArray.getString(i)
+
+        val gregorianMonthsArray = messages.getJSONArray("GregorianCalendarMonths")
+        for (i in 0..11)
+            gregorianMonths[i] = gregorianMonthsArray.getString(i)
+
+        val weekDaysArray = messages.getJSONArray("WeekDays")
+        for (i in 0..6) {
+            weekDays[i] = weekDaysArray.getString(i)
+            weekDays[i]?.run {
+                when (language) {
+                    LANG_AR -> weekDaysInitials[i] = substring(2, 4)
+                    LANG_AZB -> weekDaysInitials[i] = substring(0, 2)
+                    else -> weekDaysInitials[i] = substring(0, 1)
+                }
+            }
+        }
+    } catch (ignore: JSONException) {
+    }
+}
 fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
     view ?: return
 
@@ -489,6 +567,17 @@ fun loadApp(context: Context) {
         Log.e(TAG, "loadApp fail", e)
     }
 
+}
+
+fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
+    val enabledCalendarTypes = getEnabledCalendarTypes()
+
+    val result = ArrayList(enabledCalendarTypes)
+    for (key in CalendarType.values())
+        if (!enabledCalendarTypes.contains(key))
+            result.add(key)
+
+    return result
 }
 
 //    public static List<Reminder> getReminderDetails() {

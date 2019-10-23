@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getAppLanguage
 
 class LocationAdapter constructor(private val mLocationPreferenceDialog: LocationPreferenceDialog,
                                   private val mCities: List<CityItem>) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
@@ -27,7 +27,7 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
         fun bind(cityEntity: CityItem) {
             val city: String
             val country: String
-            when (Utils.getAppLanguage()) {
+            when (getAppLanguage()) {
                 LANG_EN_IR, LANG_EN_US, LANG_JA -> {
                     city = cityEntity.en
                     country = cityEntity.countryEn
