@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.formatCoordinate
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.io.IOException
 import java.util.*
@@ -135,7 +136,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
             result = cityName + "\n\n"
         }
         // this time, with native digits
-        result += Utils.formatCoordinate(mainActivityDependency.mainActivity,
+        result += formatCoordinate(mainActivityDependency.mainActivity,
                 Coordinate(location.latitude, location.longitude,
                         location.altitude), "\n")
         textView.text = result

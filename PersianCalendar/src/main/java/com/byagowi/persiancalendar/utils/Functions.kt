@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
+import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
@@ -37,6 +38,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
@@ -802,6 +804,20 @@ fun getDayIconResource(day: Int): Int {
     }
 }
 
+private fun readStream(inputStream: InputStream): String {
+    // http://stackoverflow.com/a/5445161
+    val s = Scanner(inputStream).useDelimiter("\\A")
+    return if (s.hasNext()) s.next() else ""
+}
+
+fun readRawResource(context: Context, @RawRes res: Int): String = readStream(context.resources.openRawResource(res))
+
+fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String): String =
+    String.format(
+        Locale.getDefault(), "%s: %.4f%s%s: %.4f",
+        context.getString(R.string.latitude), coordinate.latitude, separator,
+        context.getString(R.string.longitude), coordinate.longitude
+    )
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

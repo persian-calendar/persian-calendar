@@ -251,16 +251,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    static private String readStream(InputStream is) {
-        // http://stackoverflow.com/a/5445161
-        Scanner s = new Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
-    public static String readRawResource(@NonNull Context context, @RawRes int res) {
-        return readStream(context.getResources().openRawResource(res));
-    }
-
     static private String prepareForArabicSort(String text) {
         return text
                 .replaceAll("ی", "ي")
@@ -392,12 +382,6 @@ public class Utils {
                 return cachedCity = cityEntity;
 
         return cachedCity = null;
-    }
-
-    static public String formatCoordinate(@NonNull Context context, Coordinate coordinate, String separator) {
-        return String.format(Locale.getDefault(), "%s: %.4f%s%s: %.4f",
-                context.getString(R.string.latitude), coordinate.getLatitude(), separator,
-                context.getString(R.string.longitude), coordinate.getLongitude());
     }
 
     static public @NonNull
