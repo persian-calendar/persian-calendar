@@ -28,6 +28,8 @@ import io.github.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.praytimes.CalculationMethod
+import com.byagowi.persiancalendar.praytimes.Clock
+import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
@@ -578,6 +580,60 @@ fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
             result.add(key)
 
     return result
+}
+
+@StringRes
+fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
+    if (coordinate == null) return 0
+
+    if (prayTimes == null || dateHasChanged)
+        prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), Date(), coordinate)
+
+    val clock = current.toInt()
+
+    prayTimes?.run {
+        //TODO We like to show Imsak only in Ramadan
+        return when {
+            fajrClock.toInt() > clock -> R.string.fajr
+            sunriseClock.toInt() > clock -> R.string.sunrise
+            dhuhrClock.toInt() > clock -> R.string.dhuhr
+            asrClock.toInt() > clock -> R.string.asr
+            sunsetClock.toInt() > clock -> R.string.sunset
+            maghribClock.toInt() > clock -> R.string.maghrib
+            ishaClock.toInt() > clock -> R.string.isha
+            midnightClock.toInt() > clock -> R.string.midnight
+            else
+                // TODO: this is today's, not tomorrow
+            -> R.string.fajr
+        }
+    }
+    return 0
+}
+
+fun getClockFromStringId(@StringRes stringId: Int): Clock {
+    prayTimes?.run {
+        return when (stringId) {
+            R.string.imsak -> imsakClock
+            R.string.fajr -> fajrClock
+            R.string.sunrise -> sunriseClock
+            R.string.dhuhr -> dhuhrClock
+            R.string.asr -> asrClock
+            R.string.sunset -> sunsetClock
+            R.string.maghrib -> maghribClock
+            R.string.isha -> ishaClock
+            R.string.midnight -> midnightClock
+            else -> Clock.fromInt(0)
+        }
+    }
+    return Clock.fromInt(0)
+}
+
+fun monthsNamesOfCalendar(date: AbstractDate): Array<String?>? {
+    return when (date) {
+        is PersianDate -> persianMonths
+        is IslamicDate -> islamicMonths
+        else -> gregorianMonths
+    }
 }
 
 //    public static List<Reminder> getReminderDetails() {

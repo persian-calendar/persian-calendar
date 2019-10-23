@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.Utils.getClockFromStringId
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -108,7 +107,7 @@ fun update(context: Context, updateDate: Boolean) {
     val currentClock = Clock(calendar)
     var owghat = ""
     @StringRes
-    val nextOwghatId = Utils.getNextOwghatTimeId(currentClock, dateHasChanged)
+    val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
