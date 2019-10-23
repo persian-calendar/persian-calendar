@@ -21,7 +21,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                                         private val days: List<DayItem>,
                                         startingDayOfWeek: Int, private val weekOfYearStart: Int,
                                         private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
-    private val startingDayOfWeek: Int = Utils.fixDayOfWeekReverse(startingDayOfWeek)
+    private val startingDayOfWeek: Int = fixDayOfWeekReverse(startingDayOfWeek)
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
@@ -137,7 +137,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                 setEmpty()
             } else if (position < 7) {
                 itemDayView.setNonDayOfMonthItem(
-                        Utils.getInitialOfWeekDay(fixDayOfWeek(position)),
+                        getInitialOfWeekDay(fixDayOfWeek(position)),
                         daysPaintResources.weekDaysInitialTextSize)
                 if (isTalkBackEnabled()) {
                     itemDayView.contentDescription = String.format(
@@ -161,9 +161,10 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                             day.jdn, position - 6 - startingDayOfWeek,
                             Utils.getShiftWorkTitle(day.jdn, true))
 
-                    itemDayView.contentDescription = Utils.getA11yDaySummary(context,
+                    itemDayView.contentDescription = getA11yDaySummary(context,
                             day.jdn, day.isToday, monthEvents,
-                            day.isToday, false, true)
+                            day.isToday, withOtherCalendars = false, withTitle = true
+                    )
 
                     itemDayView.visibility = View.VISIBLE
                 } else {

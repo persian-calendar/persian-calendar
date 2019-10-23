@@ -332,9 +332,10 @@ fun update(context: Context, updateDate: Boolean) {
         // Don't remove this condition checking ever
         if (isTalkBackEnabled()) {
             // Don't use isToday, per a feedback
-            subtitle = Utils.getA11yDaySummary(context, jdn, false,
+            subtitle = getA11yDaySummary(context, jdn, false,
                     deviceCalendarEvents,
-                    true, true, false)
+                withZodiac = true, withOtherCalendars = true, withTitle = false
+            )
             if (owghat.isNotEmpty()) {
                 subtitle += getSpacedComma()
                 subtitle += owghat

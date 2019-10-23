@@ -449,9 +449,10 @@ class CalendarFragment : DaggerFragment() {
             val todayJdn = Utils.getTodayJdn()
             if (jdn != todayJdn) {
                 createAndShowShortSnackbar(view,
-                        Utils.getA11yDaySummary(mainActivityDependency.mainActivity, jdn,
-                                false, null, true,
-                                true, true))
+                        getA11yDaySummary(mainActivityDependency.mainActivity, jdn,
+                                false, null, withZodiac = true,
+                            withOtherCalendars = true, withTitle = true
+                        ))
             }
         }
     }

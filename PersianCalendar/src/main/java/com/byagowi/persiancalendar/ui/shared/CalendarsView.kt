@@ -154,8 +154,9 @@ class CalendarsView : FrameLayout {
             mBinding.equinox.visibility = if (TextUtils.isEmpty(equinox)) View.GONE else View.VISIBLE
         }
 
-        mBinding.root.contentDescription = Utils.getA11yDaySummary(context, jdn,
-                diffDays == 0L, null, true, true, true)
+        mBinding.root.contentDescription = getA11yDaySummary(context, jdn,
+                diffDays == 0L, null, withZodiac = true, withOtherCalendars = true, withTitle = true
+        )
     }
 
     interface OnShowHideTodayButton {

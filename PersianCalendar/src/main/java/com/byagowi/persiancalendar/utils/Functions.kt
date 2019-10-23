@@ -914,6 +914,102 @@ fun getCoordinate(context: Context): Coordinate? {
     }
 }
 
+fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
+
+fun getInitialOfWeekDay(position: Int): String {
+    weekDaysInitials?.let {
+        return it[position % 7]
+    }
+    return ""
+}
+
+// Extra helpers
+fun getA11yDaySummary(
+    context: Context, jdn: Long, isToday: Boolean,
+    deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>?,
+    withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
+): String {
+    // It has some expensive calculations, lets not do that when not needed
+    if (!isTalkBackEnabled()) return ""
+
+    val result = StringBuilder()
+
+    if (isToday) {
+        result.append(context.getString(R.string.today))
+        result.append("\n")
+    }
+
+    val mainDate = getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+
+    if (withTitle) {
+        result.append("\n")
+        result.append(dayTitleSummary(mainDate))
+    }
+
+    val shift = getShiftWorkTitle(jdn, false)
+    if (!TextUtils.isEmpty(shift)) {
+        result.append("\n")
+        result.append(shift)
+    }
+
+    if (withOtherCalendars) {
+        val otherCalendars = dateStringOfOtherCalendars(jdn, getSpacedComma())
+        if (!TextUtils.isEmpty(otherCalendars)) {
+            result.append("\n")
+            result.append("\n")
+            result.append(context.getString(R.string.equivalent_to))
+            result.append(" ")
+            result.append(otherCalendars)
+        }
+    }
+
+    val events = getEvents(jdn, deviceCalendarEvents)
+    val holidays = getEventsTitle(events, true, true, true, false)
+    if (!TextUtils.isEmpty(holidays)) {
+        result.append("\n")
+        result.append("\n")
+        result.append(context.getString(R.string.holiday_reason))
+        result.append("\n")
+        result.append(holidays)
+    }
+
+    val nonHolidays = getEventsTitle(events, false, true, true, false)
+    if (!TextUtils.isEmpty(nonHolidays)) {
+        result.append("\n")
+        result.append("\n")
+        result.append(context.getString(R.string.events))
+        result.append("\n")
+        result.append(nonHolidays)
+    }
+
+    if (isWeekOfYearEnabled()) {
+        val startOfYearJdn = getDateOfCalendar(
+            getMainCalendar(),
+            mainDate.year, 1, 1
+        ).toJdn()
+        val weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn)
+        result.append("\n")
+        result.append("\n")
+        result.append(
+            String.format(
+                context.getString(R.string.nth_week_of_year),
+                formatNumber(weekOfYearStart)
+            )
+        )
+    }
+
+    if (withZodiac) {
+        val zodiac = getZodiacInfo(context, jdn, false)
+        if (!TextUtils.isEmpty(zodiac)) {
+            result.append("\n")
+            result.append("\n")
+            result.append(zodiac)
+        }
+    }
+
+    return result.toString()
+}
+
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
 //    }
