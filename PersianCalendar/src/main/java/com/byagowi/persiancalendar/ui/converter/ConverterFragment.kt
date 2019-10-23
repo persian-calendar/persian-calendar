@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
+import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -32,9 +31,9 @@ class ConverterFragment : DaggerFragment() {
                 if (show) todayButton.show() else todayButton.hide()
             }
 
-            todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(Utils.getTodayJdn()) }
+            todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
             swipeToRefresh.setOnRefreshListener {
-                dayPickerView.setDayJdnOnView(Utils.getTodayJdn())
+                dayPickerView.setDayJdnOnView(getTodayJdn())
                 swipeToRefresh.isRefreshing = false
             }
 
@@ -51,7 +50,7 @@ class ConverterFragment : DaggerFragment() {
                     }
                 }
             }
-            dayPickerView.setDayJdnOnView(Utils.getTodayJdn())
+            dayPickerView.setDayJdnOnView(getTodayJdn())
 
             return root
         }

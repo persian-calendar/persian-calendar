@@ -41,6 +41,7 @@ import org.json.JSONObject
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
@@ -1009,6 +1010,17 @@ fun getA11yDaySummary(
 
     return result.toString()
 }
+
+
+fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
+    val dayOfYear = jdn - startOfYearJdn
+    return ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
+}
+
+fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =
+    getDateFromJdnOfCalendar(calendar, getTodayJdn())
+
+fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

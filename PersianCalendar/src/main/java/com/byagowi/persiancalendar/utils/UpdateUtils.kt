@@ -49,7 +49,7 @@ fun update(context: Context, updateDate: Boolean) {
     Utils.applyAppLanguage(context)
     val calendar = Utils.makeCalendarFromDate(Date())
     val mainCalendar = getMainCalendar()
-    val date = Utils.getTodayOfCalendar(mainCalendar)
+    val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
     val launchAppPendingIntent = PendingIntent.getActivity(context, 0,

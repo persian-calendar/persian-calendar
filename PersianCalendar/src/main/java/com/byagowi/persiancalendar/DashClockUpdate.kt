@@ -12,7 +12,7 @@ class DashClockUpdate : DashClockExtension() {
     override fun onUpdateData(reason: Int) {
         setUpdateWhenScreenOn(true)
         val mainCalendar = getMainCalendar()
-        val jdn = Utils.getTodayJdn()
+        val jdn = getTodayJdn()
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
         publishUpdate(ExtensionData().visible(true)
                 .icon(getDayIconResource(date.dayOfMonth))

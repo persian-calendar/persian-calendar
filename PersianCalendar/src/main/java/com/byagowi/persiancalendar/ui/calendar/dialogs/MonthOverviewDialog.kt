@@ -34,7 +34,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = mainActivityDependency.mainActivity
         var baseJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
-        if (baseJdn == -1L) baseJdn = Utils.getTodayJdn()
+        if (baseJdn == -1L) baseJdn = getTodayJdn()
 
         val records = ArrayList<MonthOverviewRecord>()
 

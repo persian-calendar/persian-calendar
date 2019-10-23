@@ -781,19 +781,6 @@ public class Utils {
         return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
     }
 
-    static public long getTodayJdn() {
-        return calendarToCivilDate(makeCalendarFromDate(new Date())).toJdn();
-    }
-
-    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
-        return getDateFromJdnOfCalendar(calendar, getTodayJdn());
-    }
-
-    public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
-        long dayOfYear = jdn - startOfYearJdn;
-        return (int) Math.ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
-    }
-
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {
         Calendar startingDate = Calendar.getInstance();
         startingDate.add(Calendar.YEAR, -1);

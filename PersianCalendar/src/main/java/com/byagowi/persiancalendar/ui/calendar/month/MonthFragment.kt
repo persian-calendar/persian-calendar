@@ -67,7 +67,7 @@ class MonthFragment : DaggerFragment() {
 
         var dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn)
 
-        val todayJdn = Utils.getTodayJdn()
+        val todayJdn = getTodayJdn()
         for (i in 0 until monthLength) {
             val jdn = baseJdn + i
             days.add(DayItem(jdn == todayJdn, jdn, dayOfWeek))
@@ -78,8 +78,8 @@ class MonthFragment : DaggerFragment() {
         }
 
         val startOfYearJdn = Utils.getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
-        val weekOfYearStart = Utils.calculateWeekOfYear(baseJdn, startOfYearJdn)
-        val weeksCount = 1 + Utils.calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
+        val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
+        val weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
 
         val startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn)
         ///////
@@ -96,7 +96,7 @@ class MonthFragment : DaggerFragment() {
         if (calendarFragmentModel.isTheFirstTime &&
                 offset == 0 && calendarFragment.viewPagerPosition == offset) {
             calendarFragmentModel.isTheFirstTime = false
-            calendarFragmentModel.selectDay(Utils.getTodayJdn())
+            calendarFragmentModel.selectDay(getTodayJdn())
             updateTitle(date)
         }
 
@@ -133,7 +133,7 @@ class MonthFragment : DaggerFragment() {
     companion object {
 
         fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-            val date = Utils.getTodayOfCalendar(calendar)
+            val date = getTodayOfCalendar(calendar)
             var month = date.month - offset
             month -= 1
             var year = date.year
