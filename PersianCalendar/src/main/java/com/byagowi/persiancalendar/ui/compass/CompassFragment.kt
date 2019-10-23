@@ -15,9 +15,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
-import com.byagowi.persiancalendar.utils.createAndShowSnackbar
+import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 import kotlin.math.abs
@@ -75,10 +73,10 @@ class CompassFragment : DaggerFragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
-            coordinate = Utils.getCoordinate(mainActivityDependency.mainActivity)
+            coordinate = getCoordinate(mainActivityDependency.mainActivity)
 
             mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.compass),
-                    Utils.getCityName(mainActivityDependency.mainActivity, true))
+                    getCityName(mainActivityDependency.mainActivity, true))
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->

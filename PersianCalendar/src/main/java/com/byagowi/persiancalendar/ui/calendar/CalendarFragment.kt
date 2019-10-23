@@ -118,7 +118,7 @@ class CalendarFragment : DaggerFragment() {
             // Don't do the same for others tabs, it is problematic
         }
 
-        mCoordinate = Utils.getCoordinate(context)?.apply {
+        mCoordinate = getCoordinate(context)?.apply {
             titles.add(getString(R.string.owghat))
             mOwghatBinding = OwghatTabContentBinding.inflate(inflater, container, false).apply {
                 tabs.add(root)
@@ -130,7 +130,7 @@ class CalendarFragment : DaggerFragment() {
                         startAthan(context, "FAJR")
                         true
                     }
-                    val cityName = Utils.getCityName(context, false)
+                    val cityName = getCityName(context, false)
                     if (!TextUtils.isEmpty(cityName)) {
                         text = cityName
                     }

@@ -810,7 +810,8 @@ private fun readStream(inputStream: InputStream): String {
     return if (s.hasNext()) s.next() else ""
 }
 
-fun readRawResource(context: Context, @RawRes res: Int): String = readStream(context.resources.openRawResource(res))
+fun readRawResource(context: Context, @RawRes res: Int): String =
+    readStream(context.resources.openRawResource(res))
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String): String =
     String.format(
@@ -818,6 +819,100 @@ fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String
         context.getString(R.string.latitude), coordinate.latitude, separator,
         context.getString(R.string.longitude), coordinate.longitude
     )
+
+fun getCityName(context: Context, fallbackToCoord: Boolean): String {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val cityEntity = getCityFromPreference(context)
+    if (cityEntity != null) {
+        if (language == LANG_EN_IR || language == LANG_EN_US || language == LANG_JA)
+            return cityEntity.en
+        else if (language == LANG_CKB)
+            return cityEntity.ckb
+        return cityEntity.fa
+    }
+
+    val geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "")
+    geocodedCityName?.let {
+        if (!TextUtils.isEmpty(it))
+            return it
+    }
+
+    if (fallbackToCoord)
+        coordinate?.let {
+            return formatCoordinate(context, it, spacedComma)
+        }
+
+    return ""
+}
+
+private fun getCityFromPreference(context: Context): CityItem? {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    val key = prefs.getString(PREF_SELECTED_LOCATION, "")
+    if (TextUtils.isEmpty(key) || key == DEFAULT_CITY)
+        return null
+
+    if (key == cachedCityKey)
+        return cachedCity
+
+    // cache last query even if no city available under the key, useful in case invalid
+    // value is somehow inserted on the preference
+    key?.let {
+        cachedCityKey = key
+    }
+
+    for (cityEntity in getAllCities(context, false))
+        if (cityEntity.key == key) {
+            cachedCity = cityEntity
+            return cachedCity
+        }
+
+    cachedCity = null
+    return cachedCity
+}
+
+fun getCoordinate(context: Context): Coordinate? {
+    val cityEntity = getCityFromPreference(context)
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    if (cityEntity != null)
+        return cityEntity.coordinate
+
+    try {
+        val latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)
+        val longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)
+        val altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE)
+
+        var latitude = "0.0"
+        var longtitude = "0.0"
+        var altitude = "0.0"
+
+        latitudeString?.let {
+            latitude = it
+        }
+
+        longtitudeString?.let {
+            longtitude = it
+        }
+
+        altitudeString?.let {
+            altitude = it
+        }
+
+        val coord = Coordinate(
+            java.lang.Double.parseDouble(latitude),
+            java.lang.Double.parseDouble(longtitude),
+            java.lang.Double.parseDouble(altitude)
+        )
+
+        // If latitude or longitude is zero probably preference is not set yet
+        return if (coord.latitude == 0.0 && coord.longitude == 0.0) null
+        else coord
+
+    } catch (e: NumberFormatException) {
+        return null
+    }
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

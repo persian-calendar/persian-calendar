@@ -60,7 +60,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         @DrawableRes
         get() {
             var isSouthernHemisphere = false
-            val coordinate = Utils.getCoordinate(this)
+            val coordinate = getCoordinate(this)
             if (coordinate != null && coordinate.latitude < 0) {
                 isSouthernHemisphere = true
             }

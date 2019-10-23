@@ -17,7 +17,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.isLocaleRTL
+import com.byagowi.persiancalendar.utils.*
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002
@@ -51,7 +51,7 @@ class AthanNotification : Service() {
             ""
         else
             getString(Utils.getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
-        val cityName = Utils.getCityName(this, false)
+        val cityName = getCityName(this, false)
         val subtitle = if (TextUtils.isEmpty(cityName))
             ""
         else

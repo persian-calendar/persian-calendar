@@ -112,7 +112,7 @@ fun update(context: Context, updateDate: Boolean) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
         if (isShownOnWidgets("owghat_location")) {
-            val cityName = Utils.getCityName(context, false)
+            val cityName = getCityName(context, false)
             if (cityName.isNotEmpty()) {
                 owghat = "$owghat ($cityName)"
             }
