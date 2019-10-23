@@ -254,10 +254,8 @@ fun loadEvents(context: Context) {
                     else if (type == "Afghanistan")
                         title += "افغانستان، "
                 }
-                persianMonths?.run {
-                    this[month - 1]?.let {
-                        title += formatDayAndMonth(day, it) + ")"
-                    }
+                persianMonths?.let {
+                    title += formatDayAndMonth(day, it[month - 1]) + ")"
                 }
 
                 var list: ArrayList<PersianCalendarEvent>? =
@@ -314,10 +312,8 @@ fun loadEvents(context: Context) {
                     else if (type == "Islamic Afghanistan")
                         title += "افغانستان، "
                 }
-                islamicMonths?.run {
-                    this[month - 1]?.let {
-                        title += formatDayAndMonth(day, it) + ")"
-                    }
+                islamicMonths?.let {
+                    title += formatDayAndMonth(day, it[month - 1]) + ")"
                 }
                 var list: ArrayList<IslamicCalendarEvent>? =
                     islamicCalendarEvents.get(month * 100 + day)
@@ -341,10 +337,8 @@ fun loadEvents(context: Context) {
             var title = event.getString("title")
 
             if (international) {
-                gregorianMonths?.run {
-                    this[month - 1]?.let {
-                        title += " (" + formatDayAndMonth(day, it) + ")"
-                    }
+                gregorianMonths?.let {
+                    title += " (" + formatDayAndMonth(day, it[month - 1]) + ")"
                 }
                 var list: ArrayList<GregorianCalendarEvent>? =
                     gregorianCalendarEvents.get(month * 100 + day)
@@ -450,11 +444,11 @@ private fun loadLanguageResource(context: Context) {
         else -> R.raw.messages_fa
     }
 
-    persianMonths = arrayOfNulls(12)
-    islamicMonths = arrayOfNulls(12)
-    gregorianMonths = arrayOfNulls(12)
-    weekDays = arrayOfNulls(7)
-    weekDaysInitials = arrayOfNulls(7)
+    persianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+    islamicMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+    gregorianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+    weekDays = arrayOf("", "", "", "", "", "", "")
+    weekDaysInitials = arrayOf("", "", "", "", "", "", "")
 
     try {
         val messages = JSONObject(readRawResource(context, messagesFile))
@@ -481,13 +475,11 @@ private fun loadLanguageResource(context: Context) {
         for (i in 0..6) {
             weekDays?.let {
                 it[i] = weekDaysArray.getString(i)
-                it[i]?.run {
-                    weekDaysInitials?.run {
-                        when (language) {
-                            LANG_AR -> this[i] = substring(2, 4)
-                            LANG_AZB -> this[i] = substring(0, 2)
-                            else -> this[i] = substring(0, 1)
-                        }
+                weekDaysInitials?.run {
+                    when (language) {
+                        LANG_AR -> this[i] = it[i].substring(2, 4)
+                        LANG_AZB -> this[i] = it[i].substring(0, 2)
+                        else -> this[i] = it[i].substring(0, 1)
                     }
                 }
             }
@@ -650,7 +642,7 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
     return Clock.fromInt(0)
 }
 
-fun monthsNamesOfCalendar(date: AbstractDate): Array<String?>? {
+fun monthsNamesOfCalendar(date: AbstractDate): Array<String>? {
     return when (date) {
         is PersianDate -> persianMonths
         is IslamicDate -> islamicMonths
