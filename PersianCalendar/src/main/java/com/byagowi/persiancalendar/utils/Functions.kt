@@ -111,6 +111,8 @@ fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
+fun dayTitleSummary(date: AbstractDate): String = getWeekDayName(date) + getSpacedComma() + formatDate(date)
+
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
@@ -649,6 +651,24 @@ fun monthsNamesOfCalendar(date: AbstractDate): Array<String>? {
         else -> gregorianMonths
     }
 }
+
+fun getMonthName(date: AbstractDate): String {
+    val months = monthsNamesOfCalendar(date) ?: return ""
+    return months[date.month - 1]
+}
+
+fun getWeekDayName(date: AbstractDate): String {
+    val civilDate = if (date is CivilDate)
+        date
+    else
+        CivilDate(date)
+
+    weekDays?.let {
+        return it[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7]
+    }
+    return ""
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

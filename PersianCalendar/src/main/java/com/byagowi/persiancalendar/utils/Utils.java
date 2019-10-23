@@ -271,14 +271,6 @@ public class Utils {
         return result;
     }
 
-    static public String getWeekDayName(AbstractDate date) {
-        CivilDate civilDate = date instanceof CivilDate
-                ? (CivilDate) date
-                : new CivilDate(date);
-        if (weekDays == null) return "";
-        return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7];
-    }
-
     static public int getDayIconResource(int day) {
         try {
             if (preferredDigits == ARABIC_DIGITS)
@@ -1019,16 +1011,6 @@ public class Utils {
 
     static public Calendar getSpringEquinox(long jdn) {
         return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
-    }
-
-    static public String dayTitleSummary(AbstractDate date) {
-        return getWeekDayName(date) + getSpacedComma() + formatDate(date);
-    }
-
-    static public String getMonthName(AbstractDate date) {
-        String[] months = monthsNamesOfCalendar(date);
-        if (months == null) return "";
-        return months[date.getMonth() - 1];
     }
 
     static public int getDayOfWeekFromJdn(long jdn) {

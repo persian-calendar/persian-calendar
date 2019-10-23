@@ -9,7 +9,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.getMainCalendar
+import com.byagowi.persiancalendar.utils.*
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.
@@ -31,8 +31,8 @@ class PersianCalendarTileService : TileService() {
 
         tile.icon = Icon.createWithResource(this,
                 Utils.getDayIconResource(today.dayOfMonth))
-        tile.label = Utils.getWeekDayName(today)
-        tile.contentDescription = Utils.getMonthName(today)
+        tile.label = getWeekDayName(today)
+        tile.contentDescription = getMonthName(today)
         // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
         tile.state = Tile.STATE_ACTIVE
         tile.updateTile()

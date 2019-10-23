@@ -80,7 +80,7 @@ fun update(context: Context, updateDate: Boolean) {
             setTextViewText(R.id.textPlaceholder1_1x1,
                     formatNumber(date.dayOfMonth))
             setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(date))
+                    getMonthName(date))
             setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
             setBackgroundColor(this, R.id.widget_layout1x1)
             manager.updateAppWidget(widget1x1, this)
@@ -97,8 +97,8 @@ fun update(context: Context, updateDate: Boolean) {
         setDeviceCalendarEvents(context)
     }
 
-    val weekDayName = Utils.getWeekDayName(date)
-    var title = Utils.dayTitleSummary(date)
+    val weekDayName = getWeekDayName(date)
+    var title = dayTitleSummary(date)
     val shiftWorkTitle = Utils.getShiftWorkTitle(jdn, false)
     if (shiftWorkTitle.isNotEmpty())
         title += " ($shiftWorkTitle)"
@@ -249,7 +249,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             var text2 = formatDate(date)
             if (enableClock)
-                text2 = Utils.getWeekDayName(date) + "\n" + text2
+                text2 = getWeekDayName(date) + "\n" + text2
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 

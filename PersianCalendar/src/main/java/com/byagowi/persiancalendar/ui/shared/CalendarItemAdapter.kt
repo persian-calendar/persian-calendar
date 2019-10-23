@@ -65,7 +65,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
             binding.day.text = formatNumber(date.dayOfMonth)
             binding.monthYear.contentDescription = ""
             binding.monthYear.text = String.format("%s\n%s",
-                    Utils.getMonthName(date),
+                    getMonthName(date),
                     formatNumber(date.year))
         }
 

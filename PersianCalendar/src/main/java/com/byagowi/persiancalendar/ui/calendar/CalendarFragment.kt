@@ -165,7 +165,7 @@ class CalendarFragment : DaggerFragment() {
         }
 
         val today = Utils.getTodayOfCalendar(getMainCalendar())
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(Utils.getMonthName(today),
+        mainActivityDependency.mainActivity.setTitleAndSubtitle(getMonthName(today),
                 formatNumber(today.year))
 
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
@@ -200,7 +200,7 @@ class CalendarFragment : DaggerFragment() {
                 startActivityForResult(
                         Intent(Intent.ACTION_INSERT)
                                 .setData(CalendarContract.Events.CONTENT_URI)
-                                .putExtra(CalendarContract.Events.DESCRIPTION, Utils.dayTitleSummary(
+                                .putExtra(CalendarContract.Events.DESCRIPTION, dayTitleSummary(
                                         Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                         time.timeInMillis)

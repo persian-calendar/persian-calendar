@@ -82,7 +82,7 @@ class CalendarsView : FrameLayout {
         val context = context ?: return
 
         mCalendarItemAdapter.setDate(calendarsToShow, jdn)
-        mBinding.weekDayName.text = Utils.getWeekDayName(CivilDate(jdn))
+        mBinding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
         mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
         mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
