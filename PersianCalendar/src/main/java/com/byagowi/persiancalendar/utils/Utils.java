@@ -643,48 +643,6 @@ public class Utils {
         return baseFormatClock(hour, clock.getMinute()) + " " + suffix;
     }
 
-    static public @StringRes
-    int getPrayTimeText(String athanKey) {
-        switch (athanKey) {
-            case "FAJR":
-                return R.string.fajr;
-
-            case "DHUHR":
-                return R.string.dhuhr;
-
-            case "ASR":
-                return R.string.asr;
-
-            case "MAGHRIB":
-                return R.string.maghrib;
-
-            case "ISHA":
-            default:
-                return R.string.isha;
-        }
-    }
-
-    static public @DrawableRes
-    int getPrayTimeImage(String athanKey) {
-        switch (athanKey) {
-            case "FAJR":
-                return R.drawable.fajr;
-
-            case "DHUHR":
-                return R.drawable.dhuhr;
-
-            case "ASR":
-                return R.drawable.asr;
-
-            case "MAGHRIB":
-                return R.drawable.maghrib;
-
-            case "ISHA":
-            default:
-                return R.drawable.isha;
-        }
-    }
-
     @StyleRes
     public static int getThemeFromName(String name) {
         switch (name) {
@@ -762,23 +720,6 @@ public class Utils {
         int nextMonth = month == 12 ? 1 : month + 1;
         return (int) (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() -
                 getDateOfCalendar(calendar, year, month, 1).toJdn());
-    }
-
-    static Calendar makeCalendarFromDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        if (isIranTime()) {
-            calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
-        }
-        calendar.setTime(date);
-        return calendar;
-    }
-
-    static public Calendar getSpringEquinox(long jdn) {
-        return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
-    }
-
-    static public int getDayOfWeekFromJdn(long jdn) {
-        return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {

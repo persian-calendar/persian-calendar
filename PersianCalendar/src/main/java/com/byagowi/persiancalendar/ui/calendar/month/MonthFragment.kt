@@ -65,7 +65,7 @@ class MonthFragment : DaggerFragment() {
         val baseJdn = date.toJdn()
         val monthLength = Utils.getMonthLength(mainCalendar, date.year, date.month)
 
-        var dayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn)
+        var dayOfWeek = getDayOfWeekFromJdn(baseJdn)
 
         val todayJdn = getTodayJdn()
         for (i in 0 until monthLength) {
@@ -81,7 +81,7 @@ class MonthFragment : DaggerFragment() {
         val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
         val weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
 
-        val startingDayOfWeek = Utils.getDayOfWeekFromJdn(baseJdn)
+        val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
         ///////
         ///////
         ///////

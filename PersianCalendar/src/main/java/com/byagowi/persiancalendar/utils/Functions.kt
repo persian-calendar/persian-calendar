@@ -15,6 +15,7 @@ import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -31,6 +32,7 @@ import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -1021,6 +1023,42 @@ fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =
     getDateFromJdnOfCalendar(calendar, getTodayJdn())
 
 fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
+
+fun getDayOfWeekFromJdn(jdn: Long): Int =
+    civilDateToCalendar(CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7
+
+fun getSpringEquinox(jdn: Long): Calendar =
+    makeCalendarFromDate(Equinox.northwardEquinox(CivilDate(jdn).year))
+
+fun makeCalendarFromDate(date: Date): Calendar {
+    val calendar = Calendar.getInstance()
+    if (isIranTime())
+        calendar.timeZone = TimeZone.getTimeZone("Asia/Tehran")
+
+    calendar.time = date
+    return calendar
+}
+
+@StringRes
+fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {
+    "FAJR" -> R.string.fajr
+    "DHUHR" -> R.string.dhuhr
+    "ASR" -> R.string.asr
+    "MAGHRIB" -> R.string.maghrib
+    "ISHA" -> R.string.isha
+    else -> R.string.isha
+}
+
+@DrawableRes
+fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
+    "FAJR" -> R.drawable.fajr
+    "DHUHR" -> R.drawable.dhuhr
+    "ASR" -> R.drawable.asr
+    "MAGHRIB" -> R.drawable.maghrib
+    "ISHA" -> R.drawable.isha
+    else -> R.drawable.isha
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

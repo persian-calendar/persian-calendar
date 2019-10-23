@@ -142,7 +142,7 @@ class CalendarsView : FrameLayout {
             if (getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
                 if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                     val addition = if (mainDate.month == 12) 1 else 0
-                    val springEquinox = Utils.getSpringEquinox(mainDate.toJdn())
+                    val springEquinox = getSpringEquinox(mainDate.toJdn())
                     equinox = String.format(context.getString(R.string.spring_equinox),
                             formatNumber(mainDate.year + addition),
                             Utils.getFormattedClock(
