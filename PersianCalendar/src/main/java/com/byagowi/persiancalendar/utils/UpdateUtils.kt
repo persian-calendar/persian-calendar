@@ -91,7 +91,7 @@ fun update(context: Context, updateDate: Boolean) {
     if (pastDate == null || pastDate != date || updateDate) {
         Log.d("UpdateUtils", "date has changed")
 
-        Utils.loadAlarms(context)
+        loadAlarms(context)
         pastDate = date
         dateHasChanged = true
         setDeviceCalendarEvents(context)

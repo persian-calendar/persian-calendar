@@ -111,7 +111,8 @@ fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
-fun dayTitleSummary(date: AbstractDate): String = getWeekDayName(date) + getSpacedComma() + formatDate(date)
+fun dayTitleSummary(date: AbstractDate): String =
+    getWeekDayName(date) + getSpacedComma() + formatDate(date)
 
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
@@ -136,7 +137,7 @@ fun formatDate(date: AbstractDate): String =
 
 fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
 
-fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
+fun getCalculationMethod(): CalculationMethod? = CalculationMethod.valueOf(calculationMethod)
 
 fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
     LANG_EN_US, LANG_JA -> true
@@ -667,6 +668,101 @@ fun getWeekDayName(date: AbstractDate): String {
         return it[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7]
     }
     return ""
+}
+
+fun loadAlarms(context: Context) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    val prefString = prefs.getString(PREF_ATHAN_ALARM, "")
+    Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
+    val calculationMethod = getCalculationMethod()
+
+    if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
+        var athanGap: Long = 0
+        try {
+            val athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0")
+            athanGapStr?.let {
+                athanGap = (java.lang.Double.parseDouble(it) * 60.0 * 1000.0).toLong()
+            }
+        } catch (e: NumberFormatException) {
+        }
+
+        val prayTimes = PrayTimesCalculator.calculate(
+            calculationMethod,
+            Date(), coordinate
+        )
+        // convert spacedComma separated string to a set
+        val alarmTimesSet = HashSet(listOf(*TextUtils.split(prefString, ",")))
+
+        val alarmTimesNames = alarmTimesSet.toTypedArray()
+        for (i in alarmTimesNames.indices) {
+            val alarmTime: Clock = when (alarmTimesNames[i]) {
+                "DHUHR" -> prayTimes.dhuhrClock
+                "ASR" -> prayTimes.asrClock
+                "MAGHRIB" -> prayTimes.maghribClock
+                "ISHA" -> prayTimes.ishaClock
+                "FAJR" -> prayTimes.fajrClock
+                // a better to have default
+                else -> prayTimes.fajrClock
+            }
+
+            setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap)
+        }
+    }
+    //        for (Reminder event : Utils.getReminderDetails()) {
+    //            ReminderUtils.turnOn(context, event);
+    //        }
+}
+
+private fun setAlarm(
+    context: Context, alarmTimeName: String, clock: Clock, ord: Int,
+    athanGap: Long
+) {
+    val triggerTime = Calendar.getInstance()
+    triggerTime.set(Calendar.HOUR_OF_DAY, clock.hour)
+    triggerTime.set(Calendar.MINUTE, clock.minute)
+    setAlarm(context, alarmTimeName, triggerTime.timeInMillis, ord, athanGap)
+}
+
+private fun setAlarm(
+    context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int,
+    athanGap: Long
+) {
+    val triggerTime = Calendar.getInstance()
+    triggerTime.timeInMillis = timeInMillis - athanGap
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+
+    // don't set an alarm in the past
+    if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
+        Log.d(TAG, "setting alarm for: " + triggerTime.time)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            ALARMS_BASE_ID + ord,
+            Intent(context, BroadcastReceivers::class.java)
+                .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
+                .setAction(BROADCAST_ALARM),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        when {
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 -> alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime.timeInMillis,
+                pendingIntent
+            )
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 -> alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime.timeInMillis,
+                pendingIntent
+            )
+            else -> alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime.timeInMillis,
+                pendingIntent
+            )
+        }
+    }
 }
 
 
