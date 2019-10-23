@@ -15,7 +15,7 @@ class DashClockUpdate : DashClockExtension() {
         val jdn = Utils.getTodayJdn()
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
         publishUpdate(ExtensionData().visible(true)
-                .icon(Utils.getDayIconResource(date.dayOfMonth))
+                .icon(getDayIconResource(date.dayOfMonth))
                 .status(getMonthName(date))
                 .expandedTitle(dayTitleSummary(date))
                 .expandedBody(Utils.dateStringOfOtherCalendars(jdn, getSpacedComma()))

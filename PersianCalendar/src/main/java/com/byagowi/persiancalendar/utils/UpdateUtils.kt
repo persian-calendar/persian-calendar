@@ -343,7 +343,7 @@ fun update(context: Context, updateDate: Boolean) {
 
         var builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setSmallIcon(Utils.getDayIconResource(date.dayOfMonth))
+                .setSmallIcon(getDayIconResource(date.dayOfMonth))
                 .setOngoing(true)
                 .setWhen(0)
                 .setContentIntent(launchAppPendingIntent)

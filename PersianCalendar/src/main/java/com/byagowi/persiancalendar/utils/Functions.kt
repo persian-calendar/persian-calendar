@@ -765,6 +765,43 @@ private fun setAlarm(
     }
 }
 
+fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
+    applyAppLanguage(context)
+
+    val values = context.resources.getStringArray(R.array.calendar_values)
+    val titles = context.resources.getStringArray(R.array.calendar_type)
+
+    // TODO: Can be done without Map
+    val typeTitleMap = HashMap<CalendarType, String>()
+    for (i in titles.indices) {
+        typeTitleMap[CalendarType.valueOf(values[i])] = titles[i]
+    }
+
+    val result = ArrayList<CalendarTypeItem>()
+    getOrderedCalendarTypes()?.run {
+        for (type in this) {
+            typeTitleMap[type]?.let {
+                result.add(CalendarTypeItem(type, it))
+            }
+        }
+    }
+
+    return result
+}
+
+fun getDayIconResource(day: Int): Int {
+    try {
+        if (preferredDigits.contentEquals(ARABIC_DIGITS))
+            return DAYS_ICONS_AR[day]
+        else if (preferredDigits.contentEquals(ARABIC_INDIC_DIGITS))
+            return DAYS_ICONS_CKB[day]
+        return DAYS_ICONS[day]
+    } catch (e: IndexOutOfBoundsException) {
+        Log.e(TAG, "No such field is available")
+        return 0
+    }
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

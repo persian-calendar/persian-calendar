@@ -62,7 +62,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
         binding.calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                Utils.getOrderedCalendarEntities(getContext()))
+                getOrderedCalendarEntities(getContext()))
 
         binding.calendarTypeSpinner.setSelection(0)
         binding.calendarTypeSpinner.onItemSelectedListener = this

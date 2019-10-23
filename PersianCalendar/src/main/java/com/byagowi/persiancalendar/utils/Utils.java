@@ -251,39 +251,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    static public List<CalendarTypeItem> getOrderedCalendarEntities(@NonNull Context context) {
-        applyAppLanguage(context);
-
-        String[] values = context.getResources().getStringArray(R.array.calendar_values);
-        String[] titles = context.getResources().getStringArray(R.array.calendar_type);
-
-        // TODO: Can be done without Map
-        Map<CalendarType, String> typeTitleMap = new HashMap<>();
-        for (int i = 0; i < titles.length; ++i) {
-            typeTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
-        }
-
-        List<CalendarTypeItem> result = new ArrayList<>();
-        for (CalendarType type : getOrderedCalendarTypes()) {
-            result.add(new CalendarTypeItem(type, typeTitleMap.get(type)));
-        }
-
-        return result;
-    }
-
-    static public int getDayIconResource(int day) {
-        try {
-            if (preferredDigits == ARABIC_DIGITS)
-                return DAYS_ICONS_AR[day];
-            else if (preferredDigits == ARABIC_INDIC_DIGITS)
-                return DAYS_ICONS_CKB[day];
-            return DAYS_ICONS[day];
-        } catch (IndexOutOfBoundsException e) {
-            Log.e(TAG, "No such field is available");
-            return 0;
-        }
-    }
-
     static private String readStream(InputStream is) {
         // http://stackoverflow.com/a/5445161
         Scanner s = new Scanner(is).useDelimiter("\\A");
