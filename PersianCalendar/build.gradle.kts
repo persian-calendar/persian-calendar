@@ -8,17 +8,19 @@ plugins {
 }
 
 // https://stackoverflow.com/a/52441962
-fun String.runCommand(workingDir: File = File("."),
-                      timeoutAmount: Long = 60,
-                      timeoutUnit: TimeUnit = TimeUnit.SECONDS): String? {
+fun String.runCommand(
+    workingDir: File = File("."),
+    timeoutAmount: Long = 60,
+    timeoutUnit: TimeUnit = TimeUnit.SECONDS
+): String? {
     return try {
         ProcessBuilder(*this.split("\\s".toRegex()).toTypedArray())
-                .directory(workingDir)
-                .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.PIPE)
-                .start().apply {
-                    waitFor(timeoutAmount, timeoutUnit)
-                }.inputStream.bufferedReader().readText()
+            .directory(workingDir)
+            .redirectOutput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start().apply {
+                waitFor(timeoutAmount, timeoutUnit)
+            }.inputStream.bufferedReader().readText()
     } catch (e: java.io.IOException) {
         e.printStackTrace()
         null
@@ -41,23 +43,25 @@ android {
     }
 
     val appVerboseVersion =
-            defaultConfig.versionName + "-" + arrayOf(
-                    "git rev-parse --abbrev-ref HEAD",
-                    "git rev-list HEAD --count",
-                    "git rev-parse --short HEAD"
-            ).map { it.runCommand()?.trim() }.joinToString("-") +
-                    (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
+        defaultConfig.versionName + "-" + arrayOf(
+            "git rev-parse --abbrev-ref HEAD",
+            "git rev-list HEAD --count",
+            "git rev-parse --short HEAD"
+        ).map { it.runCommand()?.trim() }.joinToString("-") +
+                (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
 
     buildTypes {
         getByName("debug") {
             buildOutputs.all {
-                (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-debug-$appVerboseVersion.apk"
+                (this as BaseVariantOutputImpl).outputFileName =
+                    "PersianCalendar-debug-$appVerboseVersion.apk"
             }
             versionNameSuffix = "-$appVerboseVersion"
         }
         getByName("release") {
             buildOutputs.all {
-                (this as BaseVariantOutputImpl).outputFileName = "PersianCalendar-release-$appVerboseVersion.apk"
+                (this as BaseVariantOutputImpl).outputFileName =
+                    "PersianCalendar-release-$appVerboseVersion.apk"
             }
             isMinifyEnabled = true
             isShrinkResources = true
@@ -105,10 +109,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.0.0")
 
     implementation("androidx.browser:browser:1.0.0")
-    
+
     implementation("androidx.work:work-runtime-ktx:2.2.0")
 
-    val daggerVersion = "2.24"
+    val daggerVersion = "2.25"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
