@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.Utils.getClockFromStringId
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -81,7 +80,7 @@ fun update(context: Context, updateDate: Boolean) {
             setTextViewText(R.id.textPlaceholder1_1x1,
                     formatNumber(date.dayOfMonth))
             setTextViewText(R.id.textPlaceholder2_1x1,
-                    Utils.getMonthName(date))
+                    getMonthName(date))
             setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
             setBackgroundColor(this, R.id.widget_layout1x1)
             manager.updateAppWidget(widget1x1, this)
@@ -92,14 +91,14 @@ fun update(context: Context, updateDate: Boolean) {
     if (pastDate == null || pastDate != date || updateDate) {
         Log.d("UpdateUtils", "date has changed")
 
-        Utils.loadAlarms(context)
+        loadAlarms(context)
         pastDate = date
         dateHasChanged = true
         setDeviceCalendarEvents(context)
     }
 
-    val weekDayName = Utils.getWeekDayName(date)
-    var title = Utils.dayTitleSummary(date)
+    val weekDayName = getWeekDayName(date)
+    var title = dayTitleSummary(date)
     val shiftWorkTitle = Utils.getShiftWorkTitle(jdn, false)
     if (shiftWorkTitle.isNotEmpty())
         title += " ($shiftWorkTitle)"
@@ -108,7 +107,7 @@ fun update(context: Context, updateDate: Boolean) {
     val currentClock = Clock(calendar)
     var owghat = ""
     @StringRes
-    val nextOwghatId = Utils.getNextOwghatTimeId(currentClock, dateHasChanged)
+    val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
@@ -250,7 +249,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             var text2 = formatDate(date)
             if (enableClock)
-                text2 = Utils.getWeekDayName(date) + "\n" + text2
+                text2 = getWeekDayName(date) + "\n" + text2
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 

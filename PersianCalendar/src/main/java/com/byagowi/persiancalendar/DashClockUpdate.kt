@@ -3,8 +3,7 @@ package com.byagowi.persiancalendar
 import android.content.Intent
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.getMainCalendar
-import com.byagowi.persiancalendar.utils.getSpacedComma
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.apps.dashclock.api.DashClockExtension
 import com.google.android.apps.dashclock.api.ExtensionData
 
@@ -17,8 +16,8 @@ class DashClockUpdate : DashClockExtension() {
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
         publishUpdate(ExtensionData().visible(true)
                 .icon(Utils.getDayIconResource(date.dayOfMonth))
-                .status(Utils.getMonthName(date))
-                .expandedTitle(Utils.dayTitleSummary(date))
+                .status(getMonthName(date))
+                .expandedTitle(dayTitleSummary(date))
                 .expandedBody(Utils.dateStringOfOtherCalendars(jdn, getSpacedComma()))
                 .clickIntent(Intent(applicationContext, MainActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))

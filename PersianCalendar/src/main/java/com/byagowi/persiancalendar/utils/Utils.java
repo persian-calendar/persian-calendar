@@ -271,88 +271,6 @@ public class Utils {
         return result;
     }
 
-    @StringRes
-    static int getNextOwghatTimeId(Clock current, boolean dateHasChanged) {
-        if (coordinate == null) return 0;
-
-        if (prayTimes == null || dateHasChanged) {
-            prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), new Date(), coordinate);
-        }
-
-        int clock = current.toInt();
-
-        //TODO We like to show Imsak only in Ramadan
-        if (prayTimes.getFajrClock().toInt() > clock)
-            return R.string.fajr;
-
-        else if (prayTimes.getSunriseClock().toInt() > clock)
-            return R.string.sunrise;
-
-        else if (prayTimes.getDhuhrClock().toInt() > clock)
-            return R.string.dhuhr;
-
-        else if (prayTimes.getAsrClock().toInt() > clock)
-            return R.string.asr;
-
-        else if (prayTimes.getSunsetClock().toInt() > clock)
-            return R.string.sunset;
-
-        else if (prayTimes.getMaghribClock().toInt() > clock)
-            return R.string.maghrib;
-
-        else if (prayTimes.getIshaClock().toInt() > clock)
-            return R.string.isha;
-
-        else if (prayTimes.getMidnightClock().toInt() > clock)
-            return R.string.midnight;
-
-        else
-            // TODO: this is today's, not tomorrow
-            return R.string.fajr;
-    }
-
-    static Clock getClockFromStringId(@StringRes int stringId) {
-        switch (stringId) {
-            case R.string.imsak:
-                return prayTimes.getImsakClock();
-            case R.string.fajr:
-                return prayTimes.getFajrClock();
-            case R.string.sunrise:
-                return prayTimes.getSunriseClock();
-            case R.string.dhuhr:
-                return prayTimes.getDhuhrClock();
-            case R.string.asr:
-                return prayTimes.getAsrClock();
-            case R.string.sunset:
-                return prayTimes.getSunsetClock();
-            case R.string.maghrib:
-                return prayTimes.getMaghribClock();
-            case R.string.isha:
-                return prayTimes.getIshaClock();
-            case R.string.midnight:
-                return prayTimes.getMidnightClock();
-            default:
-                return Clock.fromInt(0);
-        }
-    }
-
-    static public String[] monthsNamesOfCalendar(AbstractDate date) {
-        if (date instanceof PersianDate)
-            return persianMonths;
-        else if (date instanceof IslamicDate)
-            return islamicMonths;
-        else
-            return gregorianMonths;
-    }
-
-    static public String getWeekDayName(AbstractDate date) {
-        CivilDate civilDate = date instanceof CivilDate
-                ? (CivilDate) date
-                : new CivilDate(date);
-        if (weekDays == null) return "";
-        return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7];
-    }
-
     static public int getDayIconResource(int day) {
         try {
             if (preferredDigits == ARABIC_DIGITS)
@@ -667,98 +585,6 @@ public class Utils {
 
         return titles.toString();
     }
-
-    static void loadAlarms(@NonNull Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String prefString = prefs.getString(PREF_ATHAN_ALARM, "");
-        Log.d(TAG, "reading and loading all alarms from prefs: " + prefString);
-        CalculationMethod calculationMethod = getCalculationMethod();
-
-        if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
-            long athanGap;
-            try {
-                String athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0");
-                athanGap = (long) (Double.parseDouble(athanGapStr) * 60 * 1000);
-            } catch (NumberFormatException e) {
-                athanGap = 0;
-            }
-
-            PrayTimes prayTimes = PrayTimesCalculator.calculate(calculationMethod,
-                    new Date(), coordinate);
-            // convert spacedComma separated string to a set
-            Set<String> alarmTimesSet = new HashSet<>(Arrays.asList(TextUtils.split(prefString, ",")));
-
-            String[] alarmTimesNames = alarmTimesSet.toArray(new String[0]);
-            for (int i = 0; i < alarmTimesNames.length; i++) {
-                Clock alarmTime;
-                switch (alarmTimesNames[i]) {
-                    case "DHUHR":
-                        alarmTime = prayTimes.getDhuhrClock();
-                        break;
-
-                    case "ASR":
-                        alarmTime = prayTimes.getAsrClock();
-                        break;
-
-                    case "MAGHRIB":
-                        alarmTime = prayTimes.getMaghribClock();
-                        break;
-
-                    case "ISHA":
-                        alarmTime = prayTimes.getIshaClock();
-                        break;
-
-                    // a better to have default
-                    default:
-                    case "FAJR":
-                        alarmTime = prayTimes.getFajrClock();
-                }
-
-                setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap);
-            }
-        }
-
-//        for (Reminder event : Utils.getReminderDetails()) {
-//            ReminderUtils.turnOn(context, event);
-//        }
-    }
-
-    static private void setAlarm(@NonNull Context context, String alarmTimeName, Clock clock, int ord,
-                                 long athanGap) {
-        Calendar triggerTime = Calendar.getInstance();
-        triggerTime.set(Calendar.HOUR_OF_DAY, clock.getHour());
-        triggerTime.set(Calendar.MINUTE, clock.getMinute());
-        setAlarm(context, alarmTimeName, triggerTime.getTimeInMillis(), ord, athanGap);
-    }
-
-    static private void setAlarm(@NonNull Context context, String alarmTimeName, long timeInMillis, int ord,
-                                 long athanGap) {
-        Calendar triggerTime = Calendar.getInstance();
-        triggerTime.setTimeInMillis(timeInMillis - athanGap);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        // don't set an alarm in the past
-        if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
-            Log.d(TAG, "setting alarm for: " + triggerTime.getTime());
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    ALARMS_BASE_ID + ord,
-                    new Intent(context, BroadcastReceivers.class)
-                            .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
-                            .setAction(BROADCAST_ALARM),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
-            } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
-            } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), pendingIntent);
-            }
-        }
-    }
-
 
     static public int fixDayOfWeekReverse(int dayOfWeek) {
         return (dayOfWeek + 7 - weekStartOffset) % 7;
@@ -1093,16 +919,6 @@ public class Utils {
 
     static public Calendar getSpringEquinox(long jdn) {
         return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
-    }
-
-    static public String dayTitleSummary(AbstractDate date) {
-        return getWeekDayName(date) + getSpacedComma() + formatDate(date);
-    }
-
-    static public String getMonthName(AbstractDate date) {
-        String[] months = monthsNamesOfCalendar(date);
-        if (months == null) return "";
-        return months[date.getMonth() - 1];
     }
 
     static public int getDayOfWeekFromJdn(long jdn) {

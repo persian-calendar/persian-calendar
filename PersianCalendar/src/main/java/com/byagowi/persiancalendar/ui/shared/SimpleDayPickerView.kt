@@ -13,10 +13,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.StringWithValueItem
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
-import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
 class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, DayPickerView {
@@ -104,10 +101,12 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
         // month spinner init.
         val months = ArrayList<StringWithValueItem>()
-        val monthsTitle = Utils.monthsNamesOfCalendar(date)
-        for (i in 1..12) {
-            months.add(StringWithValueItem(i,
-                    monthsTitle[i - 1] + " / " + formatNumber(i)))
+        val monthsTitle = monthsNamesOfCalendar(date)
+        monthsTitle?.let {
+            for (i in 1..12) {
+                months.add(StringWithValueItem(i,
+                    it[i - 1] + " / " + formatNumber(i)))
+            }
         }
         binding.monthSpinner.adapter = ArrayAdapter(context,
                 android.R.layout.simple_spinner_dropdown_item, months)

@@ -126,7 +126,7 @@ class MonthFragment : DaggerFragment() {
 
     private fun updateTitle(date: AbstractDate) {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
-                Utils.getMonthName(date),
+                getMonthName(date),
                 formatNumber(date.year))
     }
 
