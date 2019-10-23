@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.calendar.IslamicDate
-import com.byagowi.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
 
 // Based on Mehdi's work
 @StringRes

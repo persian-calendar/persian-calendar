@@ -19,10 +19,10 @@ import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.calendar.AbstractDate
-import com.byagowi.persiancalendar.calendar.CivilDate
-import com.byagowi.persiancalendar.calendar.IslamicDate
-import com.byagowi.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*

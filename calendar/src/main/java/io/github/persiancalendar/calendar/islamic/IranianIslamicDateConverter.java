@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.calendar.islamic;
+package io.github.persiancalendar.calendar.islamic;
 
 import java.util.HashMap;
 import java.util.Map;

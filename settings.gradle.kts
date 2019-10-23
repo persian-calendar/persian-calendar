@@ -1,2 +1,2 @@
 rootProject.buildFileName = "build.gradle.kts"
-include(":PersianCalendar", ":equinox")
+include(":PersianCalendar", ":equinox", ":calendar")

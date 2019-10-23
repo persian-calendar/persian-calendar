@@ -8,8 +8,8 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.byagowi.persiancalendar.calendar.CivilDate;
-import com.byagowi.persiancalendar.calendar.IslamicDate;
+import io.github.persiancalendar.calendar.CivilDate;
+import io.github.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.utils.CalendarType;
 
 import org.junit.Before;

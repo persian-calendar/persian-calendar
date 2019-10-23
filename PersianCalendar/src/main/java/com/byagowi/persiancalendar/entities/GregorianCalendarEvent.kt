@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
-import com.byagowi.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.calendar.CivilDate
 
 class GregorianCalendarEvent(date: CivilDate, title: String, holiday: Boolean) : AbstractEvent<CivilDate>() {
     init {

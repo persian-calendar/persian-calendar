@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.calendar;
+package io.github.persiancalendar.calendar;
 
 /**
  * Abstract class representing a date.
