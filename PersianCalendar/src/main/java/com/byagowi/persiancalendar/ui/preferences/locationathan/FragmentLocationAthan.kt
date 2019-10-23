@@ -33,8 +33,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
-import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -78,7 +77,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
     private fun updateAthanPreferencesState() {
         val context = context ?: return
 
-        val locationEmpty = Utils.getCoordinate(context) == null
+        val locationEmpty = getCoordinate(context) == null
         categoryAthan?.isEnabled = !locationEmpty
         if (locationEmpty) {
             categoryAthan?.setSummary(R.string.athan_disabled_summary)

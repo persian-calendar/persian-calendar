@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentUris;
@@ -29,7 +27,6 @@ import android.view.accessibility.AccessibilityManager;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
@@ -48,7 +45,6 @@ import io.github.persiancalendar.calendar.CivilDate;
 import io.github.persiancalendar.calendar.IslamicDate;
 import io.github.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entities.AbstractEvent;
-import com.byagowi.persiancalendar.entities.CalendarTypeItem;
 import com.byagowi.persiancalendar.entities.CityItem;
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
@@ -58,16 +54,12 @@ import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
 import com.byagowi.persiancalendar.praytimes.CalculationMethod;
 import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
-import com.byagowi.persiancalendar.praytimes.PrayTimes;
-import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator;
 import com.byagowi.persiancalendar.service.ApplicationService;
-import com.byagowi.persiancalendar.service.BroadcastReceivers;
 import com.byagowi.persiancalendar.service.UpdateWorker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -78,8 +70,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -96,37 +86,6 @@ import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
 
 public class Utils {
-
-    @Nullable
-    static public Coordinate getCoordinate(@NonNull Context context) {
-        CityItem cityEntity = getCityFromPreference(context);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (cityEntity != null) {
-            return cityEntity.getCoordinate();
-        }
-
-        try {
-            String latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE);
-            String longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE);
-            String altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE);
-
-            Coordinate coord = new Coordinate(
-                    Double.parseDouble(latitudeString),
-                    Double.parseDouble(longtitudeString),
-                    Double.parseDouble(altitudeString)
-            );
-
-            // If latitude or longitude is zero probably preference is not set yet
-            if (coord.getLatitude() == 0 && coord.getLongitude() == 0) {
-                return null;
-            }
-
-            return coord;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 
     static public void updateStoredPreference(@NonNull Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -251,49 +210,6 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
-    static public List<CalendarTypeItem> getOrderedCalendarEntities(@NonNull Context context) {
-        applyAppLanguage(context);
-
-        String[] values = context.getResources().getStringArray(R.array.calendar_values);
-        String[] titles = context.getResources().getStringArray(R.array.calendar_type);
-
-        // TODO: Can be done without Map
-        Map<CalendarType, String> typeTitleMap = new HashMap<>();
-        for (int i = 0; i < titles.length; ++i) {
-            typeTitleMap.put(CalendarType.valueOf(values[i]), titles[i]);
-        }
-
-        List<CalendarTypeItem> result = new ArrayList<>();
-        for (CalendarType type : getOrderedCalendarTypes()) {
-            result.add(new CalendarTypeItem(type, typeTitleMap.get(type)));
-        }
-
-        return result;
-    }
-
-    static public int getDayIconResource(int day) {
-        try {
-            if (preferredDigits == ARABIC_DIGITS)
-                return DAYS_ICONS_AR[day];
-            else if (preferredDigits == ARABIC_INDIC_DIGITS)
-                return DAYS_ICONS_CKB[day];
-            return DAYS_ICONS[day];
-        } catch (IndexOutOfBoundsException e) {
-            Log.e(TAG, "No such field is available");
-            return 0;
-        }
-    }
-
-    static private String readStream(InputStream is) {
-        // http://stackoverflow.com/a/5445161
-        Scanner s = new Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
-    public static String readRawResource(@NonNull Context context, @RawRes int res) {
-        return readStream(context.getResources().openRawResource(res));
-    }
-
     static private String prepareForArabicSort(String text) {
         return text
                 .replaceAll("ی", "ي")
@@ -404,56 +320,6 @@ public class Utils {
         });
 
         return Arrays.asList(cities);
-    }
-
-    static private CityItem getCityFromPreference(@NonNull Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        String key = prefs.getString(PREF_SELECTED_LOCATION, "");
-        if (TextUtils.isEmpty(key) || key.equals(DEFAULT_CITY))
-            return null;
-
-        if (key.equals(cachedCityKey))
-            return cachedCity;
-
-        // cache last query even if no city available under the key, useful in case invalid
-        // value is somehow inserted on the preference
-        cachedCityKey = key;
-
-        for (CityItem cityEntity : getAllCities(context, false))
-            if (cityEntity.getKey().equals(key))
-                return cachedCity = cityEntity;
-
-        return cachedCity = null;
-    }
-
-    static public String formatCoordinate(@NonNull Context context, Coordinate coordinate, String separator) {
-        return String.format(Locale.getDefault(), "%s: %.4f%s%s: %.4f",
-                context.getString(R.string.latitude), coordinate.getLatitude(), separator,
-                context.getString(R.string.longitude), coordinate.getLongitude());
-    }
-
-    static public @NonNull
-    String getCityName(@NonNull Context context, boolean fallbackToCoord) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        CityItem cityEntity = getCityFromPreference(context);
-        if (cityEntity != null) {
-            if (language.equals(LANG_EN_IR) || language.equals(LANG_EN_US) || language.equals(LANG_JA))
-                return cityEntity.getEn();
-            else if (language.equals(LANG_CKB))
-                return cityEntity.getCkb();
-            return cityEntity.getFa();
-        }
-
-        String geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "");
-        if (!TextUtils.isEmpty(geocodedCityName))
-            return geocodedCityName;
-
-        if (fallbackToCoord)
-            if (coordinate != null)
-                return formatCoordinate(context, coordinate, spacedComma);
-
-        return "";
     }
 
     private static <T extends AbstractDate> boolean holidayAwareEqualCheck(T event, T date) {

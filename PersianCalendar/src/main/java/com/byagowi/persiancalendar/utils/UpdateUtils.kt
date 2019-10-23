@@ -112,7 +112,7 @@ fun update(context: Context, updateDate: Boolean) {
         owghat = context.getString(nextOwghatId) + ": " +
                 Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
         if (isShownOnWidgets("owghat_location")) {
-            val cityName = Utils.getCityName(context, false)
+            val cityName = getCityName(context, false)
             if (cityName.isNotEmpty()) {
                 owghat = "$owghat ($cityName)"
             }
@@ -343,7 +343,7 @@ fun update(context: Context, updateDate: Boolean) {
 
         var builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setSmallIcon(Utils.getDayIconResource(date.dayOfMonth))
+                .setSmallIcon(getDayIconResource(date.dayOfMonth))
                 .setOngoing(true)
                 .setWhen(0)
                 .setContentIntent(launchAppPendingIntent)

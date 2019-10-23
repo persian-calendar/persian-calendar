@@ -56,7 +56,7 @@ class AboutFragment : DaggerFragment() {
                     .setTitle(resources.getString(R.string.about_license_title))
                     .setView(ScrollView(activity).apply {
                         addView(TextView(activity).apply {
-                            text = Utils.readRawResource(activity, R.raw.credits)
+                            text = readRawResource(activity, R.raw.credits)
                             setPadding(20)
                             typeface = Typeface.MONOSPACE
                             Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)

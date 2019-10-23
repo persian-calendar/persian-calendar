@@ -159,7 +159,7 @@ class AthanActivity : AppCompatActivity() {
             place.text = String.format(
                 "%s %s",
                 getString(R.string.in_city_time),
-                Utils.getCityName(this@AthanActivity, true)
+                getCityName(this@AthanActivity, true)
             )
         }
 

@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
+import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
@@ -37,6 +38,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
@@ -765,6 +767,152 @@ private fun setAlarm(
     }
 }
 
+fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
+    applyAppLanguage(context)
+
+    val values = context.resources.getStringArray(R.array.calendar_values)
+    val titles = context.resources.getStringArray(R.array.calendar_type)
+
+    // TODO: Can be done without Map
+    val typeTitleMap = HashMap<CalendarType, String>()
+    for (i in titles.indices) {
+        typeTitleMap[CalendarType.valueOf(values[i])] = titles[i]
+    }
+
+    val result = ArrayList<CalendarTypeItem>()
+    getOrderedCalendarTypes()?.run {
+        for (type in this) {
+            typeTitleMap[type]?.let {
+                result.add(CalendarTypeItem(type, it))
+            }
+        }
+    }
+
+    return result
+}
+
+fun getDayIconResource(day: Int): Int {
+    try {
+        if (preferredDigits.contentEquals(ARABIC_DIGITS))
+            return DAYS_ICONS_AR[day]
+        else if (preferredDigits.contentEquals(ARABIC_INDIC_DIGITS))
+            return DAYS_ICONS_CKB[day]
+        return DAYS_ICONS[day]
+    } catch (e: IndexOutOfBoundsException) {
+        Log.e(TAG, "No such field is available")
+        return 0
+    }
+}
+
+private fun readStream(inputStream: InputStream): String {
+    // http://stackoverflow.com/a/5445161
+    val s = Scanner(inputStream).useDelimiter("\\A")
+    return if (s.hasNext()) s.next() else ""
+}
+
+fun readRawResource(context: Context, @RawRes res: Int): String =
+    readStream(context.resources.openRawResource(res))
+
+fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String): String =
+    String.format(
+        Locale.getDefault(), "%s: %.4f%s%s: %.4f",
+        context.getString(R.string.latitude), coordinate.latitude, separator,
+        context.getString(R.string.longitude), coordinate.longitude
+    )
+
+fun getCityName(context: Context, fallbackToCoord: Boolean): String {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val cityEntity = getCityFromPreference(context)
+    if (cityEntity != null) {
+        if (language == LANG_EN_IR || language == LANG_EN_US || language == LANG_JA)
+            return cityEntity.en
+        else if (language == LANG_CKB)
+            return cityEntity.ckb
+        return cityEntity.fa
+    }
+
+    val geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "")
+    geocodedCityName?.let {
+        if (!TextUtils.isEmpty(it))
+            return it
+    }
+
+    if (fallbackToCoord)
+        coordinate?.let {
+            return formatCoordinate(context, it, spacedComma)
+        }
+
+    return ""
+}
+
+private fun getCityFromPreference(context: Context): CityItem? {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    val key = prefs.getString(PREF_SELECTED_LOCATION, "")
+    if (TextUtils.isEmpty(key) || key == DEFAULT_CITY)
+        return null
+
+    if (key == cachedCityKey)
+        return cachedCity
+
+    // cache last query even if no city available under the key, useful in case invalid
+    // value is somehow inserted on the preference
+    key?.let {
+        cachedCityKey = key
+    }
+
+    for (cityEntity in getAllCities(context, false))
+        if (cityEntity.key == key) {
+            cachedCity = cityEntity
+            return cachedCity
+        }
+
+    cachedCity = null
+    return cachedCity
+}
+
+fun getCoordinate(context: Context): Coordinate? {
+    val cityEntity = getCityFromPreference(context)
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    if (cityEntity != null)
+        return cityEntity.coordinate
+
+    try {
+        val latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)
+        val longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)
+        val altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE)
+
+        var latitude = "0.0"
+        var longtitude = "0.0"
+        var altitude = "0.0"
+
+        latitudeString?.let {
+            latitude = it
+        }
+
+        longtitudeString?.let {
+            longtitude = it
+        }
+
+        altitudeString?.let {
+            altitude = it
+        }
+
+        val coord = Coordinate(
+            java.lang.Double.parseDouble(latitude),
+            java.lang.Double.parseDouble(longtitude),
+            java.lang.Double.parseDouble(altitude)
+        )
+
+        // If latitude or longitude is zero probably preference is not set yet
+        return if (coord.latitude == 0.0 && coord.longitude == 0.0) null
+        else coord
+
+    } catch (e: NumberFormatException) {
+        return null
+    }
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
