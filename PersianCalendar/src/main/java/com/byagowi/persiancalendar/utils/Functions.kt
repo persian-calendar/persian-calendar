@@ -10,30 +10,30 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import android.text.TextUtils
+import android.util.Log
 import android.util.SparseArray
 import android.view.View
-import androidx.annotation.RawRes
 import android.widget.TextView
+import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
-import io.github.persiancalendar.calendar.AbstractDate
-import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.IslamicDate
-import io.github.persiancalendar.calendar.PersianDate
 import com.byagowi.persiancalendar.entities.*
-import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
+import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
+import io.github.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -101,7 +101,7 @@ fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
-fun getWeekDayName(position: Int): String? = weekDays[position % 7]
+fun getWeekDayName(position: Int): String? = weekDays?.let { it[position % 7] }
 
 fun isTalkBackEnabled(): Boolean = talkBackEnabled
 
@@ -111,7 +111,8 @@ fun getSpacedComma(): String = spacedComma
 
 fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
-fun formatDayAndMonth(day: Int, month: String): String = String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+fun formatDayAndMonth(day: Int, month: String): String =
+    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
 fun toLinearDate(date: AbstractDate): String = String.format(
     "%s/%s/%s", formatNumber(date.year),
@@ -122,27 +123,29 @@ fun isNightModeEnabled(context: Context): Boolean =
     context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun formatDate(date: AbstractDate): String =
-        if (numericalDatePreferred)
-            (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
-        else
-            String.format(if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-                    formatNumber(date.dayOfMonth), getMonthName(date),
-                    formatNumber(date.year))
+    if (numericalDatePreferred)
+        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+    else
+        String.format(
+            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+            formatNumber(date.dayOfMonth), getMonthName(date),
+            formatNumber(date.year)
+        )
 
 fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
 
 fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
 fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
-        LANG_EN_US, LANG_JA -> true
-        else -> false
-    }
+    LANG_EN_US, LANG_JA -> true
+    else -> false
+}
 
 // en-US and ja are our only real LTR locales for now
 fun isLocaleRTL(): Boolean = when (getAppLanguage()) {
-        LANG_EN_US, LANG_JA -> false
-        else -> true
-    }
+    LANG_EN_US, LANG_JA -> false
+    else -> true
+}
 
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
@@ -251,8 +254,10 @@ fun loadEvents(context: Context) {
                     else if (type == "Afghanistan")
                         title += "افغانستان، "
                 }
-                persianMonths[month - 1]?.let {
-                    title += formatDayAndMonth(day, it) + ")"
+                persianMonths?.run {
+                    this[month - 1]?.let {
+                        title += formatDayAndMonth(day, it) + ")"
+                    }
                 }
 
                 var list: ArrayList<PersianCalendarEvent>? =
@@ -309,10 +314,13 @@ fun loadEvents(context: Context) {
                     else if (type == "Islamic Afghanistan")
                         title += "افغانستان، "
                 }
-                islamicMonths[month - 1]?.let {
-                    title += formatDayAndMonth(day, it) + ")"
+                islamicMonths?.run {
+                    this[month - 1]?.let {
+                        title += formatDayAndMonth(day, it) + ")"
+                    }
                 }
-                var list: ArrayList<IslamicCalendarEvent>? = islamicCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<IslamicCalendarEvent>? =
+                    islamicCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     islamicCalendarEvents.put(month * 100 + day, list)
@@ -333,10 +341,13 @@ fun loadEvents(context: Context) {
             var title = event.getString("title")
 
             if (international) {
-                gregorianMonths[month - 1]?.let {
-                    title += " (" + formatDayAndMonth(day, it) + ")"
+                gregorianMonths?.run {
+                    this[month - 1]?.let {
+                        title += " (" + formatDayAndMonth(day, it) + ")"
+                    }
                 }
-                var list: ArrayList<GregorianCalendarEvent>? = gregorianCalendarEvents.get(month * 100 + day)
+                var list: ArrayList<GregorianCalendarEvent>? =
+                    gregorianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
                     list = ArrayList()
                     gregorianCalendarEvents.put(month * 100 + day, list)
@@ -450,30 +461,41 @@ private fun loadLanguageResource(context: Context) {
 
         val persianMonthsArray = messages.getJSONArray("PersianCalendarMonths")
         for (i in 0..11)
-            persianMonths[i] = persianMonthsArray.getString(i)
+            persianMonths?.let {
+                it[i] = persianMonthsArray.getString(i)
+            }
 
         val islamicMonthsArray = messages.getJSONArray("IslamicCalendarMonths")
         for (i in 0..11)
-            islamicMonths[i] = islamicMonthsArray.getString(i)
+            islamicMonths?.let {
+                it[i] = islamicMonthsArray.getString(i)
+            }
 
         val gregorianMonthsArray = messages.getJSONArray("GregorianCalendarMonths")
         for (i in 0..11)
-            gregorianMonths[i] = gregorianMonthsArray.getString(i)
+            gregorianMonths?.let {
+                it[i] = gregorianMonthsArray.getString(i)
+            }
 
         val weekDaysArray = messages.getJSONArray("WeekDays")
         for (i in 0..6) {
-            weekDays[i] = weekDaysArray.getString(i)
-            weekDays[i]?.run {
-                when (language) {
-                    LANG_AR -> weekDaysInitials[i] = substring(2, 4)
-                    LANG_AZB -> weekDaysInitials[i] = substring(0, 2)
-                    else -> weekDaysInitials[i] = substring(0, 1)
+            weekDays?.let {
+                it[i] = weekDaysArray.getString(i)
+                it[i]?.run {
+                    weekDaysInitials?.run {
+                        when (language) {
+                            LANG_AR -> this[i] = substring(2, 4)
+                            LANG_AZB -> this[i] = substring(0, 2)
+                            else -> this[i] = substring(0, 1)
+                        }
+                    }
                 }
             }
         }
     } catch (ignore: JSONException) {
     }
 }
+
 fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
     view ?: return
 

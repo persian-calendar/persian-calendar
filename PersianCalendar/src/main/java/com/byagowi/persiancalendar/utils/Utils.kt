@@ -23,7 +23,7 @@ val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-val emptyStringList: Array<String?> = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
+val emptyStringList: Array<String?>? = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
 @kotlin.jvm.JvmField
 var persianMonths = emptyStringList
 @kotlin.jvm.JvmField
