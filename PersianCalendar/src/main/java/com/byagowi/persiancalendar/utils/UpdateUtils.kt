@@ -60,7 +60,7 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     //
     //
-    val manager = context.getSystemService<AppWidgetManager>() ?: return
+    val manager = AppWidgetManager.getInstance(context) ?: return
     val colorInt = getSelectedWidgetTextColor()
     val color = Color.parseColor(colorInt)
 
