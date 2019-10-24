@@ -102,7 +102,7 @@ fun update(context: Context, updateDate: Boolean) {
     val shiftWorkTitle = Utils.getShiftWorkTitle(jdn, false)
     if (shiftWorkTitle.isNotEmpty())
         title += " ($shiftWorkTitle)"
-    var subtitle = Utils.dateStringOfOtherCalendars(jdn, getSpacedComma())
+    var subtitle = dateStringOfOtherCalendars(jdn, getSpacedComma())
 
     val currentClock = Clock(calendar)
     var owghat = ""
@@ -118,7 +118,7 @@ fun update(context: Context, updateDate: Boolean) {
             }
         }
     }
-    val events = Utils.getEvents(jdn, deviceCalendarEvents)
+    val events = getEvents(jdn, deviceCalendarEvents)
 
     val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
     val isCenterAligned = isCenterAlignWidgets()
@@ -254,14 +254,14 @@ fun update(context: Context, updateDate: Boolean) {
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
             if (isShownOnWidgets("other_calendars")) {
-                text2 = text2 + "\n" + Utils.dateStringOfOtherCalendars(jdn, "\n")
+                text2 = text2 + "\n" + dateStringOfOtherCalendars(jdn, "\n")
             }
 
             setTextViewText(R.id.textPlaceholder1_4x2, text2)
 
             if (nextOwghatId != 0) {
                 @StringRes
-                val timesOn4x2 = if (Utils.isShiaPrayTimeCalculationSelected()) timesOn4x2Shia else timesOn4x2Sunna
+                val timesOn4x2 = if (isShiaPrayTimeCalculationSelected()) timesOn4x2Shia else timesOn4x2Sunna
                 // Set text of owghats
                 for (i in owghatPlaceHolderId.indices) {
                     setTextViewText(owghatPlaceHolderId[i],

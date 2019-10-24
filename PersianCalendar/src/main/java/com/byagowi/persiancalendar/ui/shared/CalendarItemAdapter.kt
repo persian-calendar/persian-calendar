@@ -70,7 +70,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
         }
 
         override fun onClick(view: View?) {
-            Utils.copyToClipboard(view, "converted date", view?.contentDescription)
+            copyToClipboard(view, "converted date", view?.contentDescription)
         }
     }
 }

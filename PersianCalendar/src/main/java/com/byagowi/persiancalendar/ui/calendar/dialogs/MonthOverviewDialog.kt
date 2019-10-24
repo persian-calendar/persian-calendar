@@ -44,7 +44,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
         for (i in 0 until monthLength) {
             val jdn = baseJdn + i
-            val events = Utils.getEvents(jdn, deviceEvents)
+            val events = getEvents(jdn, deviceEvents)
             val holidays = Utils.getEventsTitle(events, true, false, false, false)
             val nonHolidays = Utils.getEventsTitle(events, false, false, true, false)
             if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))

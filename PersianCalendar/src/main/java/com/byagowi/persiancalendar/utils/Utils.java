@@ -1,36 +1,20 @@
 package com.byagowi.persiancalendar.utils;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.CalendarContract;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -51,8 +35,6 @@ import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
 import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
 import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
-import com.byagowi.persiancalendar.praytimes.CalculationMethod;
-import com.byagowi.persiancalendar.praytimes.Clock;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.UpdateWorker;
@@ -71,10 +53,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
-import io.github.persiancalendar.Equinox;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.*;
@@ -321,12 +300,6 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    private static <T extends AbstractDate> boolean holidayAwareEqualCheck(T event, T date) {
-        return event.getDayOfMonth() == date.getDayOfMonth()
-                && event.getMonth() == date.getMonth()
-                && (event.getYear() == -1 || event.getYear() == date.getYear());
-    }
-
     static public @NonNull
     String getShiftWorkTitle(long jdn, boolean abbreviated) {
         if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
@@ -358,62 +331,6 @@ public class Utils {
 
         // Shouldn't be reached
         return "";
-    }
-
-    static public List<AbstractEvent> getEvents(long jdn,
-                                                @Nullable SparseArray<ArrayList<DeviceCalendarEvent>> deviceCalendarEvents) {
-        PersianDate persian = new PersianDate(jdn);
-        CivilDate civil = new CivilDate(jdn);
-        IslamicDate islamic = new IslamicDate(jdn);
-
-        List<AbstractEvent> result = new ArrayList<>();
-
-        List<PersianCalendarEvent> persianList =
-                sPersianCalendarEvents.get(persian.getMonth() * 100 + persian.getDayOfMonth());
-        if (persianList != null)
-            for (PersianCalendarEvent persianCalendarEvent : persianList)
-                if (holidayAwareEqualCheck(persianCalendarEvent.getDate(), persian))
-                    result.add(persianCalendarEvent);
-
-        List<IslamicCalendarEvent> islamicList =
-                sIslamicCalendarEvents.get(islamic.getMonth() * 100 + islamic.getDayOfMonth());
-        if (islamicList != null)
-            for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
-                if (holidayAwareEqualCheck(islamicCalendarEvent.getDate(), islamic))
-                    result.add(islamicCalendarEvent);
-
-        // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
-        if ((islamic.getMonth() == 2 || islamic.getMonth() == 11) && islamic.getDayOfMonth() == 29
-                && getMonthLength(CalendarType.ISLAMIC, islamic.getYear(), islamic.getMonth()) == 29) {
-            IslamicDate alternativeDate = new IslamicDate(islamic.getYear(), islamic.getMonth(), 30);
-
-            islamicList = sIslamicCalendarEvents.get(alternativeDate.getMonth() * 100 +
-                    alternativeDate.getDayOfMonth());
-            if (islamicList != null)
-                for (IslamicCalendarEvent islamicCalendarEvent : islamicList)
-                    if (holidayAwareEqualCheck(islamicCalendarEvent.getDate(), alternativeDate))
-                        result.add(islamicCalendarEvent);
-        }
-
-        List<GregorianCalendarEvent> gregorianList =
-                sGregorianCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
-        if (gregorianList != null)
-            for (GregorianCalendarEvent gregorianCalendarEvent : gregorianList)
-                if (holidayAwareEqualCheck(gregorianCalendarEvent.getDate(), civil))
-                    result.add(gregorianCalendarEvent);
-
-        // This one is passed by caller
-        if (deviceCalendarEvents != null) {
-            List<DeviceCalendarEvent> deviceEventList =
-                    deviceCalendarEvents.get(civil.getMonth() * 100 + civil.getDayOfMonth());
-            if (deviceEventList != null)
-                for (DeviceCalendarEvent deviceCalendarEvent : deviceEventList)
-                    // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-                    if (deviceCalendarEvent.getDate().equals(civil))
-                        result.add(deviceCalendarEvent);
-        }
-
-        return result;
     }
 
     static public @NonNull
@@ -543,35 +460,6 @@ public class Utils {
                 }
             }
         }
-    }
-
-    static public @NonNull
-    String dateStringOfOtherCalendars(long jdn, String separator) {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for (CalendarType type : otherCalendars) {
-            if (!first) result.append(separator);
-            result.append(formatDate(getDateFromJdnOfCalendar(type, jdn)));
-            first = false;
-        }
-        return result.toString();
-    }
-
-    public static void copyToClipboard(View view, CharSequence label, CharSequence text) {
-        ClipboardManager clipboardService =
-                (ClipboardManager) view.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-
-        if (clipboardService == null || label == null || text == null) return;
-
-        clipboardService.setPrimaryClip(ClipData.newPlainText(label, text));
-        createAndShowShortSnackbar(view,
-                String.format(view.getContext().getString(R.string.date_copied_clipboard), text));
-    }
-
-    static boolean isShiaPrayTimeCalculationSelected() {
-        CalculationMethod calculationMethod = getCalculationMethod();
-        return calculationMethod.equals(CalculationMethod.Tehran) ||
-                calculationMethod.equals(CalculationMethod.Jafari);
     }
 
     static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {

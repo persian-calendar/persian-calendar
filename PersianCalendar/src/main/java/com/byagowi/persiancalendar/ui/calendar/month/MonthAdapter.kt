@@ -149,7 +149,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
             } else {
                 if (position - 7 - startingDayOfWeek >= 0) {
                     val day = days[position - 7 - startingDayOfWeek]
-                    val events = Utils.getEvents(day.jdn, monthEvents)
+                    val events = getEvents(day.jdn, monthEvents)
                     val isHoliday = isWeekEnd(day.dayOfWeek) || hasAnyHolidays(events)
 
                     itemDayView.setDayOfMonthItem(day.isToday, originalPosition == selectedDay,

@@ -6,10 +6,7 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.ContentUris
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
@@ -379,7 +376,7 @@ fun loadEvents(context: Context) {
 }
 
 // https://stackoverflow.com/a/52557989
-fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : CircularRevealWidget {
+fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : CircularRevealWidget {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         circularRevealWidget.post {
             val viewWidth = circularRevealWidget.width
@@ -1338,6 +1335,95 @@ fun askForCalendarPermission(activity: Activity?) {
         }
         .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
 }
+
+fun isShiaPrayTimeCalculationSelected(): Boolean {
+    val calculationMethod = getCalculationMethod()
+    return calculationMethod == CalculationMethod.Tehran || calculationMethod == CalculationMethod.Jafari
+}
+
+fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
+    view ?: return
+
+    val clipboardService =
+        view.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+
+    if (clipboardService == null || label == null || text == null) return
+
+    clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
+    createAndShowShortSnackbar(
+        view,
+        String.format(view.context.getString(R.string.date_copied_clipboard), text)
+    )
+}
+
+fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
+    val result = StringBuilder()
+    var first = true
+    for (type in otherCalendars) {
+        if (!first) result.append(separator)
+        result.append(formatDate(getDateFromJdnOfCalendar(type, jdn)))
+        first = false
+    }
+    return result.toString()
+}
+
+private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
+    (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
+
+fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?): List<AbstractEvent<*>> {
+    val persian = PersianDate(jdn)
+    val civil = CivilDate(jdn)
+    val islamic = IslamicDate(jdn)
+
+    val result = ArrayList<AbstractEvent<*>>()
+
+    val persianList = sPersianCalendarEvents.get(persian.month * 100 + persian.dayOfMonth)
+    if (persianList != null)
+        for (persianCalendarEvent in persianList)
+            if (holidayAwareEqualCheck(persianCalendarEvent.date, persian))
+                result.add(persianCalendarEvent)
+
+    var islamicList: List<IslamicCalendarEvent>? =
+        sIslamicCalendarEvents.get(islamic.month * 100 + islamic.dayOfMonth)
+    if (islamicList != null)
+        for (islamicCalendarEvent in islamicList)
+            if (holidayAwareEqualCheck(islamicCalendarEvent.date, islamic))
+                result.add(islamicCalendarEvent)
+
+    // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
+    if ((islamic.month == 2 || islamic.month == 11)
+        && islamic.dayOfMonth == 29
+        && getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+    ) {
+        val alternativeDate = IslamicDate(islamic.year, islamic.month, 30)
+
+        islamicList =
+            sIslamicCalendarEvents.get(alternativeDate.month * 100 + alternativeDate.dayOfMonth)
+        if (islamicList != null)
+            for (islamicCalendarEvent in islamicList)
+                if (holidayAwareEqualCheck(islamicCalendarEvent.date, alternativeDate))
+                    result.add(islamicCalendarEvent)
+    }
+
+    val gregorianList = sGregorianCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
+    if (gregorianList != null)
+        for (gregorianCalendarEvent in gregorianList)
+            if (holidayAwareEqualCheck(gregorianCalendarEvent.date, civil))
+                result.add(gregorianCalendarEvent)
+
+    // This one is passed by caller
+    if (deviceCalendarEvents != null) {
+        val deviceEventList = deviceCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
+        if (deviceEventList != null)
+            for (deviceCalendarEvent in deviceEventList)
+            // holidayAwareEqualCheck is not needed as they won't have -1 on year field
+                if (deviceCalendarEvent.date == civil)
+                    result.add(deviceCalendarEvent)
+    }
+
+    return result
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

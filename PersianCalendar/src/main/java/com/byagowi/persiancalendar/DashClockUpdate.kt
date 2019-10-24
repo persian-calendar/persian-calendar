@@ -18,7 +18,7 @@ class DashClockUpdate : DashClockExtension() {
                 .icon(getDayIconResource(date.dayOfMonth))
                 .status(getMonthName(date))
                 .expandedTitle(dayTitleSummary(date))
-                .expandedBody(Utils.dateStringOfOtherCalendars(jdn, getSpacedComma()))
+                .expandedBody(dateStringOfOtherCalendars(jdn, getSpacedComma()))
                 .clickIntent(Intent(applicationContext, MainActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))
     }

@@ -289,7 +289,7 @@ class CalendarFragment : DaggerFragment() {
     private fun showEvent(jdn: Long, isToday: Boolean) {
         mEventsBinding.run {
             shiftWorkTitle.text = Utils.getShiftWorkTitle(jdn, false)
-            val events = Utils.getEvents(jdn,
+            val events = getEvents(jdn,
                     readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
             val holidays = Utils.getEventsTitle(events, true, false, false, false)
             val nonHolidays = Utils.getEventsTitle(events, false, false, false, false)
