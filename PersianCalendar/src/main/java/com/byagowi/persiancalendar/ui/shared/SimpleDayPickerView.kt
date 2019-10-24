@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
-import androidx.databinding.DataBindingUtil
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
@@ -57,19 +56,18 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
     }
 
     private fun init(context: Context) {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context),
-                R.layout.simple_day_picker_view, this, true)
-
-        binding.calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
+        binding = SimpleDayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
+            calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getOrderedCalendarEntities(getContext()))
 
-        binding.calendarTypeSpinner.setSelection(0)
-        binding.calendarTypeSpinner.onItemSelectedListener = this
+            calendarTypeSpinner.setSelection(0)
+            calendarTypeSpinner.onItemSelectedListener = this@SimpleDayPickerView
 
-        binding.yearSpinner.onItemSelectedListener = this
-        binding.monthSpinner.onItemSelectedListener = this
-        binding.daySpinner.onItemSelectedListener = this
+            yearSpinner.onItemSelectedListener = this@SimpleDayPickerView
+            monthSpinner.onItemSelectedListener = this@SimpleDayPickerView
+            daySpinner.onItemSelectedListener = this@SimpleDayPickerView
+        }
     }
 
     override fun setDayJdnOnView(jdn: Long) {

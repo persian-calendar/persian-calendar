@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import androidx.databinding.DataBindingUtil
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
@@ -150,7 +149,8 @@ class AthanActivity : AppCompatActivity() {
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
 
-        DataBindingUtil.setContentView<ActivityAthanBinding>(this, R.layout.activity_athan).apply {
+        ActivityAthanBinding.inflate(layoutInflater).apply {
+            setContentView(root)
             athanName.setText(Utils.getPrayTimeText(prayerKey))
 
             root.setOnClickListener { stop() }

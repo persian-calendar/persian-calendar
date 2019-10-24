@@ -1,40 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:background="@drawable/fajr">
 
-    <LinearLayout
-        android:id="@+id/activity_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:background="@drawable/fajr">
+    <TextView
+        android:id="@+id/athan_name"
+        style="@style/ShadowTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="80dp"
+        android:textColor="?attr/colorTextAthan"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        tools:text="اذان صبح" />
 
-        <TextView
-            android:id="@+id/athan_name"
-            style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="80dp"
-            android:textColor="?attr/colorTextAthan"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            tools:text="اذان صبح" />
+    <TextView
+        android:id="@+id/place"
+        style="@style/ShadowTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="?attr/colorTextAthan"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="به افق شهر" />
 
-        <TextView
-            android:id="@+id/place"
-            style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:textColor="?attr/colorTextAthan"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="به افق شهر" />
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

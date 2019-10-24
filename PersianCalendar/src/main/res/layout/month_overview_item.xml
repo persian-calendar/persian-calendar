@@ -1,46 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="8dp">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:orientation="vertical"
         android:padding="8dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:paddingBottom="4dp"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            tools:text="Title" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                tools:text="Title" />
+        <TextView
+            android:id="@+id/holidays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextHoliday"
+            android:textIsSelectable="true"
+            tools:text="Content" />
 
-            <TextView
-                android:id="@+id/holidays"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextHoliday"
-                android:textIsSelectable="true"
-                tools:text="Content" />
+        <TextView
+            android:id="@+id/non_holidays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            tools:text="Content" />
 
-            <TextView
-                android:id="@+id/non_holidays"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                tools:text="Content" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</layout>
+</androidx.cardview.widget.CardView>

@@ -29,7 +29,7 @@ fun String.runCommand(
 
 android {
     compileSdkVersion(29)
-    dataBinding.isEnabled = true
+    viewBinding.isEnabled = true
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
