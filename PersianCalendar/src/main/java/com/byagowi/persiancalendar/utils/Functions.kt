@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ContentUris
@@ -24,6 +25,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -1302,6 +1304,39 @@ fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) {
     PreferenceManager.getDefaultSharedPreferences(context).edit {
         putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable)
     }
+}
+
+fun askForLocationPermission(activity: Activity?) {
+    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
+    AlertDialog.Builder(activity)
+        .setTitle(R.string.location_access)
+        .setMessage(R.string.phone_location_required)
+        .setPositiveButton(R.string.continue_button) { dialog, id ->
+            activity.requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
+}
+
+fun askForCalendarPermission(activity: Activity?) {
+    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
+    AlertDialog.Builder(activity)
+        .setTitle(R.string.calendar_access)
+        .setMessage(R.string.phone_calendar_required)
+        .setPositiveButton(R.string.continue_button) { dialog, id ->
+            activity.requestPermissions(
+                arrayOf(Manifest.permission.READ_CALENDAR),
+                CALENDAR_READ_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
 }
 
 //    public static List<Reminder> getReminderDetails() {

@@ -162,7 +162,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (isShowDeviceCalendarEvents()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                Utils.askForCalendarPermission(this)
+                askForCalendarPermission(this)
             }
         }
 
@@ -346,7 +346,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS) {
             if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.askForCalendarPermission(this)
+                    askForCalendarPermission(this)
                 }
             }
         }

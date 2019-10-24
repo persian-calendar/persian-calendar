@@ -574,33 +574,6 @@ public class Utils {
                 calculationMethod.equals(CalculationMethod.Jafari);
     }
 
-    public static void askForCalendarPermission(Activity activity) {
-        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
-
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.calendar_access)
-                .setMessage(R.string.phone_calendar_required)
-                .setPositiveButton(R.string.continue_button, (dialog, id) -> activity.requestPermissions(new String[]{
-                                Manifest.permission.READ_CALENDAR
-                        },
-                        CALENDAR_READ_PERMISSION_REQUEST_CODE))
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
-    }
-
-    public static void askForLocationPermission(Activity activity) {
-        if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
-
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.location_access)
-                .setMessage(R.string.phone_location_required)
-                .setPositiveButton(R.string.continue_button, (dialog, id) -> activity.requestPermissions(new String[]{
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                        },
-                        LOCATION_PERMISSION_REQUEST_CODE))
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
-    }
-
     static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
         String desc = event.getDescription();
         String title = event.getTitle();

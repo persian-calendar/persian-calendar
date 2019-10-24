@@ -194,7 +194,7 @@ class CalendarFragment : DaggerFragment() {
         val time = Calendar.getInstance()
         time.set(civil.year, civil.month - 1, civil.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            Utils.askForCalendarPermission(activity)
+            askForCalendarPermission(activity)
         } else {
             try {
                 startActivityForResult(
@@ -223,7 +223,7 @@ class CalendarFragment : DaggerFragment() {
                 sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.askForCalendarPermission(activity)
+                    askForCalendarPermission(activity)
                 } else {
                     toggleShowDeviceCalendarOnPreference(activity, true)
                     activity.restartActivity()
