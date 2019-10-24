@@ -1,15 +1,18 @@
 package com.byagowi.persiancalendar.utils
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.AudioManager
 import android.os.Build
+import android.provider.CalendarContract
 import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
@@ -19,6 +22,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -45,6 +51,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 import kotlin.math.sqrt
+//import com.byagowi.persiancalendar.entities.Reminder;
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
 
@@ -370,7 +377,7 @@ fun loadEvents(context: Context) {
 }
 
 // https://stackoverflow.com/a/52557989
-fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View, T : CircularRevealWidget {
+fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : CircularRevealWidget {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         circularRevealWidget.post {
             val viewWidth = circularRevealWidget.width
@@ -929,7 +936,7 @@ fun getInitialOfWeekDay(position: Int): String {
 // Extra helpers
 fun getA11yDaySummary(
     context: Context, jdn: Long, isToday: Boolean,
-    deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>?,
+    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?,
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
 ): String {
     // It has some expensive calculations, lets not do that when not needed
@@ -1059,7 +1066,437 @@ fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
     else -> R.drawable.isha
 }
 
+fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
+    val startingDate = Calendar.getInstance()
+    startingDate.add(Calendar.YEAR, -1)
+    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
+    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
+    readDeviceEvents(
+        context, deviceCalendarEvent, allEnabledAppointments, startingDate,
+        TimeUnit.DAYS.toMillis((365 * 2).toLong())
+    )
+    return allEnabledAppointments
+}
+
+fun readDayDeviceEvents(context: Context, jdn: Long): SparseArray<ArrayList<DeviceCalendarEvent>> {
+    var jdn = jdn
+    if (jdn == -1L)
+        jdn = getTodayJdn()
+
+    val startingDate = civilDateToCalendar(CivilDate(jdn))
+    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
+    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
+    readDeviceEvents(
+        context,
+        deviceCalendarEvent,
+        allEnabledAppointments,
+        startingDate,
+        DAY_IN_MILLIS
+    )
+    return deviceCalendarEvent
+}
+
+fun readMonthDeviceEvents(
+    context: Context,
+    jdn: Long
+): SparseArray<ArrayList<DeviceCalendarEvent>> {
+    val startingDate = civilDateToCalendar(CivilDate(jdn))
+    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
+    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
+    readDeviceEvents(
+        context,
+        deviceCalendarEvent,
+        allEnabledAppointments,
+        startingDate,
+        32L * DAY_IN_MILLIS
+    )
+    return deviceCalendarEvent
+}
+
+private fun readDeviceEvents(
+    context: Context,
+    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>,
+    allEnabledAppointments: ArrayList<DeviceCalendarEvent>,
+    startingDate: Calendar,
+    rangeInMillis: Long
+) {
+    if (!isShowDeviceCalendarEvents()) return
+
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_CALENDAR
+        ) != PackageManager.PERMISSION_GRANTED
+    ) return
+
+    try {
+        val builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
+        ContentUris.appendId(builder, startingDate.timeInMillis - DAY_IN_MILLIS)
+        ContentUris.appendId(builder, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
+
+        val cursor = context.contentResolver.query(
+            builder.build(),
+            arrayOf(
+                CalendarContract.Instances.EVENT_ID, // 0
+                CalendarContract.Instances.TITLE, // 1
+                CalendarContract.Instances.DESCRIPTION, // 2
+                CalendarContract.Instances.BEGIN, // 3
+                CalendarContract.Instances.END, // 4
+                CalendarContract.Instances.EVENT_LOCATION, // 5
+                CalendarContract.Instances.RRULE, // 6
+                CalendarContract.Instances.VISIBLE, // 7
+                CalendarContract.Instances.ALL_DAY, // 8
+                CalendarContract.Instances.EVENT_COLOR     // 9
+            ), null, null, null
+        ) ?: return
+
+        var i = 0
+        while (cursor.moveToNext()) {
+            if (cursor.getString(7) != "1")
+                continue
+
+            var allDay = false
+            if (cursor.getString(8) == "1")
+                allDay = true
+
+            val startDate = Date(cursor.getLong(3))
+            val endDate = Date(cursor.getLong(4))
+            val startCalendar = makeCalendarFromDate(startDate)
+            val endCalendar = makeCalendarFromDate(endDate)
+
+            val civilDate = calendarToCivilDate(startCalendar)
+
+            val month = civilDate.month
+            val day = civilDate.dayOfMonth
+
+            var list: ArrayList<DeviceCalendarEvent>? =
+                deviceCalendarEvents.get(month * 100 + day)
+            if (list == null) {
+                list = ArrayList()
+                deviceCalendarEvents.put(month * 100 + day, list)
+            }
+
+            var title = cursor.getString(1)
+            if (allDay)
+                title = "\uD83D\uDCC5 $title"
+            else {
+                title = "\uD83D\uDD53 $title"
+                title += " (" + baseFormatClock(
+                    startCalendar.get(Calendar.HOUR_OF_DAY),
+                    startCalendar.get(Calendar.MINUTE)
+                )
+
+                if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0L)
+                    title += "-" + baseFormatClock(
+                        endCalendar.get(Calendar.HOUR_OF_DAY),
+                        endCalendar.get(Calendar.MINUTE)
+                    )
+
+                title += ")"
+            }
+            val event = DeviceCalendarEvent(
+                cursor.getInt(0),
+                title,
+                cursor.getString(2),
+                startDate,
+                endDate,
+                cursor.getString(5),
+                civilDate,
+                cursor.getString(9)
+            )
+            list.add(event)
+            allEnabledAppointments.add(event)
+
+            // Don't go more than 1k events on any case
+            if (++i == 1000) break
+        }
+        cursor.close()
+    } catch (e: Exception) {
+        // We don't like crash addition from here, just catch all of exceptions
+        Log.e("", "Error on device calendar events read", e)
+    }
+
+}
+
+private fun baseFormatClock(hour: Int, minute: Int): String =
+    formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
+
+fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
+    val in12 = !clockIn24 || forceIn12
+    if (!in12) return baseFormatClock(clock.hour, clock.minute)
+
+    var hour = clock.hour
+    val suffix: String
+    if (hour >= 12) {
+        suffix = getPmString()
+        hour -= 12
+    } else
+        suffix = getAmString()
+
+    return baseFormatClock(hour, clock.minute) + " " + suffix
+}
+
+fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
+    val yearOfNextMonth = if (month == 12) year + 1 else year
+    val nextMonth = if (month == 12) 1 else month + 1
+    return (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() - getDateOfCalendar(
+        calendar,
+        year,
+        month,
+        1
+    ).toJdn()).toInt()
+}
+
+fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
+    is IslamicDate -> CalendarType.ISLAMIC
+    is CivilDate -> CalendarType.GREGORIAN
+    else -> CalendarType.SHAMSI
+}
+
+fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate =
+    when (calendar) {
+        CalendarType.ISLAMIC -> IslamicDate(jdn)
+        CalendarType.GREGORIAN -> CivilDate(jdn)
+        CalendarType.SHAMSI -> PersianDate(jdn)
+        else -> PersianDate(jdn)
+    }
+
+fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
+    when (calendar) {
+        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+        CalendarType.GREGORIAN -> CivilDate(year, month, day)
+        CalendarType.SHAMSI -> PersianDate(year, month, day)
+        else -> PersianDate(year, month, day)
+    }
+
+fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
+    if (!isTalkBackEnabled()) return
+
+    val context = view.context ?: return
+
+    val now = System.currentTimeMillis()
+    if (now - latestToastShowTime > twoSeconds) {
+        createAndShowShortSnackbar(view, resId)
+        // https://stackoverflow.com/a/29423018
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+        audioManager?.playSoundEffect(AudioManager.FX_KEY_CLICK)
+        latestToastShowTime = now
+    }
+}
+
+@StyleRes
+fun getThemeFromName(name: String): Int =
+    when (name) {
+        DARK_THEME -> R.style.DarkTheme
+        MODERN_THEME -> R.style.ModernTheme
+        BLUE_THEME -> R.style.BlueTheme
+        LIGHT_THEME -> R.style.LightTheme
+        else -> R.style.LightTheme
+    }
+
+fun isRTL(context: Context): Boolean =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+    else false
+
+fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+        putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable)
+    }
+}
+
+fun askForLocationPermission(activity: Activity?) {
+    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
+    AlertDialog.Builder(activity)
+        .setTitle(R.string.location_access)
+        .setMessage(R.string.phone_location_required)
+        .setPositiveButton(R.string.continue_button) { dialog, id ->
+            activity.requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
+}
+
+fun askForCalendarPermission(activity: Activity?) {
+    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+
+    AlertDialog.Builder(activity)
+        .setTitle(R.string.calendar_access)
+        .setMessage(R.string.phone_calendar_required)
+        .setPositiveButton(R.string.continue_button) { dialog, id ->
+            activity.requestPermissions(
+                arrayOf(Manifest.permission.READ_CALENDAR),
+                CALENDAR_READ_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
+}
+
+fun isShiaPrayTimeCalculationSelected(): Boolean {
+    val calculationMethod = getCalculationMethod()
+    return calculationMethod == CalculationMethod.Tehran || calculationMethod == CalculationMethod.Jafari
+}
+
+fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
+    view ?: return
+
+    val clipboardService =
+        view.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+
+    if (clipboardService == null || label == null || text == null) return
+
+    clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
+    createAndShowShortSnackbar(
+        view,
+        String.format(view.context.getString(R.string.date_copied_clipboard), text)
+    )
+}
+
+fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
+    val result = StringBuilder()
+    var first = true
+    for (type in otherCalendars) {
+        if (!first) result.append(separator)
+        result.append(formatDate(getDateFromJdnOfCalendar(type, jdn)))
+        first = false
+    }
+    return result.toString()
+}
+
+private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
+    (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
+
+fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?): List<AbstractEvent<*>> {
+    val persian = PersianDate(jdn)
+    val civil = CivilDate(jdn)
+    val islamic = IslamicDate(jdn)
+
+    val result = ArrayList<AbstractEvent<*>>()
+
+    val persianList = sPersianCalendarEvents.get(persian.month * 100 + persian.dayOfMonth)
+    if (persianList != null)
+        for (persianCalendarEvent in persianList)
+            if (holidayAwareEqualCheck(persianCalendarEvent.date, persian))
+                result.add(persianCalendarEvent)
+
+    var islamicList: List<IslamicCalendarEvent>? =
+        sIslamicCalendarEvents.get(islamic.month * 100 + islamic.dayOfMonth)
+    if (islamicList != null)
+        for (islamicCalendarEvent in islamicList)
+            if (holidayAwareEqualCheck(islamicCalendarEvent.date, islamic))
+                result.add(islamicCalendarEvent)
+
+    // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
+    if ((islamic.month == 2 || islamic.month == 11)
+        && islamic.dayOfMonth == 29
+        && getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+    ) {
+        val alternativeDate = IslamicDate(islamic.year, islamic.month, 30)
+
+        islamicList =
+            sIslamicCalendarEvents.get(alternativeDate.month * 100 + alternativeDate.dayOfMonth)
+        if (islamicList != null)
+            for (islamicCalendarEvent in islamicList)
+                if (holidayAwareEqualCheck(islamicCalendarEvent.date, alternativeDate))
+                    result.add(islamicCalendarEvent)
+    }
+
+    val gregorianList = sGregorianCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
+    if (gregorianList != null)
+        for (gregorianCalendarEvent in gregorianList)
+            if (holidayAwareEqualCheck(gregorianCalendarEvent.date, civil))
+                result.add(gregorianCalendarEvent)
+
+    // This one is passed by caller
+    if (deviceCalendarEvents != null) {
+        val deviceEventList = deviceCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
+        if (deviceEventList != null)
+            for (deviceCalendarEvent in deviceEventList)
+            // holidayAwareEqualCheck is not needed as they won't have -1 on year field
+                if (deviceCalendarEvent.date == civil)
+                    result.add(deviceCalendarEvent)
+    }
+
+    return result
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
+//    }
+
+//    private static List<Reminder> updateSavedReminders(Context context) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
+//        if (TextUtils.isEmpty(storedJson))
+//            storedJson = "[]";
+//
+//        List<Reminder> reminders = new ArrayList<>();
+//        try {
+//            JSONArray jsonArray = new JSONArray(storedJson);
+//            int length = jsonArray.length();
+//            for (int i = 0; i < length; ++i) {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                reminders.add(new Reminder(
+//                        jsonObject.getInt("id"),
+//                        jsonObject.getString("name"),
+//                        jsonObject.getString("info"),
+//                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
+//                        jsonObject.getInt("quantity"),
+//                        jsonObject.getLong("startTime")
+//                ));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return reminders;
+//    }
+//
+//    public static void storeReminders(Context context, List<Reminder> reminders) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//
+//        try {
+//            JSONArray json = new JSONArray();
+//            for (Reminder reminder : reminders) {
+//                JSONObject object = new JSONObject();
+//                object.put("id", reminder.id);
+//                object.put("name", reminder.name);
+//                object.put("info", reminder.info);
+//                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
+//                object.put("quantity", reminder.quantity);
+//                object.put("startTime", reminder.startTime);
+//                json.put(object);
+//            }
+//
+//            String serializedJson = json.toString();
+//
+//            // Just don't store huge objects
+//            if (serializedJson.length() > 8000)
+//                return;
+//
+//            SharedPreferences.Editor edit = prefs.edit();
+//            edit.putString(REMINDERS_STORE_KEY, serializedJson);
+//            edit.apply();
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Nullable
+//    public static Reminder getReminderById(int id) {
+//        for (Reminder reminder : sReminderDetails) {
+//            if (reminder.id == id) return reminder;
+//        }
+//        return null;
 //    }

@@ -4,10 +4,7 @@ import com.byagowi.persiancalendar.praytimes.CalculationMethod
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.civilDateToCalendar
-import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import com.byagowi.persiancalendar.utils.*
 import com.cepmuvakkit.times.view.QiblaCompassView
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
@@ -195,18 +192,18 @@ class MainLogicTests {
 
     @Test
     fun test_getMonthLength() {
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 1))
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 2))
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 3))
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 4))
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 5))
-        assertEquals(31, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 6))
-        assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 7))
-        assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 8))
-        assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 9))
-        assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 10))
-        assertEquals(30, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 11))
-        assertEquals(29, Utils.getMonthLength(CalendarType.SHAMSI, 1397, 12))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 1))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 2))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 3))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 4))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 5))
+        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 6))
+        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 7))
+        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 8))
+        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 9))
+        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 10))
+        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 11))
+        assertEquals(29, getMonthLength(CalendarType.SHAMSI, 1397, 12))
     }
 
     @Test
@@ -492,7 +489,7 @@ class MainLogicTests {
         (1206..1498).forEach {
             assertEquals(
                 it.toString(), if (leapYears.contains(it)) 30 else 29,
-                Utils.getMonthLength(CalendarType.SHAMSI, it, 12)
+                getMonthLength(CalendarType.SHAMSI, it, 12)
             )
         }
     }

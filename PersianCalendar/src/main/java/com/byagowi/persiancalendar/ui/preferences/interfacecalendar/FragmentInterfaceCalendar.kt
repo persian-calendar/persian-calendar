@@ -12,7 +12,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -37,7 +37,7 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
 
         switchPreference?.setOnPreferenceChangeListener { _, _ ->
             if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                Utils.askForCalendarPermission(mainActivityDependency.mainActivity)
+                askForCalendarPermission(mainActivityDependency.mainActivity)
                 switchPreference.isChecked = false
             } else {
                 switchPreference.isChecked = !switchPreference.isChecked

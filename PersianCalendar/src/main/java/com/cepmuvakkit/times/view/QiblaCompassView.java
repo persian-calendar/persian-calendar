@@ -18,13 +18,14 @@ import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.utils.Utils;
 import com.cepmuvakkit.times.posAlgo.AstroLib;
 import com.cepmuvakkit.times.posAlgo.EarthHeading;
 import com.cepmuvakkit.times.posAlgo.Horizontal;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
+
+import static com.byagowi.persiancalendar.utils.FunctionsKt.a11yAnnounceAndClick;
 
 public class QiblaCompassView extends View {
     @ColorInt
@@ -339,7 +340,7 @@ public class QiblaCompassView extends View {
         // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0)) {
             if (!isCurrentlyNorth) {
-                Utils.a11yAnnounceAndClick(this, R.string.north);
+                a11yAnnounceAndClick(this, R.string.north);
                 isCurrentlyNorth = true;
             }
         } else {
@@ -348,7 +349,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 90)) {
             if (!isCurrentlyEast) {
-                Utils.a11yAnnounceAndClick(this, R.string.east);
+                a11yAnnounceAndClick(this, R.string.east);
                 isCurrentlyEast = true;
             }
         } else {
@@ -357,7 +358,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 180)) {
             if (!isCurrentlySouth) {
-                Utils.a11yAnnounceAndClick(this, R.string.south);
+                a11yAnnounceAndClick(this, R.string.south);
                 isCurrentlySouth = true;
             }
         } else {
@@ -366,7 +367,7 @@ public class QiblaCompassView extends View {
 
         if (isNearToDegree(bearing, 270)) {
             if (!isCurrentlyWest) {
-                Utils.a11yAnnounceAndClick(this, R.string.west);
+                a11yAnnounceAndClick(this, R.string.west);
                 isCurrentlyWest = true;
             }
         } else {
@@ -376,7 +377,7 @@ public class QiblaCompassView extends View {
         if (isLongLatAvailable() && qiblaInfo != null) {
             if (isNearToDegree(bearing, (float) qiblaInfo.getHeading())) {
                 if (!isCurrentlyQibla) {
-                    Utils.a11yAnnounceAndClick(this, R.string.qibla);
+                    a11yAnnounceAndClick(this, R.string.qibla);
                     isCurrentlyQibla = true;
                 }
             } else {

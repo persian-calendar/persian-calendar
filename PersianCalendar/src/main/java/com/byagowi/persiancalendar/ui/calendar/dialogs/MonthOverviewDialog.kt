@@ -39,17 +39,17 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val records = ArrayList<MonthOverviewRecord>()
 
         val mainCalendar = getMainCalendar()
-        val date = Utils.getDateFromJdnOfCalendar(mainCalendar, baseJdn)
-        val monthLength = Utils.getMonthLength(mainCalendar, date.year, date.month).toLong()
-        val deviceEvents = Utils.readMonthDeviceEvents(context, baseJdn)
+        val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
+        val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
+        val deviceEvents = readMonthDeviceEvents(context, baseJdn)
         for (i in 0 until monthLength) {
             val jdn = baseJdn + i
-            val events = Utils.getEvents(jdn, deviceEvents)
+            val events = getEvents(jdn, deviceEvents)
             val holidays = Utils.getEventsTitle(events, true, false, false, false)
             val nonHolidays = Utils.getEventsTitle(events, false, false, true, false)
             if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))
                 records.add(MonthOverviewRecord(dayTitleSummary(
-                        Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays))
+                        getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays))
         }
         if (records.size == 0)
             records.add(MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""))

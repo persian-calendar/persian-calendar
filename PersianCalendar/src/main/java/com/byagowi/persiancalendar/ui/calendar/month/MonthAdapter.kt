@@ -25,7 +25,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
-    private var monthEvents = SparseArray<List<DeviceCalendarEvent>>()
+    private var monthEvents = SparseArray<ArrayList<DeviceCalendarEvent>>()
     private val isArabicDigit: Boolean
     private val context: Context
     private var selectedDay = -1
@@ -43,7 +43,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
 
     internal fun initializeMonthEvents(context: Context?) {
         if (isShowDeviceCalendarEvents() && context != null) {
-            monthEvents = Utils.readMonthDeviceEvents(context, days[0].jdn)
+            monthEvents = readMonthDeviceEvents(context, days[0].jdn)
         }
     }
 
@@ -149,7 +149,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
             } else {
                 if (position - 7 - startingDayOfWeek >= 0) {
                     val day = days[position - 7 - startingDayOfWeek]
-                    val events = Utils.getEvents(day.jdn, monthEvents)
+                    val events = getEvents(day.jdn, monthEvents)
                     val isHoliday = isWeekEnd(day.dayOfWeek) || hasAnyHolidays(events)
 
                     itemDayView.setDayOfMonthItem(day.isToday, originalPosition == selectedDay,

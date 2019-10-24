@@ -29,10 +29,10 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
             try {
                 val selectedCalendarType = selectedCalendarType
-                if (day > Utils.getMonthLength(selectedCalendarType, year, month))
+                if (day > getMonthLength(selectedCalendarType, year, month))
                     throw Exception("Not a valid day")
 
-                return Utils.getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
+                return getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
             } catch (e: Exception) {
                 createAndShowShortSnackbar(rootView, R.string.date_exception)
                 Log.e("SelectDayDialog", "", e)
@@ -82,7 +82,7 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
             jdn = getTodayJdn()
         }
 
-        val date = Utils.getDateFromJdnOfCalendar(
+        val date = getDateFromJdnOfCalendar(
                 selectedCalendarType,
                 jdn)
 

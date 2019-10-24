@@ -149,7 +149,7 @@ class CalendarFragment : DaggerFragment() {
             tabsViewPager.adapter = TabsViewPager.TabsAdapter(childFragmentManager,
                     appDependency, tabs, titles)
             tabLayout.setupWithViewPager(tabsViewPager)
-            mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(Utils.isRTL(context))
+            mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(isRTL(context))
             calendarViewPager.adapter = CalendarAdapter(childFragmentManager,
                     mCalendarAdapterHelper)
             mCalendarAdapterHelper.gotoOffset(calendarViewPager, 0)
@@ -194,14 +194,14 @@ class CalendarFragment : DaggerFragment() {
         val time = Calendar.getInstance()
         time.set(civil.year, civil.month - 1, civil.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            Utils.askForCalendarPermission(activity)
+            askForCalendarPermission(activity)
         } else {
             try {
                 startActivityForResult(
                         Intent(Intent.ACTION_INSERT)
                                 .setData(CalendarContract.Events.CONTENT_URI)
                                 .putExtra(CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                        Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
+                                        getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                         time.timeInMillis)
                                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -223,9 +223,9 @@ class CalendarFragment : DaggerFragment() {
                 sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
             } else {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.askForCalendarPermission(activity)
+                    askForCalendarPermission(activity)
                 } else {
-                    Utils.toggleShowDeviceCalendarOnPreference(activity, true)
+                    toggleShowDeviceCalendarOnPreference(activity, true)
                     activity.restartActivity()
                 }
             }
@@ -289,8 +289,8 @@ class CalendarFragment : DaggerFragment() {
     private fun showEvent(jdn: Long, isToday: Boolean) {
         mEventsBinding.run {
             shiftWorkTitle.text = Utils.getShiftWorkTitle(jdn, false)
-            val events = Utils.getEvents(jdn,
-                    Utils.readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
+            val events = getEvents(jdn,
+                    readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
             val holidays = Utils.getEventsTitle(events, true, false, false, false)
             val nonHolidays = Utils.getEventsTitle(events, false, false, false, false)
             val deviceEvents = getDeviceEventsTitle(events)
@@ -460,7 +460,7 @@ class CalendarFragment : DaggerFragment() {
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
         val mainCalendar = getMainCalendar()
         val today = getTodayOfCalendar(mainCalendar)
-        val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
+        val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
         return (today.year - date.year) * 12 + today.month - date.month
     }
 
@@ -485,18 +485,18 @@ class CalendarFragment : DaggerFragment() {
                 val eventsAdapter = ArrayAdapter<AbstractEvent<*>>(context,
                         R.layout.suggestion, android.R.id.text1)
                 eventsAdapter.addAll(getAllEnabledEvents())
-                eventsAdapter.addAll(Utils.getAllEnabledAppointments(context))
+                eventsAdapter.addAll(getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
                 mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
                     val date = ev.date
-                    val type = Utils.getCalendarTypeFromDate(date)
+                    val type = getCalendarTypeFromDate(date)
                     val today = getTodayOfCalendar(type)
                     var year = date.year
                     if (year == -1) {
                         year = today.year + if (date.month < today.month) 1 else 0
                     }
-                    bringDate(Utils.getDateOfCalendar(type, year, date.month, date.dayOfMonth).toJdn())
+                    bringDate(getDateOfCalendar(type, year, date.month, date.dayOfMonth).toJdn())
                     onActionViewCollapsed()
                 }
             }

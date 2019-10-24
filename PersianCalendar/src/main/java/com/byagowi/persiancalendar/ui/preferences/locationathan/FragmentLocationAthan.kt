@@ -142,7 +142,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                     val activity = mainActivityDependency.mainActivity
 
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.askForLocationPermission(activity)
+                        askForLocationPermission(activity)
                     } else {
                         GPSLocationDialog().show(childFragmentManager,
                                 GPSLocationDialog::class.java.name)

@@ -12,8 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.DaggerFragment
@@ -237,7 +236,7 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
 
         override fun onClick(v: View?) {
             deviceInfoItemsList[mPosition].apply {
-                Utils.copyToClipboard(rootView, title, content)
+                copyToClipboard(rootView, title, content)
             }
         }
     }
