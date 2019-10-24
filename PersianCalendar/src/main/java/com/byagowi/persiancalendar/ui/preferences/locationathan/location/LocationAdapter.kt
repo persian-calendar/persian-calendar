@@ -25,29 +25,27 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
     inner class ViewHolder(private val binding: ListItemCityNameBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(cityEntity: CityItem) {
-            val city: String
-            val country: String
-            when (getAppLanguage()) {
-                LANG_EN_IR, LANG_EN_US, LANG_JA -> {
-                    city = cityEntity.en
-                    country = cityEntity.countryEn
-                }
-                LANG_CKB -> {
-                    city = cityEntity.ckb
-                    country = cityEntity.countryCkb
-                }
-                LANG_AR -> {
-                    city = cityEntity.ar
-                    country = cityEntity.countryAr
-                }
-                else -> {
-                    city = cityEntity.fa
-                    country = cityEntity.countryFa
+            binding.run {
+                root.setOnClickListener(this@ViewHolder)
+                when (getAppLanguage()) {
+                    LANG_EN_IR, LANG_EN_US, LANG_JA -> {
+                        city.text = cityEntity.en
+                        country.text = cityEntity.countryEn
+                    }
+                    LANG_CKB -> {
+                        city.text = cityEntity.ckb
+                        country.text = cityEntity.countryCkb
+                    }
+                    LANG_AR -> {
+                        city.text = cityEntity.ar
+                        country.text = cityEntity.countryAr
+                    }
+                    else -> {
+                        city.text = cityEntity.fa
+                        country.text = cityEntity.countryFa
+                    }
                 }
             }
-            val model = LocationAdapterModel(city, country, this)
-            binding.model = model
-            binding.executePendingBindings()
         }
 
         override fun onClick(view: View) =

@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-
-        <variable
-            name="model"
-            type="com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationAdapterModel" />
-    </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:onClick="@{model.callback}"
         android:padding="@dimen/card_padding">
 
         <TextView
+            android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/padding_item"
             android:paddingRight="@dimen/padding_item"
-            android:text="@{model.city}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         <TextView
+            android:id="@+id/country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{model.country}"
             android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>
