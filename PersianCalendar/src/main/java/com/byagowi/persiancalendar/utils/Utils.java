@@ -646,23 +646,6 @@ public class Utils {
         return string.replaceAll("-(IR|AF|US)", "");
     }
 
-    public static void a11yAnnounceAndClick(View view, @StringRes int resId) {
-        if (!isTalkBackEnabled()) return;
-
-        Context context = view.getContext();
-        if (context == null) return;
-
-        long now = System.currentTimeMillis();
-        if (now - latestToastShowTime > twoSeconds) {
-            createAndShowShortSnackbar(view, resId);
-            // https://stackoverflow.com/a/29423018
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager != null)
-                audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
-            latestToastShowTime = now;
-        }
-    }
-
 //    private static List<Reminder> updateSavedReminders(Context context) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 //        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");

@@ -20,6 +20,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import static com.byagowi.persiancalendar.utils.FunctionsKt.a11yAnnounceAndClick;
+
 /*
  *  This file is part of Level (an Android Bubble Level).
  *  <https://github.com/avianey/Level>
@@ -328,7 +330,7 @@ public class LevelView extends View {
 
         if (orientation.isLevel(newPitch, newRoll, newBalance, .8f)) {
             if (!isAlreadyLeveled) {
-                Utils.a11yAnnounceAndClick(this, R.string.level);
+                a11yAnnounceAndClick(this, R.string.level);
                 isAlreadyLeveled = true;
             }
         } else {

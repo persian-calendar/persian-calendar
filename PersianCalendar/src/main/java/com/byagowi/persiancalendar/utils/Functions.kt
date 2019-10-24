@@ -12,6 +12,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.AudioManager
 import android.os.Build
 import android.provider.CalendarContract
 import android.text.TextUtils
@@ -1265,6 +1266,21 @@ fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): 
         CalendarType.SHAMSI -> PersianDate(year, month, day)
         else -> PersianDate(year, month, day)
     }
+
+fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
+    if (!isTalkBackEnabled()) return
+
+    val context = view.context ?: return
+
+    val now = System.currentTimeMillis()
+    if (now - latestToastShowTime > twoSeconds) {
+        createAndShowShortSnackbar(view, resId)
+        // https://stackoverflow.com/a/29423018
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
+        audioManager?.playSoundEffect(AudioManager.FX_KEY_CLICK)
+        latestToastShowTime = now
+    }
+}
 
 
 //    public static List<Reminder> getReminderDetails() {
