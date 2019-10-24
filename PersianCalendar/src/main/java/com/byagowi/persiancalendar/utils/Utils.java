@@ -10,11 +10,9 @@ import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.accessibility.AccessibilityManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -24,16 +22,9 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.byagowi.persiancalendar.R;
-import io.github.persiancalendar.calendar.AbstractDate;
-import io.github.persiancalendar.calendar.CivilDate;
-import io.github.persiancalendar.calendar.IslamicDate;
-import io.github.persiancalendar.calendar.PersianDate;
 import com.byagowi.persiancalendar.entities.AbstractEvent;
 import com.byagowi.persiancalendar.entities.CityItem;
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
-import com.byagowi.persiancalendar.entities.GregorianCalendarEvent;
-import com.byagowi.persiancalendar.entities.IslamicCalendarEvent;
-import com.byagowi.persiancalendar.entities.PersianCalendarEvent;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
 import com.byagowi.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
@@ -59,9 +50,6 @@ import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.*;
 import static com.byagowi.persiancalendar.utils.FunctionsKt.*;
 import static com.byagowi.persiancalendar.utils.UtilsKt.*;
-
-//import com.byagowi.persiancalendar.entities.Reminder;
-
 
 public class Utils {
 
@@ -188,6 +176,131 @@ public class Utils {
         talkBackEnabled = a11y != null && a11y.isEnabled() && a11y.isTouchExplorationEnabled();
     }
 
+    static public @NonNull
+    String getShiftWorkTitle(long jdn, boolean abbreviated) {
+        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
+            return "";
+
+        long passedDays = jdn - sShiftWorkStartingJdn;
+        if (!sShiftWorkRecurs && (passedDays >= sShiftWorkPeriod))
+            return "";
+
+        int dayInPeriod = (int) (passedDays % sShiftWorkPeriod);
+        int accumulation = 0;
+        for (ShiftWorkRecord shift : sShiftWorks) {
+            accumulation += shift.getLength();
+            if (accumulation > dayInPeriod) {
+                // Skip rests on abbreviated mode
+                if (sShiftWorkRecurs && abbreviated &&
+                        (shift.getType().equals("r") || shift.getType().equals(sShiftWorkTitles.get("r"))))
+                    return "";
+
+                String title = sShiftWorkTitles.get(shift.getType());
+                if (title == null) title = shift.getType();
+                return abbreviated ?
+                        (title.substring(0, 1) +
+                                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                                        && !language.equals(LANG_AR) ? ZWJ : "")) :
+                        title;
+            }
+        }
+
+        // Shouldn't be reached
+        return "";
+    }
+
+    static public @NonNull
+    String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
+                          boolean compact, boolean showDeviceCalendarEvents,
+                          boolean insertRLM) {
+        StringBuilder titles = new StringBuilder();
+        boolean first = true;
+
+        for (AbstractEvent event : dayEvents)
+            if (event.isHoliday() == holiday) {
+                String title = event.getTitle();
+                if (insertRLM) {
+                    title = RLM + title;
+                }
+                if (event instanceof DeviceCalendarEvent) {
+                    if (!showDeviceCalendarEvents)
+                        continue;
+
+                    if (!compact) {
+                        title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
+                    }
+                } else {
+                    if (compact)
+                        title = title.replaceAll("(.*) \\(.*?$", "$1");
+                }
+
+                if (first)
+                    first = false;
+                else
+                    titles.append("\n");
+                titles.append(title);
+            }
+
+        return titles.toString();
+    }
+
+    public static void startEitherServiceOrWorker(@NonNull Context context) {
+        WorkManager workManager = WorkManager.getInstance(context);
+        if (goForWorker()) {
+            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
+                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
+
+            PeriodicWorkRequest updateWork = updateBuilder.build();
+            workManager.enqueueUniquePeriodicWork(
+                    UPDATE_TAG,
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    updateWork);
+        } else {
+            // Disable all the scheduled workers, just in case enabled before
+            workManager.cancelAllWork();
+            // Or,
+            // workManager.cancelAllWorkByTag(UPDATE_TAG);
+            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+
+            boolean alreadyRan = false;
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            if (manager != null) {
+                try {
+                    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                        if (ApplicationService.class.getName().equals(service.service.getClassName())) {
+                            alreadyRan = true;
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e);
+                }
+            }
+
+            if (!alreadyRan) {
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        ContextCompat.startForegroundService(context,
+                                new Intent(context, ApplicationService.class));
+
+                    context.startService(new Intent(context, ApplicationService.class));
+                } catch (Exception e) {
+                    Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e);
+                }
+            }
+        }
+    }
+
+    static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
+        String desc = event.getDescription();
+        String title = event.getTitle();
+        if (!TextUtils.isEmpty(desc))
+            title += " (" + Html.fromHtml(event.getDescription()).toString().trim() + ")";
+
+        return title.replaceAll("\\n", " ").trim();
+    }
+
+
+
     static private String prepareForArabicSort(String text) {
         return text
                 .replaceAll("ی", "ي")
@@ -300,72 +413,10 @@ public class Utils {
         return Arrays.asList(cities);
     }
 
-    static public @NonNull
-    String getShiftWorkTitle(long jdn, boolean abbreviated) {
-        if (sShiftWorkStartingJdn == -1 || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
-            return "";
 
-        long passedDays = jdn - sShiftWorkStartingJdn;
-        if (!sShiftWorkRecurs && (passedDays >= sShiftWorkPeriod))
-            return "";
 
-        int dayInPeriod = (int) (passedDays % sShiftWorkPeriod);
-        int accumulation = 0;
-        for (ShiftWorkRecord shift : sShiftWorks) {
-            accumulation += shift.getLength();
-            if (accumulation > dayInPeriod) {
-                // Skip rests on abbreviated mode
-                if (sShiftWorkRecurs && abbreviated &&
-                        (shift.getType().equals("r") || shift.getType().equals(sShiftWorkTitles.get("r"))))
-                    return "";
-
-                String title = sShiftWorkTitles.get(shift.getType());
-                if (title == null) title = shift.getType();
-                return abbreviated ?
-                        (title.substring(0, 1) +
-                                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
-                                        && !language.equals(LANG_AR) ? ZWJ : "")) :
-                        title;
-            }
-        }
-
-        // Shouldn't be reached
-        return "";
-    }
-
-    static public @NonNull
-    String getEventsTitle(List<AbstractEvent> dayEvents, boolean holiday,
-                          boolean compact, boolean showDeviceCalendarEvents,
-                          boolean insertRLM) {
-        StringBuilder titles = new StringBuilder();
-        boolean first = true;
-
-        for (AbstractEvent event : dayEvents)
-            if (event.isHoliday() == holiday) {
-                String title = event.getTitle();
-                if (insertRLM) {
-                    title = RLM + title;
-                }
-                if (event instanceof DeviceCalendarEvent) {
-                    if (!showDeviceCalendarEvents)
-                        continue;
-
-                    if (!compact) {
-                        title = formatDeviceCalendarEventTitle((DeviceCalendarEvent) event);
-                    }
-                } else {
-                    if (compact)
-                        title = title.replaceAll("(.*) \\(.*?$", "$1");
-                }
-
-                if (first)
-                    first = false;
-                else
-                    titles.append("\n");
-                titles.append(title);
-            }
-
-        return titles.toString();
+    private static String getOnlyLanguage(String string) {
+        return string.replaceAll("-(IR|AF|US)", "");
     }
 
     // Context preferably should be activity context not application
@@ -388,6 +439,8 @@ public class Utils {
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
+
+
 
     private static long calculateDiffToChangeDate() {
         Date currentTime = Calendar.getInstance().getTime();
@@ -416,133 +469,4 @@ public class Utils {
                 changeDateWorker).enqueue();
     }
 
-    public static void startEitherServiceOrWorker(@NonNull Context context) {
-        WorkManager workManager = WorkManager.getInstance(context);
-        if (goForWorker()) {
-            PeriodicWorkRequest.Builder updateBuilder = new PeriodicWorkRequest
-                    .Builder(UpdateWorker.class, 1, TimeUnit.HOURS);
-
-            PeriodicWorkRequest updateWork = updateBuilder.build();
-            workManager.enqueueUniquePeriodicWork(
-                    UPDATE_TAG,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    updateWork);
-        } else {
-            // Disable all the scheduled workers, just in case enabled before
-            workManager.cancelAllWork();
-            // Or,
-            // workManager.cancelAllWorkByTag(UPDATE_TAG);
-            // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
-
-            boolean alreadyRan = false;
-            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            if (manager != null) {
-                try {
-                    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                        if (ApplicationService.class.getName().equals(service.service.getClassName())) {
-                            alreadyRan = true;
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e);
-                }
-            }
-
-            if (!alreadyRan) {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        ContextCompat.startForegroundService(context,
-                                new Intent(context, ApplicationService.class));
-
-                    context.startService(new Intent(context, ApplicationService.class));
-                } catch (Exception e) {
-                    Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e);
-                }
-            }
-        }
-    }
-
-    static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
-        String desc = event.getDescription();
-        String title = event.getTitle();
-        if (!TextUtils.isEmpty(desc))
-            title += " (" + Html.fromHtml(event.getDescription()).toString().trim() + ")";
-
-        return title.replaceAll("\\n", " ").trim();
-    }
-
-    private static String getOnlyLanguage(String string) {
-        return string.replaceAll("-(IR|AF|US)", "");
-    }
-
-//    private static List<Reminder> updateSavedReminders(Context context) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
-//        if (TextUtils.isEmpty(storedJson))
-//            storedJson = "[]";
-//
-//        List<Reminder> reminders = new ArrayList<>();
-//        try {
-//            JSONArray jsonArray = new JSONArray(storedJson);
-//            int length = jsonArray.length();
-//            for (int i = 0; i < length; ++i) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                reminders.add(new Reminder(
-//                        jsonObject.getInt("id"),
-//                        jsonObject.getString("name"),
-//                        jsonObject.getString("info"),
-//                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
-//                        jsonObject.getInt("quantity"),
-//                        jsonObject.getLong("startTime")
-//                ));
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return reminders;
-//    }
-//
-//    public static void storeReminders(Context context, List<Reminder> reminders) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//
-//        try {
-//            JSONArray json = new JSONArray();
-//            for (Reminder reminder : reminders) {
-//                JSONObject object = new JSONObject();
-//                object.put("id", reminder.id);
-//                object.put("name", reminder.name);
-//                object.put("info", reminder.info);
-//                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
-//                object.put("quantity", reminder.quantity);
-//                object.put("startTime", reminder.startTime);
-//                json.put(object);
-//            }
-//
-//            String serializedJson = json.toString();
-//
-//            // Just don't store huge objects
-//            if (serializedJson.length() > 8000)
-//                return;
-//
-//            SharedPreferences.Editor edit = prefs.edit();
-//            edit.putString(REMINDERS_STORE_KEY, serializedJson);
-//            edit.apply();
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Nullable
-//    public static Reminder getReminderById(int id) {
-//        for (Reminder reminder : sReminderDetails) {
-//            if (reminder.id == id) return reminder;
-//        }
-//        return null;
-//    }
 }
