@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimes
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getFormattedClock
 import com.google.android.flexbox.FlexboxLayoutManager
 
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
@@ -72,7 +72,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
                 return
             }
 
-            binding.time.text = Utils.getFormattedClock(clock, false)
+            binding.time.text = getFormattedClock(clock, false)
         }
     }
 

@@ -290,7 +290,7 @@ class CalendarFragment : DaggerFragment() {
         mEventsBinding.run {
             shiftWorkTitle.text = Utils.getShiftWorkTitle(jdn, false)
             val events = Utils.getEvents(jdn,
-                    Utils.readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
+                    readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
             val holidays = Utils.getEventsTitle(events, true, false, false, false)
             val nonHolidays = Utils.getEventsTitle(events, false, false, false, false)
             val deviceEvents = getDeviceEventsTitle(events)
@@ -485,7 +485,7 @@ class CalendarFragment : DaggerFragment() {
                 val eventsAdapter = ArrayAdapter<AbstractEvent<*>>(context,
                         R.layout.suggestion, android.R.id.text1)
                 eventsAdapter.addAll(getAllEnabledEvents())
-                eventsAdapter.addAll(Utils.getAllEnabledAppointments(context))
+                eventsAdapter.addAll(getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
                 mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>

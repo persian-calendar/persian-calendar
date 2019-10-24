@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
-private var deviceCalendarEvents = SparseArray<List<DeviceCalendarEvent>>()
+private var deviceCalendarEvents = SparseArray<ArrayList<DeviceCalendarEvent>>()
 @StringRes
 private val timesOn4x2Shia = intArrayOf(R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight)
 @StringRes
@@ -38,7 +38,7 @@ private val owghatPlaceHolderId = intArrayOf(R.id.textPlaceholder4owghat_1_4x2, 
 
 fun setDeviceCalendarEvents(context: Context) {
     try {
-        deviceCalendarEvents = Utils.readDayDeviceEvents(context, -1)
+        deviceCalendarEvents = readDayDeviceEvents(context, -1)
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -110,7 +110,7 @@ fun update(context: Context, updateDate: Boolean) {
     val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
-                Utils.getFormattedClock(getClockFromStringId(nextOwghatId), false)
+                getFormattedClock(getClockFromStringId(nextOwghatId), false)
         if (isShownOnWidgets("owghat_location")) {
             val cityName = getCityName(context, false)
             if (cityName.isNotEmpty()) {
@@ -266,7 +266,7 @@ fun update(context: Context, updateDate: Boolean) {
                 for (i in owghatPlaceHolderId.indices) {
                     setTextViewText(owghatPlaceHolderId[i],
                             context.getString(timesOn4x2[i]) + "\n" +
-                                    Utils.getFormattedClock(getClockFromStringId(timesOn4x2[i]), false))
+                                    getFormattedClock(getClockFromStringId(timesOn4x2[i]), false))
                     setTextColor(owghatPlaceHolderId[i],
                             if (timesOn4x2[i] == nextOwghatId)
                                 Color.RED

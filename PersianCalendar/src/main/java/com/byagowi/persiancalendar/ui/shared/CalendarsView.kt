@@ -145,7 +145,7 @@ class CalendarsView : FrameLayout {
                     val springEquinox = getSpringEquinox(mainDate.toJdn())
                     equinox = String.format(context.getString(R.string.spring_equinox),
                             formatNumber(mainDate.year + addition),
-                            Utils.getFormattedClock(
+                            getFormattedClock(
                                     Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
                                             springEquinox.get(Calendar.MINUTE)), true))
                 }
