@@ -35,7 +35,7 @@ class MonthFragment : DaggerFragment() {
         val fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
                 container, false)
         val calendarFragment = calendarFragmentDependency.calendarFragment
-        val isRTL = Utils.isRTL(mainActivityDependency.mainActivity)
+        val isRTL = isRTL(mainActivityDependency.mainActivity)
         val offset = arguments?.getInt(OFFSET_ARGUMENT) ?: 0
 
         fragmentMonthBinding.next.setImageResource(if (isRTL)

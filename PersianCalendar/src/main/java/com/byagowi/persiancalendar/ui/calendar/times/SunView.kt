@@ -17,9 +17,7 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.praytimes.PrayTimes
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getAppFont
+import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos
@@ -340,7 +338,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         if (prayTimes == null || context == null)
             return
 
-        isRTL = Utils.isRTL(context)
+        isRTL = isRTL(context)
         sunriseString = context.getString(R.string.sunriseSunView)
         middayString = context.getString(R.string.middaySunView)
         sunsetString = context.getString(R.string.sunsetSunView)

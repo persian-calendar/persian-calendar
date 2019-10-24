@@ -149,7 +149,7 @@ class CalendarFragment : DaggerFragment() {
             tabsViewPager.adapter = TabsViewPager.TabsAdapter(childFragmentManager,
                     appDependency, tabs, titles)
             tabLayout.setupWithViewPager(tabsViewPager)
-            mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(Utils.isRTL(context))
+            mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(isRTL(context))
             calendarViewPager.adapter = CalendarAdapter(childFragmentManager,
                     mCalendarAdapterHelper)
             mCalendarAdapterHelper.gotoOffset(calendarViewPager, 0)

@@ -1282,6 +1282,21 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
     }
 }
 
+@StyleRes
+fun getThemeFromName(name: String): Int =
+    when (name) {
+        DARK_THEME -> R.style.DarkTheme
+        MODERN_THEME -> R.style.ModernTheme
+        BLUE_THEME -> R.style.BlueTheme
+        LIGHT_THEME -> R.style.LightTheme
+        else -> R.style.LightTheme
+    }
+
+fun isRTL(context: Context): Boolean =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+    else false
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

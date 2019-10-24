@@ -82,7 +82,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         // Don't replace below with appDependency.getSharedPreferences() ever
         // as the injection won't happen at the right time
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(Utils.getThemeFromName(getThemeFromPreference(this, prefs)))
+        setTheme(getThemeFromName(getThemeFromPreference(this, prefs)))
 
         Utils.applyAppLanguage(this)
 
@@ -112,7 +112,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             window.statusBarColor = Color.TRANSPARENT
         }
 
-        val isRTL = Utils.isRTL(this)
+        val isRTL = isRTL(this)
 
         val drawerToggle = object : ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
             var slidingDirection = if (isRTL) -1 else +1
@@ -389,7 +389,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onConfigurationChanged(newConfig)
         initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding.drawer.layoutDirection = if (Utils.isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            binding.drawer.layoutDirection = if (isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }
     }
 

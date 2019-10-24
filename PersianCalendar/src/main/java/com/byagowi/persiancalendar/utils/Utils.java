@@ -617,31 +617,6 @@ public class Utils {
         return title.replaceAll("\\n", " ").trim();
     }
 
-    public static boolean isRTL(@NonNull Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return context.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-        }
-        return false;
-    }
-
-    @StyleRes
-    public static int getThemeFromName(String name) {
-        switch (name) {
-            case DARK_THEME:
-                return R.style.DarkTheme;
-
-            case MODERN_THEME:
-                return R.style.ModernTheme;
-
-            case BLUE_THEME:
-                return R.style.BlueTheme;
-
-            default:
-            case LIGHT_THEME:
-                return R.style.LightTheme;
-        }
-    }
-
     private static String getOnlyLanguage(String string) {
         return string.replaceAll("-(IR|AF|US)", "");
     }
