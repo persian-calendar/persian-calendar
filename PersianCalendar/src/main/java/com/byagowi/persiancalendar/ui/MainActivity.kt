@@ -372,7 +372,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-                Utils.toggleShowDeviceCalendarOnPreference(this, true)
+                toggleShowDeviceCalendarOnPreference(this, true)
                 val currentDestination = Navigation
                         .findNavController(this, R.id.nav_host_fragment)
                         .currentDestination
@@ -380,7 +380,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                     restartActivity()
                 }
             } else {
-                Utils.toggleShowDeviceCalendarOnPreference(this, false)
+                toggleShowDeviceCalendarOnPreference(this, false)
             }
         }
     }

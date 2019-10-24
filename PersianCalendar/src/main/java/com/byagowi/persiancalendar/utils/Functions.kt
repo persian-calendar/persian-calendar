@@ -25,6 +25,7 @@ import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -1297,6 +1298,11 @@ fun isRTL(context: Context): Boolean =
         context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
     else false
 
+fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) {
+    PreferenceManager.getDefaultSharedPreferences(context).edit {
+        putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable)
+    }
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

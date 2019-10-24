@@ -225,7 +225,7 @@ class CalendarFragment : DaggerFragment() {
                 if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                     Utils.askForCalendarPermission(activity)
                 } else {
-                    Utils.toggleShowDeviceCalendarOnPreference(activity, true)
+                    toggleShowDeviceCalendarOnPreference(activity, true)
                     activity.restartActivity()
                 }
             }

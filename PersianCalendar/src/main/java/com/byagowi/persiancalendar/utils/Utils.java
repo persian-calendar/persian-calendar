@@ -601,13 +601,6 @@ public class Utils {
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel()).show();
     }
 
-    public static void toggleShowDeviceCalendarOnPreference(@NonNull Context context, boolean enable) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable);
-        edit.apply();
-    }
-
     static public String formatDeviceCalendarEventTitle(DeviceCalendarEvent event) {
         String desc = event.getDescription();
         String title = event.getTitle();
