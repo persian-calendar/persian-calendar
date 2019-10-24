@@ -55,7 +55,7 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
         }
 
         fun bind(position: Int) {
-            val date = Utils.getDateFromJdnOfCalendar(mCalendars[position], mJdn)
+            val date = getDateFromJdnOfCalendar(mCalendars[position], mJdn)
 
             binding.linear.text = toLinearDate(date)
             binding.linear.contentDescription = toLinearDate(date)

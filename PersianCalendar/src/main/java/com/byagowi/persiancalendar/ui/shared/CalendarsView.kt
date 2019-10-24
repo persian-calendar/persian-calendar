@@ -118,10 +118,10 @@ class CalendarsView : FrameLayout {
         }
 
         run {
-            val mainDate = Utils.getDateFromJdnOfCalendar(chosenCalendarType, jdn)
-            val startOfYear = Utils.getDateOfCalendar(chosenCalendarType,
+            val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
+            val startOfYear = getDateOfCalendar(chosenCalendarType,
                     mainDate.year, 1, 1)
-            val startOfNextYear = Utils.getDateOfCalendar(
+            val startOfNextYear = getDateOfCalendar(
                     chosenCalendarType, mainDate.year + 1, 1, 1)
             val startOfYearJdn = startOfYear.toJdn()
             val endOfYearJdn = startOfNextYear.toJdn() - 1

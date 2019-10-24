@@ -201,7 +201,7 @@ class CalendarFragment : DaggerFragment() {
                         Intent(Intent.ACTION_INSERT)
                                 .setData(CalendarContract.Events.CONTENT_URI)
                                 .putExtra(CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                        Utils.getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
+                                        getDateFromJdnOfCalendar(getMainCalendar(), jdn)))
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                                         time.timeInMillis)
                                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
@@ -460,7 +460,7 @@ class CalendarFragment : DaggerFragment() {
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
         val mainCalendar = getMainCalendar()
         val today = getTodayOfCalendar(mainCalendar)
-        val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
+        val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
         return (today.year - date.year) * 12 + today.month - date.month
     }
 
@@ -490,13 +490,13 @@ class CalendarFragment : DaggerFragment() {
                 mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
                     val date = ev.date
-                    val type = Utils.getCalendarTypeFromDate(date)
+                    val type = getCalendarTypeFromDate(date)
                     val today = getTodayOfCalendar(type)
                     var year = date.year
                     if (year == -1) {
                         year = today.year + if (date.month < today.month) 1 else 0
                     }
-                    bringDate(Utils.getDateOfCalendar(type, year, date.month, date.dayOfMonth).toJdn())
+                    bringDate(getDateOfCalendar(type, year, date.month, date.dayOfMonth).toJdn())
                     onActionViewCollapsed()
                 }
             }

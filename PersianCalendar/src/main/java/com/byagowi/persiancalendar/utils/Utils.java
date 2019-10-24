@@ -663,46 +663,6 @@ public class Utils {
         }
     }
 
-    static public AbstractDate getDateOfCalendar(CalendarType calendar, int year, int month, int day) {
-        switch (calendar) {
-            case ISLAMIC:
-                return new IslamicDate(year, month, day);
-            case GREGORIAN:
-                return new CivilDate(year, month, day);
-            case SHAMSI:
-            default:
-                return new PersianDate(year, month, day);
-        }
-    }
-
-    static public AbstractDate getDateFromJdnOfCalendar(CalendarType calendar, long jdn) {
-        switch (calendar) {
-            case ISLAMIC:
-                return new IslamicDate(jdn);
-            case GREGORIAN:
-                return new CivilDate(jdn);
-            case SHAMSI:
-            default:
-                return new PersianDate(jdn);
-        }
-    }
-
-    static public CalendarType getCalendarTypeFromDate(AbstractDate date) {
-        if (date instanceof IslamicDate)
-            return CalendarType.ISLAMIC;
-        else if (date instanceof CivilDate)
-            return CalendarType.GREGORIAN;
-        else
-            return CalendarType.SHAMSI;
-    }
-
-    static public int getMonthLength(CalendarType calendar, int year, int month) {
-        int yearOfNextMonth = month == 12 ? year + 1 : year;
-        int nextMonth = month == 12 ? 1 : month + 1;
-        return (int) (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() -
-                getDateOfCalendar(calendar, year, month, 1).toJdn());
-    }
-
 //    private static List<Reminder> updateSavedReminders(Context context) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 //        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
