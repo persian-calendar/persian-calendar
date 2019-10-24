@@ -65,7 +65,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 isSouthernHemisphere = true
             }
 
-            var month = Utils.getTodayOfCalendar(CalendarType.SHAMSI).month
+            var month = getTodayOfCalendar(CalendarType.SHAMSI).month
             if (isSouthernHemisphere) month = (month + 6 - 1) % 12 + 1
 
             return when {
@@ -201,11 +201,11 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             binding.appbarLayout.outlineProvider = null
         }
 
-        creationDateJdn = Utils.getTodayJdn()
+        creationDateJdn = getTodayJdn()
 
         if (getMainCalendar() == CalendarType.SHAMSI &&
                 isIranHolidaysEnabled() &&
-                Utils.getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
+                getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
                 view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
@@ -397,7 +397,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onResume()
         Utils.applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != Utils.getTodayJdn()) {
+        if (creationDateJdn != getTodayJdn()) {
             restartActivity()
         }
     }

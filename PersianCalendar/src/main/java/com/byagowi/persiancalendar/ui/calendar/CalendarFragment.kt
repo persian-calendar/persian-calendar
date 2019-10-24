@@ -164,14 +164,14 @@ class CalendarFragment : DaggerFragment() {
             tabsViewPager.setCurrentItem(lastTab, false)
         }
 
-        val today = Utils.getTodayOfCalendar(getMainCalendar())
+        val today = getTodayOfCalendar(getMainCalendar())
         mainActivityDependency.mainActivity.setTitleAndSubtitle(getMonthName(today),
                 formatNumber(today.year))
 
         mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
             mLastSelectedJdn = jdn
             mCalendarsView.showCalendars(mLastSelectedJdn, getMainCalendar(), getEnabledCalendarTypes())
-            val isToday = Utils.getTodayJdn() == mLastSelectedJdn
+            val isToday = getTodayJdn() == mLastSelectedJdn
             setOwghat(jdn, isToday)
             showEvent(jdn, isToday)
         })
@@ -389,7 +389,7 @@ class CalendarFragment : DaggerFragment() {
         var moonPhase = 1.0
         try {
             mCoordinate?.run {
-                moonPhase = SunMoonPosition(Utils.getTodayJdn().toDouble(), latitude,
+                moonPhase = SunMoonPosition(getTodayJdn().toDouble(), latitude,
                         longitude, 0.0, 0.0).moonPhase
             }
         } catch (e: Exception) {
@@ -420,7 +420,7 @@ class CalendarFragment : DaggerFragment() {
         mMainBinding.tabsViewPager.measureCurrentView(mOwghatBinding.root)
 
         if (mLastSelectedJdn == -1L)
-            mLastSelectedJdn = Utils.getTodayJdn()
+            mLastSelectedJdn = getTodayJdn()
     }
 
     private fun bringTodayYearMonth() {
@@ -429,7 +429,7 @@ class CalendarFragment : DaggerFragment() {
 
         mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0)
 
-        mCalendarFragmentModel.selectDay(Utils.getTodayJdn())
+        mCalendarFragmentModel.selectDay(getTodayJdn())
     }
 
     fun afterShiftWorkChange() = context?.run {
@@ -446,19 +446,20 @@ class CalendarFragment : DaggerFragment() {
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 
         if (isTalkBackEnabled()) {
-            val todayJdn = Utils.getTodayJdn()
+            val todayJdn = getTodayJdn()
             if (jdn != todayJdn) {
                 createAndShowShortSnackbar(view,
-                        Utils.getA11yDaySummary(mainActivityDependency.mainActivity, jdn,
-                                false, null, true,
-                                true, true))
+                        getA11yDaySummary(mainActivityDependency.mainActivity, jdn,
+                                false, null, withZodiac = true,
+                            withOtherCalendars = true, withTitle = true
+                        ))
             }
         }
     }
 
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
         val mainCalendar = getMainCalendar()
-        val today = Utils.getTodayOfCalendar(mainCalendar)
+        val today = getTodayOfCalendar(mainCalendar)
         val date = Utils.getDateFromJdnOfCalendar(mainCalendar, jdn)
         return (today.year - date.year) * 12 + today.month - date.month
     }
@@ -490,7 +491,7 @@ class CalendarFragment : DaggerFragment() {
                     val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
                     val date = ev.date
                     val type = Utils.getCalendarTypeFromDate(date)
-                    val today = Utils.getTodayOfCalendar(type)
+                    val today = getTodayOfCalendar(type)
                     var year = date.year
                     if (year == -1) {
                         year = today.year + if (date.month < today.month) 1 else 0
@@ -531,7 +532,7 @@ class CalendarFragment : DaggerFragment() {
                     SelectDayDialog::class.java.name)
             R.id.add_event -> {
                 if (mLastSelectedJdn == -1L)
-                    mLastSelectedJdn = Utils.getTodayJdn()
+                    mLastSelectedJdn = getTodayJdn()
 
                 addEventOnCalendar(mLastSelectedJdn)
             }

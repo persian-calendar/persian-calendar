@@ -151,10 +151,10 @@ class AthanActivity : AppCompatActivity() {
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
 
         DataBindingUtil.setContentView<ActivityAthanBinding>(this, R.layout.activity_athan).apply {
-            athanName.setText(Utils.getPrayTimeText(prayerKey))
+            athanName.setText(getPrayTimeText(prayerKey))
 
             root.setOnClickListener { stop() }
-            root.setBackgroundResource(Utils.getPrayTimeImage(prayerKey))
+            root.setBackgroundResource(getPrayTimeImage(prayerKey))
 
             place.text = String.format(
                 "%s %s",

@@ -47,9 +47,9 @@ fun setDeviceCalendarEvents(context: Context) {
 fun update(context: Context, updateDate: Boolean) {
     Log.d("UpdateUtils", "update")
     Utils.applyAppLanguage(context)
-    val calendar = Utils.makeCalendarFromDate(Date())
+    val calendar = makeCalendarFromDate(Date())
     val mainCalendar = getMainCalendar()
-    val date = Utils.getTodayOfCalendar(mainCalendar)
+    val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
     val launchAppPendingIntent = PendingIntent.getActivity(context, 0,
@@ -332,9 +332,10 @@ fun update(context: Context, updateDate: Boolean) {
         // Don't remove this condition checking ever
         if (isTalkBackEnabled()) {
             // Don't use isToday, per a feedback
-            subtitle = Utils.getA11yDaySummary(context, jdn, false,
+            subtitle = getA11yDaySummary(context, jdn, false,
                     deviceCalendarEvents,
-                    true, true, false)
+                withZodiac = true, withOtherCalendars = true, withTitle = false
+            )
             if (owghat.isNotEmpty()) {
                 subtitle += getSpacedComma()
                 subtitle += owghat

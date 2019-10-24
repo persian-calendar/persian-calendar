@@ -15,6 +15,7 @@ import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -31,6 +32,7 @@ import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -41,6 +43,7 @@ import org.json.JSONObject
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
@@ -913,6 +916,149 @@ fun getCoordinate(context: Context): Coordinate? {
         return null
     }
 }
+
+fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
+
+fun getInitialOfWeekDay(position: Int): String {
+    weekDaysInitials?.let {
+        return it[position % 7]
+    }
+    return ""
+}
+
+// Extra helpers
+fun getA11yDaySummary(
+    context: Context, jdn: Long, isToday: Boolean,
+    deviceCalendarEvents: SparseArray<List<DeviceCalendarEvent>>?,
+    withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
+): String {
+    // It has some expensive calculations, lets not do that when not needed
+    if (!isTalkBackEnabled()) return ""
+
+    val result = StringBuilder()
+
+    if (isToday) {
+        result.append(context.getString(R.string.today))
+        result.append("\n")
+    }
+
+    val mainDate = getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+
+    if (withTitle) {
+        result.append("\n")
+        result.append(dayTitleSummary(mainDate))
+    }
+
+    val shift = getShiftWorkTitle(jdn, false)
+    if (!TextUtils.isEmpty(shift)) {
+        result.append("\n")
+        result.append(shift)
+    }
+
+    if (withOtherCalendars) {
+        val otherCalendars = dateStringOfOtherCalendars(jdn, getSpacedComma())
+        if (!TextUtils.isEmpty(otherCalendars)) {
+            result.append("\n")
+            result.append("\n")
+            result.append(context.getString(R.string.equivalent_to))
+            result.append(" ")
+            result.append(otherCalendars)
+        }
+    }
+
+    val events = getEvents(jdn, deviceCalendarEvents)
+    val holidays = getEventsTitle(events, true, true, true, false)
+    if (!TextUtils.isEmpty(holidays)) {
+        result.append("\n")
+        result.append("\n")
+        result.append(context.getString(R.string.holiday_reason))
+        result.append("\n")
+        result.append(holidays)
+    }
+
+    val nonHolidays = getEventsTitle(events, false, true, true, false)
+    if (!TextUtils.isEmpty(nonHolidays)) {
+        result.append("\n")
+        result.append("\n")
+        result.append(context.getString(R.string.events))
+        result.append("\n")
+        result.append(nonHolidays)
+    }
+
+    if (isWeekOfYearEnabled()) {
+        val startOfYearJdn = getDateOfCalendar(
+            getMainCalendar(),
+            mainDate.year, 1, 1
+        ).toJdn()
+        val weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn)
+        result.append("\n")
+        result.append("\n")
+        result.append(
+            String.format(
+                context.getString(R.string.nth_week_of_year),
+                formatNumber(weekOfYearStart)
+            )
+        )
+    }
+
+    if (withZodiac) {
+        val zodiac = getZodiacInfo(context, jdn, false)
+        if (!TextUtils.isEmpty(zodiac)) {
+            result.append("\n")
+            result.append("\n")
+            result.append(zodiac)
+        }
+    }
+
+    return result.toString()
+}
+
+
+fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
+    val dayOfYear = jdn - startOfYearJdn
+    return ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
+}
+
+fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =
+    getDateFromJdnOfCalendar(calendar, getTodayJdn())
+
+fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
+
+fun getDayOfWeekFromJdn(jdn: Long): Int =
+    civilDateToCalendar(CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7
+
+fun getSpringEquinox(jdn: Long): Calendar =
+    makeCalendarFromDate(Equinox.northwardEquinox(CivilDate(jdn).year))
+
+fun makeCalendarFromDate(date: Date): Calendar {
+    val calendar = Calendar.getInstance()
+    if (isIranTime())
+        calendar.timeZone = TimeZone.getTimeZone("Asia/Tehran")
+
+    calendar.time = date
+    return calendar
+}
+
+@StringRes
+fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {
+    "FAJR" -> R.string.fajr
+    "DHUHR" -> R.string.dhuhr
+    "ASR" -> R.string.asr
+    "MAGHRIB" -> R.string.maghrib
+    "ISHA" -> R.string.isha
+    else -> R.string.isha
+}
+
+@DrawableRes
+fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
+    "FAJR" -> R.drawable.fajr
+    "DHUHR" -> R.drawable.dhuhr
+    "ASR" -> R.drawable.asr
+    "MAGHRIB" -> R.drawable.maghrib
+    "ISHA" -> R.drawable.isha
+    else -> R.drawable.isha
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

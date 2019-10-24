@@ -50,7 +50,7 @@ class AthanNotification : Service() {
         val title = if (intent == null)
             ""
         else
-            getString(Utils.getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
+            getString(getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
         val cityName = getCityName(this, false)
         val subtitle = if (TextUtils.isEmpty(cityName))
             ""

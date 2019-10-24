@@ -52,7 +52,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         Utils.updateStoredPreference(mainActivity)
 
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
-        if (selectedJdn == -1L) selectedJdn = Utils.getTodayJdn()
+        if (selectedJdn == -1L) selectedJdn = getTodayJdn()
 
         jdn = getShiftWorkStartingJdn()
         var isFirstSetup = false

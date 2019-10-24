@@ -78,7 +78,6 @@ import io.github.persiancalendar.Equinox;
 
 import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.byagowi.persiancalendar.ConstantsKt.*;
-import static com.byagowi.persiancalendar.utils.AstronomicalUtilsKt.getZodiacInfo;
 import static com.byagowi.persiancalendar.utils.FunctionsKt.*;
 import static com.byagowi.persiancalendar.utils.UtilsKt.*;
 
@@ -452,10 +451,6 @@ public class Utils {
         return titles.toString();
     }
 
-    static public int fixDayOfWeekReverse(int dayOfWeek) {
-        return (dayOfWeek + 7 - weekStartOffset) % 7;
-    }
-
     // Context preferably should be activity context not application
     static public void applyAppLanguage(@NonNull Context context) {
         String localeCode = getOnlyLanguage(language);
@@ -502,11 +497,6 @@ public class Utils {
                 CHANGE_DATE_TAG,
                 ExistingWorkPolicy.REPLACE,
                 changeDateWorker).enqueue();
-    }
-
-    public static String getInitialOfWeekDay(int position) {
-        if (weekDaysInitials == null) return "";
-        return weekDaysInitials[position % 7];
     }
 
     public static void startEitherServiceOrWorker(@NonNull Context context) {
@@ -653,48 +643,6 @@ public class Utils {
         return baseFormatClock(hour, clock.getMinute()) + " " + suffix;
     }
 
-    static public @StringRes
-    int getPrayTimeText(String athanKey) {
-        switch (athanKey) {
-            case "FAJR":
-                return R.string.fajr;
-
-            case "DHUHR":
-                return R.string.dhuhr;
-
-            case "ASR":
-                return R.string.asr;
-
-            case "MAGHRIB":
-                return R.string.maghrib;
-
-            case "ISHA":
-            default:
-                return R.string.isha;
-        }
-    }
-
-    static public @DrawableRes
-    int getPrayTimeImage(String athanKey) {
-        switch (athanKey) {
-            case "FAJR":
-                return R.drawable.fajr;
-
-            case "DHUHR":
-                return R.drawable.dhuhr;
-
-            case "ASR":
-                return R.drawable.asr;
-
-            case "MAGHRIB":
-                return R.drawable.maghrib;
-
-            case "ISHA":
-            default:
-                return R.drawable.isha;
-        }
-    }
-
     @StyleRes
     public static int getThemeFromName(String name) {
         switch (name) {
@@ -772,36 +720,6 @@ public class Utils {
         int nextMonth = month == 12 ? 1 : month + 1;
         return (int) (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() -
                 getDateOfCalendar(calendar, year, month, 1).toJdn());
-    }
-
-    static Calendar makeCalendarFromDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        if (isIranTime()) {
-            calendar.setTimeZone(TimeZone.getTimeZone("Asia/Tehran"));
-        }
-        calendar.setTime(date);
-        return calendar;
-    }
-
-    static public Calendar getSpringEquinox(long jdn) {
-        return makeCalendarFromDate(Equinox.northwardEquinox(new CivilDate(jdn).getYear()));
-    }
-
-    static public int getDayOfWeekFromJdn(long jdn) {
-        return civilDateToCalendar(new CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7;
-    }
-
-    static public long getTodayJdn() {
-        return calendarToCivilDate(makeCalendarFromDate(new Date())).toJdn();
-    }
-
-    static public AbstractDate getTodayOfCalendar(CalendarType calendar) {
-        return getDateFromJdnOfCalendar(calendar, getTodayJdn());
-    }
-
-    public static int calculateWeekOfYear(long jdn, long startOfYearJdn) {
-        long dayOfYear = jdn - startOfYearJdn;
-        return (int) Math.ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.);
     }
 
     public static List<DeviceCalendarEvent> getAllEnabledAppointments(@NonNull Context context) {
@@ -931,85 +849,6 @@ public class Utils {
             // We don't like crash addition from here, just catch all of exceptions
             Log.e("", "Error on device calendar events read", e);
         }
-    }
-
-    // Extra helpers
-    static public String getA11yDaySummary(@NonNull Context context, long jdn, boolean isToday,
-                                           SparseArray<List<DeviceCalendarEvent>> deviceCalendarEvents,
-                                           boolean withZodiac, boolean withOtherCalendars, boolean withTitle) {
-        // It has some expensive calculations, lets not do that when not needed
-        if (!isTalkBackEnabled()) return "";
-
-        StringBuilder result = new StringBuilder();
-
-        if (isToday) {
-            result.append(context.getString(R.string.today));
-            result.append("\n");
-        }
-
-        AbstractDate mainDate = getDateFromJdnOfCalendar(getMainCalendar(), jdn);
-
-        if (withTitle) {
-            result.append("\n");
-            result.append(dayTitleSummary(mainDate));
-        }
-
-        String shift = getShiftWorkTitle(jdn, false);
-        if (!TextUtils.isEmpty(shift)) {
-            result.append("\n");
-            result.append(shift);
-        }
-
-        if (withOtherCalendars) {
-            String otherCalendars = dateStringOfOtherCalendars(jdn, getSpacedComma());
-            if (!TextUtils.isEmpty(otherCalendars)) {
-                result.append("\n");
-                result.append("\n");
-                result.append(context.getString(R.string.equivalent_to));
-                result.append(" ");
-                result.append(otherCalendars);
-            }
-        }
-
-        List<AbstractEvent> events = getEvents(jdn, deviceCalendarEvents);
-        String holidays = getEventsTitle(events, true, true, true, false);
-        if (!TextUtils.isEmpty(holidays)) {
-            result.append("\n");
-            result.append("\n");
-            result.append(context.getString(R.string.holiday_reason));
-            result.append("\n");
-            result.append(holidays);
-        }
-
-        String nonHolidays = getEventsTitle(events, false, true, true, false);
-        if (!TextUtils.isEmpty(nonHolidays)) {
-            result.append("\n");
-            result.append("\n");
-            result.append(context.getString(R.string.events));
-            result.append("\n");
-            result.append(nonHolidays);
-        }
-
-        if (isWeekOfYearEnabled()) {
-            long startOfYearJdn = getDateOfCalendar(getMainCalendar(),
-                    mainDate.getYear(), 1, 1).toJdn();
-            int weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn);
-            result.append("\n");
-            result.append("\n");
-            result.append(String.format(context.getString(R.string.nth_week_of_year),
-                    formatNumber(weekOfYearStart)));
-        }
-
-        if (withZodiac) {
-            String zodiac = getZodiacInfo(context, jdn, false);
-            if (!TextUtils.isEmpty(zodiac)) {
-                result.append("\n");
-                result.append("\n");
-                result.append(zodiac);
-            }
-        }
-
-        return result.toString();
     }
 
 //    private static List<Reminder> updateSavedReminders(Context context) {

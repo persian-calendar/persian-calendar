@@ -87,7 +87,7 @@ class CalendarsView : FrameLayout {
         mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
         mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
 
-        val diffDays = abs(Utils.getTodayJdn() - jdn)
+        val diffDays = abs(getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
             if (isIranTime()) {
@@ -125,8 +125,8 @@ class CalendarsView : FrameLayout {
                     chosenCalendarType, mainDate.year + 1, 1, 1)
             val startOfYearJdn = startOfYear.toJdn()
             val endOfYearJdn = startOfNextYear.toJdn() - 1
-            val currentWeek = Utils.calculateWeekOfYear(jdn, startOfYearJdn)
-            val weeksCount = Utils.calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
+            val currentWeek = calculateWeekOfYear(jdn, startOfYearJdn)
+            val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
             val startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
                     formatNumber((jdn - startOfYearJdn).toInt()),
@@ -142,7 +142,7 @@ class CalendarsView : FrameLayout {
             if (getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
                 if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                     val addition = if (mainDate.month == 12) 1 else 0
-                    val springEquinox = Utils.getSpringEquinox(mainDate.toJdn())
+                    val springEquinox = getSpringEquinox(mainDate.toJdn())
                     equinox = String.format(context.getString(R.string.spring_equinox),
                             formatNumber(mainDate.year + addition),
                             Utils.getFormattedClock(
@@ -154,8 +154,9 @@ class CalendarsView : FrameLayout {
             mBinding.equinox.visibility = if (TextUtils.isEmpty(equinox)) View.GONE else View.VISIBLE
         }
 
-        mBinding.root.contentDescription = Utils.getA11yDaySummary(context, jdn,
-                diffDays == 0L, null, true, true, true)
+        mBinding.root.contentDescription = getA11yDaySummary(context, jdn,
+                diffDays == 0L, null, withZodiac = true, withOtherCalendars = true, withTitle = true
+        )
     }
 
     interface OnShowHideTodayButton {
