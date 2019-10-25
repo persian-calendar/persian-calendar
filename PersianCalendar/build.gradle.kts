@@ -113,7 +113,7 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:2.2.0")
 
-    val daggerVersion = "2.25"
+    val daggerVersion = "2.25.2"
     implementation("com.google.dagger:dagger-android:$daggerVersion")
     implementation("com.google.dagger:dagger-android-support:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
