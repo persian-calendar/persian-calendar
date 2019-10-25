@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.civilDateToCalendar
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.cepmuvakkit.times.view.QiblaCompassView
@@ -209,8 +208,14 @@ class MainLogicTests {
         assertEquals(29, getMonthLength(CalendarType.SHAMSI, 1397, 12))
     }
 
-    fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
-        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(year, month - 1, dayOfMonth) }.time
+    private fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
+        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            set(
+                year,
+                month - 1,
+                dayOfMonth
+            )
+        }.time
 
     @Test
     fun test_praytimes() {
