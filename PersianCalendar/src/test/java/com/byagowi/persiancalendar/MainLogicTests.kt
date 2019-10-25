@@ -206,12 +206,15 @@ class MainLogicTests {
         assertEquals(29, getMonthLength(CalendarType.SHAMSI, 1397, 12))
     }
 
+    fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
+        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(year, month - 1, dayOfMonth) }.time
+
     @Test
     fun test_praytimes() {
         // http://praytimes.org/code/v2/js/examples/monthly.htm
         var prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.MWL,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -225,7 +228,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.ISNA,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -238,7 +241,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Egypt,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -251,7 +254,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Makkah,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -264,7 +267,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Karachi,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -277,7 +280,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Jafari,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -290,7 +293,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Tehran,
-            civilDateToCalendar(CivilDate(2018, 9, 5)).time,
+            getDate(2018, 9, 5),
             Coordinate(43.0, -80.0, 0.0),
             -5.0, true
         )
@@ -303,7 +306,7 @@ class MainLogicTests {
 
         prayTimes = PrayTimesCalculator.calculate(
             CalculationMethod.Tehran,
-            civilDateToCalendar(CivilDate(2019, 6, 9)).time,
+            getDate(2019, 6, 9),
             Coordinate(3.147778, 101.695278, 0.0),
             8.0, false
         )
