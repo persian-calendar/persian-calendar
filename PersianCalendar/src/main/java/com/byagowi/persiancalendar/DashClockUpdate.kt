@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar
 
 import android.content.Intent
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.apps.dashclock.api.DashClockExtension
 import com.google.android.apps.dashclock.api.ExtensionData

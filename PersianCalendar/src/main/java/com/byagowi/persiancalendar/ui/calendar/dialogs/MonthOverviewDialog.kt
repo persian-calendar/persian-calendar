@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

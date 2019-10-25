@@ -8,7 +8,6 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 
 /**

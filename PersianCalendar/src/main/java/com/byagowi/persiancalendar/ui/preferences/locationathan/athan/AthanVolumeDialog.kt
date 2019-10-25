@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceDialogFragmentCompat
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import java.io.IOException

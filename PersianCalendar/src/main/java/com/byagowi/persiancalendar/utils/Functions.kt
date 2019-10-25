@@ -43,7 +43,6 @@ import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
-import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
@@ -63,8 +62,6 @@ import kotlin.math.ceil
 import kotlin.math.sqrt
 
 //import com.byagowi.persiancalendar.entities.Reminder;
-
-private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
 
 // This should be called before any use of Utils on the activity and services
 fun initUtils(context: Context) {
@@ -1770,7 +1767,8 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
         if (accumulation > dayInPeriod) {
             // Skip rests on abbreviated mode
             if (sShiftWorkRecurs && abbreviated &&
-                (shift.type == "r" || shift.type == sShiftWorkTitles["r"]))
+                (shift.type == "r" || shift.type == sShiftWorkTitles["r"])
+            )
                 return ""
 
             var title = sShiftWorkTitles[shift.type]
@@ -1814,15 +1812,15 @@ private fun getCountryCodeOrder(countryCode: String): Int =
     }
 
 private fun sortArray(l: CityItem, r: CityItem): Int {
-        if (l.key == "")
-            return - 1
+    if (l.key == "")
+        return -1
 
-        if (r.key == DEFAULT_CITY)
-            return 1
+    if (r.key == DEFAULT_CITY)
+        return 1
 
-        val compare = getCountryCodeOrder(l.countryCode) -
-                getCountryCodeOrder(r.countryCode)
-        if (compare != 0) return compare
+    val compare = getCountryCodeOrder(l.countryCode) -
+            getCountryCodeOrder(r.countryCode)
+    if (compare != 0) return compare
 
     return when (language) {
         LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
@@ -1881,7 +1879,7 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
 
     val cities = result.toTypedArray()
     // Sort first by country code then city
-    Arrays.sort(cities){ l, r -> sortArray(l, r) }
+    Arrays.sort(cities) { l, r -> sortArray(l, r) }
 
     return listOf(*cities)
 }

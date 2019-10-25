@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.service
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

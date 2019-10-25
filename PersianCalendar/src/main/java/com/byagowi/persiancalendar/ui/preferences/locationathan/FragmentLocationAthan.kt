@@ -32,7 +32,6 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
