@@ -4,7 +4,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceDialogFragmentCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.utils.Utils
+import com.byagowi.persiancalendar.utils.getAllCities
 
 /**
  * persian_calendar
@@ -21,7 +21,7 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = LocationAdapter(this@LocationPreferenceDialog,
-                    Utils.getAllCities(context, true))
+                    getAllCities(context, true))
         }
 
         builder.setView(recyclerView)

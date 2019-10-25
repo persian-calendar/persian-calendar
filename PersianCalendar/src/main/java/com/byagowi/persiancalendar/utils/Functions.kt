@@ -1789,6 +1789,103 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
     return ""
 }
 
+private fun prepareForArabicSort(text: String): String =
+    text
+        .replace("ی".toRegex(), "ي")
+        .replace("ک".toRegex(), "ك")
+        .replace("گ".toRegex(), "كی")
+        .replace("ژ".toRegex(), "زی")
+        .replace("چ".toRegex(), "جی")
+        .replace("پ".toRegex(), "بی")
+        .replace("ڕ".toRegex(), "ری")
+        .replace("ڵ".toRegex(), "لی")
+        .replace("ڤ".toRegex(), "فی")
+        .replace("ۆ".toRegex(), "وی")
+        .replace("ێ".toRegex(), "یی")
+        .replace("ھ".toRegex(), "نی")
+        .replace("ە".toRegex(), "هی")
+
+private fun getCountryCodeOrder(countryCode: String): Int =
+    when (language) {
+        LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
+        LANG_AR -> arCodeOrder.indexOf(countryCode)
+        LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
+        else -> irCodeOrder.indexOf(countryCode)
+    }
+
+private fun sortArray(l: CityItem, r: CityItem): Int {
+        if (l.key == "")
+            return - 1
+
+        if (r.key == DEFAULT_CITY)
+            return 1
+
+        val compare = getCountryCodeOrder(l.countryCode) -
+                getCountryCodeOrder(r.countryCode)
+        if (compare != 0) return compare
+
+    return when (language) {
+        LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
+        LANG_AR -> l.ar.compareTo(r.ar)
+        LANG_CKB -> prepareForArabicSort(l.ckb)
+            .compareTo(prepareForArabicSort(r.ckb))
+        else -> prepareForArabicSort(l.fa)
+            .compareTo(prepareForArabicSort(r.fa))
+    }
+}
+
+fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
+    val result = java.util.ArrayList<CityItem>()
+    try {
+        val countries = JSONObject(readRawResource(context, R.raw.cities))
+
+        for (countryCode in countries.keys()) {
+            val country = countries.getJSONObject(countryCode)
+
+            val countryEn = country.getString("en")
+            val countryFa = country.getString("fa")
+            val countryCkb = country.getString("ckb")
+            val countryAr = country.getString("ar")
+
+            val cities = country.getJSONObject("cities")
+
+            for (key in cities.keys()) {
+                val city = cities.getJSONObject(key)
+
+                val en = city.getString("en")
+                val fa = city.getString("fa")
+                val ckb = city.getString("ckb")
+                val ar = city.getString("ar")
+
+                val coordinate = Coordinate(
+                    city.getDouble("latitude"),
+                    city.getDouble("longitude"),
+                    // Don't Consider elevation for Iran
+                    if (countryCode == "ir") 0.0 else city.getDouble("elevation")
+                )
+
+                result.add(
+                    CityItem(
+                        key, en, fa, ckb, ar, countryCode,
+                        countryEn, countryFa, countryCkb, countryAr, coordinate
+                    )
+                )
+            }
+        }
+    } catch (ignore: JSONException) {
+    }
+
+    if (!needsSort) {
+        return result
+    }
+
+    val cities = result.toTypedArray()
+    // Sort first by country code then city
+    Arrays.sort(cities){ l, r -> sortArray(l, r) }
+
+    return listOf(*cities)
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
