@@ -3,14 +3,12 @@ package com.byagowi.persiancalendar
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.*
 
 abstract class WidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-        Utils.startEitherServiceOrWorker(context)
+        startEitherServiceOrWorker(context)
         update(context, false)
     }
 }

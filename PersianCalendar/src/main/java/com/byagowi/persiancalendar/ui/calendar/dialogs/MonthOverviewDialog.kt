@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -45,8 +44,18 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         for (i in 0 until monthLength) {
             val jdn = baseJdn + i
             val events = getEvents(jdn, deviceEvents)
-            val holidays = Utils.getEventsTitle(events, true, false, false, false)
-            val nonHolidays = Utils.getEventsTitle(events, false, false, true, false)
+            val holidays = getEventsTitle(events,
+                holiday = true,
+                compact = false,
+                showDeviceCalendarEvents = false,
+                insertRLM = false
+            )
+            val nonHolidays = getEventsTitle(events,
+                holiday = false,
+                compact = false,
+                showDeviceCalendarEvents = true,
+                insertRLM = false
+            )
             if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))
                 records.add(MonthOverviewRecord(dayTitleSummary(
                         getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays))

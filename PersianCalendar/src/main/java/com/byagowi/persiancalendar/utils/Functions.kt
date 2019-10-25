@@ -4,19 +4,23 @@ import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.*
+import android.content.Context.ACCESSIBILITY_SERVICE
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
 import android.provider.CalendarContract
+import android.text.Html
 import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
+import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
@@ -24,17 +28,21 @@ import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
+import androidx.work.*
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.service.ApplicationService
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
-import com.byagowi.persiancalendar.utils.Utils.*
+import com.byagowi.persiancalendar.service.UpdateWorker
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
@@ -49,11 +57,11 @@ import org.json.JSONObject
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.sqrt
-//import com.byagowi.persiancalendar.entities.Reminder;
 
-private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
+//import com.byagowi.persiancalendar.entities.Reminder;
 
 // This should be called before any use of Utils on the activity and services
 fun initUtils(context: Context) {
@@ -1371,7 +1379,10 @@ fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
 private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
     (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
 
-fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?): List<AbstractEvent<*>> {
+fun getEvents(
+    jdn: Long,
+    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?
+): List<AbstractEvent<*>> {
     val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
     val islamic = IslamicDate(jdn)
@@ -1423,6 +1434,454 @@ fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalen
     }
 
     return result
+}
+
+private fun calculateDiffToChangeDate(): Long {
+    val currentTime = Calendar.getInstance().time
+    val current = currentTime.time / 1000
+
+    val startTime = Calendar.getInstance()
+    startTime.set(Calendar.HOUR_OF_DAY, 0)
+    startTime.set(Calendar.MINUTE, 0)
+    startTime.set(Calendar.SECOND, 1)
+
+    val start = startTime.timeInMillis / 1000 + DAY_IN_SECOND
+
+    return start - current
+}
+
+fun setChangeDateWorker(context: Context) {
+    val remainedSeconds = calculateDiffToChangeDate()
+    val changeDateWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
+        .setInitialDelay(
+            remainedSeconds,
+            TimeUnit.SECONDS
+        )// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+        .build()
+
+    WorkManager.getInstance(context).beginUniqueWork(
+        CHANGE_DATE_TAG,
+        ExistingWorkPolicy.REPLACE,
+        changeDateWorker
+    ).enqueue()
+}
+
+fun updateStoredPreference(context: Context) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)?.let {
+        language = it
+    }
+
+    preferredDigits = if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS))
+        PERSIAN_DIGITS
+    else
+        ARABIC_DIGITS
+    if ((language == LANG_AR || language == LANG_CKB) && preferredDigits.contentEquals(
+            PERSIAN_DIGITS
+        )
+    )
+        preferredDigits = ARABIC_INDIC_DIGITS
+    if (language == LANG_JA && preferredDigits.contentEquals(PERSIAN_DIGITS))
+        preferredDigits = CJK_DIGITS
+
+    clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
+    iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+    notifyInLockScreen = prefs.getBoolean(
+        PREF_NOTIFY_DATE_LOCK_SCREEN,
+        DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+    )
+    widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
+    notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+    notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+    centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
+
+    prefs.getString(
+        PREF_SELECTED_WIDGET_TEXT_COLOR,
+        DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+    )?.let {
+        selectedWidgetTextColor = it
+    }
+
+    prefs.getString(
+        PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+        DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+    )?.let {
+        selectedWidgetBackgroundColor = it
+    }
+
+    // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
+    // so switched to "Tehran" method as default calculation algorithm
+    prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD)?.let {
+        calculationMethod = it
+    }
+
+    coordinate = getCoordinate(context)
+    try {
+        prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")?.let {
+            mainCalendar = CalendarType.valueOf(it)
+        }
+
+        prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.run {
+            var otherCalendarsString = this
+            otherCalendarsString = otherCalendarsString.trim { it <= ' ' }
+            if (TextUtils.isEmpty(otherCalendarsString)) {
+                otherCalendars = arrayOf()
+            } else {
+
+                val calendars =
+                    otherCalendarsString.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
+
+//                otherCalendars = arrayOfNulls(calendars.size)
+                for (i in calendars.indices) {
+                    otherCalendars[i] = CalendarType.valueOf(calendars[i])
+                }
+            }
+        }
+
+    } catch (e: Exception) {
+        Log.e(TAG, "Fail on parsing calendar preference", e)
+        mainCalendar = CalendarType.SHAMSI
+        otherCalendars = arrayOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+    }
+
+    spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
+    showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false)
+
+    val weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START)
+    weekStart?.let {
+        weekStartOffset = Integer.parseInt(it)
+    }
+
+    weekEnds = BooleanArray(7)
+    val weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
+    weekEndsSet?.run {
+        for (s in this)
+            weekEnds[Integer.parseInt(s)] = true
+    }
+
+    showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+    val resources = context.resources
+    prefs.getStringSet(
+        "what_to_show",
+        HashSet(listOf(*resources.getStringArray(R.array.what_to_show_default)))
+    )?.let {
+        whatToShowOnWidgets = it
+    }
+
+    astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
+    numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
+
+    if (getOnlyLanguage(getAppLanguage()) != resources.getString(R.string.code))
+        applyAppLanguage(context)
+
+    calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr)
+
+    sShiftWorkTitles = HashMap()
+    try {
+        sShiftWorks = ArrayList()
+        val shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "")
+        val parts = shiftWork?.split(",".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        parts?.run {
+            for (p in this) {
+                val v = p.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                if (v.size != 2) continue
+                sShiftWorks.add(ShiftWorkRecord(v[0], Integer.valueOf(v[1])))
+            }
+        }
+
+        sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
+
+        sShiftWorkPeriod = 0
+        for (shift in sShiftWorks) sShiftWorkPeriod += shift.length
+
+        sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+
+        val titles = resources.getStringArray(R.array.shift_work)
+        val keys = resources.getStringArray(R.array.shift_work_keys)
+        for (i in titles.indices)
+            sShiftWorkTitles[keys[i]] = titles[i]
+    } catch (e: Exception) {
+        e.printStackTrace()
+        sShiftWorks = ArrayList()
+        sShiftWorkStartingJdn = -1
+
+        sShiftWorkPeriod = 0
+        sShiftWorkRecurs = true
+    }
+
+    //        sReminderDetails = updateSavedReminders(context);
+
+    when (getAppLanguage()) {
+        LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
+            sAM = DEFAULT_AM
+            sPM = DEFAULT_PM
+        }
+        else -> {
+            sAM = context.getString(R.string.am)
+            sPM = context.getString(R.string.pm)
+        }
+    }
+
+    appTheme = try {
+        getThemeFromName(getThemeFromPreference(context, prefs))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        R.style.LightTheme
+    }
+
+    val a11y = context.getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager?
+    talkBackEnabled = a11y != null && a11y.isEnabled && a11y.isTouchExplorationEnabled
+}
+
+private fun getOnlyLanguage(string: String): String =
+    string.replace("-(IR|AF|US)".toRegex(), "")
+
+// Context preferably should be activity context not application
+fun applyAppLanguage(context: Context) {
+    val localeCode = getOnlyLanguage(language)
+    // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
+    // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+    //    localeCode = LANG_FA;
+    // }
+    var locale = Locale(localeCode)
+    Locale.setDefault(locale)
+    val resources = context.resources
+    val config = resources.configuration
+    config.locale = locale
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (language == LANG_AZB) {
+            locale = Locale(LANG_FA)
+        }
+        config.setLayoutDirection(locale)
+    }
+    resources.updateConfiguration(config, resources.displayMetrics)
+}
+
+fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
+    val desc = event.description
+    var title = event.title
+    if (!TextUtils.isEmpty(desc))
+        title += " (" + Html.fromHtml(event.description).toString().trim { it <= ' ' } + ")"
+
+    return title.replace("\\n".toRegex(), " ").trim { it <= ' ' }
+}
+
+fun getEventsTitle(
+    dayEvents: List<AbstractEvent<*>>, holiday: Boolean,
+    compact: Boolean, showDeviceCalendarEvents: Boolean,
+    insertRLM: Boolean
+): String {
+    val titles = StringBuilder()
+    var first = true
+
+    for (event in dayEvents)
+        if (event.isHoliday == holiday) {
+            var title = event.title
+            if (insertRLM)
+                title = RLM + title
+
+            if (event is DeviceCalendarEvent) {
+                if (!showDeviceCalendarEvents)
+                    continue
+
+                if (!compact) {
+                    title = formatDeviceCalendarEventTitle(event)
+                }
+            } else {
+                if (compact)
+                    title = title.replace("(.*) \\(.*?$".toRegex(), "$1")
+            }
+
+            if (first)
+                first = false
+            else
+                titles.append("\n")
+            titles.append(title)
+        }
+
+    return titles.toString()
+}
+
+fun startEitherServiceOrWorker(context: Context) {
+    val workManager = WorkManager.getInstance(context)
+    if (goForWorker()) {
+        val updateBuilder = PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1, TimeUnit.HOURS)
+
+        val updateWork = updateBuilder.build()
+        workManager.enqueueUniquePeriodicWork(
+            UPDATE_TAG,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            updateWork
+        )
+    } else {
+        // Disable all the scheduled workers, just in case enabled before
+        workManager.cancelAllWork()
+        // Or,
+        // workManager.cancelAllWorkByTag(UPDATE_TAG);
+        // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+
+        var alreadyRan = false
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        if (manager != null) {
+            try {
+                for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (ApplicationService::class.java.name == service.service.className)
+                        alreadyRan = true
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
+            }
+
+        }
+
+        if (!alreadyRan) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    ContextCompat.startForegroundService(
+                        context,
+                        Intent(context, ApplicationService::class.java)
+                    )
+
+                context.startService(Intent(context, ApplicationService::class.java))
+            } catch (e: Exception) {
+                Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e)
+            }
+        }
+    }
+}
+
+fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
+    if (sShiftWorkStartingJdn == -1L || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
+        return ""
+
+    val passedDays = jdn - sShiftWorkStartingJdn
+    if (!sShiftWorkRecurs && passedDays >= sShiftWorkPeriod)
+        return ""
+
+    val dayInPeriod = (passedDays % sShiftWorkPeriod).toInt()
+    var accumulation = 0
+    for (shift in sShiftWorks) {
+        accumulation += shift.length
+        if (accumulation > dayInPeriod) {
+            // Skip rests on abbreviated mode
+            if (sShiftWorkRecurs && abbreviated &&
+                (shift.type == "r" || shift.type == sShiftWorkTitles["r"])
+            )
+                return ""
+
+            var title = sShiftWorkTitles[shift.type]
+            if (title == null) title = shift.type
+            return if (abbreviated) {
+                title.substring(0, 1) +
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR)
+                            ZWJ
+                        else
+                            ""
+            } else
+                title
+        }
+    }
+    // Shouldn't be reached
+    return ""
+}
+
+private fun prepareForArabicSort(text: String): String =
+    text
+        .replace("ی".toRegex(), "ي")
+        .replace("ک".toRegex(), "ك")
+        .replace("گ".toRegex(), "كی")
+        .replace("ژ".toRegex(), "زی")
+        .replace("چ".toRegex(), "جی")
+        .replace("پ".toRegex(), "بی")
+        .replace("ڕ".toRegex(), "ری")
+        .replace("ڵ".toRegex(), "لی")
+        .replace("ڤ".toRegex(), "فی")
+        .replace("ۆ".toRegex(), "وی")
+        .replace("ێ".toRegex(), "یی")
+        .replace("ھ".toRegex(), "نی")
+        .replace("ە".toRegex(), "هی")
+
+private fun getCountryCodeOrder(countryCode: String): Int =
+    when (language) {
+        LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
+        LANG_AR -> arCodeOrder.indexOf(countryCode)
+        LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
+        else -> irCodeOrder.indexOf(countryCode)
+    }
+
+private fun sortArray(l: CityItem, r: CityItem): Int {
+    if (l.key == "")
+        return -1
+
+    if (r.key == DEFAULT_CITY)
+        return 1
+
+    val compare = getCountryCodeOrder(l.countryCode) -
+            getCountryCodeOrder(r.countryCode)
+    if (compare != 0) return compare
+
+    return when (language) {
+        LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
+        LANG_AR -> l.ar.compareTo(r.ar)
+        LANG_CKB -> prepareForArabicSort(l.ckb)
+            .compareTo(prepareForArabicSort(r.ckb))
+        else -> prepareForArabicSort(l.fa)
+            .compareTo(prepareForArabicSort(r.fa))
+    }
+}
+
+fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
+    val result = java.util.ArrayList<CityItem>()
+    try {
+        val countries = JSONObject(readRawResource(context, R.raw.cities))
+
+        for (countryCode in countries.keys()) {
+            val country = countries.getJSONObject(countryCode)
+
+            val countryEn = country.getString("en")
+            val countryFa = country.getString("fa")
+            val countryCkb = country.getString("ckb")
+            val countryAr = country.getString("ar")
+
+            val cities = country.getJSONObject("cities")
+
+            for (key in cities.keys()) {
+                val city = cities.getJSONObject(key)
+
+                val en = city.getString("en")
+                val fa = city.getString("fa")
+                val ckb = city.getString("ckb")
+                val ar = city.getString("ar")
+
+                val coordinate = Coordinate(
+                    city.getDouble("latitude"),
+                    city.getDouble("longitude"),
+                    // Don't Consider elevation for Iran
+                    if (countryCode == "ir") 0.0 else city.getDouble("elevation")
+                )
+
+                result.add(
+                    CityItem(
+                        key, en, fa, ckb, ar, countryCode,
+                        countryEn, countryFa, countryCkb, countryAr, coordinate
+                    )
+                )
+            }
+        }
+    } catch (ignore: JSONException) {
+    }
+
+    if (!needsSort) {
+        return result
+    }
+
+    val cities = result.toTypedArray()
+    // Sort first by country code then city
+    Arrays.sort(cities) { l, r -> sortArray(l, r) }
+
+    return listOf(*cities)
 }
 
 

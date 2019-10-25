@@ -6,9 +6,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 
-import com.byagowi.persiancalendar.utils.Utils
-import com.byagowi.persiancalendar.utils.loadApp
-import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.*
 
 import java.lang.ref.WeakReference
 
@@ -36,7 +34,7 @@ class ApplicationService : Service() {
         }
         registerReceiver(receiver, intentFilter)
 
-        Utils.updateStoredPreference(applicationContext)
+        updateStoredPreference(applicationContext)
         loadApp(this)
         update(applicationContext, true)
 

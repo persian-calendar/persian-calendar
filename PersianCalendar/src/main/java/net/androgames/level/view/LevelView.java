@@ -12,7 +12,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.byagowi.persiancalendar.R;
-import com.byagowi.persiancalendar.utils.Utils;
 
 import net.androgames.level.orientation.Orientation;
 

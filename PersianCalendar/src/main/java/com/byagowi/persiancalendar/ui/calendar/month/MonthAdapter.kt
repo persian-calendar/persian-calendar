@@ -159,7 +159,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                             else
                                 daysPaintResources.persianDigitsTextSize,
                             day.jdn, position - 6 - startingDayOfWeek,
-                            Utils.getShiftWorkTitle(day.jdn, true))
+                            getShiftWorkTitle(day.jdn, true))
 
                     itemDayView.contentDescription = getA11yDaySummary(context,
                             day.jdn, day.isToday, monthEvents,

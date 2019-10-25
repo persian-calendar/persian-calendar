@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.util.*
@@ -33,7 +32,7 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
         val titles = ArrayList<String>()
         val enabled = ArrayList<Boolean>()
 
-        Utils.updateStoredPreference(mainActivityDependency.mainActivity)
+        updateStoredPreference(mainActivityDependency.mainActivity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
         val orderedCalendarTypes = getOrderedCalendarEntities(mainActivityDependency.mainActivity)
         for (entity in orderedCalendarTypes) {

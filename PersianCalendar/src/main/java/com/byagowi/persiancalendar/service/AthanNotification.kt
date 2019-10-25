@@ -16,7 +16,6 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.Utils
 import com.byagowi.persiancalendar.utils.*
 import java.util.concurrent.TimeUnit
 
