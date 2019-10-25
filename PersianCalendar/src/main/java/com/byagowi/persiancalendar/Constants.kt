@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar
 
 import java.util.*
 
-
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val ATHAN_RINGTONE_REQUEST_CODE = 19
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
@@ -88,7 +87,6 @@ const val DEFAULT_ATHAN_VOLUME = 1
 const val DEFAULT_WEEK_START = "0"
 
 // WeekEnds, 6 means Friday
-@kotlin.jvm.JvmField
 val DEFAULT_WEEK_ENDS: Set<String> = HashSet(listOf("6"))
 
 const val LIGHT_THEME = "LightTheme"
@@ -113,15 +111,11 @@ const val FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf"
 const val RLM = '\u200F'
 const val ZWJ = "\u200D"
 
-@kotlin.jvm.JvmField
 val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
-@kotlin.jvm.JvmField
 val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-@kotlin.jvm.JvmField
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
 
 // for now
-@kotlin.jvm.JvmField
 val CJK_DIGITS = ARABIC_DIGITS
 //    public static final char[] CJK_DIGITS = {'０', '１', '２', '３', '４', '５', '６',
 //        '７', '８', '９'};
@@ -129,10 +123,7 @@ val CJK_DIGITS = ARABIC_DIGITS
 const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
 
-@kotlin.jvm.JvmField
 val DAYS_ICONS = intArrayOf(0, R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4, R.drawable.day5, R.drawable.day6, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10, R.drawable.day11, R.drawable.day12, R.drawable.day13, R.drawable.day14, R.drawable.day15, R.drawable.day16, R.drawable.day17, R.drawable.day18, R.drawable.day19, R.drawable.day20, R.drawable.day21, R.drawable.day22, R.drawable.day23, R.drawable.day24, R.drawable.day25, R.drawable.day26, R.drawable.day27, R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31)
-@kotlin.jvm.JvmField
 val DAYS_ICONS_AR = intArrayOf(0, R.drawable.day1_ar, R.drawable.day2_ar, R.drawable.day3_ar, R.drawable.day4_ar, R.drawable.day5_ar, R.drawable.day6_ar, R.drawable.day7_ar, R.drawable.day8_ar, R.drawable.day9_ar, R.drawable.day10_ar, R.drawable.day11_ar, R.drawable.day12_ar, R.drawable.day13_ar, R.drawable.day14_ar, R.drawable.day15_ar, R.drawable.day16_ar, R.drawable.day17_ar, R.drawable.day18_ar, R.drawable.day19_ar, R.drawable.day20_ar, R.drawable.day21_ar, R.drawable.day22_ar, R.drawable.day23_ar, R.drawable.day24_ar, R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar, R.drawable.day28_ar, R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar)
-@kotlin.jvm.JvmField
 val DAYS_ICONS_CKB = intArrayOf(0, R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4_ckb, R.drawable.day5_ckb, R.drawable.day6_ckb, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10, R.drawable.day11, R.drawable.day12, R.drawable.day13, R.drawable.day14_ckb, R.drawable.day15_ckb, R.drawable.day16_ckb, R.drawable.day17, R.drawable.day18, R.drawable.day19, R.drawable.day20, R.drawable.day21, R.drawable.day22, R.drawable.day23, R.drawable.day24_ckb, R.drawable.day25_ckb, R.drawable.day26_ckb, R.drawable.day27, R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31)
 
