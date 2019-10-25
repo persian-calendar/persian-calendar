@@ -1,14 +1,14 @@
-package com.byagowi.persiancalendar.praytimes;
+package io.github.persiancalendar.praytimes;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static com.byagowi.persiancalendar.praytimes.Utils.deg;
-import static com.byagowi.persiancalendar.praytimes.Utils.dtr;
-import static com.byagowi.persiancalendar.praytimes.Utils.fixHour;
-import static com.byagowi.persiancalendar.praytimes.Utils.min;
-import static com.byagowi.persiancalendar.praytimes.Utils.rtd;
+import static io.github.persiancalendar.praytimes.Utils.deg;
+import static io.github.persiancalendar.praytimes.Utils.dtr;
+import static io.github.persiancalendar.praytimes.Utils.fixHour;
+import static io.github.persiancalendar.praytimes.Utils.min;
+import static io.github.persiancalendar.praytimes.Utils.rtd;
 
 public class PrayTimesCalculator {
     // default times

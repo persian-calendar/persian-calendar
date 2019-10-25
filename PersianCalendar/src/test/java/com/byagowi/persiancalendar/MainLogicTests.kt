@@ -1,15 +1,18 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.praytimes.CalculationMethod
-import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.civilDateToCalendar
+import com.byagowi.persiancalendar.utils.getMonthLength
+import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.cepmuvakkit.times.view.QiblaCompassView
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.praytimes.CalculationMethod
+import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.*

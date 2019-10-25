@@ -19,7 +19,7 @@ import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinate
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerAppCompatDialogFragment
 import java.io.IOException

@@ -1,8 +1,8 @@
-package com.byagowi.persiancalendar.praytimes;
+package io.github.persiancalendar.praytimes;
 
 import java.util.Calendar;
 
-import static com.byagowi.persiancalendar.praytimes.Utils.fixHour;
+import static io.github.persiancalendar.praytimes.Utils.fixHour;
 
 public class Clock {
     private static final int MINUTES_PER_HOUR = 60;

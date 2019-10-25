@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
-import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.praytimes.PrayTimes
+import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.PrayTimes
 import com.byagowi.persiancalendar.utils.getFormattedClock
 import com.google.android.flexbox.FlexboxLayoutManager
 

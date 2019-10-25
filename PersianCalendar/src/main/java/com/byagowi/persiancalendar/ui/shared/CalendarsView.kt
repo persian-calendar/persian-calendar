@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
-import com.byagowi.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs

@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.entities.AbstractEvent;
 import com.byagowi.persiancalendar.entities.CityItem;
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent;
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord;
-import com.byagowi.persiancalendar.praytimes.Coordinate;
+import io.github.persiancalendar.praytimes.Coordinate;
 import com.byagowi.persiancalendar.service.ApplicationService;
 import com.byagowi.persiancalendar.service.UpdateWorker;
 

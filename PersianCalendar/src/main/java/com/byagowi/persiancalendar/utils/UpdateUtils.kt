@@ -20,7 +20,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.*
 import io.github.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import java.util.*

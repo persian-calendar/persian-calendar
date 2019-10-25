@@ -4,8 +4,8 @@ import android.util.SparseArray
 import androidx.annotation.StyleRes
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
-import com.byagowi.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.praytimes.PrayTimes
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import java.util.concurrent.TimeUnit
 

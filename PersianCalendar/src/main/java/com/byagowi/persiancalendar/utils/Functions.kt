@@ -29,10 +29,10 @@ import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
-import com.byagowi.persiancalendar.praytimes.CalculationMethod
-import com.byagowi.persiancalendar.praytimes.Clock
-import com.byagowi.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
+import io.github.persiancalendar.praytimes.CalculationMethod
+import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
