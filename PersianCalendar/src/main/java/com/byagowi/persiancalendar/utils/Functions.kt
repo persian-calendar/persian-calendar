@@ -27,6 +27,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -34,6 +37,7 @@ import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.service.UpdateWorker
 import com.byagowi.persiancalendar.utils.Utils.*
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
@@ -1423,6 +1427,36 @@ fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalen
     }
 
     return result
+}
+
+private fun calculateDiffToChangeDate(): Long {
+    val currentTime = Calendar.getInstance().time
+    val current = currentTime.time / 1000
+
+    val startTime = Calendar.getInstance()
+    startTime.set(Calendar.HOUR_OF_DAY, 0)
+    startTime.set(Calendar.MINUTE, 0)
+    startTime.set(Calendar.SECOND, 1)
+
+    val start = startTime.timeInMillis / 1000 + DAY_IN_SECOND
+
+    return start - current
+}
+
+fun setChangeDateWorker(context: Context) {
+    val remainedSeconds = calculateDiffToChangeDate()
+    val changeDateWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
+        .setInitialDelay(
+            remainedSeconds,
+            TimeUnit.SECONDS
+        )// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+        .build()
+
+    WorkManager.getInstance(context).beginUniqueWork(
+        CHANGE_DATE_TAG,
+        ExistingWorkPolicy.REPLACE,
+        changeDateWorker
+    ).enqueue()
 }
 
 

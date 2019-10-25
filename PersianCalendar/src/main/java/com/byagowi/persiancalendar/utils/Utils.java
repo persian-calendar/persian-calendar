@@ -440,33 +440,4 @@ public class Utils {
         resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
-
-
-    private static long calculateDiffToChangeDate() {
-        Date currentTime = Calendar.getInstance().getTime();
-        long current = currentTime.getTime() / 1000;
-
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 0);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.SECOND, 1);
-
-        long start = startTime.getTimeInMillis() / 1000 + DAY_IN_SECOND;
-
-        return start - current;
-    }
-
-    public static void setChangeDateWorker(@NonNull Context context) {
-        long remainedSeconds = calculateDiffToChangeDate();
-        OneTimeWorkRequest changeDateWorker =
-                new OneTimeWorkRequest.Builder(UpdateWorker.class)
-                        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
-                        .build();
-
-        WorkManager.getInstance(context).beginUniqueWork(
-                CHANGE_DATE_TAG,
-                ExistingWorkPolicy.REPLACE,
-                changeDateWorker).enqueue();
-    }
-
 }
