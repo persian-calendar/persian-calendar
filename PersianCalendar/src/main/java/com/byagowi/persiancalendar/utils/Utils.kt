@@ -109,7 +109,7 @@ var sShiftWorkStartingJdn: Long = -1
 @kotlin.jvm.JvmField
 var sShiftWorkRecurs = true
 @kotlin.jvm.JvmField
-var sShiftWorks: List<ShiftWorkRecord> = emptyList()
+var sShiftWorks: ArrayList<ShiftWorkRecord> = ArrayList()
 @kotlin.jvm.JvmField
 var sIsIranHolidaysEnabled = true
 @kotlin.jvm.JvmField

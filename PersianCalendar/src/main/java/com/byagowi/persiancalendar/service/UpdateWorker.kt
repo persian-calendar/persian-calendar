@@ -13,7 +13,7 @@ class UpdateWorker(val context: Context, workerParams: WorkerParameters) : Corou
     override suspend fun doWork(): Result = withContext(Dispatchers.Main) {
         try {
             setChangeDateWorker(context)
-            Utils.updateStoredPreference(applicationContext)
+            updateStoredPreference(applicationContext)
             update(applicationContext, true)
             Result.success()
         } catch (error: Throwable) {

@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.*
+import android.content.Context.ACCESSIBILITY_SERVICE
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
@@ -17,6 +18,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
+import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
@@ -53,6 +55,7 @@ import org.json.JSONObject
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.sqrt
 //import com.byagowi.persiancalendar.entities.Reminder;
@@ -1459,6 +1462,194 @@ fun setChangeDateWorker(context: Context) {
     ).enqueue()
 }
 
+fun updateStoredPreference(context: Context) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)?.let {
+        language = it
+    }
+
+    preferredDigits = if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS))
+        PERSIAN_DIGITS
+    else
+        ARABIC_DIGITS
+    if ((language == LANG_AR || language == LANG_CKB) && preferredDigits.contentEquals(PERSIAN_DIGITS))
+        preferredDigits = ARABIC_INDIC_DIGITS
+    if (language == LANG_JA && preferredDigits.contentEquals(PERSIAN_DIGITS))
+        preferredDigits = CJK_DIGITS
+
+    clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
+    iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+    notifyInLockScreen = prefs.getBoolean(
+        PREF_NOTIFY_DATE_LOCK_SCREEN,
+        DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+    )
+    widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
+    notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+    notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+    centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
+
+    prefs.getString(
+        PREF_SELECTED_WIDGET_TEXT_COLOR,
+        DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+    )?.let {
+        selectedWidgetTextColor = it
+    }
+
+    prefs.getString(
+        PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+        DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+    )?.let {
+        selectedWidgetBackgroundColor = it
+    }
+
+    // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
+    // so switched to "Tehran" method as default calculation algorithm
+    prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD)?.let {
+        calculationMethod = it
+    }
+
+    coordinate = getCoordinate(context)
+    try {
+        prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")?.let {
+            mainCalendar = CalendarType.valueOf(it)
+        }
+
+        prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.run {
+            var otherCalendarsString = this
+                otherCalendarsString = otherCalendarsString.trim { it <= ' ' }
+            if (TextUtils.isEmpty(otherCalendarsString)) {
+                otherCalendars = arrayOf()
+            } else {
+
+                val calendars = otherCalendarsString.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+
+//                otherCalendars = arrayOfNulls(calendars.size)
+                for (i in calendars.indices) {
+                    otherCalendars[i] = CalendarType.valueOf(calendars[i])
+                }
+            }
+        }
+
+    } catch (e: Exception) {
+        Log.e(TAG, "Fail on parsing calendar preference", e)
+        mainCalendar = CalendarType.SHAMSI
+        otherCalendars = arrayOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+    }
+
+    spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
+    showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false)
+
+    val weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START)
+    weekStart?.let {
+        weekStartOffset = Integer.parseInt(it)
+    }
+
+    weekEnds = BooleanArray(7)
+    val weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
+    weekEndsSet?.run {
+        for (s in this)
+            weekEnds[Integer.parseInt(s)] = true
+    }
+
+    showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+    val resources = context.resources
+    prefs.getStringSet(
+        "what_to_show",
+        HashSet(listOf(*resources.getStringArray(R.array.what_to_show_default)))
+    )?.let {
+        whatToShowOnWidgets = it
+    }
+
+    astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
+    numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
+
+    if (getOnlyLanguage(getAppLanguage()) != resources.getString(R.string.code))
+        applyAppLanguage(context)
+
+    calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr)
+
+    sShiftWorkTitles = HashMap()
+    try {
+        sShiftWorks = ArrayList()
+        val shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "")
+        val parts = shiftWork?.split(",".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        parts?.run {
+            for (p in this) {
+                val v = p.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                if (v.size != 2) continue
+                sShiftWorks.add(ShiftWorkRecord(v[0], Integer.valueOf(v[1])))
+            }
+        }
+
+        sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
+
+        sShiftWorkPeriod = 0
+        for (shift in sShiftWorks) sShiftWorkPeriod += shift.length
+
+        sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+
+        val titles = resources.getStringArray(R.array.shift_work)
+        val keys = resources.getStringArray(R.array.shift_work_keys)
+        for (i in titles.indices)
+            sShiftWorkTitles[keys[i]] = titles[i]
+    } catch (e: Exception) {
+        e.printStackTrace()
+        sShiftWorks = ArrayList()
+        sShiftWorkStartingJdn = -1
+
+        sShiftWorkPeriod = 0
+        sShiftWorkRecurs = true
+    }
+
+    //        sReminderDetails = updateSavedReminders(context);
+
+    when (getAppLanguage()) {
+        LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
+            sAM = DEFAULT_AM
+            sPM = DEFAULT_PM
+        }
+        else -> {
+            sAM = context.getString(R.string.am)
+            sPM = context.getString(R.string.pm)
+        }
+    }
+
+    appTheme = try {
+        getThemeFromName(getThemeFromPreference(context, prefs))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        R.style.LightTheme
+    }
+
+    val a11y = context.getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager?
+    talkBackEnabled = a11y != null && a11y.isEnabled && a11y.isTouchExplorationEnabled
+}
+
+private fun getOnlyLanguage(string: String): String =
+    string.replace("-(IR|AF|US)".toRegex(), "")
+
+// Context preferably should be activity context not application
+fun applyAppLanguage(context: Context) {
+    val localeCode = getOnlyLanguage(language)
+    // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
+    // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+    //    localeCode = LANG_FA;
+    // }
+    var locale = Locale(localeCode)
+    Locale.setDefault(locale)
+    val resources = context.resources
+    val config = resources.configuration
+    config.locale = locale
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (language == LANG_AZB) {
+            locale = Locale(LANG_FA)
+        }
+        config.setLayoutDirection(locale)
+    }
+    resources.updateConfiguration(config, resources.displayMetrics)
+}
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

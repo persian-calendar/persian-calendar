@@ -46,7 +46,7 @@ fun setDeviceCalendarEvents(context: Context) {
 
 fun update(context: Context, updateDate: Boolean) {
     Log.d("UpdateUtils", "update")
-    Utils.applyAppLanguage(context)
+    applyAppLanguage(context)
     val calendar = makeCalendarFromDate(Date())
     val mainCalendar = getMainCalendar()
     val date = getTodayOfCalendar(mainCalendar)

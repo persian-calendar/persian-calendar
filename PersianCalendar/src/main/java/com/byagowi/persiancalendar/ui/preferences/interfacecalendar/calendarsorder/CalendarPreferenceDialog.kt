@@ -33,7 +33,7 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
         val titles = ArrayList<String>()
         val enabled = ArrayList<Boolean>()
 
-        Utils.updateStoredPreference(mainActivityDependency.mainActivity)
+        updateStoredPreference(mainActivityDependency.mainActivity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
         val orderedCalendarTypes = getOrderedCalendarEntities(mainActivityDependency.mainActivity)
         for (entity in orderedCalendarTypes) {

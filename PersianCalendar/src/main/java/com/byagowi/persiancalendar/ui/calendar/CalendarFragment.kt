@@ -433,7 +433,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     fun afterShiftWorkChange() = context?.run {
-        Utils.updateStoredPreference(this)
+        updateStoredPreference(this)
         sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
     }
 

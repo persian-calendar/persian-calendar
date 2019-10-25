@@ -23,7 +23,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, Intent()
                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId))
         }
-        Utils.updateStoredPreference(this)
+        updateStoredPreference(this)
         update(this, false)
         finish()
     }
@@ -34,7 +34,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         setTheme(getThemeFromName(getThemeFromPreference(this, prefs)))
 
-        Utils.applyAppLanguage(this)
+        applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<WidgetPreferenceLayoutBinding>(this, R.layout.widget_preference_layout)
 

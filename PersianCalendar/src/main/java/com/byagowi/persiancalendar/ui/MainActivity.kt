@@ -84,7 +84,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         setTheme(getThemeFromName(getThemeFromPreference(this, prefs)))
 
-        Utils.applyAppLanguage(this)
+        applyAppLanguage(this)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
@@ -219,7 +219,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }.show()
         }
 
-        Utils.applyAppLanguage(this)
+        applyAppLanguage(this)
     }
 
     fun navigateTo(@IdRes id: Int) {
@@ -362,7 +362,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
-        Utils.updateStoredPreference(this)
+        updateStoredPreference(this)
         update(applicationContext, true)
 
         ViewModelProviders.of(this).get(MainActivityModel::class.java).preferenceIsUpdated()
@@ -395,7 +395,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     override fun onResume() {
         super.onResume()
-        Utils.applyAppLanguage(this)
+        applyAppLanguage(this)
         update(applicationContext, false)
         if (creationDateJdn != getTodayJdn()) {
             restartActivity()

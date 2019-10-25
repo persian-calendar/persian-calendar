@@ -48,8 +48,8 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val mainActivity = mainActivityDependency.mainActivity
 
-        Utils.applyAppLanguage(mainActivity)
-        Utils.updateStoredPreference(mainActivity)
+        applyAppLanguage(mainActivity)
+        updateStoredPreference(mainActivity)
 
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = getTodayJdn()
