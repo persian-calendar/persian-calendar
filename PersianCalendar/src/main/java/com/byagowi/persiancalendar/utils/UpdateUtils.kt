@@ -99,7 +99,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     val weekDayName = getWeekDayName(date)
     var title = dayTitleSummary(date)
-    val shiftWorkTitle = Utils.getShiftWorkTitle(jdn, false)
+    val shiftWorkTitle = getShiftWorkTitle(jdn, false)
     if (shiftWorkTitle.isNotEmpty())
         title += " ($shiftWorkTitle)"
     var subtitle = dateStringOfOtherCalendars(jdn, getSpacedComma())
@@ -186,7 +186,12 @@ fun update(context: Context, updateDate: Boolean) {
                 mainDateString
             }
 
-            val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)
+            val holidays = getEventsTitle(events,
+                holiday = true,
+                compact = true,
+                showDeviceCalendarEvents = true,
+                insertRLM = isRTL
+            )
             if (holidays.isNotEmpty()) {
                 setTextViewText(R.id.holiday_2x2, holidays)
                 if (isTalkBackEnabled()) {
@@ -199,7 +204,12 @@ fun update(context: Context, updateDate: Boolean) {
                 setViewVisibility(R.id.holiday_2x2, View.GONE)
             }
 
-            val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
+            val nonHolidays = getEventsTitle(events,
+                holiday = false,
+                compact = true,
+                showDeviceCalendarEvents = true,
+                insertRLM = isRTL
+            )
             if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
                 setTextViewText(R.id.event_2x2, nonHolidays)
                 setViewVisibility(R.id.event_2x2, View.VISIBLE)
@@ -385,14 +395,24 @@ fun update(context: Context, updateDate: Boolean) {
                     setViewVisibility(R.id.body, View.GONE)
                 }
 
-                val holidays = Utils.getEventsTitle(events, true, true, true, isRTL)
+                val holidays = getEventsTitle(events,
+                    holiday = true,
+                    compact = true,
+                    showDeviceCalendarEvents = true,
+                    insertRLM = isRTL
+                )
                 if (holidays.isNotEmpty()) {
                     setTextViewText(R.id.holidays, holidays)
                 } else {
                     setViewVisibility(R.id.holidays, View.GONE)
                 }
 
-                val nonHolidays = Utils.getEventsTitle(events, false, true, true, isRTL)
+                val nonHolidays = getEventsTitle(events,
+                    holiday = false,
+                    compact = true,
+                    showDeviceCalendarEvents = true,
+                    insertRLM = isRTL
+                )
                 if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
                     setTextViewText(R.id.nonholidays, nonHolidays.trim { it <= ' ' })
                 } else {

@@ -93,7 +93,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         overrideFont("SERIF", getAppFont(applicationContext))
 
-        Utils.startEitherServiceOrWorker(this)
+        startEitherServiceOrWorker(this)
 
         // Doesn't matter apparently
         // oneTimeClockDisablingForAndroid5LE();
@@ -358,7 +358,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         if (key == PREF_NOTIFY_DATE) {
             if (sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
                 stopService(Intent(this, ApplicationService::class.java))
-                Utils.startEitherServiceOrWorker(applicationContext)
+                startEitherServiceOrWorker(applicationContext)
             }
         }
 

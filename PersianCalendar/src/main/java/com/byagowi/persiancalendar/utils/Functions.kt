@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.*
@@ -14,6 +15,7 @@ import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
 import android.provider.CalendarContract
+import android.text.Html
 import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
@@ -26,14 +28,15 @@ import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.service.ApplicationService
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
@@ -58,6 +61,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.sqrt
+
 //import com.byagowi.persiancalendar.entities.Reminder;
 
 private var sAllEnabledEvents: List<AbstractEvent<*>> = ArrayList()
@@ -1378,7 +1382,10 @@ fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
 private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
     (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
 
-fun getEvents(jdn: Long, deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?): List<AbstractEvent<*>> {
+fun getEvents(
+    jdn: Long,
+    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?
+): List<AbstractEvent<*>> {
     val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
     val islamic = IslamicDate(jdn)
@@ -1473,7 +1480,10 @@ fun updateStoredPreference(context: Context) {
         PERSIAN_DIGITS
     else
         ARABIC_DIGITS
-    if ((language == LANG_AR || language == LANG_CKB) && preferredDigits.contentEquals(PERSIAN_DIGITS))
+    if ((language == LANG_AR || language == LANG_CKB) && preferredDigits.contentEquals(
+            PERSIAN_DIGITS
+        )
+    )
         preferredDigits = ARABIC_INDIC_DIGITS
     if (language == LANG_JA && preferredDigits.contentEquals(PERSIAN_DIGITS))
         preferredDigits = CJK_DIGITS
@@ -1517,13 +1527,14 @@ fun updateStoredPreference(context: Context) {
 
         prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.run {
             var otherCalendarsString = this
-                otherCalendarsString = otherCalendarsString.trim { it <= ' ' }
+            otherCalendarsString = otherCalendarsString.trim { it <= ' ' }
             if (TextUtils.isEmpty(otherCalendarsString)) {
                 otherCalendars = arrayOf()
             } else {
 
-                val calendars = otherCalendarsString.split(",".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()
+                val calendars =
+                    otherCalendarsString.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
 
 //                otherCalendars = arrayOfNulls(calendars.size)
                 for (i in calendars.indices) {
@@ -1650,6 +1661,134 @@ fun applyAppLanguage(context: Context) {
     }
     resources.updateConfiguration(config, resources.displayMetrics)
 }
+
+fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
+    val desc = event.description
+    var title = event.title
+    if (!TextUtils.isEmpty(desc))
+        title += " (" + Html.fromHtml(event.description).toString().trim { it <= ' ' } + ")"
+
+    return title.replace("\\n".toRegex(), " ").trim { it <= ' ' }
+}
+
+fun getEventsTitle(
+    dayEvents: List<AbstractEvent<*>>, holiday: Boolean,
+    compact: Boolean, showDeviceCalendarEvents: Boolean,
+    insertRLM: Boolean
+): String {
+    val titles = StringBuilder()
+    var first = true
+
+    for (event in dayEvents)
+        if (event.isHoliday == holiday) {
+            var title = event.title
+            if (insertRLM)
+                title = RLM + title
+
+            if (event is DeviceCalendarEvent) {
+                if (!showDeviceCalendarEvents)
+                    continue
+
+                if (!compact) {
+                    title = formatDeviceCalendarEventTitle(event)
+                }
+            } else {
+                if (compact)
+                    title = title.replace("(.*) \\(.*?$".toRegex(), "$1")
+            }
+
+            if (first)
+                first = false
+            else
+                titles.append("\n")
+            titles.append(title)
+        }
+
+    return titles.toString()
+}
+
+fun startEitherServiceOrWorker(context: Context) {
+    val workManager = WorkManager.getInstance(context)
+    if (goForWorker()) {
+        val updateBuilder = PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1, TimeUnit.HOURS)
+
+        val updateWork = updateBuilder.build()
+        workManager.enqueueUniquePeriodicWork(
+            UPDATE_TAG,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            updateWork
+        )
+    } else {
+        // Disable all the scheduled workers, just in case enabled before
+        workManager.cancelAllWork()
+        // Or,
+        // workManager.cancelAllWorkByTag(UPDATE_TAG);
+        // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
+
+        var alreadyRan = false
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        if (manager != null) {
+            try {
+                for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (ApplicationService::class.java.name == service.service.className)
+                        alreadyRan = true
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
+            }
+
+        }
+
+        if (!alreadyRan) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    ContextCompat.startForegroundService(
+                        context,
+                        Intent(context, ApplicationService::class.java)
+                    )
+
+                context.startService(Intent(context, ApplicationService::class.java))
+            } catch (e: Exception) {
+                Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e)
+            }
+        }
+    }
+}
+
+fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
+    if (sShiftWorkStartingJdn == -1L || jdn < sShiftWorkStartingJdn || sShiftWorkPeriod == 0)
+        return ""
+
+    val passedDays = jdn - sShiftWorkStartingJdn
+    if (!sShiftWorkRecurs && passedDays >= sShiftWorkPeriod)
+        return ""
+
+    val dayInPeriod = (passedDays % sShiftWorkPeriod).toInt()
+    var accumulation = 0
+    for (shift in sShiftWorks) {
+        accumulation += shift.length
+        if (accumulation > dayInPeriod) {
+            // Skip rests on abbreviated mode
+            if (sShiftWorkRecurs && abbreviated &&
+                (shift.type == "r" || shift.type == sShiftWorkTitles["r"]))
+                return ""
+
+            var title = sShiftWorkTitles[shift.type]
+            if (title == null) title = shift.type
+            return if (abbreviated) {
+                title.substring(0, 1) +
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR)
+                            ZWJ
+                        else
+                            ""
+            } else
+                title
+        }
+    }
+    // Shouldn't be reached
+    return ""
+}
+
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;

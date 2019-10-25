@@ -238,7 +238,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun formatClickableEventTitle(event: DeviceCalendarEvent): SpannableString {
-        val title = Utils.formatDeviceCalendarEventTitle(event)
+        val title = formatDeviceCalendarEventTitle(event)
         val ss = SpannableString(title)
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
@@ -288,11 +288,21 @@ class CalendarFragment : DaggerFragment() {
 
     private fun showEvent(jdn: Long, isToday: Boolean) {
         mEventsBinding.run {
-            shiftWorkTitle.text = Utils.getShiftWorkTitle(jdn, false)
+            shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
             val events = getEvents(jdn,
                     readDayDeviceEvents(mainActivityDependency.mainActivity, jdn))
-            val holidays = Utils.getEventsTitle(events, true, false, false, false)
-            val nonHolidays = Utils.getEventsTitle(events, false, false, false, false)
+            val holidays = getEventsTitle(events,
+                holiday = true,
+                compact = false,
+                showDeviceCalendarEvents = false,
+                insertRLM = false
+            )
+            val nonHolidays = getEventsTitle(events,
+                holiday = false,
+                compact = false,
+                showDeviceCalendarEvents = false,
+                insertRLM = false
+            )
             val deviceEvents = getDeviceEventsTitle(events)
             val contentDescription = StringBuilder()
 
