@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.praytimes;
+package io.github.persiancalendar.praytimes;
 
 class Utils {
     static double dtr(double d) {

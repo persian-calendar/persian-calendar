@@ -84,6 +84,7 @@ android {
 dependencies {
     implementation(project(":equinox"))
     implementation(project(":calendar"))
+    implementation(project(":praytimes"))
 
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.preference:preference-ktx:1.1.0")

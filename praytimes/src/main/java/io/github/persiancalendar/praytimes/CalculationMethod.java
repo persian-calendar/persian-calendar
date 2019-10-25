@@ -1,7 +1,7 @@
-package com.byagowi.persiancalendar.praytimes;
+package io.github.persiancalendar.praytimes;
 
-import static com.byagowi.persiancalendar.praytimes.Utils.deg;
-import static com.byagowi.persiancalendar.praytimes.Utils.min;
+import static io.github.persiancalendar.praytimes.Utils.deg;
+import static io.github.persiancalendar.praytimes.Utils.min;
 
 public enum CalculationMethod {
     MWL("Muslim World League", deg(18), deg(17)),

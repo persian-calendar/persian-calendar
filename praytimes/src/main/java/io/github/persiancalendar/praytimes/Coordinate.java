@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.praytimes;
+package io.github.persiancalendar.praytimes;
 
 public class Coordinate {
     private final double latitude;

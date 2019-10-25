@@ -29,8 +29,8 @@ import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.AbstractEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.praytimes.PrayTimesCalculator
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
