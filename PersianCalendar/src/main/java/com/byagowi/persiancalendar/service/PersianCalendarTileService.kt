@@ -17,23 +17,28 @@ import com.byagowi.persiancalendar.utils.*
 class PersianCalendarTileService : TileService() {
     override fun onClick() {
         try {
-            startActivityAndCollapse(Intent(this, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            startActivityAndCollapse(
+                Intent(this, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
         } catch (e: Exception) {
             Log.e("TileService", "Tile onClick fail", e)
         }
     }
 
     override fun onStartListening() {
-        val tile = qsTile ?: return
-        val today = getTodayOfCalendar(getMainCalendar())
+        qsTile?.run {
+            val today = getTodayOfCalendar(getMainCalendar())
 
-        tile.icon = Icon.createWithResource(this,
-                getDayIconResource(today.dayOfMonth))
-        tile.label = getWeekDayName(today)
-        tile.contentDescription = getMonthName(today)
-        // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
-        tile.state = Tile.STATE_ACTIVE
-        tile.updateTile()
+            icon = Icon.createWithResource(
+                this@PersianCalendarTileService,
+                getDayIconResource(today.dayOfMonth)
+            )
+            label = getWeekDayName(today)
+            contentDescription = getMonthName(today)
+            // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
+            state = Tile.STATE_ACTIVE
+            updateTile()
+        }
     }
 }
