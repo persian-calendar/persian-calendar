@@ -7,6 +7,8 @@ import java.util.Date;
 
 import io.github.persiancalendar.calendar.CivilDate;
 
+/* CAUTION: Don't convert to Kotlin without testing device calendar events, apparently
+   it doesn't work for some reason for now */
 public class DeviceCalendarEvent extends AbstractEvent<CivilDate> {
     final private int id;
     final private String description;
