@@ -149,10 +149,7 @@ class AboutFragment : DaggerFragment() {
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(
-                            "https://github.com/" + (view as Chip).text.toString()
-                                .split("@".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[1].split(
-                                "\\)".toRegex()
-                            ).dropLastWhile(String::isEmpty).toTypedArray()[0]
+                            "https://github.com/" + (view as Chip).text.toString().split("@")[1].split(")")[0]
                         )
                     )
                 )
