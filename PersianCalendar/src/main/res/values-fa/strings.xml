@@ -118,7 +118,7 @@
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
     <string name="about_sendMail">رایانامه</string>
     <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
-    <string name="about_developers">توسعه‌دهندگان</string>
+    <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسندهٔ برنامه</string>
     <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.

@@ -7,7 +7,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.text.TextUtils
 import android.text.util.Linkify
 import android.util.Log
@@ -35,8 +34,10 @@ class AboutFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         setHasOptionsMenu(true)
 
@@ -46,31 +47,35 @@ class AboutFragment : DaggerFragment() {
         activity.setTitleAndSubtitle(getString(R.string.about), "")
 
         // version
-        val version = programVersion(activity).split("-".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-        version[0] = formatNumber(version[0])
-        binding.version.text = String.format(getString(R.string.version), TextUtils.join("\n", version))
+        val version = programVersion(activity)
+            .split("-".toRegex())
+            .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
+        binding.version.text =
+            String.format(getString(R.string.version), TextUtils.join("\n", version))
 
         // licenses
         binding.licenses.setOnClickListener {
             AlertDialog.Builder(activity)
-                    .setTitle(resources.getString(R.string.about_license_title))
-                    .setView(ScrollView(activity).apply {
-                        addView(TextView(activity).apply {
-                            text = readRawResource(activity, R.raw.credits)
-                            setPadding(20)
-                            typeface = Typeface.MONOSPACE
-                            Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                        })
+                .setTitle(resources.getString(R.string.about_license_title))
+                .setView(ScrollView(activity).apply {
+                    addView(TextView(activity).apply {
+                        text = readRawResource(activity, R.raw.credits)
+                        setPadding(20)
+                        typeface = Typeface.MONOSPACE
+                        Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                     })
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.about_license_dialog_close, null)
-                    .show()
+                })
+                .setCancelable(true)
+                .setNegativeButton(R.string.about_license_dialog_close, null)
+                .show()
         }
 
         // help
-        binding.aboutTitle.text = String.format(getString(R.string.about_help_subtitle),
-                formatNumber(getMaxSupportedYear() - 1),
-                formatNumber(getMaxSupportedYear()))
+        binding.aboutTitle.text = String.format(
+            getString(R.string.about_help_subtitle),
+            formatNumber(getMaxSupportedYear() - 1),
+            formatNumber(getMaxSupportedYear())
+        )
         when (getAppLanguage()) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {
@@ -83,7 +88,12 @@ class AboutFragment : DaggerFragment() {
         // report bug
         binding.reportBug.setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()))
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -92,21 +102,33 @@ class AboutFragment : DaggerFragment() {
         binding.email.setOnClickListener {
             val emailBinding = DialogEmailBinding.inflate(inflater, container, false)
             AlertDialog.Builder(mainActivityDependency.mainActivity)
-                    .setView(emailBinding.root)
-                    .setTitle(R.string.about_email_sum)
-                    .setPositiveButton(R.string.continue_button) { _, _ ->
-                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null))
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                        try {
-                            emailIntent.putExtra(Intent.EXTRA_TEXT,
-                                    String.format(emailBinding.inputText.text?.toString() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
-                                            Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]))
-                            startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
-                        } catch (ex: android.content.ActivityNotFoundException) {
-                            createAndShowShortSnackbar(view, R.string.about_noClient)
-                        }
+                .setView(emailBinding.root)
+                .setTitle(R.string.about_email_sum)
+                .setPositiveButton(R.string.continue_button) { _, _ ->
+                    val emailIntent = Intent(
+                        Intent.ACTION_SENDTO,
+                        Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null)
+                    )
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                    try {
+                        emailIntent.putExtra(
+                            Intent.EXTRA_TEXT,
+                            String.format(
+                                emailBinding.inputText.text?.toString() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
+                                Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]
+                            )
+                        )
+                        startActivity(
+                            Intent.createChooser(
+                                emailIntent,
+                                getString(R.string.about_sendMail)
+                            )
+                        )
+                    } catch (ex: android.content.ActivityNotFoundException) {
+                        createAndShowShortSnackbar(view, R.string.about_noClient)
                     }
-                    .setNegativeButton(R.string.cancel, null).show()
+                }
+                .setNegativeButton(R.string.cancel, null).show()
         }
 
         val developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer)
@@ -115,74 +137,72 @@ class AboutFragment : DaggerFragment() {
         val color = TypedValue()
         activity.theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
 
-        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         layoutParams.setMargins(8)
 
         val chipClick = View.OnClickListener { view ->
             try {
-                startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/" + (view as Chip).text.toString()
-                                .split("@".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[1].split("\\)".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[0])))
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(
+                            "https://github.com/" + (view as Chip).text.toString()
+                                .split("@".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[1].split(
+                                "\\)".toRegex()
+                            ).dropLastWhile(String::isEmpty).toTypedArray()[0]
+                        )
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-
-        val handler = Handler()
-        handler.post(object : Runnable {
-            override fun run() {
-                try {
-                    binding.developers.removeAllViews()
-
-                    for (line in getString(R.string.about_developers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
-                        val chip = Chip(activity).apply {
-                            this.layoutParams = layoutParams
-                            setOnClickListener(chipClick)
-                            text = line
-                            chipIcon = developerIcon
-                            setChipIconTintResource(color.resourceId)
-                        }
-                        binding.developers.addView(chip)
-                    }
-
-                    for (line in getString(R.string.about_designers_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
-                        val chip = Chip(activity).apply {
-                            this.layoutParams = layoutParams
-                            text = line
-                            chipIcon = designerIcon
-                            setChipIconTintResource(color.resourceId)
-                        }
-                        binding.developers.addView(chip)
-                    }
-
-                    for (line in getString(R.string.about_translators_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
-                        val chip = Chip(activity).apply {
-                            this.layoutParams = layoutParams
-                            setOnClickListener(chipClick)
-                            text = line
-                            chipIcon = translatorIcon
-                            setChipIconTintResource(color.resourceId)
-                        }
-                        binding.developers.addView(chip)
-                    }
-
-                    for (line in getString(R.string.about_contributors_list).trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile(String::isEmpty).shuffled().toTypedArray()) {
-                        val chip = Chip(activity).apply {
-                            this.layoutParams = layoutParams
-                            setOnClickListener(chipClick)
-                            text = line
-                            chipIcon = developerIcon
-                            setChipIconTintResource(color.resourceId)
-                        }
-                        binding.developers.addView(chip)
-                    }
-
-                    handler.postDelayed(this, 10000)
-                } catch (ignore: Exception) {
+        getString(R.string.about_developers_list)
+            .trim().split("\n".toRegex()).shuffled().map {
+                Chip(activity).apply {
+                    this.layoutParams = layoutParams
+                    setOnClickListener(chipClick)
+                    text = it
+                    chipIcon = developerIcon
+                    setChipIconTintResource(color.resourceId)
                 }
-            }
-        })
+            }.forEach(binding.developers::addView)
+
+        getString(R.string.about_designers_list)
+            .trim().split("\n".toRegex()).shuffled().map {
+                Chip(activity).apply {
+                    this.layoutParams = layoutParams
+                    text = it
+                    chipIcon = designerIcon
+                    setChipIconTintResource(color.resourceId)
+                }
+            }.forEach(binding.developers::addView)
+
+        getString(R.string.about_translators_list)
+            .trim().split("\n".toRegex()).shuffled().map {
+                Chip(activity).apply {
+                    this.layoutParams = layoutParams
+                    setOnClickListener(chipClick)
+                    text = it
+                    chipIcon = translatorIcon
+                    setChipIconTintResource(color.resourceId)
+                }
+            }.forEach(binding.developers::addView)
+
+        getString(R.string.about_contributors_list)
+            .trim().split("\n".toRegex()).shuffled().map {
+                Chip(activity).apply {
+                    this.layoutParams = layoutParams
+                    setOnClickListener(chipClick)
+                    text = it
+                    chipIcon = developerIcon
+                    setChipIconTintResource(color.resourceId)
+                }
+            }.forEach(binding.developers::addView)
 
         return binding.root
     }
