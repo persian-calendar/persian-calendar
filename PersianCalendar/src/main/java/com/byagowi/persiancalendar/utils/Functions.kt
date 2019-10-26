@@ -37,10 +37,6 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.*
 import com.byagowi.persiancalendar.service.ApplicationService
-import io.github.persiancalendar.praytimes.CalculationMethod
-import io.github.persiancalendar.praytimes.Clock
-import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
 import com.google.android.material.circularreveal.CircularRevealCompat
@@ -51,6 +47,10 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.praytimes.CalculationMethod
+import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -228,8 +228,8 @@ fun loadEvents(context: Context) {
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
 
         // https://stackoverflow.com/a/36188796
-        operator fun JSONArray.iterator(): Iterator<JSONObject>
-                = (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
+        operator fun JSONArray.iterator(): Iterator<JSONObject> =
+            (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
 
         for (event in allTheEvents.getJSONArray("Persian Calendar")) {
             val month = event.getInt("month")
@@ -460,8 +460,8 @@ private fun loadLanguageResource(context: Context) {
     try {
         val messages = JSONObject(readRawResource(context, messagesFile))
 
-        fun JSONArray.toStringArray(): Array<String>
-                = (0 until length()).asSequence().map { getString(it) }.toList().toTypedArray()
+        fun JSONArray.toStringArray(): Array<String> =
+            (0 until length()).asSequence().map { getString(it) }.toList().toTypedArray()
 
         persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringArray()
         islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringArray()
@@ -1783,61 +1783,32 @@ private fun getCountryCodeOrder(countryCode: String): Int =
         else -> irCodeOrder.indexOf(countryCode)
     }
 
-private fun sortArray(l: CityItem, r: CityItem): Int {
-    if (l.key == "")
-        return -1
-
-    if (r.key == DEFAULT_CITY)
-        return 1
-
-    val compare = getCountryCodeOrder(l.countryCode) -
-            getCountryCodeOrder(r.countryCode)
-    if (compare != 0) return compare
-
-    return when (language) {
-        LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
-        LANG_AR -> l.ar.compareTo(r.ar)
-        LANG_CKB -> prepareForArabicSort(l.ckb)
-            .compareTo(prepareForArabicSort(r.ckb))
-        else -> prepareForArabicSort(l.fa)
-            .compareTo(prepareForArabicSort(r.fa))
-    }
-}
-
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
-    val result = java.util.ArrayList<CityItem>()
+    val result = mutableListOf<CityItem>()
     try {
-        val countries = JSONObject(readRawResource(context, R.raw.cities))
+        fun JSONObject.forEach(f: (String, JSONObject) -> Unit) =
+            this.keys().forEach { f(it, this.getJSONObject(it)) }
 
-        for (countryCode in countries.keys()) {
-            val country = countries.getJSONObject(countryCode)
-
+        JSONObject(readRawResource(context, R.raw.cities)).forEach { countryCode, country ->
             val countryEn = country.getString("en")
             val countryFa = country.getString("fa")
             val countryCkb = country.getString("ckb")
             val countryAr = country.getString("ar")
 
-            val cities = country.getJSONObject("cities")
-
-            for (key in cities.keys()) {
-                val city = cities.getJSONObject(key)
-
-                val en = city.getString("en")
-                val fa = city.getString("fa")
-                val ckb = city.getString("ckb")
-                val ar = city.getString("ar")
-
-                val coordinate = Coordinate(
-                    city.getDouble("latitude"),
-                    city.getDouble("longitude"),
-                    // Don't Consider elevation for Iran
-                    if (countryCode == "ir") 0.0 else city.getDouble("elevation")
-                )
-
+            country.getJSONObject("cities").forEach { key, city ->
                 result.add(
                     CityItem(
-                        key, en, fa, ckb, ar, countryCode,
-                        countryEn, countryFa, countryCkb, countryAr, coordinate
+                        key,
+                        city.getString("en"), city.getString("fa"),
+                        city.getString("ckb"), city.getString("ar"),
+                        countryCode,
+                        countryEn, countryFa, countryCkb, countryAr,
+                        Coordinate(
+                            city.getDouble("latitude"),
+                            city.getDouble("longitude"),
+                            // Don't Consider elevation for Iran
+                            if (countryCode == "ir") 0.0 else city.getDouble("elevation")
+                        )
                     )
                 )
             }
@@ -1845,17 +1816,26 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
     } catch (ignore: JSONException) {
     }
 
-    if (!needsSort) {
-        return result
-    }
+    if (!needsSort) return result
 
-    val cities = result.toTypedArray()
-    // Sort first by country code then city
-    Arrays.sort(cities) { l, r -> sortArray(l, r) }
+    return result.sortedWith(kotlin.Comparator { l, r ->
+        if (l.key == "") return@Comparator -1
 
-    return listOf(*cities)
+        if (r.key == DEFAULT_CITY) return@Comparator 1
+
+        val compare = getCountryCodeOrder(l.countryCode) - getCountryCodeOrder(r.countryCode)
+        if (compare != 0) return@Comparator compare
+
+        when (language) {
+            LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
+            LANG_AR -> l.ar.compareTo(r.ar)
+            LANG_CKB -> prepareForArabicSort(l.ckb)
+                .compareTo(prepareForArabicSort(r.ckb))
+            else -> prepareForArabicSort(l.fa)
+                .compareTo(prepareForArabicSort(r.fa))
+        }
+    })
 }
-
 
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
