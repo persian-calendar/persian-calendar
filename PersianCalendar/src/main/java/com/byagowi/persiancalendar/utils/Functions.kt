@@ -225,15 +225,13 @@ fun loadEvents(context: Context) {
     val allEnabledEvents = ArrayList<AbstractEvent<*>>()
 
     try {
-        var days: JSONArray
-        var length: Int
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
 
-        days = allTheEvents.getJSONArray("Persian Calendar")
-        length = days.length()
-        for (i in 0 until length) {
-            val event = days.getJSONObject(i)
+        // https://stackoverflow.com/a/36188796
+        operator fun JSONArray.iterator(): Iterator<JSONObject>
+                = (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
 
+        for (event in allTheEvents.getJSONArray("Persian Calendar")) {
             val month = event.getInt("month")
             val day = event.getInt("day")
             val year = if (event.has("year")) event.getInt("year") else -1
@@ -293,11 +291,7 @@ fun loadEvents(context: Context) {
             }
         }
 
-        days = allTheEvents.getJSONArray("Hijri Calendar")
-        length = days.length()
-        for (i in 0 until length) {
-            val event = days.getJSONObject(i)
-
+        for (event in allTheEvents.getJSONArray("Hijri Calendar")) {
             val month = event.getInt("month")
             val day = event.getInt("day")
             var title = event.getString("title")
@@ -350,11 +344,7 @@ fun loadEvents(context: Context) {
             }
         }
 
-        days = allTheEvents.getJSONArray("Gregorian Calendar")
-        length = days.length()
-        for (i in 0 until length) {
-            val event = days.getJSONObject(i)
-
+        for (event in allTheEvents.getJSONArray("Gregorian Calendar")) {
             val month = event.getInt("month")
             val day = event.getInt("day")
             var title = event.getString("title")
@@ -467,47 +457,31 @@ private fun loadLanguageResource(context: Context) {
         else -> R.raw.messages_fa
     }
 
-    persianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-    islamicMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-    gregorianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-    weekDays = arrayOf("", "", "", "", "", "", "")
-    weekDaysInitials = arrayOf("", "", "", "", "", "", "")
-
     try {
         val messages = JSONObject(readRawResource(context, messagesFile))
 
-        val persianMonthsArray = messages.getJSONArray("PersianCalendarMonths")
-        for (i in 0..11)
-            persianMonths?.let {
-                it[i] = persianMonthsArray.getString(i)
-            }
+        fun JSONArray.toStringArray(): Array<String>
+                = (0 until length()).asSequence().map { getString(it) }.toList().toTypedArray()
 
-        val islamicMonthsArray = messages.getJSONArray("IslamicCalendarMonths")
-        for (i in 0..11)
-            islamicMonths?.let {
-                it[i] = islamicMonthsArray.getString(i)
-            }
-
-        val gregorianMonthsArray = messages.getJSONArray("GregorianCalendarMonths")
-        for (i in 0..11)
-            gregorianMonths?.let {
-                it[i] = gregorianMonthsArray.getString(i)
-            }
-
-        val weekDaysArray = messages.getJSONArray("WeekDays")
-        for (i in 0..6) {
-            weekDays?.let {
-                it[i] = weekDaysArray.getString(i)
-                weekDaysInitials?.run {
-                    when (language) {
-                        LANG_AR -> this[i] = it[i].substring(2, 4)
-                        LANG_AZB -> this[i] = it[i].substring(0, 2)
-                        else -> this[i] = it[i].substring(0, 1)
-                    }
+        persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringArray()
+        islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringArray()
+        gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringArray()
+        messages.getJSONArray("WeekDays").toStringArray().run {
+            weekDays = this
+            weekDaysInitials = this.map {
+                when (language) {
+                    LANG_AR -> it.substring(2, 4)
+                    LANG_AZB -> it.substring(0, 2)
+                    else -> it.substring(0, 1)
                 }
-            }
+            }.toTypedArray()
         }
     } catch (ignore: JSONException) {
+        persianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+        islamicMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+        gregorianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
+        weekDays = arrayOf("", "", "", "", "", "", "")
+        weekDaysInitials = arrayOf("", "", "", "", "", "", "")
     }
 }
 
@@ -1265,7 +1239,6 @@ fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate =
         CalendarType.ISLAMIC -> IslamicDate(jdn)
         CalendarType.GREGORIAN -> CivilDate(jdn)
         CalendarType.SHAMSI -> PersianDate(jdn)
-        else -> PersianDate(jdn)
     }
 
 fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
@@ -1273,7 +1246,6 @@ fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): 
         CalendarType.ISLAMIC -> IslamicDate(year, month, day)
         CalendarType.GREGORIAN -> CivilDate(year, month, day)
         CalendarType.SHAMSI -> PersianDate(year, month, day)
-        else -> PersianDate(year, month, day)
     }
 
 fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
