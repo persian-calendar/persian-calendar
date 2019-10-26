@@ -1494,21 +1494,9 @@ fun updateStoredPreference(context: Context) {
             mainCalendar = CalendarType.valueOf(it)
         }
 
-        prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.run {
-            var otherCalendarsString = this
-            otherCalendarsString = otherCalendarsString.trim { it <= ' ' }
-            if (TextUtils.isEmpty(otherCalendarsString)) {
-                otherCalendars = arrayOf()
-            } else {
-
-                val calendars =
-                    otherCalendarsString.split(",".toRegex()).dropLastWhile { it.isEmpty() }
-                        .toTypedArray()
-
-//                otherCalendars = arrayOfNulls(calendars.size)
-                for (i in calendars.indices) {
-                    otherCalendars[i] = CalendarType.valueOf(calendars[i])
-                }
+        prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.let {
+            otherCalendars = if (it.isEmpty()) arrayOf() else {
+                it.split(",".toRegex()).map(CalendarType::valueOf).toTypedArray()
             }
         }
 
