@@ -367,10 +367,10 @@ fun update(context: Context, updateDate: Boolean) {
                 .setContentTitle(title)
                 .setContentText(subtitle)
 
-        // Night mode doesn't our custom notification in Samsung, let's detect it
-        val isSamsungNightMode = Build.BRAND == "samsung" && isNightModeEnabled(context)
+        // Night mode doesn't our custom notification in Samsung and HTC One UI, let's detect them
+        val isSamsungOrHtcNightMode = (Build.BRAND == "samsung" || Build.BRAND == "htc") && isNightModeEnabled(context)
 
-        if (!isTalkBackEnabled() && !isSamsungNightMode &&
+        if (!isTalkBackEnabled() && !isSamsungOrHtcNightMode &&
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
             val cv = RemoteViews(context.packageName, if (isRTL) {
                 R.layout.custom_notification
