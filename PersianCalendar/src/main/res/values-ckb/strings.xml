@@ -221,9 +221,9 @@
     <string name="prefer_linear_date">نیشاندانی ڕێککەوت بە ژمارە</string>
     <string name="month_overview">بۆنەکانی مانگ</string>
     <string name="map">نەخشە</string>
-    <string name="ascending_athan_volume">Ascending athan volume</string>
-    <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
-    <string name="widget_background_color">Widget Background Color</string>
-    <string name="select_widgets_background_color">Select custom color for widgets background</string>
+    <string name="ascending_athan_volume">بەرزبوونەوەی دەنگی بانگ</string>
+    <string name="enable_ascending_athan_volume">دەنگی بانگ دوای دەقەیەک دەگاتە زۆرینەی خۆی</string>
+    <string name="widget_background_color">ڕەنگی باکگراوندی ویجیت</string>
+    <string name="select_widgets_background_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ باکگراوندی ویجیت</string>
 
 </resources>
