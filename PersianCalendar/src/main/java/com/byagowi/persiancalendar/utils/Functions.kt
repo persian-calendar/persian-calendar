@@ -1540,16 +1540,12 @@ fun updateStoredPreference(context: Context) {
 
     sShiftWorkTitles = HashMap()
     try {
-        sShiftWorks = ArrayList()
-        val shiftWork = prefs.getString(PREF_SHIFT_WORK_SETTING, "")
-        val parts = shiftWork?.split(",".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
-        parts?.run {
-            for (p in this) {
-                val v = p.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (v.size != 2) continue
-                sShiftWorks.add(ShiftWorkRecord(v[0], Integer.valueOf(v[1])))
-            }
-        }
+        sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, "") ?: "")
+            .split(",".toRegex())
+            .map { it.split("=".toRegex()) }
+            .filter { it.size == 2 }
+            .map { ShiftWorkRecord(it[0], Integer.valueOf(it[1])) }
+            .toList()
 
         sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
 
