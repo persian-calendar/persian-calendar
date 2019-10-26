@@ -98,7 +98,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             first = false
                         else
                             result.append(",")
-                        result.append(record.type.replace(Regex("[=,]"), ""))
+                        result.append(record.type.replace("[=,]".toRegex(), ""))
                         result.append("=")
                         result.append(record.length)
                     }

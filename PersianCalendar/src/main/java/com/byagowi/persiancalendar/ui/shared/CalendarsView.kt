@@ -112,7 +112,7 @@ class CalendarsView : FrameLayout {
                     formatNumber(monthDiff),
                     formatNumber(dayOfMonthDiff))
             if (diffDays <= 30) {
-                text = text.split("\\(".toRegex())[0]
+                text = text.split("(")[0]
             }
             mBinding.diffDate.text = text
         }

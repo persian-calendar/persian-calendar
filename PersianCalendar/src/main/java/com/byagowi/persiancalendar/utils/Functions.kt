@@ -1496,7 +1496,7 @@ fun updateStoredPreference(context: Context) {
 
         prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.let {
             otherCalendars = if (it.isEmpty()) arrayOf() else {
-                it.split(",".toRegex()).map(CalendarType::valueOf).toTypedArray()
+                it.split(",").map(CalendarType::valueOf).toTypedArray()
             }
         }
 
@@ -1541,8 +1541,8 @@ fun updateStoredPreference(context: Context) {
     sShiftWorkTitles = HashMap()
     try {
         sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, "") ?: "")
-            .split(",".toRegex())
-            .map { it.split("=".toRegex()) }
+            .split(",")
+            .map { it.split("=") }
             .filter { it.size == 2 }
             .map { ShiftWorkRecord(it[0], Integer.valueOf(it[1])) }
             .toList()
@@ -1621,7 +1621,7 @@ fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
     if (!TextUtils.isEmpty(desc))
         title += " (" + Html.fromHtml(event.description).toString().trim { it <= ' ' } + ")"
 
-    return title.replace("\\n".toRegex(), " ").trim { it <= ' ' }
+    return title.replace("\n", " ").trim { it <= ' ' }
 }
 
 fun getEventsTitle(
@@ -1745,19 +1745,19 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
 
 private fun prepareForArabicSort(text: String): String =
     text
-        .replace("ی".toRegex(), "ي")
-        .replace("ک".toRegex(), "ك")
-        .replace("گ".toRegex(), "كی")
-        .replace("ژ".toRegex(), "زی")
-        .replace("چ".toRegex(), "جی")
-        .replace("پ".toRegex(), "بی")
-        .replace("ڕ".toRegex(), "ری")
-        .replace("ڵ".toRegex(), "لی")
-        .replace("ڤ".toRegex(), "فی")
-        .replace("ۆ".toRegex(), "وی")
-        .replace("ێ".toRegex(), "یی")
-        .replace("ھ".toRegex(), "نی")
-        .replace("ە".toRegex(), "هی")
+        .replace("ی", "ي")
+        .replace("ک", "ك")
+        .replace("گ","كی")
+        .replace("ژ", "زی")
+        .replace("چ", "جی")
+        .replace("پ", "بی")
+        .replace("ڕ", "ری")
+        .replace("ڵ", "لی")
+        .replace("ڤ", "فی")
+        .replace("ۆ", "وی")
+        .replace("ێ", "یی")
+        .replace("ھ", "نی")
+        .replace("ە", "هی")
 
 private fun getCountryCodeOrder(countryCode: String): Int =
     when (language) {

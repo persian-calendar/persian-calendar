@@ -47,8 +47,7 @@ class AboutFragment : DaggerFragment() {
         activity.setTitleAndSubtitle(getString(R.string.about), "")
 
         // version
-        val version = programVersion(activity)
-            .split("-".toRegex())
+        val version = programVersion(activity).split("-")
             .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
         binding.version.text =
             String.format(getString(R.string.version), TextUtils.join("\n", version))
@@ -159,7 +158,7 @@ class AboutFragment : DaggerFragment() {
         }
 
         getString(R.string.about_developers_list)
-            .trim().split("\n".toRegex()).shuffled().map {
+            .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
                     this.layoutParams = layoutParams
                     setOnClickListener(chipClick)
@@ -170,7 +169,7 @@ class AboutFragment : DaggerFragment() {
             }.forEach(binding.developers::addView)
 
         getString(R.string.about_designers_list)
-            .trim().split("\n".toRegex()).shuffled().map {
+            .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
                     this.layoutParams = layoutParams
                     text = it
@@ -180,7 +179,7 @@ class AboutFragment : DaggerFragment() {
             }.forEach(binding.developers::addView)
 
         getString(R.string.about_translators_list)
-            .trim().split("\n".toRegex()).shuffled().map {
+            .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
                     this.layoutParams = layoutParams
                     setOnClickListener(chipClick)
@@ -191,7 +190,7 @@ class AboutFragment : DaggerFragment() {
             }.forEach(binding.developers::addView)
 
         getString(R.string.about_contributors_list)
-            .trim().split("\n".toRegex()).shuffled().map {
+            .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
                     this.layoutParams = layoutParams
                     setOnClickListener(chipClick)
