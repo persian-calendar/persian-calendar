@@ -1747,7 +1747,7 @@ private fun prepareForArabicSort(text: String): String =
     text
         .replace("ی", "ي")
         .replace("ک", "ك")
-        .replace("گ","كی")
+        .replace("گ", "كی")
         .replace("ژ", "زی")
         .replace("چ", "جی")
         .replace("پ", "بی")
