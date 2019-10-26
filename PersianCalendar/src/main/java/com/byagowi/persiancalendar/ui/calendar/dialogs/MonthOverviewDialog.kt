@@ -96,11 +96,13 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
             fun bind(position: Int) {
                 val record = mRows[position]
-                mBinding.title.text = record.title
-                mBinding.holidays.text = record.holidays
-                mBinding.holidays.visibility = if (TextUtils.isEmpty(record.holidays)) View.GONE else View.VISIBLE
-                mBinding.nonHolidays.text = record.nonHolidays
-                mBinding.nonHolidays.visibility = if (TextUtils.isEmpty(record.nonHolidays)) View.GONE else View.VISIBLE
+                mBinding.run {
+                    title.text = record.title
+                    holidays.text = record.holidays
+                    holidays.visibility = if (TextUtils.isEmpty(record.holidays)) View.GONE else View.VISIBLE
+                    nonHolidays.text = record.nonHolidays
+                    nonHolidays.visibility = if (TextUtils.isEmpty(record.nonHolidays)) View.GONE else View.VISIBLE
+                }
             }
         }
     }
