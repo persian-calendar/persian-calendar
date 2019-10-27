@@ -217,8 +217,4 @@ class AthanActivity : AppCompatActivity() {
         handler.removeCallbacks(ascendVolume)
         finish()
     }
-
-    companion object {
-        private val TAG = AthanActivity::class.java.name
-    }
 }

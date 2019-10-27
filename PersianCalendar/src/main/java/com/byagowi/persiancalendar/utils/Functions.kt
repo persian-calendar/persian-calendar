@@ -8,7 +8,6 @@ import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.*
-import android.content.Context.ACCESSIBILITY_SERVICE
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
@@ -157,7 +156,7 @@ fun formatDate(date: AbstractDate): String =
 
 fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
 
-fun getCalculationMethod(): CalculationMethod? = CalculationMethod.valueOf(calculationMethod)
+fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
 fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
     LANG_EN_US, LANG_JA -> true
@@ -956,7 +955,12 @@ fun getA11yDaySummary(
     }
 
     val events = getEvents(jdn, deviceCalendarEvents)
-    val holidays = getEventsTitle(events, true, true, true, false)
+    val holidays = getEventsTitle(
+        events, true,
+        compact = true,
+        showDeviceCalendarEvents = true,
+        insertRLM = false
+    )
     if (!TextUtils.isEmpty(holidays)) {
         result.append("\n")
         result.append("\n")
@@ -965,7 +969,13 @@ fun getA11yDaySummary(
         result.append(holidays)
     }
 
-    val nonHolidays = getEventsTitle(events, false, true, true, false)
+    val nonHolidays = getEventsTitle(
+        events,
+        holiday = false,
+        compact = true,
+        showDeviceCalendarEvents = true,
+        insertRLM = false
+    )
     if (!TextUtils.isEmpty(nonHolidays)) {
         result.append("\n")
         result.append("\n")
@@ -1290,7 +1300,7 @@ fun askForLocationPermission(activity: Activity?) {
     AlertDialog.Builder(activity)
         .setTitle(R.string.location_access)
         .setMessage(R.string.phone_location_required)
-        .setPositiveButton(R.string.continue_button) { dialog, id ->
+        .setPositiveButton(R.string.continue_button) { _, _ ->
             activity.requestPermissions(
                 arrayOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -1299,7 +1309,7 @@ fun askForLocationPermission(activity: Activity?) {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
-        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
 }
 
 fun askForCalendarPermission(activity: Activity?) {
@@ -1308,25 +1318,21 @@ fun askForCalendarPermission(activity: Activity?) {
     AlertDialog.Builder(activity)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
-        .setPositiveButton(R.string.continue_button) { dialog, id ->
+        .setPositiveButton(R.string.continue_button) { _, _ ->
             activity.requestPermissions(
                 arrayOf(Manifest.permission.READ_CALENDAR),
                 CALENDAR_READ_PERMISSION_REQUEST_CODE
             )
         }
-        .setNegativeButton(R.string.cancel) { dialog, id -> dialog.cancel() }.show()
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
 }
 
-fun isShiaPrayTimeCalculationSelected(): Boolean {
-    val calculationMethod = getCalculationMethod()
-    return calculationMethod == CalculationMethod.Tehran || calculationMethod == CalculationMethod.Jafari
-}
+fun isShiaPrayTimeCalculationSelected(): Boolean =
+    getCalculationMethod().run { this == CalculationMethod.Tehran || this == CalculationMethod.Jafari }
 
 fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
     view ?: return
-
-    val clipboardService =
-        view.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+    val clipboardService = view.context.getSystemService<ClipboardManager>()
 
     if (clipboardService == null || label == null || text == null) return
 
@@ -1587,7 +1593,7 @@ fun updateStoredPreference(context: Context) {
         R.style.LightTheme
     }
 
-    val a11y = context.getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager?
+    val a11y = context.getSystemService<AccessibilityManager>()
     talkBackEnabled = a11y != null && a11y.isEnabled && a11y.isTouchExplorationEnabled
 }
 
@@ -1679,7 +1685,7 @@ fun startEitherServiceOrWorker(context: Context) {
         // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
         var alreadyRan = false
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        val manager = context.getSystemService<ActivityManager>()
         if (manager != null) {
             try {
                 for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
