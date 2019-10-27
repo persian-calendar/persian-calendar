@@ -11,6 +11,9 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 
+@StringRes
+private val timeNames = intArrayOf(R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight)
+
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     private var mPrayTimes: PrayTimes? = null
     var isExpanded = false
@@ -20,11 +23,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = TimeItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent, false
-        )
-
+        val binding = TimeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -76,20 +75,5 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
 
             binding.time.text = getFormattedClock(clock, false)
         }
-    }
-
-    companion object {
-        @StringRes
-        private val timeNames = intArrayOf(
-            R.string.imsak,
-            R.string.fajr,
-            R.string.sunrise,
-            R.string.dhuhr,
-            R.string.asr,
-            R.string.sunset,
-            R.string.maghrib,
-            R.string.isha,
-            R.string.midnight
-        )
     }
 }
