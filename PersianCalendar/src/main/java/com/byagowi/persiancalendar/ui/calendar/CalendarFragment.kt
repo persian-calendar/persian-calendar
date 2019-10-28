@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.entities.AbstractEvent
+import com.byagowi.persiancalendar.entities.BaseEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
@@ -269,7 +269,7 @@ class CalendarFragment : DaggerFragment() {
         return ss
     }
 
-    private fun getDeviceEventsTitle(dayEvents: List<AbstractEvent<*>>): SpannableStringBuilder {
+    private fun getDeviceEventsTitle(dayEvents: List<BaseEvent>): SpannableStringBuilder {
         val titles = SpannableStringBuilder()
         var first = true
 
@@ -492,14 +492,14 @@ class CalendarFragment : DaggerFragment() {
                 mSearchAutoComplete = findViewById(androidx.appcompat.R.id.search_src_text)
                 mSearchAutoComplete?.setHint(R.string.search_in_events)
 
-                val eventsAdapter = ArrayAdapter<AbstractEvent<*>>(context,
+                val eventsAdapter = ArrayAdapter<BaseEvent>(context,
                         R.layout.suggestion, android.R.id.text1)
                 eventsAdapter.addAll(getAllEnabledEvents())
                 eventsAdapter.addAll(getAllEnabledAppointments(context))
                 mSearchAutoComplete?.setAdapter(eventsAdapter)
                 mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
-                    val ev = parent.getItemAtPosition(position) as AbstractEvent<*>
-                    val date = ev.date
+                    val ev = parent.getItemAtPosition(position) as BaseEvent
+                    val date = getDateFromEvent(ev)
                     val type = getCalendarTypeFromDate(date)
                     val today = getTodayOfCalendar(type)
                     var year = date.year

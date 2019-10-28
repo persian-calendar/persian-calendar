@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.entities.AbstractEvent
+import com.byagowi.persiancalendar.entities.BaseEvent
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
@@ -62,13 +62,13 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
         notifyItemChanged(selectedDay)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemDayView = ItemDayView(parent.context, daysPaintResources)
         itemDayView.layoutParams = layoutParams
         return ViewHolder(itemDayView)
     }
 
-    private fun hasDeviceEvents(dayEvents: List<AbstractEvent<*>>): Boolean {
+    private fun hasDeviceEvents(dayEvents: List<BaseEvent>): Boolean {
         for (event in dayEvents) {
             if (event is DeviceCalendarEvent) {
                 return true

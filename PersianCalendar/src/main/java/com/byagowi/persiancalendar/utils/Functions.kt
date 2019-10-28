@@ -76,7 +76,7 @@ fun getAppTheme(): Int = appTheme
 
 fun getMaxSupportedYear(): Int = 1398
 
-fun getAllEnabledEvents(): List<AbstractEvent<*>> = sAllEnabledEvents
+fun getAllEnabledEvents(): List<BaseEvent> = sAllEnabledEvents
 
 fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
 
@@ -221,7 +221,7 @@ fun loadEvents(context: Context) {
     val persianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
     val islamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
     val gregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
-    val allEnabledEvents = ArrayList<AbstractEvent<*>>()
+    val allEnabledEvents = ArrayList<BaseEvent>()
 
     try {
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
@@ -527,7 +527,7 @@ fun calendarToCivilDate(calendar: Calendar): CivilDate {
     )
 }
 
-fun hasAnyHolidays(dayEvents: List<AbstractEvent<*>>): Boolean {
+fun hasAnyHolidays(dayEvents: List<BaseEvent>): Boolean {
     for (event in dayEvents) {
         if (event.isHoliday) {
             return true
@@ -1193,7 +1193,8 @@ private fun readDeviceEvents(
                 endDate,
                 cursor.getString(5),
                 civilDate,
-                cursor.getString(9)
+                cursor.getString(9),
+                false
             )
             list.add(event)
             allEnabledAppointments.add(event)
@@ -1236,6 +1237,13 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
         month,
         1
     ).toJdn()).toInt()
+}
+
+fun getDateFromEvent(event: BaseEvent): AbstractDate = when (event) {
+    is IslamicCalendarEvent -> event.date
+    is GregorianCalendarEvent -> event.date
+    is PersianCalendarEvent -> event.date
+    else -> PersianDate(getTodayJdn())
 }
 
 fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
@@ -1360,12 +1368,12 @@ private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolea
 fun getEvents(
     jdn: Long,
     deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?
-): List<AbstractEvent<*>> {
+): List<BaseEvent> {
     val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
     val islamic = IslamicDate(jdn)
 
-    val result = ArrayList<AbstractEvent<*>>()
+    val result = ArrayList<BaseEvent>()
 
     val persianList = sPersianCalendarEvents.get(persian.month * 100 + persian.dayOfMonth)
     if (persianList != null)
@@ -1631,7 +1639,7 @@ fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
 }
 
 fun getEventsTitle(
-    dayEvents: List<AbstractEvent<*>>, holiday: Boolean,
+    dayEvents: List<BaseEvent>, holiday: Boolean,
     compact: Boolean, showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean
 ): String {
