@@ -437,7 +437,7 @@ fun getIslamicOffset(context: Context): Int {
 fun getEnabledCalendarTypes(): List<CalendarType> {
     val result = ArrayList<CalendarType>()
     result.add(getMainCalendar())
-    result.addAll(listOf(*otherCalendars))
+    result.addAll(otherCalendars)
     return result
 }
 
@@ -527,14 +527,7 @@ fun calendarToCivilDate(calendar: Calendar): CivilDate {
     )
 }
 
-fun hasAnyHolidays(dayEvents: List<BaseEvent>): Boolean {
-    for (event in dayEvents) {
-        if (event.isHoliday) {
-            return true
-        }
-    }
-    return false
-}
+fun hasAnyHolidays(dayEvents: List<BaseEvent>): Boolean = dayEvents.any { it.isHoliday }
 
 fun loadApp(context: Context) {
     if (goForWorker()) return
@@ -548,7 +541,6 @@ fun loadApp(context: Context) {
             set(Calendar.SECOND, 1)
             add(Calendar.DATE, 1)
         }
-
 
         val dailyPendingIntent = PendingIntent.getBroadcast(
             context, LOAD_APP_ID,
@@ -1510,15 +1502,15 @@ fun updateStoredPreference(context: Context) {
         }
 
         prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.let {
-            otherCalendars = if (it.isEmpty()) arrayOf() else {
-                it.split(",").map(CalendarType::valueOf).toTypedArray()
+            otherCalendars = if (it.isEmpty()) listOf() else {
+                it.split(",").map(CalendarType::valueOf).toList()
             }
         }
 
     } catch (e: Exception) {
         Log.e(TAG, "Fail on parsing calendar preference", e)
         mainCalendar = CalendarType.SHAMSI
-        otherCalendars = arrayOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+        otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     }
 
     spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
@@ -1551,9 +1543,8 @@ fun updateStoredPreference(context: Context) {
     if (getOnlyLanguage(getAppLanguage()) != resources.getString(R.string.code))
         applyAppLanguage(context)
 
-    calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr)
+    calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
 
-    sShiftWorkTitles = HashMap()
     try {
         sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, "") ?: "")
             .split(",")
@@ -1571,8 +1562,7 @@ fun updateStoredPreference(context: Context) {
 
         val titles = resources.getStringArray(R.array.shift_work)
         val keys = resources.getStringArray(R.array.shift_work_keys)
-        for (i in titles.indices)
-            sShiftWorkTitles[keys[i]] = titles[i]
+        sShiftWorkTitles = keys.zip(titles).toMap()
     } catch (e: Exception) {
         e.printStackTrace()
         sShiftWorks = ArrayList()
@@ -1580,6 +1570,7 @@ fun updateStoredPreference(context: Context) {
 
         sShiftWorkPeriod = 0
         sShiftWorkRecurs = true
+        sShiftWorkTitles = emptyMap()
     }
 
     //        sReminderDetails = updateSavedReminders(context);
@@ -1773,6 +1764,11 @@ private fun prepareForArabicSort(text: String): String =
         .replace("ێ", "یی")
         .replace("ھ", "نی")
         .replace("ە", "هی")
+
+
+val irCodeOrder = listOf("zz", "ir", "af", "iq")
+val afCodeOrder = listOf("zz", "af", "ir", "iq")
+val arCodeOrder = listOf("zz", "iq", "ir", "af")
 
 private fun getCountryCodeOrder(countryCode: String): Int =
     when (language) {
