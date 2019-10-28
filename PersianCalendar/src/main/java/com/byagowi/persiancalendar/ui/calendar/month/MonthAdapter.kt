@@ -16,11 +16,13 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 
-class MonthAdapter internal constructor(mainActivityDependency: MainActivityDependency,
-                                        private val calendarFragmentDependency: CalendarFragmentDependency,
-                                        private val days: List<DayItem>,
-                                        startingDayOfWeek: Int, private val weekOfYearStart: Int,
-                                        private val weeksCount: Int) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
+class MonthAdapter internal constructor(
+    mainActivityDependency: MainActivityDependency,
+    private val calendarFragmentDependency: CalendarFragmentDependency,
+    private val days: List<DayItem>,
+    startingDayOfWeek: Int, private val weekOfYearStart: Int,
+    private val weeksCount: Int
+) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
     private val startingDayOfWeek: Int = fixDayOfWeekReverse(startingDayOfWeek)
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
@@ -36,8 +38,9 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
         isArabicDigit = isArabicDigitSelected()
 
         layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                context.resources.getDimensionPixelSize(R.dimen.day_item_size))
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            context.resources.getDimensionPixelSize(R.dimen.day_item_size)
+        )
         this.daysPaintResources = calendarFragmentDependency.daysPaintResources
     }
 
@@ -68,21 +71,16 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
         return ViewHolder(itemDayView)
     }
 
-    private fun hasDeviceEvents(dayEvents: List<BaseEvent>): Boolean {
-        for (event in dayEvents) {
-            if (event is DeviceCalendarEvent) {
-                return true
-            }
-        }
-        return false
-    }
+    private fun hasDeviceEvents(dayEvents: List<BaseEvent>): Boolean =
+        dayEvents.any { it is DeviceCalendarEvent }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int =
-            7 * if (isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
+        7 * if (isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
 
-    inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
+    inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener, View.OnLongClickListener {
         init {
             itemView.setOnClickListener(this)
             itemView.setOnLongClickListener(this)
@@ -94,7 +92,7 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
             if (jdn == -1L) return
 
             ViewModelProviders.of(calendarFragmentDependency.calendarFragment)
-                    .get(CalendarFragmentModel::class.java).selectDay(jdn)
+                .get(CalendarFragmentModel::class.java).selectDay(jdn)
             this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
@@ -118,10 +116,15 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                     val row = position / 8
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                        itemDayView.setNonDayOfMonthItem(weekNumber,
-                                daysPaintResources.weekNumberTextSize)
+                        itemDayView.setNonDayOfMonthItem(
+                            weekNumber,
+                            daysPaintResources.weekNumberTextSize
+                        )
                         if (isTalkBackEnabled()) {
-                            itemDayView.contentDescription = String.format(context.getString(R.string.nth_week_of_year), weekNumber)
+                            itemDayView.contentDescription = String.format(
+                                context.getString(R.string.nth_week_of_year),
+                                weekNumber
+                            )
                         }
 
                         itemDayView.visibility = View.VISIBLE
@@ -137,12 +140,14 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                 setEmpty()
             } else if (position < 7) {
                 itemDayView.setNonDayOfMonthItem(
-                        getInitialOfWeekDay(fixDayOfWeek(position)),
-                        daysPaintResources.weekDaysInitialTextSize)
+                    getInitialOfWeekDay(fixDayOfWeek(position)),
+                    daysPaintResources.weekDaysInitialTextSize
+                )
                 if (isTalkBackEnabled()) {
                     itemDayView.contentDescription = String.format(
-                            context.getString(R.string.week_days_name_column),
-                            getWeekDayName(fixDayOfWeek(position)))
+                        context.getString(R.string.week_days_name_column),
+                        getWeekDayName(fixDayOfWeek(position))
+                    )
                 }
 
                 itemDayView.visibility = View.VISIBLE
@@ -152,18 +157,21 @@ class MonthAdapter internal constructor(mainActivityDependency: MainActivityDepe
                     val events = getEvents(day.jdn, monthEvents)
                     val isHoliday = isWeekEnd(day.dayOfWeek) || hasAnyHolidays(events)
 
-                    itemDayView.setDayOfMonthItem(day.isToday, originalPosition == selectedDay,
-                            events.size > 0, hasDeviceEvents(events), isHoliday,
-                            if (isArabicDigit)
-                                daysPaintResources.arabicDigitsTextSize
-                            else
-                                daysPaintResources.persianDigitsTextSize,
-                            day.jdn, position - 6 - startingDayOfWeek,
-                            getShiftWorkTitle(day.jdn, true))
+                    itemDayView.setDayOfMonthItem(
+                        day.isToday, originalPosition == selectedDay,
+                        events.isNotEmpty(), hasDeviceEvents(events), isHoliday,
+                        if (isArabicDigit)
+                            daysPaintResources.arabicDigitsTextSize
+                        else
+                            daysPaintResources.persianDigitsTextSize,
+                        day.jdn, position - 6 - startingDayOfWeek,
+                        getShiftWorkTitle(day.jdn, true)
+                    )
 
-                    itemDayView.contentDescription = getA11yDaySummary(context,
-                            day.jdn, day.isToday, monthEvents,
-                            day.isToday, withOtherCalendars = false, withTitle = true
+                    itemDayView.contentDescription = getA11yDaySummary(
+                        context,
+                        day.jdn, day.isToday, monthEvents,
+                        day.isToday, withOtherCalendars = false, withTitle = true
                     )
 
                     itemDayView.visibility = View.VISIBLE

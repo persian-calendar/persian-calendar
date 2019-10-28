@@ -146,7 +146,7 @@ fun isNightModeEnabled(context: Context): Boolean =
 
 fun formatDate(date: AbstractDate): String =
     if (numericalDatePreferred)
-        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim { it <= ' ' }
+        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
     else
         String.format(
             if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
@@ -1242,6 +1242,7 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
 fun getDateFromEvent(event: BaseEvent): AbstractDate = when (event) {
     is IslamicCalendarEvent -> event.date
     is GregorianCalendarEvent -> event.date
+    is DeviceCalendarEvent -> event.date
     is PersianCalendarEvent -> event.date
     else -> PersianDate(getTodayJdn())
 }
@@ -1632,10 +1633,10 @@ fun applyAppLanguage(context: Context) {
 fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
     val desc = event.description
     var title = event.title
-    if (!TextUtils.isEmpty(desc))
-        title += " (" + Html.fromHtml(event.description).toString().trim { it <= ' ' } + ")"
+    if (desc.isNotEmpty())
+        title += " (" + Html.fromHtml(event.description).toString().trim() + ")"
 
-    return title.replace("\n", " ").trim { it <= ' ' }
+    return title.replace("\n", " ").trim()
 }
 
 fun getEventsTitle(

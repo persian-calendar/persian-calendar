@@ -414,7 +414,7 @@ fun update(context: Context, updateDate: Boolean) {
                     insertRLM = isRTL
                 )
                 if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
-                    setTextViewText(R.id.nonholidays, nonHolidays.trim { it <= ' ' })
+                    setTextViewText(R.id.nonholidays, nonHolidays.trim())
                 } else {
                     setViewVisibility(R.id.nonholidays, View.GONE)
                 }
