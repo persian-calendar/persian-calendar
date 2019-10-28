@@ -12,12 +12,6 @@ interface BaseEvent {
     val isHoliday: Boolean
 }
 
-data class DeviceCalendarEvent(
-    val id: Int, override val title: String, val description: String,
-    val start: Date, val end: Date, val stringDate: String, val date: CivilDate,
-    val color: String, override val isHoliday: Boolean
-) : BaseEvent
-
 data class GregorianCalendarEvent(
     val date: CivilDate, override val title: String,
     override val isHoliday: Boolean
