@@ -43,7 +43,7 @@ android {
     }
 
     val appVerboseVersion =
-        defaultConfig.versionName + "-" + arrayOf(
+        defaultConfig.versionName + "-" + listOf(
             "git rev-parse --abbrev-ref HEAD",
             "git rev-list HEAD --count",
             "git rev-parse --short HEAD"
