@@ -60,8 +60,6 @@ import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.sqrt
 
-//import com.byagowi.persiancalendar.entities.Reminder;
-
 // This should be called before any use of Utils on the activity and services
 fun initUtils(context: Context) {
     updateStoredPreference(context)
@@ -1831,78 +1829,3 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
         }
     })
 }
-
-//    public static List<Reminder> getReminderDetails() {
-//        return sReminderDetails;
-//    }
-
-//    private static List<Reminder> updateSavedReminders(Context context) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        String storedJson = prefs.getString(REMINDERS_STORE_KEY, "[]");
-//        if (TextUtils.isEmpty(storedJson))
-//            storedJson = "[]";
-//
-//        List<Reminder> reminders = new ArrayList<>();
-//        try {
-//            JSONArray jsonArray = new JSONArray(storedJson);
-//            int length = jsonArray.length();
-//            for (int i = 0; i < length; ++i) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                reminders.add(new Reminder(
-//                        jsonObject.getInt("id"),
-//                        jsonObject.getString("name"),
-//                        jsonObject.getString("info"),
-//                        ReminderUtils.timeUnitFromString(jsonObject.getString("unit")),
-//                        jsonObject.getInt("quantity"),
-//                        jsonObject.getLong("startTime")
-//                ));
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return reminders;
-//    }
-//
-//    public static void storeReminders(Context context, List<Reminder> reminders) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//
-//        try {
-//            JSONArray json = new JSONArray();
-//            for (Reminder reminder : reminders) {
-//                JSONObject object = new JSONObject();
-//                object.put("id", reminder.id);
-//                object.put("name", reminder.name);
-//                object.put("info", reminder.info);
-//                object.put("unit", ReminderUtils.timeUnitToString(reminder.unit));
-//                object.put("quantity", reminder.quantity);
-//                object.put("startTime", reminder.startTime);
-//                json.put(object);
-//            }
-//
-//            String serializedJson = json.toString();
-//
-//            // Just don't store huge objects
-//            if (serializedJson.length() > 8000)
-//                return;
-//
-//            SharedPreferences.Editor edit = prefs.edit();
-//            edit.putString(REMINDERS_STORE_KEY, serializedJson);
-//            edit.apply();
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Nullable
-//    public static Reminder getReminderById(int id) {
-//        for (Reminder reminder : sReminderDetails) {
-//            if (reminder.id == id) return reminder;
-//        }
-//        return null;
-//    }
