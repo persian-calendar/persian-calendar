@@ -71,8 +71,8 @@
     <string name="moonInScorpio">القمر في العقرب</string>
 
     <string name="events">المناسبات</string>
-    <string name="no_event">تعذّر العثور على أحداث  أو مناسبات أو عُطَل لليوم</string>
-    <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطَل إذهب إلى الإعدادات > المناسبات</string>
+    <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم</string>
+    <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطل إذهب إلى الإعدادات > المناسبات</string>
 
     <string name="sunriseSunView">الشروق</string>
     <string name="middaySunView">الظهر</string>
@@ -84,7 +84,7 @@
     <string name="fajr">أذان الفجر</string>
     <string name="sunrise">الشروق</string>
     <string name="dhuhr">أذان الظهر</string>
-    <string name="asr">أذان العصر	</string>
+    <string name="asr">أذان العصر</string>
     <string name="sunset">الغروب</string>
     <string name="maghrib">أذان المغرب</string>
     <string name="isha">أذان العشاء</string>
@@ -118,7 +118,7 @@
 
     <!-- Settings -->
     <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
-    <string name="pref_header_widget_location">المُصغر والتنبيهات</string>
+    <string name="pref_header_widget_location">المصغر والتنبيهات</string>
     <string name="pref_header_location_athan">المكان والأذان</string>
 
     <!--Interface and Calendar Settings-->
@@ -148,20 +148,23 @@
     <string name="showing_clock_in_24">إستخدام نظام 24 ساعة</string>
 
     <!--Widget and Notification Settings-->
-    <string name="widget_text_color">لون النص في المُصغر</string>
-    <string name="select_widgets_text_color">إختيار لونٍ للنص في  المُصغر (الودجت)</string>
-    <string name="clock_on_widget">الساعة في المُصغر</string>
-    <string name="showing_clock_on_widget">إظهار الساعة في المُصغر (الودجت)</string>
+    <string name="widget_text_color">لون النص في المصغر</string>
+    <string name="select_widgets_text_color">إختيار لونٍ للنص في المصغر (الودجت)</string>
+    <string name="clock_on_widget">الساعة في المصغر</string>
+    <string name="showing_clock_on_widget">إظهار الساعة في المصغر (الودجت)</string>
     <string name="iran_time">توقيت إيران</string>
-    <string name="showing_iran_time">إظهار المُصغر (الودجت) والتنبيهات بتوقيت إيران</string>
-    <string name="customize_widget">تخصيص المُصغر</string>
+    <string name="showing_iran_time">إظهار المصغر (الودجت) والتنبيهات بتوقيت إيران</string>
+    <string name="customize_widget">تخصيص المصغر</string>
     <string name="which_one_to_show">إظهار/إخفاء العناصر</string>
-    <string name="customize_widget_summary">إختيار العناصر الظاهرة في التنبيهات والمُصغر (الودجت)</string>
+    <string name="customize_widget_summary">إختيار العناصر الظاهرة في التنبيهات والمصغر (الودجت)</string>
     <string name="ask_user_to_set_location">حدد مكانك من الإعدادات > المكان والأذان، لإظهار أوقات الصلوات هنا</string>
     <string name="notify_date">تاريخ اليوم في تنبيه</string>
-    <string name="enable_notify">إظهار التواريخ في  تنبيهٍ دائمي</string>
+    <string name="enable_notify">إظهار التواريخ في تنبيهٍ دائمي</string>
     <string name="notify_date_lock_screen">إظهار التنبيه في شاشة القفل</string>
-    <string name="notify_date_lock_screen_summary">فقط إذا كانت الشاشة مَحميّة</string>
+    <string name="notify_date_lock_screen_summary">فقط إذا كانت الشاشة محميّة</string>
+    <string name="widget_background_color">لون خلفية المصغر</string>
+    <string name="select_widgets_background_color">إختيار لونٍ لخلفية المصغر</string>
+
 
     <!--Location and Athan-->
     <string name="gps_location">تحديد المكان باستخدام الـGPS</string>
@@ -213,7 +216,7 @@
     <string name="version">الإصدار %1$s</string>
     <string name="about_license">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
-    <string name="about_license_sum">راجع  رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
+    <string name="about_license_sum">راجع رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
     <string name="about_license_dialog_close">إغلاق</string>
 
     <string name="about_support_developers">دعم المطورين</string>
@@ -227,9 +230,9 @@
     <!--TalkBack, a11y-->
     <string name="previous_month">الشهر السابق</string>
     <string name="next_month">الشهر القادم</string>
-    <string name="week_days_name_column">عَمود %1$s في جدول التواريخ</string>
-    <string name="equivalent_to">ما يُعادل</string>
-    <string name="holiday_reason">عُطلة لأن</string>
+    <string name="week_days_name_column">عمود %1$s في جدول التواريخ</string>
+    <string name="equivalent_to">ما يعادل</string>
+    <string name="holiday_reason">عطلة لأن</string>
     <string name="nth_week_of_year">الأسبوع %1$s من السنة</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
@@ -243,7 +246,7 @@
     <string name="n_hours">%1$s ساعات</string>
     <string name="n_minutes_and_hours">%1$s ساعات و %2$s دقائق</string>
     <string name="device_info">معلومات الجهاز</string>
-    <string name="center_align_widgets_summary">توسيط المصغر  4x1 و 2x2</string>
+    <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
     <string name="n_till">%1$s إلى %2$s</string>
     <string name="shift_work_record_title">%1$s أيام %2$s</string>
@@ -257,7 +260,5 @@
     <string name="map">خريطة</string>
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
-    <string name="widget_background_color">Widget Background Color</string>
-    <string name="select_widgets_background_color">Select custom color for widgets background</string>
 
 </resources>
