@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 
 const val TAG = "Utils"
 val twoSeconds = TimeUnit.SECONDS.toMillis(2)
-val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 //
 //
 //
@@ -20,7 +19,6 @@ val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-var sAllEnabledEvents: List<BaseEvent> = emptyList()
 val emptyStringList: Array<String>? = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
 var persianMonths = emptyStringList
 var islamicMonths = emptyStringList
@@ -56,9 +54,6 @@ var talkBackEnabled = false
 var prayTimes: PrayTimes? = null
 var cachedCityKey = ""
 var cachedCity: CityItem? = null
-var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
-var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
-var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
 var sShiftWorkTitles: Map<String, String> = emptyMap()
 var sShiftWorkStartingJdn: Long = -1
 var sShiftWorkRecurs = true
