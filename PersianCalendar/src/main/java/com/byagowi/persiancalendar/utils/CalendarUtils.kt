@@ -68,12 +68,8 @@ fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance()
     set(Calendar.DAY_OF_MONTH, civilDate.dayOfMonth)
 }
 
-fun getInitialOfWeekDay(position: Int): String {
-    weekDaysInitials?.let {
-        return it[position % 7]
-    }
-    return ""
-}
+fun getInitialOfWeekDay(position: Int): String =
+    weekDaysInitials.let { if (it == null) "" else it[position % 7] }
 
 fun getWeekDayName(date: AbstractDate): String {
     val civilDate = if (date is CivilDate)
@@ -81,10 +77,7 @@ fun getWeekDayName(date: AbstractDate): String {
     else
         CivilDate(date)
 
-    weekDays?.let {
-        return it[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7]
-    }
-    return ""
+    return weekDays.let { if (it == null) "" else it[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7] }
 }
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
@@ -92,10 +85,11 @@ fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     return ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
 }
 
-fun getMonthName(date: AbstractDate): String {
-    val months = monthsNamesOfCalendar(date) ?: return ""
-    return months[date.month - 1]
-}
+fun getMonthName(date: AbstractDate): String =
+    monthsNamesOfCalendar(date).let {
+        if (it == null) ""
+        else it[date.month - 1]
+    }
 
 fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     val yearOfNextMonth = if (month == 12) year + 1 else year
@@ -295,18 +289,16 @@ fun getEvents(
     return result
 }
 
-fun getIslamicOffset(context: Context): Int {
+fun getIslamicOffset(context: Context): Int =
     try {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val islamicOffset = prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
-        islamicOffset?.run {
-            return Integer.parseInt(replace("+", ""))
+        prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET).run {
+            if (this == null) 0
+            else Integer.parseInt(replace("+", ""))
         }
-        return 0
     } catch (ignore: Exception) {
-        return 0
+        0
     }
-}
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
