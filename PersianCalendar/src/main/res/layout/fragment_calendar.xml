@@ -1,54 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbars="none">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/calendarViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/grid_calendar_height"
-                    android:background="?attr/colorMonthsBackground" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    style="@style/TabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/colorCard" />
-
-                <com.byagowi.persiancalendar.ui.calendar.TabsViewPager
-                    android:id="@+id/tabsViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="220sp" />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/today_button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/return_to_today"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_restore_modified" />
+            android:orientation="vertical">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/calendarViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/grid_calendar_height"
+                android:background="?attr/colorMonthsBackground" />
 
-</layout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                style="@style/TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/colorCard" />
+
+            <com.byagowi.persiancalendar.ui.calendar.TabsViewPager
+                android:id="@+id/tabsViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="220sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/today_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/return_to_today"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_restore_modified" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

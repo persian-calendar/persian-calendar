@@ -1,55 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/owghat_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/owghat_content"
+    <!-- sun content -->
+    <com.byagowi.persiancalendar.ui.calendar.times.SunView
+        android:id="@+id/sunView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp" />
+
+    <!-- Times -->
+    <com.byagowi.persiancalendar.ui.calendar.times.UntouchableRecyclerView
+        android:id="@+id/timesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_item"
+        android:paddingBottom="@dimen/padding_item" />
 
-        <!-- sun content -->
-        <com.byagowi.persiancalendar.ui.calendar.times.SunView
-            android:id="@+id/sunView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <!-- Times -->
-        <com.byagowi.persiancalendar.ui.calendar.times.UntouchableRecyclerView
-            android:id="@+id/timesRecyclerView"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/city_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_item"
-            android:paddingBottom="@dimen/padding_item" />
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/text_size_title"
+            tools:text="City" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/city_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorAccent"
-                android:textSize="@dimen/text_size_title"
-                tools:text="City" />
-
-            <ImageView
-                android:id="@+id/more_owghat"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:tint="?attr/colorAccent"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/more_owghat"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:tint="?attr/colorAccent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down" />
 
     </LinearLayout>
 
-</layout>
+</LinearLayout>
+

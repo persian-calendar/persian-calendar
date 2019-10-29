@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.R
@@ -35,7 +34,9 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<WidgetPreferenceLayoutBinding>(this, R.layout.widget_preference_layout)
+        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).apply {
+            setContentView(root)
+        }
 
         supportFragmentManager.commit {
             add(R.id.preference_fragment_holder, FragmentWidgetNotification(), "TAG")

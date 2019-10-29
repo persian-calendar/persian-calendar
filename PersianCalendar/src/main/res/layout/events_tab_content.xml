@@ -1,77 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <FrameLayout
+    <TextView
+        android:id="@+id/shift_work_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:shadowColor="?attr/colorTextNormal"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:textAlignment="center"
+        android:textColor="?attr/colorCard"
+        android:textSize="70sp" />
+
+    <LinearLayout
+        android:id="@+id/events_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="220dp"
+        android:orientation="vertical"
+        android:padding="@dimen/card_padding">
 
         <TextView
-            android:id="@+id/shift_work_title"
+            android:id="@+id/no_event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:shadowColor="?attr/colorTextNormal"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="2"
+            android:text="@string/no_event"
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="@dimen/text_size_description" />
+
+        <TextView
+            android:id="@+id/holiday_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextHoliday"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_description" />
+
+        <TextView
+            android:id="@+id/device_event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextNormal"
+            android:textSize="@dimen/text_size_description" />
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_description" />
+
+        <TextView
+            android:id="@+id/event_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="?attr/colorCard"
-            android:textSize="70sp" />
+            android:textColor="?attr/colorTextSecond"
+            android:textSize="12sp" />
 
-        <LinearLayout
-            android:id="@+id/events_content"
+        <View
+            android:id="@+id/today_button_space"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="220dp"
-            android:orientation="vertical"
-            android:padding="@dimen/card_padding">
+            android:layout_height="58sp" />
 
-            <TextView
-                android:id="@+id/no_event"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_event"
-                android:textColor="?attr/colorTextSecond"
-                android:textSize="@dimen/text_size_description" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/holiday_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextHoliday"
-                android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_description" />
-
-            <TextView
-                android:id="@+id/device_event_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextNormal"
-                android:textSize="@dimen/text_size_description" />
-
-            <TextView
-                android:id="@+id/event_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_description" />
-
-            <TextView
-                android:id="@+id/event_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textColor="?attr/colorTextSecond"
-                android:textSize="12sp" />
-
-            <View
-                android:id="@+id/today_button_space"
-                android:layout_width="match_parent"
-                android:layout_height="58sp" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-</layout>
+</FrameLayout>

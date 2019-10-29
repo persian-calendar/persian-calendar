@@ -1,92 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calendars_tab_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/calendars_tab_content"
+    <TextView
+        android:id="@+id/week_day_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:textColor="?attr/colorAccent"
+        android:textSize="@dimen/text_size_title"
+        tools:text="Calendar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarsRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_item"
+        android:paddingBottom="@dimen/padding_item" />
+
+    <TextView
+        android:id="@+id/equinox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:textColor="?attr/colorTextNormal"
+        android:textIsSelectable="true"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/extra_information_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_item">
 
         <TextView
-            android:id="@+id/week_day_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center_vertical"
-            android:textColor="?attr/colorAccent"
-            android:textSize="@dimen/text_size_title"
-            tools:text="Calendar" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/calendarsRecyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:paddingTop="@dimen/padding_item"
-            android:paddingBottom="@dimen/padding_item" />
-
-        <TextView
-            android:id="@+id/equinox"
+            android:id="@+id/zodiac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="?attr/colorTextNormal"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_size_description" />
 
-        <LinearLayout
-            android:id="@+id/extra_information_container"
+        <TextView
+            android:id="@+id/diff_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_item">
+            android:gravity="center"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_description"
+            tools:text="@string/date_diff_text" />
 
-            <TextView
-                android:id="@+id/zodiac"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_description" />
-
-            <TextView
-                android:id="@+id/diff_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-            <TextView
-                android:id="@+id/start_and_end_of_year_diff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="?attr/colorTextNormal"
-                android:textIsSelectable="true"
-                android:textSize="@dimen/text_size_description"
-                tools:text="@string/date_diff_text" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/more_calendar"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_gravity="center"
-            android:paddingBottom="@dimen/padding_item"
-            android:tint="?attr/colorAccent"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down" />
+        <TextView
+            android:id="@+id/start_and_end_of_year_diff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="?attr/colorTextNormal"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_description"
+            tools:text="@string/date_diff_text" />
 
     </LinearLayout>
 
-</layout>
+    <ImageView
+        android:id="@+id/more_calendar"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_gravity="center"
+        android:paddingBottom="@dimen/padding_item"
+        android:tint="?attr/colorAccent"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down" />
+
+</LinearLayout>
