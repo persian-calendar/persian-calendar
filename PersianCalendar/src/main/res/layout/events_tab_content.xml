@@ -59,6 +59,7 @@
             android:id="@+id/event_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:textAlignment="center"
             android:textColor="?attr/colorTextSecond"
             android:textSize="12sp" />
