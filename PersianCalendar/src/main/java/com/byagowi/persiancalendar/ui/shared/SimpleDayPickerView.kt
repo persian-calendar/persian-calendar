@@ -16,17 +16,19 @@ import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
 class SimpleDayPickerView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs), AdapterView.OnItemSelectedListener, DayPickerView {
+
     private var jdn: Long = -1
     private var selectedDayListener: DayPickerView.OnSelectedDayChangedListener? = null
 
     val binding: SimpleDayPickerViewBinding =
         SimpleDayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
-            calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
+            calendarTypeSpinner.adapter = ArrayAdapter(
+                getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                getOrderedCalendarEntities(getContext()))
+                getOrderedCalendarEntities(getContext())
+            )
 
             calendarTypeSpinner.setSelection(0)
             calendarTypeSpinner.onItemSelectedListener = this@SimpleDayPickerView
@@ -70,19 +72,26 @@ class SimpleDayPickerView @JvmOverloads constructor(
         }
 
         val date = getDateFromJdnOfCalendar(
-                selectedCalendarType,
-                jdn)
+            selectedCalendarType,
+            jdn
+        )
 
         // years spinner init.
         val years = ArrayList<StringWithValueItem>()
         val YEARS = 200
         val startingYearOnYearSpinner = date.year - YEARS / 2
         for (i in 0 until YEARS) {
-            years.add(StringWithValueItem(i + startingYearOnYearSpinner,
-                    formatNumber(i + startingYearOnYearSpinner)))
+            years.add(
+                StringWithValueItem(
+                    i + startingYearOnYearSpinner,
+                    formatNumber(i + startingYearOnYearSpinner)
+                )
+            )
         }
-        binding.yearSpinner.adapter = ArrayAdapter(context,
-                android.R.layout.simple_spinner_dropdown_item, years)
+        binding.yearSpinner.adapter = ArrayAdapter(
+            context,
+            android.R.layout.simple_spinner_dropdown_item, years
+        )
         binding.yearSpinner.setSelection(YEARS / 2)
         //
 
@@ -91,12 +100,18 @@ class SimpleDayPickerView @JvmOverloads constructor(
         val monthsTitle = monthsNamesOfCalendar(date)
         monthsTitle?.let {
             for (i in 1..12) {
-                months.add(StringWithValueItem(i,
-                    it[i - 1] + " / " + formatNumber(i)))
+                months.add(
+                    StringWithValueItem(
+                        i,
+                        it[i - 1] + " / " + formatNumber(i)
+                    )
+                )
             }
         }
-        binding.monthSpinner.adapter = ArrayAdapter(context,
-                android.R.layout.simple_spinner_dropdown_item, months)
+        binding.monthSpinner.adapter = ArrayAdapter(
+            context,
+            android.R.layout.simple_spinner_dropdown_item, months
+        )
         binding.monthSpinner.setSelection(date.month - 1)
         //
 
@@ -105,8 +120,10 @@ class SimpleDayPickerView @JvmOverloads constructor(
         for (i in 1..31) {
             days.add(StringWithValueItem(i, formatNumber(i)))
         }
-        binding.daySpinner.adapter = ArrayAdapter(context,
-                android.R.layout.simple_spinner_dropdown_item, days)
+        binding.daySpinner.adapter = ArrayAdapter(
+            context,
+            android.R.layout.simple_spinner_dropdown_item, days
+        )
         binding.daySpinner.setSelection(date.dayOfMonth - 1)
     }
 
@@ -119,9 +136,7 @@ class SimpleDayPickerView @JvmOverloads constructor(
         selectedDayListener?.onSelectedDayChanged(jdn)
     }
 
-    override fun onNothingSelected(adapterView: AdapterView<*>?) {
-
-    }
+    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
 
     override fun setOnSelectedDayChangedListener(listener: (Long) -> Unit) {
         selectedDayListener = object : DayPickerView.OnSelectedDayChangedListener {

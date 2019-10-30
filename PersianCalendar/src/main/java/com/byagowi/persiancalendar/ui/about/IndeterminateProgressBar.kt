@@ -10,8 +10,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 
 class IndeterminateProgressBar @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : ProgressBar(context, attrs) {
     init {
         isIndeterminate = true

@@ -11,6 +11,7 @@ import android.view.View
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
+import kotlin.math.min
 
 class ItemDayView : View {
     private lateinit var resource: DaysPaintResources
@@ -34,21 +35,9 @@ class ItemDayView : View {
         this.resource = resource
     }
 
-    // These constructors shouldn't be used
+    // This constructor shouldn't be used
     // as the first one reuses resource retrieval across the days
-    constructor(context: Context) : super(context) {
-        if (context is Activity) {
-            resource = DaysPaintResources(context)
-        }
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        if (context is Activity) {
-            resource = DaysPaintResources(context)
-        }
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
         if (context is Activity) {
             resource = DaysPaintResources(context)
         }
@@ -58,7 +47,7 @@ class ItemDayView : View {
         super.onDraw(canvas)
         val width = width
         val height = height
-        val radius = Math.min(width, height) / 2
+        val radius = min(width, height) / 2
 
         val isModernTheme = resource.style == R.style.ModernTheme
         getDrawingRect(bounds)

@@ -18,12 +18,10 @@ import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.duolingo.open.rtlviewpager.RtlViewPager
 
 // https://stackoverflow.com/a/47774679
-class TabsViewPager : RtlViewPager {
+class TabsViewPager @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    RtlViewPager(context, attrs) {
+
     private var mCurrentView: View? = null
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     public override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var heightMeasureSpec: Int = heightMeasureSpec
@@ -42,7 +40,12 @@ class TabsViewPager : RtlViewPager {
         requestLayout()
     }
 
-    class TabsAdapter internal constructor(fm: FragmentManager, private val mAppDependency: AppDependency, private val mTabs: List<View>, private val mTitles: List<String>) : FragmentStatePagerAdapter(fm) {
+    class TabsAdapter internal constructor(
+        fm: FragmentManager,
+        private val mAppDependency: AppDependency,
+        private val mTabs: List<View>,
+        private val mTitles: List<String>
+    ) : FragmentStatePagerAdapter(fm) {
         private var mCurrentPosition = -1
 
         override fun getPageTitle(position: Int): CharSequence? = mTitles[position]
@@ -82,8 +85,10 @@ class TabsViewPager : RtlViewPager {
             @get:JvmName("getView_")
             var view: View? = null
 
-            override fun onCreateView(inflater: LayoutInflater,
-                                      container: ViewGroup?, savedInstanceState: Bundle?): View? = view
+            override fun onCreateView(
+                inflater: LayoutInflater,
+                container: ViewGroup?, savedInstanceState: Bundle?
+            ): View? = view
 
             companion object {
                 internal fun newInstance(view: View) = TabFragment().also { it.view = view }

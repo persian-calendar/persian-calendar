@@ -5,17 +5,10 @@ import android.util.AttributeSet
 
 import androidx.preference.EditTextPreference
 
-class NumericPreference : EditTextPreference {
+class NumericPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    EditTextPreference(context, attrs) {
 
     private var mDouble: Double? = null
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context) : super(context)
 
     override fun getText(): String? = mDouble.toString()
 

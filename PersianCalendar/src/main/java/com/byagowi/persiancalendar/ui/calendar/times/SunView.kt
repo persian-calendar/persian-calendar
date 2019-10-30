@@ -27,10 +27,8 @@ import kotlin.math.cos
  * MEHDIMYADI
  */
 
-class SunView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : View(context, attrs), ValueAnimator.AnimatorUpdateListener {
+class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
     private val FULL_DAY = Clock(24, 0).toInt().toFloat()
     private val HALF_DAY = Clock(12, 0).toInt().toFloat()
@@ -102,29 +100,58 @@ class SunView @JvmOverloads constructor(
             try {
                 theme.resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true)
                 val HorizonColor = ContextCompat.getColor(context, typedValue.resourceId)
-                horizonColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor)
+                horizonColor =
+                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor)
                 theme.resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true)
                 val TimelineColor = ContextCompat.getColor(context, typedValue.resourceId)
-                timelineColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor)
+                timelineColor =
+                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor)
                 theme.resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true)
                 val taglineColor = ContextCompat.getColor(context, typedValue.resourceId)
-                taggingColor = typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor)
-                nightColor = typedArray.getColor(R.styleable.SunView_SunViewNightColor, ContextCompat.getColor(context, R.color.sViewNightColor))
-                dayColor = typedArray.getColor(R.styleable.SunView_SunViewDayColor, ContextCompat.getColor(context, R.color.sViewDayColor))
-                daySecondColor = typedArray.getColor(R.styleable.SunView_SunViewDaySecondColor, ContextCompat.getColor(context, R.color.sViewDaySecondColor))
-                sunColor = typedArray.getColor(R.styleable.SunView_SunViewSunColor, ContextCompat.getColor(context, R.color.sViewSunColor))
-                sunBeforeMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewBeforeMiddayColor, ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor))
-                sunAfterMiddayColor = typedArray.getColor(R.styleable.SunView_SunViewAfterMiddayColor, ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor))
-                sunEveningColor = typedArray.getColor(R.styleable.SunView_SunViewEveningColor, ContextCompat.getColor(context, R.color.sViewSunEveningColor))
+                taggingColor =
+                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor)
+                nightColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewNightColor,
+                    ContextCompat.getColor(context, R.color.sViewNightColor)
+                )
+                dayColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewDayColor,
+                    ContextCompat.getColor(context, R.color.sViewDayColor)
+                )
+                daySecondColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewDaySecondColor,
+                    ContextCompat.getColor(context, R.color.sViewDaySecondColor)
+                )
+                sunColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewSunColor,
+                    ContextCompat.getColor(context, R.color.sViewSunColor)
+                )
+                sunBeforeMiddayColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewBeforeMiddayColor,
+                    ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
+                )
+                sunAfterMiddayColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewAfterMiddayColor,
+                    ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
+                )
+                sunEveningColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewEveningColor,
+                    ContextCompat.getColor(context, R.color.sViewSunEveningColor)
+                )
                 theme.resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true)
                 val SunriseTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                sunriseTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunriseTextColor, SunriseTextColor)
+                sunriseTextColor = typedArray.getColor(
+                    R.styleable.SunView_SunViewSunriseTextColor,
+                    SunriseTextColor
+                )
                 theme.resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true)
                 val MiddayTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                middayTextColor = typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor)
+                middayTextColor =
+                    typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor)
                 theme.resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true)
                 val SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                sunsetTextColor = typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor)
+                sunsetTextColor =
+                    typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor)
 
                 theme.resolveAttribute(R.attr.colorTextNormal, typedValue, true)
                 colorTextNormal = ContextCompat.getColor(context, typedValue.resourceId)
@@ -248,20 +275,32 @@ class SunView @JvmOverloads constructor(
         mPaint.color = colorTextSecond
         canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, mPaint)
         if (!TextUtils.isEmpty(remainingString)) {
-            canvas.drawText(remainingString, width * if (isRTL) 0.30f else 0.70f, height * .94f, mPaint)
+            canvas.drawText(
+                remainingString,
+                width * if (isRTL) 0.30f else 0.70f,
+                height * .94f,
+                mPaint
+            )
         }
 
         // draw sun
         if (current in 0.17f..0.83f) {
 
             @ColorInt
-            val color = argbEvaluator.evaluate(current,
-                    sunBeforeMiddayColor, sunAfterMiddayColor) as Int
+            val color = argbEvaluator.evaluate(
+                current,
+                sunBeforeMiddayColor, sunAfterMiddayColor
+            ) as Int
 
             mSunPaint.color = color
             //mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
-            canvas.drawCircle(width * current, getY((width * current).toInt(), segmentByPixel, (height * 0.9f).toInt()), height * 0.09f, mSunPaint)
+            canvas.drawCircle(
+                width * current,
+                getY((width * current).toInt(), segmentByPixel, (height * 0.9f).toInt()),
+                height * 0.09f,
+                mSunPaint
+            )
             //mPaint.clearShadowLayer();
             //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
         } else {
@@ -300,8 +339,10 @@ class SunView @JvmOverloads constructor(
         canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
         val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
         moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-        moonOval.set(px - abs(arcWidth) / 2f, py + eOffset - radius - r,
-                px + abs(arcWidth) / 2f, py + eOffset - radius + r)
+        moonOval.set(
+            px - abs(arcWidth) / 2f, py + eOffset - radius - r,
+            px + abs(arcWidth) / 2f, py + eOffset - radius + r
+        )
         canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
         canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
         canvas.drawLine(px, py - radius, px, py + radius, moonPaintD)
@@ -356,22 +397,29 @@ class SunView @JvmOverloads constructor(
         }
 
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
-        val remaining = Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
-        dayLengthString = String.format(context.getString(R.string.length_of_day),
-                formatNumber(dayLength.hour),
-                formatNumber(dayLength.minute))
+        val remaining =
+            Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
+        dayLengthString = String.format(
+            context.getString(R.string.length_of_day),
+            formatNumber(dayLength.hour),
+            formatNumber(dayLength.minute)
+        )
         remainingString = if (remaining.toInt() == 0) {
             ""
         } else {
-            String.format(context.getString(R.string.remaining_daylight),
-                    formatNumber(remaining.hour),
-                    formatNumber(remaining.minute))
+            String.format(
+                context.getString(R.string.remaining_daylight),
+                formatNumber(remaining.hour),
+                formatNumber(remaining.minute)
+            )
         }
 
         argbEvaluator = ArgbEvaluator()
 
-        linearGradient = LinearGradient(getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
-                dayColor, daySecondColor, Shader.TileMode.MIRROR)
+        linearGradient = LinearGradient(
+            getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
+            dayColor, daySecondColor, Shader.TileMode.MIRROR
+        )
 
         if (immediate) {
             current = c

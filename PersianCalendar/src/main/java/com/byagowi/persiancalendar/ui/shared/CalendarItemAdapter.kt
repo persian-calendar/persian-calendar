@@ -10,7 +10,9 @@ import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
-class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
+class CalendarItemAdapter internal constructor(context: Context) :
+    RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
+
     private val mCalendarFont: Typeface = getCalendarFragmentFont(context)
     private var mCalendars: List<CalendarType> = ArrayList()
     internal var isExpanded = false
@@ -29,7 +31,8 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CalendarItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+            LayoutInflater.from(parent.context), parent, false
+        )
 
         return ViewHolder(binding)
     }
@@ -40,7 +43,8 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
 
     override fun getItemCount(): Int = mCalendars.size
 
-    inner class ViewHolder(private val binding: CalendarItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(private val binding: CalendarItemBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
 
@@ -64,9 +68,11 @@ class CalendarItemAdapter internal constructor(context: Context) : RecyclerView.
             binding.day.contentDescription = ""
             binding.day.text = formatNumber(date.dayOfMonth)
             binding.monthYear.contentDescription = ""
-            binding.monthYear.text = String.format("%s\n%s",
-                    getMonthName(date),
-                    formatNumber(date.year))
+            binding.monthYear.text = String.format(
+                "%s\n%s",
+                getMonthName(date),
+                formatNumber(date.year)
+            )
         }
 
         override fun onClick(view: View?) {

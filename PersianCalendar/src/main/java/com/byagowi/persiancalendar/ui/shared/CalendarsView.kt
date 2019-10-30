@@ -16,17 +16,15 @@ import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 
-class CalendarsView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : FrameLayout(context, attrs) {
+class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    FrameLayout(context, attrs) {
 
     private var mCalendarsViewExpandListener: OnCalendarsViewExpandListener? = null
     private var mOnShowHideTodayButton: OnShowHideTodayButton? = null
 
     private val mCalendarItemAdapter = CalendarItemAdapter(context)
     private val mBinding: CalendarsViewBinding =
-        CalendarsViewBinding.inflate(LayoutInflater.from(context), this,true).apply {
+        CalendarsViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
             root.setOnClickListener { expand(!mCalendarItemAdapter.isExpanded) }
             extraInformationContainer.visibility = View.GONE
             calendarsRecyclerView.layoutManager = LinearLayoutManager(context).apply {
@@ -54,33 +52,40 @@ class CalendarsView @JvmOverloads constructor(
     fun expand(expanded: Boolean) {
         mCalendarItemAdapter.isExpanded = expanded
 
-        mBinding.moreCalendar.setImageResource(if (expanded)
-            R.drawable.ic_keyboard_arrow_up
-        else
-            R.drawable.ic_keyboard_arrow_down)
+        mBinding.moreCalendar.setImageResource(
+            if (expanded)
+                R.drawable.ic_keyboard_arrow_up
+            else
+                R.drawable.ic_keyboard_arrow_down
+        )
         mBinding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
 
         mCalendarsViewExpandListener?.onCalendarsViewExpand()
     }
 
-    fun showCalendars(jdn: Long,
-                      chosenCalendarType: CalendarType,
-                      calendarsToShow: List<CalendarType>) {
+    fun showCalendars(
+        jdn: Long,
+        chosenCalendarType: CalendarType,
+        calendarsToShow: List<CalendarType>
+    ) {
         val context = context ?: return
 
         mCalendarItemAdapter.setDate(calendarsToShow, jdn)
         mBinding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
         mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
-        mBinding.zodiac.visibility = if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
+        mBinding.zodiac.visibility =
+            if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
 
         val diffDays = abs(getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
             if (isIranTime()) {
-                mBinding.weekDayName.text = String.format("%s (%s)",
-                        mBinding.weekDayName.text,
-                        context.getString(R.string.iran_time))
+                mBinding.weekDayName.text = String.format(
+                    "%s (%s)",
+                    mBinding.weekDayName.text,
+                    context.getString(R.string.iran_time)
+                )
             }
             mOnShowHideTodayButton?.onShowHideTodayButton(false)
             mBinding.diffDate.visibility = View.GONE
@@ -93,11 +98,13 @@ class CalendarsView @JvmOverloads constructor(
             val yearDiff = civilOffset.year - 2000
             val monthDiff = civilOffset.month - 1
             val dayOfMonthDiff = civilOffset.dayOfMonth - 1
-            var text = String.format(context.getString(R.string.date_diff_text),
-                    formatNumber(diffDays.toInt()),
-                    formatNumber(yearDiff),
-                    formatNumber(monthDiff),
-                    formatNumber(dayOfMonthDiff))
+            var text = String.format(
+                context.getString(R.string.date_diff_text),
+                formatNumber(diffDays.toInt()),
+                formatNumber(yearDiff),
+                formatNumber(monthDiff),
+                formatNumber(dayOfMonthDiff)
+            )
             if (diffDays <= 30) {
                 text = text.split("(")[0]
             }
@@ -106,43 +113,58 @@ class CalendarsView @JvmOverloads constructor(
 
         run {
             val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
-            val startOfYear = getDateOfCalendar(chosenCalendarType,
-                    mainDate.year, 1, 1)
+            val startOfYear = getDateOfCalendar(
+                chosenCalendarType,
+                mainDate.year, 1, 1
+            )
             val startOfNextYear = getDateOfCalendar(
-                    chosenCalendarType, mainDate.year + 1, 1, 1)
+                chosenCalendarType, mainDate.year + 1, 1, 1
+            )
             val startOfYearJdn = startOfYear.toJdn()
             val endOfYearJdn = startOfNextYear.toJdn() - 1
             val currentWeek = calculateWeekOfYear(jdn, startOfYearJdn)
             val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
-            val startOfYearText = String.format(context.getString(R.string.start_of_year_diff),
-                    formatNumber((jdn - startOfYearJdn).toInt()),
-                    formatNumber(currentWeek),
-                    formatNumber(mainDate.month))
-            val endOfYearText = String.format(context.getString(R.string.end_of_year_diff),
-                    formatNumber((endOfYearJdn - jdn).toInt()),
-                    formatNumber(weeksCount - currentWeek),
-                    formatNumber(12 - mainDate.month))
-            mBinding.startAndEndOfYearDiff.text = String.format("%s\n%s", startOfYearText, endOfYearText)
+            val startOfYearText = String.format(
+                context.getString(R.string.start_of_year_diff),
+                formatNumber((jdn - startOfYearJdn).toInt()),
+                formatNumber(currentWeek),
+                formatNumber(mainDate.month)
+            )
+            val endOfYearText = String.format(
+                context.getString(R.string.end_of_year_diff),
+                formatNumber((endOfYearJdn - jdn).toInt()),
+                formatNumber(weeksCount - currentWeek),
+                formatNumber(12 - mainDate.month)
+            )
+            mBinding.startAndEndOfYearDiff.text =
+                String.format("%s\n%s", startOfYearText, endOfYearText)
 
             var equinox = ""
             if (getMainCalendar() == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
                 if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                     val addition = if (mainDate.month == 12) 1 else 0
                     val springEquinox = getSpringEquinox(mainDate.toJdn())
-                    equinox = String.format(context.getString(R.string.spring_equinox),
-                            formatNumber(mainDate.year + addition),
-                            getFormattedClock(
-                                    Clock(springEquinox.get(Calendar.HOUR_OF_DAY),
-                                            springEquinox.get(Calendar.MINUTE)), true))
+                    equinox = String.format(
+                        context.getString(R.string.spring_equinox),
+                        formatNumber(mainDate.year + addition),
+                        getFormattedClock(
+                            Clock(
+                                springEquinox.get(Calendar.HOUR_OF_DAY),
+                                springEquinox.get(Calendar.MINUTE)
+                            ), true
+                        )
+                    )
                 }
             }
             mBinding.equinox.text = equinox
-            mBinding.equinox.visibility = if (TextUtils.isEmpty(equinox)) View.GONE else View.VISIBLE
+            mBinding.equinox.visibility =
+                if (TextUtils.isEmpty(equinox)) View.GONE else View.VISIBLE
         }
 
-        mBinding.root.contentDescription = getA11yDaySummary(context, jdn,
-                diffDays == 0L, null, withZodiac = true, withOtherCalendars = true, withTitle = true
+        mBinding.root.contentDescription = getA11yDaySummary(
+            context, jdn,
+            diffDays == 0L, null, withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }
 

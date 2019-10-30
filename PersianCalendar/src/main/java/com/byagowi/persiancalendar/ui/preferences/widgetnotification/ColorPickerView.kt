@@ -38,10 +38,8 @@ import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
 
-class ColorPickerView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : LinearLayout(context, attrs) {
+class ColorPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    LinearLayout(context, attrs) {
 
     private var colorResultView: TextView
     private var redSeekBar: SeekBar
@@ -55,7 +53,12 @@ class ColorPickerView @JvmOverloads constructor(
 
     val pickerColor: Int
         @ColorInt
-        get() = Color.argb(alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+        get() = Color.argb(
+            alphaSeekBar.progress,
+            redSeekBar.progress,
+            greenSeekBar.progress,
+            blueSeekBar.progress
+        )
 
     init {
         orientation = VERTICAL
@@ -75,7 +78,9 @@ class ColorPickerView @JvmOverloads constructor(
         val seekBarPadding = density.toInt() * 8
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = showColor()
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
+                showColor()
+
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
@@ -121,11 +126,14 @@ class ColorPickerView @JvmOverloads constructor(
             addView(greenSeekBar)
             addView(blueSeekBar)
             addView(alphaSeekBar)
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                weight = 1f
-            }
-            measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            layoutParams =
+                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                    weight = 1f
+                }
+            measure(
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+            )
         }
 
         colorFrame = object : FrameLayout(context) {
@@ -138,8 +146,10 @@ class ColorPickerView @JvmOverloads constructor(
             }
         }.apply {
             addView(colorResultView)
-            layoutParams = LayoutParams(seekBars.measuredHeight,
-                    LayoutParams.MATCH_PARENT)
+            layoutParams = LayoutParams(
+                seekBars.measuredHeight,
+                LayoutParams.MATCH_PARENT
+            )
             setBackgroundColor(Color.LTGRAY)
             val framePadding = density.toInt()
             setPadding(framePadding, framePadding, framePadding, framePadding)
@@ -169,8 +179,10 @@ class ColorPickerView @JvmOverloads constructor(
         for (color in colors) {
             val view = View(context).apply {
                 setBackgroundColor(color)
-                layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT)
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
             }
 
             val checkerBoard = createCheckerBoard(12)
@@ -197,8 +209,10 @@ class ColorPickerView @JvmOverloads constructor(
     }
 
     private fun showColor() {
-        val color = Color.argb(alphaSeekBar.progress, redSeekBar.progress,
-                greenSeekBar.progress, blueSeekBar.progress)
+        val color = Color.argb(
+            alphaSeekBar.progress, redSeekBar.progress,
+            greenSeekBar.progress, blueSeekBar.progress
+        )
         colorResultView.apply {
             setBackgroundColor(color)
             text = if (colorCodeVisibility)
@@ -226,22 +240,40 @@ class ColorPickerView @JvmOverloads constructor(
 
     fun hideAlphaSeekbar() {
         alphaSeekBar.visibility = GONE
-        seekBars.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-        colorFrame.layoutParams = LayoutParams(seekBars.measuredHeight,
-                LayoutParams.MATCH_PARENT)
+        seekBars.measure(
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        )
+        colorFrame.layoutParams = LayoutParams(
+            seekBars.measuredHeight,
+            LayoutParams.MATCH_PARENT
+        )
     }
 }
 
 // https://stackoverflow.com/a/58471997
 fun createCheckerBoard(tileSize: Int): Paint {
     return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        shader = BitmapShader(Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888).apply {
-            Canvas(this).apply {
-                val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL; color = 0x22000000 }
-                drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
-                drawRect(tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill)
-            }
-        }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        shader = BitmapShader(
+            Bitmap.createBitmap(
+                tileSize * 2,
+                tileSize * 2,
+                Bitmap.Config.ARGB_8888
+            ).apply {
+                Canvas(this).apply {
+                    val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        style = Paint.Style.FILL; color = 0x22000000
+                    }
+                    drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
+                    drawRect(
+                        tileSize.toFloat(),
+                        tileSize.toFloat(),
+                        tileSize * 2f,
+                        tileSize * 2f,
+                        fill
+                    )
+                }
+            }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
+        )
     }
 }
