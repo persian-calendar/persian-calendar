@@ -136,9 +136,7 @@ class CalendarFragment : DaggerFragment() {
                         true
                     }
                     val cityName = getCityName(context, false)
-                    if (!TextUtils.isEmpty(cityName)) {
-                        text = cityName
-                    }
+                    if (cityName.isNotEmpty()) text = cityName
                 }
                 timesRecyclerView.run {
                     layoutManager = FlexboxLayoutManager(context).apply {
@@ -299,7 +297,7 @@ class CalendarFragment : DaggerFragment() {
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
                 val color = event.color
-                if (!TextUtils.isEmpty(color)) {
+                if (color.isNotEmpty()) {
                     try {
                         ds.color = Integer.parseInt(color)
                     } catch (e: Exception) {
@@ -356,7 +354,7 @@ class CalendarFragment : DaggerFragment() {
             eventMessage.visibility = View.GONE
             noEvent.visibility = View.VISIBLE
 
-            if (!TextUtils.isEmpty(holidays)) {
+            if (holidays.isNotEmpty()) {
                 noEvent.visibility = View.GONE
                 holidayTitle.text = holidays
                 val holidayContent = getString(R.string.holiday_reason) + "\n" + holidays
@@ -381,7 +379,7 @@ class CalendarFragment : DaggerFragment() {
                 deviceEventTitle.visibility = View.GONE
             }
 
-            if (!TextUtils.isEmpty(nonHolidays)) {
+            if (nonHolidays.isNotEmpty()) {
                 noEvent.visibility = View.GONE
                 eventTitle.text = nonHolidays
                 contentDescription.append("\n")
@@ -400,8 +398,7 @@ class CalendarFragment : DaggerFragment() {
                 .getStringSet(PREF_HOLIDAY_TYPES, emptySet())
             if (enabledTypes == null || enabledTypes.size == 0) {
                 noEvent.visibility = View.GONE
-                if (!TextUtils.isEmpty(messageToShow))
-                    messageToShow.append("\n")
+                if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 
                 val title = getString(R.string.warn_if_events_not_set)
                 val ss = SpannableString(title)
@@ -417,7 +414,7 @@ class CalendarFragment : DaggerFragment() {
                 contentDescription.append(title)
             }
 
-            if (!TextUtils.isEmpty(messageToShow)) {
+            if (messageToShow.isNotEmpty()) {
                 eventMessage.text = messageToShow
                 eventMessage.movementMethod = LinkMovementMethod.getInstance()
 

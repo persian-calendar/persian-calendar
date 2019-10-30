@@ -9,7 +9,6 @@ import android.media.RingtoneManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
-import android.text.TextUtils
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -163,12 +162,9 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             if (resultCode == RESULT_OK) {
                 val uri: Parcelable? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                 if (uri != null) {
-                    var ringtoneTitle = RingtoneManager
+                    val ringtoneTitle = RingtoneManager
                             .getRingtone(context, uri.toString().toUri())
-                            .getTitle(context)
-                    if (TextUtils.isEmpty(ringtoneTitle)) {
-                        ringtoneTitle = ""
-                    }
+                            .getTitle(context) ?: ""
 
                     appDependency.sharedPreferences.edit {
                         putString(PREF_ATHAN_NAME, ringtoneTitle)

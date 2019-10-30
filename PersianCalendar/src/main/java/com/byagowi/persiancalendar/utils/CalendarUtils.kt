@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.text.Html
-import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
 import androidx.core.app.ActivityCompat
@@ -150,14 +149,14 @@ fun getA11yDaySummary(
     }
 
     val shift = getShiftWorkTitle(jdn, false)
-    if (!TextUtils.isEmpty(shift)) {
+    if (shift.isNotEmpty()) {
         result.append("\n")
         result.append(shift)
     }
 
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, getSpacedComma())
-        if (!TextUtils.isEmpty(otherCalendars)) {
+        if (otherCalendars.isNotEmpty()) {
             result.append("\n")
             result.append("\n")
             result.append(context.getString(R.string.equivalent_to))
@@ -173,7 +172,7 @@ fun getA11yDaySummary(
         showDeviceCalendarEvents = true,
         insertRLM = false
     )
-    if (!TextUtils.isEmpty(holidays)) {
+    if (holidays.isNotEmpty()) {
         result.append("\n")
         result.append("\n")
         result.append(context.getString(R.string.holiday_reason))
@@ -188,7 +187,7 @@ fun getA11yDaySummary(
         showDeviceCalendarEvents = true,
         insertRLM = false
     )
-    if (!TextUtils.isEmpty(nonHolidays)) {
+    if (nonHolidays.isNotEmpty()) {
         result.append("\n")
         result.append("\n")
         result.append(context.getString(R.string.events))
@@ -214,7 +213,7 @@ fun getA11yDaySummary(
 
     if (withZodiac) {
         val zodiac = getZodiacInfo(context, jdn, false)
-        if (!TextUtils.isEmpty(zodiac)) {
+        if (zodiac.isNotEmpty()) {
             result.append("\n")
             result.append("\n")
             result.append(zodiac)

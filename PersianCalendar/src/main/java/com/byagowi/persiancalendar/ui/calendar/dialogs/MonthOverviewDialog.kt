@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,27 +43,35 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         for (i in 0 until monthLength) {
             val jdn = baseJdn + i
             val events = getEvents(jdn, deviceEvents)
-            val holidays = getEventsTitle(events,
+            val holidays = getEventsTitle(
+                events,
                 holiday = true,
                 compact = false,
                 showDeviceCalendarEvents = false,
                 insertRLM = false
             )
-            val nonHolidays = getEventsTitle(events,
+            val nonHolidays = getEventsTitle(
+                events,
                 holiday = false,
                 compact = false,
                 showDeviceCalendarEvents = true,
                 insertRLM = false
             )
-            if (!(TextUtils.isEmpty(holidays) && TextUtils.isEmpty(nonHolidays)))
-                records.add(MonthOverviewRecord(dayTitleSummary(
-                        getDateFromJdnOfCalendar(mainCalendar, jdn)), holidays, nonHolidays))
+            if (holidays.isNotEmpty() || nonHolidays.isNotEmpty())
+                records.add(
+                    MonthOverviewRecord(
+                        dayTitleSummary(
+                            getDateFromJdnOfCalendar(mainCalendar, jdn)
+                        ), holidays, nonHolidays
+                    )
+                )
         }
         if (records.size == 0)
             records.add(MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""))
 
         val binding = MonthOverviewDialogBinding.inflate(
-                LayoutInflater.from(context), null, false)
+            LayoutInflater.from(context), null, false
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = ItemAdapter(records)
 
@@ -75,13 +82,19 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         return bottomSheetDialog
     }
 
-    internal class MonthOverviewRecord(val title: String, val holidays: String, val nonHolidays: String)
+    internal class MonthOverviewRecord(
+        val title: String,
+        val holidays: String,
+        val nonHolidays: String
+    )
 
-    private inner class ItemAdapter internal constructor(private val mRows: List<MonthOverviewRecord>) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+    private inner class ItemAdapter internal constructor(private val mRows: List<MonthOverviewRecord>) :
+        RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = MonthOverviewItemBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false)
+                LayoutInflater.from(parent.context), parent, false
+            )
 
             return ViewHolder(binding)
         }
@@ -92,16 +105,18 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         override fun getItemCount(): Int = mRows.size
 
-        internal inner class ViewHolder(var mBinding: MonthOverviewItemBinding) : RecyclerView.ViewHolder(mBinding.root) {
+        internal inner class ViewHolder(var mBinding: MonthOverviewItemBinding) :
+            RecyclerView.ViewHolder(mBinding.root) {
 
             fun bind(position: Int) {
                 val record = mRows[position]
                 mBinding.run {
                     title.text = record.title
                     holidays.text = record.holidays
-                    holidays.visibility = if (TextUtils.isEmpty(record.holidays)) View.GONE else View.VISIBLE
+                    holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE
                     nonHolidays.text = record.nonHolidays
-                    nonHolidays.visibility = if (TextUtils.isEmpty(record.nonHolidays)) View.GONE else View.VISIBLE
+                    nonHolidays.visibility =
+                        if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
                 }
             }
         }

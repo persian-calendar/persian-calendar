@@ -2,12 +2,9 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.os.Build
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -274,7 +271,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         mPaint.style = Paint.Style.FILL
         mPaint.color = colorTextSecond
         canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, mPaint)
-        if (!TextUtils.isEmpty(remainingString)) {
+        if (remainingString.isNotEmpty()) {
             canvas.drawText(
                 remainingString,
                 width * if (isRTL) 0.30f else 0.70f,

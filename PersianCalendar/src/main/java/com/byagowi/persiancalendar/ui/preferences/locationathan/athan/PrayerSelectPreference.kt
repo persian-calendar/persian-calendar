@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.preference.DialogPreference
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
@@ -14,7 +13,7 @@ class PrayerSelectPreference(context: Context, attrs: AttributeSet?) :
         get() = getPersistedString("").splitIgnoreEmpty(",").toSet()
         set(prayers) {
             val wasBlocking = shouldDisableDependents()
-            persistString(TextUtils.join(",", prayers))
+            persistString(prayers.joinToString(","))
             val isBlocking = shouldDisableDependents()
             if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking)
         }

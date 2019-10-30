@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -61,8 +60,10 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
                 appDependency.sharedPreferences.edit {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
-                        putString(PREF_OTHER_CALENDARS_KEY, TextUtils.join(",",
-                                ordering.subList(1, ordering.size)))
+                        putString(
+                            PREF_OTHER_CALENDARS_KEY,
+                            ordering.subList(1, ordering.size).joinToString(",")
+                        )
                     }
                 }
             }

@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
-import android.text.TextUtils
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -51,10 +50,7 @@ class AthanNotification : Service() {
         else
             getString(getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
         val cityName = getCityName(this, false)
-        val subtitle = if (TextUtils.isEmpty(cityName))
-            ""
-        else
-            getString(R.string.in_city_time) + " " + cityName
+        val subtitle = if (cityName.isEmpty()) "" else getString(R.string.in_city_time) + " " + cityName
         var notificationBuilder = NotificationCompat.Builder(
             this,
             NOTIFICATION_CHANNEL_ID
@@ -77,7 +73,7 @@ class AthanNotification : Service() {
                     R.layout.custom_notification_ltr
             )
             cv.setTextViewText(R.id.title, title)
-            if (TextUtils.isEmpty(subtitle)) {
+            if (subtitle.isEmpty()) {
                 cv.setViewVisibility(R.id.body, View.GONE)
             } else {
                 cv.setTextViewText(R.id.body, subtitle)

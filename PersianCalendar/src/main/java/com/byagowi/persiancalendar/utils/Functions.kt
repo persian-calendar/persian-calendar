@@ -12,7 +12,6 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.accessibility.AccessibilityManager
@@ -123,7 +122,7 @@ else
         formatNumber(date.year)
     )
 
-fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
+fun getAppLanguage(): String = if (language.isEmpty()) DEFAULT_APP_LANGUAGE else language
 
 fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 

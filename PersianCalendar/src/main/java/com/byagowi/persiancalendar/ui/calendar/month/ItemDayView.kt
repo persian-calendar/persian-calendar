@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.RectF
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
@@ -119,7 +118,7 @@ class ItemDayView : View {
 
         resource.textPaint.color = if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
         resource.textPaint.textSize = textSize / 2f
-        if (!TextUtils.isEmpty(header)) {
+        if (header.isNotEmpty()) {
             val headerXPos = (width - resource.textPaint.measureText(header).toInt()) / 2
             canvas.drawText(header, headerXPos.toFloat(), yPos * 0.87f - bounds.height(), resource.textPaint)
         }

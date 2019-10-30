@@ -9,7 +9,6 @@ import android.location.*
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.text.TextUtils
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -131,9 +130,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         }
 
         var result = ""
-        if (cityName != null && !TextUtils.isEmpty(cityName)) {
-            result = cityName + "\n\n"
-        }
+        if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"
         // this time, with native digits
         result += formatCoordinate(mainActivityDependency.mainActivity,
                 Coordinate(location.latitude, location.longitude,
