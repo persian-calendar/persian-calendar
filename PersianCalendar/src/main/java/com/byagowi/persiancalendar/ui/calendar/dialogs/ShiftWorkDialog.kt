@@ -29,9 +29,7 @@ import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerAppCompatDialogFragment
-import java.util.*
 import javax.inject.Inject
-
 
 class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 

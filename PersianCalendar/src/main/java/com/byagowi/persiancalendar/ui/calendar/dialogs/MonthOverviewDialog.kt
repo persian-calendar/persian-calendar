@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
-import java.util.*
 import javax.inject.Inject
 
 class MonthOverviewDialog : BottomSheetDialogFragment() {

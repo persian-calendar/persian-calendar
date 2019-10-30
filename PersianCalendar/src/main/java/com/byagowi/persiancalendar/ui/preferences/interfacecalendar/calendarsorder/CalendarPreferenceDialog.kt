@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import dagger.android.support.DaggerAppCompatDialogFragment
-import java.util.*
 import javax.inject.Inject
 
 class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {

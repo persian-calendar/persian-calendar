@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.calendar.AbstractDate
-import java.util.*
 import javax.inject.Inject
 
 class MonthFragment : DaggerFragment() {
