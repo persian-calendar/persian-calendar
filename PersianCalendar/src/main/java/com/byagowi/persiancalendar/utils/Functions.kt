@@ -414,7 +414,7 @@ private fun setAlarm(
 ) {
     val triggerTime = Calendar.getInstance()
     triggerTime.timeInMillis = timeInMillis - athanGap
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+    val alarmManager = context.getSystemService<AlarmManager>()
 
     // don't set an alarm in the past
     if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
@@ -593,8 +593,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
     if (now - latestToastShowTime > twoSeconds) {
         createAndShowShortSnackbar(view, resId)
         // https://stackoverflow.com/a/29423018
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
-        audioManager?.playSoundEffect(AudioManager.FX_KEY_CLICK)
+        context.getSystemService<AudioManager>()?.playSoundEffect(AudioManager.FX_KEY_CLICK)
         latestToastShowTime = now
     }
 }
@@ -613,11 +612,10 @@ fun isRTL(context: Context): Boolean =
         context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
     else false
 
-fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) {
+fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
     PreferenceManager.getDefaultSharedPreferences(context).edit {
         putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable)
     }
-}
 
 fun askForLocationPermission(activity: Activity?) {
     if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
@@ -840,8 +838,9 @@ fun updateStoredPreference(context: Context) {
         R.style.LightTheme
     }
 
-    val a11y = context.getSystemService<AccessibilityManager>()
-    talkBackEnabled = a11y != null && a11y.isEnabled && a11y.isTouchExplorationEnabled
+    context.getSystemService<AccessibilityManager>()?.run {
+        talkBackEnabled = isEnabled && isTouchExplorationEnabled
+    }
 }
 
 private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")
