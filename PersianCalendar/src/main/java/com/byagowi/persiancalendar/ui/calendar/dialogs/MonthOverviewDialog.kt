@@ -83,9 +83,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     }
 
     internal class MonthOverviewRecord(
-        val title: String,
-        val holidays: String,
-        val nonHolidays: String
+        val title: String, val holidays: String, val nonHolidays: String
     )
 
     private inner class ItemAdapter internal constructor(private val mRows: List<MonthOverviewRecord>) :

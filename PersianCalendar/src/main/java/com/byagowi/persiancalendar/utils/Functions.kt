@@ -69,7 +69,7 @@ fun getAppTheme(): Int = appTheme
 
 fun getMaxSupportedYear(): Int = 1398
 
-fun getShiftWorks(): ArrayList<ShiftWorkRecord> = ArrayList(sShiftWorks)
+fun getShiftWorks(): List<ShiftWorkRecord> = sShiftWorks
 
 fun getShiftWorkStartingJdn(): Long = sShiftWorkStartingJdn
 

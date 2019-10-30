@@ -77,44 +77,34 @@ class SimpleDayPickerView @JvmOverloads constructor(
         )
 
         // years spinner init.
-        val years = ArrayList<StringWithValueItem>()
-        val YEARS = 200
-        val startingYearOnYearSpinner = date.year - YEARS / 2
-        for (i in 0 until YEARS) {
-            years.add(
-                StringWithValueItem(
-                    i + startingYearOnYearSpinner,
-                    formatNumber(i + startingYearOnYearSpinner)
-                )
-            )
-        }
+        val YEARS_RANGE = 100
         binding.yearSpinner.adapter = ArrayAdapter(
             context,
-            android.R.layout.simple_spinner_dropdown_item, years
+            android.R.layout.simple_spinner_dropdown_item,
+            (date.year - YEARS_RANGE..date.year + YEARS_RANGE)
+                .map { StringWithValueItem(it, formatNumber(it)) }
         )
-        binding.yearSpinner.setSelection(YEARS / 2)
+        binding.yearSpinner.setSelection(YEARS_RANGE)
         //
 
-        // month spinner init.
-        val months = monthsNamesOfCalendar(date).mapIndexed { i, x ->
-            StringWithValueItem(i + 1, x + " / " + formatNumber(i + 1))
-        }
+        // month spinner init
         binding.monthSpinner.adapter = ArrayAdapter(
-            context, android.R.layout.simple_spinner_dropdown_item, months
+            context, android.R.layout.simple_spinner_dropdown_item,
+            monthsNamesOfCalendar(date).mapIndexed { i, x ->
+                StringWithValueItem(i + 1, x + " / " + formatNumber(i + 1))
+            }
         )
         binding.monthSpinner.setSelection(date.month - 1)
         //
 
-        // days spinner init.
-        val days = ArrayList<StringWithValueItem>()
-        for (i in 1..31) {
-            days.add(StringWithValueItem(i, formatNumber(i)))
-        }
+        // days spinner init
         binding.daySpinner.adapter = ArrayAdapter(
             context,
-            android.R.layout.simple_spinner_dropdown_item, days
+            android.R.layout.simple_spinner_dropdown_item,
+            (1..31).map { StringWithValueItem(it, formatNumber(it)) }
         )
         binding.daySpinner.setSelection(date.dayOfMonth - 1)
+        //
     }
 
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {

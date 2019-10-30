@@ -8,13 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.*
-import java.util.*
 
 class CalendarItemAdapter internal constructor(context: Context) :
     RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
 
     private val mCalendarFont: Typeface = getCalendarFragmentFont(context)
-    private var mCalendars: List<CalendarType> = ArrayList()
+    private var mCalendars: List<CalendarType> = emptyList()
     internal var isExpanded = false
         set(expanded) {
             field = expanded
