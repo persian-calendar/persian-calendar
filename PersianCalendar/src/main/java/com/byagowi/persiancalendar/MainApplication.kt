@@ -13,5 +13,6 @@ class MainApplication : DaggerApplication() {
         initUtils(applicationContext)
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = DaggerAppComponent.factory().create(this)
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerAppComponent.factory().create(this)
 }

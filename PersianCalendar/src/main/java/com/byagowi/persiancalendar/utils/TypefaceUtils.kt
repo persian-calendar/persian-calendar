@@ -15,7 +15,8 @@ val isCustomFontEnabled: Boolean
  */
 fun overrideFont(defaultFontNameToOverride: String, face: Typeface) {
     try {
-        val defaultFontTypefaceField = Typeface::class.java.getDeclaredField(defaultFontNameToOverride)
+        val defaultFontTypefaceField =
+            Typeface::class.java.getDeclaredField(defaultFontNameToOverride)
         defaultFontTypefaceField.isAccessible = true
         defaultFontTypefaceField.set(null, face)
     } catch (e: Exception) {
@@ -27,8 +28,8 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface) {
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 
 fun getCalendarFragmentFont(context: Context): Typeface =
-        if (isCustomFontEnabled)
-            Typeface.create("sans-serif-light", Typeface.NORMAL)
-        else
-            getAppFont(context)
+    if (isCustomFontEnabled)
+        Typeface.create("sans-serif-light", Typeface.NORMAL)
+    else
+        getAppFont(context)
 

@@ -384,19 +384,16 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
 fun loadAlarms(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val prefString = prefs.getString(PREF_ATHAN_ALARM, "")
+    val prefString = prefs.getString(PREF_ATHAN_ALARM, "") ?: ""
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
     val calculationMethod = getCalculationMethod()
 
-    if (calculationMethod != null && coordinate != null && !TextUtils.isEmpty(prefString)) {
-        var athanGap: Long = 0
-        try {
-            val athanGapStr = prefs.getString(PREF_ATHAN_GAP, "0")
-            athanGapStr?.let {
-                athanGap = (java.lang.Double.parseDouble(it) * 60.0 * 1000.0).toLong()
-            }
+    if (coordinate != null && prefString.isNotEmpty()) {
+        val athanGap = try {
+            ((prefs.getString(PREF_ATHAN_GAP, "0") ?: "0").toDouble() * 60.0 * 1000.0).toLong()
         } catch (e: NumberFormatException) {
-        }
+            null
+        } ?: 0L
 
         val prayTimes = PrayTimesCalculator.calculate(
             calculationMethod,
@@ -587,40 +584,15 @@ fun getCoordinate(context: Context): Coordinate? {
     if (cityEntity != null)
         return cityEntity.coordinate
 
-    try {
-        val latitudeString = prefs.getString(PREF_LATITUDE, DEFAULT_LATITUDE)
-        val longtitudeString = prefs.getString(PREF_LONGITUDE, DEFAULT_LONGITUDE)
-        val altitudeString = prefs.getString(PREF_ALTITUDE, DEFAULT_ALTITUDE)
+    val coord = Coordinate(
+        (prefs.getString(PREF_LATITUDE, "0") ?: "0").toDoubleOrNull() ?: .0,
+        (prefs.getString(PREF_LONGITUDE, "0") ?: "0").toDoubleOrNull() ?: .0,
+        (prefs.getString(PREF_ALTITUDE, "0") ?: "0").toDoubleOrNull() ?: .0
+    )
 
-        var latitude = "0.0"
-        var longtitude = "0.0"
-        var altitude = "0.0"
-
-        latitudeString?.let {
-            latitude = it
-        }
-
-        longtitudeString?.let {
-            longtitude = it
-        }
-
-        altitudeString?.let {
-            altitude = it
-        }
-
-        val coord = Coordinate(
-            java.lang.Double.parseDouble(latitude),
-            java.lang.Double.parseDouble(longtitude),
-            java.lang.Double.parseDouble(altitude)
-        )
-
-        // If latitude or longitude is zero probably preference is not set yet
-        return if (coord.latitude == 0.0 && coord.longitude == 0.0) null
-        else coord
-
-    } catch (e: NumberFormatException) {
-        return null
-    }
+    // If latitude or longitude is zero probably preference is not set yet
+    return if (coord.latitude == 0.0 && coord.longitude == 0.0) null
+    else coord
 }
 
 fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =

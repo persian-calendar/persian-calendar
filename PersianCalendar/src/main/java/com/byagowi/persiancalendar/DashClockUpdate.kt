@@ -7,12 +7,10 @@ import com.google.android.apps.dashclock.api.DashClockExtension
 import com.google.android.apps.dashclock.api.ExtensionData
 
 class DashClockUpdate : DashClockExtension() {
-
     override fun onUpdateData(reason: Int) {
         setUpdateWhenScreenOn(true)
-        val mainCalendar = getMainCalendar()
         val jdn = getTodayJdn()
-        val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
+        val date = getDateFromJdnOfCalendar(getMainCalendar(), jdn)
         publishUpdate(ExtensionData().visible(true)
                 .icon(getDayIconResource(date.dayOfMonth))
                 .status(getMonthName(date))
