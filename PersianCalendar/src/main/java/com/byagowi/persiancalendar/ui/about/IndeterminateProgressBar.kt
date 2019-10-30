@@ -9,20 +9,11 @@ import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 
-class IndeterminateProgressBar : ProgressBar {
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
-
-    private fun init() {
+class IndeterminateProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : ProgressBar(context, attrs) {
+    init {
         isIndeterminate = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             ValueAnimator.ofArgb(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE).apply {
@@ -30,7 +21,12 @@ class IndeterminateProgressBar : ProgressBar {
                 interpolator = LinearInterpolator()
                 repeatMode = ValueAnimator.RESTART
                 repeatCount = ValueAnimator.INFINITE
-                addUpdateListener { indeterminateDrawable?.setColorFilter(it.animatedValue as Int, PorterDuff.Mode.SRC_ATOP) }
+                addUpdateListener {
+                    indeterminateDrawable?.setColorFilter(
+                        it.animatedValue as Int,
+                        PorterDuff.Mode.SRC_ATOP
+                    )
+                }
                 start()
             }
     }

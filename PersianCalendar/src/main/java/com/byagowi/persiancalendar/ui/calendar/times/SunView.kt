@@ -27,14 +27,17 @@ import kotlin.math.cos
  * MEHDIMYADI
  */
 
-class SunView : View, ValueAnimator.AnimatorUpdateListener {
+class SunView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
     private val FULL_DAY = Clock(24, 0).toInt().toFloat()
     private val HALF_DAY = Clock(12, 0).toInt().toFloat()
-    lateinit var mPaint: Paint
-    lateinit var mSunPaint: Paint
-    lateinit var mSunRaisePaint: Paint
-    lateinit var mDayPaint: Paint
+    var mPaint: Paint
+    var mSunPaint: Paint
+    var mSunRaisePaint: Paint
+    var mDayPaint: Paint
     @ColorInt
     internal var horizonColor: Int = 0
     @ColorInt
@@ -90,24 +93,7 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
     private var moonPhase = 1.0
     private var fontSize: Int = 0
 
-    constructor(context: Context) : super(context) {
-        init(context, null)
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context, attrs)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context, attrs)
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context, attrs)
-    }
-
-    private fun init(context: Context, attrs: AttributeSet?) {
+    init {
         if (attrs != null) {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView)
             val typedValue = TypedValue()

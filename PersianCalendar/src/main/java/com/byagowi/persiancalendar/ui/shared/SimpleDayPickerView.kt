@@ -15,10 +15,26 @@ import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.*
 import java.util.*
 
-class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, DayPickerView {
-    lateinit var binding: SimpleDayPickerViewBinding
+class SimpleDayPickerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : FrameLayout(context, attrs), AdapterView.OnItemSelectedListener, DayPickerView {
     private var jdn: Long = -1
     private var selectedDayListener: DayPickerView.OnSelectedDayChangedListener? = null
+
+    val binding: SimpleDayPickerViewBinding =
+        SimpleDayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
+            calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                getOrderedCalendarEntities(getContext()))
+
+            calendarTypeSpinner.setSelection(0)
+            calendarTypeSpinner.onItemSelectedListener = this@SimpleDayPickerView
+
+            yearSpinner.onItemSelectedListener = this@SimpleDayPickerView
+            monthSpinner.onItemSelectedListener = this@SimpleDayPickerView
+            daySpinner.onItemSelectedListener = this@SimpleDayPickerView
+        }
 
     override val dayJdnFromView: Long
         get() {
@@ -42,33 +58,6 @@ class SimpleDayPickerView : FrameLayout, AdapterView.OnItemSelectedListener, Day
 
     override val selectedCalendarType: CalendarType
         get() = (binding.calendarTypeSpinner.selectedItem as CalendarTypeItem).type
-
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
-    }
-
-    private fun init(context: Context) {
-        binding = SimpleDayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
-            calendarTypeSpinner.adapter = ArrayAdapter(getContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                getOrderedCalendarEntities(getContext()))
-
-            calendarTypeSpinner.setSelection(0)
-            calendarTypeSpinner.onItemSelectedListener = this@SimpleDayPickerView
-
-            yearSpinner.onItemSelectedListener = this@SimpleDayPickerView
-            monthSpinner.onItemSelectedListener = this@SimpleDayPickerView
-            daySpinner.onItemSelectedListener = this@SimpleDayPickerView
-        }
-    }
 
     override fun setDayJdnOnView(jdn: Long) {
         var jdn = jdn

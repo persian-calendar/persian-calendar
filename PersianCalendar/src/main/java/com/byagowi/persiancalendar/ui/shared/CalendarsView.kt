@@ -16,37 +16,24 @@ import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 
-class CalendarsView : FrameLayout {
+class CalendarsView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : FrameLayout(context, attrs) {
 
-    private lateinit var mBinding: CalendarsViewBinding
     private var mCalendarsViewExpandListener: OnCalendarsViewExpandListener? = null
     private var mOnShowHideTodayButton: OnShowHideTodayButton? = null
-    private val mCalendarItemAdapter by lazy { CalendarItemAdapter(context) }
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
-    }
-
-    fun init(context: Context) {
-        mBinding = CalendarsViewBinding.inflate(LayoutInflater.from(context), this,
-                true)
-
-        mBinding.root.setOnClickListener { expand(!mCalendarItemAdapter.isExpanded) }
-        mBinding.extraInformationContainer.visibility = View.GONE
-
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
-        mBinding.calendarsRecyclerView.layoutManager = linearLayoutManager
-        mBinding.calendarsRecyclerView.adapter = mCalendarItemAdapter
-    }
+    private val mCalendarItemAdapter = CalendarItemAdapter(context)
+    private val mBinding: CalendarsViewBinding =
+        CalendarsViewBinding.inflate(LayoutInflater.from(context), this,true).apply {
+            root.setOnClickListener { expand(!mCalendarItemAdapter.isExpanded) }
+            extraInformationContainer.visibility = View.GONE
+            calendarsRecyclerView.layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
+            }
+            calendarsRecyclerView.adapter = mCalendarItemAdapter
+        }
 
     fun hideMoreIcon() {
         mBinding.moreCalendar.visibility = View.GONE

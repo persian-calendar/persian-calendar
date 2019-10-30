@@ -143,7 +143,6 @@ public class LevelView extends View {
         init(context);
     }
 
-
     public LevelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);

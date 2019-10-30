@@ -38,37 +38,27 @@ import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
 
-class ColorPickerView : LinearLayout {
-    private lateinit var colorResultView: TextView
-    private lateinit var redSeekBar: SeekBar
-    private lateinit var greenSeekBar: SeekBar
-    private lateinit var blueSeekBar: SeekBar
-    private lateinit var alphaSeekBar: SeekBar
-    private lateinit var colorsToPick: LinearLayout
-    private lateinit var seekBars: LinearLayout
-    private lateinit var colorFrame: FrameLayout
+class ColorPickerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : LinearLayout(context, attrs) {
+
+    private var colorResultView: TextView
+    private var redSeekBar: SeekBar
+    private var greenSeekBar: SeekBar
+    private var blueSeekBar: SeekBar
+    private var alphaSeekBar: SeekBar
+    private var colorsToPick: LinearLayout
+    private var seekBars: LinearLayout
+    private var colorFrame: FrameLayout
     private var colorCodeVisibility = false
 
     val pickerColor: Int
         @ColorInt
         get() = Color.argb(alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
-
-    private fun init() {
+    init {
         orientation = VERTICAL
-
-        val context = context ?: return
 
         colorResultView = TextView(context).apply {
             setTextIsSelectable(true)
@@ -85,11 +75,8 @@ class ColorPickerView : LinearLayout {
         val seekBarPadding = density.toInt() * 8
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
-                    showColor()
-
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = showColor()
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
 
