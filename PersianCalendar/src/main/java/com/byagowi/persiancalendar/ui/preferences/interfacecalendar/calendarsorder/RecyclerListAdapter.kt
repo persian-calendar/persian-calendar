@@ -28,9 +28,11 @@ import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import java.util.*
 
-class RecyclerListAdapter constructor(private val calendarPreferenceDialog: CalendarPreferenceDialog,
-                                      private val mainActivityDependency: MainActivityDependency,
-                                      titles: List<String>, values: List<String>, enabled: List<Boolean>) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
+class RecyclerListAdapter constructor(
+    private val calendarPreferenceDialog: CalendarPreferenceDialog,
+    private val mainActivityDependency: MainActivityDependency,
+    titles: List<String>, values: List<String>, enabled: List<Boolean>
+) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     private val titles: MutableList<String>
     private val values: MutableList<String>
@@ -55,7 +57,8 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = CalendarTypeItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+            LayoutInflater.from(parent.context), parent, false
+        )
 
         return ItemViewHolder(binding)
     }
@@ -121,7 +124,8 @@ class RecyclerListAdapter constructor(private val calendarPreferenceDialog: Cale
 
     override fun getItemCount(): Int = titles.size
 
-    inner class ItemViewHolder constructor(private val binding: CalendarTypeItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder constructor(private val binding: CalendarTypeItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(position: Int) {
             binding.checkTextView.text = titles[position]

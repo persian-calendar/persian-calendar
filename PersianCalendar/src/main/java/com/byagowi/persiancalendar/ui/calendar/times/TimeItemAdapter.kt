@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
-
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
-import io.github.persiancalendar.praytimes.Clock
-import io.github.persiancalendar.praytimes.PrayTimes
 import com.byagowi.persiancalendar.utils.getFormattedClock
 import com.google.android.flexbox.FlexboxLayoutManager
+import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.PrayTimes
 
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     private var mPrayTimes: PrayTimes? = null
@@ -21,8 +20,10 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = TimeItemBinding.inflate(LayoutInflater.from(parent.context),
-                parent, false)
+        val binding = TimeItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
+        )
 
         return ViewHolder(binding)
     }
@@ -38,16 +39,19 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         for (i in timeNames.indices) notifyItemChanged(i)
     }
 
-    inner class ViewHolder(private val binding: TimeItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: TimeItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private val emptyLayout = FlexboxLayoutManager.LayoutParams(0, 0)
         private val wrapContent = FlexboxLayoutManager.LayoutParams(
-                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
-                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT)
+            FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
+            FlexboxLayoutManager.LayoutParams.WRAP_CONTENT
+        )
 
         fun bind(position: Int) {
             val timeName = timeNames[position]
             binding.root.layoutParams = if (!isExpanded && !(timeName == R.string.fajr ||
-                            timeName == R.string.dhuhr || timeName == R.string.maghrib))
+                        timeName == R.string.dhuhr || timeName == R.string.maghrib)
+            )
                 emptyLayout
             else
                 wrapContent
@@ -78,6 +82,16 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
 
     companion object {
         @StringRes
-        private val timeNames = intArrayOf(R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight)
+        private val timeNames = intArrayOf(
+            R.string.imsak,
+            R.string.fajr,
+            R.string.sunrise,
+            R.string.dhuhr,
+            R.string.asr,
+            R.string.sunset,
+            R.string.maghrib,
+            R.string.isha,
+            R.string.midnight
+        )
     }
 }

@@ -11,12 +11,16 @@ class DashClockUpdate : DashClockExtension() {
         setUpdateWhenScreenOn(true)
         val jdn = getTodayJdn()
         val date = getDateFromJdnOfCalendar(getMainCalendar(), jdn)
-        publishUpdate(ExtensionData().visible(true)
+        publishUpdate(
+            ExtensionData().visible(true)
                 .icon(getDayIconResource(date.dayOfMonth))
                 .status(getMonthName(date))
                 .expandedTitle(dayTitleSummary(date))
                 .expandedBody(dateStringOfOtherCalendars(jdn, getSpacedComma()))
-                .clickIntent(Intent(applicationContext, MainActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)))
+                .clickIntent(
+                    Intent(applicationContext, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+        )
     }
 }

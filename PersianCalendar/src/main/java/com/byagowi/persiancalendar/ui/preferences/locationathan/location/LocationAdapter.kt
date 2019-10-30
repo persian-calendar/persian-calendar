@@ -9,20 +9,25 @@ import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.utils.getAppLanguage
 
-class LocationAdapter constructor(private val mLocationPreferenceDialog: LocationPreferenceDialog,
-                                  private val mCities: List<CityItem>) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
+class LocationAdapter constructor(
+    private val mLocationPreferenceDialog: LocationPreferenceDialog,
+    private val mCities: List<CityItem>
+) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationAdapter.ViewHolder {
         val binding = ListItemCityNameBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+            LayoutInflater.from(parent.context), parent, false
+        )
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(mCities[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(mCities[position])
 
     override fun getItemCount(): Int = mCities.size
 
-    inner class ViewHolder(private val binding: ListItemCityNameBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(private val binding: ListItemCityNameBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(cityEntity: CityItem) {
             binding.run {
@@ -49,6 +54,6 @@ class LocationAdapter constructor(private val mLocationPreferenceDialog: Locatio
         }
 
         override fun onClick(view: View) =
-                mLocationPreferenceDialog.selectItem(mCities[adapterPosition].key)
+            mLocationPreferenceDialog.selectItem(mCities[adapterPosition].key)
     }
 }

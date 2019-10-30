@@ -82,10 +82,12 @@ class DaysPaintResources(activity: Activity) {
         todayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         val resources = activity.resources
-        eventBarPaint.strokeWidth = resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
+        eventBarPaint.strokeWidth =
+            resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
 
         todayPaint.style = Paint.Style.STROKE
-        todayPaint.strokeWidth = resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
+        todayPaint.strokeWidth =
+            resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
 
         theme.resolveAttribute(R.attr.colorCurrentDay, value, true)
         todayPaint.color = ContextCompat.getColor(activity, value.resourceId)
@@ -97,9 +99,12 @@ class DaysPaintResources(activity: Activity) {
         eventYOffset = resources.getDimensionPixelSize(R.dimen.day_item_event_y_offset)
         appointmentYOffset = resources.getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
         weekNumberTextSize = resources.getDimensionPixelSize(R.dimen.day_item_week_number_text_size)
-        weekDaysInitialTextSize = resources.getDimensionPixelSize(R.dimen.day_item_week_days_initial_text_size)
-        arabicDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
-        persianDigitsTextSize = resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
+        weekDaysInitialTextSize =
+            resources.getDimensionPixelSize(R.dimen.day_item_week_days_initial_text_size)
+        arabicDigitsTextSize =
+            resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
+        persianDigitsTextSize =
+            resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
         textPaint.typeface = getCalendarFragmentFont(activity)
     }

@@ -16,5 +16,9 @@ class CalendarFragmentModel : ViewModel() {
         selectedDayLiveData.postValue(jdn)
     }
 
-    class MonthFragmentUpdateCommand internal constructor(val target: Int, val isEventsModification: Boolean, val currentlySelectedJdn: Long)
+    class MonthFragmentUpdateCommand internal constructor(
+        val target: Int,
+        val isEventsModification: Boolean,
+        val currentlySelectedJdn: Long
+    )
 }

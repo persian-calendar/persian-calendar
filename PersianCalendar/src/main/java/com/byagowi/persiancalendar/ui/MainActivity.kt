@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
-import java.util.*
 import javax.inject.Inject
 
 

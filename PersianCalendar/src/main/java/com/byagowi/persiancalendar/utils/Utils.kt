@@ -2,7 +2,8 @@ package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.StyleRes
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.entities.CityItem
+import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.concurrent.TimeUnit

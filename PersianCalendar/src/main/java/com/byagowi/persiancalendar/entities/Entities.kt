@@ -5,7 +5,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinate
-import java.util.*
 
 interface BaseEvent {
     val title: String

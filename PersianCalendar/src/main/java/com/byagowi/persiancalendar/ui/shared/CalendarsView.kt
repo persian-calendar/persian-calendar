@@ -8,10 +8,10 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import io.github.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
-import io.github.persiancalendar.praytimes.Clock
 import com.byagowi.persiancalendar.utils.*
+import io.github.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.abs
 

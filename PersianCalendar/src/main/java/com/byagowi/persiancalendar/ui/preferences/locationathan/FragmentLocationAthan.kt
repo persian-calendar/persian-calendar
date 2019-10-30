@@ -31,7 +31,10 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.askForLocationPermission
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
+import com.byagowi.persiancalendar.utils.getCoordinate
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -59,17 +62,21 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
 
-        findPreference<ListPreference>("SelectedPrayTimeMethod")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("SelectedPrayTimeMethod")?.summaryProvider =
+            ListPreference.SimpleSummaryProvider.getInstance()
 
         categoryAthan = findPreference(PREF_KEY_ATHAN)
         updateAthanPreferencesState()
 
         updateAthanPreferencesState()
-        ViewModelProviders.of(mainActivityDependency.mainActivity).get(MainActivityModel::class.java)
-                .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
+        ViewModelProviders.of(mainActivityDependency.mainActivity)
+            .get(MainActivityModel::class.java)
+            .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
-        putAthanNameOnSummary(appDependency.sharedPreferences
-                .getString(PREF_ATHAN_NAME, defaultAthanName))
+        putAthanNameOnSummary(
+            appDependency.sharedPreferences
+                .getString(PREF_ATHAN_NAME, defaultAthanName)
+        )
     }
 
     private fun updateAthanPreferencesState() {
@@ -111,11 +118,13 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         when (preference?.key) {
             "pref_key_ringtone" -> {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-                        .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                                Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                    .putExtra(
+                        RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                        Settings.System.DEFAULT_NOTIFICATION_URI
+                    )
                 val customAthanUri = getCustomAthanUri(context)
                 if (customAthanUri != null) {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
@@ -139,11 +148,20 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 try {
                     val activity = mainActivityDependency.mainActivity
 
-                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
                         askForLocationPermission(activity)
                     } else {
-                        GPSLocationDialog().show(childFragmentManager,
-                                GPSLocationDialog::class.java.name)
+                        GPSLocationDialog().show(
+                            childFragmentManager,
+                            GPSLocationDialog::class.java.name
+                        )
                     }
                 } catch (e: Exception) {
                     // Do whatever we were doing till now
@@ -160,11 +178,12 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
 
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                val uri: Parcelable? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                val uri: Parcelable? =
+                    data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                 if (uri != null) {
                     val ringtoneTitle = RingtoneManager
-                            .getRingtone(context, uri.toString().toUri())
-                            .getTitle(context) ?: ""
+                        .getRingtone(context, uri.toString().toUri())
+                        .getTitle(context) ?: ""
 
                     appDependency.sharedPreferences.edit {
                         putString(PREF_ATHAN_NAME, ringtoneTitle)

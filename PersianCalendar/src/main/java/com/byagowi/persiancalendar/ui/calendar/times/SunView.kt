@@ -12,9 +12,11 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getAppFont
+import com.byagowi.persiancalendar.utils.isRTL
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
-import com.byagowi.persiancalendar.utils.*
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos

@@ -29,14 +29,21 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        findPreference<ListPreference>("AppLanguage")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-        findPreference<ListPreference>("Theme")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-        findPreference<ListPreference>("WeekStart")?.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("AppLanguage")?.summaryProvider =
+            ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("Theme")?.summaryProvider =
+            ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("WeekStart")?.summaryProvider =
+            ListPreference.SimpleSummaryProvider.getInstance()
 
         val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
 
         switchPreference?.setOnPreferenceChangeListener { _, _ ->
-            if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    mainActivityDependency.mainActivity,
+                    Manifest.permission.READ_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 askForCalendarPermission(mainActivityDependency.mainActivity)
                 switchPreference.isChecked = false
             } else {

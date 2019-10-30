@@ -14,9 +14,12 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import io.github.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
+import com.byagowi.persiancalendar.utils.createAndShowSnackbar
+import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.getCoordinate
 import dagger.android.support.DaggerFragment
+import io.github.persiancalendar.praytimes.Coordinate
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -70,28 +73,38 @@ class CompassFragment : DaggerFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(mainActivityDependency.mainActivity)
 
-            mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.compass),
-                    getCityName(mainActivityDependency.mainActivity, true))
+            mainActivityDependency.mainActivity.setTitleAndSubtitle(
+                getString(R.string.compass),
+                getCityName(mainActivityDependency.mainActivity, true)
+            )
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.level -> mainActivityDependency.mainActivity.navigateTo(R.id.level)
                     R.id.map -> try {
-                        CustomTabsIntent.Builder().build().launchUrl(mainActivityDependency.mainActivity,
-                                Uri.parse("https://g.co/qiblafinder"))
+                        CustomTabsIntent.Builder().build().launchUrl(
+                            mainActivityDependency.mainActivity,
+                            Uri.parse("https://g.co/qiblafinder")
+                        )
                     } catch (ignore: Exception) {
                     }
-                    R.id.help -> createAndShowSnackbar(view, mainActivityDependency.mainActivity
-                            .getString(if (sensorNotFound)
-                                R.string.compass_not_found
-                            else
-                                R.string.calibrate_compass_summary), 5000)
+                    R.id.help -> createAndShowSnackbar(
+                        view, mainActivityDependency.mainActivity
+                            .getString(
+                                if (sensorNotFound)
+                                    R.string.compass_not_found
+                                else
+                                    R.string.calibrate_compass_summary
+                            ), 5000
+                    )
                     else -> {
                     }
                 }
@@ -101,7 +114,7 @@ class CompassFragment : DaggerFragment() {
                 stopped = !stopped
                 fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
                 fab.contentDescription = mainActivityDependency.mainActivity
-                        .getString(if (stopped) R.string.resume else R.string.stop)
+                    .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
 
@@ -143,7 +156,11 @@ class CompassFragment : DaggerFragment() {
         sensorManager = mainActivity.getSystemService()
         sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         if (sensor != null) {
-            sensorManager?.registerListener(compassListener, sensor, SensorManager.SENSOR_DELAY_FASTEST)
+            sensorManager?.registerListener(
+                compassListener,
+                sensor,
+                SensorManager.SENSOR_DELAY_FASTEST
+            )
             if (coordinate == null) {
                 createAndShowShortSnackbar(mainActivity.coordinator, R.string.set_location)
             }

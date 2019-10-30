@@ -15,7 +15,9 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.getPrayTimeText
+import com.byagowi.persiancalendar.utils.isLocaleRTL
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002
@@ -50,7 +52,8 @@ class AthanNotification : Service() {
         else
             getString(getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
         val cityName = getCityName(this, false)
-        val subtitle = if (cityName.isEmpty()) "" else getString(R.string.in_city_time) + " " + cityName
+        val subtitle =
+            if (cityName.isEmpty()) "" else getString(R.string.in_city_time) + " " + cityName
         var notificationBuilder = NotificationCompat.Builder(
             this,
             NOTIFICATION_CHANNEL_ID

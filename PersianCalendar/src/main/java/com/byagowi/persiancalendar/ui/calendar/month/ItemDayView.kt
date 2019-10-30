@@ -36,7 +36,8 @@ class ItemDayView : View {
 
     // This constructor shouldn't be used
     // as the first one reuses resource retrieval across the days
-    @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
+    @JvmOverloads
+    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
         if (context is Activity) {
             resource = DaysPaintResources(context)
         }
@@ -58,8 +59,10 @@ class ItemDayView : View {
             if (isModernTheme) {
                 canvas.drawRoundRect(drawingRect, 0f, 0f, resource.selectedPaint)
             } else {
-                canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(),
-                        resource.selectedPaint)
+                canvas.drawCircle(
+                    width / 2f, height / 2f, (radius - 5).toFloat(),
+                    resource.selectedPaint
+                )
             }
         }
 
@@ -67,8 +70,10 @@ class ItemDayView : View {
             if (isModernTheme) {
                 canvas.drawRoundRect(drawingRect, 0f, 0f, resource.todayPaint)
             } else {
-                canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(),
-                        resource.todayPaint)
+                canvas.drawCircle(
+                    width / 2f, height / 2f, (radius - 5).toFloat(),
+                    resource.todayPaint
+                )
             }
         }
 
@@ -84,20 +89,26 @@ class ItemDayView : View {
             resource.colorTextDayName
         }
 
-        resource.eventBarPaint.color = if (IsSelected && !isModernTheme) color else resource.colorEventLine
+        resource.eventBarPaint.color =
+            if (IsSelected && !isModernTheme) color else resource.colorEventLine
 
         if (hasEvent) {
-            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                    (height - resource.eventYOffset + yOffsetToApply).toFloat(),
-                    width / 2f + resource.halfEventBarWidth,
-                    (height - resource.eventYOffset + yOffsetToApply).toFloat(), resource.eventBarPaint)
+            canvas.drawLine(
+                width / 2f - resource.halfEventBarWidth,
+                (height - resource.eventYOffset + yOffsetToApply).toFloat(),
+                width / 2f + resource.halfEventBarWidth,
+                (height - resource.eventYOffset + yOffsetToApply).toFloat(), resource.eventBarPaint
+            )
         }
 
         if (hasAppointment) {
-            canvas.drawLine(width / 2f - resource.halfEventBarWidth,
-                    (height - resource.appointmentYOffset + yOffsetToApply).toFloat(),
-                    width / 2f + resource.halfEventBarWidth,
-                    (height - resource.appointmentYOffset + yOffsetToApply).toFloat(), resource.eventBarPaint)
+            canvas.drawLine(
+                width / 2f - resource.halfEventBarWidth,
+                (height - resource.appointmentYOffset + yOffsetToApply).toFloat(),
+                width / 2f + resource.halfEventBarWidth,
+                (height - resource.appointmentYOffset + yOffsetToApply).toFloat(),
+                resource.eventBarPaint
+            )
         }
 
         // TODO: Better to not change resource's paint objects, but for now
@@ -110,24 +121,33 @@ class ItemDayView : View {
         }
 
         val xPos = (width - resource.textPaint.measureText(text).toInt()) / 2
-        val textToMeasureHeight = if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
+        val textToMeasureHeight =
+            if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
         var yPos = (height + bounds.height()) / 2
         yPos += yOffsetToApply
         canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), resource.textPaint)
 
-        resource.textPaint.color = if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
+        resource.textPaint.color =
+            if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
         resource.textPaint.textSize = textSize / 2f
         if (header.isNotEmpty()) {
             val headerXPos = (width - resource.textPaint.measureText(header).toInt()) / 2
-            canvas.drawText(header, headerXPos.toFloat(), yPos * 0.87f - bounds.height(), resource.textPaint)
+            canvas.drawText(
+                header,
+                headerXPos.toFloat(),
+                yPos * 0.87f - bounds.height(),
+                resource.textPaint
+            )
         }
     }
 
-    private fun setAll(text: String, isToday: Boolean, isSelected: Boolean,
-                       hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-                       textSize: Int, jdn: Long, dayOfMonth: Int, isNumber: Boolean,
-                       header: String) {
+    private fun setAll(
+        text: String, isToday: Boolean, isSelected: Boolean,
+        hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
+        textSize: Int, jdn: Long, dayOfMonth: Int, isNumber: Boolean,
+        header: String
+    ) {
         this.text = text
         this.today = isToday
         this.IsSelected = isSelected
@@ -142,16 +162,22 @@ class ItemDayView : View {
         postInvalidate()
     }
 
-    fun setDayOfMonthItem(isToday: Boolean, isSelected: Boolean,
-                          hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-                          textSize: Int, jdn: Long, dayOfMonth: Int, header: String) {
+    fun setDayOfMonthItem(
+        isToday: Boolean, isSelected: Boolean,
+        hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
+        textSize: Int, jdn: Long, dayOfMonth: Int, header: String
+    ) {
         val dayOfMonthString = formatNumber(dayOfMonth)
-        setAll(dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
-                isHoliday, textSize, jdn, dayOfMonth, true, header)
+        setAll(
+            dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
+            isHoliday, textSize, jdn, dayOfMonth, true, header
+        )
     }
 
     fun setNonDayOfMonthItem(text: String, textSize: Int) {
-        setAll(text, false, false, false, false, false,
-                textSize, -1, -1, false, "")
+        setAll(
+            text, false, false, false, false, false,
+            textSize, -1, -1, false, ""
+        )
     }
 }

@@ -54,7 +54,11 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
             progress = volume
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
                     volume = progress
                     audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)
                 }

@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.byagowi.persiancalendar.OFFSET_ARGUMENT
 import com.byagowi.persiancalendar.R
-import io.github.persiancalendar.calendar.AbstractDate
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.CalendarFragmentDependency
@@ -18,6 +17,7 @@ import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
+import io.github.persiancalendar.calendar.AbstractDate
 import java.util.*
 import javax.inject.Inject
 
@@ -30,31 +30,41 @@ class MonthFragment : DaggerFragment() {
     @Inject
     lateinit var calendarFragmentDependency: CalendarFragmentDependency
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val fragmentMonthBinding = FragmentMonthBinding.inflate(inflater,
-                container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val fragmentMonthBinding = FragmentMonthBinding.inflate(
+            inflater,
+            container, false
+        )
         val calendarFragment = calendarFragmentDependency.calendarFragment
         val isRTL = isRTL(mainActivityDependency.mainActivity)
         val offset = arguments?.getInt(OFFSET_ARGUMENT) ?: 0
 
-        fragmentMonthBinding.next.setImageResource(if (isRTL)
-            R.drawable.ic_keyboard_arrow_left
-        else
-            R.drawable.ic_keyboard_arrow_right)
+        fragmentMonthBinding.next.setImageResource(
+            if (isRTL)
+                R.drawable.ic_keyboard_arrow_left
+            else
+                R.drawable.ic_keyboard_arrow_right
+        )
         fragmentMonthBinding.next.setOnClickListener { calendarFragment.changeMonth(if (isRTL) -1 else 1) }
 
-        fragmentMonthBinding.prev.setImageResource(if (isRTL)
-            R.drawable.ic_keyboard_arrow_right
-        else
-            R.drawable.ic_keyboard_arrow_left)
+        fragmentMonthBinding.prev.setImageResource(
+            if (isRTL)
+                R.drawable.ic_keyboard_arrow_right
+            else
+                R.drawable.ic_keyboard_arrow_left
+        )
         fragmentMonthBinding.prev.setOnClickListener { calendarFragment.changeMonth(if (isRTL) 1 else -1) }
 
         fragmentMonthBinding.monthDays.setHasFixedSize(true)
 
 
-        fragmentMonthBinding.monthDays.layoutManager = GridLayoutManager(mainActivityDependency.mainActivity,
-                if (isWeekOfYearEnabled()) 8 else 7)
+        fragmentMonthBinding.monthDays.layoutManager = GridLayoutManager(
+            mainActivityDependency.mainActivity,
+            if (isWeekOfYearEnabled()) 8 else 7
+        )
         ///////
         ///////
         ///////
@@ -79,22 +89,27 @@ class MonthFragment : DaggerFragment() {
 
         val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
         val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
-        val weeksCount = 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
+        val weeksCount =
+            1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
 
         val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
         ///////
         ///////
         ///////
 
-        val calendarFragmentModel = ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel::class.java)
+        val calendarFragmentModel =
+            ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel::class.java)
 
-        val adapter = MonthAdapter(mainActivityDependency, calendarFragmentDependency, days,
-                startingDayOfWeek, weekOfYearStart, weeksCount)
+        val adapter = MonthAdapter(
+            mainActivityDependency, calendarFragmentDependency, days,
+            startingDayOfWeek, weekOfYearStart, weeksCount
+        )
         fragmentMonthBinding.monthDays.adapter = adapter
         fragmentMonthBinding.monthDays.itemAnimator = null
 
         if (calendarFragmentModel.isTheFirstTime &&
-                offset == 0 && calendarFragment.viewPagerPosition == offset) {
+            offset == 0 && calendarFragment.viewPagerPosition == offset
+        ) {
             calendarFragmentModel.isTheFirstTime = false
             calendarFragmentModel.selectDay(getTodayJdn())
             updateTitle(date)
@@ -126,8 +141,9 @@ class MonthFragment : DaggerFragment() {
 
     private fun updateTitle(date: AbstractDate) {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
-                getMonthName(date),
-                formatNumber(date.year))
+            getMonthName(date),
+            formatNumber(date.year)
+        )
     }
 
     companion object {

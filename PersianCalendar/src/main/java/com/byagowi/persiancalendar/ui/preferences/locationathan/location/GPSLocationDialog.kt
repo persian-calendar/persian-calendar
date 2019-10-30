@@ -18,9 +18,10 @@ import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import io.github.persiancalendar.praytimes.Coordinate
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.askForLocationPermission
+import com.byagowi.persiancalendar.utils.formatCoordinate
 import dagger.android.support.DaggerAppCompatDialogFragment
+import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -68,10 +69,10 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
 
         return AlertDialog.Builder(mainActivityDependency.mainActivity)
-                .setPositiveButton("", null)
-                .setNegativeButton("", null)
-                .setView(textView)
-                .create()
+            .setPositiveButton("", null)
+            .setNegativeButton("", null)
+            .setView(textView)
+            .create()
     }
 
     private fun checkGPSProvider() {
@@ -82,14 +83,15 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                 AlertDialog.Builder(mainActivityDependency.mainActivity)
-                        .setMessage(R.string.gps_internet_desc)
-                        .setPositiveButton(R.string.accept) { _, _ ->
-                            try {
-                                mainActivityDependency.mainActivity.startActivity(
-                                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            } catch (ignore: Exception) {
-                            }
-                        }.create().show()
+                    .setMessage(R.string.gps_internet_desc)
+                    .setPositiveButton(R.string.accept) { _, _ ->
+                        try {
+                            mainActivityDependency.mainActivity.startActivity(
+                                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                            )
+                        } catch (ignore: Exception) {
+                        }
+                    }.create().show()
             }
         } catch (ignore: Exception) {
         }
@@ -97,7 +99,14 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     }
 
     private fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivityDependency.mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                mainActivityDependency.mainActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                mainActivityDependency.mainActivity,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             lacksPermission = true
             return
         }
@@ -132,9 +141,13 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         var result = ""
         if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"
         // this time, with native digits
-        result += formatCoordinate(mainActivityDependency.mainActivity,
-                Coordinate(location.latitude, location.longitude,
-                        location.altitude), "\n")
+        result += formatCoordinate(
+            mainActivityDependency.mainActivity,
+            Coordinate(
+                location.latitude, location.longitude,
+                location.altitude
+            ), "\n"
+        )
         textView.text = result
     }
 
@@ -166,7 +179,11 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         super.onPause()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             getLocation()

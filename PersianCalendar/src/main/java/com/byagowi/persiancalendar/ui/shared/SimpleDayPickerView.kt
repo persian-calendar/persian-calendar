@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.*
-import java.util.*
 
 class SimpleDayPickerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

@@ -12,7 +12,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
+import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.DaggerFragment
@@ -30,17 +31,27 @@ class DeviceInformationFragment : DaggerFragment() {
 
     private var clickCount: Int = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
-            mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+            mainActivityDependency.mainActivity.setTitleAndSubtitle(
+                getString(R.string.device_info),
+                ""
+            )
 
             circularRevealFromMiddle(circularReveal)
 
             recyclerView.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-                addItemDecoration(DividerItemDecoration(mainActivityDependency.mainActivity, LinearLayoutManager.VERTICAL))
+                addItemDecoration(
+                    DividerItemDecoration(
+                        mainActivityDependency.mainActivity,
+                        LinearLayoutManager.VERTICAL
+                    )
+                )
                 adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
             }
 
@@ -68,7 +79,8 @@ class DeviceInformationFragment : DaggerFragment() {
                     if (++clickCount % 10 == 0) {
                         BottomSheetDialog(mainActivityDependency.mainActivity).apply {
                             setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
-                                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                                layoutParams =
+                                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                             })
                         }.show()
                     }
@@ -81,102 +93,113 @@ class DeviceInformationFragment : DaggerFragment() {
     }
 }
 
-class DeviceInfoAdapter constructor(activity: Activity, private val rootView: View)
-    : ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(DeviceInfoDiffCallback()) {
+class DeviceInfoAdapter constructor(activity: Activity, private val rootView: View) :
+    ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(
+        DeviceInfoDiffCallback()
+    ) {
     private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
     data class DeviceInfoItem(val title: String, val content: String?, val version: String)
 
     class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
-        override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
+        override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean =
+            oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean = oldItem == newItem
+        override fun areContentsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean =
+            oldItem == newItem
     }
 
     init {
         deviceInfoItemsList.apply {
-            addIfNotNull("Screen Resolution",
-                    getScreenResolution(activity.windowManager),
-                    "")
-
-            addIfNotNull("Android Version",
-                    Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
-                    Build.VERSION.SDK_INT.toString())
-
-            addIfNotNull("Manufacturer",
-                    Build.MANUFACTURER, ""
+            addIfNotNull(
+                "Screen Resolution",
+                getScreenResolution(activity.windowManager),
+                ""
             )
 
             addIfNotNull(
-                    "Brand",
-                    Build.BRAND, ""
+                "Android Version",
+                Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
+                Build.VERSION.SDK_INT.toString()
             )
 
             addIfNotNull(
-                    "Model",
-                    Build.MODEL, ""
+                "Manufacturer",
+                Build.MANUFACTURER, ""
             )
 
             addIfNotNull(
-                    "Product",
-                    Build.PRODUCT, ""
+                "Brand",
+                Build.BRAND, ""
+            )
+
+            addIfNotNull(
+                "Model",
+                Build.MODEL, ""
+            )
+
+            addIfNotNull(
+                "Product",
+                Build.PRODUCT, ""
             )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Build.SUPPORTED_ABIS.forEachIndexed { index, abi ->
-                    addIfNotNull("Instruction CPU ${index + 1}",
-                            abi, "")
+                    addIfNotNull(
+                        "Instruction CPU ${index + 1}",
+                        abi, ""
+                    )
                 }
             } else {
                 addIfNotNull(
-                        "Instruction CPU 1",
-                        Build.CPU_ABI, ""
+                    "Instruction CPU 1",
+                    Build.CPU_ABI, ""
                 )
 
                 addIfNotNull(
-                        "Instruction CPU 2",
-                        Build.CPU_ABI2, ""
+                    "Instruction CPU 2",
+                    Build.CPU_ABI2, ""
                 )
             }
 
             addIfNotNull(
-                    "Instruction Architecture",
-                    Build.DEVICE, ""
+                "Instruction Architecture",
+                Build.DEVICE, ""
             )
 
             addIfNotNull(
-                    "Android Id",
-                    Build.ID, ""
+                "Android Id",
+                Build.ID, ""
             )
 
             addIfNotNull(
-                    "Board",
-                    Build.BOARD, ""
+                "Board",
+                Build.BOARD, ""
             )
 
             addIfNotNull(
-                    "Radio Firmware Version",
-                    Build.getRadioVersion(), ""
+                "Radio Firmware Version",
+                Build.getRadioVersion(), ""
             )
 
             addIfNotNull(
-                    "Build User",
-                    Build.USER, ""
+                "Build User",
+                Build.USER, ""
             )
 
             addIfNotNull(
-                    "Host",
-                    Build.HOST, ""
+                "Host",
+                Build.HOST, ""
             )
 
             addIfNotNull(
-                    "Display",
-                    Build.DISPLAY, ""
+                "Display",
+                Build.DISPLAY, ""
             )
 
             addIfNotNull(
-                    "Device Fingerprints",
-                    Build.FINGERPRINT, ""
+                "Device Fingerprints",
+                Build.FINGERPRINT, ""
             )
         }
 
@@ -200,25 +223,33 @@ class DeviceInfoAdapter constructor(activity: Activity, private val rootView: Vi
     }
 
     private fun addIfNotNull(title: String, content: String?, version: String) {
-        deviceInfoItemsList.add(DeviceInfoItem(
+        deviceInfoItemsList.add(
+            DeviceInfoItem(
                 title,
                 content ?: "Unknown", version
-        ))
+            )
+        )
     }
 
     private fun getScreenResolution(wm: WindowManager): String =
-            String.format(Locale.ENGLISH, "%d*%d pixels",
-                    wm.defaultDisplay.width, wm.defaultDisplay.height)
+        String.format(
+            Locale.ENGLISH, "%d*%d pixels",
+            wm.defaultDisplay.width, wm.defaultDisplay.height
+        )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(DeviceInfoRowBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
+        ViewHolder(
+            DeviceInfoRowBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int = deviceInfoItemsList.size
 
-    inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) : RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
+    inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) :
+        RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
         private var mPosition = 0
 
         init {

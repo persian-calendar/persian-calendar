@@ -36,9 +36,9 @@ public class EarthPosition {
     }
 
     public EarthPosition(float latitude, float longitude, float timezone, int altitude, int temperature, int pressure) {
-        mLatitude = (double) latitude;
-        mLongitude = (double) longitude;
-        mTimezone = (double) timezone;
+        mLatitude = latitude;
+        mLongitude = longitude;
+        mTimezone = timezone;
         mTemperature = temperature;
         mPressure = pressure;
         mAltitude = altitude;

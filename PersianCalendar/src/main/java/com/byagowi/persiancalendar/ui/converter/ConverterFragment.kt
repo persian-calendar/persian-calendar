@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
+import com.byagowi.persiancalendar.utils.getTodayJdn
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -48,8 +49,10 @@ class ConverterFragment : DaggerFragment() {
                 } else {
                     calendarsView.visibility = View.VISIBLE
                     val selectedCalendarType = dayPickerView.selectedCalendarType
-                    calendarsView.showCalendars(jdn, selectedCalendarType,
-                        getOrderedCalendarTypes() - selectedCalendarType)
+                    calendarsView.showCalendars(
+                        jdn, selectedCalendarType,
+                        getOrderedCalendarTypes() - selectedCalendarType
+                    )
                 }
             }
             dayPickerView.setDayJdnOnView(getTodayJdn())

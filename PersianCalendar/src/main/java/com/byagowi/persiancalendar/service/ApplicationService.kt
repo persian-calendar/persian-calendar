@@ -5,9 +5,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
-
-import com.byagowi.persiancalendar.utils.*
-
+import com.byagowi.persiancalendar.utils.loadApp
+import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.updateStoredPreference
 import java.lang.ref.WeakReference
 
 /**

@@ -63,7 +63,7 @@ public class DeviceCalendarEvent implements BaseEvent {
         return color;
     }
 
-    public CivilDate getDate () {
+    public CivilDate getDate() {
         return date;
     }
 

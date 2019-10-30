@@ -20,8 +20,10 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
         val recyclerView = RecyclerView(builder.context).apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = LocationAdapter(this@LocationPreferenceDialog,
-                    getAllCities(context, true))
+            adapter = LocationAdapter(
+                this@LocationPreferenceDialog,
+                getAllCities(context, true)
+            )
         }
 
         builder.setView(recyclerView)

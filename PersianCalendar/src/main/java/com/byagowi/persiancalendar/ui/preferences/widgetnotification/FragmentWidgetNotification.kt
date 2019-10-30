@@ -14,7 +14,7 @@ import java.util.*
 class FragmentWidgetNotification : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
-            addPreferencesFromResource(R.xml.preferences_widget_notification)
+        addPreferencesFromResource(R.xml.preferences_widget_notification)
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val activity = activity ?: return false
@@ -24,12 +24,17 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    arrayOf(0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020)
-                            .map(Long::toInt).toIntArray())
-            colorPickerView.setPickedColor(Color.parseColor(
+                arrayOf(0xFFFFFFFF, 0xFFE65100, 0xFF00796b, 0xFFFEF200, 0xFF202020)
+                    .map(Long::toInt).toIntArray()
+            )
+            colorPickerView.setPickedColor(
+                Color.parseColor(
                     sharedPreferences.getString(
-                            PREF_SELECTED_WIDGET_TEXT_COLOR,
-                            DEFAULT_SELECTED_WIDGET_TEXT_COLOR)))
+                        PREF_SELECTED_WIDGET_TEXT_COLOR,
+                        DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+                    )
+                )
+            )
             colorPickerView.hideAlphaSeekbar()
 
             val padding = (activity.resources.displayMetrics.density * 10).toInt()
@@ -41,9 +46,13 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
                 setPositiveButton(R.string.accept) { _, _ ->
                     try {
                         sharedPreferences.edit {
-                            putString(PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                    String.format(Locale.ENGLISH, "#%06X",
-                                            0xFFFFFF and colorPickerView.pickerColor))
+                            putString(
+                                PREF_SELECTED_WIDGET_TEXT_COLOR,
+                                String.format(
+                                    Locale.ENGLISH, "#%06X",
+                                    0xFFFFFF and colorPickerView.pickerColor
+                                )
+                            )
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -57,12 +66,17 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_BACKGROUND_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    arrayOf(0x00000000L, 0x50000000L, 0xFF000000L)
-                            .map(Long::toInt).toIntArray())
-            colorPickerView.setPickedColor(Color.parseColor(
+                arrayOf(0x00000000L, 0x50000000L, 0xFF000000L)
+                    .map(Long::toInt).toIntArray()
+            )
+            colorPickerView.setPickedColor(
+                Color.parseColor(
                     sharedPreferences.getString(
-                            PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-                            DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR)))
+                        PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                        DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+                    )
+                )
+            )
 
             val padding = (activity.resources.displayMetrics.density * 10).toInt()
             colorPickerView.setPadding(padding, padding, padding, padding)
@@ -73,9 +87,13 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
                 setPositiveButton(R.string.accept) { _, _ ->
                     try {
                         sharedPreferences.edit {
-                            putString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-                                    String.format(Locale.ENGLISH, "#%08X",
-                                            0xFFFFFFFF and colorPickerView.pickerColor.toLong()))
+                            putString(
+                                PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                                String.format(
+                                    Locale.ENGLISH, "#%08X",
+                                    0xFFFFFFFF and colorPickerView.pickerColor.toLong()
+                                )
+                            )
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()

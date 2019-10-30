@@ -120,8 +120,6 @@
 //    }
 
 
-
-
 //    public static List<Reminder> getReminderDetails() {
 //        return sReminderDetails;
 //    }

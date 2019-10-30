@@ -9,7 +9,10 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.text.*
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
@@ -21,7 +24,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.byagowi.persiancalendar.*
-import io.github.persiancalendar.calendar.CivilDate
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -29,8 +31,6 @@ import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.BaseEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
@@ -44,6 +44,9 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import dagger.android.support.DaggerFragment
+import io.github.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 import javax.inject.Inject
 

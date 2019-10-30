@@ -9,14 +9,17 @@ import com.byagowi.persiancalendar.OFFSET_ARGUMENT
 
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 
-class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: CalendarAdapterHelper) : FragmentStatePagerAdapter(fm) {
+class CalendarAdapter(
+    fm: FragmentManager,
+    private val mCalendarAdapterHelper: CalendarAdapterHelper
+) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment =
-            MonthFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
-                }
+        MonthFragment().apply {
+            arguments = Bundle().apply {
+                putInt(OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
             }
+        }
 
     override fun getCount() = mCalendarAdapterHelper.monthsLimit
 
@@ -29,8 +32,10 @@ class CalendarAdapter(fm: FragmentManager, private val mCalendarAdapterHelper: C
             }
         }
 
-        fun positionToOffset(position: Int) = if (isRTL) position - monthsLimit / 2 else monthsLimit / 2 - position
+        fun positionToOffset(position: Int) =
+            if (isRTL) position - monthsLimit / 2 else monthsLimit / 2 - position
 
-        private fun offsetToPosition(position: Int) = (if (isRTL) position else -position) + monthsLimit / 2
+        private fun offsetToPosition(position: Int) =
+            (if (isRTL) position else -position) + monthsLimit / 2
     }
 }
