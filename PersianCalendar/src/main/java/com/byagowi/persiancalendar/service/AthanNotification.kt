@@ -25,9 +25,7 @@ private const val NOTIFICATION_CHANNEL_ID = NOTIFICATION_ID.toString()
 
 class AthanNotification : Service() {
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notificationManager = getSystemService<NotificationManager>()

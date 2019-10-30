@@ -17,9 +17,7 @@ import java.lang.ref.WeakReference
 class ApplicationService : Service() {
     private val receiver = BroadcastReceivers()
 
-    override fun onBind(paramIntent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(paramIntent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         instance = WeakReference(this)

@@ -17,7 +17,6 @@ import com.byagowi.persiancalendar.utils.update
  * Startup broadcast receiver
  */
 class BroadcastReceivers : BroadcastReceiver() {
-
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
         when (intent?.action) {

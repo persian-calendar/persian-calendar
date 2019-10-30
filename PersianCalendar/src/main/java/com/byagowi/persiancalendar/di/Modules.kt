@@ -32,6 +32,7 @@ abstract class AppModule {
 
 @Module
 abstract class CalendarFragmentModule {
+
     @PerChildFragment
     @ContributesAndroidInjector(modules = [MainChildFragmentModule::class])
     internal abstract fun monthFragmentInjector(): MonthFragment

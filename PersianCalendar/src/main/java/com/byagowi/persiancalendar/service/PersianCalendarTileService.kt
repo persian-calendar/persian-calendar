@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.utils.*
  */
 @TargetApi(Build.VERSION_CODES.N)
 class PersianCalendarTileService : TileService() {
+
     override fun onClick() {
         try {
             startActivityAndCollapse(

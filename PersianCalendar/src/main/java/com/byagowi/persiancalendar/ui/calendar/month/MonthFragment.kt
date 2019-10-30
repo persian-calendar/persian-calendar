@@ -146,7 +146,6 @@ class MonthFragment : DaggerFragment() {
     }
 
     companion object {
-
         fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
             val date = getTodayOfCalendar(calendar)
             var month = date.month - offset
