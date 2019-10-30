@@ -3,12 +3,14 @@ package net.androgames.level;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 
 import com.byagowi.persiancalendar.R;
@@ -51,24 +53,30 @@ public class LevelFragment extends DaggerFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        final MainActivity mainActivity = mainActivityDependency.getMainActivity();
         mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
-        FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
+        final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
         provider = new OrientationProvider(mainActivity, binding.levelView);
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
-        binding.bottomAppbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.compass)
-                mainActivity.navigateTo(R.id.compass);
-            return true;
+        binding.bottomAppbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.compass)
+                    mainActivity.navigateTo(R.id.compass);
+                return true;
+            }
         });
-        binding.fab.setOnClickListener(v -> {
-            boolean stop = !provider.isListening();
-            binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
-            binding.fab.setContentDescription(mainActivity.getString(stop ? R.string.stop : R.string.resume));
-            if (stop) provider.startListening();
-            else provider.stopListening();
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean stop = !provider.isListening();
+                binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
+                binding.fab.setContentDescription(mainActivity.getString(stop ? R.string.stop : R.string.resume));
+                if (stop) provider.startListening();
+                else provider.stopListening();
+            }
         });
 
         return binding.getRoot();
