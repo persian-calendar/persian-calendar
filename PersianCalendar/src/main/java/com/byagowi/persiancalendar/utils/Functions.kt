@@ -202,12 +202,11 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String {
     return result
 }
 
-fun getEnabledCalendarTypes(): List<CalendarType> {
-    val result = ArrayList<CalendarType>()
-    result.add(getMainCalendar())
-    result.addAll(otherCalendars)
-    return result
-}
+fun getEnabledCalendarTypes(): List<CalendarType> =
+    ArrayList<CalendarType>().apply {
+        add(getMainCalendar())
+        addAll(otherCalendars)
+    }
 
 private fun loadLanguageResource(context: Context) {
     @RawRes val messagesFile: Int = when (language) {
@@ -335,7 +334,7 @@ fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
 
 @StringRes
 fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
-    if (coordinate == null) return 0
+    coordinate ?: return 0
 
     if (prayTimes == null || dateHasChanged)
         prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), Date(), coordinate)
@@ -637,14 +636,13 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
 }
 
 @StyleRes
-fun getThemeFromName(name: String): Int =
-    when (name) {
-        DARK_THEME -> R.style.DarkTheme
-        MODERN_THEME -> R.style.ModernTheme
-        BLUE_THEME -> R.style.BlueTheme
-        LIGHT_THEME -> R.style.LightTheme
-        else -> R.style.LightTheme
-    }
+fun getThemeFromName(name: String): Int = when (name) {
+    DARK_THEME -> R.style.DarkTheme
+    MODERN_THEME -> R.style.ModernTheme
+    BLUE_THEME -> R.style.BlueTheme
+    LIGHT_THEME -> R.style.LightTheme
+    else -> R.style.LightTheme
+}
 
 fun isRTL(context: Context): Boolean =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)

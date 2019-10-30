@@ -47,7 +47,7 @@ fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset)
 
 fun getAllEnabledEvents(): List<BaseEvent> = sAllEnabledEvents
 
-fun getWeekDayName(position: Int): String? = weekDays?.let { it[position % 7] }
+fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
 fun getAmString(): String = sAM
 
@@ -69,7 +69,7 @@ fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance()
 }
 
 fun getInitialOfWeekDay(position: Int): String =
-    weekDaysInitials.let { if (it == null) "" else it[position % 7] }
+    weekDaysInitials[position % 7]
 
 fun getWeekDayName(date: AbstractDate): String {
     val civilDate = if (date is CivilDate)
@@ -77,7 +77,7 @@ fun getWeekDayName(date: AbstractDate): String {
     else
         CivilDate(date)
 
-    return weekDays.let { if (it == null) "" else it[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7] }
+    return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7]
 }
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
@@ -86,10 +86,7 @@ fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
 }
 
 fun getMonthName(date: AbstractDate): String =
-    monthsNamesOfCalendar(date).let {
-        if (it == null) ""
-        else it[date.month - 1]
-    }
+    monthsNamesOfCalendar(date)[date.month - 1]
 
 fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     val yearOfNextMonth = if (month == 12) year + 1 else year
@@ -102,12 +99,10 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     ).toJdn()).toInt()
 }
 
-fun monthsNamesOfCalendar(date: AbstractDate): List<String> {
-    return when (date) {
-        is PersianDate -> persianMonths
-        is IslamicDate -> islamicMonths
-        else -> gregorianMonths
-    }
+fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
+    is PersianDate -> persianMonths
+    is IslamicDate -> islamicMonths
+    else -> gregorianMonths
 }
 
 fun getDateFromEvent(event: BaseEvent): AbstractDate = when (event) {
@@ -390,9 +385,7 @@ fun loadEvents(context: Context) {
                     else if (type == "Afghanistan")
                         title += "افغانستان، "
                 }
-                persianMonths?.let {
-                    title += formatDayAndMonth(day, it[month - 1]) + ")"
-                }
+                title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
 
                 var list: ArrayList<PersianCalendarEvent>? =
                     persianCalendarEvents.get(month * 100 + day)
@@ -444,9 +437,8 @@ fun loadEvents(context: Context) {
                     else if (type == "Islamic Afghanistan")
                         title += "افغانستان، "
                 }
-                islamicMonths?.let {
-                    title += formatDayAndMonth(day, it[month - 1]) + ")"
-                }
+                title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
+
                 var list: ArrayList<IslamicCalendarEvent>? =
                     islamicCalendarEvents.get(month * 100 + day)
                 if (list == null) {
@@ -465,9 +457,8 @@ fun loadEvents(context: Context) {
             var title = event.getString("title")
 
             if (international) {
-                gregorianMonths?.let {
-                    title += " (" + formatDayAndMonth(day, it[month - 1]) + ")"
-                }
+                title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
+
                 var list: ArrayList<GregorianCalendarEvent>? =
                     gregorianCalendarEvents.get(month * 100 + day)
                 if (list == null) {
