@@ -227,13 +227,12 @@ private fun loadLanguageResource(context: Context) {
     try {
         val messages = JSONObject(readRawResource(context, messagesFile))
 
-        fun JSONArray.toStringArray(): Array<String> =
-            (0 until length()).asSequence().map { getString(it) }.toList().toTypedArray()
+        fun JSONArray.toStringList() = (0 until length()).map { getString(it) }.toList()
 
-        persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringArray()
-        islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringArray()
-        gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringArray()
-        messages.getJSONArray("WeekDays").toStringArray().run {
+        persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
+        islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
+        gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringList()
+        messages.getJSONArray("WeekDays").toStringList().run {
             weekDays = this
             weekDaysInitials = this.map {
                 when (language) {
@@ -241,14 +240,14 @@ private fun loadLanguageResource(context: Context) {
                     LANG_AZB -> it.substring(0, 2)
                     else -> it.substring(0, 1)
                 }
-            }.toTypedArray()
+            }
         }
     } catch (ignore: JSONException) {
-        persianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-        islamicMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-        gregorianMonths = arrayOf("", "", "", "", "", "", "", "", "", "", "", "")
-        weekDays = arrayOf("", "", "", "", "", "", "")
-        weekDaysInitials = arrayOf("", "", "", "", "", "", "")
+        persianMonths = monthNameEmptyList
+        islamicMonths = monthNameEmptyList
+        gregorianMonths = monthNameEmptyList
+        weekDays = weekDaysEmptyList
+        weekDaysInitials = weekDaysEmptyList
     }
 }
 
@@ -268,8 +267,7 @@ fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
 }
 
 fun createAndShowShortSnackbar(view: View?, @StringRes messageId: Int) {
-    view ?: return
-    val context = view.context ?: return
+    val context = view?.context ?: return
 
     createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT)
 }
@@ -384,27 +382,22 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
 fun loadAlarms(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val prefString = prefs.getString(PREF_ATHAN_ALARM, "") ?: ""
+    val prefString = (prefs.getString(PREF_ATHAN_ALARM, "") ?: "").trim()
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
     val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && prefString.isNotEmpty()) {
-        val athanGap = try {
-            ((prefs.getString(PREF_ATHAN_GAP, "0") ?: "0").toDouble() * 60.0 * 1000.0).toLong()
-        } catch (e: NumberFormatException) {
-            null
-        } ?: 0L
+        val athanGap =
+            (((prefs.getString(PREF_ATHAN_GAP, "0") ?: "0").toDoubleOrNull() ?: .0)
+                    * 60.0 * 1000.0).toLong()
 
         val prayTimes = PrayTimesCalculator.calculate(
             calculationMethod,
             Date(), coordinate
         )
         // convert spacedComma separated string to a set
-        val alarmTimesSet = HashSet(listOf(*TextUtils.split(prefString, ",")))
-
-        val alarmTimesNames = alarmTimesSet.toTypedArray()
-        for (i in alarmTimesNames.indices) {
-            val alarmTime: Clock = when (alarmTimesNames[i]) {
+        prefString.split(",").toSet().forEachIndexed { i, name ->
+            val alarmTime: Clock = when (name) {
                 "DHUHR" -> prayTimes.dhuhrClock
                 "ASR" -> prayTimes.asrClock
                 "MAGHRIB" -> prayTimes.maghribClock
@@ -414,7 +407,7 @@ fun loadAlarms(context: Context) {
                 else -> prayTimes.fajrClock
             }
 
-            setAlarm(context, alarmTimesNames[i], alarmTime, i, athanGap)
+            setAlarm(context, name, alarmTime, i, athanGap)
         }
     }
     //        for (Reminder event : Utils.getReminderDetails()) {
@@ -423,8 +416,7 @@ fun loadAlarms(context: Context) {
 }
 
 private fun setAlarm(
-    context: Context, alarmTimeName: String, clock: Clock, ord: Int,
-    athanGap: Long
+    context: Context, alarmTimeName: String, clock: Clock, ord: Int, athanGap: Long
 ) {
     val triggerTime = Calendar.getInstance()
     triggerTime.set(Calendar.HOUR_OF_DAY, clock.hour)
@@ -433,8 +425,7 @@ private fun setAlarm(
 }
 
 private fun setAlarm(
-    context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int,
-    athanGap: Long
+    context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int, athanGap: Long
 ) {
     val triggerTime = Calendar.getInstance()
     triggerTime.timeInMillis = timeInMillis - athanGap
@@ -841,12 +832,8 @@ fun updateStoredPreference(context: Context) {
 
     showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
-    prefs.getStringSet(
-        "what_to_show",
-        HashSet(listOf(*resources.getStringArray(R.array.what_to_show_default)))
-    )?.let {
-        whatToShowOnWidgets = it
-    }
+    whatToShowOnWidgets = prefs.getStringSet("what_to_show", null)
+        ?: resources.getStringArray(R.array.what_to_show_default).toSet()
 
     astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
     numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
@@ -862,7 +849,6 @@ fun updateStoredPreference(context: Context) {
             .map { it.split("=") }
             .filter { it.size == 2 }
             .map { ShiftWorkRecord(it[0], Integer.valueOf(it[1])) }
-            .toList()
 
         sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
 

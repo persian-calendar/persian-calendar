@@ -25,19 +25,23 @@ class PreferencesFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
 
-        FragmentSettingsBinding.inflate(LayoutInflater.from(container?.context), container, false).apply {
-            viewPager.adapter = ViewPagerAdapter(childFragmentManager, 3)
-            tabLayout.setupWithViewPager(viewPager)
+        FragmentSettingsBinding.inflate(LayoutInflater.from(container?.context), container, false)
+            .apply {
+                viewPager.adapter = ViewPagerAdapter(childFragmentManager, 3)
+                tabLayout.setupWithViewPager(viewPager)
 
-            return root
-        }
+                return root
+            }
     }
 
-    internal inner class ViewPagerAdapter(manager: FragmentManager, private var pageCount: Int) : FragmentPagerAdapter(manager) {
+    internal inner class ViewPagerAdapter(manager: FragmentManager, private var pageCount: Int) :
+        FragmentPagerAdapter(manager) {
 
         override fun getItem(position: Int): Fragment {
             var fragment = Fragment()

@@ -1,12 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
-import android.util.SparseArray
 import androidx.annotation.StyleRes
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val TAG = "Utils"
@@ -19,12 +17,13 @@ val twoSeconds = TimeUnit.SECONDS.toMillis(2)
 const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-val emptyStringList: Array<String>? = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "")
-var persianMonths = emptyStringList
-var islamicMonths = emptyStringList
-var gregorianMonths = emptyStringList
-var weekDays = emptyStringList
-var weekDaysInitials = emptyStringList
+val monthNameEmptyList = (1..12).map { "" }.toList()
+var persianMonths = monthNameEmptyList
+var islamicMonths = monthNameEmptyList
+var gregorianMonths = monthNameEmptyList
+val weekDaysEmptyList = (1..7).map { "" }.toList()
+var weekDays = weekDaysEmptyList
+var weekDaysInitials = weekDaysEmptyList
 var preferredDigits = PERSIAN_DIGITS
 var clockIn24 = DEFAULT_WIDGET_IN_24
 var iranTime = DEFAULT_IRAN_TIME

@@ -96,21 +96,11 @@ class SimpleDayPickerView @JvmOverloads constructor(
         //
 
         // month spinner init.
-        val months = ArrayList<StringWithValueItem>()
-        val monthsTitle = monthsNamesOfCalendar(date)
-        monthsTitle?.let {
-            for (i in 1..12) {
-                months.add(
-                    StringWithValueItem(
-                        i,
-                        it[i - 1] + " / " + formatNumber(i)
-                    )
-                )
-            }
+        val months = monthsNamesOfCalendar(date).mapIndexed { i, x ->
+            StringWithValueItem(i + 1, x + " / " + formatNumber(i + 1))
         }
         binding.monthSpinner.adapter = ArrayAdapter(
-            context,
-            android.R.layout.simple_spinner_dropdown_item, months
+            context, android.R.layout.simple_spinner_dropdown_item, months
         )
         binding.monthSpinner.setSelection(date.month - 1)
         //

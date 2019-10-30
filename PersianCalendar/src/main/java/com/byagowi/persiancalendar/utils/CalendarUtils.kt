@@ -102,7 +102,7 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     ).toJdn()).toInt()
 }
 
-fun monthsNamesOfCalendar(date: AbstractDate): Array<String>? {
+fun monthsNamesOfCalendar(date: AbstractDate): List<String> {
     return when (date) {
         is PersianDate -> persianMonths
         is IslamicDate -> islamicMonths
