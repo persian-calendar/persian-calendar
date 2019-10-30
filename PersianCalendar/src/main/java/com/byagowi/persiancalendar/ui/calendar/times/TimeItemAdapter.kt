@@ -12,7 +12,10 @@ import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @StringRes
-private val timeNames = intArrayOf(R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight)
+private val timeNames = listOf(
+    R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
+    R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
+)
 
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     private var mPrayTimes: PrayTimes? = null
