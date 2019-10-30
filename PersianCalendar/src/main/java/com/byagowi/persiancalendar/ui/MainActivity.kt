@@ -41,7 +41,8 @@ import javax.inject.Inject
 /**
  * Program activity for android
  */
-class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
+    NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
     lateinit var appDependency: AppDependency // same object from App
@@ -108,14 +109,21 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
             val win = window
             val winParams = win.attributes
-            winParams.flags = winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+            winParams.flags =
+                winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
             win.attributes = winParams
             window.statusBarColor = Color.TRANSPARENT
         }
 
         val isRTL = isRTL(this)
 
-        val drawerToggle = object : ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer) {
+        val drawerToggle = object : ActionBarDrawerToggle(
+            this,
+            binding.drawer,
+            binding.toolbar,
+            R.string.openDrawer,
+            R.string.closeDrawer
+        ) {
             var slidingDirection = if (isRTL) -1 else +1
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -124,12 +132,12 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
 
             private fun slidingAnimation(drawerView: View, slideOffset: Float) =
-                    binding.apply {
-                        appMainLayout.translationX = slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-                        drawer.bringChildToFront(drawerView)
-                        drawer.requestLayout()
-                    }
-
+                binding.apply {
+                    appMainLayout.translationX =
+                        slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                    drawer.bringChildToFront(drawerView)
+                    drawer.requestLayout()
+                }
 
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
@@ -137,7 +145,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                     navigateTo(clickedItem)
                     clickedItem = 0
                 }
-
             }
         }
 
@@ -162,7 +169,11 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         prefs.registerOnSharedPreferenceChangeListener(this)
 
         if (isShowDeviceCalendarEvents()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 askForCalendarPermission(this)
             }
         }
@@ -170,7 +181,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         binding.navigation.setNavigationItemSelectedListener(this)
 
         (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
-                .setImageResource(seasonImage)
+            .setImageResource(seasonImage)
 
         var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
         if (appLanguage == null) appLanguage = "N/A"
@@ -182,13 +193,14 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 view.setOnClickListener {
                     dismiss()
                 }
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                    .setTextColor(Color.WHITE)
                 setAction("Settings") {
                     prefs.edit {
                         putString(PREF_APP_LANGUAGE, LANG_EN_US)
                         putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
                         putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-                        putStringSet(PREF_HOLIDAY_TYPES, HashSet())
+                        putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                     }
                 }
                 setActionTextColor(resources.getColor(R.color.dark_accent))
@@ -205,15 +217,27 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         creationDateJdn = getTodayJdn()
 
         if (getMainCalendar() == CalendarType.SHAMSI &&
-                isIranHolidaysEnabled() &&
-                getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()) {
+            isIranHolidaysEnabled() &&
+            getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
+        ) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).setTextColor(Color.WHITE)
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                    .setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
                     try {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=$packageName")
+                            )
+                        )
                     } catch (anfe: ActivityNotFoundException) {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                            )
+                        )
                     }
                 }
                 setActionTextColor(resources.getColor(R.color.dark_accent))
@@ -225,7 +249,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     fun navigateTo(@IdRes id: Int) {
         val menuItem = binding.navigation.menu.findItem(
-                if (id == R.id.level) R.id.compass else id) // We don't have a menu entry for compass, so
+            if (id == R.id.level) R.id.compass else id
+        ) // We don't have a menu entry for compass, so
         if (menuItem != null) {
             menuItem.isCheckable = true
             menuItem.isChecked = true
@@ -238,7 +263,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment)
-                .navigate(id, null, null)
+            .navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -298,35 +323,39 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 putBoolean(PREF_PERSIAN_DIGITS, persianDigits)
                 // Enable Afghanistan holidays when Dari or Pashto is set
                 if (changeToAfghanistanHolidays) {
-                    val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
+                    val currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
 
-                    if (currentHolidays == null || currentHolidays.isEmpty() ||
-                            currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
-                        putStringSet(PREF_HOLIDAY_TYPES, HashSet(listOf("afghanistan_holidays")))
-                    }
+                    if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
+                        currentHolidays.contains("iran_holidays")
+                    )
+                        putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
+
                 }
                 if (changeToIranEvents) {
-                    val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
+                    val currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
 
-                    if (currentHolidays == null || currentHolidays.isEmpty() ||
-                            currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays")) {
-                        putStringSet(PREF_HOLIDAY_TYPES, HashSet(listOf("iran_holidays")))
-                    }
+                    if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays"))
+                    )
+                        putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
                 }
                 if (removeAllEvents) {
-                    val currentHolidays = sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
+                    val currentHolidays =
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
 
-                    if (currentHolidays == null || currentHolidays.isEmpty() ||
-                            currentHolidays.size == 1 && currentHolidays.contains("iran_holidays")) {
-                        putStringSet(PREF_HOLIDAY_TYPES, HashSet())
-                    }
+                    if (currentHolidays.isEmpty() ||
+                        (currentHolidays.size == 1 && currentHolidays.contains("iran_holidays"))
+                    )
+                        putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                 }
                 when {
                     changeToGregorianCalendar -> {
                         putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
                         putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
                         putString(PREF_WEEK_START, "1")
-                        putStringSet(PREF_WEEK_ENDS, HashSet(listOf("1")))
+                        putStringSet(PREF_WEEK_ENDS, setOf("1"))
                     }
                     changeToIslamicCalendar -> {
                         putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
@@ -346,9 +375,12 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS) {
             if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
+                )
                     askForCalendarPermission(this)
-                }
             }
         }
 
@@ -369,14 +401,22 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         ViewModelProviders.of(this).get(MainActivityModel::class.java).preferenceIsUpdated()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CALENDAR_READ_PERMISSION_REQUEST_CODE) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_CALENDAR
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 toggleShowDeviceCalendarOnPreference(this, true)
                 val currentDestination = Navigation
-                        .findNavController(this, R.id.nav_host_fragment)
-                        .currentDestination
+                    .findNavController(this, R.id.nav_host_fragment)
+                    .currentDestination
                 if (currentDestination != null && currentDestination.id == R.id.calendar) {
                     restartActivity()
                 }
@@ -390,7 +430,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onConfigurationChanged(newConfig)
         initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding.drawer.layoutDirection = if (isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            binding.drawer.layoutDirection =
+                if (isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }
     }
 
@@ -442,25 +483,22 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         return true
     }
 
-    fun setTitleAndSubtitle(title: String, subtitle: String) = supportActionBar?.apply {
-        this.title = title
-        this.subtitle = subtitle
-    }
+    fun setTitleAndSubtitle(title: String, subtitle: String): Unit = supportActionBar?.let {
+        it.title = title
+        it.subtitle = subtitle
+    } ?: Unit
 
     override fun onBackPressed() {
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
             binding.drawer.closeDrawers()
         } else {
             val calendarFragment = supportFragmentManager
-                    .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
-            if (calendarFragment != null) {
-                if (calendarFragment.closeSearch())
-                    return
-            }
+                .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
+            if (calendarFragment?.closeSearch() == true) return
 
             val currentDestination = Navigation
-                    .findNavController(this, R.id.nav_host_fragment)
-                    .currentDestination
+                .findNavController(this, R.id.nav_host_fragment)
+                .currentDestination
             if (currentDestination == null || currentDestination.id == R.id.calendar)
                 finish()
             else

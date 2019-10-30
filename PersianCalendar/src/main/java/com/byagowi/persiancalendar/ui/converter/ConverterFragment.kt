@@ -17,11 +17,16 @@ class ConverterFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.date_converter), "")
+        mainActivityDependency.mainActivity.setTitleAndSubtitle(
+            getString(R.string.date_converter),
+            ""
+        )
 
         FragmentConverterBinding.inflate(inflater, container, false).apply {
 
@@ -43,11 +48,8 @@ class ConverterFragment : DaggerFragment() {
                 } else {
                     calendarsView.visibility = View.VISIBLE
                     val selectedCalendarType = dayPickerView.selectedCalendarType
-                    val orderedCalendarTypes = getOrderedCalendarTypes()
-                    if (selectedCalendarType != null && orderedCalendarTypes != null) {
-                        orderedCalendarTypes.remove(selectedCalendarType)
-                        calendarsView.showCalendars(jdn, selectedCalendarType, orderedCalendarTypes)
-                    }
+                    calendarsView.showCalendars(jdn, selectedCalendarType,
+                        getOrderedCalendarTypes() - selectedCalendarType)
                 }
             }
             dayPickerView.setDayJdnOnView(getTodayJdn())

@@ -114,15 +114,14 @@ fun toLinearDate(date: AbstractDate): String = String.format(
 fun isNightModeEnabled(context: Context): Boolean =
     context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun formatDate(date: AbstractDate): String =
-    if (numericalDatePreferred)
-        (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
-    else
-        String.format(
-            if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-            formatNumber(date.dayOfMonth), getMonthName(date),
-            formatNumber(date.year)
-        )
+fun formatDate(date: AbstractDate): String = if (numericalDatePreferred)
+    (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
+else
+    String.format(
+        if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+        formatNumber(date.dayOfMonth), getMonthName(date),
+        formatNumber(date.year)
+    )
 
 fun getAppLanguage(): String = if (TextUtils.isEmpty(language)) DEFAULT_APP_LANGUAGE else language
 
@@ -202,11 +201,7 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String {
     return result
 }
 
-fun getEnabledCalendarTypes(): List<CalendarType> =
-    ArrayList<CalendarType>().apply {
-        add(getMainCalendar())
-        addAll(otherCalendars)
-    }
+fun getEnabledCalendarTypes(): List<CalendarType> = listOf(getMainCalendar()) + otherCalendars
 
 private fun loadLanguageResource(context: Context) {
     @RawRes val messagesFile: Int = when (language) {
@@ -321,15 +316,8 @@ fun loadApp(context: Context) {
 
 }
 
-fun getOrderedCalendarTypes(): ArrayList<CalendarType>? {
-    val enabledCalendarTypes = getEnabledCalendarTypes()
-
-    val result = ArrayList(enabledCalendarTypes)
-    for (key in CalendarType.values())
-        if (!enabledCalendarTypes.contains(key))
-            result.add(key)
-
-    return result
+fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
+    it + (CalendarType.values().toList() - it)
 }
 
 @StringRes
@@ -352,9 +340,8 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
             maghribClock.toInt() > clock -> R.string.maghrib
             ishaClock.toInt() > clock -> R.string.isha
             midnightClock.toInt() > clock -> R.string.midnight
-            else
-                // TODO: this is today's, not tomorrow
-            -> R.string.fajr
+            // TODO: this is today's, not tomorrow
+            else -> R.string.fajr
         }
     }
     return 0
@@ -465,26 +452,13 @@ private fun setAlarm(
 
 fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
     applyAppLanguage(context)
-
-    val values = context.resources.getStringArray(R.array.calendar_values)
-    val titles = context.resources.getStringArray(R.array.calendar_type)
-
-    // TODO: Can be done without Map
-    val typeTitleMap = HashMap<CalendarType, String>()
-    for (i in titles.indices) {
-        typeTitleMap[CalendarType.valueOf(values[i])] = titles[i]
+    val typeTitleMap = context.resources.getStringArray(R.array.calendar_values)
+        .map(CalendarType::valueOf)
+        .zip(context.resources.getStringArray(R.array.calendar_type))
+        .toMap()
+    return getOrderedCalendarTypes().mapNotNull {
+        typeTitleMap[it]?.run { CalendarTypeItem(it, this) }
     }
-
-    val result = ArrayList<CalendarTypeItem>()
-    getOrderedCalendarTypes()?.run {
-        for (type in this) {
-            typeTitleMap[type]?.let {
-                result.add(CalendarTypeItem(type, it))
-            }
-        }
-    }
-
-    return result
 }
 
 fun getDayIconResource(day: Int): Int {
@@ -500,21 +474,18 @@ fun getDayIconResource(day: Int): Int {
     }
 }
 
-private fun readStream(inputStream: InputStream): String {
-    // http://stackoverflow.com/a/5445161
-    val s = Scanner(inputStream).useDelimiter("\\A")
-    return if (s.hasNext()) s.next() else ""
-}
+// http://stackoverflow.com/a/5445161
+private fun readStream(inputStream: InputStream): String =
+    Scanner(inputStream).useDelimiter("\\A").let { if (it.hasNext()) it.next() else "" }
 
-fun readRawResource(context: Context, @RawRes res: Int): String =
+fun readRawResource(context: Context, @RawRes res: Int) =
     readStream(context.resources.openRawResource(res))
 
-fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String): String =
-    String.format(
-        Locale.getDefault(), "%s: %.4f%s%s: %.4f",
-        context.getString(R.string.latitude), coordinate.latitude, separator,
-        context.getString(R.string.longitude), coordinate.longitude
-    )
+fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) = String.format(
+    Locale.getDefault(), "%s: %.4f%s%s: %.4f",
+    context.getString(R.string.latitude), coordinate.latitude, separator,
+    context.getString(R.string.longitude), coordinate.longitude
+)
 
 fun getCityName(context: Context, fallbackToCoord: Boolean): String {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -527,11 +498,8 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String {
         return cityEntity.fa
     }
 
-    val geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "")
-    geocodedCityName?.let {
-        if (!TextUtils.isEmpty(it))
-            return it
-    }
+    val geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "") ?: ""
+    if (geocodedCityName.isNotEmpty()) return geocodedCityName
 
     if (fallbackToCoord)
         coordinate?.let {
@@ -544,18 +512,15 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String {
 private fun getCityFromPreference(context: Context): CityItem? {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val key = prefs.getString(PREF_SELECTED_LOCATION, "")
-    if (TextUtils.isEmpty(key) || key == DEFAULT_CITY)
-        return null
+    val key = prefs.getString(PREF_SELECTED_LOCATION, "") ?: ""
+    if (key.isEmpty() || key == DEFAULT_CITY) return null
 
     if (key == cachedCityKey)
         return cachedCity
 
     // cache last query even if no city available under the key, useful in case invalid
     // value is somehow inserted on the preference
-    key?.let {
-        cachedCityKey = key
-    }
+    cachedCityKey = key
 
     for (cityEntity in getAllCities(context, false))
         if (cityEntity.key == key) {
@@ -745,12 +710,12 @@ fun setChangeDateWorker(context: Context) {
     ).enqueue()
 }
 
+fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
+
 fun updateStoredPreference(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)?.let {
-        language = it
-    }
+    language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE) ?: DEFAULT_APP_LANGUAGE
 
     preferredDigits = if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS))
         PERSIAN_DIGITS
@@ -775,38 +740,30 @@ fun updateStoredPreference(context: Context) {
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
     centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
 
-    prefs.getString(
-        PREF_SELECTED_WIDGET_TEXT_COLOR,
-        DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    )?.let {
-        selectedWidgetTextColor = it
-    }
+    selectedWidgetTextColor =
+        (prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR)
+            ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR)
 
-    prefs.getString(
-        PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-        DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-    )?.let {
-        selectedWidgetBackgroundColor = it
-    }
+    selectedWidgetBackgroundColor =
+        (prefs.getString(
+            PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+            DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        )) ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
-    prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD)?.let {
-        calculationMethod = it
-    }
+    calculationMethod =
+        prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD) ?: DEFAULT_PRAY_TIME_METHOD
 
     coordinate = getCoordinate(context)
     try {
-        prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")?.let {
-            mainCalendar = CalendarType.valueOf(it)
-        }
+        mainCalendar = CalendarType.valueOf(
+            prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI") ?: "SHAMSI"
+        )
 
-        prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")?.let {
-            otherCalendars = if (it.isEmpty()) listOf() else {
-                it.split(",").map(CalendarType::valueOf).toList()
-            }
-        }
-
+        otherCalendars =
+            (prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC") ?: "GREGORIAN,ISLAMIC")
+                .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
     } catch (e: Exception) {
         Log.e(TAG, "Fail on parsing calendar preference", e)
         mainCalendar = CalendarType.SHAMSI
@@ -815,18 +772,14 @@ fun updateStoredPreference(context: Context) {
 
     spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
     showWeekOfYear = prefs.getBoolean("showWeekOfYearNumber", false)
-
-    val weekStart = prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START)
-    weekStart?.let {
-        weekStartOffset = Integer.parseInt(it)
-    }
+    weekStartOffset =
+        (prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START) ?: DEFAULT_WEEK_START).toIntOrNull()
+            ?: 0
 
     weekEnds = BooleanArray(7)
-    val weekEndsSet = prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-    weekEndsSet?.run {
-        for (s in this)
-            weekEnds[Integer.parseInt(s)] = true
-    }
+    (prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS) ?: DEFAULT_WEEK_ENDS)
+        .map(Integer::parseInt)
+        .forEach { weekEnds[it] = true }
 
     showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
@@ -892,8 +845,7 @@ fun updateStoredPreference(context: Context) {
     talkBackEnabled = a11y != null && a11y.isEnabled && a11y.isTouchExplorationEnabled
 }
 
-private fun getOnlyLanguage(string: String): String =
-    string.replace("-(IR|AF|US)".toRegex(), "")
+private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")
 
 // Context preferably should be activity context not application
 fun applyAppLanguage(context: Context) {

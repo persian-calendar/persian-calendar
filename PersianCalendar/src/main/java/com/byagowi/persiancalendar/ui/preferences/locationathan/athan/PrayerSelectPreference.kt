@@ -4,14 +4,14 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.preference.DialogPreference
-import java.util.*
+import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
 
-class PrayerSelectPreference(context: Context, attrs: AttributeSet) : DialogPreference(context, attrs) {
-
+class PrayerSelectPreference(context: Context, attrs: AttributeSet?) :
+    DialogPreference(context, attrs) {
     // convert comma separated string to a set
     // convert set to a comma separated string
-    var prayers: MutableSet<String>
-        get() = HashSet(Arrays.asList(*TextUtils.split(getPersistedString(""), ",")))
+    var prayers: Set<String>
+        get() = getPersistedString("").splitIgnoreEmpty(",").toSet()
         set(prayers) {
             val wasBlocking = shouldDisableDependents()
             persistString(TextUtils.join(",", prayers))

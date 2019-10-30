@@ -6,7 +6,7 @@ import com.byagowi.persiancalendar.R
 
 class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
 
-    private lateinit var prayers: MutableSet<String>
+    private var prayers: Set<String> = emptySet()
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
         super.onPrepareDialogBuilder(builder)
@@ -23,10 +23,10 @@ class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
         }
 
         builder.setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
-            if (isChecked) {
-                prayers.add(entriesKeys[which].toString())
+            prayers = if (isChecked) {
+                prayers + entriesKeys[which].toString()
             } else {
-                prayers.remove(entriesKeys[which].toString())
+                prayers - entriesKeys[which].toString()
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -74,8 +73,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         mBinding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
         mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
-        mBinding.zodiac.visibility =
-            if (TextUtils.isEmpty(mBinding.zodiac.text)) View.GONE else View.VISIBLE
+        mBinding.zodiac.visibility = if (mBinding.zodiac.text.isEmpty()) View.GONE else View.VISIBLE
 
         val diffDays = abs(getTodayJdn() - jdn)
 
@@ -158,8 +156,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 }
             }
             mBinding.equinox.text = equinox
-            mBinding.equinox.visibility =
-                if (TextUtils.isEmpty(equinox)) View.GONE else View.VISIBLE
+            mBinding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
         }
 
         mBinding.root.contentDescription = getA11yDaySummary(

@@ -7,7 +7,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.text.util.Linkify
 import android.util.Log
 import android.util.TypedValue
@@ -50,7 +49,7 @@ class AboutFragment : DaggerFragment() {
         val version = programVersion(activity).split("-")
             .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
         binding.version.text =
-            String.format(getString(R.string.version), TextUtils.join("\n", version))
+            String.format(getString(R.string.version), version.joinToString("\n"))
 
         // licenses
         binding.licenses.setOnClickListener {
