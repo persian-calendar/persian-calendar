@@ -24,8 +24,8 @@ fun getAthanVolume(context: Context): Int =
 
 fun isAscendingAthanVolumeEnabled(context: Context): Boolean =
     PreferenceManager.getDefaultSharedPreferences(context)?.getBoolean(
-        PREF_ASCENDING_ATHAN_VOLUME, true
-    ) ?: true
+        PREF_ASCENDING_ATHAN_VOLUME, false
+    ) ?: false
 
 fun getCustomAthanUri(context: Context): Uri? =
     PreferenceManager.getDefaultSharedPreferences(context)?.getString(PREF_ATHAN_URI, "")
