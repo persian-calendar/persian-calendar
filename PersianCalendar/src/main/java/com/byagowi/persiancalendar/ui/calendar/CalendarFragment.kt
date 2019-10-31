@@ -535,37 +535,41 @@ class CalendarFragment : DaggerFragment() {
         menu.clear()
         inflater.inflate(R.menu.calendar_menu_buttons, menu)
 
-        mSearchView = menu.findItem(R.id.search).actionView as SearchView
-        mSearchView?.run {
+        mSearchView = (menu.findItem(R.id.search).actionView as SearchView?)?.apply {
             setOnSearchClickListener {
-                mSearchAutoComplete?.onItemClickListener = null
-
-                findViewById<View>(androidx.appcompat.R.id.search_plate)
-                setBackgroundColor(Color.TRANSPARENT)
-
-                val context = context ?: return@setOnSearchClickListener
-
-                mSearchAutoComplete = findViewById(androidx.appcompat.R.id.search_src_text)
-                mSearchAutoComplete?.setHint(R.string.search_in_events)
-
-                val eventsAdapter = ArrayAdapter<BaseEvent>(
-                    context,
-                    R.layout.suggestion, android.R.id.text1
+                // Remove search edit view below bar
+                findViewById<View?>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(
+                    Color.TRANSPARENT
                 )
-                eventsAdapter.addAll(getAllEnabledEvents())
-                eventsAdapter.addAll(getAllEnabledAppointments(context))
-                mSearchAutoComplete?.setAdapter(eventsAdapter)
-                mSearchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
-                    val ev = parent.getItemAtPosition(position) as BaseEvent
-                    val date = getDateFromEvent(ev)
-                    val type = getCalendarTypeFromDate(date)
-                    val today = getTodayOfCalendar(type)
-                    var year = date.year
-                    if (year == -1) {
-                        year = today.year + if (date.month < today.month) 1 else 0
+
+                mSearchAutoComplete = (findViewById<SearchView.SearchAutoComplete?>(
+                    androidx.appcompat.R.id.search_src_text
+                ))?.apply {
+                    setHint(R.string.search_in_events)
+                    setAdapter(
+                        ArrayAdapter<BaseEvent>(
+                            mainActivityDependency.mainActivity,
+                            R.layout.suggestion, android.R.id.text1,
+                            getAllEnabledEvents() + getAllEnabledAppointments(context)
+                        )
+                    )
+                    setOnItemClickListener { parent, _, position, _ ->
+                        val ev = parent.getItemAtPosition(position) as BaseEvent
+                        val date = getDateFromEvent(ev)
+                        val type = getCalendarTypeFromDate(date)
+                        val today = getTodayOfCalendar(type)
+                        bringDate(
+                            getDateOfCalendar(
+                                type,
+                                if (date.year == -1)
+                                    (today.year + if (date.month < today.month) 1 else 0)
+                                else date.year,
+                                date.month,
+                                date.dayOfMonth
+                            ).toJdn()
+                        )
+                        onActionViewCollapsed()
                     }
-                    bringDate(getDateOfCalendar(type, year, date.month, date.dayOfMonth).toJdn())
-                    onActionViewCollapsed()
                 }
             }
         }

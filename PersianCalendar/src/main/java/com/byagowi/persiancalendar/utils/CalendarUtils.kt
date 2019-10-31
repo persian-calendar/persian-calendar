@@ -105,10 +105,10 @@ fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
 }
 
 fun getDateFromEvent(event: BaseEvent): AbstractDate = when (event) {
+    is PersianCalendarEvent -> event.date
     is IslamicCalendarEvent -> event.date
     is GregorianCalendarEvent -> event.date
     is DeviceCalendarEvent -> event.date
-    is PersianCalendarEvent -> event.date
     else -> PersianDate(getTodayJdn())
 }
 
