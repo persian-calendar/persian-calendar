@@ -588,7 +588,7 @@ private fun readDeviceEvents(
                 deviceCalendarEvents.put(month * 100 + day, list)
             }
 
-            var title = cursor.getString(1)
+            var title = cursor.getString(1) ?: ""
             if (allDay)
                 title = "\uD83D\uDCC5 $title"
             else {
@@ -609,12 +609,12 @@ private fun readDeviceEvents(
             val event = DeviceCalendarEvent(
                 cursor.getInt(0),
                 title,
-                cursor.getString(2),
+                cursor.getString(2) ?: "",
                 startDate,
                 endDate,
-                cursor.getString(5),
+                cursor.getString(5) ?: "",
                 civilDate,
-                cursor.getString(9),
+                cursor.getString(9) ?: "",
                 false
             )
             list.add(event)
@@ -632,11 +632,7 @@ private fun readDeviceEvents(
 }
 
 fun readDayDeviceEvents(context: Context, jdn: Long): SparseArray<ArrayList<DeviceCalendarEvent>> {
-    var jdn = jdn
-    if (jdn == -1L)
-        jdn = getTodayJdn()
-
-    val startingDate = civilDateToCalendar(CivilDate(jdn))
+    val startingDate = civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn))
     val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
     val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
     readDeviceEvents(
