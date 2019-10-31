@@ -1,40 +1,41 @@
 package com.byagowi.persiancalendar.entities
 
 import com.byagowi.persiancalendar.utils.CalendarType
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinate
 import java.util.*
 
-interface BaseEvent {
+interface CalendarEvent<T : AbstractDate> {
     val title: String
     val isHoliday: Boolean
+    val date: T
 }
 
 data class GregorianCalendarEvent(
-    val date: CivilDate, override val title: String, override val isHoliday: Boolean
-) : BaseEvent {
+    override val date: CivilDate, override val title: String, override val isHoliday: Boolean
+) : CalendarEvent<CivilDate> {
     override fun toString(): String = title
 }
 
 data class IslamicCalendarEvent(
-    val date: IslamicDate, override val title: String, override val isHoliday: Boolean
-) : BaseEvent {
+    override val date: IslamicDate, override val title: String, override val isHoliday: Boolean
+) : CalendarEvent<IslamicDate> {
     override fun toString(): String = title
 }
 
 data class PersianCalendarEvent(
-    val date: PersianDate, override val title: String, override val isHoliday: Boolean
-) : BaseEvent {
+    override val date: PersianDate, override val title: String, override val isHoliday: Boolean
+) : CalendarEvent<PersianDate> {
     override fun toString(): String = title
 }
 
 class DeviceCalendarEvent(
-    val id: Int, override val title: String, val description: String,
-    val start: Date, val end: Date, val dateString: String, val date: CivilDate,
-    val color: String, override val isHoliday: Boolean
-) : BaseEvent {
+    override val date: CivilDate, override val title: String, override val isHoliday: Boolean,
+    val id: Int, val description: String, val start: Date, val end: Date, val color: String
+) : CalendarEvent<CivilDate> {
     override fun toString(): String = title
 }
 

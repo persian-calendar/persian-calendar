@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
 val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
-var sAllEnabledEvents: List<BaseEvent> = emptyList()
+var sAllEnabledEvents: List<CalendarEvent<*>> = emptyList()
 var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
 var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
 var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
@@ -38,13 +38,13 @@ fun isWeekOfYearEnabled(): Boolean = showWeekOfYear
 
 fun isShowDeviceCalendarEvents(): Boolean = showDeviceCalendarEvents
 
-fun hasAnyHolidays(dayEvents: List<BaseEvent>): Boolean = dayEvents.any { it.isHoliday }
+fun hasAnyHolidays(dayEvents: List<CalendarEvent<*>>): Boolean = dayEvents.any { it.isHoliday }
 
 fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
-fun getAllEnabledEvents(): List<BaseEvent> = sAllEnabledEvents
+fun getAllEnabledEvents(): List<CalendarEvent<*>> = sAllEnabledEvents
 
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
@@ -102,14 +102,6 @@ fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
     is PersianDate -> persianMonths
     is IslamicDate -> islamicMonths
     else -> gregorianMonths
-}
-
-fun getDateFromEvent(event: BaseEvent): AbstractDate = when (event) {
-    is PersianCalendarEvent -> event.date
-    is IslamicCalendarEvent -> event.date
-    is GregorianCalendarEvent -> event.date
-    is DeviceCalendarEvent -> event.date
-    else -> PersianDate(getTodayJdn())
 }
 
 fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
@@ -229,12 +221,12 @@ private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolea
 fun getEvents(
     jdn: Long,
     deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?
-): List<BaseEvent> {
+): List<CalendarEvent<*>> {
     val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
     val islamic = IslamicDate(jdn)
 
-    val result = ArrayList<BaseEvent>()
+    val result = ArrayList<CalendarEvent<*>>()
 
     val persianList = sPersianCalendarEvents.get(persian.month * 100 + persian.dayOfMonth)
     if (persianList != null)
@@ -331,7 +323,7 @@ fun loadEvents(context: Context) {
     val persianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
     val islamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
     val gregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
-    val allEnabledEvents = ArrayList<BaseEvent>()
+    val allEnabledEvents = ArrayList<CalendarEvent<*>>()
 
     try {
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
@@ -546,7 +538,7 @@ private fun readDeviceEvents(
         ContentUris.appendId(builder, startingDate.timeInMillis - DAY_IN_MILLIS)
         ContentUris.appendId(builder, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
 
-        val cursor = context.contentResolver.query(
+        context.contentResolver.query(
             builder.build(),
             arrayOf(
                 CalendarContract.Instances.EVENT_ID, // 0
@@ -554,76 +546,68 @@ private fun readDeviceEvents(
                 CalendarContract.Instances.DESCRIPTION, // 2
                 CalendarContract.Instances.BEGIN, // 3
                 CalendarContract.Instances.END, // 4
-                CalendarContract.Instances.EVENT_LOCATION, // 5
-                CalendarContract.Instances.RRULE, // 6
-                CalendarContract.Instances.VISIBLE, // 7
-                CalendarContract.Instances.ALL_DAY, // 8
-                CalendarContract.Instances.EVENT_COLOR     // 9
+                CalendarContract.Instances.VISIBLE, // 5
+                CalendarContract.Instances.ALL_DAY, // 6
+                CalendarContract.Instances.EVENT_COLOR // 7
             ), null, null, null
-        ) ?: return
+        )?.use {
+            var i = 0
+            while (it.moveToNext()) {
+                if (it.getString(5) != "1")
+                    continue
 
-        var i = 0
-        while (cursor.moveToNext()) {
-            if (cursor.getString(7) != "1")
-                continue
+                val startDate = Date(it.getLong(3))
+                val endDate = Date(it.getLong(4))
+                val startCalendar = makeCalendarFromDate(startDate)
+                val endCalendar = makeCalendarFromDate(endDate)
 
-            var allDay = false
-            if (cursor.getString(8) == "1")
-                allDay = true
+                val civilDate = calendarToCivilDate(startCalendar)
 
-            val startDate = Date(cursor.getLong(3))
-            val endDate = Date(cursor.getLong(4))
-            val startCalendar = makeCalendarFromDate(startDate)
-            val endCalendar = makeCalendarFromDate(endDate)
+                val month = civilDate.month
+                val day = civilDate.dayOfMonth
 
-            val civilDate = calendarToCivilDate(startCalendar)
+                var list: ArrayList<DeviceCalendarEvent>? =
+                    deviceCalendarEvents.get(month * 100 + day)
+                if (list == null) {
+                    list = ArrayList()
+                    deviceCalendarEvents.put(month * 100 + day, list)
+                }
 
-            val month = civilDate.month
-            val day = civilDate.dayOfMonth
-
-            var list: ArrayList<DeviceCalendarEvent>? =
-                deviceCalendarEvents.get(month * 100 + day)
-            if (list == null) {
-                list = ArrayList()
-                deviceCalendarEvents.put(month * 100 + day, list)
-            }
-
-            var title = cursor.getString(1) ?: ""
-            if (allDay)
-                title = "\uD83D\uDCC5 $title"
-            else {
-                title = "\uD83D\uDD53 $title"
-                title += " (" + baseFormatClock(
-                    startCalendar.get(Calendar.HOUR_OF_DAY),
-                    startCalendar.get(Calendar.MINUTE)
-                )
-
-                if (cursor.getLong(3) != cursor.getLong(4) && cursor.getLong(4) != 0L)
-                    title += "-" + baseFormatClock(
-                        endCalendar.get(Calendar.HOUR_OF_DAY),
-                        endCalendar.get(Calendar.MINUTE)
+                var title = it.getString(1) ?: ""
+                if (it.getString(6) == "1")
+                    title = "\uD83D\uDCC5 $title"
+                else {
+                    title = "\uD83D\uDD53 $title"
+                    title += " (" + baseFormatClock(
+                        startCalendar.get(Calendar.HOUR_OF_DAY),
+                        startCalendar.get(Calendar.MINUTE)
                     )
 
-                title += ")"
-            }
-            val event = DeviceCalendarEvent(
-                cursor.getInt(0),
-                title,
-                cursor.getString(2) ?: "",
-                startDate,
-                endDate,
-                cursor.getString(5) ?: "",
-                civilDate,
-                cursor.getString(9) ?: "",
-                false
-            )
-            list.add(event)
-            allEnabledAppointments.add(event)
+                    if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
+                        title += "-" + baseFormatClock(
+                            endCalendar.get(Calendar.HOUR_OF_DAY),
+                            endCalendar.get(Calendar.MINUTE)
+                        )
 
-            // Don't go more than 1k events on any case
-            if (++i == 1000) break
+                    title += ")"
+                }
+                val event = DeviceCalendarEvent(
+                    id = it.getInt(0),
+                    title = title,
+                    description = it.getString(2) ?: "",
+                    start = startDate,
+                    end = endDate,
+                    date = civilDate,
+                    color = it.getString(7) ?: "",
+                    isHoliday = false
+                )
+                list.add(event)
+                allEnabledAppointments.add(event)
+
+                // Don't go more than 1k events on any case
+                if (++i == 1000) break
+            }
         }
-        cursor.close()
     } catch (e: Exception) {
         // We don't like crash addition from here, just catch all of exceptions
         Log.e("", "Error on device calendar events read", e)
@@ -672,7 +656,7 @@ fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
 }
 
 fun getEventsTitle(
-    dayEvents: List<BaseEvent>, holiday: Boolean,
+    dayEvents: List<CalendarEvent<*>>, holiday: Boolean,
     compact: Boolean, showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean
 ): String {

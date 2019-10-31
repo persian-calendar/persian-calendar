@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.entities.BaseEvent
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
@@ -313,7 +313,7 @@ class CalendarFragment : DaggerFragment() {
         return ss
     }
 
-    private fun getDeviceEventsTitle(dayEvents: List<BaseEvent>): SpannableStringBuilder {
+    private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>): SpannableStringBuilder {
         val titles = SpannableStringBuilder()
         var first = true
 
@@ -547,14 +547,14 @@ class CalendarFragment : DaggerFragment() {
                 ))?.apply {
                     setHint(R.string.search_in_events)
                     setAdapter(
-                        ArrayAdapter<BaseEvent>(
+                        ArrayAdapter<CalendarEvent<*>>(
                             mainActivityDependency.mainActivity,
                             R.layout.suggestion, android.R.id.text1,
                             getAllEnabledEvents() + getAllEnabledAppointments(context)
                         )
                     )
                     setOnItemClickListener { parent, _, position, _ ->
-                        val date = getDateFromEvent(parent.getItemAtPosition(position) as BaseEvent)
+                        val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                         val type = getCalendarTypeFromDate(date)
                         val today = getTodayOfCalendar(type)
                         bringDate(
