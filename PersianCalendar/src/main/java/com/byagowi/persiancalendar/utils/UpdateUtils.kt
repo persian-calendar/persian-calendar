@@ -83,8 +83,13 @@ fun update(context: Context, updateDate: Boolean) {
     val widget4x2 = ComponentName(context, Widget4x2::class.java)
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
 
+    fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int): Unit =
+        this.setInt(layoutId, "setBackgroundColor",
+            Color.parseColor(getSelectedWidgetBackgroundColor()))
+
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
         RemoteViews(context.packageName, R.layout.widget1x1).apply {
+            setBackgroundColor(R.id.widget_layout1x1)
             setTextColor(R.id.textPlaceholder1_1x1, color)
             setTextColor(R.id.textPlaceholder2_1x1, color)
             setTextViewText(
@@ -96,7 +101,6 @@ fun update(context: Context, updateDate: Boolean) {
                 getMonthName(date)
             )
             setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
-            setBackgroundColor(this, R.id.widget_layout1x1)
             manager.updateAppWidget(widget1x1, this)
         }
     }
@@ -178,7 +182,7 @@ fun update(context: Context, updateDate: Boolean) {
 
         remoteViews4.run {
             // Widget 4x1
-            setBackgroundColor(this, R.id.widget_layout4x1)
+            setBackgroundColor(R.id.widget_layout4x1)
             setTextColor(R.id.textPlaceholder1_4x1, color)
             setTextColor(R.id.textPlaceholder2_4x1, color)
             setTextColor(R.id.textPlaceholder3_4x1, color)
@@ -208,7 +212,7 @@ fun update(context: Context, updateDate: Boolean) {
         remoteViews2.run {
             var text2: String
             // Widget 2x2
-            setBackgroundColor(this, R.id.widget_layout2x2)
+            setBackgroundColor(R.id.widget_layout2x2)
             setTextColor(R.id.time_2x2, color)
             setTextColor(R.id.date_2x2, color)
             setTextColor(R.id.event_2x2, color)
@@ -284,9 +288,10 @@ fun update(context: Context, updateDate: Boolean) {
         } else {
             RemoteViews(context.packageName, R.layout.widget4x2)
         }
-        setBackgroundColor(remoteViews4x2, R.id.widget_layout4x2)
 
         remoteViews4x2.run {
+            setBackgroundColor(R.id.widget_layout4x2)
+
             setTextColor(R.id.textPlaceholder0_4x2, color)
             setTextColor(R.id.textPlaceholder1_4x2, color)
             setTextColor(R.id.textPlaceholder2_4x2, color)
@@ -524,9 +529,4 @@ fun update(context: Context, updateDate: Boolean) {
     } else if (goForWorker()) {
         context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
     }
-}
-
-private fun setBackgroundColor(remoteView: RemoteViews, @IdRes layoutId: Int) {
-    val colorInt = getSelectedWidgetBackgroundColor()
-    remoteView.setInt(layoutId, "setBackgroundColor", Color.parseColor(colorInt))
 }
