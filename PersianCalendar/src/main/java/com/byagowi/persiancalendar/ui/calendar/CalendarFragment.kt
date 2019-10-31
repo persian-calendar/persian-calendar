@@ -554,8 +554,7 @@ class CalendarFragment : DaggerFragment() {
                         )
                     )
                     setOnItemClickListener { parent, _, position, _ ->
-                        val ev = parent.getItemAtPosition(position) as BaseEvent
-                        val date = getDateFromEvent(ev)
+                        val date = getDateFromEvent(parent.getItemAtPosition(position) as BaseEvent)
                         val type = getCalendarTypeFromDate(date)
                         val today = getTodayOfCalendar(type)
                         bringDate(
