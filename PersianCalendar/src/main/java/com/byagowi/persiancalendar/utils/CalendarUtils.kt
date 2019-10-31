@@ -288,14 +288,7 @@ fun getIslamicOffset(context: Context): Int =
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    var enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, HashSet())
-
-    if (enabledTypes == null) {
-        enabledTypes = when (getAppLanguage()) {
-            LANG_FA, LANG_GLK, LANG_AZB, LANG_EN_IR, LANG_CKB -> HashSet(listOf("iran_holidays"))
-            else -> HashSet()
-        }
-    }
+    val enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
     val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
     val afghanistanOthers = enabledTypes.contains("afghanistan_others")
