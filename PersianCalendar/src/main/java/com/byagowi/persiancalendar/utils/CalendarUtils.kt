@@ -67,8 +67,7 @@ fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance()
     set(Calendar.DAY_OF_MONTH, civilDate.dayOfMonth)
 }
 
-fun getInitialOfWeekDay(position: Int): String =
-    weekDaysInitials[position % 7]
+fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
 
 fun getWeekDayName(date: AbstractDate): String = weekDays[civilDateToCalendar(
     if (date is CivilDate)
@@ -297,7 +296,7 @@ fun loadEvents(context: Context) {
 
         // https://stackoverflow.com/a/36188796
         operator fun JSONArray.iterator(): Iterator<JSONObject> =
-            (0 until length()).asSequence().map { get(it) as JSONObject }.iterator()
+            (0 until length()).map { get(it) as JSONObject }.iterator()
 
         for (event in allTheEvents.getJSONArray("Persian Calendar")) {
             val month = event.getInt("month")

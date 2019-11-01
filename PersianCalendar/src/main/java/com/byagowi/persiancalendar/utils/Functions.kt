@@ -313,23 +313,20 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
     return 0
 }
 
-fun getClockFromStringId(@StringRes stringId: Int): Clock {
-    prayTimes?.run {
-        return when (stringId) {
-            R.string.imsak -> imsakClock
-            R.string.fajr -> fajrClock
-            R.string.sunrise -> sunriseClock
-            R.string.dhuhr -> dhuhrClock
-            R.string.asr -> asrClock
-            R.string.sunset -> sunsetClock
-            R.string.maghrib -> maghribClock
-            R.string.isha -> ishaClock
-            R.string.midnight -> midnightClock
-            else -> Clock.fromInt(0)
-        }
+fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
+    when (stringId) {
+        R.string.imsak -> imsakClock
+        R.string.fajr -> fajrClock
+        R.string.sunrise -> sunriseClock
+        R.string.dhuhr -> dhuhrClock
+        R.string.asr -> asrClock
+        R.string.sunset -> sunsetClock
+        R.string.maghrib -> maghribClock
+        R.string.isha -> ishaClock
+        R.string.midnight -> midnightClock
+        else -> Clock.fromInt(0)
     }
-    return Clock.fromInt(0)
-}
+} ?: Clock.fromInt(0)
 
 fun loadAlarms(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -518,7 +515,7 @@ fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =
 
 fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
 
-fun getSpringEquinox(jdn: Long): Calendar =
+fun getSpringEquinox(jdn: Long) =
     makeCalendarFromDate(Equinox.northwardEquinox(CivilDate(jdn).year))
 
 @StringRes
@@ -911,35 +908,6 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
     return ""
 }
 
-private fun prepareForArabicSort(text: String): String =
-    text
-        .replace("ی", "ي")
-        .replace("ک", "ك")
-        .replace("گ", "كی")
-        .replace("ژ", "زی")
-        .replace("چ", "جی")
-        .replace("پ", "بی")
-        .replace("ڕ", "ری")
-        .replace("ڵ", "لی")
-        .replace("ڤ", "فی")
-        .replace("ۆ", "وی")
-        .replace("ێ", "یی")
-        .replace("ھ", "نی")
-        .replace("ە", "هی")
-
-
-val irCodeOrder = listOf("zz", "ir", "af", "iq")
-val afCodeOrder = listOf("zz", "af", "ir", "iq")
-val arCodeOrder = listOf("zz", "iq", "ir", "af")
-
-private fun getCountryCodeOrder(countryCode: String): Int =
-    when (language) {
-        LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
-        LANG_AR -> arCodeOrder.indexOf(countryCode)
-        LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
-        else -> irCodeOrder.indexOf(countryCode)
-    }
-
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
     val result = mutableListOf<CityItem>()
     try {
@@ -975,6 +943,34 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
 
     if (!needsSort) return result
 
+    val irCodeOrder = listOf("zz", "ir", "af", "iq")
+    val afCodeOrder = listOf("zz", "af", "ir", "iq")
+    val arCodeOrder = listOf("zz", "iq", "ir", "af")
+
+    fun getCountryCodeOrder(countryCode: String): Int =
+        when (language) {
+            LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
+            LANG_AR -> arCodeOrder.indexOf(countryCode)
+            LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
+            else -> irCodeOrder.indexOf(countryCode)
+        }
+
+    fun prepareForArabicSort(text: String): String =
+        text
+            .replace("ی", "ي")
+            .replace("ک", "ك")
+            .replace("گ", "كی")
+            .replace("ژ", "زی")
+            .replace("چ", "جی")
+            .replace("پ", "بی")
+            .replace("ڕ", "ری")
+            .replace("ڵ", "لی")
+            .replace("ڤ", "فی")
+            .replace("ۆ", "وی")
+            .replace("ێ", "یی")
+            .replace("ھ", "نی")
+            .replace("ە", "هی")
+
     return result.sortedWith(kotlin.Comparator { l, r ->
         if (l.key == "") return@Comparator -1
 
@@ -986,10 +982,8 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
         when (language) {
             LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
             LANG_AR -> l.ar.compareTo(r.ar)
-            LANG_CKB -> prepareForArabicSort(l.ckb)
-                .compareTo(prepareForArabicSort(r.ckb))
-            else -> prepareForArabicSort(l.fa)
-                .compareTo(prepareForArabicSort(r.fa))
+            LANG_CKB -> prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
+            else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
         }
     })
 }
