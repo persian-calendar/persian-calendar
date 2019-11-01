@@ -318,16 +318,16 @@ fun update(context: Context, updateDate: Boolean) {
                         R.string.asr, R.string.maghrib,
                         R.string.isha
                     )
-                ) { textHolderId, owghatId ->
+                ) { textHolderViewId, owghatStringId ->
                     setTextViewText(
-                        textHolderId, "${context.getString(owghatId)}\n${getFormattedClock(
-                            getClockFromStringId(owghatId),
+                        textHolderViewId, "${context.getString(owghatStringId)}\n${getFormattedClock(
+                            getClockFromStringId(owghatStringId),
                             false
                         )}"
                     )
                     setTextColor(
-                        textHolderId,
-                        if (owghatId == nextOwghatId)
+                        textHolderViewId,
+                        if (owghatStringId == nextOwghatId)
                             Color.RED
                         else
                             color
