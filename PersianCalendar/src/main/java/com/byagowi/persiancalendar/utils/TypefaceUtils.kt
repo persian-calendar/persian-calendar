@@ -22,7 +22,6 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface) {
     } catch (e: Exception) {
         Log.e("TAG", "Can not set custom font $face instead of $defaultFontNameToOverride")
     }
-
 }
 
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
