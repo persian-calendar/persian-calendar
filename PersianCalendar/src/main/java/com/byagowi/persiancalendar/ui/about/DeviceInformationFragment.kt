@@ -223,7 +223,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
     }
 
     private fun addIfNotNull(title: String, content: String?, version: String) =
-        deviceInfoItemsList.add(DeviceInfoItem(title,content ?: "Unknown", version))
+        deviceInfoItemsList.add(DeviceInfoItem(title, content ?: "Unknown", version))
 
     private fun getScreenResolution(wm: WindowManager): String =
         String.format(

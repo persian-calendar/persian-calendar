@@ -515,7 +515,7 @@ class CalendarFragment : DaggerFragment() {
                     view,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,
-                        false, null, withZodiac = true,
+                        false, emptyDeviceCalendarEventsStore, withZodiac = true,
                         withOtherCalendars = true, withTitle = true
                     )
                 )

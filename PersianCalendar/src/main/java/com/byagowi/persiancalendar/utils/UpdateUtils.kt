@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
-private var deviceCalendarEvents = SparseArray<ArrayList<DeviceCalendarEvent>>()
+private var deviceCalendarEvents = emptyDeviceCalendarEventsStore
 
 fun setDeviceCalendarEvents(context: Context) {
     try {
@@ -320,7 +320,8 @@ fun update(context: Context, updateDate: Boolean) {
                     )
                 ) { textHolderViewId, owghatStringId ->
                     setTextViewText(
-                        textHolderViewId, "${context.getString(owghatStringId)}\n${getFormattedClock(
+                        textHolderViewId,
+                        "${context.getString(owghatStringId)}\n${getFormattedClock(
                             getClockFromStringId(owghatStringId),
                             false
                         )}"

@@ -93,7 +93,7 @@ fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
 // Extra helpers
 fun getA11yDaySummary(
     context: Context, jdn: Long, isToday: Boolean,
-    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?,
+    deviceCalendarEvents: DeviceCalendarEventsStore,
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
 ): String {
     // It has some expensive calculations, lets not do that when not needed
@@ -191,10 +191,7 @@ fun getA11yDaySummary(
 private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
     (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
 
-fun getEvents(
-    jdn: Long,
-    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>?
-): List<CalendarEvent<*>> {
+fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
     val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
     val islamic = IslamicDate(jdn)
@@ -236,13 +233,10 @@ fun getEvents(
                 result.add(gregorianCalendarEvent)
 
     // This one is passed by caller
-    if (deviceCalendarEvents != null) {
-        val deviceEventList = deviceCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
-        if (deviceEventList != null)
-            for (deviceCalendarEvent in deviceEventList)
-            // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-                if (deviceCalendarEvent.date == civil)
-                    result.add(deviceCalendarEvent)
+    (deviceCalendarEvents[civil.month * 100 + civil.dayOfMonth] ?: emptyList()).forEach {
+        // holidayAwareEqualCheck is not needed as they won't have -1 on year field
+        if (it.date == civil)
+            result.add(it)
     }
 
     return result
@@ -437,18 +431,6 @@ fun loadEvents(context: Context) {
     sAllEnabledEvents = allEnabledEvents
 }
 
-fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
-    val startingDate = Calendar.getInstance()
-    startingDate.add(Calendar.YEAR, -1)
-    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
-    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
-    readDeviceEvents(
-        context, deviceCalendarEvent, allEnabledAppointments, startingDate,
-        TimeUnit.DAYS.toMillis((365 * 2).toLong())
-    )
-    return allEnabledAppointments
-}
-
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
 
@@ -482,21 +464,23 @@ fun makeCalendarFromDate(date: Date): Calendar {
     return calendar
 }
 
+typealias DeviceCalendarEventsStore = Map<Int, List<DeviceCalendarEvent>>
+val emptyDeviceCalendarEventsStore: DeviceCalendarEventsStore = emptyMap()
+
 private fun readDeviceEvents(
     context: Context,
-    deviceCalendarEvents: SparseArray<ArrayList<DeviceCalendarEvent>>,
     allEnabledAppointments: ArrayList<DeviceCalendarEvent>,
     startingDate: Calendar,
     rangeInMillis: Long
-) {
-    if (!isShowDeviceCalendarEvents()) return
-
-    if (ActivityCompat.checkSelfPermission(
+): DeviceCalendarEventsStore {
+    if (!isShowDeviceCalendarEvents() ||
+        ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.READ_CALENDAR
         ) != PackageManager.PERMISSION_GRANTED
-    ) return
+    ) return emptyDeviceCalendarEventsStore
 
+    val result = HashMap<Int, ArrayList<DeviceCalendarEvent>>()
     try {
         val builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
         ContentUris.appendId(builder, startingDate.timeInMillis - DAY_IN_MILLIS)
@@ -530,11 +514,8 @@ private fun readDeviceEvents(
                 val month = civilDate.month
                 val day = civilDate.dayOfMonth
 
-                var list: ArrayList<DeviceCalendarEvent>? =
-                    deviceCalendarEvents.get(month * 100 + day)
-                if (list == null) {
-                    list = ArrayList()
-                    deviceCalendarEvents.put(month * 100 + day, list)
+                val list = result[month * 100 + day] ?: ArrayList<DeviceCalendarEvent>().apply {
+                    result[month * 100 + day] = this
                 }
 
                 var title = it.getString(1) ?: ""
@@ -576,37 +557,34 @@ private fun readDeviceEvents(
         // We don't like crash addition from here, just catch all of exceptions
         Log.e("", "Error on device calendar events read", e)
     }
+    return result
 }
 
-fun readDayDeviceEvents(context: Context, jdn: Long): SparseArray<ArrayList<DeviceCalendarEvent>> {
-    val startingDate = civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn))
-    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
+fun readDayDeviceEvents(context: Context, jdn: Long) = readDeviceEvents(
+    context,
+    ArrayList(), // intentionally ignored result
+    civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn)),
+    DAY_IN_MILLIS
+)
+
+fun readMonthDeviceEvents(context: Context, jdn: Long) = readDeviceEvents(
+    context,
+    ArrayList(), // intentionally ignored result
+    civilDateToCalendar(CivilDate(jdn)),
+    32L * DAY_IN_MILLIS
+)
+
+fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
     val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
-    readDeviceEvents(
+    readDeviceEvents( // ignore main result this time
         context,
-        deviceCalendarEvent,
         allEnabledAppointments,
-        startingDate,
-        DAY_IN_MILLIS
+        Calendar.getInstance().apply {
+            add(Calendar.YEAR, -1)
+        },
+        TimeUnit.DAYS.toMillis((365 * 2).toLong())
     )
-    return deviceCalendarEvent
-}
-
-fun readMonthDeviceEvents(
-    context: Context,
-    jdn: Long
-): SparseArray<ArrayList<DeviceCalendarEvent>> {
-    val startingDate = civilDateToCalendar(CivilDate(jdn))
-    val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
-    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>() // intentional ignored result
-    readDeviceEvents(
-        context,
-        deviceCalendarEvent,
-        allEnabledAppointments,
-        startingDate,
-        32L * DAY_IN_MILLIS
-    )
-    return deviceCalendarEvent
+    return allEnabledAppointments
 }
 
 fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {

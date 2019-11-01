@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.month
 
 import android.content.Context
-import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
@@ -27,7 +26,7 @@ class MonthAdapter internal constructor(
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
-    private var monthEvents = SparseArray<ArrayList<DeviceCalendarEvent>>()
+    private var monthEvents = emptyDeviceCalendarEventsStore
     private val isArabicDigit: Boolean
     private val context: Context
     private var selectedDay = -1
@@ -170,7 +169,7 @@ class MonthAdapter internal constructor(
 
                     itemDayView.contentDescription = getA11yDaySummary(
                         context,
-                        day.jdn, day.isToday, monthEvents,
+                        day.jdn, day.isToday, emptyDeviceCalendarEventsStore,
                         day.isToday, withOtherCalendars = false, withTitle = true
                     )
 
@@ -178,7 +177,6 @@ class MonthAdapter internal constructor(
                 } else {
                     setEmpty()
                 }
-
             }
         }
 
