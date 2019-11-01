@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.ui.calendar.month.DaysPaintResources
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @PerFragment
 class CalendarFragmentDependency @Inject
 constructor(activity: MainActivity) {

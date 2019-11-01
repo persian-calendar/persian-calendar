@@ -65,5 +65,3 @@ var sPM = DEFAULT_PM
 var latestToastShowTime: Long = -1
 var numericalDatePreferred = false
 var calendarTypesTitleAbbr = emptyList<String>()
-//    private static List<Reminder> sReminderDetails = Collections.emptyList();
-//

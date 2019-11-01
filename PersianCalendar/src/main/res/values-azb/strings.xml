@@ -227,18 +227,4 @@
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
 
-    <!-- Reminder -->
-    <!--<string translatable="false" name="reminder_summary">هر %1$s %2$s</string>-->
-    <!--<string translatable="false" name="reminder">خاطیرلاما</string>-->
-    <!--<string translatable="false" name="reminder_name">خاطیرلاما آدی</string>-->
-    <!--<string translatable="false" name="more_information">چوخلی اطلاعات</string>-->
-    <!--<string translatable="false" name="reminder_period">تناوب خاطیرلامالاری</string>-->
-    <!--<string translatable="false" name="period_starting_time"> باشلاما تناوبی</string>-->
-    <!--<string translatable="false" name="please_enter_a_name">لطفاً بیر آد وارید ائلیین</string>-->
-    <!--<string translatable="false" name="reminder_hour">ساعات</string>-->
-    <!--<string translatable="false" name="reminder_day">گون</string>-->
-    <!--<string translatable="false" name="reminded">%1$s سری اعلان اولوب</string>-->
-    <!--<string translatable="false" name="no_guaranty">یادآورهای یکباره را می‌توان در صفحهٔ اصلی تقویم تنظیم کرد. تضمینی در صحت عملکرد این بخش از برنامه همانند سایر بخش‌ها وجود ندارد و عملکرد آن بستگی به تنظیمات دستگاه و عدم استفاده از حالت ذخیرهٔ نیرو دارد.</string>-->
-    <!--<string translatable="false" name="item_removed">«%1$s» حذف اولدی</string>-->
-
 </resources>

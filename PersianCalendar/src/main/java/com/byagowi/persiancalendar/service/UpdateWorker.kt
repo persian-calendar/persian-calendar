@@ -22,5 +22,4 @@ class UpdateWorker(val context: Context, workerParams: WorkerParameters) :
             Result.failure()
         }
     }
-
 }

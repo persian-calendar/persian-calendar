@@ -226,15 +226,4 @@
     <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
 
-    <!-- Reminder -->
-    <!--<string name="reminder_summary">هر %1$s %2$s</string>-->
-    <!--<string name="reminder">یادآوردن</string>-->
-    <!--<string name="reminder_name">نامˈياد أوردن</string>-->
-    <!--<string name="more_information">ايطلاعاتˇويشتر</string>-->
-    <!--<string name="reminder_period">تناوب یادآور</string>-->
-    <!--<string name="period_starting_time">زمان شروع تناوب</string>-->
-    <!--<string name="please_enter_a_name">ايتأ ايسٚم بينيويسيد لؤطفن</string>-->
-    <!--<string name="reminder_hour">ساعت</string>-->
-    <!--<string name="reminder_day">رۊز</string>-->
-
 </resources>

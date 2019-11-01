@@ -23,9 +23,6 @@
             android:id="@+id/navigate_to_about"
             app:destination="@id/about" />
         <action
-            android:id="@+id/navigate_to_reminder"
-            app:destination="@id/reminder" />
-        <action
             android:id="@+id/navigate_to_settings"
             app:destination="@id/settings" />
         <action
@@ -74,10 +71,5 @@
         android:id="@+id/deviceInfo"
         android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationFragment"
         android:label="Device Information Fragment" />
-
-    <fragment
-        android:id="@+id/reminder"
-        android:name="com.byagowi.persiancalendar.ui.reminder.ReminderFragment"
-        android:label="Reminder Fragment" />
 
 </navigation>

@@ -5,11 +5,6 @@ const val ATHAN_RINGTONE_REQUEST_CODE = 19
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
 const val CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63
 
-const val REMINDERS_STORE_KEY = "REMINDERS_STORE"
-const val REMINDERS_COUNT_KEY = "REMINDER_%d"
-const val REMINDER_ID = "reminder_id"
-const val SIGNAL_PAUSE = 5
-
 const val LANG_FA = "fa"
 const val LANG_FA_AF = "fa-AF"
 const val LANG_PS = "ps"
@@ -92,8 +87,6 @@ const val MODERN_THEME = "ClassicTheme" // don't change it, for legacy reasons
 const val LOAD_APP_ID = 1000
 const val THREE_HOURS_APP_ID = 1010
 const val ALARMS_BASE_ID = 2000
-const val REMINDERS_BASE_ID = 10000 // reserved till 20000
-const val REMINDERS_MAX_ID = 10000
 
 const val OFFSET_ARGUMENT = "OFFSET_ARGUMENT"
 const val BROADCAST_ALARM = "BROADCAST_ALARM"

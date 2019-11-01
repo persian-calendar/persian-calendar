@@ -22,7 +22,6 @@ import dagger.android.ContributesAndroidInjector
 
 import net.androgames.level.LevelFragment
 
-
 @Module(includes = [AndroidInjectionModule::class])
 abstract class AppModule {
     @PerActivity
@@ -76,14 +75,6 @@ abstract class MainActivityModule {
     @PerFragment
     @ContributesAndroidInjector
     internal abstract fun deviceInfoFragmentInjector(): DeviceInformationFragment
-
-    //    @PerFragment
-    //    @ContributesAndroidInjector
-    //    abstract ReminderFragment reminderFragmentInjector();
-    //
-    //    @PerFragment
-    //    @ContributesAndroidInjector
-    //    abstract EditReminderDialog editReminderFragmentInjector();
 
     @PerFragment
     @ContributesAndroidInjector

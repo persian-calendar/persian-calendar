@@ -62,14 +62,6 @@
             android:launchMode="singleTop"
             android:theme="@style/FullscreenTheme" />
 
-        <!--<activity-->
-            <!--android:name=".ui.reminder.ReminderActivity"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"-->
-            <!--android:excludeFromRecents="true"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/FullscreenTheme" />-->
-
         <receiver
             android:name=".service.BroadcastReceivers"
             android:exported="false">
@@ -168,10 +160,6 @@
             android:name=".service.AthanNotification"
             android:label="Athan Service" />
 
-        <!--<receiver-->
-            <!--android:name=".service.ReminderAlert"-->
-            <!--android:label="@string/widget_name" />-->
-
         <service
             android:name=".service.PersianCalendarTileService"
             android:icon="@drawable/day18"
@@ -181,10 +169,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
-        <!--<service-->
-            <!--android:name=".service.ReminderNotification"-->
-            <!--android:label="Reminder Service" />-->
 
     </application>
 

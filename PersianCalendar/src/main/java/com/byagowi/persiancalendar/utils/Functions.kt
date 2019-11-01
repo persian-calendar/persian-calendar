@@ -362,9 +362,6 @@ fun loadAlarms(context: Context) {
             setAlarm(context, name, alarmTime, i, athanGap)
         }
     }
-    //        for (Reminder event : Utils.getReminderDetails()) {
-    //            ReminderUtils.turnOn(context, event);
-    //        }
 }
 
 private fun setAlarm(
@@ -784,8 +781,6 @@ fun updateStoredPreference(context: Context) {
         sShiftWorkRecurs = true
         sShiftWorkTitles = emptyMap()
     }
-
-    //        sReminderDetails = updateSavedReminders(context);
 
     when (getAppLanguage()) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
