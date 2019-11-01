@@ -1,5 +1,6 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -57,6 +58,7 @@ android {
                     "PersianCalendar-debug-$appVerboseVersion.apk"
             }
             versionNameSuffix = "-$appVerboseVersion"
+            applicationIdSuffix = ".debug"
         }
         getByName("release") {
             buildOutputs.all {
@@ -74,10 +76,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+// compile bytecode to java 8 (default is java 6)
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 dependencies {
