@@ -70,14 +70,12 @@ fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance()
 fun getInitialOfWeekDay(position: Int): String =
     weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate): String {
-    val civilDate = if (date is CivilDate)
+fun getWeekDayName(date: AbstractDate): String = weekDays[civilDateToCalendar(
+    if (date is CivilDate)
         date
     else
         CivilDate(date)
-
-    return weekDays[civilDateToCalendar(civilDate).get(Calendar.DAY_OF_WEEK) % 7]
-}
+).get(Calendar.DAY_OF_WEEK) % 7]
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
@@ -470,13 +468,11 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     return baseFormatClock(hour, clock.minute) + " " + suffix
 }
 
-fun calendarToCivilDate(calendar: Calendar): CivilDate {
-    return CivilDate(
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH) + 1,
-        calendar.get(Calendar.DAY_OF_MONTH)
-    )
-}
+fun calendarToCivilDate(calendar: Calendar) = CivilDate(
+    calendar.get(Calendar.YEAR),
+    calendar.get(Calendar.MONTH) + 1,
+    calendar.get(Calendar.DAY_OF_MONTH)
+)
 
 fun makeCalendarFromDate(date: Date): Calendar {
     val calendar = Calendar.getInstance()
@@ -581,7 +577,6 @@ private fun readDeviceEvents(
         // We don't like crash addition from here, just catch all of exceptions
         Log.e("", "Error on device calendar events read", e)
     }
-
 }
 
 fun readDayDeviceEvents(context: Context, jdn: Long): SparseArray<ArrayList<DeviceCalendarEvent>> {
