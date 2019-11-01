@@ -174,7 +174,7 @@ class CalendarFragment : DaggerFragment() {
             tabsViewPager.setCurrentItem(lastTab, false)
         }
 
-        val today = getTodayOfCalendar(getMainCalendar())
+        val today = getTodayOfCalendar(mainCalendar)
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
             getMonthName(today),
             formatNumber(today.year)
@@ -184,7 +184,7 @@ class CalendarFragment : DaggerFragment() {
             mLastSelectedJdn = jdn
             mCalendarsView.showCalendars(
                 mLastSelectedJdn,
-                getMainCalendar(),
+                mainCalendar,
                 getEnabledCalendarTypes()
             )
             val isToday = getTodayJdn() == mLastSelectedJdn
@@ -225,7 +225,7 @@ class CalendarFragment : DaggerFragment() {
                         .setData(CalendarContract.Events.CONTENT_URI)
                         .putExtra(
                             CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+                                getDateFromJdnOfCalendar(mainCalendar, jdn)
                             )
                         )
                         .putExtra(
@@ -508,7 +508,7 @@ class CalendarFragment : DaggerFragment() {
         mLastSelectedJdn = jdn
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 
-        if (isTalkBackEnabled()) {
+        if (isTalkBackEnabled) {
             val todayJdn = getTodayJdn()
             if (jdn != todayJdn) {
                 createAndShowShortSnackbar(
@@ -524,7 +524,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
-        val mainCalendar = getMainCalendar()
+        val mainCalendar = mainCalendar
         val today = getTodayOfCalendar(mainCalendar)
         val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
         return (today.year - date.year) * 12 + today.month - date.month
@@ -615,7 +615,7 @@ class CalendarFragment : DaggerFragment() {
             )
             R.id.month_overview -> {
                 val visibleMonthJdn = MonthFragment.getDateFromOffset(
-                    getMainCalendar(),
+                    mainCalendar,
                     mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.currentItem)
                 ).toJdn()
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(

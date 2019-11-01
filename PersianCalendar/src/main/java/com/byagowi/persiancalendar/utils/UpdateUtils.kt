@@ -56,7 +56,7 @@ fun update(context: Context, updateDate: Boolean) {
     Log.d("UpdateUtils", "update")
     applyAppLanguage(context)
     val calendar = makeCalendarFromDate(Date())
-    val mainCalendar = getMainCalendar()
+    val mainCalendar = mainCalendar
     val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
@@ -71,7 +71,7 @@ fun update(context: Context, updateDate: Boolean) {
     //
     //
     val manager = AppWidgetManager.getInstance(context) ?: return
-    val colorInt = getSelectedWidgetTextColor()
+    val colorInt = selectedWidgetTextColor
     val color = Color.parseColor(colorInt)
 
     // en-US is our only real LTR language for now
@@ -85,7 +85,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int): Unit =
         this.setInt(layoutId, "setBackgroundColor",
-            Color.parseColor(getSelectedWidgetBackgroundColor()))
+            Color.parseColor(selectedWidgetBackgroundColor))
 
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
         RemoteViews(context.packageName, R.layout.widget1x1).apply {
@@ -120,7 +120,7 @@ fun update(context: Context, updateDate: Boolean) {
     val shiftWorkTitle = getShiftWorkTitle(jdn, false)
     if (shiftWorkTitle.isNotEmpty())
         title += " ($shiftWorkTitle)"
-    var subtitle = dateStringOfOtherCalendars(jdn, getSpacedComma())
+    var subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
     val currentClock = Clock(calendar)
     var owghat = ""
@@ -138,8 +138,8 @@ fun update(context: Context, updateDate: Boolean) {
     }
     val events = getEvents(jdn, deviceCalendarEvents)
 
-    val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
-    val isCenterAligned = isCenterAlignWidgets()
+    val enableClock = isWidgetClock && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
+    val isCenterAligned = isCenterAlignWidgets
 
     if (manager.getAppWidgetIds(widget4x1)?.isNotEmpty() == true || manager.getAppWidgetIds(
             widget2x2
@@ -200,7 +200,7 @@ fun update(context: Context, updateDate: Boolean) {
                 text2 = mainDateString
             }
             if (isShownOnWidgets("other_calendars")) {
-                text2 += getSpacedComma() + subtitle
+                text2 += spacedComma + subtitle
             }
 
             setTextViewText(R.id.textPlaceholder2_4x1, text2)
@@ -234,7 +234,7 @@ fun update(context: Context, updateDate: Boolean) {
             )
             if (holidays.isNotEmpty()) {
                 setTextViewText(R.id.holiday_2x2, holidays)
-                if (isTalkBackEnabled()) {
+                if (isTalkBackEnabled) {
                     setContentDescription(
                         R.id.holiday_2x2,
                         context.getString(R.string.holiday_reason) + " " +
@@ -396,7 +396,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
     }
 
-    if (isNotifyDate()) {
+    if (isNotifyDate) {
         val notificationManager = context.getSystemService<NotificationManager>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
@@ -409,7 +409,7 @@ fun update(context: Context, updateDate: Boolean) {
         }
 
         // Don't remove this condition checking ever
-        if (isTalkBackEnabled()) {
+        if (isTalkBackEnabled) {
             // Don't use isToday, per a feedback
             subtitle = getA11yDaySummary(
                 context, jdn, false,
@@ -417,7 +417,7 @@ fun update(context: Context, updateDate: Boolean) {
                 withZodiac = true, withOtherCalendars = true, withTitle = false
             )
             if (owghat.isNotEmpty()) {
-                subtitle += getSpacedComma()
+                subtitle += spacedComma
                 subtitle += owghat
             }
         }
@@ -429,7 +429,7 @@ fun update(context: Context, updateDate: Boolean) {
             .setWhen(0)
             .setContentIntent(launchAppPendingIntent)
             .setVisibility(
-                if (isNotifyDateOnLockScreen())
+                if (isNotifyDateOnLockScreen)
                     NotificationCompat.VISIBILITY_PUBLIC
                 else
                     NotificationCompat.VISIBILITY_SECRET
@@ -443,7 +443,7 @@ fun update(context: Context, updateDate: Boolean) {
         val isSamsungOrHtcNightMode =
             (Build.BRAND == "samsung" || Build.BRAND == "htc") && isNightModeEnabled(context)
 
-        if (!isTalkBackEnabled() && !isSamsungOrHtcNightMode &&
+        if (!isTalkBackEnabled && !isSamsungOrHtcNightMode &&
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)
         ) {
             val cv = RemoteViews(

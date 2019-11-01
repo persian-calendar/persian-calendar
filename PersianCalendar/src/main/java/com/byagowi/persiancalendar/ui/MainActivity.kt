@@ -215,8 +215,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         creationDateJdn = getTodayJdn()
 
-        if (getMainCalendar() == CalendarType.SHAMSI &&
-            isIranHolidaysEnabled() &&
+        if (mainCalendar == CalendarType.SHAMSI &&
+            sIsIranHolidaysEnabled &&
             getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
         ) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {

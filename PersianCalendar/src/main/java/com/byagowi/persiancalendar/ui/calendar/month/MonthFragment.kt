@@ -67,7 +67,7 @@ class MonthFragment : DaggerFragment() {
         ///////
         ///////
         ///////
-        val mainCalendar = getMainCalendar()
+        val mainCalendar = mainCalendar
         val days = ArrayList<DayItem>()
 
         val date = getDateFromOffset(mainCalendar, offset)

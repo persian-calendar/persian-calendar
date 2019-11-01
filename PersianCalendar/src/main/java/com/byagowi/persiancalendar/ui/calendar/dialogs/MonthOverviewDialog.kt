@@ -35,7 +35,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         val records = ArrayList<MonthOverviewRecord>()
 
-        val mainCalendar = getMainCalendar()
+        val mainCalendar = mainCalendar
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)

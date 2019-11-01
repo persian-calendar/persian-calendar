@@ -64,46 +64,13 @@ fun initUtils(context: Context) {
     loadEvents(context)
 }
 
-@StyleRes
-fun getAppTheme(): Int = appTheme
-
 fun getMaxSupportedYear(): Int = 1398
-
-fun getShiftWorks(): List<ShiftWorkRecord> = sShiftWorks
-
-fun getShiftWorkStartingJdn(): Long = sShiftWorkStartingJdn
-
-fun getShiftWorkRecurs(): Boolean = sShiftWorkRecurs
-
-fun getShiftWorkTitles(): Map<String, String> = sShiftWorkTitles
-
-fun getMainCalendar(): CalendarType = mainCalendar
 
 fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
 
-fun isAstronomicalFeaturesEnabled(): Boolean = astronomicalFeaturesEnabled
-
 fun isArabicDigitSelected(): Boolean = preferredDigits.contentEquals(ARABIC_DIGITS)
 
-fun isWidgetClock(): Boolean = widgetClock
-
-fun isNotifyDate(): Boolean = notifyDate
-
-fun getSelectedWidgetTextColor(): String = selectedWidgetTextColor
-
-fun getSelectedWidgetBackgroundColor(): String = selectedWidgetBackgroundColor
-
-fun isIranHolidaysEnabled(): Boolean = sIsIranHolidaysEnabled
-
 fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-fun isTalkBackEnabled(): Boolean = talkBackEnabled
-
-fun isCenterAlignWidgets(): Boolean = centerAlignWidgets
-
-fun getSpacedComma(): String = spacedComma
-
-fun isNotifyDateOnLockScreen(): Boolean = notifyInLockScreen
 
 fun toLinearDate(date: AbstractDate): String = String.format(
     "%s/%s/%s", formatNumber(date.year),
@@ -200,7 +167,7 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String {
     return result
 }
 
-fun getEnabledCalendarTypes(): List<CalendarType> = listOf(getMainCalendar()) + otherCalendars
+fun getEnabledCalendarTypes(): List<CalendarType> = listOf(mainCalendar) + otherCalendars
 
 private fun loadLanguageResource(context: Context) {
     @RawRes val messagesFile: Int = when (language) {
@@ -585,7 +552,7 @@ fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate =
     }
 
 fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
-    if (!isTalkBackEnabled()) return
+    if (!isTalkBackEnabled) return
 
     val context = view.context ?: return
 
@@ -728,14 +695,14 @@ fun updateStoredPreference(context: Context) {
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
-    notifyInLockScreen = prefs.getBoolean(
+    isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN,
         DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )
-    widgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
-    notifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+    isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
+    isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-    centerAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
+    isCenterAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
 
     selectedWidgetTextColor =
         (prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR)
@@ -783,7 +750,7 @@ fun updateStoredPreference(context: Context) {
     whatToShowOnWidgets = prefs.getStringSet("what_to_show", null)
         ?: resources.getStringArray(R.array.what_to_show_default).toSet()
 
-    astronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
+    isAstronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
     numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
 
     if (getOnlyLanguage(getAppLanguage()) != resources.getString(R.string.code))
@@ -839,7 +806,7 @@ fun updateStoredPreference(context: Context) {
     }
 
     context.getSystemService<AccessibilityManager>()?.run {
-        talkBackEnabled = isEnabled && isTouchExplorationEnabled
+        isTalkBackEnabled = isEnabled && isTouchExplorationEnabled
     }
 }
 

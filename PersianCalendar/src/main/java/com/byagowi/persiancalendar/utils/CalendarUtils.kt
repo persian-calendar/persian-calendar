@@ -59,7 +59,7 @@ fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
 
 fun dayTitleSummary(date: AbstractDate): String =
-    getWeekDayName(date) + getSpacedComma() + formatDate(date)
+    getWeekDayName(date) + spacedComma + formatDate(date)
 
 fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance().apply {
     set(Calendar.YEAR, civilDate.year)
@@ -124,7 +124,7 @@ fun getA11yDaySummary(
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
 ): String {
     // It has some expensive calculations, lets not do that when not needed
-    if (!isTalkBackEnabled()) return ""
+    if (!isTalkBackEnabled) return ""
 
     val result = StringBuilder()
 
@@ -133,7 +133,7 @@ fun getA11yDaySummary(
         result.append("\n")
     }
 
-    val mainDate = getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+    val mainDate = getDateFromJdnOfCalendar(mainCalendar, jdn)
 
     if (withTitle) {
         result.append("\n")
@@ -147,7 +147,7 @@ fun getA11yDaySummary(
     }
 
     if (withOtherCalendars) {
-        val otherCalendars = dateStringOfOtherCalendars(jdn, getSpacedComma())
+        val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
             result.append("\n")
             result.append("\n")
@@ -189,7 +189,7 @@ fun getA11yDaySummary(
 
     if (isWeekOfYearEnabled()) {
         val startOfYearJdn = getDateOfCalendar(
-            getMainCalendar(),
+            mainCalendar,
             mainDate.year, 1, 1
         ).toJdn()
         val weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn)

@@ -52,7 +52,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = getTodayJdn()
 
-        jdn = getShiftWorkStartingJdn()
+        jdn = sShiftWorkStartingJdn
         var isFirstSetup = false
         if (jdn == -1L) {
             isFirstSetup = true
@@ -64,7 +64,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
 
-        var shiftWorks: List<ShiftWorkRecord> = getShiftWorks()
+        var shiftWorks: List<ShiftWorkRecord> = sShiftWorks
         if (shiftWorks.isEmpty())
             shiftWorks = listOf(ShiftWorkRecord("d", 0))
         val shiftWorkItemAdapter = ItemsAdapter(shiftWorks, binding)
@@ -75,7 +75,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (isFirstSetup) R.string.shift_work_starting_date else R.string.shift_work_starting_date_edit
             ),
             formatDate(
-                getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+                getDateFromJdnOfCalendar(mainCalendar, jdn)
             )
         )
 
@@ -84,12 +84,12 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             binding.description.text = String.format(
                 getString(R.string.shift_work_starting_date),
                 formatDate(
-                    getDateFromJdnOfCalendar(getMainCalendar(), jdn)
+                    getDateFromJdnOfCalendar(mainCalendar, jdn)
                 )
             )
             shiftWorkItemAdapter.reset()
         }
-        binding.recurs.isChecked = getShiftWorkRecurs()
+        binding.recurs.isChecked = sShiftWorkRecurs
 
         return AlertDialog.Builder(mainActivity)
             .setView(binding.root)
@@ -148,7 +148,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             updateShiftWorkResult()
         }
 
-        fun shiftWorkKeyToString(type: String): String = getShiftWorkTitles()[type] ?: type
+        fun shiftWorkKeyToString(type: String): String = sShiftWorkTitles[type] ?: type
 
         private fun updateShiftWorkResult() {
             val result = StringBuilder()
@@ -159,7 +159,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 if (first)
                     first = false
                 else
-                    result.append(getSpacedComma())
+                    result.append(spacedComma)
                 result.append(
                     String.format(
                         getString(R.string.shift_work_record_title),
