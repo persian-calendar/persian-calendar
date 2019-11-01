@@ -169,14 +169,14 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         addView(colorsToPick)
     }
 
-    fun setColorsToPick(@ColorInt colors: IntArray) {
+    fun setColorsToPick(@ColorInt colors: List<Long>) {
         colorsToPick.removeAllViews()
 
         val context = context ?: return
 
         val density = context.resources.displayMetrics.density
 
-        for (color in colors) {
+        colors.map(Long::toInt).forEach { color ->
             val view = View(context).apply {
                 setBackgroundColor(color)
                 layoutParams = FrameLayout.LayoutParams(
