@@ -58,6 +58,7 @@ android {
                     "PersianCalendar-debug-$appVerboseVersion.apk"
             }
             versionNameSuffix = "-$appVerboseVersion"
+            applicationIdSuffix = ".debug"
         }
         getByName("release") {
             buildOutputs.all {
