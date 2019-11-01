@@ -24,7 +24,7 @@ import kotlin.math.abs
 
 private const val ALPHA_FULL = 1.0f
 
-class SimpleItemTouchHelperCallback constructor(private val mAdapter: RecyclerListAdapter) :
+class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
     ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled(): Boolean = true

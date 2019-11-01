@@ -93,7 +93,7 @@ class DeviceInformationFragment : DaggerFragment() {
     }
 }
 
-class DeviceInfoAdapter constructor(activity: Activity, private val rootView: View) :
+class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
     ListAdapter<DeviceInfoAdapter.DeviceInfoItem, DeviceInfoAdapter.ViewHolder>(
         DeviceInfoDiffCallback()
     ) {

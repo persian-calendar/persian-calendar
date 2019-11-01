@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.utils.getAppLanguage
 
-class LocationAdapter constructor(
+class LocationAdapter(
     private val mLocationPreferenceDialog: LocationPreferenceDialog,
     private val mCities: List<CityItem>
 ) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {

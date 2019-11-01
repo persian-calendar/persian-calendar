@@ -28,7 +28,7 @@ import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import java.util.*
 
-class RecyclerListAdapter constructor(
+class RecyclerListAdapter(
     private val calendarPreferenceDialog: CalendarPreferenceDialog,
     private val mainActivityDependency: MainActivityDependency,
     titles: List<String>, values: List<String>, enabled: List<Boolean>
@@ -124,7 +124,7 @@ class RecyclerListAdapter constructor(
 
     override fun getItemCount(): Int = titles.size
 
-    inner class ItemViewHolder constructor(private val binding: CalendarTypeItemBinding) :
+    inner class ItemViewHolder(private val binding: CalendarTypeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(position: Int) {

@@ -18,7 +18,7 @@ class IndeterminateProgressBar @JvmOverloads constructor(
             ValueAnimator.ofArgb(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE).apply {
                 duration = 3000
                 interpolator = LinearInterpolator()
-                repeatMode = ValueAnimator.RESTART
+                repeatMode = ValueAnimator.REVERSE
                 repeatCount = ValueAnimator.INFINITE
                 addUpdateListener {
                     indeterminateDrawable?.setColorFilter(
