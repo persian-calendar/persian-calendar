@@ -443,7 +443,7 @@ class CalendarFragment : DaggerFragment() {
         )
         val adapter = mOwghatBinding.timesRecyclerView.adapter
         if (adapter is TimeItemAdapter)
-            adapter.setTimes(prayTimes)
+            adapter.mPrayTimes = prayTimes
 
         var moonPhase = 1.0
         try {

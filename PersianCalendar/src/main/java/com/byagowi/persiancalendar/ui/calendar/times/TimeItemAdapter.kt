@@ -18,7 +18,11 @@ private val timeNames = listOf(
 )
 
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
-    private var mPrayTimes: PrayTimes? = null
+    var mPrayTimes: PrayTimes? = null
+        set(prayTimes) {
+            field = prayTimes
+            for (i in timeNames.indices) notifyItemChanged(i)
+        }
     var isExpanded = false
         set(expanded) {
             field = expanded
@@ -33,11 +37,6 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int = timeNames.size
-
-    fun setTimes(prayTimes: PrayTimes) {
-        mPrayTimes = prayTimes
-        for (i in timeNames.indices) notifyItemChanged(i)
-    }
 
     inner class ViewHolder(private val binding: TimeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
