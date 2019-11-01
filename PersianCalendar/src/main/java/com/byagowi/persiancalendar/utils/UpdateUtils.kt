@@ -29,20 +29,6 @@ import java.util.concurrent.TimeUnit.MINUTES
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents = SparseArray<ArrayList<DeviceCalendarEvent>>()
-@StringRes
-private val timesOn4x2Shia =
-    intArrayOf(R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight)
-@StringRes
-private val timesOn4x2Sunna =
-    intArrayOf(R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha)
-@IdRes
-private val owghatPlaceHolderId = intArrayOf(
-    R.id.textPlaceholder4owghat_1_4x2,
-    R.id.textPlaceholder4owghat_2_4x2,
-    R.id.textPlaceholder4owghat_3_4x2,
-    R.id.textPlaceholder4owghat_4_4x2,
-    R.id.textPlaceholder4owghat_5_4x2
-)
 
 fun setDeviceCalendarEvents(context: Context) {
     try {
@@ -84,9 +70,12 @@ fun update(context: Context, updateDate: Boolean) {
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
 
     fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int): Unit =
-        this.setInt(layoutId, "setBackgroundColor",
-            Color.parseColor(getSelectedWidgetBackgroundColor()))
+        this.setInt(
+            layoutId, "setBackgroundColor",
+            Color.parseColor(getSelectedWidgetBackgroundColor())
+        )
 
+    //region Widget 1x1
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
         RemoteViews(context.packageName, R.layout.widget1x1).apply {
             setBackgroundColor(R.id.widget_layout1x1)
@@ -104,6 +93,7 @@ fun update(context: Context, updateDate: Boolean) {
             manager.updateAppWidget(widget1x1, this)
         }
     }
+    //endregion
 
     var dateHasChanged = false
     if (pastDate == null || pastDate != date || updateDate) {
@@ -124,6 +114,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     val currentClock = Clock(calendar)
     var owghat = ""
+
     @StringRes
     val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
@@ -141,6 +132,7 @@ fun update(context: Context, updateDate: Boolean) {
     val enableClock = isWidgetClock() && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1
     val isCenterAligned = isCenterAlignWidgets()
 
+    //region Widget 4x1 and 2x2
     if (manager.getAppWidgetIds(widget4x1)?.isNotEmpty() == true || manager.getAppWidgetIds(
             widget2x2
         )?.isNotEmpty() == true
@@ -276,18 +268,16 @@ fun update(context: Context, updateDate: Boolean) {
             manager.updateAppWidget(widget2x2, this)
         }
     }
+    //endregion
 
     //region Widget 4x2
     if (manager.getAppWidgetIds(widget4x2)?.isNotEmpty() == true) {
-        val remoteViews4x2: RemoteViews = if (enableClock) {
-            if (!isIranTime()) {
-                RemoteViews(context.packageName, R.layout.widget4x2_clock)
-            } else {
-                RemoteViews(context.packageName, R.layout.widget4x2_clock_iran)
-            }
-        } else {
-            RemoteViews(context.packageName, R.layout.widget4x2)
-        }
+        val remoteViews4x2: RemoteViews = RemoteViews(
+            context.packageName,
+            if (enableClock) {
+                if (isIranTime()) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
+            } else R.layout.widget4x2
+        )
 
         remoteViews4x2.run {
             setBackgroundColor(R.id.widget_layout4x2)
@@ -307,26 +297,37 @@ fun update(context: Context, updateDate: Boolean) {
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
-            if (isShownOnWidgets("other_calendars")) {
+            if (isShownOnWidgets("other_calendars"))
                 text2 = text2 + "\n" + dateStringOfOtherCalendars(jdn, "\n")
-            }
 
             setTextViewText(R.id.textPlaceholder1_4x2, text2)
 
             if (nextOwghatId != 0) {
-                @StringRes
-                val timesOn4x2 =
-                    if (isShiaPrayTimeCalculationSelected()) timesOn4x2Shia else timesOn4x2Sunna
                 // Set text of owghats
-                for (i in owghatPlaceHolderId.indices) {
+                listOf(
+                    R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
+                    R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
+                    R.id.textPlaceholder4owghat_5_4x2
+                ).zip(
+                    if (isShiaPrayTimeCalculationSelected()) listOf(
+                        R.string.fajr, R.string.dhuhr,
+                        R.string.sunset, R.string.maghrib,
+                        R.string.midnight
+                    ) else listOf(
+                        R.string.fajr, R.string.dhuhr,
+                        R.string.asr, R.string.maghrib,
+                        R.string.isha
+                    )
+                ) { textHolderId, owghatId ->
                     setTextViewText(
-                        owghatPlaceHolderId[i],
-                        context.getString(timesOn4x2[i]) + "\n" +
-                                getFormattedClock(getClockFromStringId(timesOn4x2[i]), false)
+                        textHolderId, "${context.getString(owghatId)}\n${getFormattedClock(
+                            getClockFromStringId(owghatId),
+                            false
+                        )}"
                     )
                     setTextColor(
-                        owghatPlaceHolderId[i],
-                        if (timesOn4x2[i] == nextOwghatId)
+                        textHolderId,
+                        if (owghatId == nextOwghatId)
                             Color.RED
                         else
                             color
@@ -422,7 +423,7 @@ fun update(context: Context, updateDate: Boolean) {
             }
         }
 
-        var builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
+        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSmallIcon(getDayIconResource(date.dayOfMonth))
             .setOngoing(true)
@@ -447,31 +448,24 @@ fun update(context: Context, updateDate: Boolean) {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)
         ) {
             val cv = RemoteViews(
-                context.packageName, if (isRTL) {
-                    R.layout.custom_notification
-                } else {
-                    R.layout.custom_notification_ltr
-                }
+                context.packageName,
+                if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
             ).apply {
                 setTextViewText(R.id.title, title)
                 setTextViewText(R.id.body, subtitle)
             }
 
-
             val bcv = RemoteViews(
-                context.packageName, if (isRTL) {
-                    R.layout.custom_notification_big
-                } else {
-                    R.layout.custom_notification_big_ltr
-                }
+                context.packageName,
+                if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
             ).apply {
                 setTextViewText(R.id.title, title)
 
-                if (subtitle.isNotEmpty()) {
-                    setTextViewText(R.id.body, subtitle)
-                } else {
-                    setViewVisibility(R.id.body, View.GONE)
-                }
+                fun RemoteViews.setTextViewTextOrIfEmpty(viewId: Int, text: CharSequence) =
+                    if (text.trim().isEmpty()) setViewVisibility(viewId, View.GONE)
+                    else setTextViewText(viewId, text.trim())
+
+                setTextViewTextOrIfEmpty(R.id.body, subtitle)
 
                 val holidays = getEventsTitle(
                     events,
@@ -480,52 +474,42 @@ fun update(context: Context, updateDate: Boolean) {
                     showDeviceCalendarEvents = true,
                     insertRLM = isRTL
                 )
-                if (holidays.isNotEmpty()) {
-                    setTextViewText(R.id.holidays, holidays)
-                } else {
-                    setViewVisibility(R.id.holidays, View.GONE)
-                }
+                setTextViewTextOrIfEmpty(R.id.holidays, holidays)
 
                 val nonHolidays = getEventsTitle(
-                    events,
+                    dayEvents = events,
                     holiday = false,
                     compact = true,
                     showDeviceCalendarEvents = true,
                     insertRLM = isRTL
                 )
-                if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
-                    setTextViewText(R.id.nonholidays, nonHolidays.trim())
-                } else {
-                    setViewVisibility(R.id.nonholidays, View.GONE)
-                }
+                setTextViewTextOrIfEmpty(
+                    R.id.nonholidays,
+                    if (isShownOnWidgets("non_holiday_events")) "" else nonHolidays
+                )
 
-                if (isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
-                    setTextViewText(R.id.owghat, owghat)
-                } else {
-                    setViewVisibility(R.id.owghat, View.GONE)
-                }
+                setTextViewTextOrIfEmpty(
+                    R.id.owghat,
+                    if (isShownOnWidgets("owghat")) "" else owghat
+                )
             }
 
-            builder = builder
+            builder
                 .setCustomContentView(cv)
                 .setCustomBigContentView(bcv)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
-        if (BuildConfig.DEBUG) {
-            builder = builder.setWhen(Calendar.getInstance().timeInMillis)
-        }
+        if (BuildConfig.DEBUG) builder.setWhen(Calendar.getInstance().timeInMillis)
 
-        if (goForWorker()) {
+        if (goForWorker())
             notificationManager?.notify(NOTIFICATION_ID, builder.build())
-        } else {
+        else
             try {
                 ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
             } catch (e: Exception) {
                 Log.e("UpdateUtils", "failed to start service with the notification", e)
             }
-
-        }
     } else if (goForWorker()) {
         context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
     }
