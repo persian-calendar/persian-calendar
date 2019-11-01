@@ -604,7 +604,7 @@ fun readMonthDeviceEvents(
 ): SparseArray<ArrayList<DeviceCalendarEvent>> {
     val startingDate = civilDateToCalendar(CivilDate(jdn))
     val deviceCalendarEvent = SparseArray<ArrayList<DeviceCalendarEvent>>()
-    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
+    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>() // intentional ignored result
     readDeviceEvents(
         context,
         deviceCalendarEvent,
