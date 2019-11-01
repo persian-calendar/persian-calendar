@@ -120,7 +120,7 @@ class MonthAdapter internal constructor(
                             weekNumber,
                             daysPaintResources.weekNumberTextSize
                         )
-                        if (isTalkBackEnabled()) {
+                        if (isTalkBackEnabled) {
                             itemDayView.contentDescription = String.format(
                                 context.getString(R.string.nth_week_of_year),
                                 weekNumber
@@ -143,7 +143,7 @@ class MonthAdapter internal constructor(
                     getInitialOfWeekDay(fixDayOfWeek(position)),
                     daysPaintResources.weekDaysInitialTextSize
                 )
-                if (isTalkBackEnabled()) {
+                if (isTalkBackEnabled) {
                     itemDayView.contentDescription = String.format(
                         context.getString(R.string.week_days_name_column),
                         getWeekDayName(fixDayOfWeek(position))
