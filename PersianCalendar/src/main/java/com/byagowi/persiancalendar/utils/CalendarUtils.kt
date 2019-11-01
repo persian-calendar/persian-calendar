@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.text.Html
 import android.util.Log
-import android.util.SparseArray
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -26,9 +25,9 @@ import kotlin.math.ceil
 
 val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 var sAllEnabledEvents: List<CalendarEvent<*>> = emptyList()
-var sPersianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
-var sIslamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
-var sGregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
+var sPersianCalendarEvents: PersianCalendarEventsStore = emptyMap()
+var sIslamicCalendarEvents: IslamicCalendarEventsStore = emptyMap()
+var sGregorianCalendarEvents: GregorianCalendarEventsStore = emptyMap()
 
 fun isIranTime(): Boolean = iranTime
 
@@ -198,18 +197,13 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
 
     val result = ArrayList<CalendarEvent<*>>()
 
-    val persianList = sPersianCalendarEvents.get(persian.month * 100 + persian.dayOfMonth)
-    if (persianList != null)
-        for (persianCalendarEvent in persianList)
-            if (holidayAwareEqualCheck(persianCalendarEvent.date, persian))
-                result.add(persianCalendarEvent)
+    sPersianCalendarEvents.getEvents(persian).forEach {
+        if (holidayAwareEqualCheck(it.date, persian)) result.add(it)
+    }
 
-    var islamicList: List<IslamicCalendarEvent>? =
-        sIslamicCalendarEvents.get(islamic.month * 100 + islamic.dayOfMonth)
-    if (islamicList != null)
-        for (islamicCalendarEvent in islamicList)
-            if (holidayAwareEqualCheck(islamicCalendarEvent.date, islamic))
-                result.add(islamicCalendarEvent)
+    sIslamicCalendarEvents.getEvents(islamic).forEach {
+        if (holidayAwareEqualCheck(it.date, islamic)) result.add(it)
+    }
 
     // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
     if ((islamic.month == 2 || islamic.month == 11)
@@ -217,23 +211,17 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
         && getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
     ) {
         val alternativeDate = IslamicDate(islamic.year, islamic.month, 30)
-
-        islamicList =
-            sIslamicCalendarEvents.get(alternativeDate.month * 100 + alternativeDate.dayOfMonth)
-        if (islamicList != null)
-            for (islamicCalendarEvent in islamicList)
-                if (holidayAwareEqualCheck(islamicCalendarEvent.date, alternativeDate))
-                    result.add(islamicCalendarEvent)
+        sIslamicCalendarEvents.getEvents(alternativeDate).forEach {
+            if (holidayAwareEqualCheck(it.date, alternativeDate)) result.add(it)
+        }
     }
 
-    val gregorianList = sGregorianCalendarEvents.get(civil.month * 100 + civil.dayOfMonth)
-    if (gregorianList != null)
-        for (gregorianCalendarEvent in gregorianList)
-            if (holidayAwareEqualCheck(gregorianCalendarEvent.date, civil))
-                result.add(gregorianCalendarEvent)
+    sGregorianCalendarEvents.getEvents(civil).forEach {
+        if (holidayAwareEqualCheck(it.date, civil)) result.add(it)
+    }
 
     // This one is passed by caller
-    (deviceCalendarEvents[civil.month * 100 + civil.dayOfMonth] ?: emptyList()).forEach {
+    deviceCalendarEvents.getDeviceEvents(civil).forEach {
         // holidayAwareEqualCheck is not needed as they won't have -1 on year field
         if (it.date == civil)
             result.add(it)
@@ -280,9 +268,9 @@ fun loadEvents(context: Context) {
     // Now that we are configuring converter's algorithm above, lets set the offset also
     IslamicDate.islamicOffset = getIslamicOffset(context)
 
-    val persianCalendarEvents = SparseArray<ArrayList<PersianCalendarEvent>>()
-    val islamicCalendarEvents = SparseArray<ArrayList<IslamicCalendarEvent>>()
-    val gregorianCalendarEvents = SparseArray<ArrayList<GregorianCalendarEvent>>()
+    val persianCalendarEvents = HashMap<Int, ArrayList<PersianCalendarEvent>>()
+    val islamicCalendarEvents = HashMap<Int, ArrayList<IslamicCalendarEvent>>()
+    val gregorianCalendarEvents = HashMap<Int, ArrayList<GregorianCalendarEvent>>()
     val allEnabledEvents = ArrayList<CalendarEvent<*>>()
 
     try {
@@ -338,14 +326,8 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
 
-                var list: ArrayList<PersianCalendarEvent>? =
-                    persianCalendarEvents.get(month * 100 + day)
-                if (list == null) {
-                    list = ArrayList()
-                    persianCalendarEvents.put(month * 100 + day, list)
-                }
                 val ev = PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
-                list.add(ev)
+                persianCalendarEvents.addToStore(ev)
                 allEnabledEvents.add(ev)
             }
         }
@@ -390,14 +372,8 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
 
-                var list: ArrayList<IslamicCalendarEvent>? =
-                    islamicCalendarEvents.get(month * 100 + day)
-                if (list == null) {
-                    list = ArrayList()
-                    islamicCalendarEvents.put(month * 100 + day, list)
-                }
                 val ev = IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
-                list.add(ev)
+                islamicCalendarEvents.addToStore(ev)
                 allEnabledEvents.add(ev)
             }
         }
@@ -410,18 +386,11 @@ fun loadEvents(context: Context) {
             if (international) {
                 title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
 
-                var list: ArrayList<GregorianCalendarEvent>? =
-                    gregorianCalendarEvents.get(month * 100 + day)
-                if (list == null) {
-                    list = ArrayList()
-                    gregorianCalendarEvents.put(month * 100 + day, list)
-                }
                 val ev = GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
-                list.add(ev)
+                gregorianCalendarEvents.addToStore(ev)
                 allEnabledEvents.add(ev)
             }
         }
-
     } catch (ignore: JSONException) {
     }
 
@@ -464,9 +433,6 @@ fun makeCalendarFromDate(date: Date): Calendar {
     return calendar
 }
 
-typealias DeviceCalendarEventsStore = Map<Int, List<DeviceCalendarEvent>>
-val emptyDeviceCalendarEventsStore: DeviceCalendarEventsStore = emptyMap()
-
 private fun readDeviceEvents(
     context: Context,
     allEnabledAppointments: ArrayList<DeviceCalendarEvent>,
@@ -478,7 +444,7 @@ private fun readDeviceEvents(
             context,
             Manifest.permission.READ_CALENDAR
         ) != PackageManager.PERMISSION_GRANTED
-    ) return emptyDeviceCalendarEventsStore
+    ) return emptyMap()
 
     val result = HashMap<Int, ArrayList<DeviceCalendarEvent>>()
     try {
@@ -509,15 +475,6 @@ private fun readDeviceEvents(
                 val startCalendar = makeCalendarFromDate(startDate)
                 val endCalendar = makeCalendarFromDate(endDate)
 
-                val civilDate = calendarToCivilDate(startCalendar)
-
-                val month = civilDate.month
-                val day = civilDate.dayOfMonth
-
-                val list = result[month * 100 + day] ?: ArrayList<DeviceCalendarEvent>().apply {
-                    result[month * 100 + day] = this
-                }
-
                 var title = it.getString(1) ?: ""
                 if (it.getString(6) == "1")
                     title = "\uD83D\uDCC5 $title"
@@ -542,11 +499,11 @@ private fun readDeviceEvents(
                     description = it.getString(2) ?: "",
                     start = startDate,
                     end = endDate,
-                    date = civilDate,
+                    date = calendarToCivilDate(startCalendar),
                     color = it.getString(7) ?: "",
                     isHoliday = false
                 )
-                list.add(event)
+                result.addToStore(event)
                 allEnabledAppointments.add(event)
 
                 // Don't go more than 1k events on any case
@@ -630,4 +587,28 @@ fun getEventsTitle(
         }
 
     return titles.toString()
+}
+
+fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
+    is IslamicDate -> CalendarType.ISLAMIC
+    is CivilDate -> CalendarType.GREGORIAN
+    else -> CalendarType.SHAMSI
+}
+
+fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
+    when (calendar) {
+        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+        CalendarType.GREGORIAN -> CivilDate(year, month, day)
+        CalendarType.SHAMSI -> PersianDate(year, month, day)
+    }
+
+fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
+    val yearOfNextMonth = if (month == 12) year + 1 else year
+    val nextMonth = if (month == 12) 1 else month + 1
+    return (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() - getDateOfCalendar(
+        calendar,
+        year,
+        month,
+        1
+    ).toJdn()).toInt()
 }

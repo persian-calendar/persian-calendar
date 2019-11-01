@@ -26,7 +26,7 @@ class MonthAdapter internal constructor(
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
     private val daysPaintResources: DaysPaintResources
-    private var monthEvents = emptyDeviceCalendarEventsStore
+    private var monthEvents: DeviceCalendarEventsStore = emptyMap()
     private val isArabicDigit: Boolean
     private val context: Context
     private var selectedDay = -1
@@ -169,7 +169,7 @@ class MonthAdapter internal constructor(
 
                     itemDayView.contentDescription = getA11yDaySummary(
                         context,
-                        day.jdn, day.isToday, emptyDeviceCalendarEventsStore,
+                        day.jdn, day.isToday, emptyMap(),
                         day.isToday, withOtherCalendars = false, withTitle = true
                     )
 

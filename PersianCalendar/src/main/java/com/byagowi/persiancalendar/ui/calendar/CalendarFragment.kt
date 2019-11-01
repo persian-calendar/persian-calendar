@@ -77,7 +77,6 @@ class CalendarFragment : DaggerFragment() {
                 false
             )
             mMainBinding.todayButton.show()
-            //            mMainBinding.swipeRefresh.setEnabled(true);
         }
     }
 
@@ -86,7 +85,6 @@ class CalendarFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val context = mainActivityDependency.mainActivity
 
         setHasOptionsMenu(true)
@@ -294,7 +292,6 @@ class CalendarFragment : DaggerFragment() {
                 } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
                     createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support)
                 }
-
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -515,7 +512,7 @@ class CalendarFragment : DaggerFragment() {
                     view,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,
-                        false, emptyDeviceCalendarEventsStore, withZodiac = true,
+                        false, emptyMap(), withZodiac = true,
                         withOtherCalendars = true, withTitle = true
                     )
                 )

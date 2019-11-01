@@ -10,7 +10,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
-import android.util.SparseArray
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.IdRes
@@ -18,7 +17,6 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate
@@ -28,7 +26,7 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
-private var deviceCalendarEvents = emptyDeviceCalendarEventsStore
+private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyMap()
 
 fun setDeviceCalendarEvents(context: Context) {
     try {

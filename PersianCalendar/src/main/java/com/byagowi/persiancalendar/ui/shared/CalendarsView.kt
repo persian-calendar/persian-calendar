@@ -161,7 +161,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         mBinding.root.contentDescription = getA11yDaySummary(
             context, jdn,
-            diffDays == 0L, emptyDeviceCalendarEventsStore,
+            diffDays == 0L, emptyMap(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }
