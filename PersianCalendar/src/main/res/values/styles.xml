@@ -37,7 +37,7 @@
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorMonthsBackground">@color/dark_primary</item>
-        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
