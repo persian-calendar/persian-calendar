@@ -215,10 +215,7 @@ fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
 
     val snackbarView = snackbar.view
     snackbarView.setOnClickListener { snackbar.dismiss() }
-
-    val text = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-    text.setTextColor(Color.WHITE)
-    text.maxLines = 5
+    snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
 
     snackbar.show()
 }

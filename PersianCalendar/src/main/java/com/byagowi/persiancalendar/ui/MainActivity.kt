@@ -192,8 +192,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 view.setOnClickListener {
                     dismiss()
                 }
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                    .setTextColor(Color.WHITE)
                 setAction("Settings") {
                     prefs.edit {
                         putString(PREF_APP_LANGUAGE, LANG_EN_US)
@@ -220,8 +218,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
         ) {
             Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                    .setTextColor(Color.WHITE)
                 setAction(getString(R.string.update)) {
                     try {
                         startActivity(

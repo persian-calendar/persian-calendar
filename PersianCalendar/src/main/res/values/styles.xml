@@ -80,7 +80,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
-        <item name="android:itemBackground">@color/dark_background</item>
         <item name="android:textColor">@color/dark_text_normal</item>
 
         <item name="coloredTabBackground">@color/dark_card_background</item>
