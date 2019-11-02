@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
+    <attr name="navigationBarColor" format="reference" />
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorCard" format="reference" />
     <attr name="colorBackground" format="reference" />
@@ -42,6 +43,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/dark_primary_dark
         </item>
+        <item name="navigationBarColor">@color/dark_primary</item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
@@ -102,6 +104,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/light_primary_dark
         </item>
+        <item name="navigationBarColor">@color/light_primary</item>
         <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
@@ -139,7 +142,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
-        <item name="android:itemBackground">@color/light_background</item>
         <item name="android:textColor">@color/light_text_normal</item>
 
         <item name="coloredTabBackground">@color/light_accent</item>
@@ -162,6 +164,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/blue_icon_drawer
         </item>
+        <item name="navigationBarColor">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <!-- Customize your theme here. -->
@@ -201,7 +204,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
-        <item name="android:itemBackground">@color/blue_background</item>
         <item name="android:textColor">@color/blue_text_normal</item>
 
         <item name="coloredTabBackground">@color/blue_primary</item>
@@ -218,12 +220,13 @@
 
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorMonthsBackground">@color/modern_primary</item>
-        <item name="colorPrimary">@color/modern_primary</item>
+        <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/modern_primary
         </item>
+        <item name="navigationBarColor">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
         <!-- Customize your theme here. -->
@@ -263,7 +266,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
-        <item name="android:itemBackground">@color/modern_background</item>
         <item name="android:textColor">@color/modern_text_normal</item>
 
         <item name="coloredTabBackground">@color/modern_card_background</item>

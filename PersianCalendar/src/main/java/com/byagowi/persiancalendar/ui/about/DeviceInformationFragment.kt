@@ -55,8 +55,8 @@ class DeviceInformationFragment : DaggerFragment() {
                 adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
             }
 
-            bottomNavigation.run {
-                menu.run {
+            bottomNavigation.apply {
+                menu.apply {
                     add(Build.VERSION.RELEASE)
                     getItem(0).setIcon(R.drawable.ic_developer)
 
@@ -71,7 +71,7 @@ class DeviceInformationFragment : DaggerFragment() {
                     getItem(2).setIcon(R.drawable.ic_motorcycle)
 
                     add(Build.MODEL)
-                    getItem(3).setIcon(R.drawable.ic_device_information)
+                    getItem(3).setIcon(R.drawable.ic_device_information_white)
                 }
                 labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
                 setOnNavigationItemSelectedListener {

@@ -92,7 +92,7 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.1.0")
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.android.material:material:1.0.0")
+    implementation("com.google.android.material:material:1.1.0-beta01")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
