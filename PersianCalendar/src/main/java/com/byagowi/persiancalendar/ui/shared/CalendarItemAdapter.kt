@@ -36,9 +36,7 @@ class CalendarItemAdapter internal constructor(context: Context) :
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int = mCalendars.size
 
@@ -74,8 +72,7 @@ class CalendarItemAdapter internal constructor(context: Context) :
             )
         }
 
-        override fun onClick(view: View?) {
+        override fun onClick(view: View?) =
             copyToClipboard(view, "converted date", view?.contentDescription)
-        }
     }
 }

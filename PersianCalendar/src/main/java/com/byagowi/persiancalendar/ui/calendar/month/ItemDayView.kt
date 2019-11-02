@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
 class ItemDayView : View {
+
     private lateinit var resource: DaysPaintResources
     private val bounds = Rect()
     private val drawingRect = RectF()

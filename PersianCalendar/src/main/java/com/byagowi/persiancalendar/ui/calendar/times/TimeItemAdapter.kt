@@ -18,6 +18,7 @@ private val timeNames = listOf(
 )
 
 class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
+
     var mPrayTimes: PrayTimes? = null
         set(prayTimes) {
             field = prayTimes

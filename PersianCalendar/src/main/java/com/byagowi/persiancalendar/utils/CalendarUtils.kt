@@ -52,7 +52,7 @@ fun getAmString(): String = sAM
 fun getPmString(): String = sPM
 
 fun getDayOfWeekFromJdn(jdn: Long): Int =
-    civilDateToCalendar(CivilDate(jdn)).get(Calendar.DAY_OF_WEEK) % 7
+    civilDateToCalendar(CivilDate(jdn))[Calendar.DAY_OF_WEEK] % 7
 
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
@@ -69,19 +69,15 @@ fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance()
 fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
 
 fun getWeekDayName(date: AbstractDate): String = weekDays[civilDateToCalendar(
-    if (date is CivilDate)
-        date
-    else
-        CivilDate(date)
-).get(Calendar.DAY_OF_WEEK) % 7]
+    if (date is CivilDate) date else CivilDate(date)
+)[Calendar.DAY_OF_WEEK] % 7]
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
     return ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
 }
 
-fun getMonthName(date: AbstractDate): String =
-    monthsNamesOfCalendar(date)[date.month - 1]
+fun getMonthName(date: AbstractDate): String = monthsNamesOfCalendar(date)[date.month - 1]
 
 fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
     is PersianDate -> persianMonths
@@ -209,14 +205,14 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
 }
 
 fun getIslamicOffset(context: Context): Int =
-    (PreferenceManager.getDefaultSharedPreferences(context).getString(
+    PreferenceManager.getDefaultSharedPreferences(context)?.getString(
         PREF_ISLAMIC_OFFSET,
         DEFAULT_ISLAMIC_OFFSET
-    ) ?: "0").replace("+", "").toIntOrNull() ?: 0
+    )?.replace("+", "")?.toIntOrNull() ?: 0
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val enabledTypes = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+    val enabledTypes = prefs?.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
     val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
     val afghanistanOthers = enabledTypes.contains("afghanistan_others")
@@ -392,9 +388,7 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
 }
 
 fun calendarToCivilDate(calendar: Calendar) = CivilDate(
-    calendar.get(Calendar.YEAR),
-    calendar.get(Calendar.MONTH) + 1,
-    calendar.get(Calendar.DAY_OF_MONTH)
+    calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DAY_OF_MONTH]
 )
 
 fun makeCalendarFromDate(date: Date): Calendar {
@@ -568,20 +562,14 @@ fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     else -> CalendarType.SHAMSI
 }
 
-fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
-    when (calendar) {
-        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
-        CalendarType.GREGORIAN -> CivilDate(year, month, day)
-        CalendarType.SHAMSI -> PersianDate(year, month, day)
-    }
-
-fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
-    val yearOfNextMonth = if (month == 12) year + 1 else year
-    val nextMonth = if (month == 12) 1 else month + 1
-    return (getDateOfCalendar(calendar, yearOfNextMonth, nextMonth, 1).toJdn() - getDateOfCalendar(
-        calendar,
-        year,
-        month,
-        1
-    ).toJdn()).toInt()
+fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int) = when (calendar) {
+    CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+    CalendarType.GREGORIAN -> CivilDate(year, month, day)
+    CalendarType.SHAMSI -> PersianDate(year, month, day)
 }
+
+fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int = (getDateOfCalendar(
+    calendar, if (month == 12) year + 1 else year, if (month == 12) 1 else month + 1, 1
+).toJdn() - getDateOfCalendar(
+    calendar, year, month, 1
+).toJdn()).toInt()

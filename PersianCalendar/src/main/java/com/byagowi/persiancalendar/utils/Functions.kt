@@ -93,7 +93,7 @@ fun getAppLanguage(): String = if (language.isEmpty()) DEFAULT_APP_LANGUAGE else
 
 fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
-fun isNonArabicScriptSelected(): Boolean = when (getAppLanguage()) {
+fun isNonArabicScriptSelected() = when (getAppLanguage()) {
     LANG_EN_US, LANG_JA -> true
     else -> false
 }
@@ -507,8 +507,7 @@ fun getCoordinate(context: Context): Coordinate? {
     else coord
 }
 
-fun getTodayOfCalendar(calendar: CalendarType): AbstractDate =
-    getDateFromJdnOfCalendar(calendar, getTodayJdn())
+fun getTodayOfCalendar(calendar: CalendarType) = getDateFromJdnOfCalendar(calendar, getTodayJdn())
 
 fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
 
@@ -897,8 +896,7 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
                             ZWJ
                         else
                             ""
-            } else
-                title
+            } else title
         }
     }
     // Shouldn't be reached

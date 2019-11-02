@@ -22,6 +22,7 @@ class MonthAdapter internal constructor(
     startingDayOfWeek: Int, private val weekOfYearStart: Int,
     private val weeksCount: Int
 ) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
+
     private val startingDayOfWeek: Int = fixDayOfWeekReverse(startingDayOfWeek)
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams

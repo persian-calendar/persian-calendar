@@ -46,6 +46,7 @@ class TabsViewPager @JvmOverloads constructor(context: Context, attrs: Attribute
         private val mTabs: List<View>,
         private val mTitles: List<String>
     ) : FragmentStatePagerAdapter(fm) {
+
         private var mCurrentPosition = -1
 
         override fun getPageTitle(position: Int): CharSequence? = mTitles[position]

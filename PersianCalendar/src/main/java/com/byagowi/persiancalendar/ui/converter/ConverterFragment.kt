@@ -23,14 +23,12 @@ class ConverterFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
             getString(R.string.date_converter),
             ""
         )
 
         FragmentConverterBinding.inflate(inflater, container, false).apply {
-
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
             calendarsView.setOnShowHideTodayButton { show ->

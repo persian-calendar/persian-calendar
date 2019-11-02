@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 
 class DaysPaintResources(activity: Activity) {
+
     @StyleRes
     val style: Int
     @ColorInt

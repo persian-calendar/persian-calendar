@@ -37,7 +37,6 @@ class AboutFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         setHasOptionsMenu(true)
 
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
