@@ -299,7 +299,7 @@ class CalendarFragment : DaggerFragment() {
                 val color = event.color
                 if (color.isNotEmpty()) {
                     try {
-                        ds.color = Integer.parseInt(color)
+                        ds.color = color.toInt()
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }

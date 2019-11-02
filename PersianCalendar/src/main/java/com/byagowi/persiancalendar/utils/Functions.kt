@@ -160,12 +160,9 @@ fun getCalendarNameAbbr(date: AbstractDate): String {
     }
 }
 
-fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String {
-    var result = prefs.getString(PREF_THEME, "")
-    if (result == null)
-        result = if (isNightModeEnabled(context)) DARK_THEME else LIGHT_THEME
-    return result
-}
+fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
+    prefs.getString(PREF_THEME, null)
+        ?: if (isNightModeEnabled(context)) DARK_THEME else LIGHT_THEME
 
 fun getEnabledCalendarTypes(): List<CalendarType> = listOf(mainCalendar) + otherCalendars
 
@@ -736,7 +733,7 @@ fun updateStoredPreference(context: Context) {
 
     weekEnds = BooleanArray(7)
     (prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS) ?: DEFAULT_WEEK_ENDS)
-        .map(Integer::parseInt)
+        .mapNotNull(String::toIntOrNull)
         .forEach { weekEnds[it] = true }
 
     showDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
