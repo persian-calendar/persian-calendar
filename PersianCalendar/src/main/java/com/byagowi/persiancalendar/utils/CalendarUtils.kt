@@ -187,59 +187,32 @@ fun getA11yDaySummary(
     return result.toString()
 }
 
-private fun <T : AbstractDate> holidayAwareEqualCheck(event: T, date: T): Boolean =
-    (event.dayOfMonth == date.dayOfMonth && event.month == date.month && (event.year == -1 || event.year == date.year))
-
 fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
-    val persian = PersianDate(jdn)
     val civil = CivilDate(jdn)
+    val persian = PersianDate(jdn)
     val islamic = IslamicDate(jdn)
 
     val result = ArrayList<CalendarEvent<*>>()
 
-    sPersianCalendarEvents.getEvents(persian).forEach {
-        if (holidayAwareEqualCheck(it.date, persian)) result.add(it)
-    }
-
-    sIslamicCalendarEvents.getEvents(islamic).forEach {
-        if (holidayAwareEqualCheck(it.date, islamic)) result.add(it)
-    }
-
-    // Special case Imam Reza and Imam Mohammad Taqi martyrdom event on Hijri as it is a holiday and so vital to have
-    if ((islamic.month == 2 || islamic.month == 11)
-        && islamic.dayOfMonth == 29
-        && getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
-    ) {
-        val alternativeDate = IslamicDate(islamic.year, islamic.month, 30)
-        sIslamicCalendarEvents.getEvents(alternativeDate).forEach {
-            if (holidayAwareEqualCheck(it.date, alternativeDate)) result.add(it)
-        }
-    }
-
-    sGregorianCalendarEvents.getEvents(civil).forEach {
-        if (holidayAwareEqualCheck(it.date, civil)) result.add(it)
-    }
-
-    // This one is passed by caller
-    deviceCalendarEvents.getDeviceEvents(civil).forEach {
-        // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-        if (it.date == civil)
-            result.add(it)
-    }
+    deviceCalendarEvents.getDeviceEvents(civil).forEach { result.add(it) } // Passed by caller}
+    sGregorianCalendarEvents.getEvents(civil).forEach { result.add(it) }
+    sPersianCalendarEvents.getEvents(persian).forEach { result.add(it) }
+    sIslamicCalendarEvents.getEvents(islamic).forEach { result.add(it) }
+    // Special case Islamic events happening in 30th day but the month has only 29 days
+    if (islamic.dayOfMonth == 29 &&
+        getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+    )
+        sIslamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30))
+            .forEach { result.add(it) }
 
     return result
 }
 
 fun getIslamicOffset(context: Context): Int =
-    try {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET).run {
-            if (this == null) 0
-            else Integer.parseInt(replace("+", ""))
-        }
-    } catch (ignore: Exception) {
-        0
-    }
+    (PreferenceManager.getDefaultSharedPreferences(context).getString(
+        PREF_ISLAMIC_OFFSET,
+        DEFAULT_ISLAMIC_OFFSET
+    ) ?: "0").replace("+", "").toIntOrNull() ?: 0
 
 fun loadEvents(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
