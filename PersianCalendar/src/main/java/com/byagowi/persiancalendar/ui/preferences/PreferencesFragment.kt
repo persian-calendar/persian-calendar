@@ -32,7 +32,7 @@ class PreferencesFragment : DaggerFragment() {
         val mainActivity = mainActivityDependency.mainActivity
 
         mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
-        FragmentSettingsBinding.inflate(
+        return FragmentSettingsBinding.inflate(
             LayoutInflater.from(mainActivity), container, false
         ).apply {
             viewPager.adapter = object : FragmentStateAdapter(mainActivity) {
@@ -59,8 +59,6 @@ class PreferencesFragment : DaggerFragment() {
                     }
                 )
             }.attach()
-
-            return root
-        }
+        }.root
     }
 }
