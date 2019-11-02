@@ -24,8 +24,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        app:layout_anchor="@+id/bottom_appbar"
+        app:layout_anchor="@id/bottom_appbar"
         app:srcCompat="@drawable/ic_stop" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
