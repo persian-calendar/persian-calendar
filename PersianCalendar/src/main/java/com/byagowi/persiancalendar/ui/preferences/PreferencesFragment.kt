@@ -29,36 +29,38 @@ class PreferencesFragment : DaggerFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
+        val mainActivity = mainActivityDependency.mainActivity
 
-        FragmentSettingsBinding.inflate(LayoutInflater.from(container?.context), container, false)
-            .apply {
-                viewPager.adapter = ViewPagerAdapter(3)
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.setText(
-                        when (position) {
-                            0 -> R.string.pref_header_interface_calendar
-                            1 -> R.string.pref_header_widget_location
-                            2 -> R.string.pref_header_location_athan
-                            else -> R.string.pref_header_location_athan
-                        }
-                    )
-                }.attach()
+        mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
+        FragmentSettingsBinding.inflate(
+            LayoutInflater.from(mainActivity), container, false
+        ).apply {
+            viewPager.adapter = object : FragmentStateAdapter(mainActivity) {
+                override fun getItemCount(): Int {
+                    return 3
+                }
 
-                return root
+                override fun createFragment(position: Int): Fragment {
+                    return when (position) {
+                        0 -> FragmentInterfaceCalendar()
+                        1 -> FragmentWidgetNotification()
+                        2 -> FragmentLocationAthan()
+                        else -> Fragment()
+                    }
+                }
             }
-    }
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.setText(
+                    when (position) {
+                        0 -> R.string.pref_header_interface_calendar
+                        1 -> R.string.pref_header_widget_location
+                        2 -> R.string.pref_header_location_athan
+                        else -> R.string.pref_header_location_athan
+                    }
+                )
+            }.attach()
 
-    internal inner class ViewPagerAdapter(private var pageCount: Int) : FragmentStateAdapter(this) {
-        override fun createFragment(position: Int): Fragment {
-            return when (position) {
-                0 -> FragmentInterfaceCalendar()
-                1 -> FragmentWidgetNotification()
-                2 -> FragmentLocationAthan()
-                else -> Fragment()
-            }
+            return root
         }
-
-        override fun getItemCount(): Int = pageCount
     }
 }
