@@ -12,6 +12,7 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -29,10 +30,12 @@
                 android:layout_height="match_parent"
                 android:background="?attr/colorCard" />
 
-            <com.byagowi.persiancalendar.ui.calendar.TabsViewPager
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/tabsViewPager"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 android:layout_width="match_parent"
-                android:layout_height="220sp" />
+                android:minHeight="220sp" />
 
         </LinearLayout>
 

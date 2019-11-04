@@ -19,10 +19,14 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
@@ -36,6 +40,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
+import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.TimeItemAdapter
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
@@ -43,6 +48,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.praytimes.Coordinate
@@ -80,6 +86,34 @@ class CalendarFragment : DaggerFragment() {
         }
     }
 
+    class TabFragment : Fragment() {
+        @get:JvmName("getView_")
+        lateinit var view: View
+        private var position = 0
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?, savedInstanceState: Bundle?
+        ): View? = view
+
+        override fun onResume() {
+            super.onResume()
+
+            val sunView = view.findViewById<View>(R.id.sunView)
+            if (sunView is SunView) sunView.startAnimate(false)
+
+            PreferenceManager.getDefaultSharedPreferences(view.context)
+                .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+        }
+
+        companion object {
+            internal fun newInstance(view: View, position: Int) = TabFragment().also {
+                it.view = view
+                it.position = position
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -97,17 +131,9 @@ class CalendarFragment : DaggerFragment() {
 
         titles.add(getString(R.string.calendar))
         mCalendarsView = CalendarsView(context).apply {
-            setOnCalendarsViewExpandListener {
-                mMainBinding.tabsViewPager.measureCurrentView(this@apply)
-            }
             setOnShowHideTodayButton { show ->
-                if (show) {
-                    mMainBinding.todayButton.show()
-                    //                mMainBinding.swipeRefresh.setEnabled(true);
-                } else {
-                    mMainBinding.todayButton.hide()
-                    //                mMainBinding.swipeRefresh.setEnabled(false);
-                }
+                if (show) mMainBinding.todayButton.show()
+                else mMainBinding.todayButton.hide()
             }
         }
         mMainBinding.todayButton.setOnClickListener { bringTodayYearMonth() }
@@ -150,11 +176,14 @@ class CalendarFragment : DaggerFragment() {
         }
 
         mMainBinding.run {
-            tabsViewPager.adapter = TabsViewPager.TabsAdapter(
-                childFragmentManager,
-                appDependency, tabs, titles
-            )
-            tabLayout.setupWithViewPager(tabsViewPager)
+            tabsViewPager.adapter = object : FragmentStateAdapter(context) {
+                override fun getItemCount() = tabs.size
+                override fun createFragment(position: Int) =
+                    TabFragment.newInstance(tabs[position], position)
+            }
+            TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
+                tab.text = titles[position]
+            }.attach()
             mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(isRTL(context))
             calendarViewPager.adapter = CalendarAdapter(
                 childFragmentManager,
@@ -189,12 +218,6 @@ class CalendarFragment : DaggerFragment() {
             setOwghat(jdn, isToday)
             showEvent(jdn, isToday)
         })
-
-        //        mMainBinding.swipeRefresh.setEnabled(false);
-        //        mMainBinding.swipeRefresh.setOnRefreshListener(() -> {
-        //            bringTodayYearMonth();
-        //            mMainBinding.swipeRefresh.setRefreshing(false);
-        //        });
 
         return mMainBinding.root
     }
@@ -456,12 +479,8 @@ class CalendarFragment : DaggerFragment() {
 
         mOwghatBinding.sunView.run {
             setSunriseSunsetMoonPhase(prayTimes, moonPhase)
-            if (isToday) {
-                visibility = View.VISIBLE
-                if (mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB)
-                    startAnimate(true)
-            } else
-                visibility = View.GONE
+            visibility = if (isToday) View.VISIBLE else View.GONE
+            if (isToday && mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB) startAnimate(false)
         }
     }
 
@@ -477,7 +496,6 @@ class CalendarFragment : DaggerFragment() {
                     R.drawable.ic_keyboard_arrow_down
             )
         }
-        mMainBinding.tabsViewPager.measureCurrentView(mOwghatBinding.root)
 
         if (mLastSelectedJdn == -1L)
             mLastSelectedJdn = getTodayJdn()
