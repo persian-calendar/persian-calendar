@@ -75,15 +75,10 @@ class CalendarFragment : DaggerFragment() {
     private var mLastSelectedJdn: Long = -1
     private var mSearchView: SearchView? = null
     private var mSearchAutoComplete: SearchView.SearchAutoComplete? = null
-    private lateinit var mCalendarAdapterHelper: CalendarAdapter.CalendarAdapterHelper
-    private val mChangeListener = object : ViewPager.SimpleOnPageChangeListener() {
-        override fun onPageSelected(position: Int) {
-            sendUpdateCommandToMonthFragments(
-                mCalendarAdapterHelper.positionToOffset(position),
-                false
-            )
-            mMainBinding.todayButton.show()
-        }
+
+    fun onDaySelected(position: Int) {
+        sendUpdateCommandToMonthFragments(CalendarAdapter.applyOffset(position), false)
+        mMainBinding.todayButton.show()
     }
 
     class TabFragment : Fragment() {
@@ -183,14 +178,8 @@ class CalendarFragment : DaggerFragment() {
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
                 tab.text = titles[position]
             }.attach()
-            mCalendarAdapterHelper = CalendarAdapter.CalendarAdapterHelper(isRTL(context))
-            calendarViewPager.adapter = CalendarAdapter(
-                childFragmentManager,
-                mCalendarAdapterHelper
-            )
-            mCalendarAdapterHelper.gotoOffset(calendarViewPager, 0)
-
-            calendarViewPager.addOnPageChangeListener(mChangeListener)
+            calendarViewPager.adapter = CalendarAdapter(this@CalendarFragment)
+            CalendarAdapter.gotoOffset(calendarViewPager, 0, false)
 
             var lastTab = appDependency.sharedPreferences
                 .getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
@@ -499,7 +488,7 @@ class CalendarFragment : DaggerFragment() {
         mLastSelectedJdn = -1
         sendUpdateCommandToMonthFragments(BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false)
 
-        mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, 0)
+        CalendarAdapter.gotoOffset(mMainBinding.calendarViewPager, 0)
 
         mCalendarFragmentModel.selectDay(getTodayJdn())
     }
@@ -511,7 +500,7 @@ class CalendarFragment : DaggerFragment() {
 
     fun bringDate(jdn: Long) {
         viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
-        mCalendarAdapterHelper.gotoOffset(mMainBinding.calendarViewPager, viewPagerPosition)
+        CalendarAdapter.gotoOffset(mMainBinding.calendarViewPager, viewPagerPosition)
 
         mCalendarFragmentModel.selectDay(jdn)
         mLastSelectedJdn = jdn
@@ -625,7 +614,7 @@ class CalendarFragment : DaggerFragment() {
             R.id.month_overview -> {
                 val visibleMonthJdn = MonthFragment.getDateFromOffset(
                     mainCalendar,
-                    mCalendarAdapterHelper.positionToOffset(mMainBinding.calendarViewPager.currentItem)
+                    CalendarAdapter.applyOffset(mMainBinding.calendarViewPager.currentItem)
                 ).toJdn()
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(
                     childFragmentManager,

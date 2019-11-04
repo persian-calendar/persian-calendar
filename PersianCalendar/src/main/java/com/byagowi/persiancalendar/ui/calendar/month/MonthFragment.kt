@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
+import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.calendar.AbstractDate
@@ -28,6 +29,13 @@ class MonthFragment : DaggerFragment() {
     lateinit var mainActivityDependency: MainActivityDependency
     @Inject
     lateinit var calendarFragmentDependency: CalendarFragmentDependency
+
+    override fun onResume() {
+        super.onResume()
+        calendarFragmentDependency.calendarFragment.onDaySelected(
+            arguments?.getInt(OFFSET_ARGUMENT) ?: 0
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +55,7 @@ class MonthFragment : DaggerFragment() {
             else
                 R.drawable.ic_keyboard_arrow_right
         )
-        fragmentMonthBinding.next.setOnClickListener { calendarFragment.changeMonth(if (isRTL) -1 else 1) }
+        fragmentMonthBinding.next.setOnClickListener { calendarFragment.changeMonth(1) }
 
         fragmentMonthBinding.prev.setImageResource(
             if (isRTL)
@@ -55,11 +63,9 @@ class MonthFragment : DaggerFragment() {
             else
                 R.drawable.ic_keyboard_arrow_left
         )
-        fragmentMonthBinding.prev.setOnClickListener { calendarFragment.changeMonth(if (isRTL) 1 else -1) }
+        fragmentMonthBinding.prev.setOnClickListener { calendarFragment.changeMonth(-1) }
 
         fragmentMonthBinding.monthDays.setHasFixedSize(true)
-
-
         fragmentMonthBinding.monthDays.layoutManager = GridLayoutManager(
             mainActivityDependency.mainActivity,
             if (isWeekOfYearEnabled()) 8 else 7
@@ -115,7 +121,7 @@ class MonthFragment : DaggerFragment() {
         }
 
         calendarFragmentModel.monthFragmentsHandler.observe(this, Observer { command ->
-            if (command.target == offset) {
+            if (command.target == CalendarAdapter.applyOffset(offset)) {
                 val jdn = command.currentlySelectedJdn
 
                 if (command.isEventsModification) {

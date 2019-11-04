@@ -2,40 +2,30 @@ package com.byagowi.persiancalendar.ui.calendar.calendar
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.OFFSET_ARGUMENT
-
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 
-class CalendarAdapter(
-    fm: FragmentManager,
-    private val mCalendarAdapterHelper: CalendarAdapterHelper
-) : FragmentStatePagerAdapter(fm) {
+class CalendarAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItem(position: Int): Fragment =
+    override fun getItemCount() = monthsLimit
+
+    override fun createFragment(position: Int): Fragment =
         MonthFragment().apply {
             arguments = Bundle().apply {
-                putInt(OFFSET_ARGUMENT, mCalendarAdapterHelper.positionToOffset(position))
+                putInt(OFFSET_ARGUMENT, applyOffset(position))
             }
         }
 
-    override fun getCount() = mCalendarAdapterHelper.monthsLimit
+    companion object {
+        const val monthsLimit = 5000 // this should be an even number
 
-    class CalendarAdapterHelper(private val isRTL: Boolean) {
-        val monthsLimit = 5000 // this should be an even number
-
-        fun gotoOffset(monthViewPager: ViewPager, offset: Int) {
-            if (monthViewPager.currentItem != offsetToPosition(offset)) {
-                monthViewPager.currentItem = offsetToPosition(offset)
-            }
+        fun gotoOffset(monthViewPager: ViewPager2, offset: Int, smoothScroll: Boolean = true) {
+            if (monthViewPager.currentItem != applyOffset(offset))
+                monthViewPager.setCurrentItem(applyOffset(offset), smoothScroll)
         }
 
-        fun positionToOffset(position: Int) =
-            if (isRTL) position - monthsLimit / 2 else monthsLimit / 2 - position
-
-        private fun offsetToPosition(position: Int) =
-            (if (isRTL) position else -position) + monthsLimit / 2
+        fun applyOffset(position: Int) = monthsLimit / 2 - position
     }
 }

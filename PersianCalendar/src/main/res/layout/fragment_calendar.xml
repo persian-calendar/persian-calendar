@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.viewpager.widget.ViewPager
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/calendarViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/grid_calendar_height"
