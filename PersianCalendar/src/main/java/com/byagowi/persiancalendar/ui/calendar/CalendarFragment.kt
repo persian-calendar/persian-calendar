@@ -99,8 +99,7 @@ class CalendarFragment : DaggerFragment() {
         override fun onResume() {
             super.onResume()
 
-            val sunView = view.findViewById<View>(R.id.sunView)
-            if (sunView is SunView) sunView.startAnimate(false)
+            (view.findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
 
             PreferenceManager.getDefaultSharedPreferences(view.context)
                 .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
@@ -299,53 +298,53 @@ class CalendarFragment : DaggerFragment() {
 
     private fun formatClickableEventTitle(event: DeviceCalendarEvent): SpannableString {
         val title = formatDeviceCalendarEventTitle(event)
-        val ss = SpannableString(title)
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(textView: View) {
-                try {
-                    startActivityForResult(
-                        Intent(Intent.ACTION_VIEW)
-                            .setData(
-                                ContentUris.withAppendedId(
-                                    CalendarContract.Events.CONTENT_URI, event.id.toLong()
-                                )
-                            ),
-                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-                    )
-                } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                    createAndShowShortSnackbar(textView, R.string.device_calendar_does_not_support)
-                }
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                val color = event.color
-                if (color.isNotEmpty()) {
+        return SpannableString(title).apply {
+            setSpan(object : ClickableSpan() {
+                override fun onClick(textView: View) {
                     try {
-                        ds.color = color.toInt()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        startActivityForResult(
+                            Intent(Intent.ACTION_VIEW)
+                                .setData(
+                                    ContentUris.withAppendedId(
+                                        CalendarContract.Events.CONTENT_URI, event.id.toLong()
+                                    )
+                                ),
+                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+                        )
+                    } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
+                        createAndShowShortSnackbar(
+                            textView,
+                            R.string.device_calendar_does_not_support
+                        )
                     }
                 }
-            }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    if (event.color.isNotEmpty()) {
+                        try {
+                            ds.color = event.color.toInt()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return ss
     }
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>): SpannableStringBuilder {
         val titles = SpannableStringBuilder()
         var first = true
 
-        for (event in dayEvents)
-            if (event is DeviceCalendarEvent) {
-                if (first)
-                    first = false
-                else
-                    titles.append("\n")
+        dayEvents.filterIsInstance<DeviceCalendarEvent>().forEach {
+            if (first)
+                first = false
+            else
+                titles.append("\n")
 
-                titles.append(formatClickableEventTitle(event))
-            }
+            titles.append(formatClickableEventTitle(it))
+        }
 
         return titles
     }
@@ -461,36 +460,31 @@ class CalendarFragment : DaggerFragment() {
             getCalculationMethod(),
             date, mCoordinate
         )
-        val adapter = mOwghatBinding.timesRecyclerView.adapter
-        if (adapter is TimeItemAdapter)
-            adapter.mPrayTimes = prayTimes
-
-        var moonPhase = 1.0
-        try {
-            mCoordinate?.run {
-                moonPhase = SunMoonPosition(
-                    getTodayJdn().toDouble(), latitude,
-                    longitude, 0.0, 0.0
-                ).moonPhase
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        (mOwghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+            mPrayTimes = prayTimes
         }
-
         mOwghatBinding.sunView.run {
-            setSunriseSunsetMoonPhase(prayTimes, moonPhase)
+            setSunriseSunsetMoonPhase(prayTimes, try {
+                mCoordinate?.run {
+                    SunMoonPosition(
+                        getTodayJdn().toDouble(), latitude,
+                        longitude, 0.0, 0.0
+                    ).moonPhase
+                } ?: 1.0
+            } catch (e: Exception) {
+                e.printStackTrace()
+                1.0
+            })
             visibility = if (isToday) View.VISIBLE else View.GONE
             if (isToday && mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB) startAnimate(false)
         }
     }
 
     private fun onOwghatClick() {
-        val adapter = mOwghatBinding.timesRecyclerView.adapter
-        if (adapter is TimeItemAdapter) {
-            val expanded = !adapter.isExpanded
-            adapter.isExpanded = expanded
+        (mOwghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+            isExpanded = !isExpanded
             mOwghatBinding.moreOwghat.setImageResource(
-                if (expanded)
+                if (isExpanded)
                     R.drawable.ic_keyboard_arrow_up
                 else
                     R.drawable.ic_keyboard_arrow_down

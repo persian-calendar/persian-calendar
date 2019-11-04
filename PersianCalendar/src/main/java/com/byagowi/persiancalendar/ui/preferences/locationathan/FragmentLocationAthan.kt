@@ -101,14 +101,10 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             else -> super.onDisplayPreferenceDialog(preference)
         }
         if (fragment != null) {
-            val bundle = Bundle(1)
-            bundle.putString("key", preference?.key)
-            fragment.arguments = bundle
+            fragment.arguments = Bundle(1).apply { putString("key", preference?.key) }
             fragment.setTargetFragment(this, 0)
             val fragmentManager = fragmentManager
-            if (fragmentManager != null) {
-                fragment.show(fragmentManager, fragment.javaClass.name)
-            }
+            if (fragmentManager != null) fragment.show(fragmentManager, fragment.javaClass.name)
         }
     }
 

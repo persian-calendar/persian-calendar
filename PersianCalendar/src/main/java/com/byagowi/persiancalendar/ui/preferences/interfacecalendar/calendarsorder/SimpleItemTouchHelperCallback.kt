@@ -52,9 +52,7 @@ class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
         recyclerView: RecyclerView, source: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        if (source.itemViewType != target.itemViewType) {
-            return false
-        }
+        if (source.itemViewType != target.itemViewType) return false
 
         // Notify the adapter of the move
         mAdapter.onItemMoved(source.adapterPosition, target.adapterPosition)
@@ -81,13 +79,9 @@ class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         // We only want the active item to change
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            if (viewHolder is RecyclerListAdapter.ItemViewHolder) {
-                // Let the view holder know that this item is being moved or dragged
-                val itemViewHolder = viewHolder as RecyclerListAdapter.ItemViewHolder?
-                itemViewHolder?.onItemSelected()
-            }
-        }
+        // Let the view holder know that this item is being moved or dragged
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE)
+            (viewHolder as? RecyclerListAdapter.ItemViewHolder?)?.onItemSelected()
 
         super.onSelectedChanged(viewHolder, actionState)
     }
@@ -97,9 +91,7 @@ class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
 
         viewHolder.itemView.alpha = ALPHA_FULL
 
-        if (viewHolder is RecyclerListAdapter.ItemViewHolder) {
-            // Tell the view holder it's time to restore the idle state
-            viewHolder.onItemCleared()
-        }
+        // Tell the view holder it's time to restore the idle state
+        (viewHolder as? RecyclerListAdapter.ItemViewHolder?)?.onItemCleared()
     }
 }
