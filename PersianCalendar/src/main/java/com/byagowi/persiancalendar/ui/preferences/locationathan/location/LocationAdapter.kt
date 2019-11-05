@@ -26,28 +26,27 @@ class LocationAdapter(
     inner class ViewHolder(private val binding: ListItemCityNameBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        fun bind(cityEntity: CityItem) {
-            binding.run {
-                root.setOnClickListener(this@ViewHolder)
-                when (getAppLanguage()) {
-                    LANG_EN_IR, LANG_EN_US, LANG_JA -> {
-                        city.text = cityEntity.en
-                        country.text = cityEntity.countryEn
-                    }
-                    LANG_CKB -> {
-                        city.text = cityEntity.ckb
-                        country.text = cityEntity.countryCkb
-                    }
-                    LANG_AR -> {
-                        city.text = cityEntity.ar
-                        country.text = cityEntity.countryAr
-                    }
-                    else -> {
-                        city.text = cityEntity.fa
-                        country.text = cityEntity.countryFa
-                    }
+        fun bind(cityEntity: CityItem) = binding.let {
+            it.root.setOnClickListener(this)
+            when (getAppLanguage()) {
+                LANG_EN_IR, LANG_EN_US, LANG_JA -> {
+                    it.city.text = cityEntity.en
+                    it.country.text = cityEntity.countryEn
+                }
+                LANG_CKB -> {
+                    it.city.text = cityEntity.ckb
+                    it.country.text = cityEntity.countryCkb
+                }
+                LANG_AR -> {
+                    it.city.text = cityEntity.ar
+                    it.country.text = cityEntity.countryAr
+                }
+                else -> {
+                    it.city.text = cityEntity.fa
+                    it.country.text = cityEntity.countryFa
                 }
             }
+            Unit
         }
 
         override fun onClick(view: View) =

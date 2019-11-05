@@ -123,11 +123,10 @@ class RecyclerListAdapter(
     inner class ItemViewHolder(private val binding: CalendarTypeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(position: Int) {
-            binding.checkTextView.text = titles[position]
-            binding.checkTextView.isChecked = enabled[position]
-
-            binding.checkTextView.setOnClickListener {
+        fun bind(position: Int) = binding.apply {
+            checkTextView.text = titles[position]
+            checkTextView.isChecked = enabled[position]
+            checkTextView.setOnClickListener {
                 val newState = !binding.checkTextView.isChecked
                 binding.checkTextView.isChecked = newState
                 enabled[position] = newState

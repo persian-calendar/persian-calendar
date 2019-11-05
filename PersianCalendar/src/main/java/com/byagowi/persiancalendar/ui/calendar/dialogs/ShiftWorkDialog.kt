@@ -300,19 +300,17 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                 updateShiftWorkResult()
             }
 
-            fun bind(position: Int) {
-                if (position < mRows.size) {
-                    val shiftWorkRecord = mRows[position]
-                    mPosition = position
-                    mBinding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
-                    mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
-                    mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
-                    mBinding.detail.visibility = View.VISIBLE
-                    mBinding.addButton.visibility = View.GONE
-                } else {
-                    mBinding.detail.visibility = View.GONE
-                    mBinding.addButton.visibility = if (mRows.size < 20) View.VISIBLE else View.GONE
-                }
+            fun bind(position: Int) = if (position < mRows.size) {
+                val shiftWorkRecord = mRows[position]
+                mPosition = position
+                mBinding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
+                mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
+                mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
+                mBinding.detail.visibility = View.VISIBLE
+                mBinding.addButton.visibility = View.GONE
+            } else {
+                mBinding.detail.visibility = View.GONE
+                mBinding.addButton.visibility = if (mRows.size < 20) View.VISIBLE else View.GONE
             }
         }
     }
