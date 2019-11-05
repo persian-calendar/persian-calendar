@@ -65,11 +65,9 @@ class MonthAdapter internal constructor(
         notifyItemChanged(selectedDay)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemDayView = ItemDayView(parent.context, daysPaintResources)
-        itemDayView.layoutParams = layoutParams
-        return ViewHolder(itemDayView)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        ItemDayView(parent.context, daysPaintResources).also { it.layoutParams = layoutParams }
+    )
 
     private fun hasDeviceEvents(dayEvents: List<CalendarEvent<*>>): Boolean =
         dayEvents.any { it is DeviceCalendarEvent }

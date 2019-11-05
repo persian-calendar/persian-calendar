@@ -55,13 +55,9 @@ class RecyclerListAdapter(
         this.enabled = ArrayList(enabled)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = CalendarTypeItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-
-        return ItemViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
+        CalendarTypeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(position)

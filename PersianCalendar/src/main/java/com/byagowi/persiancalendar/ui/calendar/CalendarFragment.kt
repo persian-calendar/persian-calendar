@@ -25,7 +25,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding

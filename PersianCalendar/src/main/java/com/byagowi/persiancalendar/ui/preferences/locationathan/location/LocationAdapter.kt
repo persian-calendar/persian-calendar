@@ -14,12 +14,9 @@ class LocationAdapter(
     private val mCities: List<CityItem>
 ) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationAdapter.ViewHolder {
-        val binding = ListItemCityNameBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return ViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        ListItemCityNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(mCities[position])

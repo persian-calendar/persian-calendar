@@ -28,7 +28,7 @@ class ConverterFragment : DaggerFragment() {
             ""
         )
 
-        FragmentConverterBinding.inflate(inflater, container, false).apply {
+        return FragmentConverterBinding.inflate(inflater, container, false).apply {
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
             calendarsView.setOnShowHideTodayButton { show ->
@@ -54,8 +54,6 @@ class ConverterFragment : DaggerFragment() {
                 }
             }
             dayPickerView.setDayJdnOnView(getTodayJdn())
-
-            return root
-        }
+        }.root
     }
 }

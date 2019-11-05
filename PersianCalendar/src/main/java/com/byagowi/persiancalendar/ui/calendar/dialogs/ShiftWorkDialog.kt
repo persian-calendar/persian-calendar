@@ -172,13 +172,9 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             mBinding.result.visibility = if (result.isEmpty()) View.GONE else View.VISIBLE
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ShiftWorkItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-
-            return ViewHolder(binding)
-        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+            ShiftWorkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 

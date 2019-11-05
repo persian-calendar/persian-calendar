@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference
  * calendar notification.
  */
 class ApplicationService : Service() {
+
     private val receiver = BroadcastReceivers()
 
     override fun onBind(paramIntent: Intent?): IBinder? = null

@@ -35,7 +35,7 @@ class DeviceInformationFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return FragmentDeviceInfoBinding.inflate(inflater, container, false).run {
+        return FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
             mainActivityDependency.mainActivity.setTitleAndSubtitle(
                 getString(R.string.device_info),
                 ""
@@ -87,9 +87,7 @@ class DeviceInformationFragment : DaggerFragment() {
                     true
                 }
             }
-
-            root
-        }
+        }.root
     }
 }
 
@@ -231,12 +229,9 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
             wm.defaultDisplay.width, wm.defaultDisplay.height
         )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(
-            DeviceInfoRowBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        DeviceInfoRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 

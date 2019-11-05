@@ -29,8 +29,9 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
             for (i in timeNames.indices) notifyItemChanged(i)
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(TimeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        TimeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 

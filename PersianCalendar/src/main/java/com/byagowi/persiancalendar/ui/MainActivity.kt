@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -152,14 +151,16 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         val intent = intent
         if (intent != null) {
-            when (intent.action) {
-                "COMPASS" -> navigateTo(R.id.compass)
-                "LEVEL" -> navigateTo(R.id.level)
-                "CONVERTER" -> navigateTo(R.id.converter)
-                "SETTINGS" -> navigateTo(R.id.settings)
-                "DEVICE" -> navigateTo(R.id.deviceInfo)
-                else -> navigateTo(R.id.calendar)
-            }
+            navigateTo(
+                when (intent.action) {
+                    "COMPASS" -> R.id.compass
+                    "LEVEL" -> R.id.level
+                    "CONVERTER" -> R.id.converter
+                    "SETTINGS" -> R.id.settings
+                    "DEVICE" -> R.id.deviceInfo
+                    else -> R.id.calendar
+                }
+            )
 
             // So it won't happen again if the activity restarted
             intent.action = ""
@@ -167,15 +168,11 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         prefs.registerOnSharedPreferenceChangeListener(this)
 
-        if (isShowDeviceCalendarEvents()) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_CALENDAR
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                askForCalendarPermission(this)
-            }
-        }
+        if (isShowDeviceCalendarEvents() && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) askForCalendarPermission(this)
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
@@ -207,37 +204,34 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             binding.appbarLayout.outlineProvider = null
-        }
 
         creationDateJdn = getTodayJdn()
 
         if (mainCalendar == CalendarType.SHAMSI &&
             sIsIranHolidaysEnabled &&
             getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
-        ) {
-            Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
-                setAction(getString(R.string.update)) {
-                    try {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=$packageName")
-                            )
+        ) Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+            setAction(getString(R.string.update)) {
+                try {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=$packageName")
                         )
-                    } catch (anfe: ActivityNotFoundException) {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-                            )
+                    )
+                } catch (ignore: ActivityNotFoundException) {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
                         )
-                    }
+                    )
                 }
-                setActionTextColor(resources.getColor(R.color.dark_accent))
-            }.show()
-        }
+            }
+            setActionTextColor(resources.getColor(R.color.dark_accent))
+        }.show()
 
         applyAppLanguage(this)
     }
@@ -368,26 +362,20 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             }
         }
 
-        if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS) {
-            if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true) {
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.READ_CALENDAR
-                    ) != PackageManager.PERMISSION_GRANTED
-                )
-                    askForCalendarPermission(this)
-            }
-        }
+        if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
+            sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+            && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) askForCalendarPermission(this)
 
-        if (key == PREF_APP_LANGUAGE || key == PREF_THEME) {
-            restartToSettings()
-        }
+        if (key == PREF_APP_LANGUAGE || key == PREF_THEME) restartToSettings()
 
-        if (key == PREF_NOTIFY_DATE) {
-            if (sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
-                stopService(Intent(this, ApplicationService::class.java))
-                startEitherServiceOrWorker(applicationContext)
-            }
+        if (key == PREF_NOTIFY_DATE &&
+            sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false
+        ) {
+            stopService(Intent(this, ApplicationService::class.java))
+            startEitherServiceOrWorker(applicationContext)
         }
 
         updateStoredPreference(this)
@@ -409,15 +397,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 toggleShowDeviceCalendarOnPreference(this, true)
-                val currentDestination = Navigation
-                    .findNavController(this, R.id.nav_host_fragment)
-                    .currentDestination
-                if (currentDestination != null && currentDestination.id == R.id.calendar) {
-                    restartActivity()
-                }
-            } else {
-                toggleShowDeviceCalendarOnPreference(this, false)
-            }
+                if (getCurrentDestinationId() == R.id.calendar) restartActivity()
+            } else toggleShowDeviceCalendarOnPreference(this, false)
         }
     }
 
@@ -434,9 +415,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != getTodayJdn()) {
-            restartActivity()
-        }
+        if (creationDateJdn != getTodayJdn()) restartActivity()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -491,13 +470,14 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
             if (calendarFragment?.closeSearch() == true) return
 
-            val currentDestination = Navigation
-                .findNavController(this, R.id.nav_host_fragment)
-                .currentDestination
-            if (currentDestination == null || currentDestination.id == R.id.calendar)
+            if (getCurrentDestinationId() == R.id.calendar)
                 finish()
             else
                 navigateTo(R.id.calendar)
         }
     }
+
+    private fun getCurrentDestinationId(): Int? = Navigation
+        .findNavController(this, R.id.nav_host_fragment)
+        .currentDestination?.id
 }

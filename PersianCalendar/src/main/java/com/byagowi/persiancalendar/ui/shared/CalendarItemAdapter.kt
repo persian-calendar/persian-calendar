@@ -28,13 +28,9 @@ class CalendarItemAdapter internal constructor(context: Context) :
         //        notifyDataSetChanged();
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = CalendarItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-
-        return ViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        CalendarItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
@@ -44,7 +40,6 @@ class CalendarItemAdapter internal constructor(context: Context) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-
             val applyLineMultiplier = !isCustomFontEnabled
 
             binding.monthYear.typeface = mCalendarFont

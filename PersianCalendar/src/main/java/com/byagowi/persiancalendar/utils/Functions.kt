@@ -106,18 +106,10 @@ fun isLocaleRTL(): Boolean = when (getAppLanguage()) {
 
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
-fun formatNumber(number: String): String {
-    if (preferredDigits.contentEquals(ARABIC_DIGITS))
-        return number
-
-    val result = number.toCharArray()
-    for (i in result.indices) {
-        val c = number[i]
-        if (Character.isDigit(c))
-            result[i] = preferredDigits[Character.getNumericValue(c)]
-    }
-    return String(result)
-}
+fun formatNumber(number: String): String =
+    if (preferredDigits.contentEquals(ARABIC_DIGITS)) number else number.toCharArray().map {
+        if (Character.isDigit(it)) preferredDigits[Character.getNumericValue(it)] else it
+    }.joinToString("")
 
 // https://stackoverflow.com/a/52557989
 fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : CircularRevealWidget {
@@ -184,7 +176,7 @@ private fun loadLanguageResource(context: Context) {
     try {
         val messages = JSONObject(readRawResource(context, messagesFile))
 
-        fun JSONArray.toStringList() = (0 until length()).map { getString(it) }.toList()
+        fun JSONArray.toStringList() = (0 until length()).map { getString(it) }
 
         persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
         islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
@@ -273,7 +265,6 @@ fun loadApp(context: Context) {
     } catch (e: Exception) {
         Log.e(TAG, "loadApp fail", e)
     }
-
 }
 
 fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
@@ -350,18 +341,12 @@ fun loadAlarms(context: Context) {
                 else -> prayTimes.fajrClock
             }
 
-            setAlarm(context, name, alarmTime, i, athanGap)
+            setAlarm(context, name, Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, alarmTime.hour)
+                set(Calendar.MINUTE, alarmTime.minute)
+            }.timeInMillis, i, athanGap)
         }
     }
-}
-
-private fun setAlarm(
-    context: Context, alarmTimeName: String, clock: Clock, ord: Int, athanGap: Long
-) {
-    val triggerTime = Calendar.getInstance()
-    triggerTime.set(Calendar.HOUR_OF_DAY, clock.hour)
-    triggerTime.set(Calendar.MINUTE, clock.minute)
-    setAlarm(context, alarmTimeName, triggerTime.timeInMillis, ord, athanGap)
 }
 
 private fun setAlarm(
@@ -531,12 +516,11 @@ fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
     else -> R.drawable.isha
 }
 
-fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate =
-    when (calendar) {
-        CalendarType.ISLAMIC -> IslamicDate(jdn)
-        CalendarType.GREGORIAN -> CivilDate(jdn)
-        CalendarType.SHAMSI -> PersianDate(jdn)
-    }
+fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate = when (calendar) {
+    CalendarType.ISLAMIC -> IslamicDate(jdn)
+    CalendarType.GREGORIAN -> CivilDate(jdn)
+    CalendarType.SHAMSI -> PersianDate(jdn)
+}
 
 fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
     if (!isTalkBackEnabled) return
@@ -847,7 +831,6 @@ fun startEitherServiceOrWorker(context: Context) {
             } catch (e: Exception) {
                 Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
             }
-
         }
 
         if (!alreadyRan) {

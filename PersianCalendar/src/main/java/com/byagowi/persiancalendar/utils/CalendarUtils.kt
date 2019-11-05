@@ -511,50 +511,25 @@ fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
     return allEnabledAppointments
 }
 
-fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String {
-    val desc = event.description
-    var title = event.title
-    if (desc.isNotEmpty())
-        title += " (" + Html.fromHtml(event.description).toString().trim() + ")"
-
-    return title.replace("\n", " ").trim()
-}
+fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
+    (event.title + if (event.description.isNotBlank())
+        " (" + Html.fromHtml(event.description).toString().trim() + ")"
+    else "").replace("\n", " ").trim()
 
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>, holiday: Boolean,
     compact: Boolean, showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean
-): String {
-    val titles = StringBuilder()
-    var first = true
-
-    for (event in dayEvents)
-        if (event.isHoliday == holiday) {
-            var title = event.title
-            if (insertRLM)
-                title = RLM + title
-
-            if (event is DeviceCalendarEvent) {
-                if (!showDeviceCalendarEvents)
-                    continue
-
-                if (!compact) {
-                    title = formatDeviceCalendarEventTitle(event)
-                }
-            } else {
-                if (compact)
-                    title = title.replace("(.*) \\(.*?$".toRegex(), "$1")
-            }
-
-            if (first)
-                first = false
-            else
-                titles.append("\n")
-            titles.append(title)
+) = dayEvents
+    .filter { it.isHoliday == holiday }
+    .mapNotNull { if (it is DeviceCalendarEvent && !showDeviceCalendarEvents) null else it }
+    .map {
+        when {
+            it is DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
+            compact -> it.title.split(" (")[0]
+            else -> it.title
         }
-
-    return titles.toString()
-}
+    }.joinToString("\n") { if (insertRLM) RLM + it else it }
 
 fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     is IslamicDate -> CalendarType.ISLAMIC

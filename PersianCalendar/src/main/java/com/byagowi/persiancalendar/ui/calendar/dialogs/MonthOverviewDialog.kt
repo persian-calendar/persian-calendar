@@ -88,17 +88,11 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     private inner class ItemAdapter internal constructor(private val mRows: List<MonthOverviewRecord>) :
         RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = MonthOverviewItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+            MonthOverviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
-            return ViewHolder(binding)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(position)
-        }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
         override fun getItemCount(): Int = mRows.size
 

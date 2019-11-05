@@ -36,12 +36,6 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         mBinding.moreCalendar.visibility = View.GONE
     }
 
-    fun setOnCalendarsViewExpandListener(listener: () -> Unit) {
-        mCalendarsViewExpandListener = object : OnCalendarsViewExpandListener {
-            override fun onCalendarsViewExpand() = listener()
-        }
-    }
-
     fun setOnShowHideTodayButton(listener: (Boolean) -> Unit) {
         mOnShowHideTodayButton = object : OnShowHideTodayButton {
             override fun onShowHideTodayButton(show: Boolean) = listener(show)
