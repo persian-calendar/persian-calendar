@@ -183,31 +183,23 @@ fun getA11yDaySummary(
     return result.toString()
 }
 
-fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
-    val civil = CivilDate(jdn)
-    val persian = PersianDate(jdn)
-    val islamic = IslamicDate(jdn)
-
-    val result = ArrayList<CalendarEvent<*>>()
-
-    deviceCalendarEvents.getDeviceEvents(civil).forEach { result.add(it) } // Passed by caller}
-    sGregorianCalendarEvents.getEvents(civil).forEach { result.add(it) }
-    sPersianCalendarEvents.getEvents(persian).forEach { result.add(it) }
-    sIslamicCalendarEvents.getEvents(islamic).forEach { result.add(it) }
-    // Special case Islamic events happening in 30th day but the month has only 29 days
-    if (islamic.dayOfMonth == 29 &&
-        getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
-    )
-        sIslamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30))
-            .forEach { result.add(it) }
-
-    return result
-}
+fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
+    ArrayList<CalendarEvent<*>>().apply {
+        addAll(sPersianCalendarEvents.getEvents(PersianDate(jdn)))
+        val islamic = IslamicDate(jdn)
+        addAll(sIslamicCalendarEvents.getEvents(islamic))
+        // Special case Islamic events happening in 30th day but the month has only 29 days
+        if (islamic.dayOfMonth == 29 &&
+            getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+        ) addAll(sIslamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
+        val civil = CivilDate(jdn)
+        addAll(deviceCalendarEvents.getDeviceEvents(civil)) // Passed by caller
+        addAll(sGregorianCalendarEvents.getEvents(civil))
+    }
 
 fun getIslamicOffset(context: Context): Int =
     PreferenceManager.getDefaultSharedPreferences(context)?.getString(
-        PREF_ISLAMIC_OFFSET,
-        DEFAULT_ISLAMIC_OFFSET
+        PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET
     )?.replace("+", "")?.toIntOrNull() ?: 0
 
 fun loadEvents(context: Context) {
@@ -391,13 +383,10 @@ fun calendarToCivilDate(calendar: Calendar) = CivilDate(
     calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DAY_OF_MONTH]
 )
 
-fun makeCalendarFromDate(date: Date): Calendar {
-    val calendar = Calendar.getInstance()
+fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
     if (isIranTime())
-        calendar.timeZone = TimeZone.getTimeZone("Asia/Tehran")
-
-    calendar.time = date
-    return calendar
+        timeZone = TimeZone.getTimeZone("Asia/Tehran")
+    time = date
 }
 
 private fun readDeviceEvents(
@@ -503,10 +492,8 @@ fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
     readDeviceEvents( // ignore main result this time
         context,
         allEnabledAppointments,
-        Calendar.getInstance().apply {
-            add(Calendar.YEAR, -1)
-        },
-        TimeUnit.DAYS.toMillis((365 * 2).toLong())
+        Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+        365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
     )
     return allEnabledAppointments
 }
@@ -517,9 +504,8 @@ fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
     else "").replace("\n", " ").trim()
 
 fun getEventsTitle(
-    dayEvents: List<CalendarEvent<*>>, holiday: Boolean,
-    compact: Boolean, showDeviceCalendarEvents: Boolean,
-    insertRLM: Boolean
+    dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
+    showDeviceCalendarEvents: Boolean, insertRLM: Boolean
 ) = dayEvents
     .filter { it.isHoliday == holiday && (it !is DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
@@ -536,11 +522,12 @@ fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     else -> CalendarType.SHAMSI
 }
 
-fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int) = when (calendar) {
-    CalendarType.ISLAMIC -> IslamicDate(year, month, day)
-    CalendarType.GREGORIAN -> CivilDate(year, month, day)
-    CalendarType.SHAMSI -> PersianDate(year, month, day)
-}
+fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
+    when (calendar) {
+        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+        CalendarType.GREGORIAN -> CivilDate(year, month, day)
+        CalendarType.SHAMSI -> PersianDate(year, month, day)
+    }
 
 fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int = (getDateOfCalendar(
     calendar, if (month == 12) year + 1 else year, if (month == 12) 1 else month + 1, 1
