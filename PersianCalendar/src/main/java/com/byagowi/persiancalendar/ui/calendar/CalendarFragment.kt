@@ -77,7 +77,7 @@ class CalendarFragment : DaggerFragment() {
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
-        mMainBinding.todayButton.show()
+        if (position != 0) mMainBinding.todayButton.show()
     }
 
     class TabFragment : Fragment() {
