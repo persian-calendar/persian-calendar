@@ -76,7 +76,7 @@ class CalendarFragment : DaggerFragment() {
     private var mSearchAutoComplete: SearchView.SearchAutoComplete? = null
 
     fun onDaySelected(position: Int) {
-        sendUpdateCommandToMonthFragments(CalendarAdapter.applyOffset(position), false)
+        sendUpdateCommandToMonthFragments(position, false)
         mMainBinding.todayButton.show()
     }
 

@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
-import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.utils.*
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.calendar.AbstractDate
@@ -121,7 +120,7 @@ class MonthFragment : DaggerFragment() {
         }
 
         calendarFragmentModel.monthFragmentsHandler.observe(this, Observer { command ->
-            if (command.target == CalendarAdapter.applyOffset(offset)) {
+            if (command.target == offset) {
                 val jdn = command.currentlySelectedJdn
 
                 if (command.isEventsModification) {
@@ -133,12 +132,9 @@ class MonthFragment : DaggerFragment() {
                 }
 
                 val selectedDay = 1 + jdn - baseJdn
-                if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength) {
-                    adapter.selectDay((1 + jdn - baseJdn).toInt())
-                }
-            } else {
-                adapter.selectDay(-1)
-            }
+                if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
+                    adapter.selectDay(selectedDay.toInt())
+            } else adapter.selectDay(-1)
         })
 
         return fragmentMonthBinding.root
