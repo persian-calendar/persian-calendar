@@ -95,18 +95,8 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             .setView(binding.root)
             .setTitle(null)
             .setPositiveButton(R.string.accept) { _, _ ->
-                val result = StringBuilder()
-                var first = true
-                for (record in shiftWorkItemAdapter.rows) {
-                    if (record.length == 0) continue
-
-                    if (first)
-                        first = false
-                    else
-                        result.append(",")
-                    result.append(record.type.replace("[=,]".toRegex(), ""))
-                    result.append("=")
-                    result.append(record.length)
+                val result = shiftWorkItemAdapter.rows.filter { it.length != 0 }.joinToString(",") {
+                    "${it.type.replace("=", "").replace(",", "")}=${it.length}"
                 }
 
                 appDependency.sharedPreferences.edit {
@@ -150,27 +140,16 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         fun shiftWorkKeyToString(type: String): String = sShiftWorkTitles[type] ?: type
 
-        private fun updateShiftWorkResult() {
-            val result = StringBuilder()
-            var first = true
-            for (record in mRows) {
-                if (record.length == 0) continue
-
-                if (first)
-                    first = false
-                else
-                    result.append(spacedComma)
-                result.append(
-                    String.format(
-                        getString(R.string.shift_work_record_title),
-                        formatNumber(record.length), shiftWorkKeyToString(record.type)
-                    )
+        private fun updateShiftWorkResult() =
+            mRows.filter { it.length != 0 }.joinToString(spacedComma) {
+                String.format(
+                    getString(R.string.shift_work_record_title),
+                    formatNumber(it.length), shiftWorkKeyToString(it.type)
                 )
+            }.also {
+                mBinding.result.text = it
+                mBinding.result.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
             }
-
-            mBinding.result.text = result.toString()
-            mBinding.result.visibility = if (result.isEmpty()) View.GONE else View.VISIBLE
-        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
             ShiftWorkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

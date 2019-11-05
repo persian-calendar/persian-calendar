@@ -521,8 +521,7 @@ fun getEventsTitle(
     compact: Boolean, showDeviceCalendarEvents: Boolean,
     insertRLM: Boolean
 ) = dayEvents
-    .filter { it.isHoliday == holiday }
-    .mapNotNull { if (it is DeviceCalendarEvent && !showDeviceCalendarEvents) null else it }
+    .filter { it.isHoliday == holiday && (it !is DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
         when {
             it is DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
