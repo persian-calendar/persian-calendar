@@ -73,7 +73,6 @@ class CalendarFragment : DaggerFragment() {
     private lateinit var mEventsBinding: EventsTabContentBinding
     private var mLastSelectedJdn: Long = -1
     private var mSearchView: SearchView? = null
-    private var mSearchAutoComplete: SearchView.SearchAutoComplete? = null
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
@@ -532,16 +531,16 @@ class CalendarFragment : DaggerFragment() {
         menu.clear()
         inflater.inflate(R.menu.calendar_menu_buttons, menu)
 
-        mSearchView = (menu.findItem(R.id.search).actionView as SearchView?)?.apply {
+        mSearchView = (menu.findItem(R.id.search).actionView as? SearchView?)?.apply {
             setOnSearchClickListener {
                 // Remove search edit view below bar
                 findViewById<View?>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(
                     Color.TRANSPARENT
                 )
 
-                mSearchAutoComplete = (findViewById<SearchView.SearchAutoComplete?>(
+                (findViewById<View?>(
                     androidx.appcompat.R.id.search_src_text
-                ))?.apply {
+                ) as? SearchView.SearchAutoComplete?)?.apply {
                     setHint(R.string.search_in_events)
                     setAdapter(
                         ArrayAdapter<CalendarEvent<*>>(
@@ -569,29 +568,6 @@ class CalendarFragment : DaggerFragment() {
                 }
             }
         }
-    }
-
-    private fun destroySearchView() {
-        mSearchView = mSearchView?.run {
-            setOnSearchClickListener(null)
-            null
-        }
-
-        mSearchAutoComplete = mSearchAutoComplete?.run {
-            setAdapter(null)
-            onItemClickListener = null
-            null
-        }
-    }
-
-    override fun onDestroyOptionsMenu() {
-        destroySearchView()
-        super.onDestroyOptionsMenu()
-    }
-
-    override fun onDestroy() {
-        destroySearchView()
-        super.onDestroy()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
