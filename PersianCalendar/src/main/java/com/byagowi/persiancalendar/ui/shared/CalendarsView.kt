@@ -72,7 +72,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val diffDays = abs(getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
-            if (isIranTime()) {
+            if (iranTime) {
                 mBinding.weekDayName.text = String.format(
                     "%s (%s)",
                     mBinding.weekDayName.text,

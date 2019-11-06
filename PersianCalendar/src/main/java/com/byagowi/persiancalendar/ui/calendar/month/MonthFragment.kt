@@ -67,7 +67,7 @@ class MonthFragment : DaggerFragment() {
         fragmentMonthBinding.monthDays.setHasFixedSize(true)
         fragmentMonthBinding.monthDays.layoutManager = GridLayoutManager(
             mainActivityDependency.mainActivity,
-            if (isWeekOfYearEnabled()) 8 else 7
+            if (showWeekOfYear) 8 else 7
         )
         ///////
         ///////

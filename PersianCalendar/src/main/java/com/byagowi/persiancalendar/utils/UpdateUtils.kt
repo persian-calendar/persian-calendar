@@ -138,7 +138,7 @@ fun update(context: Context, updateDate: Boolean) {
         val remoteViews4: RemoteViews
         val remoteViews2: RemoteViews
         if (enableClock) {
-            if (!isIranTime()) {
+            if (!iranTime) {
                 remoteViews4 = RemoteViews(
                     context.packageName,
                     if (isCenterAligned) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
@@ -182,7 +182,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             if (enableClock) {
                 text2 = title
-                if (isIranTime()) {
+                if (iranTime) {
                     text3 = "(" + context.getString(R.string.iran_time) + ")"
                 }
             } else {
@@ -273,7 +273,7 @@ fun update(context: Context, updateDate: Boolean) {
         val remoteViews4x2: RemoteViews = RemoteViews(
             context.packageName,
             if (enableClock) {
-                if (isIranTime()) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
+                if (iranTime) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
             } else R.layout.widget4x2
         )
 

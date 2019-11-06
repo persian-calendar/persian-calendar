@@ -45,7 +45,7 @@ class MonthAdapter internal constructor(
     }
 
     internal fun initializeMonthEvents(context: Context?) {
-        if (isShowDeviceCalendarEvents() && context != null) {
+        if (showDeviceCalendarEvents && context != null) {
             monthEvents = readMonthDeviceEvents(context, days[0].jdn)
         }
     }
@@ -58,7 +58,7 @@ class MonthAdapter internal constructor(
         if (dayOfMonth == -1) return
 
         selectedDay = dayOfMonth + 6 + startingDayOfWeek
-        if (isWeekOfYearEnabled()) {
+        if (showWeekOfYear) {
             selectedDay += selectedDay / 7 + 1
         }
 
@@ -75,7 +75,7 @@ class MonthAdapter internal constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int =
-        7 * if (isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
+        7 * if (showWeekOfYear) 8 else 7 // days of week * month view rows
 
     inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {
@@ -109,7 +109,7 @@ class MonthAdapter internal constructor(
             var position = position
             val originalPosition = position
             val itemDayView = itemView as ItemDayView
-            if (isWeekOfYearEnabled()) {
+            if (showWeekOfYear) {
                 if (position % 8 == 0) {
                     val row = position / 8
                     if (row in 1..weeksCount) {

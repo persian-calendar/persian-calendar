@@ -167,7 +167,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         prefs.registerOnSharedPreferenceChangeListener(this)
 
-        if (isShowDeviceCalendarEvents() && ActivityCompat.checkSelfPermission(
+        if (showDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED

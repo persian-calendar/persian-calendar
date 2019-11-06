@@ -29,13 +29,7 @@ var sPersianCalendarEvents: PersianCalendarEventsStore = emptyMap()
 var sIslamicCalendarEvents: IslamicCalendarEventsStore = emptyMap()
 var sGregorianCalendarEvents: GregorianCalendarEventsStore = emptyMap()
 
-fun isIranTime(): Boolean = iranTime
-
 fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
-
-fun isWeekOfYearEnabled(): Boolean = showWeekOfYear
-
-fun isShowDeviceCalendarEvents(): Boolean = showDeviceCalendarEvents
 
 fun hasAnyHolidays(dayEvents: List<CalendarEvent<*>>): Boolean = dayEvents.any { it.isHoliday }
 
@@ -43,13 +37,7 @@ fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
-fun getAllEnabledEvents(): List<CalendarEvent<*>> = sAllEnabledEvents
-
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
-
-fun getAmString(): String = sAM
-
-fun getPmString(): String = sPM
 
 fun getDayOfWeekFromJdn(jdn: Long): Int =
     civilDateToCalendar(CivilDate(jdn))[Calendar.DAY_OF_WEEK] % 7
@@ -155,7 +143,7 @@ fun getA11yDaySummary(
         result.append(nonHolidays)
     }
 
-    if (isWeekOfYearEnabled()) {
+    if (showWeekOfYear) {
         val startOfYearJdn = getDateOfCalendar(
             mainCalendar,
             mainDate.year, 1, 1
@@ -371,10 +359,10 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     var hour = clock.hour
     val suffix: String
     if (hour >= 12) {
-        suffix = getPmString()
+        suffix = sPM
         hour -= 12
     } else
-        suffix = getAmString()
+        suffix = sAM
 
     return baseFormatClock(hour, clock.minute) + " " + suffix
 }
@@ -384,7 +372,7 @@ fun calendarToCivilDate(calendar: Calendar) = CivilDate(
 )
 
 fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
-    if (isIranTime())
+    if (iranTime)
         timeZone = TimeZone.getTimeZone("Asia/Tehran")
     time = date
 }
@@ -395,7 +383,7 @@ private fun readDeviceEvents(
     startingDate: Calendar,
     rangeInMillis: Long
 ): DeviceCalendarEventsStore {
-    if (!isShowDeviceCalendarEvents() ||
+    if (!showDeviceCalendarEvents ||
         ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.READ_CALENDAR
