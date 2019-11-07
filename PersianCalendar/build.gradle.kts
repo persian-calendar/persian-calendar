@@ -122,9 +122,8 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
 
-//    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
-
-//  debugImplementation("com.github.pedrovgs:lynx:1.1.0")
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
+    // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
     testImplementation("junit:junit:4.12")
 
