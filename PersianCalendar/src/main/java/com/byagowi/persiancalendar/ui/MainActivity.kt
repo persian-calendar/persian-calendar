@@ -178,8 +178,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
             .setImageResource(seasonImage)
 
-        var appLanguage = prefs.getString(PREF_APP_LANGUAGE, "N/A")
-        if (appLanguage == null) appLanguage = "N/A"
+        val appLanguage = prefs.getString(PREF_APP_LANGUAGE, null) ?: "N/A"
         if (appLanguage == "N/A" && !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
             Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -264,9 +263,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             var changeToPersianCalendar = false
             var changeToIranEvents = false
             var removeAllEvents = false
-            var lang = sharedPreferences?.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE)
-            if (lang == null) lang = ""
-            when (lang) {
+            when (sharedPreferences?.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE) {
                 LANG_EN_US -> {
                     changeToGregorianCalendar = true
                     removeAllEvents = true
@@ -312,31 +309,28 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                 // Enable Afghanistan holidays when Dari or Pashto is set
                 if (changeToAfghanistanHolidays) {
                     val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
                         currentHolidays.contains("iran_holidays")
-                    )
-                        putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
+                    ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
 
                 }
                 if (changeToIranEvents) {
                     val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() ||
                         (currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays"))
-                    )
-                        putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
+                    ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
                 }
                 if (removeAllEvents) {
                     val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, emptySet()) ?: emptySet()
+                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() ||
                         (currentHolidays.size == 1 && currentHolidays.contains("iran_holidays"))
-                    )
-                        putStringSet(PREF_HOLIDAY_TYPES, emptySet())
+                    ) putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                 }
                 when {
                     changeToGregorianCalendar -> {
@@ -380,7 +374,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         updateStoredPreference(this)
         update(applicationContext, true)
 
-        ViewModelProviders.of(this).get(MainActivityModel::class.java).preferenceIsUpdated()
+        ViewModelProviders.of(this)[MainActivityModel::class.java].preferenceIsUpdated()
     }
 
     override fun onRequestPermissionsResult(

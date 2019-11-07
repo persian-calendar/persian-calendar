@@ -69,8 +69,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         updateAthanPreferencesState()
 
         updateAthanPreferencesState()
-        ViewModelProviders.of(mainActivityDependency.mainActivity)
-            .get(MainActivityModel::class.java)
+        ViewModelProviders.of(mainActivityDependency.mainActivity)[MainActivityModel::class.java]
             .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
         putAthanNameOnSummary(

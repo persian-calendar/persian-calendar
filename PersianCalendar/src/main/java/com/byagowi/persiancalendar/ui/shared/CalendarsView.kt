@@ -142,8 +142,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                         formatNumber(mainDate.year + addition),
                         getFormattedClock(
                             Clock(
-                                springEquinox.get(Calendar.HOUR_OF_DAY),
-                                springEquinox.get(Calendar.MINUTE)
+                                springEquinox[Calendar.HOUR_OF_DAY],
+                                springEquinox[Calendar.MINUTE]
                             ), true
                         )
                     )

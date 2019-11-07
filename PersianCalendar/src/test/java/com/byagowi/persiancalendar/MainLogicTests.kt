@@ -210,11 +210,7 @@ class MainLogicTests {
 
     private fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
         Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-            set(
-                year,
-                month - 1,
-                dayOfMonth
-            )
+            set(year, month - 1, dayOfMonth)
         }.time
 
     @Test
@@ -535,12 +531,12 @@ class MainLogicTests {
             listOf(2008, 3, 20, 9, 18, 17/*should be 19*/)
         ).forEach {
             calendar.time = Equinox.northwardEquinox(it[0])
-            assertEquals(it[0].toString(), it[0], calendar.get(Calendar.YEAR))
-            assertEquals(it[0].toString(), it[1], calendar.get(Calendar.MONTH) + 1)
-            assertEquals(it[0].toString(), it[2], calendar.get(Calendar.DAY_OF_MONTH))
-            assertEquals(it[0].toString(), it[3], calendar.get(Calendar.HOUR_OF_DAY))
-            assertEquals(it[0].toString(), it[4], calendar.get(Calendar.MINUTE))
-            assertEquals(it[0].toString(), it[5], calendar.get(Calendar.SECOND))
+            assertEquals(it[0].toString(), it[0], calendar[Calendar.YEAR])
+            assertEquals(it[0].toString(), it[1], calendar[Calendar.MONTH] + 1)
+            assertEquals(it[0].toString(), it[2], calendar[Calendar.DAY_OF_MONTH])
+            assertEquals(it[0].toString(), it[3], calendar[Calendar.HOUR_OF_DAY])
+            assertEquals(it[0].toString(), it[4], calendar[Calendar.MINUTE])
+            assertEquals(it[0].toString(), it[5], calendar[Calendar.SECOND])
         }
 
         // And not having random crashes

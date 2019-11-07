@@ -89,8 +89,9 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return
 
-            ViewModelProviders.of(calendarFragmentDependency.calendarFragment)
-                .get(CalendarFragmentModel::class.java).selectDay(jdn)
+            ViewModelProviders
+                .of(calendarFragmentDependency.calendarFragment)[CalendarFragmentModel::class.java]
+                .selectDay(jdn)
             this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
         }
 

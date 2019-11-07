@@ -277,11 +277,10 @@ class CalendarFragment : DaggerFragment() {
         }
     }
 
-    private fun sendUpdateCommandToMonthFragments(toWhich: Int, addOrModify: Boolean) {
-        ViewModelProviders.of(this).get(CalendarFragmentModel::class.java).monthFragmentsUpdate(
+    private fun sendUpdateCommandToMonthFragments(toWhich: Int, addOrModify: Boolean) =
+        ViewModelProviders.of(this)[CalendarFragmentModel::class.java].monthFragmentsUpdate(
             CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, mLastSelectedJdn)
         )
-    }
 
     private fun formatClickableEventTitle(event: DeviceCalendarEvent): SpannableString {
         val title = formatDeviceCalendarEventTitle(event)
@@ -404,8 +403,8 @@ class CalendarFragment : DaggerFragment() {
             val messageToShow = SpannableStringBuilder()
 
             val enabledTypes = appDependency.sharedPreferences
-                .getStringSet(PREF_HOLIDAY_TYPES, emptySet())
-            if (enabledTypes == null || enabledTypes.size == 0) {
+                .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+            if (enabledTypes.size == 0) {
                 noEvent.visibility = View.GONE
                 if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 

@@ -615,19 +615,11 @@ fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
     return result.toString()
 }
 
-private fun calculateDiffToChangeDate(): Long {
-    val currentTime = Calendar.getInstance().time
-    val current = currentTime.time / 1000
-
-    val startTime = Calendar.getInstance()
-    startTime.set(Calendar.HOUR_OF_DAY, 0)
-    startTime.set(Calendar.MINUTE, 0)
-    startTime.set(Calendar.SECOND, 1)
-
-    val start = startTime.timeInMillis / 1000 + DAY_IN_SECOND
-
-    return start - current
-}
+private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
+    set(Calendar.HOUR_OF_DAY, 0)
+    set(Calendar.MINUTE, 0)
+    set(Calendar.SECOND, 1)
+}.timeInMillis / 1000 + DAY_IN_SECOND - Calendar.getInstance().time.time / 1000
 
 fun setChangeDateWorker(context: Context) {
     val remainedSeconds = calculateDiffToChangeDate()
@@ -730,7 +722,7 @@ fun updateStoredPreference(context: Context) {
     calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
 
     try {
-        sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, "") ?: "")
+        sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
             .split(",")
             .map { it.split("=") }
             .filter { it.size == 2 }

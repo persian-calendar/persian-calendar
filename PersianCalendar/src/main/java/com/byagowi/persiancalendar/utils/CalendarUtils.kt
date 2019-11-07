@@ -61,9 +61,7 @@ fun dayTitleSummary(date: AbstractDate): String =
     getWeekDayName(date) + spacedComma + formatDate(date)
 
 fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance().apply {
-    set(Calendar.YEAR, civilDate.year)
-    set(Calendar.MONTH, civilDate.month - 1)
-    set(Calendar.DAY_OF_MONTH, civilDate.dayOfMonth)
+    set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
 }
 
 fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
@@ -437,14 +435,14 @@ private fun readDeviceEvents(
                 else {
                     title = "\uD83D\uDD53 $title"
                     title += " (" + baseFormatClock(
-                        startCalendar.get(Calendar.HOUR_OF_DAY),
-                        startCalendar.get(Calendar.MINUTE)
+                        startCalendar[Calendar.HOUR_OF_DAY],
+                        startCalendar[Calendar.MINUTE]
                     )
 
                     if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
                         title += "-" + baseFormatClock(
-                            endCalendar.get(Calendar.HOUR_OF_DAY),
-                            endCalendar.get(Calendar.MINUTE)
+                            endCalendar[Calendar.HOUR_OF_DAY],
+                            endCalendar[Calendar.MINUTE]
                         )
 
                     title += ")"

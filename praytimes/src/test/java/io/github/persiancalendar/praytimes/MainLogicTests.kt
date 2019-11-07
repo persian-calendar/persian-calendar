@@ -121,10 +121,6 @@ class MainLogicTests {
 
     private fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
         Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-            set(
-                year,
-                month - 1,
-                dayOfMonth
-            )
+            set(year, month - 1, dayOfMonth)
         }.time
 }

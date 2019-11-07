@@ -224,13 +224,10 @@ fun update(context: Context, updateDate: Boolean) {
             )
             if (holidays.isNotEmpty()) {
                 setTextViewText(R.id.holiday_2x2, holidays)
-                if (isTalkBackEnabled) {
-                    setContentDescription(
-                        R.id.holiday_2x2,
-                        context.getString(R.string.holiday_reason) + " " +
-                                holidays
-                    )
-                }
+                if (isTalkBackEnabled) setContentDescription(
+                    R.id.holiday_2x2,
+                    context.getString(R.string.holiday_reason) + " " + holidays
+                )
                 setViewVisibility(R.id.holiday_2x2, View.VISIBLE)
             } else {
                 setViewVisibility(R.id.holiday_2x2, View.GONE)

@@ -102,7 +102,7 @@ class MonthFragment : DaggerFragment() {
         ///////
 
         val calendarFragmentModel =
-            ViewModelProviders.of(calendarFragment).get(CalendarFragmentModel::class.java)
+            ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
 
         val adapter = MonthAdapter(
             mainActivityDependency, calendarFragmentDependency, days,
