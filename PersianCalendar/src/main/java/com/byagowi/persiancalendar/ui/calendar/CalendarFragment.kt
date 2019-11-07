@@ -89,14 +89,10 @@ class CalendarFragment : DaggerFragment() {
             container: ViewGroup?, savedInstanceState: Bundle?
         ): View? = view
 
-        var isFirstTime = true
-
         override fun onResume() {
             super.onResume()
 
-            (view.findViewById<View>(R.id.sunView) as? SunView?)
-                ?.startAnimate(isFirstTime) // don't animate when it is just initialized
-            isFirstTime = !isFirstTime
+            (view.findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
 
             PreferenceManager.getDefaultSharedPreferences(view.context)
                 .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
