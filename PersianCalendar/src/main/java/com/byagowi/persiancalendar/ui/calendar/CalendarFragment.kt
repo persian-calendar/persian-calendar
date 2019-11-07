@@ -19,7 +19,6 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -89,10 +88,14 @@ class CalendarFragment : DaggerFragment() {
             container: ViewGroup?, savedInstanceState: Bundle?
         ): View? = view
 
+        var isFirstTime = true
+
         override fun onResume() {
             super.onResume()
 
-            (view.findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
+            (view.findViewById<View>(R.id.sunView) as? SunView?)
+                ?.startAnimate(isFirstTime) // don't animate when it is just initialized
+            isFirstTime = !isFirstTime
 
             PreferenceManager.getDefaultSharedPreferences(view.context)
                 .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
