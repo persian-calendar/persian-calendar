@@ -91,10 +91,10 @@ class CalendarFragment : DaggerFragment() {
 
         override fun onResume() {
             super.onResume()
-            view?.run {
-                (findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
+            view?.also {
+                (it.findViewById<View?>(R.id.sunView) as? SunView?)?.startAnimate(immediate = false)
 
-                PreferenceManager.getDefaultSharedPreferences(context)
+                PreferenceManager.getDefaultSharedPreferences(it.context)
                     .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
             }
         }
@@ -463,7 +463,8 @@ class CalendarFragment : DaggerFragment() {
                 1.0
             })
             visibility = if (isToday) View.VISIBLE else View.GONE
-            if (isToday && mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB) startAnimate(false)
+            if (isToday && mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB)
+                startAnimate(immediate = false)
         }
     }
 

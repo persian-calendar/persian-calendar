@@ -32,7 +32,7 @@ data class PersianCalendarEvent(
     override fun toString(): String = title
 }
 
-class DeviceCalendarEvent(
+data class DeviceCalendarEvent(
     override val date: CivilDate, override val title: String, override val isHoliday: Boolean,
     val id: Int, val description: String, val start: Date, val end: Date, val color: String
 ) : CalendarEvent<CivilDate> {
