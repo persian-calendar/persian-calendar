@@ -411,9 +411,9 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         if (creationDateJdn != getTodayJdn()) restartActivity()
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean =
         // Checking for the "menu" key
-        return if (keyCode == KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
                 binding.drawer.closeDrawers()
             } else {
@@ -423,7 +423,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         } else {
             super.onKeyDown(keyCode, event)
         }
-    }
 
     fun restartActivity() {
         val intent = intent
