@@ -1,6 +1,10 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.app.Activity
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -199,6 +203,37 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                 "Device Fingerprints",
                 Build.FINGERPRINT, ""
             )
+
+            addIfNotNull(
+                "Sensors",
+                (rootView.context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager?)
+                    ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
+            )
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                addIfNotNull(
+                    "Battery",
+                    (rootView.context.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager?)
+                        ?.run {
+                            listOf("Charging: $isCharging") + listOf(
+                                BatteryManager.BATTERY_PROPERTY_CAPACITY,
+                                BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
+                                BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
+                                BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
+                                BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
+                            ).zip(
+                                listOf(
+                                    "Capacity",
+                                    "Charge Counter",
+                                    "Current Average",
+                                    "Current Now",
+                                    "Energy Counter"
+                                )
+                            ) { x, y -> "$y: ${getLongProperty(x)}" }
+                        }?.joinToString("\n"), ""
+                )
+            }
         }
 
         // If one wants to add kernel related cpu information
