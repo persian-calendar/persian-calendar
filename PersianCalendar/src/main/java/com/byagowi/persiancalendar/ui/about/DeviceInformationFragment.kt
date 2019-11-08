@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
@@ -206,7 +207,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
 
             addIfNotNull(
                 "Sensors",
-                (rootView.context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager?)
+                (rootView.context.getSystemService<SensorManager>())
                     ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
             )
 
@@ -214,7 +215,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 addIfNotNull(
                     "Battery",
-                    (rootView.context.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager?)
+                    (rootView.context.getSystemService<BatteryManager>())
                         ?.run {
                             listOf("Charging: $isCharging") + listOf(
                                 BatteryManager.BATTERY_PROPERTY_CAPACITY,
