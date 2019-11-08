@@ -81,7 +81,7 @@ class CalendarFragment : DaggerFragment() {
 
     class TabFragment : Fragment() {
         @get:JvmName("getView_")
-        lateinit var view: View
+        var view: View? = null // Don't turn it to lateinit till more investigations
         private var position = 0
 
         override fun onCreateView(
@@ -91,11 +91,12 @@ class CalendarFragment : DaggerFragment() {
 
         override fun onResume() {
             super.onResume()
+            view?.run {
+                (findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
 
-            (view.findViewById<View>(R.id.sunView) as? SunView?)?.startAnimate(false)
-
-            PreferenceManager.getDefaultSharedPreferences(view.context)
-                .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+                PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+            }
         }
 
         companion object {
