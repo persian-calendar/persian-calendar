@@ -219,7 +219,7 @@ fun loadEvents(context: Context) {
         if (afghanistanHolidays) {
             IslamicDate.useUmmAlQura = true
         }
-        when (getAppLanguage()) {
+        when (language) {
             LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura =
                 true
         }
