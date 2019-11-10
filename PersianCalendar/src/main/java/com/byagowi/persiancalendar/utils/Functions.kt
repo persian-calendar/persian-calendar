@@ -810,20 +810,19 @@ fun startEitherServiceOrWorker(context: Context) {
         // workManager.cancelAllWorkByTag(UPDATE_TAG);
         // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
-        var alreadyRan = false
-        val manager = context.getSystemService<ActivityManager>()
-        if (manager != null) {
+        var isRunning = false
+        context.getSystemService<ActivityManager>()?.let {
             try {
-                for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+                for (service in it.getRunningServices(Integer.MAX_VALUE)) {
                     if (ApplicationService::class.java.name == service.service.className)
-                        alreadyRan = true
+                        isRunning = true
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
             }
         }
 
-        if (!alreadyRan) {
+        if (!isRunning) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     ContextCompat.startForegroundService(
