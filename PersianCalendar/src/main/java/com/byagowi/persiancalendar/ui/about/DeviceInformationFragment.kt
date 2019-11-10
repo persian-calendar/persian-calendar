@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.app.Activity
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.BatteryManager
