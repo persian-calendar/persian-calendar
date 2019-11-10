@@ -10,5 +10,5 @@ import androidx.recyclerview.widget.RecyclerView
 class UntouchableRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
-    override fun onTouchEvent(e: MotionEvent): Boolean = false
+    override fun onTouchEvent(e: MotionEvent?): Boolean = false
 }
