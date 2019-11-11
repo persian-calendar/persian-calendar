@@ -15,7 +15,6 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.accessibility.AccessibilityManager
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
@@ -197,16 +196,6 @@ private fun loadLanguageResource(context: Context) {
         weekDaysInitials = weekDaysEmptyList
     }
 }
-
-fun createAndShowSnackbar(v: View?, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar.make(v ?: return, message, duration).apply {
-        view.setOnClickListener { dismiss() }
-        view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
-    }.show()
-}
-
-fun createAndShowSnackbar(view: View?, @StringRes messageId: Int) =
-    createAndShowSnackbar(view, view?.context?.getString(messageId) ?: "")
 
 fun loadApp(context: Context) {
     if (goForWorker()) return
@@ -513,7 +502,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
 
     val now = System.currentTimeMillis()
     if (now - latestToastShowTime > twoSeconds) {
-        createAndShowSnackbar(view, resId)
+        Snackbar.make(view, resId, Snackbar.LENGTH_SHORT).show()
         // https://stackoverflow.com/a/29423018
         context.getSystemService<AudioManager>()?.playSoundEffect(AudioManager.FX_KEY_CLICK)
         latestToastShowTime = now
@@ -582,10 +571,11 @@ fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
     if (clipboardService == null || label == null || text == null) return
 
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    createAndShowSnackbar(
+    Snackbar.make(
         view,
-        String.format(view.context.getString(R.string.date_copied_clipboard), text)
-    )
+        String.format(view.context.getString(R.string.date_copied_clipboard), text),
+        Snackbar.LENGTH_SHORT
+    ).show()
 }
 
 fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {

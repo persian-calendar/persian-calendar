@@ -47,6 +47,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.calendar.CivilDate
@@ -248,9 +249,12 @@ class CalendarFragment : DaggerFragment() {
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                 )
             } catch (e: Exception) {
-                createAndShowSnackbar(view, R.string.device_calendar_does_not_support)
+                Snackbar.make(
+                    mMainBinding.root,
+                    R.string.device_calendar_does_not_support,
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-
         }
     }
 
@@ -299,10 +303,11 @@ class CalendarFragment : DaggerFragment() {
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                         )
                     } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                        createAndShowSnackbar(
+                        Snackbar.make(
                             textView,
-                            R.string.device_calendar_does_not_support
-                        )
+                            R.string.device_calendar_does_not_support,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -508,14 +513,15 @@ class CalendarFragment : DaggerFragment() {
         if (isTalkBackEnabled) {
             val todayJdn = getTodayJdn()
             if (jdn != todayJdn) {
-                createAndShowSnackbar(
-                    view,
+                Snackbar.make(
+                    mMainBinding.root,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,
                         false, emptyMap(), withZodiac = true,
                         withOtherCalendars = true, withTitle = true
-                    )
-                )
+                    ),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

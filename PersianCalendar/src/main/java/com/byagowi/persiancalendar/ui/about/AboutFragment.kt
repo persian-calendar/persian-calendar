@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,8 +24,12 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getMaxSupportedYear
+import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.readRawResource
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -121,8 +126,9 @@ class AboutFragment : DaggerFragment() {
                                 getString(R.string.about_sendMail)
                             )
                         )
-                    } catch (ex: android.content.ActivityNotFoundException) {
-                        createAndShowSnackbar(view, R.string.about_noClient)
+                    } catch (ex: ActivityNotFoundException) {
+                        Snackbar.make(binding.root, R.string.about_noClient, Snackbar.LENGTH_SHORT)
+                            .show()
                     }
                 }
                 .setNegativeButton(R.string.cancel, null).show()

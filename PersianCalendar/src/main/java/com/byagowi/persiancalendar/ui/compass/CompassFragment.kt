@@ -9,14 +9,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.createAndShowSnackbar
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.praytimes.Coordinate
 import javax.inject.Inject
@@ -72,6 +74,12 @@ class CompassFragment : DaggerFragment() {
         }
     }
 
+    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
+        Snackbar.make(mainActivityDependency.mainActivity.coordinator, messageId, duration).apply {
+            view.setOnClickListener { dismiss() }
+            view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+        }.show()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
@@ -95,14 +103,12 @@ class CompassFragment : DaggerFragment() {
                         )
                     } catch (ignore: Exception) {
                     }
-                    R.id.help -> createAndShowSnackbar(
-                        view, mainActivityDependency.mainActivity
-                            .getString(
-                                if (sensorNotFound)
-                                    R.string.compass_not_found
-                                else
-                                    R.string.calibrate_compass_summary
-                            ), 5000
+                    R.id.help -> showLongSnackbar(
+                        if (sensorNotFound)
+                            R.string.compass_not_found
+                        else
+                            R.string.calibrate_compass_summary,
+                        5000
                     )
                     else -> {
                     }
@@ -160,11 +166,10 @@ class CompassFragment : DaggerFragment() {
                 sensor,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
-            if (coordinate == null) {
-                createAndShowSnackbar(mainActivity.coordinator, R.string.set_location)
-            }
+            if (coordinate == null)
+                showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
         } else {
-            createAndShowSnackbar(view, R.string.compass_not_found)
+            showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
             sensorNotFound = true
         }
     }

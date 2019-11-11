@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.*
+import com.google.android.material.snackbar.Snackbar
 
 class SimpleDayPickerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -38,23 +39,19 @@ class SimpleDayPickerView @JvmOverloads constructor(
         }
 
     override val dayJdnFromView: Long
-        get() {
+        get() = try {
             val year = (binding.yearSpinner.selectedItem as StringWithValueItem).value
             val month = (binding.monthSpinner.selectedItem as StringWithValueItem).value
             val day = (binding.daySpinner.selectedItem as StringWithValueItem).value
+            val selectedCalendarType = selectedCalendarType
+            if (day > getMonthLength(selectedCalendarType, year, month))
+                throw Exception("Not a valid day")
 
-            try {
-                val selectedCalendarType = selectedCalendarType
-                if (day > getMonthLength(selectedCalendarType, year, month))
-                    throw Exception("Not a valid day")
-
-                return getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
-            } catch (e: Exception) {
-                createAndShowSnackbar(rootView, R.string.date_exception)
-                Log.e("SelectDayDialog", "", e)
-            }
-
-            return -1
+            getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
+        } catch (e: Exception) {
+            Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
+            Log.e("SelectDayDialog", "", e)
+            -1
         }
 
     override val selectedCalendarType: CalendarType
