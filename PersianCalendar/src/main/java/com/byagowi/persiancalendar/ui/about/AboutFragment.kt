@@ -73,7 +73,7 @@ class AboutFragment : DaggerFragment() {
             formatNumber(getMaxSupportedYear() - 1),
             formatNumber(getMaxSupportedYear())
         )
-        when (getAppLanguage()) {
+        when (language) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR // en. unlike en-US, is for Iranians as indicated also on UI
             -> {
             }

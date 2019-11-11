@@ -84,22 +84,20 @@ fun formatDate(date: AbstractDate): String = if (numericalDatePreferred)
     (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
 else
     String.format(
-        if (getAppLanguage() == LANG_CKB) "%sی %sی %s" else "%s %s %s",
+        if (language == LANG_CKB) "%sی %sی %s" else "%s %s %s",
         formatNumber(date.dayOfMonth), getMonthName(date),
         formatNumber(date.year)
     )
 
-fun getAppLanguage(): String = if (language.isEmpty()) DEFAULT_APP_LANGUAGE else language
-
 fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
-fun isNonArabicScriptSelected() = when (getAppLanguage()) {
+fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
     else -> false
 }
 
 // en-US and ja are our only real LTR locales for now
-fun isLocaleRTL(): Boolean = when (getAppLanguage()) {
+fun isLocaleRTL(): Boolean = when (language) {
     LANG_EN_US, LANG_JA -> false
     else -> true
 }
@@ -716,7 +714,7 @@ fun updateStoredPreference(context: Context) {
     isAstronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
     numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
 
-    if (getOnlyLanguage(getAppLanguage()) != resources.getString(R.string.code))
+    if (getOnlyLanguage(language) != resources.getString(R.string.code))
         applyAppLanguage(context)
 
     calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
@@ -748,7 +746,7 @@ fun updateStoredPreference(context: Context) {
         sShiftWorkTitles = emptyMap()
     }
 
-    when (getAppLanguage()) {
+    when (language) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
             sAM = DEFAULT_AM
             sPM = DEFAULT_PM
@@ -812,20 +810,19 @@ fun startEitherServiceOrWorker(context: Context) {
         // workManager.cancelAllWorkByTag(UPDATE_TAG);
         // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
-        var alreadyRan = false
-        val manager = context.getSystemService<ActivityManager>()
-        if (manager != null) {
+        var isRunning = false
+        context.getSystemService<ActivityManager>()?.let {
             try {
-                for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+                for (service in it.getRunningServices(Integer.MAX_VALUE)) {
                     if (ApplicationService::class.java.name == service.service.className)
-                        alreadyRan = true
+                        isRunning = true
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
             }
         }
 
-        if (!alreadyRan) {
+        if (!isRunning) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     ContextCompat.startForegroundService(

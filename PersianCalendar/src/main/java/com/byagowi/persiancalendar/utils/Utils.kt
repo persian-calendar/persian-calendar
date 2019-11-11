@@ -37,6 +37,7 @@ internal var selectedWidgetBackgroundColor: String = DEFAULT_SELECTED_WIDGET_BAC
 //    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
 internal var calculationMethod: String = DEFAULT_PRAY_TIME_METHOD
 internal var language: String = DEFAULT_APP_LANGUAGE
+    get() = if (field.isEmpty()) DEFAULT_APP_LANGUAGE else field
 internal var coordinate: Coordinate? = null
 internal var mainCalendar = CalendarType.SHAMSI
 internal var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
