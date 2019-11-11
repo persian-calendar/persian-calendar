@@ -198,29 +198,15 @@ private fun loadLanguageResource(context: Context) {
     }
 }
 
-fun createAndShowSnackbar(view: View?, message: String, duration: Int) {
-    view ?: return
-
-    val snackbar = Snackbar.make(view, message, duration)
-
-    val snackbarView = snackbar.view
-    snackbarView.setOnClickListener { snackbar.dismiss() }
-    snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
-
-    snackbar.show()
+fun createAndShowSnackbar(v: View?, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    Snackbar.make(v ?: return, message, duration).apply {
+        view.setOnClickListener { dismiss() }
+        view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+    }.show()
 }
 
-fun createAndShowShortSnackbar(view: View?, @StringRes messageId: Int) {
-    val context = view?.context ?: return
-
-    createAndShowSnackbar(view, context.getString(messageId), Snackbar.LENGTH_SHORT)
-}
-
-fun createAndShowShortSnackbar(view: View?, message: String) {
-    view ?: return
-
-    createAndShowSnackbar(view, message, Snackbar.LENGTH_SHORT)
-}
+fun createAndShowSnackbar(view: View?, @StringRes messageId: Int) =
+    createAndShowSnackbar(view, view?.context?.getString(messageId) ?: "")
 
 fun loadApp(context: Context) {
     if (goForWorker()) return
@@ -527,7 +513,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
 
     val now = System.currentTimeMillis()
     if (now - latestToastShowTime > twoSeconds) {
-        createAndShowShortSnackbar(view, resId)
+        createAndShowSnackbar(view, resId)
         // https://stackoverflow.com/a/29423018
         context.getSystemService<AudioManager>()?.playSoundEffect(AudioManager.FX_KEY_CLICK)
         latestToastShowTime = now
@@ -596,7 +582,7 @@ fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
     if (clipboardService == null || label == null || text == null) return
 
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    createAndShowShortSnackbar(
+    createAndShowSnackbar(
         view,
         String.format(view.context.getString(R.string.date_copied_clipboard), text)
     )

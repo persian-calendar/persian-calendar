@@ -248,7 +248,7 @@ class CalendarFragment : DaggerFragment() {
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                 )
             } catch (e: Exception) {
-                createAndShowShortSnackbar(view, R.string.device_calendar_does_not_support)
+                createAndShowSnackbar(view, R.string.device_calendar_does_not_support)
             }
 
         }
@@ -299,7 +299,7 @@ class CalendarFragment : DaggerFragment() {
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                         )
                     } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                        createAndShowShortSnackbar(
+                        createAndShowSnackbar(
                             textView,
                             R.string.device_calendar_does_not_support
                         )
@@ -508,7 +508,7 @@ class CalendarFragment : DaggerFragment() {
         if (isTalkBackEnabled) {
             val todayJdn = getTodayJdn()
             if (jdn != todayJdn) {
-                createAndShowShortSnackbar(
+                createAndShowSnackbar(
                     view,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,

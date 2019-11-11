@@ -50,7 +50,7 @@ class SimpleDayPickerView @JvmOverloads constructor(
 
                 return getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
             } catch (e: Exception) {
-                createAndShowShortSnackbar(rootView, R.string.date_exception)
+                createAndShowSnackbar(rootView, R.string.date_exception)
                 Log.e("SelectDayDialog", "", e)
             }
 

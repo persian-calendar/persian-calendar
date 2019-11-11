@@ -249,31 +249,17 @@ fun loadEvents(context: Context) {
             var addOrNot = false
             val type = event.getString("type")
 
-            if (holiday && iranHolidays && (type == "Islamic Iran" ||
-                        type == "Iran" || type == "Ancient Iran")
-            )
-                addOrNot = true
+            if (holiday && iranHolidays &&
+                (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
+            ) addOrNot = true
 
-            if (!iranHolidays && type == "Islamic Iran")
-                holiday = false
-
-            if (iranIslamic && type == "Islamic Iran")
-                addOrNot = true
-
-            if (iranAncient && type == "Ancient Iran")
-                addOrNot = true
-
-            if (iranOthers && type == "Iran")
-                addOrNot = true
-
-            if (afghanistanHolidays && type == "Afghanistan" && holiday)
-                addOrNot = true
-
-            if (!afghanistanHolidays && type == "Afghanistan")
-                holiday = false
-
-            if (afghanistanOthers && type == "Afghanistan")
-                addOrNot = true
+            if (!iranHolidays && type == "Islamic Iran") holiday = false
+            if (iranIslamic && type == "Islamic Iran") addOrNot = true
+            if (iranAncient && type == "Ancient Iran") addOrNot = true
+            if (iranOthers && type == "Iran") addOrNot = true
+            if (afghanistanHolidays && type == "Afghanistan" && holiday) addOrNot = true
+            if (!afghanistanHolidays && type == "Afghanistan") holiday = false
+            if (afghanistanOthers && type == "Afghanistan") addOrNot = true
 
             if (addOrNot) {
                 title += " ("
@@ -300,26 +286,13 @@ fun loadEvents(context: Context) {
             var addOrNot = false
             val type = event.getString("type")
 
-            if (afghanistanHolidays && holiday && type == "Islamic Afghanistan")
-                addOrNot = true
-
-            if (!afghanistanHolidays && type == "Islamic Afghanistan")
-                holiday = false
-
-            if (afghanistanOthers && type == "Islamic Afghanistan")
-                addOrNot = true
-
-            if (iranHolidays && holiday && type == "Islamic Iran")
-                addOrNot = true
-
-            if (!iranHolidays && type == "Islamic Iran")
-                holiday = false
-
-            if (iranIslamic && type == "Islamic Iran")
-                addOrNot = true
-
-            if (iranOthers && type == "Islamic Iran")
-                addOrNot = true
+            if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
+            if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
+            if (afghanistanOthers && type == "Islamic Afghanistan") addOrNot = true
+            if (iranHolidays && holiday && type == "Islamic Iran") addOrNot = true
+            if (!iranHolidays && type == "Islamic Iran") holiday = false
+            if (iranIslamic && type == "Islamic Iran") addOrNot = true
+            if (iranOthers && type == "Islamic Iran") addOrNot = true
 
             if (addOrNot) {
                 title += " ("
@@ -371,8 +344,7 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     if (hour >= 12) {
         suffix = getPmString()
         hour -= 12
-    } else
-        suffix = getAmString()
+    } else suffix = getAmString()
 
     return baseFormatClock(hour, clock.minute) + " " + suffix
 }

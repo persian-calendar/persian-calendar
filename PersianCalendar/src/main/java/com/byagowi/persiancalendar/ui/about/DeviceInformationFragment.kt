@@ -38,61 +38,59 @@ class DeviceInformationFragment : DaggerFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
-            mainActivityDependency.mainActivity.setTitleAndSubtitle(
-                getString(R.string.device_info),
-                ""
-            )
+    ): View? = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
+        mainActivityDependency.mainActivity.setTitleAndSubtitle(
+            getString(R.string.device_info),
+            ""
+        )
 
-            circularRevealFromMiddle(circularReveal)
+        circularRevealFromMiddle(circularReveal)
 
-            recyclerView.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-                addItemDecoration(
-                    DividerItemDecoration(
-                        mainActivityDependency.mainActivity,
-                        LinearLayoutManager.VERTICAL
-                    )
+        recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+            addItemDecoration(
+                DividerItemDecoration(
+                    mainActivityDependency.mainActivity,
+                    LinearLayoutManager.VERTICAL
                 )
-                adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
-            }
+            )
+            adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
+        }
 
-            bottomNavigation.apply {
-                menu.apply {
-                    add(Build.VERSION.RELEASE)
-                    getItem(0).setIcon(R.drawable.ic_developer)
+        bottomNavigation.apply {
+            menu.apply {
+                add(Build.VERSION.RELEASE)
+                getItem(0).setIcon(R.drawable.ic_developer)
 
-                    add("API " + Build.VERSION.SDK_INT)
-                    getItem(1).setIcon(R.drawable.ic_settings)
+                add("API " + Build.VERSION.SDK_INT)
+                getItem(1).setIcon(R.drawable.ic_settings)
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        add(Build.SUPPORTED_ABIS[0])
-                    } else {
-                        add(Build.CPU_ABI)
-                    }
-                    getItem(2).setIcon(R.drawable.ic_motorcycle)
-
-                    add(Build.MODEL)
-                    getItem(3).setIcon(R.drawable.ic_device_information_white)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    add(Build.SUPPORTED_ABIS[0])
+                } else {
+                    add(Build.CPU_ABI)
                 }
-                labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-                setOnNavigationItemSelectedListener {
-                    // Easter egg
-                    if (++clickCount % 10 == 0) {
-                        BottomSheetDialog(mainActivityDependency.mainActivity).apply {
-                            setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
-                                layoutParams =
-                                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
-                            })
-                        }.show()
-                    }
-                    true
-                }
+                getItem(2).setIcon(R.drawable.ic_motorcycle)
+
+                add(Build.MODEL)
+                getItem(3).setIcon(R.drawable.ic_device_information_white)
             }
-        }.root
-    }
+            labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+            setOnNavigationItemSelectedListener {
+                // Easter egg
+                if (++clickCount % 10 == 0) {
+                    BottomSheetDialog(mainActivityDependency.mainActivity).apply {
+                        setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
+                            layoutParams =
+                                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                        })
+                    }.show()
+                }
+                true
+            }
+        }
+    }.root
 }
 
 class DeviceInfoAdapter(activity: Activity, private val rootView: View) :

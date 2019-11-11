@@ -14,7 +14,6 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.utils.createAndShowShortSnackbar
 import com.byagowi.persiancalendar.utils.createAndShowSnackbar
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
@@ -162,10 +161,10 @@ class CompassFragment : DaggerFragment() {
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             if (coordinate == null) {
-                createAndShowShortSnackbar(mainActivity.coordinator, R.string.set_location)
+                createAndShowSnackbar(mainActivity.coordinator, R.string.set_location)
             }
         } else {
-            createAndShowShortSnackbar(view, R.string.compass_not_found)
+            createAndShowSnackbar(view, R.string.compass_not_found)
             sensorNotFound = true
         }
     }

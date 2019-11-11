@@ -122,7 +122,7 @@ class AboutFragment : DaggerFragment() {
                             )
                         )
                     } catch (ex: android.content.ActivityNotFoundException) {
-                        createAndShowShortSnackbar(view, R.string.about_noClient)
+                        createAndShowSnackbar(view, R.string.about_noClient)
                     }
                 }
                 .setNegativeButton(R.string.cancel, null).show()
