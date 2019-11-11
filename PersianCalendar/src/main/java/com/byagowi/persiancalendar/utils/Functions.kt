@@ -223,8 +223,7 @@ fun loadApp(context: Context) {
             val threeHoursPendingIntent = PendingIntent.getBroadcast(
                 context,
                 THREE_HOURS_APP_ID,
-                Intent(context, BroadcastReceivers::class.java)
-                    .setAction(BROADCAST_UPDATE_APP),
+                Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_UPDATE_APP),
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
 

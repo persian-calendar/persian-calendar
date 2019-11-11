@@ -178,15 +178,14 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
             .setImageResource(seasonImage)
 
-        val appLanguage = prefs.getString(PREF_APP_LANGUAGE, null) ?: "N/A"
-        if (appLanguage == "N/A" && !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
+        if (prefs.getString(PREF_APP_LANGUAGE, null) == null &&
+            !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
+        ) {
             Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     view.layoutDirection = View.LAYOUT_DIRECTION_LTR
                 }
-                view.setOnClickListener {
-                    dismiss()
-                }
+                view.setOnClickListener { dismiss() }
                 setAction("Settings") {
                     prefs.edit {
                         putString(PREF_APP_LANGUAGE, LANG_EN_US)

@@ -81,8 +81,7 @@ class CompassFragment : DaggerFragment() {
         }.show()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(mainActivityDependency.mainActivity)
@@ -166,8 +165,7 @@ class CompassFragment : DaggerFragment() {
                 sensor,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
-            if (coordinate == null)
-                showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+            if (coordinate == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
         } else {
             showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
             sensorNotFound = true
