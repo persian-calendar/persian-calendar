@@ -27,6 +27,7 @@ fun String.runCommand(
 
 android {
     compileSdkVersion(29)
+    buildToolsVersion("29.0.2")
     viewBinding.isEnabled = true
 
     defaultConfig {
