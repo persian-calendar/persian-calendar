@@ -804,28 +804,26 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
 
     val dayInPeriod = (passedDays % sShiftWorkPeriod).toInt()
     var accumulation = 0
+    var title = ""
     for (shift in sShiftWorks) {
         accumulation += shift.length
         if (accumulation > dayInPeriod) {
-            // Skip rests on abbreviated mode
-            if (sShiftWorkRecurs && abbreviated &&
-                (shift.type == "r" || shift.type == sShiftWorkTitles["r"])
-            )
-                return ""
-
-            var title = sShiftWorkTitles[shift.type]
-            if (title == null) title = shift.type
-            return if (abbreviated) {
-                title.substring(0, 1) +
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR)
-                            ZWJ
-                        else
-                            ""
-            } else title
+            title = shift.type
+            break
         }
     }
-    // Shouldn't be reached
-    return ""
+
+    if (title.isEmpty()) return ""
+
+    // Skip rests on abbreviated mode
+    if (sShiftWorkRecurs && abbreviated && (title == "r" || title == sShiftWorkTitles["r"]))
+        return ""
+
+    title = sShiftWorkTitles[title] ?: title
+    return if (abbreviated) title.substring(0, 1) + when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR -> ZWJ
+        else -> ""
+    } else title
 }
 
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
