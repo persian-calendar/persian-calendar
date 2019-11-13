@@ -695,8 +695,8 @@ fun updateStoredPreference(context: Context) {
         .map { it.splitIgnoreEmpty("=") }
         .filter { it.size == 2 }
         .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
-    sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
     sShiftWorkPeriod = sShiftWorks.map { it.length }.sum()
+    sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
     sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
     sShiftWorkTitles = resources.getStringArray(R.array.shift_work_keys)
         .zip(resources.getStringArray(R.array.shift_work))
@@ -799,28 +799,21 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
         return ""
 
     val passedDays = jdn - sShiftWorkStartingJdn
-    if (!sShiftWorkRecurs && passedDays >= sShiftWorkPeriod)
-        return ""
+    if (!sShiftWorkRecurs && passedDays >= sShiftWorkPeriod) return ""
 
     val dayInPeriod = (passedDays % sShiftWorkPeriod).toInt()
-    var accumulation = 0
-    var title = ""
-    for (shift in sShiftWorks) {
-        accumulation += shift.length
-        if (accumulation > dayInPeriod) {
-            title = shift.type
-            break
-        }
-    }
 
-    if (title.isEmpty()) return ""
+    var accumulation = 0
+    val type = sShiftWorks.firstOrNull {
+        accumulation += it.length
+        accumulation > dayInPeriod
+    }?.type ?: return ""
 
     // Skip rests on abbreviated mode
-    if (sShiftWorkRecurs && abbreviated && (title == "r" || title == sShiftWorkTitles["r"]))
-        return ""
+    if (sShiftWorkRecurs && abbreviated && (type == "r" || type == sShiftWorkTitles["r"])) return ""
 
-    title = sShiftWorkTitles[title] ?: title
-    return if (abbreviated) title.substring(0, 1) + when {
+    val title = sShiftWorkTitles[type] ?: type
+    return if (abbreviated && title.isNotEmpty()) title.substring(0, 1) + when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR -> ZWJ
         else -> ""
     } else title
