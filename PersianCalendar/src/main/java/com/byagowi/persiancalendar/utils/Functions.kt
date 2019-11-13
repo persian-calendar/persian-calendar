@@ -51,7 +51,6 @@ import org.json.JSONObject
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 import kotlin.math.sqrt
 
 // This should be called before any use of Utils on the activity and services
@@ -67,7 +66,10 @@ fun getMaxSupportedYear(): Int = 1398
 
 fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
 
-fun isArabicDigitSelected(): Boolean = preferredDigits.contentEquals(ARABIC_DIGITS)
+fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
+    ARABIC_DIGITS -> true
+    else -> false
+}
 
 fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
@@ -103,10 +105,12 @@ fun isLocaleRTL(): Boolean = when (language) {
 
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
-fun formatNumber(number: String): String =
-    if (preferredDigits.contentEquals(ARABIC_DIGITS)) number else number.toCharArray().map {
+fun formatNumber(number: String): String = when (preferredDigits) {
+    ARABIC_DIGITS -> number
+    else -> number.toCharArray().map {
         if (Character.isDigit(it)) preferredDigits[Character.getNumericValue(it)] else it
     }.joinToString("")
+}
 
 // https://stackoverflow.com/a/52557989
 fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : CircularRevealWidget {
@@ -252,9 +256,9 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
 
     val clock = current.toInt()
 
-    prayTimes?.run {
+    return prayTimes?.run {
         //TODO We like to show Imsak only in Ramadan
-        return when {
+        when {
             fajrClock.toInt() > clock -> R.string.fajr
             sunriseClock.toInt() > clock -> R.string.sunrise
             dhuhrClock.toInt() > clock -> R.string.dhuhr
@@ -266,8 +270,7 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
             // TODO: this is today's, not tomorrow
             else -> R.string.fajr
         }
-    }
-    return 0
+    } ?: 0
 }
 
 fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
@@ -372,17 +375,15 @@ fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
     }
 }
 
-fun getDayIconResource(day: Int): Int {
-    try {
-        if (preferredDigits.contentEquals(ARABIC_DIGITS))
-            return DAYS_ICONS_AR[day]
-        else if (preferredDigits.contentEquals(ARABIC_INDIC_DIGITS))
-            return DAYS_ICONS_CKB[day]
-        return DAYS_ICONS[day]
-    } catch (e: IndexOutOfBoundsException) {
-        Log.e(TAG, "No such field is available")
-        return 0
+fun getDayIconResource(day: Int): Int = try {
+    when (preferredDigits) {
+        ARABIC_DIGITS -> DAYS_ICONS_ARABIC[day]
+        ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC[day]
+        else -> DAYS_ICONS_PERSIAN[day]
     }
+} catch (e: IndexOutOfBoundsException) {
+    Log.e(TAG, "No such field is available")
+    0
 }
 
 // http://stackoverflow.com/a/5445161
@@ -617,17 +618,13 @@ fun updateStoredPreference(context: Context) {
 
     language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE) ?: DEFAULT_APP_LANGUAGE
 
-    preferredDigits = if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS))
-        PERSIAN_DIGITS
-    else
-        ARABIC_DIGITS
-    if ((language == LANG_AR || language == LANG_CKB) && preferredDigits.contentEquals(
-            PERSIAN_DIGITS
-        )
-    )
-        preferredDigits = ARABIC_INDIC_DIGITS
-    if (language == LANG_JA && preferredDigits.contentEquals(PERSIAN_DIGITS))
-        preferredDigits = CJK_DIGITS
+    preferredDigits =
+        if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)) when (language) {
+            LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS
+            LANG_JA -> CJK_DIGITS
+            else -> PERSIAN_DIGITS
+        }
+        else ARABIC_DIGITS
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     iranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
@@ -658,12 +655,11 @@ fun updateStoredPreference(context: Context) {
     coordinate = getCoordinate(context)
     try {
         mainCalendar = CalendarType.valueOf(
-            prefs.getString(PREF_MAIN_CALENDAR_KEY, "SHAMSI") ?: "SHAMSI"
+            prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI"
         )
 
-        otherCalendars =
-            (prefs.getString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC") ?: "GREGORIAN,ISLAMIC")
-                .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
+        otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
+            .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
     } catch (e: Exception) {
         Log.e(TAG, "Fail on parsing calendar preference", e)
         mainCalendar = CalendarType.SHAMSI
@@ -677,7 +673,7 @@ fun updateStoredPreference(context: Context) {
             ?: 0
 
     weekEnds = BooleanArray(7)
-    (prefs.getStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS) ?: DEFAULT_WEEK_ENDS)
+    (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: DEFAULT_WEEK_ENDS)
         .mapNotNull(String::toIntOrNull)
         .forEach { weekEnds[it] = true }
 
@@ -694,32 +690,17 @@ fun updateStoredPreference(context: Context) {
 
     calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
 
-    try {
-        sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
-            .split(",")
-            .map { it.split("=") }
-            .filter { it.size == 2 }
-            .map { ShiftWorkRecord(it[0], Integer.valueOf(it[1])) }
-
-        sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
-
-        sShiftWorkPeriod = 0
-        for (shift in sShiftWorks) sShiftWorkPeriod += shift.length
-
-        sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
-
-        val titles = resources.getStringArray(R.array.shift_work)
-        val keys = resources.getStringArray(R.array.shift_work_keys)
-        sShiftWorkTitles = keys.zip(titles).toMap()
-    } catch (e: Exception) {
-        e.printStackTrace()
-        sShiftWorks = ArrayList()
-        sShiftWorkStartingJdn = -1
-
-        sShiftWorkPeriod = 0
-        sShiftWorkRecurs = true
-        sShiftWorkTitles = emptyMap()
-    }
+    sShiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
+        .splitIgnoreEmpty(",")
+        .map { it.splitIgnoreEmpty("=") }
+        .filter { it.size == 2 }
+        .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
+    sShiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
+    sShiftWorkPeriod = sShiftWorks.map { it.length }.sum()
+    sShiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+    sShiftWorkTitles = resources.getStringArray(R.array.shift_work_keys)
+        .zip(resources.getStringArray(R.array.shift_work))
+        .toMap()
 
     when (language) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
@@ -739,9 +720,9 @@ fun updateStoredPreference(context: Context) {
         R.style.LightTheme
     }
 
-    context.getSystemService<AccessibilityManager>()?.run {
-        isTalkBackEnabled = isEnabled && isTouchExplorationEnabled
-    }
+    isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.run {
+        isEnabled && isTouchExplorationEnabled
+    } ?: false
 }
 
 private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")

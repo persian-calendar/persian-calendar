@@ -457,16 +457,15 @@ fun readMonthDeviceEvents(context: Context, jdn: Long) = readDeviceEvents(
     32L * DAY_IN_MILLIS
 )
 
-fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> {
-    val allEnabledAppointments = ArrayList<DeviceCalendarEvent>()
-    readDeviceEvents( // ignore main result this time
-        context,
-        allEnabledAppointments,
-        Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
-        365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
-    )
-    return allEnabledAppointments
-}
+fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> =
+    ArrayList<DeviceCalendarEvent>().apply {
+        readDeviceEvents( // ignore main result this time
+            context,
+            this,
+            Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+            365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
+        )
+    }
 
 fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())

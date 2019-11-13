@@ -99,19 +99,12 @@ const val FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf"
 const val RLM = '\u200F'
 const val ZWJ = "\u200D"
 
-val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
-val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
-
-// for now
-val CJK_DIGITS = ARABIC_DIGITS
-//    public static final char[] CJK_DIGITS = {'０', '１', '２', '３', '４', '５', '６',
-//        '７', '８', '９'};
-
 const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
 
-val DAYS_ICONS = listOf(
+// See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
+val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
+val DAYS_ICONS_PERSIAN = listOf(
     0,
     R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4, R.drawable.day5,
     R.drawable.day6, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10,
@@ -121,7 +114,10 @@ val DAYS_ICONS = listOf(
     R.drawable.day26, R.drawable.day27, R.drawable.day28, R.drawable.day29, R.drawable.day30,
     R.drawable.day31
 )
-val DAYS_ICONS_AR = listOf(
+// No Urdu ones as they don't use them commonly nowadays
+///
+val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+val DAYS_ICONS_ARABIC = listOf(
     0,
     R.drawable.day1_ar, R.drawable.day2_ar, R.drawable.day3_ar, R.drawable.day4_ar,
     R.drawable.day5_ar, R.drawable.day6_ar, R.drawable.day7_ar, R.drawable.day8_ar,
@@ -132,7 +128,10 @@ val DAYS_ICONS_AR = listOf(
     R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar, R.drawable.day28_ar,
     R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar
 )
-val DAYS_ICONS_CKB = listOf(
+val CJK_DIGITS = ARABIC_DIGITS // Not that great to have charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
+///
+val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+val DAYS_ICONS_ARABIC_INDIC = listOf(
     0,
     R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4_ckb, R.drawable.day5_ckb,
     R.drawable.day6_ckb, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10,
