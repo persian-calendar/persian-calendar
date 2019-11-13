@@ -6,7 +6,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.util.Log
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 
@@ -16,18 +15,14 @@ import com.byagowi.persiancalendar.utils.*
 @TargetApi(Build.VERSION_CODES.N)
 class PersianCalendarTileService : TileService() {
 
-    override fun onClick() {
-        try {
-            startActivityAndCollapse(
-                Intent(this, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
-        } catch (e: Exception) {
-            Log.e("TileService", "Tile onClick fail", e)
-        }
+    override fun onClick() = try {
+        startActivityAndCollapse(Intent(this, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 
-    override fun onStartListening() {
+    override fun onStartListening() = try {
         val today = getTodayOfCalendar(mainCalendar)
         qsTile?.also {
             it.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
@@ -35,6 +30,8 @@ class PersianCalendarTileService : TileService() {
             it.contentDescription = getMonthName(today)
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
             it.state = Tile.STATE_ACTIVE
-        }?.updateTile()
+        }?.updateTile() ?: Unit
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
