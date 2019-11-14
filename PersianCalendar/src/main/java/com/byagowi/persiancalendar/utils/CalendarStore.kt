@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
-import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.entities.GregorianCalendarEvent
-import com.byagowi.persiancalendar.entities.IslamicCalendarEvent
-import com.byagowi.persiancalendar.entities.PersianCalendarEvent
+import com.byagowi.persiancalendar.entities.*
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -15,47 +12,54 @@ typealias IslamicCalendarEventsStore = Map<Int, List<IslamicCalendarEvent>>
 typealias GregorianCalendarEventsStore = Map<Int, List<GregorianCalendarEvent>>
 typealias DeviceCalendarEventsStore = Map<Int, List<DeviceCalendarEvent>>
 
-fun HashMap<Int, ArrayList<DeviceCalendarEvent>>.addToStore(ev: DeviceCalendarEvent) {
-    val entry = ev.date.month * 100 + ev.date.dayOfMonth
-    (this[entry] ?: ArrayList<DeviceCalendarEvent>().also { this[entry] = it }).add(ev)
-}
+private fun AbstractDate.entry() = month * 100 + dayOfMonth
 
-fun HashMap<Int, ArrayList<PersianCalendarEvent>>.addToStore(ev: PersianCalendarEvent) {
-    val entry = ev.date.month * 100 + ev.date.dayOfMonth
-    (this[entry] ?: ArrayList<PersianCalendarEvent>().also { this[entry] = it }).add(ev)
-}
+// Just adds all the events to a just generated a map, nothing special
+fun List<DeviceCalendarEvent>.toDeviceEventsStore(): DeviceCalendarEventsStore =
+    fold(HashMap<Int, ArrayList<DeviceCalendarEvent>>()) { s, ev ->
+        (s[ev.date.entry()] ?: ArrayList<DeviceCalendarEvent>().also {
+            s[ev.date.entry()] = it
+        }).add(ev)
+        s
+    }
 
-fun HashMap<Int, ArrayList<IslamicCalendarEvent>>.addToStore(ev: IslamicCalendarEvent) {
-    val entry = ev.date.month * 100 + ev.date.dayOfMonth
-    (this[entry] ?: ArrayList<IslamicCalendarEvent>().also { this[entry] = it }).add(ev)
-}
+fun List<PersianCalendarEvent>.toPersianEventsStore(): PersianCalendarEventsStore =
+    fold(HashMap<Int, ArrayList<PersianCalendarEvent>>()) { s, ev ->
+        (s[ev.date.entry()] ?: ArrayList<PersianCalendarEvent>().also {
+            s[ev.date.entry()] = it
+        }).add(ev)
+        s
+    }
 
-fun HashMap<Int, ArrayList<GregorianCalendarEvent>>.addToStore(ev: GregorianCalendarEvent) {
-    val entry = ev.date.month * 100 + ev.date.dayOfMonth
-    (this[entry] ?: ArrayList<GregorianCalendarEvent>().also { this[entry] = it }).add(ev)
-}
+fun List<IslamicCalendarEvent>.toIslamicEventsStore(): IslamicCalendarEventsStore =
+    fold(HashMap<Int, ArrayList<IslamicCalendarEvent>>()) { s, ev ->
+        (s[ev.date.entry()] ?: ArrayList<IslamicCalendarEvent>().also {
+            s[ev.date.entry()] = it
+        }).add(ev)
+        s
+    }
+
+fun List<GregorianCalendarEvent>.toGregorianEventsStore(): GregorianCalendarEventsStore =
+    fold(HashMap<Int, ArrayList<GregorianCalendarEvent>>()) { s, ev ->
+        (s[ev.date.entry()] ?: ArrayList<GregorianCalendarEvent>().also {
+            s[ev.date.entry()] = it
+        }).add(ev)
+        s
+    }
 
 private fun AbstractDate.holidayAwareEqualCheck(date: AbstractDate): Boolean =
     (this.dayOfMonth == date.dayOfMonth && this.month == date.month &&
             (this.year == -1 || date.year == -1 || this.year == date.year))
 
-fun PersianCalendarEventsStore.getEvents(persianDate: PersianDate) =
-    this[persianDate.month * 100 + persianDate.dayOfMonth]?.filter {
-        it.date.holidayAwareEqualCheck(persianDate)
-    } ?: emptyList()
+fun PersianCalendarEventsStore.getEvents(date: PersianDate) =
+    this[date.entry()]?.filter { it.date.holidayAwareEqualCheck(date) } ?: emptyList()
 
-fun IslamicCalendarEventsStore.getEvents(islamicDate: IslamicDate) =
-    this[islamicDate.month * 100 + islamicDate.dayOfMonth]?.filter {
-        it.date.holidayAwareEqualCheck(islamicDate)
-    } ?: emptyList()
+fun IslamicCalendarEventsStore.getEvents(date: IslamicDate) =
+    this[date.entry()]?.filter { it.date.holidayAwareEqualCheck(date) } ?: emptyList()
 
-fun GregorianCalendarEventsStore.getEvents(civilDate: CivilDate) =
-    this[civilDate.month * 100 + civilDate.dayOfMonth]?.filter {
-        it.date.holidayAwareEqualCheck(civilDate)
-    } ?: emptyList()
+fun GregorianCalendarEventsStore.getEvents(date: CivilDate) =
+    this[date.entry()]?.filter { it.date.holidayAwareEqualCheck(date) } ?: emptyList()
 
+// holidayAwareEqualCheck is not needed as they won't have -1 on year field
 fun DeviceCalendarEventsStore.getDeviceEvents(civilDate: CivilDate) =
-    this[civilDate.month * 100 + civilDate.dayOfMonth]?.filter {
-        // holidayAwareEqualCheck is not needed as they won't have -1 on year field
-        it.date == civilDate
-    } ?: emptyList()
+    this[civilDate.entry()]?.filter { it.date == civilDate } ?: emptyList()

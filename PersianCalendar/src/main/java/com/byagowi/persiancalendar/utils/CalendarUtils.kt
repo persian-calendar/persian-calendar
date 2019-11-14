@@ -220,34 +220,34 @@ fun loadEvents(context: Context) {
             IslamicDate.useUmmAlQura = true
         }
         when (language) {
-            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA -> IslamicDate.useUmmAlQura =
-                true
+            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA ->
+                IslamicDate.useUmmAlQura = true
         }
     }
+
     // Now that we are configuring converter's algorithm above, lets set the offset also
     IslamicDate.islamicOffset = getIslamicOffset(context)
 
-    val persianCalendarEvents = HashMap<Int, ArrayList<PersianCalendarEvent>>()
-    val islamicCalendarEvents = HashMap<Int, ArrayList<IslamicCalendarEvent>>()
-    val gregorianCalendarEvents = HashMap<Int, ArrayList<GregorianCalendarEvent>>()
-    val allEnabledEvents = ArrayList<CalendarEvent<*>>()
-
     try {
+        sAllEnabledEvents = emptyList()
+
+        val allEnabledEvents = ArrayList<CalendarEvent<*>>()
+
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
 
         // https://stackoverflow.com/a/36188796
-        operator fun JSONArray.iterator(): Iterator<JSONObject> =
-            (0 until length()).map { get(it) as JSONObject }.iterator()
+        fun JSONObject.getArray(key: String): Sequence<JSONObject> =
+            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
 
-        for (event in allTheEvents.getJSONArray("Persian Calendar")) {
-            val month = event.getInt("month")
-            val day = event.getInt("day")
-            val year = if (event.has("year")) event.getInt("year") else -1
-            var title = event.getString("title")
-            var holiday = event.getBoolean("holiday")
+        sPersianCalendarEvents = allTheEvents.getArray("Persian Calendar").mapNotNull {
+            val month = it.getInt("month")
+            val day = it.getInt("day")
+            val year = if (it.has("year")) it.getInt("year") else -1
+            var title = it.getString("title")
+            var holiday = it.getBoolean("holiday")
 
             var addOrNot = false
-            val type = event.getString("type")
+            val type = it.getString("type")
 
             if (holiday && iranHolidays &&
                 (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
@@ -270,21 +270,18 @@ fun loadEvents(context: Context) {
                         title += "افغانستان، "
                 }
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
+                PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
+            } else null
+        }.toList().also { allEnabledEvents.addAll(it) }.toPersianEventsStore()
 
-                val ev = PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
-                persianCalendarEvents.addToStore(ev)
-                allEnabledEvents.add(ev)
-            }
-        }
-
-        for (event in allTheEvents.getJSONArray("Hijri Calendar")) {
-            val month = event.getInt("month")
-            val day = event.getInt("day")
-            var title = event.getString("title")
-            var holiday = event.getBoolean("holiday")
+        sIslamicCalendarEvents = allTheEvents.getArray("Hijri Calendar").mapNotNull {
+            val month = it.getInt("month")
+            val day = it.getInt("day")
+            var title = it.getString("title")
+            var holiday = it.getBoolean("holiday")
 
             var addOrNot = false
-            val type = event.getString("type")
+            val type = it.getString("type")
 
             if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
             if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
@@ -304,32 +301,25 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
 
-                val ev = IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
-                islamicCalendarEvents.addToStore(ev)
-                allEnabledEvents.add(ev)
-            }
-        }
+                IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
+            } else null
+        }.toList().also { allEnabledEvents.addAll(it) }.toIslamicEventsStore()
 
-        for (event in allTheEvents.getJSONArray("Gregorian Calendar")) {
-            val month = event.getInt("month")
-            val day = event.getInt("day")
-            var title = event.getString("title")
+        sGregorianCalendarEvents = allTheEvents.getArray("Gregorian Calendar").mapNotNull {
+            val month = it.getInt("month")
+            val day = it.getInt("day")
+            var title = it.getString("title")
 
             if (international) {
                 title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
 
-                val ev = GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
-                gregorianCalendarEvents.addToStore(ev)
-                allEnabledEvents.add(ev)
-            }
-        }
+                GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
+            } else null
+        }.toList().also { allEnabledEvents.addAll(it) }.toGregorianEventsStore()
+
+        sAllEnabledEvents = allEnabledEvents
     } catch (ignore: JSONException) {
     }
-
-    sPersianCalendarEvents = persianCalendarEvents
-    sIslamicCalendarEvents = islamicCalendarEvents
-    sGregorianCalendarEvents = gregorianCalendarEvents
-    sAllEnabledEvents = allEnabledEvents
 }
 
 
@@ -415,21 +405,17 @@ private fun readDeviceEvents(
     emptyList<DeviceCalendarEvent>()
 }
 
-// Just adds all the events to a just generated map, nothing special
-private fun List<DeviceCalendarEvent>.toEventsStore(): DeviceCalendarEventsStore =
-    fold(HashMap<Int, ArrayList<DeviceCalendarEvent>>()) { s, e -> s.apply { addToStore(e) } }
-
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
     civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn)),
     DAY_IN_MILLIS
-).toEventsStore()
+).toDeviceEventsStore()
 
 fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
     civilDateToCalendar(CivilDate(jdn)),
     32L * DAY_IN_MILLIS
-).toEventsStore()
+).toDeviceEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
     ctx,

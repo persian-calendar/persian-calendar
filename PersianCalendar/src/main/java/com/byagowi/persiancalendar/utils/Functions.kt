@@ -823,7 +823,7 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
     val result = mutableListOf<CityItem>()
     try {
         fun JSONObject.forEach(f: (String, JSONObject) -> Unit) =
-            this.keys().forEach { f(it, this.getJSONObject(it)) }
+            this.keys().asSequence().forEach { f(it, this.getJSONObject(it)) }
 
         JSONObject(readRawResource(context, R.raw.cities)).forEach { countryCode, country ->
             val countryEn = country.getString("en")

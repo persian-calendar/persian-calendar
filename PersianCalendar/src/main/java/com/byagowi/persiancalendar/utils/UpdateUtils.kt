@@ -28,12 +28,10 @@ private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyMap()
 
-fun setDeviceCalendarEvents(context: Context) {
-    try {
-        deviceCalendarEvents = readDayDeviceEvents(context, -1)
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+fun setDeviceCalendarEvents(context: Context) = try {
+    deviceCalendarEvents = readDayDeviceEvents(context, -1)
+} catch (e: Exception) {
+    e.printStackTrace()
 }
 
 fun update(context: Context, updateDate: Boolean) {
