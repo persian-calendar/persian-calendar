@@ -329,7 +329,7 @@ fun update(context: Context, updateDate: Boolean) {
                 }
 
                 var difference = getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt()
-                if (difference < 0) difference = 60 * 24 - difference
+                if (difference < 0) difference += 60 * 24
 
                 val hrs = (MINUTES.toHours(difference.toLong()) % 24).toInt()
                 val min = (MINUTES.toMinutes(difference.toLong()) % 60).toInt()
