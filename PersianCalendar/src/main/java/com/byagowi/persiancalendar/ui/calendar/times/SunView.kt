@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.utils.isRTL
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 
@@ -191,7 +192,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         curvePath.moveTo(0f, height.toFloat())
 
         if (width != 0) {
-            segmentByPixel = 2 * Math.PI / width
+            segmentByPixel = 2 * PI / width
         }
 
         for (x in 0..width) {
@@ -349,7 +350,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     private fun getY(x: Int, segment: Double, height: Int): Float {
-        val cos = (cos(-Math.PI + x * segment) + 1) / 2
+        val cos = (cos(-PI + x * segment) + 1) / 2
         return height - height * cos.toFloat() + height * 0.1f
     }
 
