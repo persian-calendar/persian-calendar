@@ -128,7 +128,8 @@ val DAYS_ICONS_ARABIC = listOf(
     R.drawable.day25_ar, R.drawable.day26_ar, R.drawable.day27_ar, R.drawable.day28_ar,
     R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar
 )
-val CJK_DIGITS = ARABIC_DIGITS // Not that great to have charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
+// Not that great to have charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
+val CJK_DIGITS = ARABIC_DIGITS
 ///
 val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
 val DAYS_ICONS_ARABIC_INDIC = listOf(

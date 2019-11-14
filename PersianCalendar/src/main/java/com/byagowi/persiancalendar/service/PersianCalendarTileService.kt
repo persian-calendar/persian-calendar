@@ -16,8 +16,10 @@ import com.byagowi.persiancalendar.utils.*
 class PersianCalendarTileService : TileService() {
 
     override fun onClick() = try {
-        startActivityAndCollapse(Intent(this, MainActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        startActivityAndCollapse(
+            Intent(this, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
     } catch (e: Exception) {
         e.printStackTrace()
     }

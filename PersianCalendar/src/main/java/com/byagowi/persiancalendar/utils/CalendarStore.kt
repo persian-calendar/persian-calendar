@@ -1,6 +1,9 @@
 package com.byagowi.persiancalendar.utils
 
-import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
+import com.byagowi.persiancalendar.entities.GregorianCalendarEvent
+import com.byagowi.persiancalendar.entities.IslamicCalendarEvent
+import com.byagowi.persiancalendar.entities.PersianCalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.text.Html
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -16,7 +15,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Clock
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
