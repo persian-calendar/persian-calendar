@@ -332,6 +332,7 @@ fun loadEvents(context: Context) {
     sAllEnabledEvents = allEnabledEvents
 }
 
+
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
 
@@ -361,111 +362,80 @@ fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
 
 private fun readDeviceEvents(
     context: Context,
-    allEnabledAppointments: ArrayList<DeviceCalendarEvent>,
     startingDate: Calendar,
     rangeInMillis: Long
-): DeviceCalendarEventsStore {
-    if (!isShowDeviceCalendarEvents() ||
-        ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.READ_CALENDAR
-        ) != PackageManager.PERMISSION_GRANTED
-    ) return emptyMap()
-
-    val result = HashMap<Int, ArrayList<DeviceCalendarEvent>>()
-    try {
-        val builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
-        ContentUris.appendId(builder, startingDate.timeInMillis - DAY_IN_MILLIS)
-        ContentUris.appendId(builder, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
-
-        context.contentResolver.query(
-            builder.build(),
-            arrayOf(
-                CalendarContract.Instances.EVENT_ID, // 0
-                CalendarContract.Instances.TITLE, // 1
-                CalendarContract.Instances.DESCRIPTION, // 2
-                CalendarContract.Instances.BEGIN, // 3
-                CalendarContract.Instances.END, // 4
-                CalendarContract.Instances.VISIBLE, // 5
-                CalendarContract.Instances.ALL_DAY, // 6
-                CalendarContract.Instances.EVENT_COLOR // 7
-            ), null, null, null
-        )?.use {
-            var i = 0
-            while (it.moveToNext()) {
-                if (it.getString(5) != "1")
-                    continue
-
-                val startDate = Date(it.getLong(3))
-                val endDate = Date(it.getLong(4))
-                val startCalendar = makeCalendarFromDate(startDate)
-                val endCalendar = makeCalendarFromDate(endDate)
-
-                var title = it.getString(1) ?: ""
-                if (it.getString(6) == "1")
-                    title = "\uD83D\uDCC5 $title"
-                else {
-                    title = "\uD83D\uDD53 $title"
-                    title += " (" + baseFormatClock(
-                        startCalendar[Calendar.HOUR_OF_DAY],
-                        startCalendar[Calendar.MINUTE]
-                    )
-
-                    if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                        title += "-" + baseFormatClock(
-                            endCalendar[Calendar.HOUR_OF_DAY],
-                            endCalendar[Calendar.MINUTE]
-                        )
-
-                    title += ")"
-                }
-                val event = DeviceCalendarEvent(
-                    id = it.getInt(0),
-                    title = title,
-                    description = it.getString(2) ?: "",
-                    start = startDate,
-                    end = endDate,
-                    date = calendarToCivilDate(startCalendar),
-                    color = it.getString(7) ?: "",
-                    isHoliday = false
-                )
-                result.addToStore(event)
-                allEnabledAppointments.add(event)
-
-                // Don't go more than 1k events on any case
-                if (++i == 1000) break
-            }
-        }
-    } catch (e: Exception) {
-        // We don't like crash addition from here, just catch all of exceptions
-        Log.e("", "Error on device calendar events read", e)
-    }
-    return result
+): List<DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents() ||
+    ActivityCompat.checkSelfPermission(
+        context, Manifest.permission.READ_CALENDAR
+    ) != PackageManager.PERMISSION_GRANTED
+) emptyList() else try {
+    context.contentResolver.query(
+        CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
+            ContentUris.appendId(this, startingDate.timeInMillis - DAY_IN_MILLIS)
+            ContentUris.appendId(this, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
+        }.build(),
+        arrayOf(
+            CalendarContract.Instances.EVENT_ID, // 0
+            CalendarContract.Instances.TITLE, // 1
+            CalendarContract.Instances.DESCRIPTION, // 2
+            CalendarContract.Instances.BEGIN, // 3
+            CalendarContract.Instances.END, // 4
+            CalendarContract.Instances.VISIBLE, // 5
+            CalendarContract.Instances.ALL_DAY, // 6
+            CalendarContract.Instances.EVENT_COLOR // 7
+        ), null, null, null
+    )?.use {
+        var i = 0 // Don't go more than 1k events on any case
+        generateSequence { if (it.moveToNext() && (++i) < 1000) it else null }.mapNotNull {
+            if (it.getString(5) != "1") return@mapNotNull null
+            val startDate = Date(it.getLong(3))
+            val endDate = Date(it.getLong(4))
+            val startCalendar = makeCalendarFromDate(startDate)
+            val endCalendar = makeCalendarFromDate(endDate)
+            fun Calendar.clock() = baseFormatClock(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
+            DeviceCalendarEvent(
+                id = it.getInt(0),
+                title =
+                if (it.getString(6) == "1") "\uD83D\uDCC5 ${it.getString(1) ?: ""}"
+                else "\uD83D\uDD53 ${it.getString(1) ?: ""} (${startCalendar.clock()}${(
+                        if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
+                            "-${endCalendar.clock()}"
+                        else "")})",
+                description = it.getString(2) ?: "",
+                start = startDate,
+                end = endDate,
+                date = calendarToCivilDate(startCalendar),
+                color = it.getString(7) ?: "",
+                isHoliday = false
+            )
+        }.toList()
+    } ?: emptyList()
+} catch (e: Exception) {
+    e.printStackTrace()
+    emptyList<DeviceCalendarEvent>()
 }
 
-fun readDayDeviceEvents(context: Context, jdn: Long) = readDeviceEvents(
-    context,
-    ArrayList(), // intentionally ignored result
+// Just adds all the events to a just generated map, nothing special
+private fun List<DeviceCalendarEvent>.toEventsStore(): DeviceCalendarEventsStore =
+    fold(HashMap<Int, ArrayList<DeviceCalendarEvent>>()) { s, e -> s.apply { addToStore(e) } }
+
+fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
+    ctx,
     civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn)),
     DAY_IN_MILLIS
-)
+).toEventsStore()
 
-fun readMonthDeviceEvents(context: Context, jdn: Long) = readDeviceEvents(
-    context,
-    ArrayList(), // intentionally ignored result
+fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
+    ctx,
     civilDateToCalendar(CivilDate(jdn)),
     32L * DAY_IN_MILLIS
-)
+).toEventsStore()
 
-fun getAllEnabledAppointments(context: Context): List<DeviceCalendarEvent> =
-    ArrayList<DeviceCalendarEvent>().apply {
-        readDeviceEvents( // ignore main result this time
-            context,
-            this,
-            Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
-            365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
-        )
-    }
+fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
+    ctx,
+    Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+    365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
+)
 
 fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())
