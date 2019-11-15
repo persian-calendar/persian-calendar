@@ -89,13 +89,14 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
                             mainActivityDependency.mainActivity.startActivity(
                                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             )
-                        } catch (ignore: Exception) {
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }.create().show()
             }
-        } catch (ignore: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
     }
 
     private fun getLocation() {

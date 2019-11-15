@@ -43,8 +43,9 @@ class ApplicationService : Service() {
     override fun onDestroy() {
         try {
             unregisterReceiver(receiver)
-        } catch (ignore: Exception) {
+        } catch (e: Exception) {
             // Really can't do much here
+            e.printStackTrace()
         }
 
         super.onDestroy()

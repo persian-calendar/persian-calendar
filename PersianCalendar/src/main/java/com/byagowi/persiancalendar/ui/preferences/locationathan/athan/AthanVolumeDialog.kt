@@ -39,13 +39,13 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+
             try {
                 player.start()
                 mediaPlayer = player
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
 
         return SeekBar(context).apply {
@@ -74,9 +74,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
                             mediaPlayer?.prepare()
                             mediaPlayer?.start()
                         }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    } catch (e: IllegalStateException) {
+                    } catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }
@@ -86,7 +84,9 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
     override fun onDialogClosed(positiveResult: Boolean) {
         val athanPref = preference as AthanVolumePreference
+
         ringtone?.stop()
+
         try {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.stop()
@@ -95,8 +95,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
-        if (positiveResult) {
-            athanPref.volume = volume
-        }
+
+        if (positiveResult) athanPref.volume = volume
     }
 }

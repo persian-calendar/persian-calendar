@@ -254,7 +254,8 @@ fun loadEvents(context: Context) {
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toGregorianEventsStore()
 
         allEnabledEvents = allEnabledEventsBuilder
-    } catch (ignore: JSONException) {
+    } catch (e: JSONException) {
+        e.printStackTrace()
     }
 }
 
@@ -291,7 +292,8 @@ fun loadLanguageResource(context: Context) {
                 }
             }
         }
-    } catch (ignore: JSONException) {
+    } catch (e: JSONException) {
+        e.printStackTrace()
         persianMonths = monthNameEmptyList
         islamicMonths = monthNameEmptyList
         gregorianMonths = monthNameEmptyList

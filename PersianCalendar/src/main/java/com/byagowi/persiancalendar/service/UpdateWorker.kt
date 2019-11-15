@@ -18,7 +18,8 @@ class UpdateWorker(val context: Context, workerParams: WorkerParameters) :
             updateStoredPreference(applicationContext)
             update(applicationContext, true)
             Result.success()
-        } catch (error: Throwable) {
+        } catch (e: Throwable) {
+            e.printStackTrace()
             Result.failure()
         }
     }

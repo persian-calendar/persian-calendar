@@ -173,7 +173,7 @@ class AthanActivity : AppCompatActivity() {
                 PhoneStateListener.LISTEN_CALL_STATE
             )
         } catch (e: Exception) {
-            Log.e(TAG, "TelephonyManager handling fail", e)
+            e.printStackTrace()
         }
     }
 

@@ -100,7 +100,8 @@ class CompassFragment : DaggerFragment() {
                             mainActivityDependency.mainActivity,
                             Uri.parse("https://g.co/qiblafinder")
                         )
-                    } catch (ignore: Exception) {
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                     R.id.help -> showLongSnackbar(
                         if (sensorNotFound)

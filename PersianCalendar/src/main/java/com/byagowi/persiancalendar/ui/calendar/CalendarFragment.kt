@@ -249,6 +249,7 @@ class CalendarFragment : DaggerFragment() {
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                 )
             } catch (e: Exception) {
+                e.printStackTrace()
                 Snackbar.make(
                     mMainBinding.root,
                     R.string.device_calendar_does_not_support,
@@ -303,6 +304,7 @@ class CalendarFragment : DaggerFragment() {
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                         )
                     } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
+                        e.printStackTrace()
                         Snackbar.make(
                             textView,
                             R.string.device_calendar_does_not_support,

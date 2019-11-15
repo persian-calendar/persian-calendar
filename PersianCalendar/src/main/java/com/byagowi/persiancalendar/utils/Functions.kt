@@ -310,7 +310,7 @@ fun getDayIconResource(day: Int): Int = try {
         else -> DAYS_ICONS_PERSIAN[day]
     }
 } catch (e: IndexOutOfBoundsException) {
-    Log.e(TAG, "No such field is available")
+    Log.e(TAG, "No such field is available", e)
     0
 }
 
@@ -605,7 +605,8 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
                 )
             }
         }
-    } catch (ignore: JSONException) {
+    } catch (e: JSONException) {
+        e.printStackTrace()
     }
 
     if (!needsSort) return result

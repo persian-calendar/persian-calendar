@@ -126,7 +126,8 @@ class AboutFragment : DaggerFragment() {
                                 getString(R.string.about_sendMail)
                             )
                         )
-                    } catch (ex: ActivityNotFoundException) {
+                    } catch (e: ActivityNotFoundException) {
+                        e.printStackTrace()
                         Snackbar.make(binding.root, R.string.about_noClient, Snackbar.LENGTH_SHORT)
                             .show()
                     }
@@ -227,7 +228,7 @@ class AboutFragment : DaggerFragment() {
     private fun programVersion(context: Context): String = try {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
     } catch (e: PackageManager.NameNotFoundException) {
-        Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion")
+        Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion", e)
         ""
     }
 }

@@ -126,7 +126,8 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 }
                 try {
                     startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
-                } catch (ignore: Exception) {
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
                 return true
             }
@@ -162,6 +163,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                     }
                 } catch (e: Exception) {
                     // Do whatever we were doing till now
+                    e.printStackTrace()
                 }
 
                 return super.onPreferenceTreeClick(preference)

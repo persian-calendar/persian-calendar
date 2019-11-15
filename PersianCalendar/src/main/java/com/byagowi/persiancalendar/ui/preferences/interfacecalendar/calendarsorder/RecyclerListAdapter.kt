@@ -111,7 +111,8 @@ class RecyclerListAdapter(
                 //                    alertDialog.dismiss();
                 //                });
                 //                alertDialog.show();
-            } catch (ignored: Exception) {
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             calendarPreferenceDialog.dismiss()

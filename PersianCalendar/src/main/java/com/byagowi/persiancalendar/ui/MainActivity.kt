@@ -218,7 +218,8 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
                             Uri.parse("market://details?id=$packageName")
                         )
                     )
-                } catch (ignore: ActivityNotFoundException) {
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
                     startActivity(
                         Intent(
                             Intent.ACTION_VIEW,

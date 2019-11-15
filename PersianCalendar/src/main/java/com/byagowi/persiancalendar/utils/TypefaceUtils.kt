@@ -20,7 +20,7 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface) {
         defaultFontTypefaceField.isAccessible = true
         defaultFontTypefaceField.set(null, face)
     } catch (e: Exception) {
-        Log.e("TAG", "Can not set custom font $face instead of $defaultFontNameToOverride")
+        Log.e(TAG, "Can not set custom font $face instead of $defaultFontNameToOverride", e)
     }
 }
 
