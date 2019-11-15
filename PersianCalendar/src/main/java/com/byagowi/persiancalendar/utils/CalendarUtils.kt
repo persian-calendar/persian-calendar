@@ -9,45 +9,23 @@ import android.text.Html
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Clock
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
-val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
-var sAllEnabledEvents: List<CalendarEvent<*>> = emptyList()
-var sPersianCalendarEvents: PersianCalendarEventsStore = emptyMap()
-var sIslamicCalendarEvents: IslamicCalendarEventsStore = emptyMap()
-var sGregorianCalendarEvents: GregorianCalendarEventsStore = emptyMap()
-
-fun isIranTime(): Boolean = iranTime
-
 fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
-
-fun isWeekOfYearEnabled(): Boolean = showWeekOfYear
-
-fun isShowDeviceCalendarEvents(): Boolean = showDeviceCalendarEvents
-
-fun hasAnyHolidays(dayEvents: List<CalendarEvent<*>>): Boolean = dayEvents.any { it.isHoliday }
 
 fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
-fun getAllEnabledEvents(): List<CalendarEvent<*>> = sAllEnabledEvents
-
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
-
-fun getAmString(): String = sAM
-
-fun getPmString(): String = sPM
 
 fun getDayOfWeekFromJdn(jdn: Long): Int =
     civilDateToCalendar(CivilDate(jdn))[Calendar.DAY_OF_WEEK] % 7
@@ -151,7 +129,7 @@ fun getA11yDaySummary(
         result.append(nonHolidays)
     }
 
-    if (isWeekOfYearEnabled()) {
+    if (isShowWeekOfYearEnabled) {
         val startOfYearJdn = getDateOfCalendar(
             mainCalendar,
             mainDate.year, 1, 1
@@ -181,145 +159,22 @@ fun getA11yDaySummary(
 
 fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {
-        addAll(sPersianCalendarEvents.getEvents(PersianDate(jdn)))
+        addAll(persianCalendarEvents.getEvents(PersianDate(jdn)))
         val islamic = IslamicDate(jdn)
-        addAll(sIslamicCalendarEvents.getEvents(islamic))
+        addAll(islamicCalendarEvents.getEvents(islamic))
         // Special case Islamic events happening in 30th day but the month has only 29 days
         if (islamic.dayOfMonth == 29 &&
             getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
-        ) addAll(sIslamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
+        ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
         val civil = CivilDate(jdn)
         addAll(deviceCalendarEvents.getDeviceEvents(civil)) // Passed by caller
-        addAll(sGregorianCalendarEvents.getEvents(civil))
+        addAll(gregorianCalendarEvents.getEvents(civil))
     }
 
 fun getIslamicOffset(context: Context): Int =
     PreferenceManager.getDefaultSharedPreferences(context)?.getString(
         PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET
     )?.replace("+", "")?.toIntOrNull() ?: 0
-
-fun loadEvents(context: Context) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val enabledTypes = prefs?.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
-
-    val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
-    val afghanistanOthers = enabledTypes.contains("afghanistan_others")
-    val iranHolidays = enabledTypes.contains("iran_holidays")
-    val iranIslamic = enabledTypes.contains("iran_islamic")
-    val iranAncient = enabledTypes.contains("iran_ancient")
-    val iranOthers = enabledTypes.contains("iran_others")
-    val international = enabledTypes.contains("international")
-
-    sIsIranHolidaysEnabled = iranHolidays
-
-    IslamicDate.useUmmAlQura = false
-    if (!iranHolidays) {
-        if (afghanistanHolidays) {
-            IslamicDate.useUmmAlQura = true
-        }
-        when (language) {
-            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA ->
-                IslamicDate.useUmmAlQura = true
-        }
-    }
-
-    // Now that we are configuring converter's algorithm above, lets set the offset also
-    IslamicDate.islamicOffset = getIslamicOffset(context)
-
-    try {
-        sAllEnabledEvents = emptyList()
-
-        val allEnabledEvents = ArrayList<CalendarEvent<*>>()
-
-        val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
-
-        // https://stackoverflow.com/a/36188796
-        fun JSONObject.getArray(key: String): Sequence<JSONObject> =
-            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
-
-        sPersianCalendarEvents = allTheEvents.getArray("Persian Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            val year = if (it.has("year")) it.getInt("year") else -1
-            var title = it.getString("title")
-            var holiday = it.getBoolean("holiday")
-
-            var addOrNot = false
-            val type = it.getString("type")
-
-            if (holiday && iranHolidays &&
-                (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
-            ) addOrNot = true
-
-            if (!iranHolidays && type == "Islamic Iran") holiday = false
-            if (iranIslamic && type == "Islamic Iran") addOrNot = true
-            if (iranAncient && type == "Ancient Iran") addOrNot = true
-            if (iranOthers && type == "Iran") addOrNot = true
-            if (afghanistanHolidays && type == "Afghanistan" && holiday) addOrNot = true
-            if (!afghanistanHolidays && type == "Afghanistan") holiday = false
-            if (afghanistanOthers && type == "Afghanistan") addOrNot = true
-
-            if (addOrNot) {
-                title += " ("
-                if (holiday && afghanistanHolidays && iranHolidays) {
-                    if (type == "Islamic Iran" || type == "Iran")
-                        title += "ایران، "
-                    else if (type == "Afghanistan")
-                        title += "افغانستان، "
-                }
-                title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
-                PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
-            } else null
-        }.toList().also { allEnabledEvents.addAll(it) }.toPersianEventsStore()
-
-        sIslamicCalendarEvents = allTheEvents.getArray("Hijri Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            var title = it.getString("title")
-            var holiday = it.getBoolean("holiday")
-
-            var addOrNot = false
-            val type = it.getString("type")
-
-            if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
-            if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
-            if (afghanistanOthers && type == "Islamic Afghanistan") addOrNot = true
-            if (iranHolidays && holiday && type == "Islamic Iran") addOrNot = true
-            if (!iranHolidays && type == "Islamic Iran") holiday = false
-            if (iranIslamic && type == "Islamic Iran") addOrNot = true
-            if (iranOthers && type == "Islamic Iran") addOrNot = true
-
-            if (addOrNot) {
-                title += " ("
-                if (holiday && afghanistanHolidays && iranHolidays) {
-                    if (type == "Islamic Iran")
-                        title += "ایران، "
-                    else if (type == "Islamic Afghanistan")
-                        title += "افغانستان، "
-                }
-                title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
-
-                IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
-            } else null
-        }.toList().also { allEnabledEvents.addAll(it) }.toIslamicEventsStore()
-
-        sGregorianCalendarEvents = allTheEvents.getArray("Gregorian Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            var title = it.getString("title")
-
-            if (international) {
-                title += " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")"
-
-                GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
-            } else null
-        }.toList().also { allEnabledEvents.addAll(it) }.toGregorianEventsStore()
-
-        sAllEnabledEvents = allEnabledEvents
-    } catch (ignore: JSONException) {
-    }
-}
-
 
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
@@ -331,9 +186,9 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     var hour = clock.hour
     val suffix: String
     if (hour >= 12) {
-        suffix = getPmString()
+        suffix = pmString
         hour -= 12
-    } else suffix = getAmString()
+    } else suffix = amString
 
     return baseFormatClock(hour, clock.minute) + " " + suffix
 }
@@ -343,7 +198,7 @@ fun calendarToCivilDate(calendar: Calendar) = CivilDate(
 )
 
 fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
-    if (isIranTime())
+    if (isIranTime)
         timeZone = TimeZone.getTimeZone("Asia/Tehran")
     time = date
 }
@@ -352,7 +207,7 @@ private fun readDeviceEvents(
     context: Context,
     startingDate: Calendar,
     rangeInMillis: Long
-): List<DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents() ||
+): List<DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
     ) != PackageManager.PERMISSION_GRANTED

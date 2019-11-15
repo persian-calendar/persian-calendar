@@ -25,7 +25,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
 
-import static com.byagowi.persiancalendar.utils.FunctionsKt.a11yAnnounceAndClick;
+import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
 
 public class QiblaCompassView extends View {
     @ColorInt

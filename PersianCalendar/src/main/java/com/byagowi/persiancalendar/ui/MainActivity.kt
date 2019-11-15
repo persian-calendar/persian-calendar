@@ -167,7 +167,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         prefs.registerOnSharedPreferenceChangeListener(this)
 
-        if (isShowDeviceCalendarEvents() && ActivityCompat.checkSelfPermission(
+        if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
@@ -207,7 +207,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         creationDateJdn = getTodayJdn()
 
         if (mainCalendar == CalendarType.SHAMSI &&
-            sIsIranHolidaysEnabled &&
+            isIranHolidaysEnabled &&
             getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
         ) Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
             setAction(getString(R.string.update)) {

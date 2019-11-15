@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import static com.byagowi.persiancalendar.utils.FunctionsKt.a11yAnnounceAndClick;
+import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
 
 /*
  *  This file is part of Level (an Android Bubble Level).

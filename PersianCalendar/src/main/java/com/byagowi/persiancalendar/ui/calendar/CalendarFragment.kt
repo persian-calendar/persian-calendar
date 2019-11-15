@@ -262,7 +262,7 @@ class CalendarFragment : DaggerFragment() {
         val activity = mainActivityDependency.mainActivity
 
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-            if (isShowDeviceCalendarEvents()) {
+            if (isShowDeviceCalendarEvents) {
                 sendUpdateCommandToMonthFragments(
                     calculateViewPagerPositionFromJdn(mLastSelectedJdn),
                     true
@@ -553,7 +553,7 @@ class CalendarFragment : DaggerFragment() {
                         ArrayAdapter<CalendarEvent<*>>(
                             mainActivityDependency.mainActivity,
                             R.layout.suggestion, android.R.id.text1,
-                            getAllEnabledEvents() + getAllEnabledAppointments(context)
+                            allEnabledEvents + getAllEnabledAppointments(context)
                         )
                     )
                     setOnItemClickListener { parent, _, position, _ ->

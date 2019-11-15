@@ -45,9 +45,8 @@ class MonthAdapter internal constructor(
     }
 
     internal fun initializeMonthEvents(context: Context?) {
-        if (isShowDeviceCalendarEvents() && context != null) {
+        if (isShowDeviceCalendarEvents && context != null)
             monthEvents = readMonthDeviceEvents(context, days[0].jdn)
-        }
     }
 
     internal fun selectDay(dayOfMonth: Int) {
@@ -58,9 +57,8 @@ class MonthAdapter internal constructor(
         if (dayOfMonth == -1) return
 
         selectedDay = dayOfMonth + 6 + startingDayOfWeek
-        if (isWeekOfYearEnabled()) {
-            selectedDay += selectedDay / 7 + 1
-        }
+
+        if (isShowWeekOfYearEnabled) selectedDay += selectedDay / 7 + 1
 
         notifyItemChanged(selectedDay)
     }
@@ -75,7 +73,7 @@ class MonthAdapter internal constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount(): Int =
-        7 * if (isWeekOfYearEnabled()) 8 else 7 // days of week * month view rows
+        7 * if (isShowWeekOfYearEnabled) 8 else 7 // days of week * month view rows
 
     inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {
@@ -110,7 +108,7 @@ class MonthAdapter internal constructor(
             var position = position
             val originalPosition = position
             val itemDayView = itemView as ItemDayView
-            if (isWeekOfYearEnabled()) {
+            if (isShowWeekOfYearEnabled) {
                 if (position % 8 == 0) {
                     val row = position / 8
                     if (row in 1..weeksCount) {
@@ -154,7 +152,7 @@ class MonthAdapter internal constructor(
                 if (position - 7 - startingDayOfWeek >= 0) {
                     val day = days[position - 7 - startingDayOfWeek]
                     val events = getEvents(day.jdn, monthEvents)
-                    val isHoliday = isWeekEnd(day.dayOfWeek) || hasAnyHolidays(events)
+                    val isHoliday = isWeekEnd(day.dayOfWeek) || events.any { it.isHoliday }
 
                     itemDayView.setDayOfMonthItem(
                         day.isToday, originalPosition == selectedDay,

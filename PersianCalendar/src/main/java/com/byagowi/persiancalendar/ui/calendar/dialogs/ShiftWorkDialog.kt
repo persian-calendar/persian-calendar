@@ -52,7 +52,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = getTodayJdn()
 
-        jdn = sShiftWorkStartingJdn
+        jdn = shiftWorkStartingJdn
         var isFirstSetup = false
         if (jdn == -1L) {
             isFirstSetup = true
@@ -63,11 +63,10 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             LayoutInflater.from(mainActivity), null, false
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
-
-        var shiftWorks: List<ShiftWorkRecord> = sShiftWorks
-        if (shiftWorks.isEmpty())
-            shiftWorks = listOf(ShiftWorkRecord("d", 0))
-        val shiftWorkItemAdapter = ItemsAdapter(shiftWorks, binding)
+        val shiftWorkItemAdapter = ItemsAdapter(
+            if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
+            binding
+        )
         binding.recyclerView.adapter = shiftWorkItemAdapter
 
         binding.description.text = String.format(
@@ -89,7 +88,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             )
             shiftWorkItemAdapter.reset()
         }
-        binding.recurs.isChecked = sShiftWorkRecurs
+        binding.recurs.isChecked = shiftWorkRecurs
 
         return AlertDialog.Builder(mainActivity)
             .setView(binding.root)
@@ -138,7 +137,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             updateShiftWorkResult()
         }
 
-        fun shiftWorkKeyToString(type: String): String = sShiftWorkTitles[type] ?: type
+        fun shiftWorkKeyToString(type: String): String = shiftWorkTitles[type] ?: type
 
         private fun updateShiftWorkResult() =
             mRows.filter { it.length != 0 }.joinToString(spacedComma) {
@@ -175,10 +174,8 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
                 val days = (0..7).map {
                     StringWithValueItem(
-                        it, if (it == 0)
-                            getString(R.string.shift_work_days_head)
-                        else
-                            formatNumber(it)
+                        it,
+                        if (it == 0) getString(R.string.shift_work_days_head) else formatNumber(it)
                     )
                 }
                 mBinding.lengthSpinner.adapter = ArrayAdapter(
