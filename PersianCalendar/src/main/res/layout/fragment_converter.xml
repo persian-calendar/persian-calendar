@@ -5,44 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeToRefresh"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView
+                android:id="@+id/day_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_margin="@dimen/card_margin"
+                app:cardBackgroundColor="?attr/colorCard">
 
-                <com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView
-                    android:id="@+id/day_picker_view"
+                <com.byagowi.persiancalendar.ui.shared.CalendarsView
+                    android:id="@+id/calendars_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/card_margin"
-                    app:cardBackgroundColor="?attr/colorCard">
+            </androidx.cardview.widget.CardView>
 
-                    <com.byagowi.persiancalendar.ui.shared.CalendarsView
-                        android:id="@+id/calendars_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+        </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/today_button"

@@ -8,16 +8,17 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.NumberPicker
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SimpleDayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
-import com.byagowi.persiancalendar.entities.StringWithValueItem
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class SimpleDayPickerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : FrameLayout(context, attrs), AdapterView.OnItemSelectedListener, DayPickerView {
+) : FrameLayout(context, attrs), AdapterView.OnItemSelectedListener, DayPickerView,
+    NumberPicker.OnValueChangeListener {
 
     private var jdn: Long = -1
     private var selectedDayListener: DayPickerView.OnSelectedDayChangedListener? = null
@@ -33,16 +34,16 @@ class SimpleDayPickerView @JvmOverloads constructor(
             calendarTypeSpinner.setSelection(0)
             calendarTypeSpinner.onItemSelectedListener = this@SimpleDayPickerView
 
-            yearSpinner.onItemSelectedListener = this@SimpleDayPickerView
-            monthSpinner.onItemSelectedListener = this@SimpleDayPickerView
-            daySpinner.onItemSelectedListener = this@SimpleDayPickerView
+            yearPicker.setOnValueChangedListener(this@SimpleDayPickerView)
+            monthPicker.setOnValueChangedListener(this@SimpleDayPickerView)
+            dayPicker.setOnValueChangedListener(this@SimpleDayPickerView)
         }
 
     override val dayJdnFromView: Long
         get() = try {
-            val year = (binding.yearSpinner.selectedItem as StringWithValueItem).value
-            val month = (binding.monthSpinner.selectedItem as StringWithValueItem).value
-            val day = (binding.daySpinner.selectedItem as StringWithValueItem).value
+            val year = binding.yearPicker.value
+            val month = binding.monthPicker.value
+            val day = binding.dayPicker.value
             val selectedCalendarType = selectedCalendarType
             if (day > getMonthLength(selectedCalendarType, year, month))
                 throw Exception("Not a valid day")
@@ -62,54 +63,47 @@ class SimpleDayPickerView @JvmOverloads constructor(
         var jdn = jdn
         this.jdn = jdn
 
-        val context = context ?: return
+        if (jdn == -1L) jdn = getTodayJdn()
 
-        if (jdn == -1L) {
-            jdn = getTodayJdn()
-        }
-
-        val date = getDateFromJdnOfCalendar(
-            selectedCalendarType,
-            jdn
-        )
+        val date = getDateFromJdnOfCalendar(selectedCalendarType, jdn)
 
         // years spinner init.
         val YEARS_RANGE = 100
-        binding.yearSpinner.adapter = ArrayAdapter(
-            context,
-            android.R.layout.simple_spinner_dropdown_item,
-            (date.year - YEARS_RANGE..date.year + YEARS_RANGE)
-                .map { StringWithValueItem(it, formatNumber(it)) }
-        )
-        binding.yearSpinner.setSelection(YEARS_RANGE)
+        binding.yearPicker.apply {
+            minValue = date.year - YEARS_RANGE
+            maxValue = date.year + YEARS_RANGE
+            value = date.year
+            setFormatter { formatNumber(it) }
+        }
         //
 
         // month spinner init
-        binding.monthSpinner.adapter = ArrayAdapter(
-            context, android.R.layout.simple_spinner_dropdown_item,
-            monthsNamesOfCalendar(date).mapIndexed { i, x ->
-                StringWithValueItem(i + 1, x + " / " + formatNumber(i + 1))
-            }
-        )
-        binding.monthSpinner.setSelection(date.month - 1)
+        binding.monthPicker.apply {
+            minValue = 1
+            maxValue = 12
+            value = date.month
+            val months = monthsNamesOfCalendar(date)
+            setFormatter { months[it - 1] + " / " + formatNumber(it) }
+        }
         //
 
         // days spinner init
-        binding.daySpinner.adapter = ArrayAdapter(
-            context,
-            android.R.layout.simple_spinner_dropdown_item,
-            (1..31).map { StringWithValueItem(it, formatNumber(it)) }
-        )
-        binding.daySpinner.setSelection(date.dayOfMonth - 1)
+        binding.dayPicker.apply {
+            minValue = 1
+            maxValue = 31
+            value = date.dayOfMonth
+            setFormatter { formatNumber(it) }
+        }
         //
     }
 
-    override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
-        if (adapterView?.id == R.id.calendarTypeSpinner)
-            setDayJdnOnView(jdn)
-        else
-            jdn = dayJdnFromView
+    override fun onValueChange(p0: NumberPicker?, p1: Int, p2: Int) {
+        jdn = dayJdnFromView
+        selectedDayListener?.onSelectedDayChanged(jdn)
+    }
 
+    override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, i: Int, l: Long) {
+        setDayJdnOnView(jdn)
         selectedDayListener?.onSelectedDayChanged(jdn)
     }
 
