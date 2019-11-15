@@ -37,7 +37,7 @@ class ConverterFragment : DaggerFragment() {
 
             todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
 
-            dayPickerView.setOnSelectedDayChangedListener { jdn ->
+            dayPickerView.selectedDayListener = fun (jdn) {
                 if (jdn == -1L) {
                     calendarsView.visibility = View.GONE
                 } else {

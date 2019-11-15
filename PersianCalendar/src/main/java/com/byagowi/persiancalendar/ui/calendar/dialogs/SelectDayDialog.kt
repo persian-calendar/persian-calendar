@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.di.CalendarFragmentDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.ui.shared.SimpleDayPickerView
+import com.byagowi.persiancalendar.ui.shared.DayPickerView
 import dagger.android.support.DaggerAppCompatDialogFragment
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class SelectDayDialog : DaggerAppCompatDialogFragment() {
         val jdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
 
         val mainActivity = mainActivityDependency.mainActivity
-        val dayPickerView = SimpleDayPickerView(mainActivity)
+        val dayPickerView = DayPickerView(mainActivity)
         dayPickerView.setDayJdnOnView(jdn)
 
         return AlertDialog.Builder(mainActivity)
