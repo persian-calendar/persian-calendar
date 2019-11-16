@@ -3,6 +3,10 @@ package com.byagowi.persiancalendar.ui.about
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorManager
+import android.opengl.EGL14
+import android.opengl.EGLConfig
+import android.opengl.GLES10
+import android.opengl.GLES20
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
@@ -212,25 +216,92 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 addIfNotNull(
                     "Battery",
-                    (rootView.context.getSystemService<BatteryManager>())
-                        ?.run {
-                            listOf("Charging: $isCharging") + listOf(
-                                BatteryManager.BATTERY_PROPERTY_CAPACITY,
-                                BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
-                                BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
-                                BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
-                                BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
-                            ).zip(
-                                listOf(
-                                    "Capacity",
-                                    "Charge Counter",
-                                    "Current Average",
-                                    "Current Now",
-                                    "Energy Counter"
-                                )
-                            ) { x, y -> "$y: ${getLongProperty(x)}" }
-                        }?.joinToString("\n"), ""
+                    (rootView.context.getSystemService<BatteryManager>())?.run {
+                        listOf("Charging: $isCharging") + listOf(
+                            Pair("Capacity", BatteryManager.BATTERY_PROPERTY_CAPACITY),
+                            Pair("Charge Counter", BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER),
+                            Pair("Current Avg", BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE),
+                            Pair("Current Now", BatteryManager.BATTERY_PROPERTY_CURRENT_NOW),
+                            Pair("Energy Counter", BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)
+                        ).map { "${it.first}: ${getLongProperty(it.second)}" }
+                    }?.joinToString("\n"), ""
                 )
+            }
+
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
+                    val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
+                    val versions = IntArray(2)
+                    EGL14.eglInitialize(display, versions, 0, versions, 1);
+                    val configAttr = intArrayOf(
+                        EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
+                        EGL14.EGL_LEVEL, 0,
+                        EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                        EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT,
+                        EGL14.EGL_NONE
+                    )
+                    val configs = Array<EGLConfig?>(1) { null }
+                    val numConfig = IntArray(1)
+                    EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, numConfig, 0)
+                    if (numConfig[0] != 0) {
+                        val surf = EGL14.eglCreatePbufferSurface(
+                            display, configs[0], intArrayOf(
+                                EGL14.EGL_WIDTH, 64,
+                                EGL14.EGL_HEIGHT, 64,
+                                EGL14.EGL_NONE
+                            ), 0
+                        )
+                        EGL14.eglMakeCurrent(
+                            display, surf, surf, EGL14.eglCreateContext(
+                                display, configs[0], EGL14.EGL_NO_CONTEXT,
+                                intArrayOf(
+                                    EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
+                                    EGL14.EGL_NONE
+                                ), 0
+                            )
+                        )
+                    }
+                }
+                addIfNotNull(
+                    "OpenGL",
+                    (listOf(
+                        Pair("Version", GLES20.GL_VERSION),
+                        Pair("Renderer", GLES20.GL_RENDERER),
+                        Pair("Vendor", GLES20.GL_VENDOR),
+                        Pair("Extensions", GLES20.GL_EXTENSIONS)
+                    ).map { "${it.first}: ${GLES20.glGetString(it.second)}" } + listOf(
+                        "",
+                        "Limits:"
+                    ) + listOf(
+                        Pair(
+                            "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+                            GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
+                        ),
+                        Pair("GL_MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
+                        Pair(
+                            "GL_MAX_FRAGMENT_UNIFORM_VECTORS",
+                            GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS
+                        ),
+                        Pair("GL_MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
+                        Pair("GL_MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
+                        Pair("GL_MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
+                        Pair("GL_MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
+                        Pair("GL_MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
+                        Pair(
+                            "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+                            GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS
+                        ),
+                        Pair("GL_MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
+                        Pair("GL_MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
+                    ).map {
+                        val result = IntArray(1)
+                        GLES10.glGetIntegerv(it.second, result, 0)
+                        "${it.first}: ${result[0]}"
+                    }).joinToString("\n"), ""
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
