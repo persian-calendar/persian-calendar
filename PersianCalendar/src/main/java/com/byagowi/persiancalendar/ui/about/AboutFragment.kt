@@ -57,7 +57,10 @@ class AboutFragment : DaggerFragment() {
 
         // licenses
         binding.licenses.setOnClickListener {
-            AlertDialog.Builder(activity, com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen)
+            AlertDialog.Builder(
+                activity,
+                com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+            )
                 .setTitle(resources.getString(R.string.about_license_title))
                 .setView(ScrollView(activity).apply {
                     addView(TextView(activity).apply {
