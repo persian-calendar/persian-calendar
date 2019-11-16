@@ -156,11 +156,8 @@ class AboutFragment : DaggerFragment() {
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(
-                            "https://github.com/" + (view as Chip).text.toString().split("@")[1].split(
-                                ")"
-                            )[0]
-                        )
+                        ("https://github.com/" + (view as Chip).text.toString()
+                            .split("@")[1].split(")")[0]).toUri()
                     )
                 )
             } catch (e: Exception) {

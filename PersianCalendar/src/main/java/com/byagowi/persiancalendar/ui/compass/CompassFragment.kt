@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
@@ -13,6 +12,7 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
@@ -98,7 +98,7 @@ class CompassFragment : DaggerFragment() {
                     R.id.map -> try {
                         CustomTabsIntent.Builder().build().launchUrl(
                             mainActivityDependency.mainActivity,
-                            Uri.parse("https://g.co/qiblafinder")
+                            "https://g.co/qiblafinder".toUri()
                         )
                     } catch (e: Exception) {
                         e.printStackTrace()
