@@ -57,7 +57,7 @@ class AboutFragment : DaggerFragment() {
 
         // licenses
         binding.licenses.setOnClickListener {
-            AlertDialog.Builder(activity)
+            AlertDialog.Builder(activity, com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen)
                 .setTitle(resources.getString(R.string.about_license_title))
                 .setView(ScrollView(activity).apply {
                     addView(TextView(activity).apply {
@@ -65,6 +65,7 @@ class AboutFragment : DaggerFragment() {
                         setPadding(20)
                         typeface = Typeface.MONOSPACE
                         Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                        setTextIsSelectable(true)
                     })
                 })
                 .setCancelable(true)
