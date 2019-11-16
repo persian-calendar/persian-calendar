@@ -10,11 +10,18 @@ import android.opengl.GLES20
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
@@ -103,7 +110,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
     ) {
     private val deviceInfoItemsList = ArrayList<DeviceInfoItem>()
 
-    data class DeviceInfoItem(val title: String, val content: String?, val version: String)
+    data class DeviceInfoItem(val title: String, val content: CharSequence?, val version: String)
 
     class DeviceInfoDiffCallback : DiffUtil.ItemCallback<DeviceInfoItem>() {
         override fun areItemsTheSame(oldItem: DeviceInfoItem, newItem: DeviceInfoItem): Boolean =
@@ -208,7 +215,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
 
             addIfNotNull(
                 "Sensors",
-                (rootView.context.getSystemService<SensorManager>())
+                (activity.getSystemService<SensorManager>())
                     ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
             )
 
@@ -216,7 +223,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 addIfNotNull(
                     "Battery",
-                    (rootView.context.getSystemService<BatteryManager>())?.run {
+                    (activity.getSystemService<BatteryManager>())?.run {
                         listOf("Charging: $isCharging") + listOf(
                             Pair("Capacity", BatteryManager.BATTERY_PROPERTY_CAPACITY),
                             Pair("Charge Counter", BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER),
@@ -263,42 +270,64 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                         )
                     }
                 }
+                val intBuffer = IntArray(1)
                 addIfNotNull(
                     "OpenGL",
                     (listOf(
-                        Pair("Version", GLES20.GL_VERSION),
-                        Pair("Renderer", GLES20.GL_RENDERER),
-                        Pair("Vendor", GLES20.GL_VENDOR),
-                        Pair("Extensions", GLES20.GL_EXTENSIONS)
+                        Pair("VERSION", GLES20.GL_VERSION),
+                        Pair("RENDERER", GLES20.GL_RENDERER),
+                        Pair("VENDOR", GLES20.GL_VENDOR)
                     ).map { "${it.first}: ${GLES20.glGetString(it.second)}" } + listOf(
-                        "",
-                        "Limits:"
-                    ) + listOf(
                         Pair(
-                            "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+                            "MAX_COMBINED_TEXTURE_IMAGE_UNITS",
                             GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
                         ),
-                        Pair("GL_MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
+                        Pair("MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
                         Pair(
                             "GL_MAX_FRAGMENT_UNIFORM_VECTORS",
                             GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS
                         ),
-                        Pair("GL_MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
-                        Pair("GL_MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
-                        Pair("GL_MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
-                        Pair("GL_MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
-                        Pair("GL_MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
+                        Pair("MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
+                        Pair("MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
+                        Pair("MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
+                        Pair("MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
+                        Pair("MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
                         Pair(
-                            "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+                            "MAX_VERTEX_TEXTURE_IMAGE_UNITS",
                             GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS
                         ),
-                        Pair("GL_MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
-                        Pair("GL_MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
+                        Pair("MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
+                        Pair("MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
                     ).map {
-                        val result = IntArray(1)
-                        GLES10.glGetIntegerv(it.second, result, 0)
-                        "${it.first}: ${result[0]}"
-                    }).joinToString("\n"), ""
+                        GLES10.glGetIntegerv(it.second, intBuffer, 0)
+                        "${it.first}: ${intBuffer[0]}"
+                    }).joinToString("\n"),
+                    ""
+                )
+
+                addIfNotNull(
+                    "OpenGL Extensions",
+                    SpannableStringBuilder().apply {
+                        GLES20.glGetString(GLES20.GL_EXTENSIONS).split(" ").forEach {
+                            append(SpannableString(it).apply {
+                                setSpan(object : ClickableSpan() {
+                                    override fun onClick(textView: View) = try {
+                                        CustomTabsIntent.Builder().build().launchUrl(
+                                            activity,
+                                            it.replace(
+                                                "GL_([a-zA-Z]+)_(.+)".toRegex(),
+                                                "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
+                                            ).toUri()
+                                        )
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                }, 0, it.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            })
+                            append("\n")
+                        }
+                    },
+                    ""
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -324,7 +353,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
         //   }
     }
 
-    private fun addIfNotNull(title: String, content: String?, version: String) =
+    private fun addIfNotNull(title: String, content: CharSequence?, version: String) =
         deviceInfoItemsList.add(DeviceInfoItem(title, content ?: "Unknown", version))
 
     private fun getScreenResolution(wm: WindowManager): String =
@@ -356,6 +385,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                 mBinding.content.text = content
                 mBinding.version.text = version
             }
+            mBinding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
         override fun onClick(v: View?) {
