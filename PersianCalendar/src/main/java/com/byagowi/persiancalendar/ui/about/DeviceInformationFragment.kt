@@ -47,26 +47,19 @@ class DeviceInformationFragment : DaggerFragment() {
     private var clickCount: Int = 0
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(
-            getString(R.string.device_info),
-            ""
-        )
+        val activity = mainActivityDependency.mainActivity
+
+        activity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
         circularRevealFromMiddle(circularReveal)
 
         recyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
-            addItemDecoration(
-                DividerItemDecoration(
-                    mainActivityDependency.mainActivity,
-                    LinearLayoutManager.VERTICAL
-                )
-            )
-            adapter = DeviceInfoAdapter(mainActivityDependency.mainActivity, root)
+            layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
+            adapter = DeviceInfoAdapter(activity, root)
         }
 
         bottomNavigation.apply {
@@ -91,8 +84,8 @@ class DeviceInformationFragment : DaggerFragment() {
             setOnNavigationItemSelectedListener {
                 // Easter egg
                 if (++clickCount % 10 == 0) {
-                    BottomSheetDialog(mainActivityDependency.mainActivity).apply {
-                        setContentView(IndeterminateProgressBar(mainActivityDependency.mainActivity).apply {
+                    BottomSheetDialog(activity).apply {
+                        setContentView(IndeterminateProgressBar(activity).apply {
                             layoutParams =
                                 ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                         })
@@ -122,103 +115,44 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
 
     init {
         deviceInfoItemsList.apply {
-            addIfNotNull(
-                "Screen Resolution",
-                getScreenResolution(activity.windowManager),
-                ""
-            )
+            fun addIfNotNull(title: String, content: CharSequence?, version: String) =
+                deviceInfoItemsList.add(DeviceInfoItem(title, content ?: "Unknown", version))
 
+            fun getScreenResolution(wm: WindowManager) = String.format(
+                Locale.ENGLISH, "%d*%d pixels", wm.defaultDisplay.width, wm.defaultDisplay.height
+            )
+            addIfNotNull("Screen Resolution", getScreenResolution(activity.windowManager), "")
             addIfNotNull(
-                "Android Version",
-                Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
+                "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
                 Build.VERSION.SDK_INT.toString()
             )
-
-            addIfNotNull(
-                "Manufacturer",
-                Build.MANUFACTURER, ""
-            )
-
-            addIfNotNull(
-                "Brand",
-                Build.BRAND, ""
-            )
-
-            addIfNotNull(
-                "Model",
-                Build.MODEL, ""
-            )
-
-            addIfNotNull(
-                "Product",
-                Build.PRODUCT, ""
-            )
+            addIfNotNull("Manufacturer", Build.MANUFACTURER, "")
+            addIfNotNull("Brand", Build.BRAND, "")
+            addIfNotNull("Model", Build.MODEL, "")
+            addIfNotNull("Product", Build.PRODUCT, "")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Build.SUPPORTED_ABIS.forEachIndexed { index, abi ->
-                    addIfNotNull(
-                        "Instruction CPU ${index + 1}",
-                        abi, ""
-                    )
+                    addIfNotNull("Instruction CPU ${index + 1}", abi, "")
                 }
             } else {
-                addIfNotNull(
-                    "Instruction CPU 1",
-                    Build.CPU_ABI, ""
-                )
-
-                addIfNotNull(
-                    "Instruction CPU 2",
-                    Build.CPU_ABI2, ""
-                )
+                addIfNotNull("Instruction CPU 1", Build.CPU_ABI, "")
+                addIfNotNull("Instruction CPU 2", Build.CPU_ABI2, "")
             }
 
-            addIfNotNull(
-                "Instruction Architecture",
-                Build.DEVICE, ""
-            )
-
-            addIfNotNull(
-                "Android Id",
-                Build.ID, ""
-            )
-
-            addIfNotNull(
-                "Board",
-                Build.BOARD, ""
-            )
-
-            addIfNotNull(
-                "Radio Firmware Version",
-                Build.getRadioVersion(), ""
-            )
-
-            addIfNotNull(
-                "Build User",
-                Build.USER, ""
-            )
-
-            addIfNotNull(
-                "Host",
-                Build.HOST, ""
-            )
-
-            addIfNotNull(
-                "Display",
-                Build.DISPLAY, ""
-            )
-
-            addIfNotNull(
-                "Device Fingerprints",
-                Build.FINGERPRINT, ""
-            )
-
+            addIfNotNull("Instruction Architecture", Build.DEVICE, "")
+            addIfNotNull("Android Id", Build.ID, "")
+            addIfNotNull("Board", Build.BOARD, "")
+            addIfNotNull("Radio Firmware Version", Build.getRadioVersion(), "")
+            addIfNotNull("Build User", Build.USER, "")
+            addIfNotNull("Host", Build.HOST, "")
+            addIfNotNull("Display", Build.DISPLAY, "")
+            addIfNotNull("Device Fingerprints", Build.FINGERPRINT, "")
             addIfNotNull(
                 "Sensors",
                 (activity.getSystemService<SensorManager>())
                     ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
             )
-
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 addIfNotNull(
@@ -243,62 +177,54 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                     EGL14.eglInitialize(display, versions, 0, versions, 1);
                     val configAttr = intArrayOf(
                         EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
-                        EGL14.EGL_LEVEL, 0,
-                        EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
-                        EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT,
-                        EGL14.EGL_NONE
+                        EGL14.EGL_LEVEL, 0, EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                        EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT, EGL14.EGL_NONE
                     )
                     val configs = Array<EGLConfig?>(1) { null }
-                    val numConfig = IntArray(1)
-                    EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, numConfig, 0)
-                    if (numConfig[0] != 0) {
+                    val configsCount = IntArray(1)
+                    EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, configsCount, 0)
+                    if (configsCount[0] != 0) {
                         val surf = EGL14.eglCreatePbufferSurface(
-                            display, configs[0], intArrayOf(
-                                EGL14.EGL_WIDTH, 64,
-                                EGL14.EGL_HEIGHT, 64,
-                                EGL14.EGL_NONE
-                            ), 0
+                            display, configs[0],
+                            intArrayOf(EGL14.EGL_WIDTH, 64, EGL14.EGL_HEIGHT, 64, EGL14.EGL_NONE), 0
                         )
                         EGL14.eglMakeCurrent(
                             display, surf, surf, EGL14.eglCreateContext(
                                 display, configs[0], EGL14.EGL_NO_CONTEXT,
-                                intArrayOf(
-                                    EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
-                                    EGL14.EGL_NONE
-                                ), 0
+                                intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 2, EGL14.EGL_NONE), 0
                             )
                         )
                     }
                 }
-                val intBuffer = IntArray(1)
                 addIfNotNull(
                     "OpenGL",
                     (listOf(
-                        Pair("VERSION", GLES20.GL_VERSION),
-                        Pair("RENDERER", GLES20.GL_RENDERER),
-                        Pair("VENDOR", GLES20.GL_VENDOR)
+                        Pair("GL_VERSION", GLES20.GL_VERSION),
+                        Pair("GL_RENDERER", GLES20.GL_RENDERER),
+                        Pair("GL_VENDOR", GLES20.GL_VENDOR)
                     ).map { "${it.first}: ${GLES20.glGetString(it.second)}" } + listOf(
                         Pair(
-                            "MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+                            "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
                             GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
                         ),
-                        Pair("MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
+                        Pair("GL_MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
                         Pair(
                             "GL_MAX_FRAGMENT_UNIFORM_VECTORS",
                             GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS
                         ),
-                        Pair("MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
-                        Pair("MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
-                        Pair("MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
-                        Pair("MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
-                        Pair("MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
+                        Pair("GL_MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
+                        Pair("GL_MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
+                        Pair("GL_MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
+                        Pair("GL_MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
+                        Pair("GL_MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
                         Pair(
-                            "MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+                            "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
                             GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS
                         ),
-                        Pair("MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
-                        Pair("MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
+                        Pair("GL_MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
+                        Pair("GL_MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
                     ).map {
+                        val intBuffer = IntArray(1)
                         GLES10.glGetIntegerv(it.second, intBuffer, 0)
                         "${it.first}: ${intBuffer[0]}"
                     }).joinToString("\n"),
@@ -352,15 +278,6 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
         //       e.printStackTrace();
         //   }
     }
-
-    private fun addIfNotNull(title: String, content: CharSequence?, version: String) =
-        deviceInfoItemsList.add(DeviceInfoItem(title, content ?: "Unknown", version))
-
-    private fun getScreenResolution(wm: WindowManager): String =
-        String.format(
-            Locale.ENGLISH, "%d*%d pixels",
-            wm.defaultDisplay.width, wm.defaultDisplay.height
-        )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         DeviceInfoRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
