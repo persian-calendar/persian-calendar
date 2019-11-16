@@ -51,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:contentDescription="@string/select_month"
             android:orientation="vertical"
             android:padding="4dp">
 
@@ -58,7 +59,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:contentDescription="@string/select_month"
                 android:text="@string/month"
                 android:textColor="?attr/colorTextSecond"
                 android:textSize="@dimen/text_size_description" />
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/select_day"
+            android:contentDescription="@string/select_year"
             android:orientation="vertical"
             android:padding="4dp">
 
