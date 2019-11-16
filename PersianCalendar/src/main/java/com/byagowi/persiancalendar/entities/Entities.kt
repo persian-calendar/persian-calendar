@@ -52,7 +52,3 @@ data class DayItem(val isToday: Boolean, val jdn: Long, val dayOfWeek: Int)
 data class CalendarTypeItem(val type: CalendarType, private val title: String) {
     override fun toString(): String = title
 }
-
-data class StringWithValueItem(val value: Int, private val title: String) {
-    override fun toString(): String = title
-}
