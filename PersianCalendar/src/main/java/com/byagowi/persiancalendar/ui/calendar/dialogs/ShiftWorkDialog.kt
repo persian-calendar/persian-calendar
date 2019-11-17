@@ -72,9 +72,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             getString(
                 if (isFirstSetup) R.string.shift_work_starting_date else R.string.shift_work_starting_date_edit
             ),
-            formatDate(
-                getDateFromJdnOfCalendar(mainCalendar, jdn)
-            )
+            formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn))
         )
 
         binding.resetLink.setOnClickListener {
@@ -121,32 +119,26 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
         }
     }
 
-
     private inner class ItemsAdapter internal constructor(
-        initialItems: List<ShiftWorkRecord>,
-        private val mBinding: ShiftWorkSettingsBinding
+        var rows: List<ShiftWorkRecord> = emptyList(),
+        private val binding: ShiftWorkSettingsBinding
     ) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
-        private val mRows = ArrayList<ShiftWorkRecord>()
-
-        internal val rows: List<ShiftWorkRecord>
-            get() = mRows
 
         init {
-            mRows.addAll(initialItems)
             updateShiftWorkResult()
         }
 
         fun shiftWorkKeyToString(type: String): String = shiftWorkTitles[type] ?: type
 
         private fun updateShiftWorkResult() =
-            mRows.filter { it.length != 0 }.joinToString(spacedComma) {
+            rows.filter { it.length != 0 }.joinToString(spacedComma) {
                 String.format(
                     getString(R.string.shift_work_record_title),
                     formatNumber(it.length), shiftWorkKeyToString(it.type)
                 )
             }.also {
-                mBinding.result.text = it
-                mBinding.result.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
+                binding.result.text = it
+                binding.result.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
             }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -155,23 +147,22 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-        override fun getItemCount(): Int = mRows.size + 1
+        override fun getItemCount(): Int = rows.size + 1
 
         internal fun reset() {
-            mRows.clear()
-            mRows.add(ShiftWorkRecord("d", 0))
+            rows = listOf(ShiftWorkRecord("d", 0))
             notifyDataSetChanged()
             updateShiftWorkResult()
         }
 
-        internal inner class ViewHolder(private val mBinding: ShiftWorkItemBinding) :
-            RecyclerView.ViewHolder(mBinding.root) {
-            private var mPosition: Int = 0
+        internal inner class ViewHolder(private val binding: ShiftWorkItemBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            private var pos: Int = 0
 
             init {
-                val context = mBinding.root.context
+                val context = binding.root.context
 
-                mBinding.lengthSpinner.adapter = ArrayAdapter(
+                binding.lengthSpinner.adapter = ArrayAdapter(
                     context,
                     android.R.layout.simple_spinner_dropdown_item,
                     (0..7).map {
@@ -179,7 +170,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     }
                 )
 
-                mBinding.typeAutoCompleteTextView.run {
+                binding.typeAutoCompleteTextView.run {
                     val adapter = ArrayAdapter(
                         context,
                         android.R.layout.simple_spinner_dropdown_item,
@@ -194,8 +185,10 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                         override fun onItemSelected(
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
-                            mRows[mPosition] =
-                                ShiftWorkRecord(text.toString(), mRows[mPosition].length)
+                            rows = rows.mapIndexed { i, x ->
+                                if (i == pos) ShiftWorkRecord(text.toString(), rows[pos].length)
+                                else x
+                            }
                             updateShiftWorkResult()
                         }
 
@@ -211,8 +204,10 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                         override fun onTextChanged(
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
-                            mRows[mPosition] =
-                                ShiftWorkRecord(text.toString(), mRows[mPosition].length)
+                            rows = rows.mapIndexed { i, x ->
+                                if (i == pos) ShiftWorkRecord(text.toString(), rows[pos].length)
+                                else x
+                            }
                             updateShiftWorkResult()
                         }
                     })
@@ -220,48 +215,50 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                         override fun filter(
                             source: CharSequence?, start: Int, end: Int,
                             dest: Spanned?, dstart: Int, dend: Int
-                        ): CharSequence? =
-                            if (source?.contains("[=,]".toRegex()) == true) "" else null
+                        ) = if (source?.contains("[=,]".toRegex()) == true) "" else null
                     })
                 }
 
-                mBinding.remove.setOnClickListener { remove() }
+                binding.remove.setOnClickListener { remove() }
 
-                mBinding.lengthSpinner.onItemSelectedListener =
+                binding.lengthSpinner.onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
                         override fun onNothingSelected(parent: AdapterView<*>) {}
                         override fun onItemSelected(
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
-                            mRows[mPosition] = ShiftWorkRecord(mRows[mPosition].type, position)
+                            rows = rows.mapIndexed { i, x ->
+                                if (i == pos) ShiftWorkRecord(x.type, position)
+                                else x
+                            }
                             updateShiftWorkResult()
                         }
                     }
 
-                mBinding.addButton.setOnClickListener {
-                    mRows.add(ShiftWorkRecord("r", 0))
+                binding.addButton.setOnClickListener {
+                    rows = rows + ShiftWorkRecord("r", 0)
                     notifyDataSetChanged()
                     updateShiftWorkResult()
                 }
             }
 
             fun remove() {
-                mRows.removeAt(mPosition)
+                rows = rows.filterIndexed { i, _ -> i != pos }
                 notifyDataSetChanged()
                 updateShiftWorkResult()
             }
 
-            fun bind(position: Int) = if (position < mRows.size) {
-                val shiftWorkRecord = mRows[position]
-                mPosition = position
-                mBinding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
-                mBinding.lengthSpinner.setSelection(shiftWorkRecord.length)
-                mBinding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
-                mBinding.detail.visibility = View.VISIBLE
-                mBinding.addButton.visibility = View.GONE
+            fun bind(position: Int) = if (position < rows.size) {
+                val shiftWorkRecord = rows[position]
+                pos = position
+                binding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
+                binding.lengthSpinner.setSelection(shiftWorkRecord.length)
+                binding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
+                binding.detail.visibility = View.VISIBLE
+                binding.addButton.visibility = View.GONE
             } else {
-                mBinding.detail.visibility = View.GONE
-                mBinding.addButton.visibility = if (mRows.size < 20) View.VISIBLE else View.GONE
+                binding.detail.visibility = View.GONE
+                binding.addButton.visibility = if (rows.size < 20) View.VISIBLE else View.GONE
             }
         }
     }
